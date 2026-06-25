@@ -7,7 +7,7 @@
 
 package org.openmarkov.core.io;
 
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,9 +20,9 @@ import java.net.URL;
      *
      * @return A {@code ProbNetInfo} or {@code null}
      *
-     * @throws ParserException ParserException
+     * @throws ProbNetParserException ProbNetParserException
      */
-    ProbNetInfo read(URL networkSource) throws IOException, ParserException;
+    ProbNetInfo read(URL networkSource) throws IOException, ProbNetParserException;
     
     
 }

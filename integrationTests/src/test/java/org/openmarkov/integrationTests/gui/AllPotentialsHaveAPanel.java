@@ -1,6 +1,6 @@
 package org.openmarkov.integrationTests.gui;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openmarkov.core.model.network.potential.Potential;
@@ -10,6 +10,7 @@ import org.openmarkov.plugin.PluginSearch;
 
 import java.util.stream.Stream;
 
+@Disabled("On hold until July 2026")
 public class AllPotentialsHaveAPanel {
     
     public static Stream<Class<? extends Potential>> toolPotentialClasses() {

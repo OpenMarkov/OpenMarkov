@@ -7,15 +7,10 @@
 
 package org.openmarkov.io.elvira;
 
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.util.List;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
@@ -23,6 +18,13 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.canonical.ICIPotential;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Manuel Arias
@@ -41,7 +43,7 @@ public class ElviraParserTest {
 	private ElviraParser elviraParser;
 
 	@BeforeEach
-	/** Create a ElviraScanner and opens a file for tests */ public void setUp() throws org.openmarkov.core.exception.ParserException, IOException {
+	/** Create a ElviraScanner and opens a file for tests */ public void setUp() throws ProbNetParserException, IOException {
 		elviraParser = new ElviraParser();
         probNet = elviraParser.read(this.getClass().getClassLoader().getResource(testFile)).probNet();
 	}
@@ -127,7 +129,7 @@ public class ElviraParserTest {
 	 *
 	 * @throws Exception
 	 */
-	@Test public void loadANodeThreeState() throws org.openmarkov.core.exception.ParserException, IOException {
+	@Test public void loadANodeThreeState() throws ProbNetParserException, IOException {
 		String testFile = "UnNodoTresEstados.elv";
 		elviraParser = new ElviraParser();
 		ProbNet unNodoTresEstados = elviraParser.read(this.getClass().getClassLoader().getResource(testFile))

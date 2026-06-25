@@ -8,10 +8,10 @@
 package org.openmarkov.gui.action;
 
 import org.openmarkov.core.action.base.PNEdit;
+import org.openmarkov.core.localize.ConsiderAutoLocalizationIsValid;
 import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.gui.graphic.VisualNode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +21,7 @@ import java.util.List;
  * @author Miguel Palacios
  * @version 1.0 21/12/10
  */
+@ConsiderAutoLocalizationIsValid
 public class MoveNodeEdit extends PNEdit {
     
     private static final long serialVersionUID = 7578733825996342882L;
@@ -29,7 +30,6 @@ public class MoveNodeEdit extends PNEdit {
     
     record Movement(VisualNode visualNode, String nodeName, Point2D.Double previousPosition,
                     Point2D.Double newPosition) {
-        
     }
     
     /**

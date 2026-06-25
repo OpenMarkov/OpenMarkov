@@ -6,7 +6,7 @@
                   value="Augmented change potential for {node} from {oldPotential} to {newPotential}"/>
     <Localization class="org.openmarkov.gui.action.ICITablePotentialValueEdit" value="ICI Table potential value edit"/>
     <Localization class="org.openmarkov.gui.action.ImposePolicyEdit"
-                  value="Impose policy {newPolicy} on {visualDecisionNode}. Last policy was {lastPolicy}"/>
+                  value="Impose policy {newPolicy} on {decisionNode}. Last policy was {lastPolicy}"/>
     <Localization class="org.openmarkov.gui.action.LinkRestrictionPotentialValueEdit" value="Restrict link {link}"/>
     <Localization class="org.openmarkov.gui.action.MoveNodeEdit"
                   value="Movements: {movements}"/>
@@ -102,4 +102,18 @@
     <Localization class="org.openmarkov.gui.graphic.VisualLink" value="Visual {link}"/>
     <Localization class="org.openmarkov.gui.window.edition.SelectedContent"
                   value="Selected nodes: {nodes}\nSelected links: {links}"/>
+    <Localization class="org.openmarkov.gui.action.AutoArrangeEdit"
+                  value="Auto arrange nodes {namesNode} to positions {newPositions}"/>
+    <Localization class="org.openmarkov.gui.action.ChangeNodeTypeEdit"
+                  value="Change type of {node} to new type {newNodeType}"/>
+    <Localization class="org.openmarkov.gui.action.ChangeNodeTypeEdit$SetNodeTypeEdit"
+                  value="Set type of {node} to type {newNodeType}"/>
+    <Localization class="org.openmarkov.gui.action.EventTablePotentialValueEdit"
+                  value="Change potential for {node}"/>
+    <Localization class="org.openmarkov.gui.action.PasteEdit$2"
+                  value="Verify constraints"/>
+    <Localization class="org.openmarkov.gui.graphic.VisualLink$LinkCannotBePaintedException"
+                  value="Link from {source} to {destination} cannot be painted"/>
+    <Localization class="org.openmarkov.gui.graphic.VisualNode"
+                  value="visual {node}"/>
 </ClassLocalizations>

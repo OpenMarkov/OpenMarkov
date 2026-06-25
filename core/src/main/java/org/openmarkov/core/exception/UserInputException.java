@@ -9,7 +9,7 @@ package org.openmarkov.core.exception;
  * single type to display a user-friendly message for any such error without
  * knowing the specific subtype.
  * <p>
- * Direct subtypes: {@link IncompatibleEvidenceException}, {@link ParserException},
+ * Direct subtypes: {@link IncompatibleEvidenceException}, {@link ProbNetParserException},
  * {@link WriterException}, {@link EmptyDatabaseException},
  * {@link ParsingSourceException}.
  * Additional subtypes live in {@code org.openmarkov.core.io.exception} and

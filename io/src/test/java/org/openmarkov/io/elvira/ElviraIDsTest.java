@@ -7,13 +7,16 @@
 
 package org.openmarkov.io.elvira;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.io.ProbNetReader;
+import org.openmarkov.core.model.network.ProbNet;
 
 import java.io.IOException;
 
-import org.junit.jupiter.api.*;
-import org.openmarkov.core.io.ProbNetReader;
-import org.openmarkov.core.model.network.ProbNet;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class ElviraIDsTest {
@@ -24,10 +27,7 @@ public class ElviraIDsTest {
 	private ProbNet probNet;
 
 	@BeforeEach
-	/** Create a ElviraScanner and opens a file for tests */ public void setUp() throws org.openmarkov.core.exception.ParserException, IOException {
-		System.out.println(testFile);
-		System.out.println("-------------------------------------");
-		System.out.println();
+	/** Create a ElviraScanner and opens a file for tests */ public void setUp() throws ProbNetParserException, IOException {
         ProbNetReader probNetReader = new ElviraParser();
         probNet = probNetReader.read(this.getClass().getClassLoader().getResource(testFile)).probNet();
 	}

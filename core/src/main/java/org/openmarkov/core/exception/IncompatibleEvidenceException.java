@@ -33,7 +33,7 @@ public abstract class IncompatibleEvidenceException extends UserInputException {
         public final Finding oldFinding;
     }
     
-    //Node for {variable} is not an Event node.
+    
     public static final class VariableMustBeEvent extends IncompatibleEvidenceException {
         public final Variable variable;
         

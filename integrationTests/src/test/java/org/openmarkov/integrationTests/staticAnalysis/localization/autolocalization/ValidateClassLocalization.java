@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.localize.ClassLocalizable;
+import org.openmarkov.core.localize.ConsiderAutoLocalizationIsValid;
 import org.openmarkov.core.localize.Localizable;
 import org.openmarkov.core.localize.StringBundle;
 import org.openmarkov.core.localize.StringDatabase;
@@ -12,8 +13,21 @@ import org.openmarkov.core.stringformat.StringFormat;
 import org.openmarkov.java.classUtils.ClassUtils;
 import org.openmarkov.plugin.PluginSearch;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -193,6 +207,7 @@ public class ValidateClassLocalization {
                 .flatMap(autolocalizablesAndBundles ->
                                  autolocalizablesAndBundles.localizablesClasses
                                          .stream()
+                                         .filter(autolocalizableClass -> autolocalizableClass.getDeclaredAnnotation(ConsiderAutoLocalizationIsValid.class) == null)
                                          .map(autoLocalizableClass -> new AutolocalizableAndBundles(autolocalizablesAndBundles.bundles, autoLocalizableClass))
                 )
                 .forEach(autolocalizableAndBundles -> {

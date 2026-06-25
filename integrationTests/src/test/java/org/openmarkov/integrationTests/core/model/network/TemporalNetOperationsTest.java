@@ -10,8 +10,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.model.network.CycleLength;
 import org.openmarkov.core.model.network.CycleLength.Unit;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.TemporalNetOperations;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
@@ -26,7 +31,7 @@ public class TemporalNetOperationsTest {
     private ProbNet probNet;
     
     @BeforeEach
-    public void setUp() throws java.net.URISyntaxException, org.openmarkov.core.exception.ParserException, IOException {
+    public void setUp() throws java.net.URISyntaxException, ProbNetParserException, IOException {
         String networkName = "networks/mid/SimpleTemporalUtilityNode.pgmx";
         // Open the file containing the network
         

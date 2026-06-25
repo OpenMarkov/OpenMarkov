@@ -130,8 +130,8 @@ public class FisherTesterTest {
     public void testBinaryMarginalDependence() {
         FisherTester tester = new FisherTester();
         double pValue = tester.test(binaryDb, bNodeA, bNodeB, Collections.emptyList());
-
-        System.out.printf("Fisher  A ⊥̸ B         : p = %.8f%n", pValue);
+        
+        //System.out.printf("Fisher  A ⊥̸ B         : p = %.8f%n", pValue);
         assertTrue(pValue < 0.05, "Expected marginal dependence between binary A and B.");
     }
 
@@ -139,8 +139,8 @@ public class FisherTesterTest {
     public void testBinaryConditionalIndependence() {
         FisherTester tester = new FisherTester();
         double pValue = tester.test(binaryDb, bNodeA, bNodeB, Collections.singletonList(bNodeC));
-
-        System.out.printf("Fisher  A ⊥  B | C    : p = %.8f%n", pValue);
+        
+        //System.out.printf("Fisher  A ⊥  B | C    : p = %.8f%n", pValue);
         assertTrue(pValue > 0.05, "Expected conditional independence between binary A and B given C.");
     }
 
@@ -150,8 +150,8 @@ public class FisherTesterTest {
     public void testTernaryMarginalDependence() {
         FisherTester tester = new FisherTester();
         double pValue = tester.test(ternaryDb, tNodeA, tNodeB, Collections.emptyList());
-
-        System.out.printf("Fisher(χ²) A ⊥̸ B      : p = %.8f%n", pValue);
+        
+        //System.out.printf("Fisher(χ²) A ⊥̸ B      : p = %.8f%n", pValue);
         assertTrue(pValue < 0.05, "Expected marginal dependence between ternary A and B.");
     }
 
@@ -159,8 +159,8 @@ public class FisherTesterTest {
     public void testTernaryConditionalIndependence() {
         FisherTester tester = new FisherTester();
         double pValue = tester.test(ternaryDb, tNodeA, tNodeB, Collections.singletonList(tNodeC));
-
-        System.out.printf("Fisher(χ²) A ⊥  B | C : p = %.8f%n", pValue);
+        
+        //System.out.printf("Fisher(χ²) A ⊥  B | C : p = %.8f%n", pValue);
         assertTrue(pValue > 0.05, "Expected conditional independence between ternary A and B given C.");
     }
 }

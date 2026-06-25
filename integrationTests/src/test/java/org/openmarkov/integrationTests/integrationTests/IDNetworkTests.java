@@ -8,8 +8,7 @@ import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
-import org.openmarkov.core.io.ProbNetInfo;
-import org.openmarkov.core.io.ProbNetReader;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
@@ -34,7 +33,7 @@ public abstract class IDNetworkTests {
     protected ProbNet probNet;
     protected EvidenceCase preResolutionEvidence;
     
-    @BeforeEach public void setUp() throws java.net.URISyntaxException, org.openmarkov.core.exception.ParserException, IOException {
+    @BeforeEach public void setUp() throws java.net.URISyntaxException, ProbNetParserException, IOException {
         // Load the network: ID-decide-test
         PGMXReader_0_2 pgmxReader = newPGMXReader();
         PGMXReader.NetworkAndEvidence probNetInfo = pgmxReader.read(getClass().getClassLoader()

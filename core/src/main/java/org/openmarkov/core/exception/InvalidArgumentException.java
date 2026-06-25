@@ -54,4 +54,8 @@ public class InvalidArgumentException extends IllegalArgumentException implement
         String namePart = argumentName != null ? argumentName + " " : "";
         return "Argument " + namePart + valuePart + "is invalid because " + reason + ".";
     }
+    
+    @Override public String toString() {
+        return this.localize();
+    }
 }

@@ -3,7 +3,7 @@ package org.openmarkov.integrationTests.core.model.network;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
@@ -24,7 +24,7 @@ public class PotentialsCanBeCloned {
     record DeepCloneTestData(Potential potential, ProbNet probNet) {
     }
     
-    Stream<DeepCloneTestData> deepCloneTestData() throws NoReaderForFileException, ParserException, IOException, CorruptNetworkFile {
+    Stream<DeepCloneTestData> deepCloneTestData() throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
         var net = NetsIO.openNetworkURL(PotentialsCanBeCloned.DAN_WITH_EVERY_POTENTIAL_URL)
                         .probNet();
         return net.getNodes().stream()
@@ -43,7 +43,7 @@ public class PotentialsCanBeCloned {
     }
     
     
-    Stream<Potential> cloneTestData() throws NoReaderForFileException, ParserException, IOException, CorruptNetworkFile {
+    Stream<Potential> cloneTestData() throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
         return this.deepCloneTestData().map(DeepCloneTestData::potential);
     }
     

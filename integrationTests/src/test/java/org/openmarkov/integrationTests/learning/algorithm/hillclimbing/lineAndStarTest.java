@@ -5,10 +5,17 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.model.database.CaseDatabase;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.EmptyDatabaseException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
 import org.openmarkov.core.io.exception.NoWriterForExtensionException;
+import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.integrationTests.IntegrationTest;
@@ -52,7 +59,6 @@ public class lineAndStarTest {
                 proposedEdits.add(bestEdition);
                 bestEdition = learningManager.getLearningAlgorithm().getNextEdit(true, true);
             }
-            System.out.println("Proposed edits: " + proposedEdits);
             if (proposedEdits.isEmpty()) {
                 break;
             }
@@ -65,7 +71,6 @@ public class lineAndStarTest {
                              + System.lineSeparator() + "Expected edits: " + expectedEdits
                              + System.lineSeparator() + "Proposed edits: " + edits);
             }
-            System.out.println("Applying edit: " + proposedEdits.get(0));
             learningManager.applyEdit(proposedEdits.get(0).getEdit());
             stepIndex += 1;
         }
@@ -74,7 +79,6 @@ public class lineAndStarTest {
         } else if (stepIndex > EXPECTED_EDITS.size()) {
             fail("More steps than expected have been made");
         }
-        System.out.println("Finished learning successfully.");
     }
     
     private static @Nullable List<PNEdit> editsOfStep(int stepIndex, ProbNet net) {

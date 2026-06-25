@@ -317,5 +317,9 @@ public class FeatureSelection {
 				case MARKOV_BLANKET_IAMB -> "Markov blanket (IAMB)";
 			};
 		}
+		
+		@Override public String toString() {
+			return this.localize();
+		}
 	}
 }

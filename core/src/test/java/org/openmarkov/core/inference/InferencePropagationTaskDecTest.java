@@ -60,7 +60,7 @@ public abstract class InferencePropagationTaskDecTest extends InferenceTaskTest 
     @Test
     public void testEvaluationIDDecisionTestProblem()
             throws FileNotFoundException,
-            IOException, ParserException, NodeNotFoundException,
+            IOException, ProbNetParserException, NodeNotFoundException,
             ConstraintViolatedException, NotEvaluableNetworkException {
         Task algorithm = buildInferenceAlgorithmAndSkipTestIfNotEvaluable(iD_DecisionTestProblemWithoutSV);
         

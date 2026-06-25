@@ -15,40 +15,74 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.located.LocatedJDOMFactory;
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.expression.VariableExpression;
+import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.inference.TemporalOptions;
+import org.openmarkov.core.io.format.annotation.FormatManager;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.Criterion;
+import org.openmarkov.core.model.network.CycleLength;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.PartitionedInterval;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.Properties;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.StringWithProperties;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.core.model.network.constraint.OnlyContinuousVariables;
 import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
 import org.openmarkov.core.model.network.constraint.OnlySelfLoopsWithEventAndChanceNodes;
-import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
-import org.openmarkov.io.probmodel.exception.PGMXParserException;
-import org.openmarkov.core.inference.MulticriteriaOptions;
-import org.openmarkov.core.io.format.annotation.FormatManager;
-import org.openmarkov.core.model.graph.Link;
-import org.openmarkov.core.model.network.*;
-import org.openmarkov.core.model.network.Properties;
-import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunction;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionManager;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
-import org.openmarkov.core.model.network.potential.*;
+import org.openmarkov.core.model.network.potential.BinomialPotential;
+import org.openmarkov.core.model.network.potential.ConditionalGaussianPotential;
+import org.openmarkov.core.model.network.potential.CycleLengthShift;
+import org.openmarkov.core.model.network.potential.DeltaPotential;
+import org.openmarkov.core.model.network.potential.DiscretizedCauchyPotential;
+import org.openmarkov.core.model.network.potential.ExactDistrPotential;
+import org.openmarkov.core.model.network.potential.ExponentialHazardPotential;
+import org.openmarkov.core.model.network.potential.ExponentialPotential;
+import org.openmarkov.core.model.network.potential.FunctionPotential;
+import org.openmarkov.core.model.network.potential.LinearCombinationPotential;
+import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.PotentialRole;
+import org.openmarkov.core.model.network.potential.ProductPotential;
+import org.openmarkov.core.model.network.potential.SameAsPrevious;
+import org.openmarkov.core.model.network.potential.SumPotential;
+import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.core.model.network.potential.UniformPotential;
+import org.openmarkov.core.model.network.potential.WeibullHazardPotential;
 import org.openmarkov.core.model.network.potential.canonical.ICIPotential;
+import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.potential.treeadd.Threshold;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
 import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.core.model.network.type.plugin.NetworkTypeUtils;
+import org.openmarkov.io.probmodel.exception.PGMXParserException;
 import org.openmarkov.io.probmodel.strings.XMLAttributes;
 import org.openmarkov.io.probmodel.strings.XMLTags;
 import org.openmarkov.io.probmodel.strings.XMLValues;
 import org.xml.sax.SAXException;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PGMXReader_0_2 {
     
@@ -96,13 +130,13 @@ public class PGMXReader_0_2 {
      *
      * @throws PGMXParserException if there is an error parsing the XML
      */
-    public PGMXReader.NetworkAndEvidence read(URL networkSource) throws ParserException {
+    public PGMXReader.NetworkAndEvidence read(URL networkSource) throws ProbNetParserException {
         FormatManager formatManager = FormatManager.getInstance();
         try {
             formatManager.checkVersion(networkSource);
             formatManager.checkStructure(networkSource);
         } catch (SAXException | IOException e) {
-            throw new ParserException.PGMXInvalid(e.getMessage());
+            throw new ProbNetParserException.PGMXInvalid(e.getMessage());
         }
         Element root = getRootElement(networkSource);
         ProbNet probNet = this.getProbNet(root, networkSource.getFile());
@@ -120,7 +154,7 @@ public class PGMXReader_0_2 {
      *
      * @return network version in a String
      */
-    public static String getVersion(URL networkSource) throws ParserException.XMLInvalid, ParserException.CannotOpenFile {
+    public static String getVersion(URL networkSource) throws ProbNetParserException.XMLInvalid, ProbNetParserException.CannotOpenFile {
         Element root = getRootElement(networkSource);
         return root.getAttributeValue(XMLAttributes.FORMAT_VERSION.toString());
     }
@@ -134,16 +168,16 @@ public class PGMXReader_0_2 {
      * @return root Element
      */
     @SuppressWarnings("ThrowInsideCatchBlockWhichIgnoresCaughtException")
-    public static Element getRootElement(URL networkSource) throws ParserException.XMLInvalid, ParserException.CannotOpenFile {
+    public static Element getRootElement(URL networkSource) throws ProbNetParserException.XMLInvalid, ProbNetParserException.CannotOpenFile {
         SAXBuilder builder = new SAXBuilder();
         builder.setJDOMFactory(new LocatedJDOMFactory());
         Document document;
         try {
             document = builder.build(networkSource);
         } catch (JDOMException e) {
-            throw new ParserException.XMLInvalid(networkSource.getFile(), e);
+            throw new ProbNetParserException.XMLInvalid(networkSource.getFile(), e);
         } catch (IOException e) {
-            throw new ParserException.CannotOpenFile(networkSource.getFile());
+            throw new ProbNetParserException.CannotOpenFile(networkSource.getFile());
         }
         return document.getRootElement();
     }
@@ -156,7 +190,7 @@ public class PGMXReader_0_2 {
      *
      * @throws PGMXParserException if the PGMX file cannot be parsed
      */
-    public ProbNet getProbNet(Element root, String netName) throws ParserException {
+    public ProbNet getProbNet(Element root, String netName) throws ProbNetParserException {
         return getProbNet(root, netName, new HashMap<>());
     }
     
@@ -169,7 +203,7 @@ public class PGMXReader_0_2 {
      *
      * @throws PGMXParserException if the PGMX file cannot be parsed
      */
-    protected ProbNet getProbNet(Element root, String netName, Map<String, ProbNet> classes) throws ParserException {
+    protected ProbNet getProbNet(Element root, String netName, Map<String, ProbNet> classes) throws ProbNetParserException {
         Element xMLProbNet = root.getChild(getStringTagNetwork());
         ProbNet probNet = null;
         if (xMLProbNet != null) { // Read prob net if the xml file exists

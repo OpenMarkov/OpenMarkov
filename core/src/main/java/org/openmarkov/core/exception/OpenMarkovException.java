@@ -29,4 +29,8 @@ public abstract class OpenMarkovException extends Exception implements IBundledO
     protected OpenMarkovException() {
     }
     
+    @Override public String toString() {
+        return this.localize();
+    }
+    
 }

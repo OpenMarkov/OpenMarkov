@@ -9,9 +9,8 @@ package org.openmarkov.core.io.format.annotation;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.plugin.PluginSearch;
@@ -34,7 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -116,7 +116,7 @@ public class FormatManager {
      *
      * @return a ProbNetReader object
      */
-    public ProbNetReader getProbNetReader(URL url) throws NoReaderForFileException, ParserException.BadlyStructuredFile {
+    public ProbNetReader getProbNetReader(URL url) throws NoReaderForFileException, ProbNetParserException.BadlyStructuredFile {
         //checkVersion(url);
         String fileName = url.getFile();
         String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
@@ -131,7 +131,7 @@ public class FormatManager {
         return reader;
     }
     
-    private static @NotNull String getFileVersion(URL url, String fileExtension) throws ParserException.BadlyStructuredFile {
+    private static @NotNull String getFileVersion(URL url, String fileExtension) throws ProbNetParserException.BadlyStructuredFile {
         String fileVersion;
         if (fileExtension.equals("elv")) {
             fileVersion = "";
@@ -146,11 +146,11 @@ public class FormatManager {
             try {
                 doc = docBuilder.parse(url.openStream());
             } catch (SAXParseException e) {
-                throw new ParserException.BadlyStructuredFile(url, e);
+                throw new ProbNetParserException.BadlyStructuredFile(url, e);
             } catch (SAXException e) {
                 throw new UnreachableException("Unexpected SAX error reading " + url, e);
             } catch (IOException e) {
-                throw new ParserException.BadlyStructuredFile(url, e);
+                throw new ProbNetParserException.BadlyStructuredFile(url, e);
             }
             fileVersion = doc.getDocumentElement().getAttribute("formatVersion");
             //Removing the last index of the version
@@ -223,7 +223,7 @@ public class FormatManager {
     }
     
     
-    public void checkStructure(String name, InputStream inputStream) throws SAXException, IOException, ParserException.BadlyStructuredFile {
+    public void checkStructure(String name, InputStream inputStream) throws SAXException, IOException, ProbNetParserException.BadlyStructuredFile {
         InputStream xsd = getClass().getClassLoader().getResourceAsStream("val_v4.xsd");
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Source schemaFile = new StreamSource(xsd);
@@ -233,11 +233,11 @@ public class FormatManager {
             validator.validate(new StreamSource(inputStream));
         } catch (SAXParseException e) {
             URL url = new File(name).toURI().toURL();
-            throw new ParserException.BadlyStructuredFile(url, e);
+            throw new ProbNetParserException.BadlyStructuredFile(url, e);
         }
     }
     
-    public void checkStructure(URL url) throws ParserException.BadlyStructuredFile {
+    public void checkStructure(URL url) throws ProbNetParserException.BadlyStructuredFile {
         /*
         InputStream xsd = getClass().getClassLoader().getResourceAsStream("val_v4.xsd");
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -250,9 +250,9 @@ public class FormatManager {
         try {
             schema.newValidator().validate(new StreamSource(url.openStream()));
         } catch (SAXException e) {
-            throw new UnrecoverableException(new ParserException.CannotParseFile(e, url));
+            throw new UnrecoverableException(new ProbNetParserException.CannotParseFile(e, url));
         } catch (IOException e) {
-            throw new ParserException.BadlyStructuredFile(url, e);
+            throw new ProbNetParserException.BadlyStructuredFile(url, e);
         }
         */
     }

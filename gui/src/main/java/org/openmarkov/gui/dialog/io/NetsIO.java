@@ -8,18 +8,17 @@
 package org.openmarkov.gui.dialog.io;
 
 import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.exception.WriterException;
-import org.openmarkov.core.io.format.annotation.FormatType;
-import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
-import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.io.ProbNetInfo;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.core.io.format.annotation.FormatManager;
+import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
@@ -146,7 +145,7 @@ public class NetsIO {
      */
     @ToCheck(reasonKind = {ToCheck.ReasonKind.CODE_QUALITY, ToCheck.ReasonKind.EXCEPTIONS_REWORK},
             reasonDescription = "Reading a network file should always throw the exceptions " +
-                    "ParserException.BadlyStructuredFile and CorruptNetworkFile. However, these exceptions are thrown " +
+                    "ProbNetParserException.BadlyStructuredFile and CorruptNetworkFile. However, these exceptions are thrown " +
                     "in 'getProbNetReader' instead of 'loadProbNetInfo', meaning someplaces read ProbNet files without " +
                     "the awareness these exceptions give." +
                     "\n" +
@@ -154,7 +153,7 @@ public class NetsIO {
                     " is likely we want it to receive an URL to the file instead of a String containing the filename. " +
                     "Duplicated methods should be avoided if doing this, as the current implementation duplicates some."
     )
-    public static ProbNetInfo openNetworkFile(String fileName) throws IOException, ParserException, NoReaderForFileException, CorruptNetworkFile {
+    public static ProbNetInfo openNetworkFile(String fileName) throws IOException, ProbNetParserException, NoReaderForFileException, CorruptNetworkFile {
         return NetsIO.openNetworkURL(new File(fileName).toURI().toURL());
     }
     
@@ -166,7 +165,7 @@ public class NetsIO {
      *
      * @return an ProbNetInfo object with the information of the network.
      */
-    public static ProbNetInfo openNetworkURL(URL url) throws IOException, org.openmarkov.core.exception.ParserException, NoReaderForFileException, CorruptNetworkFile {
+    public static ProbNetInfo openNetworkURL(URL url) throws IOException, ProbNetParserException, NoReaderForFileException, CorruptNetworkFile {
         String networkName = url.getPath();
         networkName = networkName.substring(networkName.lastIndexOf('/') + 1);
         FormatManager formatManager = FormatManager.getInstance();

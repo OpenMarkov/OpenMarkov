@@ -245,8 +245,8 @@ public class CrossEntropyIndependenceTesterTest {
         CrossEntropyIndependenceTester tester = new CrossEntropyIndependenceTester();
 
         double pValue = tester.test(caseDatabase, nodeA, nodeB, Collections.emptyList());
-
-        System.out.printf("Test A ⊥̸ B (marginal): p-value = %.6f%n", pValue);
+        
+        //System.out.printf("Test A ⊥̸ B (marginal): p-value = %.6f%n", pValue);
         assertTrue(pValue < 0.05, "Expected marginal dependence between A and B.");
     }
 
@@ -294,8 +294,8 @@ public class CrossEntropyIndependenceTesterTest {
         CrossEntropyIndependenceTester tester = new CrossEntropyIndependenceTester();
 
         double pValue = tester.test(caseDatabase, nodeA, nodeB, Collections.singletonList(nodeC));
-
-        System.out.printf("Test A ⊥ B | C: p-value = %.6f%n", pValue);
+        
+        //System.out.printf("Test A ⊥ B | C: p-value = %.6f%n", pValue);
         assertTrue(pValue > 0.05, "Expected conditional independence between A and B given C.");
     }
 }

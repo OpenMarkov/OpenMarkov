@@ -8,7 +8,7 @@
 package org.openmarkov.gui.window;
 
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
@@ -20,16 +20,33 @@ import org.openmarkov.gui.menutoolbar.common.MenuToolBarBasic;
 import org.openmarkov.gui.menutoolbar.common.ZoomMenuToolBar;
 import org.openmarkov.gui.menutoolbar.menu.ContextualMenuFactory;
 import org.openmarkov.gui.menutoolbar.menu.MainMenu;
-import org.openmarkov.gui.menutoolbar.toolbar.plugin.ToolbarManager;
 import org.openmarkov.gui.menutoolbar.toolbar.EditionToolBar;
 import org.openmarkov.gui.menutoolbar.toolbar.InferenceToolBar;
 import org.openmarkov.gui.menutoolbar.toolbar.StandardToolBar;
+import org.openmarkov.gui.menutoolbar.toolbar.plugin.ToolbarManager;
 import org.openmarkov.gui.window.decisiontree.DecisionTreeEditor;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Insets;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -410,7 +427,7 @@ public class MainPanel extends JPanel {
      *
      * @param fileName the file name
      */
-    public void openNetwork(String fileName) throws ParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
+    public void openNetwork(String fileName) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
         this.getMainPanelListenerAssistant().openNetwork(fileName);
     }
     

@@ -7,8 +7,18 @@
 
 package org.openmarkov.integrationTests.learning.algorithm.pc;
 
-import org.junit.jupiter.api.*;
-import org.openmarkov.core.exception.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.EmptyDatabaseException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -17,7 +27,6 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.io.database.excel.CSVDataBaseIO;
-import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 import org.openmarkov.learning.algorithm.pc.PCAlgorithm;
 import org.openmarkov.learning.algorithm.pc.independencetester.CrossEntropyIndependenceTester;
 import org.openmarkov.learning.algorithm.pc.independencetester.IndependenceTester;
@@ -53,7 +62,6 @@ public class PCAlgorithmTest {
 	@Tag(TestSpeed.FAST)
     @Test
 	public void testABCE() throws org.openmarkov.core.exception.CannotNormalizePotentialException, EmptyDatabaseException, java.io.FileNotFoundException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
-		System.out.println(getClass().getResource(bnABCEFilename));
 		CSVDataBaseIO csvReader = new CSVDataBaseIO();
 		CaseDatabase ABCEDatabase = csvReader.load(new File(getClass().getResource(bnABCEFilename).getFile()));
 		ProbNet learnedNet = new ProbNet();
@@ -71,21 +79,14 @@ public class PCAlgorithmTest {
 		Node nodeE = learnedNet.getNode("E");
 
 		Assertions.assertNotNull(nodeA);
-        if (nodeA!=null) System.out.println("A found.");
 		Assertions.assertNotNull(nodeB);
-        if (nodeB!=null) System.out.println("B found.");
 		Assertions.assertNotNull(nodeC);
-        if (nodeC!=null) System.out.println("C found.");
 		Assertions.assertNotNull(nodeE);
-        if (nodeE!=null) System.out.println("E found.");
 		// check the structure of the learned net
 		// present links
 		Assertions.assertTrue(nodeE.isParent(nodeA));
-        if (nodeE.isParent(nodeA)) System.out.println("A parent of E.");
 		Assertions.assertTrue(nodeE.isParent(nodeB));
-        if (nodeE.isParent(nodeA)) System.out.println("B parent of E.");
 		Assertions.assertTrue(nodeE.isParent(nodeC));
-        if (nodeE.isParent(nodeC)) System.out.println("C parent of E.");
 		
 		// check the CPTs using semantic lookups (position-independent)
 		double maxError = 0.05;
@@ -345,7 +346,7 @@ public class PCAlgorithmTest {
 	@Disabled
 	@Tag(TestSpeed.SLOW)
     @Test
-	public void testAlarm500() throws org.openmarkov.core.exception.CannotNormalizePotentialException, org.openmarkov.core.exception.ParserException, EmptyDatabaseException, IOException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+	public void testAlarm500() throws org.openmarkov.core.exception.CannotNormalizePotentialException, ProbNetParserException, EmptyDatabaseException, IOException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 
 		CSVDataBaseIO csvReader = new CSVDataBaseIO();
 		CaseDatabase alarmDatabase = csvReader.load(new File(getClass().getResource(alarmDatabaseFilename).getFile()));
@@ -359,15 +360,17 @@ public class PCAlgorithmTest {
 
 		learningAlgorithm.run(new ModelNetUse());
 
+		/*
 		Assertions.assertEquals(34, learnedNet.getLinks().size());
 		PGMXReader_0_2 reader = new PGMXReader_0_2();
         String netName = getClass().getResource(this.path + "BN-alarm.pgmx").getFile();
         ProbNet readNet = reader.read(new File(netName).toURI().toURL()).probNet();
 		printDifferences(readNet, learnedNet);
+		*/
 	}
 
 	//@Test
-	public void testAlarm10k() throws org.openmarkov.core.exception.CannotNormalizePotentialException, org.openmarkov.core.exception.ParserException, EmptyDatabaseException, IOException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+	public void testAlarm10k() throws org.openmarkov.core.exception.CannotNormalizePotentialException, ProbNetParserException, EmptyDatabaseException, IOException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 
 		CSVDataBaseIO csvReader = new CSVDataBaseIO();
 		CaseDatabase alarm10kDatabase = csvReader.load(new File(getClass().getResource(alarm10kDatabaseFilename).getFile()));
@@ -383,10 +386,12 @@ public class PCAlgorithmTest {
 
 		Assertions.assertEquals(46, learnedNet.getLinks().size());
 
+		/*
 		PGMXReader_0_2 reader = new PGMXReader_0_2();
         String netName = getClass().getResource("/BN-alarm.pgmx").getFile();
         ProbNet readNet = reader.read(new File(netName).toURI().toURL()).probNet();
 		printDifferences(readNet, learnedNet);
+		*/
 	}
 
 	private void printDifferences(ProbNet originalNet, ProbNet learnedNet) {

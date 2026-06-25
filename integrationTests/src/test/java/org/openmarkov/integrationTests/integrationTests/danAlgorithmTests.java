@@ -7,9 +7,16 @@
 
 package org.openmarkov.integrationTests.integrationTests;
 
-import org.junit.jupiter.api.*;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.io.ProbNetInfo;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.PotentialOperationException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -29,7 +36,7 @@ public class danAlgorithmTests {
     }
     
     @Test
-    public void testOneDecision() throws ParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
+    public void testOneDecision() throws ProbNetParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         String networkName = "DAN-one-decision-CE.pgmx";
         String path = "networks/dan/";
         double lambda = 30000;
@@ -48,7 +55,7 @@ public class danAlgorithmTests {
     
     @Disabled("Missing test net DAN-2tests.pgmx")
     @Test
-    public void testDAN2tests() throws ParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
+    public void testDAN2tests() throws ProbNetParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         String networkName = "DAN-2tests.pgmx";
         String path = "networks/IDCEAnTherapies/";
         double lambda = 30000;
@@ -67,7 +74,7 @@ public class danAlgorithmTests {
     
     @Disabled("Missing test net DAN-3tests.pgmx")
     @Test
-    public void testDAN3tests() throws ParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
+    public void testDAN3tests() throws ProbNetParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         String networkName = "DAN-3tests.pgmx";
         String path = "networks/IDCEAnTherapies/";
         double lambda = 30000;
@@ -86,7 +93,7 @@ public class danAlgorithmTests {
     
     @Disabled("Missing test net DAN-4tests.pgmx")
     @Test
-    public void testDAN4tests() throws ParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
+    public void testDAN4tests() throws ProbNetParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         String networkName = "DAN-4tests.pgmx";
         String path = "networks/IDCEAnTherapies/";
         double lambda = 30000;
@@ -105,7 +112,7 @@ public class danAlgorithmTests {
     
     
     @Test
-    public void oneChanceCETest() throws ParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
+    public void oneChanceCETest() throws ProbNetParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         String networkName = "DAN-one-chance-ce.pgmx";
         String path = "networks/dan/";
         double lambda = 30000;

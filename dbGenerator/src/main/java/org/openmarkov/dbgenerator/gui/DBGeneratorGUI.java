@@ -8,25 +8,39 @@
 package org.openmarkov.dbgenerator.gui;
 
 import org.apache.commons.io.FilenameUtils;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
 import org.openmarkov.core.io.exception.NoReaderForExtension;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.dbgenerator.DBGenerator;
-import org.openmarkov.gui.dialog.io.*;
 import org.openmarkov.gui.dialog.io.DBWriterOMFileChooser;
+import org.openmarkov.gui.dialog.io.FileFilterByExtension;
+import org.openmarkov.gui.dialog.io.NetsIO;
 import org.openmarkov.gui.dialog.io.NetworkOMFileChooser;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.WindowConstants;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -149,8 +163,8 @@ public class DBGeneratorGUI extends JDialog {
                     if (netFilePath != null) {
                         try {
                             net = NetsIO.openNetworkFile(netFilePath).probNet();
-                        } catch (IOException | ParserException | NoReaderForFileException
-                                | CorruptNetworkFile e) {
+                        } catch (IOException | ProbNetParserException | NoReaderForFileException
+                                 | CorruptNetworkFile e) {
                             throw new UnrecoverableException(e);
                         }
                     }
@@ -184,7 +198,7 @@ public class DBGeneratorGUI extends JDialog {
             }
             try {
                 net = NetsIO.openNetworkFile(netFilePath).probNet();
-            } catch (NoReaderForFileException | IOException | ParserException | CorruptNetworkFile e) {
+            } catch (NoReaderForFileException | IOException | ProbNetParserException | CorruptNetworkFile e) {
                 throw new UnrecoverableException(e);
             } finally {
                 generateButton.setEnabled(net != null);

@@ -10,4 +10,8 @@ public class UnexpectedMenuActionException extends RuntimeException implements I
     
     public final String actionCommand;
     
+    @Override public String toString() {
+        return this.localize();
+    }
+    
 }

@@ -13,8 +13,10 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.io.ProbNetInfo;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.testTags.TestSpeed;
@@ -38,7 +40,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 /**
@@ -209,7 +212,7 @@ public class NetsIOTest {
         FileInputStream file = new FileInputStream(networkName);
         probNetInfo = pgmxReader.read(new File(networkName).toURI().toURL());
         probNet = probNetInfo.probNet();
-        System.out.println("Loaded, saved and reloaded probNet:" + networkToTest.url.getPath());
+        //System.out.println("Loaded, saved and reloaded probNet:" + networkToTest.url.getPath()+ " to "+new File(networkName).getAbsolutePath());
         assertNotNull(probNet);
         assertNotNull(probNet.getNodes());
         EvidenceCase preResolutionEvidence;
@@ -227,12 +230,12 @@ public class NetsIOTest {
         // be converted to table potentials for inference. I/O is verified above; inference
         // is a best-effort check only.
         catch (NonProjectablePotentialException e) {
-            System.out.println("Inference skipped for " + networkName + " (continuous distribution): " + e.getMessage());
+            //System.out.println("Inference skipped for " + networkName + " (continuous distribution): " + e.getMessage());
         } catch (UnreachableException e) {
             // VECEPSA wraps PotentialCannotBeConvertedToATable as UnreachableException
             // when running concurrent simulations. Same known limitation as above.
             if (e.getCause() instanceof NonProjectablePotentialException.PotentialCannotBeConvertedToATable) {
-                System.out.println("Inference skipped for " + networkName + " (continuous distribution in VECEPSA): " + e.getCause().getMessage());
+                //System.out.println("Inference skipped for " + networkName + " (continuous distribution in VECEPSA): " + e.getCause().getMessage());
             } else {
                 throw e;
             }
@@ -242,7 +245,7 @@ public class NetsIOTest {
     @ParameterizedTest
     @MethodSource("networksToTestOfVersion0_2")
     @Tag(TestSpeed.SLOW)
-    public void testPGMX_0_2vs0_5(NetworkToTest networkToTest) throws IOException, WriterException, ParserException {
+    public void testPGMX_0_2vs0_5(NetworkToTest networkToTest) throws IOException, WriterException, ProbNetParserException {
         // The name is irrelevant because this nets will only be created for tests purposes and it will be deleted
         // after each iteration
         String networkName = networkToTest.url.getPath();

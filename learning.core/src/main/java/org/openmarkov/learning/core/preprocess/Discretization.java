@@ -8,8 +8,8 @@
 package org.openmarkov.learning.core.preprocess;
 
 import org.jetbrains.annotations.NotNull;
-import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.localize.Localizable;
+import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
@@ -880,6 +880,10 @@ public class Discretization {
                 case CHIMERGE -> "ChiMerge (χ², supervised)";
                 case KMEANS -> "K-means (unsupervised)";
             };
+        }
+        
+        @Override public String toString() {
+            return this.localize();
         }
     }
     

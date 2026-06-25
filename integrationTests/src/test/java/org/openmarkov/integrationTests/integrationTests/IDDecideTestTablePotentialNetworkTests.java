@@ -1,6 +1,7 @@
 package org.openmarkov.integrationTests.integrationTests;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.openmarkov.core.exception.ProbNetParserException;
 
 import java.io.IOException;
 
@@ -12,7 +13,7 @@ import java.io.IOException;
 public class IDDecideTestTablePotentialNetworkTests extends idDecideTestNetworkTests {
 	
 	@Override
-	@BeforeEach public void setUp() throws java.net.URISyntaxException, org.openmarkov.core.exception.ParserException, IOException {
+	@BeforeEach public void setUp() throws java.net.URISyntaxException, ProbNetParserException, IOException {
 		networkName = "networks/id/ID-decide-test.pgmx";
 		super.setUp();
 	}

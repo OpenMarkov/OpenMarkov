@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.action.core.MulticriteriaEdit;
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.ProbNet;
@@ -30,7 +30,7 @@ public class MulticriteriaEditTest {
     
     private ProbNet probNet;
     
-    @BeforeEach public void setUp() throws ParserException, URISyntaxException, IOException {
+    @BeforeEach public void setUp() throws ProbNetParserException, URISyntaxException, IOException {
         this.probNet = getProbNet4Test();
         probNet.getPNESupport().setWithUndo(true);
     }
@@ -73,7 +73,7 @@ public class MulticriteriaEditTest {
         
     }
     
-    private ProbNet getProbNet4Test() throws ParserException, IOException {
+    private ProbNet getProbNet4Test() throws ProbNetParserException, IOException {
         String bayesNetworkName = "networks/bn/BN-MulticriteriaEditTest.pgmx";
         
         // Load the Bayesian network

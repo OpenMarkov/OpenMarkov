@@ -210,5 +210,9 @@ public class Outliers {
 				case ZSCORE_WINSORIZE -> "Z-score rule: winsorize outliers to nearest in-range state";
 			};
 		}
+		
+		@Override public String toString() {
+			return this.localize();
+		}
 	}
 }

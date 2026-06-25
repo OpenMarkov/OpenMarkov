@@ -8,8 +8,8 @@
 package org.openmarkov.learning.core.preprocess;
 
 import org.jetbrains.annotations.NotNull;
-import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.localize.Localizable;
+import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.stringformat.LocalizationFormatter;
@@ -425,6 +425,10 @@ public class MissingValues {
                 case IMPUTE_MEDIAN -> "Impute missing values with the median (numeric variables)";
                 case IMPUTE_KNN -> "Impute missing values with k-Nearest Neighbours (k=5)";
             };
+		}
+		
+		@Override public String toString() {
+			return this.localize();
 		}
 	}
 

@@ -7,7 +7,7 @@
 
 package org.openmarkov.io.probmodel.reader;
 
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 
 import java.util.Arrays;
 
@@ -21,7 +21,7 @@ public class ReaderFactory {
      *
      * @return PGMXReader 0_2 or newer
      */
-    public static PGMXReader_0_2 getReader(String strVersion) throws ParserException.WrongVersion {
+    public static PGMXReader_0_2 getReader(String strVersion) throws ProbNetParserException.WrongVersion {
         Version version = Arrays.stream(Version.values())
                                 .filter(
                                         iteratorVersion -> strVersion.startsWith(iteratorVersion.toString()))
@@ -30,7 +30,7 @@ public class ReaderFactory {
         return switch (version) {
             case V02 -> new PGMXReader_0_2();
             case V10 -> new PGMXReader_1_0();
-            case null -> throw new ParserException.WrongVersion(strVersion);
+            case null -> throw new ProbNetParserException.WrongVersion(strVersion);
         };
     }
 }

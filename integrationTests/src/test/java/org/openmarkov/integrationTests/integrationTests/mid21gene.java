@@ -4,9 +4,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.io.ProbNetInfo;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.model.network.CEP;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.potential.DeltaPotential;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.inference.algorithm.temporalevaluation.tasks.TemporalEvaluation;
@@ -15,11 +22,12 @@ import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEPSA;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
 import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 
-//import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
+//import java.io.FileOutputStream;
 
 @Disabled("The network '21-gene-190909-psa.pgmx' is missing.")
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -36,7 +44,7 @@ public class mid21gene {
     private ProbNet probNet;
     private EvidenceCase preResolutionEvidence;
     
-    @BeforeEach public void setUp() throws ParserException, URISyntaxException, FileNotFoundException {
+    @BeforeEach public void setUp() throws ProbNetParserException, URISyntaxException, FileNotFoundException {
         //Configurator.setRootLevel(Level.DEBUG);
         
         String networkName = "/networks/mid/21-gene-190909-psa.pgmx";

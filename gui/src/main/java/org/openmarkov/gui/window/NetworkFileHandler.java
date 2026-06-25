@@ -7,31 +7,51 @@
 
 package org.openmarkov.gui.window;
 
-import org.openmarkov.core.exception.*;
+import org.apache.commons.io.FilenameUtils;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.EmptyDatabaseException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ParsingSourceException;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.io.ProbNetInfo;
-import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
 import org.openmarkov.core.io.exception.NoWriterForExtensionException;
 import org.openmarkov.core.io.format.annotation.FormatManager;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.model.database.CaseDatabase;
+import org.openmarkov.core.model.network.Criterion;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.gui.configuration.LastOpenFiles;
 import org.openmarkov.gui.configuration.LocalPreferences;
 import org.openmarkov.gui.dialog.common.CommentHTMLScrollPane;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
-import org.openmarkov.gui.dialog.io.*;
+import org.openmarkov.gui.dialog.io.DBReaderOMFileChooser;
+import org.openmarkov.gui.dialog.io.FileFilterByExtension;
+import org.openmarkov.gui.dialog.io.NetsIO;
+import org.openmarkov.gui.dialog.io.NetworkOMFileChooser;
+import org.openmarkov.gui.dialog.io.OMFileChooser;
+import org.openmarkov.gui.dialog.io.URLNetworkChooserDialog;
 import org.openmarkov.gui.dialog.network.NetworkPropertiesDialog;
-import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -41,8 +61,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * Handles all file I/O operations: open, save, close, backup, evidence, and network creation.
@@ -103,11 +121,11 @@ class NetworkFileHandler {
     
     // ── Open ──────────────────────────────────────────────────────
     
-    void openNetwork() throws ParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
+    void openNetwork() throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
         openNetwork("");
     }
     
-    void openNetwork(String fileName) throws ParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
+    void openNetwork(String fileName) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
         if (fileName.isEmpty()) {
             fileName = requestNetworkFileToOpen();
         }
@@ -147,7 +165,7 @@ class NetworkFileHandler {
         networkPanels.add(newNetworkEditorPanel);
     }
     
-    void openNetworkURL() throws NoReaderForFileException, ParserException, IOException, CorruptNetworkFile {
+    void openNetworkURL() throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
         URL url = requestURLFileToOpen();
         if (url == null) {
             return;
@@ -228,7 +246,7 @@ class NetworkFileHandler {
         return saveNetworkActions(networkPanel, fileName, fileFormat);
     }
     
-    void saveOpenNetwork(NetworkEditorPanel networkPanel) throws ParserException, IOException, NoReaderForFileException, CorruptNetworkFile, WriterException {
+    void saveOpenNetwork(NetworkEditorPanel networkPanel) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile, WriterException {
         String fileName = networkPanel.getNetworkFile();
         if (fileName != null) {
             createBackUpNetworkFile(fileName, toBakExtension(networkPanel.getNetworkFile()));

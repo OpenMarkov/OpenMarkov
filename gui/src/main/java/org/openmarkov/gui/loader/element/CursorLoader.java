@@ -9,7 +9,10 @@ package org.openmarkov.gui.loader.element;
 
 import org.openmarkov.core.localize.StringDatabase;
 
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.net.URL;
 
 /**
@@ -39,11 +42,6 @@ public class CursorLoader {
      * Folder where cursors are saved.
      */
     private static final String CURSORS_PATH = "cursors/";
-    /**
-     * Name of a inexistent cursor just for automated testing of the class
-     * juanluisgf - Nov 2008
-     */
-    public static final Cursor TEST_CURSOR_FOR_NON_EXISTANT = load("nonexistant.gif");
     
     /**
      * This method loads a cursor resource and handles the exception if not

@@ -7,7 +7,6 @@
 
 package org.openmarkov.integrationTests.inference.heuristics;
 
-import org.junit.jupiter.api.Test;
 import org.openmarkov.core.inference.heuristic.EliminationHeuristic;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
@@ -16,18 +15,17 @@ import org.openmarkov.inference.algorithm.huginPropagation.ClusterOfVariables;
 import org.openmarkov.inference.algorithm.huginPropagation.HuginForest;
 import org.openmarkov.integrationTests.inference.util.Util;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 /**
  * Compares elimination heuristics on the largest Bayesian networks in the repository.
@@ -61,8 +59,12 @@ public class HeuristicComparisonTest {
             "org.openmarkov.inference.heuristic.weightedMinFill.WeightedMinFill",
             "org.openmarkov.inference.heuristic.rollout.RolloutElimination"
     };
+    
+    static void main() {
+        new HeuristicComparisonTest().compareHeuristicsOnLargeNetworks();
+    }
+    
 
-    @Test
     public void compareHeuristicsOnLargeNetworks() {
         List<ProbNet> networks = loadLargestBayesianNetworks();
         if (networks.isEmpty()) {

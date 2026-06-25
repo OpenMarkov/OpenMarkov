@@ -12,4 +12,8 @@ public class WrongClassException extends RuntimeException implements IBundledOpe
     public final Class<?> expectedClass;
     public final Class<?> foundClass;
     
+    @Override public String toString() {
+        return this.localize();
+    }
+    
 }

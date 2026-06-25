@@ -1,8 +1,14 @@
 package org.openmarkov.stochasticPropagationOutput;
 
-import org.junit.jupiter.api.*;
-
-import org.openmarkov.core.exception.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.ProbNet;
@@ -15,7 +21,11 @@ import org.openmarkov.inference.algorithm.likelihoodWeighting.LikelihoodWeightin
 import org.openmarkov.inference.algorithm.likelihoodWeighting.LogicSampling;
 import org.openmarkov.inference.algorithm.likelihoodWeighting.StochasticPropagation;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class StorageTest {
@@ -70,7 +80,7 @@ public class StorageTest {
 
                 // Algorithm to use
                 algorithmName = AlgorithmName.values()[i];
-                roundByBars(algorithmName.name());
+                //printRoundedByBars(algorithmName.name());
 
 
                 // Get the variable list to add findings
@@ -116,12 +126,12 @@ public class StorageTest {
                 algorithm.setStoringSamples(true);
 
                 HashMap<Variable, TablePotential> results = algorithm.getPosteriorValues();
-                printResults(results);
+                //printResults(results);
 
 
                 // Printing
-                System.out.println(algorithm.getVariablesToSample());
-                matrixPrettyPrint(algorithm.getSamples());
+                //System.out.println(algorithm.getVariablesToSample());
+                //matrixPrettyPrint(algorithm.getSamples());
 
                 // Prepare exact algorithm
                 ClusterPropagation exactAlgorithm = new HuginPropagation(probNet);
@@ -220,7 +230,7 @@ public class StorageTest {
      * - string -
      * ----------
      */
-    private void roundByBars(String string) {
+    private void printRoundedByBars(String string) {
 
         // Top bar
         for (int i = 0; i < string.length() + 3; i++) {

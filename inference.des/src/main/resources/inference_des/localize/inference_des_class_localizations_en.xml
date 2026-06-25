@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassLocalizations>
+    <Localization class="org.openmarkov.inference.DES.exception.EventIsNotParentOf"
+                  value="{eventNode} must be parent of {node}."/>
+    <Localization class="org.openmarkov.inference.DES.exception.NodeMustBeChance"
+                  value="{node} must be chance."/>
+    <Localization class="org.openmarkov.inference.DES.exception.NodeMustBeEvent"
+                  value="{node} must be event."/>
+    <Localization class="org.openmarkov.inference.DES.exception.NodeMustBeUtility"
+                  value="{node} must be utility."/>
+    <Localization class="org.openmarkov.inference.DES.exception.OnlyDESNetsAllowedException"
+                  value="Network {probNet.metadata.name} must be a DESNet."/>
+</ClassLocalizations>

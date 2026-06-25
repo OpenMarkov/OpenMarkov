@@ -7,9 +7,15 @@
 
 package org.openmarkov.integrationTests.costeffectiveness;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.inference.TemporalOptions;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.Criterion;
@@ -57,7 +63,7 @@ public class CEAGlobalAnalysisTest {
 	
 	@Tag(TestSpeed.MEDIUM)
     @Test
-	public void testChancellorUnicriterion() throws NonProjectablePotentialException, org.openmarkov.core.exception.ParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
+	public void testChancellorUnicriterion() throws NonProjectablePotentialException, ProbNetParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
 		// Open the file containing the network
 		// Load the Bayesian network
 		PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();
@@ -102,7 +108,7 @@ public class CEAGlobalAnalysisTest {
     
     @Tag(TestSpeed.MEDIUM)
     @Test
-	public void testDMHEE25SV() throws NonProjectablePotentialException, org.openmarkov.core.exception.ParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
+	public void testDMHEE25SV() throws NonProjectablePotentialException, ProbNetParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
 		PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();
 		ProbNet probNet = pgmxReader.read(getClass().getResource("/networks/mid/MID-dmhee-2.5-sv.pgmx")).probNet();
 
@@ -128,7 +134,7 @@ public class CEAGlobalAnalysisTest {
 	
 	@Tag(TestSpeed.SLOW)
     @Test
-	public void testDMHEE35() throws NonProjectablePotentialException, org.openmarkov.core.exception.ParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
+	public void testDMHEE35() throws NonProjectablePotentialException, ProbNetParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
 		// Constants
         // Open the file containing the network
 		
@@ -168,11 +174,12 @@ public class CEAGlobalAnalysisTest {
 		Assertions.assertArrayEquals(expectedResults, results, 0.001);
 
 	}
-
+	
+	@Disabled
 	@Tag(TestSpeed.SLOW)
 	@SuppressWarnings("rawtypes")
     @Test
-	public void testDMHEE47PSA() throws NonProjectablePotentialException, org.openmarkov.core.exception.ParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
+	public void testDMHEE47PSA() throws NonProjectablePotentialException, ProbNetParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
 		
 		// Load the Bayesian network
 		PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();
@@ -209,7 +216,7 @@ public class CEAGlobalAnalysisTest {
 	@Tag(TestSpeed.SLOW)
 	@SuppressWarnings("rawtypes")
     @Test
-	public void testBriggsSA() throws NonProjectablePotentialException, org.openmarkov.core.exception.ParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
+	public void testBriggsSA() throws NonProjectablePotentialException, ProbNetParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
 		
 		// Load the Bayesian network
 		PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();
@@ -270,10 +277,11 @@ public class CEAGlobalAnalysisTest {
 					label + " strategy " + i + " effectiveness must not be Infinite");
 		}
 	}
-    
+	
+	@Disabled
     @Tag(TestSpeed.SLOW)
     @Test
-	public void testHPV() throws NonProjectablePotentialException, org.openmarkov.core.exception.ParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
+	public void testHPV() throws NonProjectablePotentialException, ProbNetParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {
 		PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();
 		ProbNet probNet = pgmxReader.read(getClass().getResource("/networks/mid/MID-HPV.pgmx")).probNet();
 

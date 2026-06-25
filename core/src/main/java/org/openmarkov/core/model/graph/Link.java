@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.graph;
 
 import org.openmarkov.core.localize.ClassLocalizable;
+import org.openmarkov.core.localize.ConsiderAutoLocalizationIsValid;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.State;
@@ -16,7 +17,11 @@ import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This class implements explicit links.
@@ -28,6 +33,7 @@ import java.util.*;
  * @see Graph
  * @since OpenMarkov 1.0
  */
+@ConsiderAutoLocalizationIsValid
 public class Link<T> implements ClassLocalizable {
     
     // Attributes

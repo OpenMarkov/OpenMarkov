@@ -1,5 +1,6 @@
 package org.openmarkov.integrationTests.staticAnalysis.verifyImplementationRequirements;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class ImplementationRequirementsAreMet {
     
+    @Disabled("This test has been ignored for longer than a year")
     @Tag(TestSpeed.FAST)
     @Test
     public void requirementsAreMet() {

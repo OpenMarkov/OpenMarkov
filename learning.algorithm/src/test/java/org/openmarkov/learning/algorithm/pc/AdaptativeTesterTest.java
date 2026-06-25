@@ -217,7 +217,7 @@ public class AdaptativeTesterTest {
     void testMarginalDependence() {
         AdaptativeTester tester = new AdaptativeTester();
         double p = tester.test(standardDb, stdNodeA, stdNodeB, Collections.emptyList());
-        System.out.printf("Adaptive  A ⊥̸ B        : p = %.6f%n", p);
+        //System.out.printf("Adaptive  A ⊥̸ B        : p = %.6f%n", p);
         assertTrue(p < ALPHA, "Expected marginal dependence (p < 0.05), got p = " + p);
     }
 
@@ -226,7 +226,7 @@ public class AdaptativeTesterTest {
     void testConditionalIndependenceGivenC() {
         AdaptativeTester tester = new AdaptativeTester();
         double p = tester.test(standardDb, stdNodeA, stdNodeB, List.of(stdNodeC));
-        System.out.printf("Adaptive  A ⊥  B | C   : p = %.6f%n", p);
+        //System.out.printf("Adaptive  A ⊥  B | C   : p = %.6f%n", p);
         assertTrue(p > ALPHA, "Expected conditional independence (p > 0.05), got p = " + p);
     }
 
@@ -239,7 +239,7 @@ public class AdaptativeTesterTest {
     void testSparse_AdaptativeDoesNotRejectIndependence() {
         AdaptativeTester tester = new AdaptativeTester();
         double p = tester.test(sparseDb, sparseNodeY, sparseNodeZ, List.of(sparseNodeX));
-        System.out.printf("Adaptive  Y ⊥  Z | X   : p = %.6f%n", p);
+        //System.out.printf("Adaptive  Y ⊥  Z | X   : p = %.6f%n", p);
         assertTrue(p > ALPHA,
                 "AdaptativeTester should not reject independence on sparse 2×2 data, got p = " + p);
     }
@@ -252,9 +252,9 @@ public class AdaptativeTesterTest {
 
         double pCE = crossEntropy.test(sparseDb, sparseNodeY, sparseNodeZ, List.of(sparseNodeX));
         double pAd = adaptive.test(sparseDb, sparseNodeY, sparseNodeZ, List.of(sparseNodeX));
-
-        System.out.printf("CrossEntropy  Y ⊥ Z | X : p = %.6f%n", pCE);
-        System.out.printf("Adaptive      Y ⊥ Z | X : p = %.6f%n", pAd);
+        
+        //System.out.printf("CrossEntropy  Y ⊥ Z | X : p = %.6f%n", pCE);
+        //System.out.printf("Adaptive      Y ⊥ Z | X : p = %.6f%n", pAd);
 
         assertTrue(pCE < ALPHA,
                 "CrossEntropyIndependenceTester should falsely reject independence on sparse 2×2 data");
@@ -276,9 +276,9 @@ public class AdaptativeTesterTest {
 
         double pCE = crossEntropy.test(standardDb, stdNodeA, stdNodeB, Collections.emptyList());
         double pAd = adaptive.test(standardDb, stdNodeA, stdNodeB, Collections.emptyList());
-
-        System.out.printf("CrossEntropy  A ⊥̸ B       : p = %.8f%n", pCE);
-        System.out.printf("Adaptive      A ⊥̸ B       : p = %.8f%n", pAd);
+        
+        //System.out.printf("CrossEntropy  A ⊥̸ B       : p = %.8f%n", pCE);
+        //System.out.printf("Adaptive      A ⊥̸ B       : p = %.8f%n", pAd);
 
         assertEquals(pCE, pAd, 1e-12,
                 "AdaptativeTester should produce the exact same p-value as CrossEntropy when all expected counts ≥ 5");
@@ -294,9 +294,9 @@ public class AdaptativeTesterTest {
 
         double pFi = fisher.test(sparseDb, sparseNodeY, sparseNodeZ, List.of(sparseNodeX));
         double pAd = adaptive.test(sparseDb, sparseNodeY, sparseNodeZ, List.of(sparseNodeX));
-
-        System.out.printf("Fisher    Y ⊥ Z | X : p = %.8f%n", pFi);
-        System.out.printf("Adaptive  Y ⊥ Z | X : p = %.8f%n", pAd);
+        
+        //System.out.printf("Fisher    Y ⊥ Z | X : p = %.8f%n", pFi);
+        //System.out.printf("Adaptive  Y ⊥ Z | X : p = %.8f%n", pAd);
 
         assertEquals(pFi, pAd, 1e-12,
                 "AdaptativeTester should produce the exact same p-value as FisherTester for sparse 2×2 tables");
@@ -312,9 +312,9 @@ public class AdaptativeTesterTest {
 
         double pG2 = g2.test(sparseNonBinaryDb, sparseNodeR, sparseNodeS, List.of(sparseNodeT));
         double pAd = adaptive.test(sparseNonBinaryDb, sparseNodeR, sparseNodeS, List.of(sparseNodeT));
-
-        System.out.printf("G2        R ⊥ S | T : p = %.8f%n", pG2);
-        System.out.printf("Adaptive  R ⊥ S | T : p = %.8f%n", pAd);
+        
+        //System.out.printf("G2        R ⊥ S | T : p = %.8f%n", pG2);
+        //System.out.printf("Adaptive  R ⊥ S | T : p = %.8f%n", pAd);
 
         assertEquals(pG2, pAd, 1e-12,
                 "AdaptativeTester should produce the exact same p-value as G2IndependenceTester for sparse non-binary tables");

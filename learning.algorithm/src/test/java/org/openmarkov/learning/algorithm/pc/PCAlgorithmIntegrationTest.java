@@ -3,9 +3,9 @@ package org.openmarkov.learning.algorithm.pc;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.action.base.PNEdit;
-import org.openmarkov.core.action.core.COrientLinksEdit;
 import org.openmarkov.core.action.base.linkEdits.OrientLinkEdit;
 import org.openmarkov.core.action.base.linkEdits.RemoveLinkEdit;
+import org.openmarkov.core.action.core.COrientLinksEdit;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Node;
@@ -18,9 +18,17 @@ import org.openmarkov.learning.core.util.LearningEditProposal;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Integration tests for the {@link PCAlgorithm} using CSV databases with known structures.
@@ -686,9 +694,9 @@ public class PCAlgorithmIntegrationTest {
                 new CrossEntropyIndependenceTester(), SIGNIFICANCE, null);
 
         runAlgorithmToCompletion(pc);
-
-        System.out.println("\n=== HeadToHead2 (5k) ===");
-        printEdges(probNet);
+        
+        //System.out.println("\n=== HeadToHead2 (5k) ===");
+        //printEdges(probNet);
 
         // Resolve nodes by variable name to be independent of CSV column order.
         Node nodeA = probNet.getNode("A");
@@ -846,8 +854,8 @@ public class PCAlgorithmIntegrationTest {
         runAlgorithmToCompletion(pc);
 
         // Print result for manual comparison with Tetrad
-        System.out.println("\n=== OpenMarkov PC - Asia (10k, alpha=" + SIGNIFICANCE + ") ===");
-        printEdges(probNet);
+        //System.out.println("\n=== OpenMarkov PC - Asia (10k, alpha=" + SIGNIFICANCE + ") ===");
+        //printEdges(probNet);
 
         // Resolve nodes by variable name
         Node visit    = probNet.getNode("VisitToAsia");

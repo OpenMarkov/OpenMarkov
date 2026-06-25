@@ -1,6 +1,6 @@
 package org.openmarkov.integrationTests.io;
 
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -10,7 +10,10 @@ import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_0_2;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_1_0;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 
@@ -75,35 +78,35 @@ public class PGMXCompound {
         return errorWriting;
     }
     
-    public PGMXReader.NetworkAndEvidence getProbNetInfo() throws ParserException, IOException {
+    public PGMXReader.NetworkAndEvidence getProbNetInfo() throws ProbNetParserException, IOException {
         if (probNetInfo == null) {
             readProbNetInfoIfNecessary();
         }
         return probNetInfo;
     }
     
-    public ProbNet getProbNet() throws ParserException, IOException {
+    public ProbNet getProbNet() throws ProbNetParserException, IOException {
         if (probNet == null) {
             readProbNetInfoIfNecessary();
         }
         return probNet;
     }
     
-    public List<EvidenceCase> getEvidence() throws ParserException, IOException {
+    public List<EvidenceCase> getEvidence() throws ProbNetParserException, IOException {
         if (evidenceCases == null) {
             readProbNetInfoIfNecessary();
         }
         return evidenceCases;
     }
     
-    public String getVersion() throws ParserException, IOException {
+    public String getVersion() throws ProbNetParserException, IOException {
         if (version == null) {
             readProbNetInfoIfNecessary();
         }
         return version;
     }
     
-    private void readProbNetInfoIfNecessary() throws IOException, ParserException {
+    private void readProbNetInfoIfNecessary() throws IOException, ProbNetParserException {
         if (triedToRead) {
             return;
         }

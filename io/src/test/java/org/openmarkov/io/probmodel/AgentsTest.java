@@ -7,21 +7,23 @@
 
 package org.openmarkov.io.probmodel;
 
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.StringWithProperties;
+import org.openmarkov.core.testTags.TestSpeed;
+import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import org.openmarkov.core.exception.ParserException;
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.StringWithProperties;
-import org.openmarkov.core.testTags.TestSpeed;
-import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class AgentsTest {
@@ -42,7 +44,7 @@ public class AgentsTest {
 	
 	@Tag(TestSpeed.MEDIUM)
 	@Test
-    public void testAgentsNumber() throws ParserException, IOException {
+	public void testAgentsNumber() throws ProbNetParserException, IOException {
 		ProbNet manualProbNet = new PGMXReader_0_2().read(new File(rootPath + probNetManualName).toURI().toURL())
                                                     .probNet();
 		List<StringWithProperties> agents = manualProbNet.getAgents();

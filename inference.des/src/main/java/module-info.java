@@ -7,6 +7,7 @@ open module inference.DES {
     requires org.jfree.jfreechart;
     requires org.openmarkov.core;
     requires ssj;
+    requires org.jetbrains.annotations;
     
     exports org.openmarkov.inference.DES;
 }

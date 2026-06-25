@@ -7,7 +7,7 @@
 
 package org.openmarkov.gui.window;
 
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.component.FrameMirror;
@@ -18,9 +18,14 @@ import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.plugin.PluginSearch;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.io.Serial;
 
@@ -153,7 +158,7 @@ public class MainGUI extends JFrame {
      *
      * @param fileName File name
      */
-    public void openNetwork(String fileName) throws ParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
+    public void openNetwork(String fileName) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
         mainPanel.openNetwork(fileName);
     }
     

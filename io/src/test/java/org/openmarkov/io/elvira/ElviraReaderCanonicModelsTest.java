@@ -7,23 +7,25 @@
 
 package org.openmarkov.io.elvira;
 
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.io.IOException;
-import java.util.List;
-
-import org.openmarkov.core.exception.ParserException;
-import org.openmarkov.core.model.network.ProbNet;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.canonical.ICIFamily;
 import org.openmarkov.core.model.network.potential.canonical.ICIModelType;
 import org.openmarkov.core.model.network.potential.canonical.ICIPotential;
 import org.openmarkov.core.testTags.TestSpeed;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Manuel Arias
@@ -58,7 +60,7 @@ public class ElviraReaderCanonicModelsTest {
 	}
 	
 	@Tag(TestSpeed.SLOW)
-	@Test public void testLoadElviraOr() throws ParserException, IOException {
+	@Test public void testLoadElviraOr() throws ProbNetParserException, IOException {
 		String testFile = "puerta-or.elv";
         ProbNet probNet = elviraParser.read(this.getClass().getClassLoader().getResource(testFile)).probNet();
 
@@ -99,10 +101,10 @@ public class ElviraReaderCanonicModelsTest {
 	/**
 	 * Reads a big probabilistic network with canonical models.
 	 *
-	 * @throws ParserException
+	 * @throws ProbNetParserException
 	 * @throws Exception
 	 */
-	@Test public void testNaN() throws ParserException, IOException {
+	@Test public void testNaN() throws ProbNetParserException, IOException {
 		String testFile = "cataratas-NaN.elv";
         ProbNet probNet = elviraParser.read(this.getClass().getClassLoader().getResource(testFile)).probNet();
 		// Test a canonical potential
@@ -119,7 +121,7 @@ public class ElviraReaderCanonicModelsTest {
 	 *
 	 * @throws Exception
 	 */
-	@Test public void testCataratas() throws ParserException, IOException {
+	@Test public void testCataratas() throws ProbNetParserException, IOException {
 		String testFile = "cataratas-escenarios-091123.elv";
         ProbNet probNet = elviraParser.read(this.getClass().getClassLoader().getResource(testFile)).probNet();
 		// Test a normal node potential

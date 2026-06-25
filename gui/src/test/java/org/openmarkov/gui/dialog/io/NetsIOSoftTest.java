@@ -7,8 +7,11 @@
 
 package org.openmarkov.gui.dialog.io;
 
-import org.junit.jupiter.api.*;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 
@@ -38,7 +41,7 @@ public class NetsIOSoftTest {
 
     @Disabled("Ignored because a deprecated network")
     @Test
-    public void testURLConnection() throws java.io.IOException, org.openmarkov.core.exception.ParserException, NoReaderForFileException, CorruptNetworkFile {
+    public void testURLConnection() throws java.io.IOException, ProbNetParserException, NoReaderForFileException, CorruptNetworkFile {
         for (String urlString : urlsToTest) {
             URL url = new URL(urlString);
             NetsIO.openNetworkURL(url);

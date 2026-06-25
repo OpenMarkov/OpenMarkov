@@ -6,7 +6,6 @@
  */
 package org.openmarkov.inference.heuristic.rollout;
 
-import org.junit.jupiter.api.Test;
 import org.openmarkov.core.action.core.RemoveNodeEdit;
 import org.openmarkov.core.inference.heuristic.EliminationHeuristic;
 import org.openmarkov.core.model.network.Node;
@@ -29,8 +28,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import static org.openmarkov.inference.heuristic.rollout.RolloutCostFunction.*;
-import static org.openmarkov.inference.heuristic.rollout.RolloutCriterion.*;
+import static org.openmarkov.inference.heuristic.rollout.RolloutCostFunction.MIN_CLIQUE_SIZE;
+import static org.openmarkov.inference.heuristic.rollout.RolloutCostFunction.WEIGHTED_MIN_FILL;
+import static org.openmarkov.inference.heuristic.rollout.RolloutCriterion.JUNCTION_TREE_SUM;
+import static org.openmarkov.inference.heuristic.rollout.RolloutCriterion.MAX_CLIQUE_TABLE_SIZE;
 
 /**
  * Benchmark that systematically explores RolloutElimination parameter combinations
@@ -79,12 +80,14 @@ public class RolloutParameterTuningTest {
         }
         return configs;
     }
-
+    
+    static void main() {
+        new RolloutParameterTuningTest().tuneParameters();
+    }
+    
     // -------------------------------------------------------------------------
     // Main benchmark
     // -------------------------------------------------------------------------
-
-    @Test
     public void tuneParameters() {
         Map<String, ProbNet> networks = new LinkedHashMap<>();
         networks.put("asia(8)", moralize(TestNetworks.buildAsia()));

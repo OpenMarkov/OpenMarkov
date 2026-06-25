@@ -7,10 +7,14 @@
 
 package org.openmarkov.integrationTests.inference.ceanalysis;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.io.ProbNetInfo;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Node;
@@ -40,7 +44,7 @@ public class DANOperationsTest {
     private ProbNet danDiabetes;
     private ProbNet danDiabetesCE;
     
-    @BeforeEach public void setUp() throws URISyntaxException, ParserException, IOException {
+    @BeforeEach public void setUp() throws URISyntaxException, ProbNetParserException, IOException {
         PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();
         
         ProbNetInfo probNetInfo;

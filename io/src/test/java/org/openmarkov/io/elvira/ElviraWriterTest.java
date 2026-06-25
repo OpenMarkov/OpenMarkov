@@ -40,7 +40,7 @@ public class ElviraWriterTest {
     //TODO: Temporarily disabled as it uses tests classes from openmarkov.core (ProbNetTest)
     @Disabled("Temporarily disabled as it uses tests classes from openmarkov.core (ProbNetTest)")
     /*
-    @Test public void testBNTwoNodes() throws FileNotFoundException, WriterException, ParserException {
+    @Test public void testBNTwoNodes() throws FileNotFoundException, WriterException, ProbNetParserException {
         new ElviraWriter().writeProbNet(smallTestFile, small);
         ProbNet readNetwork = new ElviraParser().loadProbNet(smallTestFile);
         ProbNetTest.compareNetworks(small, readNetwork);

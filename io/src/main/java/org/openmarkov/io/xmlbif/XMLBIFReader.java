@@ -9,9 +9,7 @@ package org.openmarkov.io.xmlbif;
 
 import org.jdom2.Element;
 
-import org.openmarkov.core.exception.ParserException;
-import org.openmarkov.core.io.ProbNetInfo;
-import org.openmarkov.core.io.format.annotation.FormatType;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.VariableType;
@@ -22,7 +20,6 @@ import org.openmarkov.io.probmodel.reader.PGMXReader;
 import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 import org.openmarkov.io.xmlbif.strings.XMLBIFTags;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +34,7 @@ public class XMLBIFReader extends PGMXReader_0_2 {
 	}
 
 	@Override
-	public PGMXReader.NetworkAndEvidence read(URL networkSource) throws ParserException {
+	public PGMXReader.NetworkAndEvidence read(URL networkSource) throws ProbNetParserException {
 		return new PGMXReader.NetworkAndEvidence(this.getProbNet(getRootElement(networkSource), networkSource.getFile()), null);
 	}
 	

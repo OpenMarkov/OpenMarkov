@@ -48,4 +48,8 @@ public final class NotSupportedOperationException extends UnsupportedOperationEx
     public @Nullable String getReason() {
         return this.reason;
     }
+    
+    @Override public String toString() {
+        return this.localize();
+    }
 }

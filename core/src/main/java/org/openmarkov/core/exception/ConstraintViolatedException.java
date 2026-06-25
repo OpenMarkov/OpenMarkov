@@ -3,11 +3,50 @@ package org.openmarkov.core.exception;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.localize.Localizable;
-import org.openmarkov.core.model.network.*;
-import org.openmarkov.core.model.network.constraint.*;
+import org.openmarkov.core.model.network.Criterion;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.constraint.AllChanceVariablesHaveChancePotentials;
+import org.openmarkov.core.model.network.constraint.DistinctLinks;
+import org.openmarkov.core.model.network.constraint.DistinctVariableNames;
+import org.openmarkov.core.model.network.constraint.MaxNumParents;
+import org.openmarkov.core.model.network.constraint.ModelNetworkConstraint;
+import org.openmarkov.core.model.network.constraint.NoAlwaysObservedDescendantOfDecision;
+import org.openmarkov.core.model.network.constraint.NoBackwardLink;
+import org.openmarkov.core.model.network.constraint.NoCycle;
+import org.openmarkov.core.model.network.constraint.NoEventNodes;
+import org.openmarkov.core.model.network.constraint.NoLoops;
+import org.openmarkov.core.model.network.constraint.NoMixedParents;
+import org.openmarkov.core.model.network.constraint.NoMultipleLinks;
+import org.openmarkov.core.model.network.constraint.NoSelfLoop;
+import org.openmarkov.core.model.network.constraint.NoSuperValueNode;
+import org.openmarkov.core.model.network.constraint.NoUtilityParent;
+import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
+import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
+import org.openmarkov.core.model.network.constraint.OnlyContinuousVariables;
+import org.openmarkov.core.model.network.constraint.OnlyDirectedLinks;
+import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
+import org.openmarkov.core.model.network.constraint.OnlyFiniteStatesVariables;
+import org.openmarkov.core.model.network.constraint.OnlyNumericVariables;
+import org.openmarkov.core.model.network.constraint.OnlyOneAgent;
+import org.openmarkov.core.model.network.constraint.OnlyOneOrphanInitialEvent;
+import org.openmarkov.core.model.network.constraint.OnlySelfLoopsWithEventAndChanceNodes;
+import org.openmarkov.core.model.network.constraint.OnlyTemporalVariables;
+import org.openmarkov.core.model.network.constraint.OnlyUndirectedLinks;
+import org.openmarkov.core.model.network.constraint.PNConstraint;
+import org.openmarkov.core.model.network.constraint.ProperUtilityPotentials;
+import org.openmarkov.core.model.network.constraint.UtilityNodes;
+import org.openmarkov.core.model.network.constraint.ValidCriterionName;
+import org.openmarkov.core.model.network.constraint.ValidState;
 import org.openmarkov.core.stringformat.LocalizationFormatter;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public abstract class ConstraintViolatedException extends OpenMarkovException {
@@ -371,7 +410,6 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         private final Variable variable;
     }
     
-    //{eventNode} is of type event.
     public static class CannotHaveEventNodeException extends ConstraintViolatedException {
         
         public final Node eventNode;
@@ -383,8 +421,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         
     }
     
-    //There can be only one orphan event node which the purpose of initial, but multiple have it:\n{orphanEventNodes}
-    public static class    OnlyOneOrphanInitialEventException extends ConstraintViolatedException {
+    
+    public static class OnlyOneOrphanInitialEventException extends ConstraintViolatedException {
         
         public final List<Node> orphanEventNodes;
         
@@ -395,8 +433,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
     }
     
     
-    //Self loop can only be used if the node is event or chance, which is not applicable to {node}.
-    public static class    OnlySelfLoopsWithEventAndChanceNodesException extends ConstraintViolatedException {
+    public static class OnlySelfLoopsWithEventAndChanceNodesException extends ConstraintViolatedException {
         
         public final Node node;
         

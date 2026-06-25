@@ -14,21 +14,34 @@
 package org.openmarkov.learning.gui;
 
 import org.apache.commons.io.FilenameUtils;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.model.database.CaseDatabase;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.EmptyDatabaseException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ParsingSourceException;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
 import org.openmarkov.core.io.exception.NoWriterForExtensionException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.gui.action.AutoArrangeEdit;
-import org.openmarkov.gui.dialog.io.*;
+import org.openmarkov.gui.dialog.io.DBReaderOMFileChooser;
+import org.openmarkov.gui.dialog.io.DBWriterOMFileChooser;
+import org.openmarkov.gui.dialog.io.NetsIO;
+import org.openmarkov.gui.dialog.io.NetworkOMFileChooser;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
-import org.openmarkov.gui.layout.bayesian.StressLayout;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
+import org.openmarkov.gui.layout.bayesian.StressLayout;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
@@ -51,17 +64,40 @@ import org.openmarkov.learning.exception.FormatNotSupportedException;
 import org.openmarkov.learning.exception.LearningException;
 import org.openmarkov.learning.gui.interactive.InteractiveLearningDialog;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -172,7 +208,7 @@ public class LearningDialog extends JDialog {
         modelNetTabPanel.loadModelNetButton.addActionListener(evt -> {
             try {
                 loadModelNetButtonActionPerformed(evt);
-            } catch (ParserException | IOException | NoReaderForFileException |
+            } catch (ProbNetParserException | IOException | NoReaderForFileException |
                      CorruptNetworkFile e) {
                 throw new UnrecoverableException(e);
             }
@@ -732,8 +768,8 @@ public class LearningDialog extends JDialog {
         modelNetVariablesRadioButton.setEnabled(false);
         selectDeselectCheckBox.setEnabled(false);
     }
-
-    private void loadModelNetButtonActionPerformed(ActionEvent evt) throws ParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
+    
+    private void loadModelNetButtonActionPerformed(ActionEvent evt) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
         //GEN-FIRST:event_loadModelNetButtonActionPerformed
         if (!modelNetTabPanel.fromFileRadioButton.isSelected()) {
             return;

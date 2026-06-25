@@ -5,19 +5,38 @@ import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.located.LocatedJDOMFactory;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.inference.TemporalOptions;
-import org.openmarkov.core.io.ProbNetInfo;
 import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.core.model.graph.Link;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.CycleLength;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.PartitionedInterval;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.StringWithProperties;
+import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunction;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
-import org.openmarkov.core.model.network.potential.*;
+import org.openmarkov.core.model.network.potential.AugmentedProbTable;
+import org.openmarkov.core.model.network.potential.BinomialPotential;
+import org.openmarkov.core.model.network.potential.CycleLengthShift;
+import org.openmarkov.core.model.network.potential.DeltaPotential;
+import org.openmarkov.core.model.network.potential.DiscretizedCauchyPotential;
+import org.openmarkov.core.model.network.potential.ExactDistrPotential;
+import org.openmarkov.core.model.network.potential.FunctionPotential;
+import org.openmarkov.core.model.network.potential.GLMPotential;
+import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.core.model.network.potential.UniformPotential;
+import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
+import org.openmarkov.core.model.network.potential.WeibullHazardPotential;
 import org.openmarkov.core.model.network.potential.canonical.ICIPotential;
 import org.openmarkov.core.model.network.potential.canonical.MinMaxPotential;
 import org.openmarkov.core.model.network.potential.treeadd.Threshold;
@@ -28,10 +47,20 @@ import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 import org.openmarkov.io.probmodel.strings.XMLAttributes;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_0_2;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Manuel Arias
@@ -80,7 +109,7 @@ public class Classificator extends PGMXReader_0_2 {
         networksWithAdvancedFeatures = getNetworksWithAdvancedFeatures(pathToNewFiles);
     }
     
-    public static void main(String[] args) throws IOException, ParserException, NonProjectablePotentialException {
+    public static void main(String[] args) throws IOException, ProbNetParserException, NonProjectablePotentialException {
         Classificator classificator = new Classificator(PGMXOrigin.File, args);
         classificator.testConversionBetweenVersions();
         classificator.performTests();
@@ -115,7 +144,7 @@ public class Classificator extends PGMXReader_0_2 {
     }
     
     // Methods
-    private void performTests() throws IOException, ParserException, NonProjectablePotentialException {
+    private void performTests() throws IOException, ProbNetParserException, NonProjectablePotentialException {
         int differentNetworks = 0;
         int differentNetworks0_2 = 0;
         int differentNetworks0_7 = 0;

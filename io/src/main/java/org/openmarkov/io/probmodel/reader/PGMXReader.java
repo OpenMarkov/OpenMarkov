@@ -8,7 +8,7 @@
 package org.openmarkov.io.probmodel.reader;
 
 import org.jdom2.Element;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.io.ProbNetInfo;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.format.annotation.FormatType;
@@ -29,7 +29,7 @@ import java.util.List;
 @FormatType(name = "PGMXReader", extensions = {"pgmx", "xml"}, description = "ProbModelXML")
 public class PGMXReader implements ProbNetReader {
     
-    @Override public ProbNetInfo read(URL networkSource) throws IOException, ParserException {
+    @Override public ProbNetInfo read(URL networkSource) throws IOException, ProbNetParserException {
         Element root = PGMXReader_0_2.getRootElement(networkSource);
         String formatVersion = root.getAttributeValue(XMLAttributes.FORMAT_VERSION.toString());
         PGMXReader_0_2 reader = ReaderFactory.getReader(formatVersion);

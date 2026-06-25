@@ -9,20 +9,36 @@
 package org.openmarkov.inference.algorithm.likelihoodWeighting;
 
 
-import org.junit.jupiter.api.*;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.model.network.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.ProbNetOperations;
+import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.testTags.TestSpeed;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.*;
 
 
-
- /*
+/*
  * Tests for likelihood weighting and logic sampling
  *
  * @author iagoparis - spring 2018
@@ -56,7 +72,7 @@ public class StochasticPropagationTest {
 
             // Algorithm to use
             algorithmName = AlgorithmName.values()[i];
-            roundByBars(algorithmName.name());
+            //printRoundedByBars(algorithmName.name());
 
             algorithm = returnChosenAlgorithm(defaultNet, algorithmName);
             defaultNet.addLink(defaultNet.getNode("C"), defaultNet.getNode("B"), true);
@@ -68,7 +84,7 @@ public class StochasticPropagationTest {
             Assertions.assertEquals(sortedVariables.get(0), defaultNet.getVariable("C"));
             Assertions.assertEquals(sortedVariables.get(1), defaultNet.getVariable("B"));
             Assertions.assertEquals(sortedVariables.get(2), defaultNet.getVariable("D"));
-            System.out.println("OK");
+            //System.out.println("OK");
         }
     }
 
@@ -109,7 +125,7 @@ public class StochasticPropagationTest {
 
             // Algorithm to use
             algorithmName = AlgorithmName.values()[i];
-            roundByBars(algorithmName.name());
+            //printRoundedByBars(algorithmName.name());
 
             // Net creation
             ProbNet oneNet = ExampleNets.oneNet();
@@ -151,7 +167,7 @@ public class StochasticPropagationTest {
 
             // Algorithm to use
             algorithmName = AlgorithmName.values()[i];
-            roundByBars(algorithmName.name());
+            //printRoundedByBars(algorithmName.name());
 
 		// Net creation
 		ProbNet twoNet = ExampleNets.twoNet();
@@ -232,7 +248,7 @@ public class StochasticPropagationTest {
 
             // Algorithm to use
             algorithmName = AlgorithmName.values()[i];
-            roundByBars(algorithmName.name());
+            //printRoundedByBars(algorithmName.name());
 
 		// Net creation
 		ProbNet bigNet = ExampleNets.bigNet();
@@ -361,7 +377,7 @@ public class StochasticPropagationTest {
 
             // Algorithm to use
             algorithmName = AlgorithmName.values()[i];
-            roundByBars(algorithmName.name());
+            //printRoundedByBars(algorithmName.name());
 
             // Net creation
             ProbNet asiaNet = ExampleNets.buildBN_asia_java();
@@ -505,17 +521,17 @@ public class StochasticPropagationTest {
         }
 
 		// Printing
-        System.out.println("Samples: " + algorithm.getSampleSize());
-        System.out.println();
+        //System.out.println("Samples: " + algorithm.getSampleSize());
+        //System.out.println();
 
 		for (Map.Entry<Variable, TablePotential> node : orderedPropagationResult.entrySet()) {
             
             String key = node.getKey().getName();
 			String value = node.getValue().toString();
-			System.out.println(key + "   " + value);
+            //System.out.println(key + "   " + value);
 
 		}
-		System.out.println();
+        //System.out.println();
 	}
 
     /*
@@ -524,7 +540,7 @@ public class StochasticPropagationTest {
      * - string -
      * ----------
      */
-    public void roundByBars(String string) {
+    public void printRoundedByBars(String string) {
 
         // Top bar
         for (int i = 0; i < string.length() + 3; i++) {

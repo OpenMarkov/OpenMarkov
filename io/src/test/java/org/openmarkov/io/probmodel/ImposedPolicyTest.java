@@ -7,16 +7,17 @@
 
 package org.openmarkov.io.probmodel;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
-import org.junit.jupiter.api.*;
-
-import org.openmarkov.core.exception.ParserException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_0_2;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class ImposedPolicyTest {
@@ -42,7 +43,7 @@ public class ImposedPolicyTest {
     }
     
 	@Test
-	public final void test() throws ParserException, IOException {
+	public final void test() throws ProbNetParserException, IOException {
 		String rootPath = 
 				absolutePath.substring(0, absolutePath.length() - networkTestName.length());
 		String pathAndName = rootPath + networkTestName;

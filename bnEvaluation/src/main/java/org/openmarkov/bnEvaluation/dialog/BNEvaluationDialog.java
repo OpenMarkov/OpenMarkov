@@ -15,9 +15,15 @@ import org.openmarkov.bnEvaluation.component.MeasuresPanel;
 import org.openmarkov.bnEvaluation.exceptions.NetworkIsNotEvaluable;
 import org.openmarkov.bnEvaluation.measures.MeasuresSet;
 import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.model.database.CaseDatabase;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
+import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
@@ -29,9 +35,22 @@ import org.openmarkov.gui.dialog.io.NetworkOMFileChooser;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.window.MainPanel;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -155,7 +174,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         this.loadModelNetButton.addActionListener(e -> {
             try {
                 this.loadModelNetButtonActionPerformed();
-            } catch (NoReaderForFileException | ParserException | IOException | CorruptNetworkFile |
+            } catch (NoReaderForFileException | ProbNetParserException | IOException | CorruptNetworkFile |
                      NetworkIsNotEvaluable ex) {
                 throw new UnrecoverableException(ex);
             }
@@ -226,7 +245,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
      * Then, method enableMeasuresComponents is called for check
      * consistency between the network and data and activate the measurement components
      */
-    private void loadModelNetButtonActionPerformed() throws NoReaderForFileException, ParserException, IOException, CorruptNetworkFile, NetworkIsNotEvaluable {
+    private void loadModelNetButtonActionPerformed() throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile, NetworkIsNotEvaluable {
         NetworkOMFileChooser modelNetFileChooser = new NetworkOMFileChooser(); // COMMON_NETWORK_FILE_CHOOSER;
         //modelNetFileChooser.setDialogTitle(stringDatabase.getString("OpenNetwork.Title));
         if (modelNetFileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {

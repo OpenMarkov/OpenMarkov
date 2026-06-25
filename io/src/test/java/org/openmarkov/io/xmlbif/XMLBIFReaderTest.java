@@ -7,16 +7,18 @@
 
 package org.openmarkov.io.xmlbif;
 
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.model.network.ProbNet;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import org.openmarkov.core.exception.ParserException;
-import org.openmarkov.core.model.network.ProbNet;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 // TODO: Use the ProbNetTest class from the openmarkov.core tests
 //import org.openmarkov.core.model.network.ProbNetTest;
 
@@ -38,7 +40,7 @@ public class XMLBIFReaderTest {
 	    }
 		@Disabled
 		@Test
-		public void readNetworkTest() throws ParserException, IOException {
+		public void readNetworkTest() throws ProbNetParserException, IOException {
 			ProbNet probNet1;
 				String pathAndName = rootPath + networkTestName;
             probNet1 = reader.read(new File(pathAndName).toURI().toURL()).probNet();

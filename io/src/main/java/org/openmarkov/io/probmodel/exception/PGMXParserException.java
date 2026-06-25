@@ -4,14 +4,14 @@ import org.jdom2.Element;
 import org.jdom2.located.LocatedElement;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 
 import java.util.List;
 
 @SuppressWarnings("serial")
-public abstract sealed class PGMXParserException extends ParserException {
+public abstract sealed class PGMXParserException extends ProbNetParserException {
     
     public final Element element;
     

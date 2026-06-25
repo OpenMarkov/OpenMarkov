@@ -2,47 +2,50 @@ package org.openmarkov.integrationTests.inference;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.inference.InferenceTestsTools;
 import org.openmarkov.integrationTests.inference.heuristics.Tools;
-import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.ProbNet;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class IDResolutionAndPropagationTest {
 	
-	private ProbNet loadID(String nameSuffix) throws ParserException, IOException {
+	private ProbNet loadID(String nameSuffix) throws ProbNetParserException, IOException {
 		Tools t = new Tools();
 		return t.loadID(nameSuffix);
 	}
 	
-	private void testBasicInferenceNoCEA(String nameSuffix, boolean checkStrategyTree) throws NonProjectablePotentialException, IncompatibleEvidenceException, ParserException, URISyntaxException, IOException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
+	private void testBasicInferenceNoCEA(String nameSuffix, boolean checkStrategyTree) throws NonProjectablePotentialException, IncompatibleEvidenceException, ProbNetParserException, URISyntaxException, IOException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
 			testResolutionAndPropagation(loadID(nameSuffix),null,checkStrategyTree);
 	}
 	
 	@Test
-	public void testIDOnlyDecisionNoUtility() throws NonProjectablePotentialException, IncompatibleEvidenceException, ParserException, URISyntaxException, IOException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
+	public void testIDOnlyDecisionNoUtility() throws NonProjectablePotentialException, IncompatibleEvidenceException, ProbNetParserException, URISyntaxException, IOException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
 		testBasicInferenceNoCEA("only-decision-no-utility", false);
 	}
 	
 	@Test
-	public void testIDThreeDecTwoUtil() throws NonProjectablePotentialException, IncompatibleEvidenceException, ParserException, URISyntaxException, IOException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
+	public void testIDThreeDecTwoUtil() throws NonProjectablePotentialException, IncompatibleEvidenceException, ProbNetParserException, URISyntaxException, IOException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
 		testBasicInferenceNoCEA("three-dec-two-util", true);
 	}
 	
 	@Tag(TestSpeed.MEDIUM)
 	@Test
-	public void testIDOnlyImposedUniformDecisionNoUtility() throws NonProjectablePotentialException, IncompatibleEvidenceException, ParserException, URISyntaxException, IOException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
+	public void testIDOnlyImposedUniformDecisionNoUtility() throws NonProjectablePotentialException, IncompatibleEvidenceException, ProbNetParserException, URISyntaxException, IOException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
 		testBasicInferenceNoCEA("only-imposed-uniform-dec-no-util", false);
 	}
 	
 	@Test
-	public void testIDOnlyImposedDecisionAndChanceNoUtility() throws NonProjectablePotentialException, IncompatibleEvidenceException, ParserException, URISyntaxException, IOException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
+	public void testIDOnlyImposedDecisionAndChanceNoUtility() throws NonProjectablePotentialException, IncompatibleEvidenceException, ProbNetParserException, URISyntaxException, IOException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
 		testBasicInferenceNoCEA("only-imposed-decision-and-chance-no-utility", false);
 	}
 	

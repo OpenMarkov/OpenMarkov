@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link MonteCarloTester}.
@@ -69,8 +71,8 @@ public class MonteCarloTesterTest {
     public void testMarginalDependence() {
         MonteCarloTester tester = new MonteCarloTester(199, 42L);
         double p = tester.test(db, nodeA, nodeB, Collections.emptyList());
-
-        System.out.printf("MonteCarlo  A _|/_ B       : p = %.6f%n", p);
+        
+        //System.out.printf("MonteCarlo  A _|/_ B       : p = %.6f%n", p);
         assertTrue(p < 0.05, "Expected marginal dependence between A and B, got p = " + p);
     }
 
@@ -78,8 +80,8 @@ public class MonteCarloTesterTest {
     public void testConditionalIndependenceGivenC() {
         MonteCarloTester tester = new MonteCarloTester(199, 42L);
         double p = tester.test(db, nodeA, nodeB, List.of(nodeC));
-
-        System.out.printf("MonteCarlo  A _|_ B | C    : p = %.6f%n", p);
+        
+        //System.out.printf("MonteCarlo  A _|_ B | C    : p = %.6f%n", p);
         assertTrue(p > 0.05, "Expected conditional independence given C, got p = " + p);
     }
 

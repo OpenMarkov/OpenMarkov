@@ -7,10 +7,18 @@
 
 package org.openmarkov.io.probmodel;
 
-import org.junit.jupiter.api.*;
-import org.openmarkov.core.exception.ParserException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.graph.Link;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.canonical.MaxPotential;
@@ -49,7 +57,7 @@ public class PGMXReaderWriterTest {
 	/*
 	@Disabled("Temporarily disabled as it uses tests classes from openmarkov.core (ProbNetTest)")
 	@Test
-	public void readWriteNetwork() throws WriterException, ParserException {
+	public void readWriteNetwork() throws WriterException, ProbNetParserException {
 		ProbNet trivialNet = Util.createTrivialID();
 		
 		// Write test network
@@ -68,7 +76,7 @@ public class PGMXReaderWriterTest {
     /*
     @Disabled("Ignored because a deprecated network")
     @Test
-    public void readHPVNetwork() throws ParserException, WriterException {
+    public void readHPVNetwork() throws ProbNetParserException, WriterException {
         String pathAndName = rootPath + networkTestName;
         ProbNet probNet1 = reader.loadProbNet(pathAndName);
         assertNotNull(probNet1);
@@ -81,7 +89,7 @@ public class PGMXReaderWriterTest {
     
     @Tag(TestSpeed.MEDIUM)
     @Test
-    public void iciPotentialsReadingTest() throws ParserException, IOException {
+    public void iciPotentialsReadingTest() throws ProbNetParserException, IOException {
         
         // Read test network
         String testNetworkName = rootPath + "/test-ici-reading.pgmx";
@@ -100,7 +108,7 @@ public class PGMXReaderWriterTest {
 	/*
 	@Disabled("Temporarily disabled as it uses tests classes from openmarkov.core (ProbNetTest)")
 	@Test
-    public void iciPotentialsWritingTest() throws WriterException, ParserException{
+    public void iciPotentialsWritingTest() throws WriterException, ProbNetParserException{
         ProbNet probNet = Util.buildNetWithICI ();
         // Write test network
         String testNetworkName = rootPath +  "/test-ici.pgmx";
@@ -118,7 +126,7 @@ public class PGMXReaderWriterTest {
     /*
     @Disabled("Temporarily disabled as it uses tests classes from openmarkov.core (ProbNetTest)")
     @Test
-    public void decisionAnalysisNetTest() throws WriterException, ParserException {
+    public void decisionAnalysisNetTest() throws WriterException, ProbNetParserException {
         ProbNet probNet = createDecisionAnalysisNet();
         
         // Write test network

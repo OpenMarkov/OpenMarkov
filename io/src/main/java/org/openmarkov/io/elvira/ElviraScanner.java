@@ -7,12 +7,15 @@
 
 package org.openmarkov.io.elvira;
 
-import java.io.*;
+import org.openmarkov.core.exception.ProbNetParserException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.openmarkov.core.exception.ParserException;
 
 /**
  * Reads a Elvira file and generates tokens.
@@ -89,10 +92,10 @@ public class ElviraScanner {
      * Reads and returns the next token from the input stream.
      *
      * @return the next {@code ElviraToken}
-     * @throws ParserException if a parsing error occurs
+     * @throws ProbNetParserException if a parsing error occurs
      * @throws IOException     if an I/O error occurs
      */
-    public ElviraToken getNextToken() throws ParserException, IOException {
+    public ElviraToken getNextToken() throws ProbNetParserException, IOException {
         ReservedWord reservedWord = readNextToken(streamTokenizer);
         if (reservedWord == null) {
             if (streamTokenizer.ttype == TT_RIGHTCB) {
@@ -155,7 +158,7 @@ public class ElviraScanner {
                 if (streamTokenizer.ttype == TT_LEFTP) {
                     return getCanonicalToken(reservedWord);
                 }
-                throw new ParserException.MissingToken("MIN");
+                throw new ProbNetParserException.MissingToken("MIN");
             }
             case DEFAULT -> {
                 checkToken(streamTokenizer, ReservedWord.NODE);
@@ -279,7 +282,7 @@ public class ElviraScanner {
      *
      * @return ElviraToken
      */
-    private ElviraToken getCanonicalToken(ReservedWord reservedWord) throws IOException, ParserException.MismatchedToken {
+    private ElviraToken getCanonicalToken(ReservedWord reservedWord) throws IOException, ProbNetParserException.MismatchedToken {
         ArrayList<String> relationsNames = new ArrayList<String>();
         String relationName;
         while (streamTokenizer.ttype != TT_RIGHTP) {
@@ -332,12 +335,12 @@ public class ElviraScanner {
      *
      * @throws IOException     launch by {@code StreamTokenizer} if an I/O
      *                         error occurs.
-     * @throws ParserException parser exception
+     * @throws ProbNetParserException parser exception
      */
-    private void readTokenType(StreamTokenizer streamTokenizer, int ttype) throws IOException, ParserException.MismatchedToken {
+    private void readTokenType(StreamTokenizer streamTokenizer, int ttype) throws IOException, ProbNetParserException.MismatchedToken {
         readToken(streamTokenizer);
         if (streamTokenizer.ttype != ttype) {
-            throw new ParserException.MismatchedToken(ttype, streamTokenizer.ttype);
+            throw new ProbNetParserException.MismatchedToken(ttype, streamTokenizer.ttype);
         }
     }
     
@@ -361,14 +364,14 @@ public class ElviraScanner {
      * @param streamTokenizer      {@code StreamTokenizer}
      * @param reservedWordExpected {@code ReservedWord}
      *
-     * @throws ParserException if parser occurs
+     * @throws ProbNetParserException if parser occurs
      */
     private static void checkToken(StreamTokenizer streamTokenizer, ReservedWord reservedWordExpected)
-            throws IOException, ParserException.MismatchedToken {
+            throws IOException, ProbNetParserException.MismatchedToken {
         streamTokenizer.nextToken();
         ReservedWord reservedWordReaded = ReservedWordTokens.getReservedWord(streamTokenizer.sval);
         if (reservedWordReaded != reservedWordExpected) {
-            throw new ParserException.MismatchedToken(reservedWordExpected.toString(), streamTokenizer.sval);
+            throw new ProbNetParserException.MismatchedToken(reservedWordExpected.toString(), streamTokenizer.sval);
         }
     }
     

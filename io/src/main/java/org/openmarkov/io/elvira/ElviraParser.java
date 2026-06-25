@@ -7,22 +7,16 @@
 
 package org.openmarkov.io.elvira;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import org.openmarkov.core.exception.ConstraintViolatedException;
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.io.ProbNetInfo;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.format.annotation.FormatType;
-import org.openmarkov.core.model.network.NodeType;
-import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
@@ -37,6 +31,12 @@ import org.openmarkov.core.model.network.potential.canonical.MaxPotential;
 import org.openmarkov.core.model.network.potential.canonical.MinPotential;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Reads a probabilistic network in Elvira format and builds a
@@ -172,7 +172,7 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 		return auxVariables;
 	}
 	
-	@Override public ProbNetInfo read(URL networkSource) throws IOException, ParserException {
+	@Override public ProbNetInfo read(URL networkSource) throws IOException, ProbNetParserException {
 		this.fileName = networkSource.getFile();
 		scanner.initializeScanner(fileName, networkSource.openStream());
 		// Load probNet
@@ -187,7 +187,7 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 			}
 			getPotentials(token);
 			ElviraUtil.swapNameAndTitle(probNet);
-		} catch (ParserException e) {
+		} catch (ProbNetParserException e) {
 			e.setFilename(fileName);
 			e.setLineNumber(scanner.lineno());
 			throw e;
@@ -200,18 +200,18 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 	 * Reads the probNet type, creates the right compound constraint and
      * associate that constraint to {@code probNet}
 	 *
-	 * @throws ParserException if parser occurs
+	 * @throws ProbNetParserException if parser occurs
 	 */
     @SuppressWarnings("ThrowInsideCatchBlockWhichIgnoresCaughtException")
-    private void getConstraints() throws ParserException {
+	private void getConstraints() throws ProbNetParserException {
 		ElviraToken token;
 		try {
 			token = scanner.getNextToken();
 		} catch (IOException e) {
-			throw new ParserException.CannotReadConstraint();
+			throw new ProbNetParserException.CannotReadConstraint();
 		}
 		if (token.getTokenType() != TokenType.RESERVED) {
-			throw new ParserException.ProbabilisticNetworkTypeMissing();
+			throw new ProbNetParserException.ProbabilisticNetworkTypeMissing();
 		}
 		try {
 			if (token.getReservedWord() == ReservedWord.BNET) {
@@ -224,7 +224,8 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 				probNet.setNetworkType(InfluenceDiagramType.getUniqueInstance());
 				probNet.setName(token.getStringValue1());
 			} else {
-				throw new ParserException.ProbabilisticNetworkTypeNotRecognized(token.getReservedWord().toString());
+				throw new ProbNetParserException.ProbabilisticNetworkTypeNotRecognized(token.getReservedWord()
+				                                                                            .toString());
 			}
         } catch (ConstraintViolatedException e) {
             throw new UnreachableException(e);
@@ -237,9 +238,9 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 	 *
 	 * @return Next token corresponding to a node (end of general information).
      * {@code ElviraToken}
-	 * @throws ParserException if parser occurs
+	 * @throws ProbNetParserException if parser occurs
 	 */
-	private ElviraToken getGeneralInfo() throws IOException, ParserException {
+	private ElviraToken getGeneralInfo() throws IOException, ProbNetParserException {
 
 		ElviraToken token = scanner.getNextToken();
 		ReservedWord reservedWord = token.getReservedWord();
@@ -277,10 +278,10 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 	 * Reads nodes (variables)
 	 *
      * @param token {@code ElviraToken}
-	 * @throws ParserException if parser occurs
+	 * @throws ProbNetParserException if parser occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	private ElviraToken getNodes(ElviraToken token) throws IOException, ParserException {
+	private ElviraToken getNodes(ElviraToken token) throws IOException, ProbNetParserException {
 		do {
 			token = getNode(token);
 		} while ((token.getReservedWord() != ReservedWord.LINK) && (token.getReservedWord() != ReservedWord.RELATION));
@@ -290,10 +291,10 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 	/**
      * @param token {@code ElviraToken}
      * @return token. {@code ElviraToken}
-	 * @throws ParserException if parser occurs
+	 * @throws ProbNetParserException if parser occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	private ElviraToken getNode(ElviraToken token) throws IOException, ParserException {
+	private ElviraToken getNode(ElviraToken token) throws IOException, ProbNetParserException {
 		Node node = null;
 		String variableName = token.getStringValue1();
 		NodeType nodeType = NodeType.CHANCE;
@@ -349,7 +350,7 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 				if (numStates < 0) {
 					numStates = reverseOrderStatesNames.length;
 				} else if (numStates != reverseOrderStatesNames.length) {
-					throw new ParserException.WrongNumberOfStates(variableName, numStates, reverseOrderStatesNames.length);
+					throw new ProbNetParserException.WrongNumberOfStates(variableName, numStates, reverseOrderStatesNames.length);
 				}
 				State[] statesNames = new State[numStates];
 				for (int i = 0; i < numStates; i++) {
@@ -406,16 +407,16 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
      * @param token {@code ElviraToken}
      * @return token. {@code ElviraToken}
 	 * @throws IOException if an I/O error occurs
-	 * @throws ParserException if parser occurs
+	 * @throws ProbNetParserException if parser occurs
 	 */
-	private ElviraToken getLinks(ElviraToken token) throws IOException, ParserException {
+	private ElviraToken getLinks(ElviraToken token) throws IOException, ProbNetParserException {
 		do {
 			String variable1Name = token.getStringValue1();
 			String variable2Name = token.getStringValue2();
 			Node node1 = probNet.getNode(variable1Name);
 			Node node2 = probNet.getNode(variable2Name);
-			if(node1 == null) throw new ParserException.MissingVariable(variable1Name);
-			if(node2 == null) throw new ParserException.MissingVariable(variable2Name);
+			if (node1 == null) throw new ProbNetParserException.MissingVariable(variable1Name);
+			if (node2 == null) throw new ProbNetParserException.MissingVariable(variable2Name);
 			probNet.addLink(node1, node2, true);
 			token = scanner.getNextToken();
 		} while (token.getReservedWord() == ReservedWord.LINK);
@@ -426,17 +427,17 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 	 * Reads potentials information and create potentials.
 	 *
      * @param token {@code ElviraToken}
-	 * @throws ParserException if parser occurs
+	 * @throws ProbNetParserException if parser occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	private void getPotentials(ElviraToken token) throws IOException, ParserException {
+	private void getPotentials(ElviraToken token) throws IOException, ProbNetParserException {
 		do {
 			// Gets relation variables
 			String[] variablesListNames = token.getStringListValue();
 			List<Variable> variables = new ArrayList<Variable>();
 			for (String variableName : variablesListNames) {
 				Variable variable = probNet.getVariable(variableName);
-				if (variable == null) throw new ParserException.MissingVariable(variableName);
+				if (variable == null) throw new ProbNetParserException.MissingVariable(variableName);
 				variables.add(variable);
 			}
 			Potential potential = getPotential(variables);
@@ -452,10 +453,10 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 	 *
      * @param variables {@code ArrayList} of {@code Variable}
      * @return potential. {@code Potential}
-	 * @throws ParserException if parser occurs
+	 * @throws ProbNetParserException if parser occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	private Potential getPotential(List<Variable> variables) throws IOException, ParserException {
+	private Potential getPotential(List<Variable> variables) throws IOException, ProbNetParserException {
         boolean isUtilityPotential = variables.get(0).getVariableType() == VariableType.NUMERIC;
         Potential potential = null;
 		HashMap<String, Object> properties = new HashMap<String, Object>();
@@ -544,16 +545,16 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
      * Adds the sub-potentials stored in {@code subPotentials} to
      * {@code ICIPotentials}.
 	 *
-	 * @throws ParserException if remains one or more sub-potential or there are
+	 * @throws ProbNetParserException if remains one or more sub-potential or there are
 	 *                         some missing relation.
 	 */
-	private void addSubPotentials() throws ParserException.MissingPotential, ParserException.SomeSubpotentialsArentLinkedToAnICIPotential {
+	private void addSubPotentials() throws ProbNetParserException.MissingPotential, ProbNetParserException.SomeSubpotentialsArentLinkedToAnICIPotential {
 		for (ICIPotential potential : iciPotentials) {
 			String[] relations = (String[]) potential.properties.get("Relations");
 			for (String relation : relations) {
 				TablePotential subPotential = subPotentials.get(relation);
 				if (subPotential == null) {
-					throw new ParserException.MissingPotential(relation);
+					throw new ProbNetParserException.MissingPotential(relation);
                 }
                 if (subPotential.getVariables().size() > 1) {
                     potential.setNoisyParameters(subPotential.getVariable(1), //parent
@@ -566,7 +567,7 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
             }
         }
         if (!subPotentials.isEmpty()) {
-			throw new ParserException.SomeSubpotentialsArentLinkedToAnICIPotential(subPotentials);
+			throw new ProbNetParserException.SomeSubpotentialsArentLinkedToAnICIPotential(subPotentials);
 		}
 	}
 

@@ -7,12 +7,17 @@
 
 package org.openmarkov.core.model.network.constraint;
 
+import io.github.jorgericovivas.rust_essentials.tuples.Tuple2Record;
+import io.github.jorgericovivas.rust_essentials.tuples.Tuples;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.action.base.linkEdits.BaseLinkEdit;
 import org.openmarkov.core.model.network.GraphNetwork;
-import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.constraint.annotation.Constraint;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This constraint ensures that the editions done during the learning of a
@@ -22,7 +27,7 @@ import org.openmarkov.core.model.network.constraint.annotation.Constraint;
 @Constraint(name = "ModelNetworkConstraint", defaultBehavior = ConstraintBehavior.OPTIONAL)
 public class ModelNetworkConstraint extends PNConstraint {
     
-    private final ProbNet modelNet;
+    private final Set<Tuple2Record<String, String>> forbiddenLinksToModify;
     private final boolean linkAdditionAllowed;
     private final boolean linkRemovalAllowed;
     private final boolean linkInversionAllowed;
@@ -32,16 +37,24 @@ public class ModelNetworkConstraint extends PNConstraint {
         this.linkAdditionAllowed = linkAdditionAllowed;
         this.linkRemovalAllowed = linkRemovalAllowed;
         this.linkInversionAllowed = linkInversionAllowed;
-        this.modelNet = modelNet.copy();
+        var forbiddenLinksToModify = new HashSet<Tuple2Record<String, String>>();
+        for (var sourceNode : modelNet.getNodes()) {
+            for (var destinationNode : modelNet.getNodes()) {
+                if (modelNet.getLink(sourceNode, destinationNode, true) != null) {
+                    forbiddenLinksToModify.add(Tuples.record(sourceNode.getName(), destinationNode.getName()));
+                }
+            }
+        }
+        this.forbiddenLinksToModify = Collections.unmodifiableSet(forbiddenLinksToModify);
     }
     
     @Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {
     }
     
     public boolean canEditBeDone(BaseLinkEdit simpleEdit) {
-        Node source = modelNet.getNode(simpleEdit.getVariableFrom().getName());
-        Node destination = modelNet.getNode(simpleEdit.getVariableTo().getName());
-        return modelNet.getLink(destination, source, true) == null;
+        return !this.forbiddenLinksToModify.contains(Tuples.record(simpleEdit.getVariableFrom()
+                                                                             .getName(), simpleEdit.getVariableTo()
+                                                                                                   .getName()));
     }
     
     public boolean isLinkAdditionAllowed() {

@@ -1,14 +1,7 @@
 package org.openmarkov.integrationTests.inference.heuristics;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.io.ProbNetInfo;
+import org.junit.jupiter.api.Assertions;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
@@ -22,13 +15,15 @@ import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.Decisio
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANOperations;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.EvaluationDecisionTreeNode;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
-import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 
-import org.junit.jupiter.api.Assertions;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class Tools {
     
-    public ProbNet loadNetwork(String networkNameSuffix, String networkNamePrefix, String subfolderName) throws IOException, ParserException {
+    public ProbNet loadNetwork(String networkNameSuffix, String networkNamePrefix, String subfolderName) throws IOException, ProbNetParserException {
         String networkName = "networks/" + subfolderName + "/" + networkNamePrefix + "-" + networkNameSuffix + ".pgmx";
         PGMXReader pgmxReader = new PGMXReader();
         return pgmxReader.read(getClass().getClassLoader()
@@ -37,11 +32,11 @@ public class Tools {
     }
     
     
-    public ProbNet loadDAN(String nameSuffix) throws IOException, ParserException {
+    public ProbNet loadDAN(String nameSuffix) throws IOException, ProbNetParserException {
         return loadNetwork(nameSuffix, "DAN", "dan");
     }
     
-    public ProbNet loadID(String nameSuffix) throws IOException, ParserException {
+    public ProbNet loadID(String nameSuffix) throws IOException, ProbNetParserException {
         return loadNetwork(nameSuffix, "ID", "id");
     }
     

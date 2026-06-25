@@ -10,8 +10,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.io.ProbNetInfo;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.ProbNet;
@@ -36,7 +40,7 @@ public class bnHeparTests {
     private ProbNet probNet;
     private EvidenceCase preResolutionEvidence;
     
-    @BeforeEach public void setUp() throws java.net.URISyntaxException, org.openmarkov.core.exception.ParserException, FileNotFoundException {
+    @BeforeEach public void setUp() throws java.net.URISyntaxException, ProbNetParserException, FileNotFoundException {
         
         // Load the network: ID-decide-test
         PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();

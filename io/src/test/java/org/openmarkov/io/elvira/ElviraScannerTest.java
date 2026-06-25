@@ -7,16 +7,19 @@
 
 package org.openmarkov.io.elvira;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ProbNetParserException;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.net.URL;
 
 
 /**
@@ -40,8 +43,8 @@ public class ElviraScannerTest {
 		elviraScanner.initializeScanner(url.getFile(), new FileInputStream(url.getFile()));
 
 	}
-
-	@Test public void testGetNextToken() throws org.openmarkov.core.exception.ParserException, java.io.IOException {
+	
+	@Test public void testGetNextToken() throws ProbNetParserException, java.io.IOException {
 		// bnet token
 		token = elviraScanner.getNextToken();
 		assertEquals(TokenType.RESERVED, token.getTokenType());

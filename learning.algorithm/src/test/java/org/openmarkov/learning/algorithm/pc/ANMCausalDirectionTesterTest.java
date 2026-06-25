@@ -12,7 +12,8 @@ import org.openmarkov.learning.algorithm.pc.independencetester.ANMCausalDirectio
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link ANMCausalDirectionTester}.
@@ -101,8 +102,8 @@ public class ANMCausalDirectionTesterTest {
     public void testForwardDirection_HighPValue() {
         ANMCausalDirectionTester tester = new ANMCausalDirectionTester();
         double p = tester.testDirection(asymDb, nodeX, nodeY);
-
-        System.out.printf("ANM  X -> Y : p = %.6f%n", p);
+        
+        //System.out.printf("ANM  X -> Y : p = %.6f%n", p);
         assertTrue(p > 0.05,
                 "Forward direction (X->Y) should have high p-value (noise independent of X), got p = " + p);
     }
@@ -111,8 +112,8 @@ public class ANMCausalDirectionTesterTest {
     public void testReverseDirection_LowPValue() {
         ANMCausalDirectionTester tester = new ANMCausalDirectionTester();
         double p = tester.testDirection(asymDb, nodeY, nodeX);
-
-        System.out.printf("ANM  Y -> X : p = %.6f%n", p);
+        
+        //System.out.printf("ANM  Y -> X : p = %.6f%n", p);
         assertTrue(p < 0.05,
                 "Reverse direction (Y->X) should have low p-value (noise depends on Y), got p = " + p);
     }
@@ -122,8 +123,8 @@ public class ANMCausalDirectionTesterTest {
         ANMCausalDirectionTester tester = new ANMCausalDirectionTester();
         double pForward = tester.testDirection(asymDb, nodeX, nodeY);
         double pReverse = tester.testDirection(asymDb, nodeY, nodeX);
-
-        System.out.printf("ANM  X -> Y : p = %.6f   Y -> X : p = %.6f%n", pForward, pReverse);
+        
+        //System.out.printf("ANM  X -> Y : p = %.6f   Y -> X : p = %.6f%n", pForward, pReverse);
         assertTrue(pForward > pReverse,
                 "Forward p-value should be higher than reverse p-value");
     }
@@ -178,8 +179,8 @@ public class ANMCausalDirectionTesterTest {
 
         ANMCausalDirectionTester tester = new ANMCausalDirectionTester();
         double p = tester.testDirection(binaryDb, nA, nB);
-
-        System.out.printf("ANM binary A -> B : p = %.6f%n", p);
+        
+        //System.out.printf("ANM binary A -> B : p = %.6f%n", p);
         assertTrue(p >= 0.0 && p <= 1.0, "p-value must be in [0, 1]");
         // For a symmetric binary relationship, both directions yield similar noise
         // so we just check it runs and returns a valid p-value

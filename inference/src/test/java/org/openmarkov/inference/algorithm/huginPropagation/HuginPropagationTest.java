@@ -7,17 +7,24 @@
 
 package org.openmarkov.inference.algorithm.huginPropagation;
 
-import org.junit.jupiter.api.*;
-
-import org.openmarkov.core.exception.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.inference.InferenceAlgorithm;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
 import org.openmarkov.inference.algorithm.huginPropagation.ClusterPropagation.StorageLevel;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,6 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Manuel Arias
@@ -122,8 +131,8 @@ public class HuginPropagationTest {
             propagation.setPreResolutionEvidence(twoFindings);
 
             posteriorProbabilities = propagation.getPosteriorValues();
-
-            printPosteriorProbabilities(posteriorProbabilities);
+            
+            //printPosteriorProbabilities(posteriorProbabilities);
         }
     }
 

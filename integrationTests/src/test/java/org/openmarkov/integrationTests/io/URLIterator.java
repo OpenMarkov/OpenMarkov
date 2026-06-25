@@ -1,13 +1,16 @@
 package org.openmarkov.integrationTests.io;
 
 import bitbucket.NetsRepository;
-import org.openmarkov.core.exception.ParserException;
-import org.openmarkov.core.io.ProbNetInfo;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
 import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 
@@ -35,7 +38,7 @@ public class URLIterator implements PGMXIterator {
     }
     
     @Override
-    public PGMXCompound next() throws IOException, ParserException {
+    public PGMXCompound next() throws IOException, ProbNetParserException {
         URL url = listURL.get(nextURLIndex++);
         String networkName = url.getPath();
         

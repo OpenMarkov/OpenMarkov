@@ -120,8 +120,8 @@ public class CrossEntropyIndependenceTesterIntegrationTest {
                 nodeB,
                 Collections.emptyList()
         );
-
-        System.out.printf("Marginal test A ⊥̸ B: p-value = %.8f%n", pValue);
+        
+        //System.out.printf("Marginal test A ⊥̸ B: p-value = %.8f%n", pValue);
 
         assertTrue(
                 pValue < ALPHA,
@@ -140,8 +140,8 @@ public class CrossEntropyIndependenceTesterIntegrationTest {
                 nodeB,
                 Collections.singletonList(nodeC)
         );
-
-        System.out.printf("Conditional test A ⊥ B | C: p-value = %.8f%n", pValue);
+        
+        //System.out.printf("Conditional test A ⊥ B | C: p-value = %.8f%n", pValue);
 
         assertTrue(
                 pValue > ALPHA,
@@ -167,8 +167,8 @@ public class CrossEntropyIndependenceTesterIntegrationTest {
                 nodeA,
                 Collections.singletonList(nodeC)
         );
-
-        System.out.printf("Symmetry test: p(A,B|C)=%.8f, p(B,A|C)=%.8f%n", pValueAB, pValueBA);
+        
+        //System.out.printf("Symmetry test: p(A,B|C)=%.8f, p(B,A|C)=%.8f%n", pValueAB, pValueBA);
 
         assertTrue(
                 Math.abs(pValueAB - pValueBA) < 1e-12,

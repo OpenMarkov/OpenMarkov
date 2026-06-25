@@ -7,17 +7,18 @@
 
 package org.openmarkov.full;
 
-import org.openmarkov.core.exception.ParserException;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.gui.configuration.*;
+import org.openmarkov.gui.configuration.LocalPreferences;
+import org.openmarkov.gui.configuration.UILookAndFeelPlugin;
 import org.openmarkov.gui.dialog.OMExceptionHandler;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
-import org.openmarkov.gui.configuration.UILookAndFeelPlugin;
 import org.openmarkov.gui.window.MainGUI;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
+import javax.swing.UnsupportedLookAndFeelException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -115,7 +116,7 @@ public class OpenMarkov {
         for (String filename : filesToOpen) {
             try {
                 mainGUI.openNetwork(filename);
-            } catch (ParserException | IOException | NoReaderForFileException | CorruptNetworkFile e) {
+            } catch (ProbNetParserException | IOException | NoReaderForFileException | CorruptNetworkFile e) {
                 Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
             }
         }

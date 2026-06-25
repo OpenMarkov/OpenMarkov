@@ -5,8 +5,6 @@ import org.openmarkov.core.model.network.Node;
 
 public class EventIsNotParentOf extends OpenMarkovException {
     
-    
-    //{eventNode} must be parent of {node}.
     public final Node eventNode;
     public final Node node;
     

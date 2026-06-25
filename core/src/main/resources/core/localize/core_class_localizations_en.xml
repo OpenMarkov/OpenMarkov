@@ -231,40 +231,42 @@
                   value="This algorithm cannot evaluate {probNet} because it does not satisfy the following constraints: {unsatisfiedConstraints}"/>
     <Localization class="org.openmarkov.core.exception.NotEvaluableNetworkException$VariableIsNotTemporal"
                   value="Variable {variable} is not temporal."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$BadlyStructuredFile"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$BadlyStructuredFile"
                   value="File {url} is not well-formed.\nAn error occurred at line {saxParseException.getLineNumber}, column {saxParseException.getColumnNumber}: {saxParseException.getMessage}."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$CannotOpenFile"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$CannotOpenFile"
                   value="Cannot open file {filename}."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$CannotParseFile"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$CannotParseFile"
                   value="Unexpected error when validating {url}\n{originException.getMessage}."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$CannotReadConstraint"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$CannotReadConstraint"
                   value="Could not read a constraint."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$MismatchedToken"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$MismatchedToken"
                   value="Expected token {expected}, but found {found}"/>
-    <Localization class="org.openmarkov.core.exception.ParserException$MissingPotential"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$MissingPotential"
                   value="Potential {potential} does not exist."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$MissingProbabilisticNetworkInformation"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$MissingProbabilisticNetworkInformation"
                   value="No ProbNet in ProbNetInfo."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$MissingPropertiesOfContiousVariable"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$MissingPropertiesOfContiousVariable"
                   value="Variable {variableName} is missing properties: {missingProperties}."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$MissingToken" value="Token {token} is missing;"/>
-    <Localization class="org.openmarkov.core.exception.ParserException$MissingVariable"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$MissingToken"
+                  value="Token {token} is missing;"/>
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$MissingVariable"
                   value="Variable {variableName} is missing."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$MoreThanOneInputOpened"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$MoreThanOneInputOpened"
                   value="You have requested to open {amountOfInputsRequested} files, but only 1 is allowed."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$PGMXInvalid"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$PGMXInvalid"
                   value="Invalid PGMX Structure due to: {message}."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$ProbabilisticNetworkTypeMissing"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$ProbabilisticNetworkTypeMissing"
                   value="Network type is missing."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$ProbabilisticNetworkTypeNotRecognized"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$ProbabilisticNetworkTypeNotRecognized"
                   value="Cannot recognize network type {networkType}."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$SomeSubpotentialsArentLinkedToAnICIPotential"
+    <Localization
+            class="org.openmarkov.core.exception.ProbNetParserException$SomeSubpotentialsArentLinkedToAnICIPotential"
                   value="There are {subPotentials.size} not linked no an ICIPotential ({subPotentials})."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$WrongNumberOfStates"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$WrongNumberOfStates"
                   value="There was expected to find {expectedLength} states in variable {variableName}, but {actualLength} were found."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$WrongVersion"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$WrongVersion"
                   value="Version {version} is not supported."/>
-    <Localization class="org.openmarkov.core.exception.ParserException$XMLInvalid"
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$XMLInvalid"
                   value="Can not parse XML {netName} document due to: {originException.getMessage}."/>
     <Localization class="org.openmarkov.core.exception.ParsingSourceException$CouldNotParseSourceException"
                   value="{originException}"/>
@@ -306,7 +308,7 @@
     <Localization class="org.openmarkov.core.model.network.Finding"
                   value="Finding of variable {variable} with numerical value {numericalValue} and state index {stateIndex}"/>
     <Localization class="org.openmarkov.core.model.network.Node" value="{nodeType} node of {variable}"/>
-    <Localization class="org.openmarkov.core.model.network.PartitionedInterval" value="Interval with limits: {limits}"/>
+    <Localization class="org.openmarkov.core.model.network.PartitionedInterval" value="Interval with limits"/>
     <Localization class="org.openmarkov.core.model.network.Point2D$Double" value="{ x: {x}, y: {y} }"/>
     <Localization class="org.openmarkov.core.model.network.ProbNet"
                   value="{networkType} network named {metadata.name}"
@@ -417,4 +419,34 @@
                   value="There is no network selected to use as model, and one is required."/>
     <Localization class="org.openmarkov.learning.core.exception.UnobservedVariablesException"
                   value="Algorithm {algorithmType.name} does not support unobserved variables, which are: {unobservedVariables}"/>
+    <Localization class="org.openmarkov.core.action.base.linkEdits.MultiAddLinkEdit"
+                  value="Add link(s): {edits}"/>
+    <Localization class="org.openmarkov.core.action.core.EventNodeAlwaysAppendEdit"
+                  value="Set new always append to {newAlwaysAppend} for {node}"/>
+    <Localization class="org.openmarkov.core.action.core.MonteCarloOptionsEdit"
+                  value="Change MonteCarlo options of {probNet}."/>
+    <Localization class="org.openmarkov.core.action.core.RemoveConstraintEdit"
+                  value="Removal of constraint {constraint}."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CannotHaveEventNodeException"
+                  value="{eventNode} is of type event."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyOneOrphanInitialEventException"
+                  value="There can be only one orphan event node which the purpose of initial, but multiple have it:\n{orphanEventNodes}"/>
+    <Localization
+            class="org.openmarkov.core.exception.ConstraintViolatedException$OnlySelfLoopsWithEventAndChanceNodesException"
+            value="Self loop can only be used if the node is event or chance, which is not applicable to {node}."/>
+    <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$SamplesWeightIsZero"
+                  value="Samples weigth is 0"/>
+    <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$VariableMustBeEvent"
+                  value="Node for {variable} is not an Event node."/>
+    <Localization class="org.openmarkov.core.exception.NotEvaluableNetworkException$UnsatisfiedConstraints"
+                  value="Some constraints are not satisfied: {unsatisfiedConstraints}"/>
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$MissingPropertiesOfContinuousVariable"
+                  value="Continous variable {variableName} is missing some properties: {missingProperties}"/>
+    <Localization class="org.openmarkov.core.model.network.Configuration"
+                  value="Configuration with findings {findings}"
+                  short="Configuration with {findings.size} findings"/>
+    <Localization class="org.openmarkov.core.model.network.EqualCriterion"
+                  value="{ceCriterion} criterion named {criterionName}"/>
+    <Localization class="org.openmarkov.core.model.network.type.DESNetworkType"
+                  value="DESNet"/>
 </ClassLocalizations>

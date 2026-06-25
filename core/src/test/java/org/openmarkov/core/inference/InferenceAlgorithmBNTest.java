@@ -383,7 +383,7 @@ public abstract class InferenceAlgorithmBNTest extends InferenceAlgorithmTest {
     @Test
     public void testConditioningVariablesEvaluationIDDiagnosisProblem()
             throws
-            IOException, ParserException, NodeNotFoundException,
+            IOException, ProbNetParserException, NodeNotFoundException,
             ConstraintViolatedException, NotEvaluableNetworkException {
         ProbNet network = iD_DiagnosisProblem;
         //Decision criteria variable

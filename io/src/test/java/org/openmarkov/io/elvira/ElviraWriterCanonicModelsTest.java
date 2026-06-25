@@ -7,13 +7,10 @@
 
 package org.openmarkov.io.elvira;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-
-import org.junit.jupiter.api.*;
-import org.openmarkov.core.exception.ParserException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.model.network.NodeType;
@@ -23,6 +20,11 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.canonical.MaxPotential;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class ElviraWriterCanonicModelsTest {
@@ -125,7 +127,7 @@ public class ElviraWriterCanonicModelsTest {
     }
     
     @Test
-    public final void testWriteProbNet() throws ParserException, IOException, WriterException.CannotCreateFile, WriterException.UnknownNetworkType, WriterException.ICIModelNotSupportedByElvira {
+    public final void testWriteProbNet() throws ProbNetParserException, IOException, WriterException.CannotCreateFile, WriterException.UnknownNetworkType, WriterException.ICIModelNotSupportedByElvira {
         URL url = this.getClass().getClassLoader().getResource("trivial3jensen.elv");
         String rootPath = url.getPath();
         File file = new File(rootPath);
@@ -134,7 +136,6 @@ public class ElviraWriterCanonicModelsTest {
         rootPath = absolutePath.substring(0, absolutePath.length() - name.length());
         
         String fullNetworkName = rootPath + "MiniICI.elv";
-        System.out.println(fullNetworkName);
         new ElviraWriter().write(fullNetworkName, miniICI, null);
         ProbNetReader probNetReader = new ElviraParser();
         probNetReader.read(new File(fullNetworkName).toURI().toURL()).probNet();

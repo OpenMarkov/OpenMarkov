@@ -165,7 +165,7 @@ public class G2IndependenceTesterTest {
     void testMarginalDependence() {
         G2IndependenceTester tester = new G2IndependenceTester();
         double p = tester.test(standardDb, stdNodeA, stdNodeB, Collections.emptyList());
-        System.out.printf("G²  A ⊥̸ B         : p = %.6f%n", p);
+        //System.out.printf("G²  A ⊥̸ B         : p = %.6f%n", p);
         assertTrue(p < 0.05, "Expected marginal dependence (p < 0.05)");
     }
 
@@ -174,7 +174,7 @@ public class G2IndependenceTesterTest {
     void testConditionalIndependenceGivenC() {
         G2IndependenceTester tester = new G2IndependenceTester();
         double p = tester.test(standardDb, stdNodeA, stdNodeB, List.of(stdNodeC));
-        System.out.printf("G²  A ⊥  B | C    : p = %.6f%n", p);
+        //System.out.printf("G²  A ⊥  B | C    : p = %.6f%n", p);
         assertTrue(p > 0.05, "Expected conditional independence (p > 0.05)");
     }
 
@@ -187,7 +187,7 @@ public class G2IndependenceTesterTest {
     void testSparse_G2_doesNotRejectIndependence() {
         G2IndependenceTester tester = new G2IndependenceTester();
         double p = tester.test(sparseDb, sparseNodeY, sparseNodeZ, List.of(sparseNodeX));
-        System.out.printf("G²           Y ⊥ Z | X : p = %.6f%n", p);
+        //System.out.printf("G²           Y ⊥ Z | X : p = %.6f%n", p);
         assertTrue(p > 0.05,
                 "G² with Laplace smoothing should not reject independence despite sparse cells");
     }
@@ -200,9 +200,9 @@ public class G2IndependenceTesterTest {
 
         double pCE = crossEntropy.test(sparseDb, sparseNodeY, sparseNodeZ, List.of(sparseNodeX));
         double pG2 = g2.test(sparseDb, sparseNodeY, sparseNodeZ, List.of(sparseNodeX));
-
-        System.out.printf("CrossEntropy Y ⊥ Z | X : p = %.6f%n", pCE);
-        System.out.printf("G²           Y ⊥ Z | X : p = %.6f%n", pG2);
+        
+        //System.out.printf("CrossEntropy Y ⊥ Z | X : p = %.6f%n", pCE);
+        //System.out.printf("G²           Y ⊥ Z | X : p = %.6f%n", pG2);
 
         // CrossEntropy sees perfect Y–Z association in the X=1 stratum (zero cells
         // are skipped rather than smoothed), which inflates the statistic and

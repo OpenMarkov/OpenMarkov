@@ -12,4 +12,8 @@ public class NoSelectedNodeException extends RuntimeException implements IBundle
     
     public final VisualNetwork visualNetwork;
     
+    @Override public String toString() {
+        return this.localize();
+    }
+    
 }

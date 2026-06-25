@@ -14,4 +14,9 @@
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TreeADDWithoutTwoThresholds" value="TreeADD branch has {thresholds.size} thresholds, but it should have only 2."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownNetworkType" value="There is no network type matching {unknownType}."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$VariableHasNoStates" value="Variable {variableName} has no states, while a list of states must be provided."/>
+    <Localization
+            class="org.openmarkov.io.probmodel.exception.PGMXParserException$CannotAssignPotentialToStaticVariable"
+            value="Potential cannot be assigned to a static variable"/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$EvidenceIncompatibleInFile"
+                  value="{sourceException}"/>
 </ClassLocalizations>

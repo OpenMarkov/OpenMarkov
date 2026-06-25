@@ -8,7 +8,12 @@ import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -85,7 +90,7 @@ public abstract class InferenceAlgorithmDecTest extends InferenceAlgorithmTest {
     @Test
     public void testEvaluationIDDecisionTestProblem()
             throws FileNotFoundException,
-            IOException, ParserException, NodeNotFoundException,
+            IOException, ProbNetParserException, NodeNotFoundException,
             ConstraintViolatedException, NotEvaluableNetworkException {
         
         InferenceAlgorithm algorithm = buildInferenceAlgorithmAndSkipTestIfNotEvaluable(iD_DecisionTestProblemWithoutSV);
@@ -124,7 +129,7 @@ public abstract class InferenceAlgorithmDecTest extends InferenceAlgorithmTest {
     //Test for diagnosis problem
     public void testEvaluationIDDecisionTestProblem(ProbNet diagram)
             throws
-            IOException, ParserException, NodeNotFoundException,
+            IOException, ProbNetParserException, NodeNotFoundException,
             ConstraintViolatedException, NotEvaluableNetworkException {
         Variable variableX = null;
         Variable variableY = null;
