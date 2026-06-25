@@ -1,0 +1,139 @@
+@startuml diagrama_clases
+
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam classHeaderBackgroundColor #EEEEEE
+skinparam classBorderColor #888888
+skinparam arrowColor #444444
+skinparam arrowThickness 1.5
+skinparam shadowing false
+skinparam linetype ortho
+
+' -------------------------------------------------------
+' Módulo core
+' -------------------------------------------------------
+package "org.openmarkov.core\n(inference.heuristic)" #FAFAFA {
+
+  abstract class EliminationHeuristic {
+    # probNet : ProbNet
+    # variablesToEliminate : List<List<Variable>>
+    # nodesToEliminate : List<List<Node>>
+    --
+    + {abstract} getVariableToDelete() : Variable
+    + afterEditExecutes(PNEdit) : void
+    # getEventVariable(PNEdit) : Variable
+  }
+
+}
+
+' -------------------------------------------------------
+' Heurísticas existentes
+' -------------------------------------------------------
+package "org.openmarkov.inference\n(heuristic.*)" #F5F5FF {
+
+  class SimpleElimination {
+    Elimina la variable\ncon menos vecinos
+  }
+
+  class MinimalFillIn {
+    Minimiza arcos\nde relleno
+  }
+
+  class minimalCliqueSize {
+    Minimiza tamaño\ndel clique creado
+  }
+
+  ' -------------------------------------------------------
+  ' CanoMoral — corregida
+  ' -------------------------------------------------------
+  class CanoMoralElimination #FFE0B2 {
+    - graph : ProbNet
+    - listOfSetsOfNodes : List<Set<Node>>
+    --
+    + getVariableToDelete() : Variable
+    - createdCliqueSize(Node) : long
+    - sumCliqueSizes(Node) : long
+    - getMaxClique(seed, allNodes) : Set<Node>
+    note "Corregida: bug en sumCliqueSizes\n(condición i==n) y getMaxClique\n(inicialización a seed)" as NCM
+  }
+
+  ' -------------------------------------------------------
+  ' WeightedMinFill — nueva
+  ' -------------------------------------------------------
+  class WeightedMinFill #C8E6C9 {
+    - graphCopy : ProbNet
+    - variablesNodes : HashMap<Variable, Node>
+    --
+    + getVariableToDelete() : Variable
+    + afterEditExecutes(PNEdit) : void
+    - weightedFillInCost(Node) : long
+    note "Nueva. cost(X) = Σ card(Y)·card(Z)\npara aristas de relleno (Y,Z)" as NWMF
+  }
+
+  ' -------------------------------------------------------
+  ' LookaheadHeuristic — nueva, abstracta
+  ' -------------------------------------------------------
+  abstract class LookaheadHeuristic #BBDEFB {
+    # depth : int
+    # beamWidth : int
+    - graphCopy : ProbNet
+    - variablesNodes : HashMap<Variable, Node>
+    {static} DEFAULT_DEPTH = 2
+    {static} DEFAULT_BEAM  = 3
+    --
+    + getVariableToDelete() : Variable
+    + afterEditExecutes(PNEdit) : void
+    # {abstract} immediateCost(adj, active, x, card) : double
+    - score(adj, active, x, depth, card) : double
+    {static} # eliminate(adj, x) : boolean[][]
+    {static} # countNeighbors(adj, x, n) : int
+    note "Nueva. Búsqueda anticipada n pasos\ncon beam search sobre boolean[][].\nscore = c0 + min_Y score(G\\X, Y, d-1)" as NLH
+  }
+
+  class LookaheadMinFill #E3F2FD {
+    + immediateCost(adj, active, x, card) : double
+    note "cost = Σ card(Y)·card(Z)\npara aristas de relleno" as NLMF
+  }
+
+  class LookaheadMinCliqueSize #E3F2FD {
+    + immediateCost(adj, active, x, card) : double
+    note "cost = |N(x)| + 1" as NLMCS
+  }
+
+  class LookaheadCanoMoral #E3F2FD {
+    + immediateCost(adj, active, x, card) : double
+    - createdCliqueSize(...) : double
+    - sumCliqueSizes(...) : double
+    - getMaxClique(adj, seed, allNodes, n) : boolean[]
+    note "cost = createdCliqueSize / sumCliqueSizes\n(H6 sobre boolean[][])" as NLCM
+  }
+
+}
+
+' -------------------------------------------------------
+' Herencia
+' -------------------------------------------------------
+EliminationHeuristic <|-- SimpleElimination
+EliminationHeuristic <|-- MinimalFillIn
+EliminationHeuristic <|-- minimalCliqueSize
+EliminationHeuristic <|-- CanoMoralElimination
+EliminationHeuristic <|-- WeightedMinFill
+EliminationHeuristic <|-- LookaheadHeuristic
+
+LookaheadHeuristic <|-- LookaheadMinFill
+LookaheadHeuristic <|-- LookaheadMinCliqueSize
+LookaheadHeuristic <|-- LookaheadCanoMoral
+
+' -------------------------------------------------------
+' Leyenda
+' -------------------------------------------------------
+legend right
+  |= Color |= Significado |
+  |<#EEEEEE> Gris claro | Clase existente sin cambios |
+  |<#FFE0B2> Naranja | Clase existente corregida |
+  |<#C8E6C9> Verde | Nueva heurística greedy |
+  |<#BBDEFB> Azul medio | Nueva clase base (lookahead) |
+  |<#E3F2FD> Azul claro | Nueva heurística lookahead |
+endlegend
+
+@enduml

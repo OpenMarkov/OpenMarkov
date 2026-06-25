@@ -1,0 +1,169 @@
+@startuml fig-problemas
+' ============================================================
+' Catalogo de problemas de diseno en la jerarquia de Potential
+' Vista panoramica: 6 problemas identificados
+' ============================================================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 40
+skinparam dpi 150
+
+hide empty methods
+
+skinparam class {
+    BackgroundColor<<problem>> #FFDDD8
+    BorderColor<<problem>> #CC4444
+    BackgroundColor<<neutral>> #E8E8FF
+    BorderColor<<neutral>> #6666AA
+    BackgroundColor<<victim>> #FFF3CD
+    BorderColor<<victim>> #CC9900
+}
+
+' ==== CLASE BASE ====
+abstract class Potential <<neutral>> {
+    #variables : List<Variable>
+    #role : PotentialRole
+    --
+    +{abstract} tableProject(...)
+    +{abstract} reorder(...)
+    +{abstract} deepCopy(...)
+    +{abstract} copy()
+    +{abstract} isUncertain()
+    +{abstract} project(...)
+    +{abstract} scalePotential(...)
+}
+
+note top of Potential #FFDDD8
+  <b>P2</b>: Metodos abstractos forzados
+  que las subclases no pueden
+  implementar (devuelven null,
+  lanzan excepciones o estan vacios).
+  Viola LSP.
+end note
+
+' ==== TABLA DE POTENCIALES ====
+class TablePotential <<problem>> {
+    +<color:#CC4444>values : double[]</color>
+    +<color:#CC4444>strategyTrees : StrategyTree[]</color>
+    +<color:#CC4444>uncertainValues : UncertainValue[]</color>
+    #dimensions : int[]
+    #offsets : int[]
+    #tableSize : int
+    --
+    +tableProject(...)  <color:#CC4444>// triple logica</color>
+    +reorder(...)       <color:#CC4444>// triple logica</color>
+    +deepCopy(...)      <color:#CC4444>// triple logica</color>
+    +setUniform()       <color:#CC4444>// switch(role)</color>
+    +getInducedFindings() <color:#CC4444>// switch(role)</color>
+}
+
+note right of TablePotential #FFDDD8
+  <b>P1</b>: God Class — tres responsabilidades
+  mezcladas (values, strategies, uncertainty).
+  Campos opcionales null en >95% de instancias.
+  <b>Bug critico</b>: constructor de copia hace
+  alias mutable compartido.
+
+  <b>P6</b>: PotentialRole como type code —
+  switch/if sobre role en setUniform(),
+  getInducedFindings(), etc.
+end note
+
+' ==== GTABLE ====
+class "GTablePotential<E>" as GTablePotential <<problem>> {
+    +elementTable : List<E>
+    --
+    super(vars, <b>null</b>)
+    <color:#CC4444>values[] reservado pero no usado</color>
+}
+
+note bottom of GTablePotential #FFDDD8
+  <b>P3</b>: Hereda values[] que
+  nunca utiliza. Desperdicio
+  de tableSize * 8 bytes.
+  Viola LSP.
+end note
+
+' ==== STRATEGY TREE ====
+class StrategyTree <<victim>> {
+    +branches : Map
+}
+
+class TreeADDPotential <<victim>> {
+    +rootNode : ...
+}
+
+' ==== SUBCLASES VICTIMAS ====
+class UniformPotential <<victim>> {
+    --
+    reorder() → <color:#CC4444>null</color>
+    project() → <color:#CC4444>Exception</color>
+    scalePotential() → <color:#CC4444>vacio</color>
+}
+
+class DeltaPotential <<victim>> {
+    --
+    reorder() → <color:#CC4444>null</color>
+    project() → <color:#CC4444>Exception</color>
+}
+
+class "SumPotential\nProductPotential" as SumProduct <<victim>> {
+    --
+    reorder() → <color:#CC4444>null</color>
+    scalePotential() → <color:#CC4444>vacio</color>
+}
+
+' ==== INFERENCIA ====
+package "inference (modulo externo)" #F0F0F0 {
+    class VariableEliminationCore <<victim>> {
+        <color:#CC4444>(TablePotential) potential</color>
+    }
+    class VEPropagation <<victim>> {
+        <color:#CC4444>(TablePotential) result</color>
+    }
+}
+
+note bottom of VariableEliminationCore #FFDDD8
+  <b>P4</b>: Downcasts desprotegidos
+  en todo el modulo de inferencia.
+  ClassCastException en runtime
+  si el potencial no es TablePotential.
+end note
+
+' ==== HERENCIA ====
+Potential <|-- TablePotential
+Potential <|-- UniformPotential
+Potential <|-- DeltaPotential
+Potential <|-- SumProduct
+TablePotential <|-- GTablePotential
+
+' ==== DEPENDENCIA CICLICA ====
+TablePotential --> StrategyTree : <color:#CC4444>P5: ciclo</color>
+StrategyTree --> TreeADDPotential : <color:#CC4444>P5: ciclo</color>
+TreeADDPotential --> TablePotential : <color:#CC4444>P5: ciclo</color>
+
+' ==== DOWNCASTS ====
+VariableEliminationCore ..> TablePotential : <color:#CC4444>downcast</color>
+VEPropagation ..> TablePotential : <color:#CC4444>downcast</color>
+
+legend right
+  |= Color |= Significado |
+  | <#FFDDD8> | Clase con problemas de diseno |
+  | <#FFF3CD> | Clase afectada por problemas |
+  | <#E8E8FF> | Clase base (neutral) |
+  | <#F0F0F0> | Modulo externo |
+  --
+  |= Codigo |= Problema |
+  | <b>P1</b> | God Class: campos opcionales en TablePotential |
+  | <b>P2</b> | Metodos abstractos forzados (LSP) |
+  | <b>P3</b> | GTablePotential hereda values[] inutiles |
+  | <b>P4</b> | Downcasts desprotegidos en inferencia |
+  | <b>P5</b> | Dependencia ciclica Table↔Strategy↔TreeADD |
+  | <b>P6</b> | PotentialRole como type code |
+endlegend
+
+@enduml

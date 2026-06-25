@@ -1,0 +1,1543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.1.0">
+  <ProbNet type="BayesianNetwork">
+    <AdditionalConstraints>
+      <Constraint name="org.openmarkov.core.model.network.constraint.NoCycle" />
+      <Constraint name="org.openmarkov.core.model.network.constraint.NoMultipleLinks" />
+      <Constraint name="org.openmarkov.core.model.network.constraint.NoRevelationArc" />
+      <Constraint name="org.openmarkov.core.model.network.constraint.DistinctLinks" />
+      <Constraint name="org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables" />
+      <Constraint name="org.openmarkov.core.model.network.constraint.OnlyDirectedLinks" />
+      <Constraint name="org.openmarkov.core.model.network.constraint.OnlyOneAgent" />
+      <Constraint name="org.openmarkov.core.model.network.constraint.NoEmptyName" />
+      <Constraint name="org.openmarkov.core.model.network.constraint.NoSelfLoop" />
+      <Constraint name="org.openmarkov.core.model.network.constraint.NoBackwardLink" />
+      <Constraint name="org.openmarkov.core.model.network.constraint.OnlyChanceNodes" />
+    </AdditionalConstraints>
+    <Variables>
+      <Variable name="dT0250" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in T level for the electrode(s) responsible for 
+    the coding of 250 Hz. Up stands for 1 unit up, in the developer's mind 
+    this is up by 5 current units.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="310" y="161" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="Nerve_0250_Soft" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in significant neural activity in the tonotopical 
+    region responsible for 250 Hz, when stimulated with intensities around 
+    threshold. Up stands for 1 unit up, in the developer's mind this is a 
+    level that should be noticeable for 95% of patients.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="435" y="333" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="softer" />
+          <State name="st.quo" />
+          <State name="louder" />
+        </States>
+      </Variable>
+      <Variable name="dM0250" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in M level for the electrode(s) responsible for 
+    the coding of 250 Hz. Up stands for 1 unit up, in the developer's mind 
+    this is up by 7 current units.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="398" y="80" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="Nerve_0250_Loud" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in significant neural activity in the tonotopical 
+    region responsible for 250 Hz, when stimulated with intensities near to 
+    uncomfortable. Up stands for 1 unit up, in the developer's mind this is a 
+    level that should be noticeable for 95% of patients.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="804" y="236" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="softer" />
+          <State name="st.quo" />
+          <State name="louder" />
+        </States>
+      </Variable>
+      <Variable name="d_Audio_0250" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in audiometric threshold at 250 Hz. Higher stands 
+    for 1 unit up, in the developer's mind this corresponds to a 5dBHL shift.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="724" y="434" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="lower threshold" />
+          <State name="st.quo" />
+          <State name="higher threshold" />
+        </States>
+      </Variable>
+      <Variable name="dT0500" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in T level for the electrode(s) responsible for 
+    the coding of 500 Hz. Up stands for 1 unit up, in the developer's mind 
+    this is up by 5 current units.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="1358" y="179" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="Nerve_0250_Mid" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in significant neural activity in the tonotopical 
+    region responsible for 250 Hz, when stimulated with intensities in the 
+    midrange. Up stands for 1 unit up, in the developer's mind this is a level 
+    that should be noticeable for 95% of patients.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="638" y="301" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="softer" />
+          <State name="st.quo" />
+          <State name="louder" />
+        </States>
+      </Variable>
+      <Variable name="dG0250" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in Gain for the electrode(s) responsible for the 
+    coding of 250 Hz. Up stands for 1 unit up, in the developer's mind this is 
+    up by 3 units.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="514" y="159" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="dS0250" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in Sensitivity for the electrode(s) responsible 
+    for the coding of 250 Hz. Up stands for 1 unit up, in the developer's mind 
+    this is up by 10 units.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="806" y="79" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="dPW_0250" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in Pulse Width for the electrode(s) responsible 
+    for the coding of 250 Hz. Up stands for 1 unit up, in the developer's mind 
+    this is up by 3 usec.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="719" y="159" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="dIDR" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in IDR for the electrode(s) responsible for the 
+    coding of 250 Hz. Up stands for 1 unit up, in the developer's mind this is 
+    up by 5 dB.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="604" y="46" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="T0250" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This is the absolute T-level. It is known at the beginning of the 
+      fitting and should always be entered.
+    </p>
+    <p style="margin-top: 0">
+      In the developer's mind Low stands for under 42, High for over 68.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="101" y="162" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="low" />
+          <State name="medium" />
+          <State name="high" />
+        </States>
+      </Variable>
+      <Variable name="dSR0250" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in Stimulation rate for the electrode(s) 
+    responsible for the coding of 250 Hz. Up stands for 1 unit up, in the 
+    developer's mind this is up by 300 pps.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="922" y="158" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="IDR" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This is the absolute IDR. It is known at the beginning of the fitting 
+      and should always be entered.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="103" y="40" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="&lt;60" />
+          <State name="60-79" />
+          <State name="80" />
+        </States>
+      </Variable>
+      <Variable name="T0500" type="finiteStates" role="chance">
+        <Coordinates x="1150" y="178" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="low" />
+          <State name="medium" />
+          <State name="high" />
+        </States>
+      </Variable>
+      <Variable name="Internal_Noise_0250" type="finiteStates" role="chance">
+        <Comment><![CDATA[Internal noise]]></Comment>
+        <Coordinates x="948" y="340" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="softer" />
+          <State name="st.quo" />
+          <State name="louder" />
+        </States>
+      </Variable>
+      <Variable name="dM0500" type="finiteStates" role="chance">
+        <Coordinates x="1459" y="98" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="dG500" type="finiteStates" role="chance">
+        <Coordinates x="1561" y="180" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="Nerve_0500_Soft" type="finiteStates" role="chance">
+        <Coordinates x="1465" y="334" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="softer" />
+          <State name="st.quo" />
+          <State name="louder" />
+        </States>
+      </Variable>
+      <Variable name="Nerve_0500_Mid" type="finiteStates" role="chance">
+        <Coordinates x="1668" y="302" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="softer" />
+          <State name="st.quo" />
+          <State name="louder" />
+        </States>
+      </Variable>
+      <Variable name="dPW_500" type="finiteStates" role="chance">
+        <Coordinates x="1767" y="179" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="d_Audio_0500" type="finiteStates" role="chance">
+        <Coordinates x="1551" y="424" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="lower threshold" />
+          <State name="st.quo" />
+          <State name="higher threshold" />
+        </States>
+      </Variable>
+      <Variable name="dS0500" type="finiteStates" role="chance">
+        <Coordinates x="1864" y="100" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="Nerve_0500_Loud" type="finiteStates" role="chance">
+        <Coordinates x="1871" y="262" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="softer" />
+          <State name="st.quo" />
+          <State name="louder" />
+        </States>
+      </Variable>
+      <Variable name="Internal_Noise_0500" type="finiteStates" role="chance">
+        <Coordinates x="1978" y="341" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="softer" />
+          <State name="st.quo" />
+          <State name="louder" />
+        </States>
+      </Variable>
+      <Variable name="dT1000" type="finiteStates" role="chance">
+        <Coordinates x="2440" y="170" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="dSR0500" type="finiteStates" role="chance">
+        <Coordinates x="1971" y="179" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="down" />
+          <State name="st.quo" />
+          <State name="up" />
+        </States>
+      </Variable>
+      <Variable name="T1000" type="finiteStates" role="chance">
+        <Coordinates x="2229" y="172" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="low" />
+          <State name="medium" />
+          <State name="high" />
+        </States>
+      </Variable>
+      <Variable name="d_LS_0250_30_40" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    This reflects the change in Louness Scaling at 250 Hz and levels 30-40dB. 
+    Louder stands for 1 unit up, in the developer's mind this corresponds to 
+    half a score louder perception.
+  </body>
+</html>]]></Comment>
+        <Coordinates x="271" y="478" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="louder" />
+          <State name="st.quo" />
+          <State name="softer" />
+        </States>
+      </Variable>
+      <Variable name="d_LS_0250_45_55" type="finiteStates" role="chance">
+        <Coordinates x="476" y="477" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="louder" />
+          <State name="st.quo" />
+          <State name="softer" />
+        </States>
+      </Variable>
+      <Variable name="d_LS_0250_60_70" type="finiteStates" role="chance">
+        <Coordinates x="937" y="470" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="louder" />
+          <State name="st.quo" />
+          <State name="softer" />
+        </States>
+      </Variable>
+      <Variable name="d_LS_0250_75_85" type="finiteStates" role="chance">
+        <Coordinates x="1141" y="472" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="louder" />
+          <State name="st.quo" />
+          <State name="softer" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="dT0250" />
+        <Variable name="Nerve_0250_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT0250" />
+        <Variable name="Nerve_0250_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT0250" />
+        <Variable name="Internal_Noise_0250" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT0250" />
+        <Variable name="Nerve_0500_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT0250" />
+        <Variable name="Nerve_0500_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT0250" />
+        <Variable name="Internal_Noise_0500" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT0250" />
+        <Variable name="Nerve_0250_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Soft" />
+        <Variable name="d_Audio_0250" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Soft" />
+        <Variable name="d_LS_0250_30_40" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Soft" />
+        <Variable name="d_LS_0250_45_55" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Soft" />
+        <Variable name="d_LS_0250_60_70" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Soft" />
+        <Variable name="d_LS_0250_75_85" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dM0250" />
+        <Variable name="Nerve_0250_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dM0250" />
+        <Variable name="Nerve_0250_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dM0250" />
+        <Variable name="Nerve_0250_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Loud" />
+        <Variable name="d_LS_0250_30_40" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Loud" />
+        <Variable name="d_LS_0250_45_55" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Loud" />
+        <Variable name="d_LS_0250_60_70" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Loud" />
+        <Variable name="d_LS_0250_75_85" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT0500" />
+        <Variable name="Nerve_0250_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT0500" />
+        <Variable name="Nerve_0250_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT0500" />
+        <Variable name="Internal_Noise_0500" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Mid" />
+        <Variable name="d_Audio_0250" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Mid" />
+        <Variable name="d_LS_0250_30_40" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Mid" />
+        <Variable name="d_LS_0250_45_55" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Mid" />
+        <Variable name="d_LS_0250_60_70" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0250_Mid" />
+        <Variable name="d_LS_0250_75_85" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dG0250" />
+        <Variable name="Nerve_0250_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dG0250" />
+        <Variable name="Nerve_0250_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dG0250" />
+        <Variable name="Nerve_0250_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dS0250" />
+        <Variable name="Nerve_0250_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dS0250" />
+        <Variable name="Nerve_0250_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dS0250" />
+        <Variable name="Nerve_0250_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dPW_0250" />
+        <Variable name="Nerve_0250_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dPW_0250" />
+        <Variable name="Nerve_0250_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dPW_0250" />
+        <Variable name="Nerve_0250_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dIDR" />
+        <Variable name="Nerve_0250_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dIDR" />
+        <Variable name="Nerve_0250_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dIDR" />
+        <Variable name="Nerve_0500_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dIDR" />
+        <Variable name="Nerve_0500_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dIDR" />
+        <Variable name="Nerve_0500_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dIDR" />
+        <Variable name="Nerve_0250_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="T0250" />
+        <Variable name="dT0250" />
+      </Link>
+      <Link directed="true">
+        <Variable name="T0250" />
+        <Variable name="Internal_Noise_0250" />
+      </Link>
+      <Link directed="true">
+        <Variable name="T0250" />
+        <Variable name="Internal_Noise_0500" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dSR0250" />
+        <Variable name="Nerve_0250_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dSR0250" />
+        <Variable name="Nerve_0250_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dSR0250" />
+        <Variable name="Nerve_0250_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="IDR" />
+        <Variable name="dIDR" />
+      </Link>
+      <Link directed="true">
+        <Variable name="T0500" />
+        <Variable name="dT0500" />
+      </Link>
+      <Link directed="true">
+        <Variable name="T0500" />
+        <Variable name="Internal_Noise_0250" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Internal_Noise_0250" />
+        <Variable name="d_Audio_0250" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Internal_Noise_0250" />
+        <Variable name="d_LS_0250_30_40" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Internal_Noise_0250" />
+        <Variable name="d_LS_0250_45_55" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Internal_Noise_0250" />
+        <Variable name="d_LS_0250_60_70" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Internal_Noise_0250" />
+        <Variable name="d_LS_0250_75_85" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dM0500" />
+        <Variable name="Nerve_0500_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dM0500" />
+        <Variable name="Nerve_0500_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dM0500" />
+        <Variable name="Nerve_0500_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dG500" />
+        <Variable name="Nerve_0500_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dG500" />
+        <Variable name="Nerve_0500_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dG500" />
+        <Variable name="Nerve_0500_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0500_Soft" />
+        <Variable name="d_Audio_0500" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Nerve_0500_Mid" />
+        <Variable name="d_Audio_0500" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dPW_500" />
+        <Variable name="Nerve_0500_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dPW_500" />
+        <Variable name="Nerve_0500_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dPW_500" />
+        <Variable name="Nerve_0500_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dS0500" />
+        <Variable name="Nerve_0500_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dS0500" />
+        <Variable name="Nerve_0500_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dS0500" />
+        <Variable name="Nerve_0500_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Internal_Noise_0500" />
+        <Variable name="d_Audio_0500" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT1000" />
+        <Variable name="Nerve_0500_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT1000" />
+        <Variable name="Nerve_0500_Mid" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dT1000" />
+        <Variable name="Nerve_0500_Loud" />
+      </Link>
+      <Link directed="true">
+        <Variable name="dSR0500" />
+        <Variable name="Nerve_0500_Soft" />
+      </Link>
+      <Link directed="true">
+        <Variable name="T1000" />
+        <Variable name="dT1000" />
+      </Link>
+      <Link directed="true">
+        <Variable name="T1000" />
+        <Variable name="Internal_Noise_0500" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="dT0250" />
+          <Variable name="T0250" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="dT0250" />
+              <Variable name="T0250" />
+            </Variables>
+            <Values>0.0 0.3 0.7 0.1 0.8 0.1 0.7 0.3 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="dT0250" />
+            </Variables>
+            <Values>0.0 1.0 0.0</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="Nerve_0250_Soft" />
+          <Variable name="dT0250" />
+          <Variable name="dM0250" />
+          <Variable name="dT0500" />
+          <Variable name="dG0250" />
+          <Variable name="dS0250" />
+          <Variable name="dPW_0250" />
+          <Variable name="dIDR" />
+          <Variable name="dSR0250" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Soft" />
+              <Variable name="dT0250" />
+            </Variables>
+            <Values>0.7 0.3 0.0 0.0 1.0 0.0 0.0 0.3 0.7</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Soft" />
+              <Variable name="dM0250" />
+            </Variables>
+            <Values>0.9 0.1 0.0 0.0 1.0 0.0 0.0 0.1 0.9</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Soft" />
+              <Variable name="dT0500" />
+            </Variables>
+            <Values>0.1 0.9 0.0 0.0 1.0 0.0 0.0 0.9 0.1</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Soft" />
+              <Variable name="dG0250" />
+            </Variables>
+            <Values>0.3 0.7 0.0 0.0 1.0 0.0 0.0 0.7 0.3</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Soft" />
+              <Variable name="dS0250" />
+            </Variables>
+            <Values>0.5 0.5 0.0 0.0 1.0 0.0 0.0 0.5 0.5</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Soft" />
+              <Variable name="dPW_0250" />
+            </Variables>
+            <Values>0.1 0.9 0.0 0.0 1.0 0.0 0.0 0.9 0.1</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Soft" />
+              <Variable name="dIDR" />
+            </Variables>
+            <Values>0.2 0.8 0.0 0.0 1.0 0.0 0.0 0.8 0.2</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Soft" />
+              <Variable name="dSR0250" />
+            </Variables>
+            <Values>0.2 0.8 0.0 0.0 1.0 0.0 0.0 0.2 0.8</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Soft" />
+            </Variables>
+            <Values>0.1 0.8 0.1</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dM0250" />
+        </Variables>
+        <Values>0.3333333333 0.3333333333 0.3333333333</Values>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="Nerve_0250_Loud" />
+          <Variable name="dT0250" />
+          <Variable name="dM0250" />
+          <Variable name="dG0250" />
+          <Variable name="dS0250" />
+          <Variable name="dPW_0250" />
+          <Variable name="dIDR" />
+          <Variable name="dSR0250" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Loud" />
+              <Variable name="dT0250" />
+            </Variables>
+            <Values>0.1 0.9 0.0 0.0 1.0 0.0 0.0 0.9 0.1</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Loud" />
+              <Variable name="dM0250" />
+            </Variables>
+            <Values>0.95 0.05 0.0 0.0 1.0 0.0 0.0 0.05 0.95</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Loud" />
+              <Variable name="dG0250" />
+            </Variables>
+            <Values>0.6 0.4 0.0 0.0 1.0 0.0 0.0 0.4 0.6</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Loud" />
+              <Variable name="dS0250" />
+            </Variables>
+            <Values>0.3 0.7 0.0 0.0 1.0 0.0 0.0 0.7 0.3</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Loud" />
+              <Variable name="dPW_0250" />
+            </Variables>
+            <Values>0.1 0.9 0.0 0.0 1.0 0.0 0.0 0.9 0.1</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Loud" />
+              <Variable name="dIDR" />
+            </Variables>
+            <Values>0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Loud" />
+              <Variable name="dSR0250" />
+            </Variables>
+            <Values>0.4 0.6 0.0 0.0 1.0 0.0 0.0 0.6 0.4</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Loud" />
+            </Variables>
+            <Values>0.1 0.8 0.1</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="d_Audio_0250" />
+          <Variable name="Internal_Noise_0250" />
+          <Variable name="Nerve_0250_Soft" />
+          <Variable name="Nerve_0250_Mid" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_Audio_0250" />
+              <Variable name="Internal_Noise_0250" />
+            </Variables>
+            <Values>0.6 0.4 0.0 0.0 1.0 0.0 0.0 0.6 0.4</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_Audio_0250" />
+              <Variable name="Nerve_0250_Soft" />
+            </Variables>
+            <Values>0.0 0.2 0.8 0.0 1.0 0.0 0.8 0.2 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_Audio_0250" />
+              <Variable name="Nerve_0250_Mid" />
+            </Variables>
+            <Values>0.0 0.9 0.1 0.0 1.0 0.0 0.1 0.9 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_Audio_0250" />
+            </Variables>
+            <Values>0.1 0.8 0.1</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="dT0500" />
+          <Variable name="T0500" />
+        </Variables>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="Nerve_0250_Mid" />
+          <Variable name="dT0250" />
+          <Variable name="dM0250" />
+          <Variable name="dT0500" />
+          <Variable name="dG0250" />
+          <Variable name="dS0250" />
+          <Variable name="dPW_0250" />
+          <Variable name="dIDR" />
+          <Variable name="dSR0250" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Mid" />
+              <Variable name="dT0250" />
+            </Variables>
+            <Values>0.1 0.9 0.0 0.0 1.0 0.0 0.0 0.9 0.1</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Mid" />
+              <Variable name="dM0250" />
+            </Variables>
+            <Values>0.9 0.1 0.0 0.0 1.0 0.0 0.0 0.1 0.9</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Mid" />
+              <Variable name="dT0500" />
+            </Variables>
+            <Values>0.1 0.9 0.0 0.0 1.0 0.0 0.0 0.9 0.1</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Mid" />
+              <Variable name="dG0250" />
+            </Variables>
+            <Values>0.6 0.4 0.0 0.0 1.0 0.0 0.0 0.4 0.6</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Mid" />
+              <Variable name="dS0250" />
+            </Variables>
+            <Values>0.2 0.8 0.0 0.0 1.0 0.0 0.0 0.8 0.2</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Mid" />
+              <Variable name="dPW_0250" />
+            </Variables>
+            <Values>0.1 0.9 0.0 0.0 1.0 0.0 0.0 0.9 0.1</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Mid" />
+              <Variable name="dIDR" />
+            </Variables>
+            <Values>0.2 0.8 0.0 0.0 1.0 0.0 0.0 0.8 0.2</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Mid" />
+              <Variable name="dSR0250" />
+            </Variables>
+            <Values>0.3 0.7 0.0 0.0 1.0 0.0 0.0 0.7 0.3</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Nerve_0250_Mid" />
+            </Variables>
+            <Values>0.1 0.8 0.1</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dG0250" />
+        </Variables>
+        <Values>0.2 0.4 0.4</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dS0250" />
+        </Variables>
+        <Values>0.5 0.4 0.1</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dPW_0250" />
+        </Variables>
+        <Values>0.1 0.6 0.3</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dIDR" />
+          <Variable name="IDR" />
+        </Variables>
+        <Values>0.0 0.0 1.0 0.1 0.2 0.7 0.1 0.9 0.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="T0250" />
+        </Variables>
+        <Values>0.4 0.5 0.1</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dSR0250" />
+        </Variables>
+        <Values>0.1 0.8 0.1</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="IDR" />
+        </Variables>
+        <Values>0.1 0.5 0.4</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="T0500" />
+        </Variables>
+        <Values>0.4 0.5 0.1</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Internal_Noise_0250" />
+          <Variable name="T0250" />
+          <Variable name="dT0250" />
+          <Variable name="T0500" />
+        </Variables>
+        <Values>0.3 0.7 0.0 0.8 0.2 0.0 0.5 0.5 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.3 0.7 0.0 0.1 0.9 0.0 0.1 0.9 0.35 0.65 0.0 0.75 0.25 0.0 0.45 0.55 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.25 0.75 0.0 0.05 0.95 0.0 0.05 0.95 0.4 0.6 0.0 0.7 0.3 0.0 0.4 0.6 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.2 0.8 0.0 0.02 0.98 0.0 0.02 0.98</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dM0500" />
+        </Variables>
+        <Values>0.3333333333 0.3333333333 0.3333333333</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dG500" />
+        </Variables>
+        <Values>0.2 0.4 0.4</Values>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Nerve_0500_Soft" />
+          <Variable name="dT0250" />
+          <Variable name="dM0500" />
+          <Variable name="dT1000" />
+          <Variable name="dG500" />
+          <Variable name="dS0500" />
+          <Variable name="dPW_500" />
+          <Variable name="dIDR" />
+          <Variable name="dSR0500" />
+          <Variable name="dIDR" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Nerve_0500_Mid" />
+          <Variable name="dT0250" />
+          <Variable name="dM0500" />
+          <Variable name="dT1000" />
+          <Variable name="dG500" />
+          <Variable name="dS0500" />
+          <Variable name="dPW_500" />
+          <Variable name="dIDR" />
+          <Variable name="dIDR" />
+        </Variables>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dPW_500" />
+        </Variables>
+        <Values>0.1 0.6 0.3</Values>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="d_Audio_0500" />
+          <Variable name="Nerve_0500_Soft" />
+          <Variable name="Nerve_0500_Mid" />
+          <Variable name="Internal_Noise_0500" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_Audio_0500" />
+              <Variable name="Nerve_0500_Soft" />
+            </Variables>
+            <Values>0.0 0.2 0.8 0.0 1.0 0.0 0.8 0.2 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_Audio_0500" />
+              <Variable name="Nerve_0500_Mid" />
+            </Variables>
+            <Values>0.0 0.9 0.1 0.0 1.0 0.0 0.1 0.9 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_Audio_0500" />
+              <Variable name="Internal_Noise_0500" />
+            </Variables>
+            <Values>0.6 0.4 0.0 0.0 1.0 0.0 0.0 0.6 0.4</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_Audio_0500" />
+            </Variables>
+            <Values>0.1 0.8 0.1</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dS0500" />
+        </Variables>
+        <Values>0.5 0.4 0.1</Values>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Nerve_0500_Loud" />
+          <Variable name="dM0500" />
+          <Variable name="dT1000" />
+          <Variable name="dG500" />
+          <Variable name="dS0500" />
+          <Variable name="dPW_500" />
+          <Variable name="dIDR" />
+          <Variable name="dIDR" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Internal_Noise_0500" />
+          <Variable name="T0250" />
+          <Variable name="dT0250" />
+          <Variable name="T1000" />
+          <Variable name="dT0500" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="dT1000" />
+          <Variable name="T1000" />
+        </Variables>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="dSR0500" />
+        </Variables>
+        <Values>0.1 0.8 0.1</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="T1000" />
+        </Variables>
+        <Values>0.4 0.5 0.1</Values>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="d_LS_0250_30_40" />
+          <Variable name="Nerve_0250_Soft" />
+          <Variable name="Nerve_0250_Mid" />
+          <Variable name="Nerve_0250_Loud" />
+          <Variable name="Internal_Noise_0250" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_30_40" />
+              <Variable name="Nerve_0250_Soft" />
+            </Variables>
+            <Values>0.0 0.3 0.7 0.0 1.0 0.0 0.7 0.3 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_30_40" />
+              <Variable name="Nerve_0250_Mid" />
+            </Variables>
+            <Values>0.0 0.4 0.6 0.0 1.0 0.0 0.6 0.4 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_30_40" />
+              <Variable name="Nerve_0250_Loud" />
+            </Variables>
+            <Values>0.0 0.9 0.1 0.0 1.0 0.0 0.1 0.9 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_30_40" />
+              <Variable name="Internal_Noise_0250" />
+            </Variables>
+            <Values>0.6 0.4 0.0 0.0 1.0 0.0 0.0 0.6 0.4</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_30_40" />
+            </Variables>
+            <Values>0.1 0.8 0.1</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="d_LS_0250_45_55" />
+          <Variable name="Nerve_0250_Soft" />
+          <Variable name="Nerve_0250_Mid" />
+          <Variable name="Nerve_0250_Loud" />
+          <Variable name="Internal_Noise_0250" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_45_55" />
+              <Variable name="Nerve_0250_Soft" />
+            </Variables>
+            <Values>0.0 0.9 0.1 0.0 1.0 0.0 0.1 0.9 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_45_55" />
+              <Variable name="Nerve_0250_Mid" />
+            </Variables>
+            <Values>0.0 0.2 0.8 0.0 1.0 0.0 0.8 0.2 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_45_55" />
+              <Variable name="Nerve_0250_Loud" />
+            </Variables>
+            <Values>0.0 0.4 0.6 0.0 1.0 0.0 0.6 0.4 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_45_55" />
+              <Variable name="Internal_Noise_0250" />
+            </Variables>
+            <Values>0.2 0.8 0.0 0.0 1.0 0.0 0.2 0.6 0.2</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_45_55" />
+            </Variables>
+            <Values>0.1 0.8 0.1</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="d_LS_0250_60_70" />
+          <Variable name="Nerve_0250_Soft" />
+          <Variable name="Nerve_0250_Mid" />
+          <Variable name="Nerve_0250_Loud" />
+          <Variable name="Internal_Noise_0250" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_60_70" />
+              <Variable name="Nerve_0250_Soft" />
+            </Variables>
+            <Values>0.0 0.2 0.8 0.0 1.0 0.0 0.8 0.2 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_60_70" />
+              <Variable name="Nerve_0250_Mid" />
+            </Variables>
+            <Values>0.0 0.3 0.7 0.0 1.0 0.0 0.7 0.3 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_60_70" />
+              <Variable name="Nerve_0250_Loud" />
+            </Variables>
+            <Values>0.0 0.7 0.3 0.0 1.0 0.0 0.3 0.7 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_60_70" />
+              <Variable name="Internal_Noise_0250" />
+            </Variables>
+            <Values>0.2 0.8 0.0 0.0 1.0 0.0 0.0 0.8 0.2</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_60_70" />
+            </Variables>
+            <Values>0.1 0.8 0.1</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="d_LS_0250_75_85" />
+          <Variable name="Nerve_0250_Soft" />
+          <Variable name="Nerve_0250_Mid" />
+          <Variable name="Nerve_0250_Loud" />
+          <Variable name="Internal_Noise_0250" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_75_85" />
+              <Variable name="Nerve_0250_Soft" />
+            </Variables>
+            <Values>0.0 0.9 0.1 0.0 1.0 0.0 0.1 0.9 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_75_85" />
+              <Variable name="Nerve_0250_Mid" />
+            </Variables>
+            <Values>0.0 0.7 0.3 0.0 1.0 0.0 0.3 0.7 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_75_85" />
+              <Variable name="Nerve_0250_Loud" />
+            </Variables>
+            <Values>0.0 0.2 0.8 0.0 1.0 0.0 0.8 0.2 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_75_85" />
+              <Variable name="Internal_Noise_0250" />
+            </Variables>
+            <Values>0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="d_LS_0250_75_85" />
+            </Variables>
+            <Values>0.1 0.8 0.1</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+</ProbModelXML>
+

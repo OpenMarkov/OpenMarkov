@@ -1,0 +1,71 @@
+@startuml r4-after
+' ============================================================
+' R4 After -- MainMenu with EnumMap + factory methods
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 40
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<good>> #D8FFD8
+  BorderColor<<good>> #44AA44
+  BackgroundColor<<ok>> #FFF8E0
+  BorderColor<<ok>> #AA9944
+  BackgroundColor<<map>> #E0F0FF
+  BorderColor<<map>> #4488CC
+}
+
+class MainMenu <<good>> {
+  - items: <color:#4488CC><b>EnumMap<ActionCommands, JComponent></b></color>
+  - mainPanel: MainPanel
+  - listener: ActionListener
+  - groupEditOptions: ButtonGroup
+  - groupByNameByTitle: ButtonGroup
+  __
+  <color:#44AA44><b>Factory methods (4):</b></color>
+  - createItem(name, action, icon, key)
+  - createItem(name, action)
+  - createCheckBox(name, action, icon, group)
+  - {static} createMenu(menuItemName)
+  __
+  <color:#44AA44><b>Build methods (6):</b></color>
+  - createAllItems()
+  - buildFileMenu() / rechargeFileMenu()
+  - buildEditMenu()
+  - buildInferenceMenu() / rebuildInferenceMenu(bool)
+  - buildViewMenu()
+  - buildToolsMenu() / buildHelpMenu()
+  __
+  <color:#44AA44><b>Lookup (replaces 43-case switch):</b></color>
+  - getJComponentActionCommand(cmd):\l    <color:#4488CC>items.get(cmd)</color>
+  __
+  <b>425 lines</b>
+}
+
+class "EnumMap<ActionCommands,\nJComponent>" as Map <<map>> {
+  NEW_NETWORK → JMenuItem
+  OPEN_NETWORK → JMenuItem
+  SAVE_NETWORK → JMenuItem
+  CLIPBOARD_CUT → JMenuItem
+  OBJECT_SELECTION → JCheckBoxMenuItem
+  ... <color:#4488CC>(~45 entries)</color>
+}
+
+note right of MainMenu
+  Each item is created once:
+  ──────────────────────────────────
+  createItem(FILE_NEW_MENUITEM,
+    NEW_NETWORK,
+    IconBind.NEW_ENABLED,
+    ctrl(VK_N));
+  ──────────────────────────────────
+  1 line per item, not 8.
+end note
+
+MainMenu *-- Map : items
+
+@enduml

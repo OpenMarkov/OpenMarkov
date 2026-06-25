@@ -1,0 +1,139 @@
+@startuml after
+' ============================================================
+' Node.java DESPUES de la refactorizacion (670 lineas)
+' Colores:
+'   verde    = clases nuevas extraidas
+'   amarillo = clases existentes modificadas (callers)
+'   azul     = clase principal simplificada
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 30
+
+hide empty methods
+
+skinparam class {
+    BackgroundColor<<simplified>> #E8E8FF
+    BorderColor<<simplified>> #6666AA
+    BackgroundColor<<new>> #D4EDDA
+    BorderColor<<new>> #28A745
+    BackgroundColor<<modified>> #FFF3CD
+    BorderColor<<modified>> #D4A017
+    BackgroundColor<<existing>> #F0F0F0
+    BorderColor<<existing>> #999999
+}
+
+class Node <<simplified>> {
+    .. Identidad ..
+    -variable : Variable
+    -nodeType : NodeType
+    #probNet : ProbNet
+    .. Metadatos ..
+    -purpose, relevance, comment
+    -policyType, isInput, alwaysObserved
+    -additionalProperties : Map
+    .. Presentacion ..
+    -coordinateX, coordinateY : double
+    .. Potenciales CRUD ..
+    #potentials : List<Potential>
+    +setPotential(Potential)
+    +addPotential(Potential)
+    +removePotential(Potential)
+    +getPotentials() : List
+    .. Delegacion al grafo ..
+    +getParents() : List<Node>
+    +getChildren() : List<Node>
+    +getLinks() : List<Link>
+    .. Consultas estructurales ..
+    +isSuperValueNode() : boolean
+    +getUtilityParents() : List<Node>
+    +onlyNumericalParents() : boolean
+}
+
+class NodeAbsorptionHandler <<new>> {
+    +{static} absorbNodeConsistently(
+      Node, Variable)
+    --
+    Logica de absorcion de un
+    nodo padre en su hijo utilidad.
+    Multiplica o maximiza potenciales
+    y actualiza los arcos del grafo.
+}
+
+class VariableTypeConverter <<new>> {
+    +{static} convertVariableType(
+      Node, VariableType)
+    +{static} resetLinks(Node)
+    -{static} setPotentialsNodeAndChildren(Node)
+    -{static} setUniformPotentialToNode(Node)
+    --
+    Logica de conversion de tipo
+    de variable (FINITE_STATES,
+    NUMERIC, DISCRETIZED) con
+    actualizacion en cascada de
+    potenciales del nodo y sus hijos.
+}
+
+class UtilityFunctionComputer <<new>> {
+    +{static} computeUtilityFunction(
+      Node) : TablePotential
+    +{static} approximateMaxUtility(
+      Node) : double
+    +{static} approximateMinUtility(
+      Node) : double
+    --
+    Calculo recursivo de funciones
+    de utilidad para nodos supervalor.
+}
+
+class LinkRestrictionPotentialOperations <<existing>> {
+    +{static} setPotentialWithRestrictions(
+      Node, Potential)
+    +{static} updatePotentialByLinkRestrictions(Node)
+    +{static} hasLinkRestriction(Node)
+    ...
+}
+
+class AbsorbNodeEdit <<modified>> {
+    +doEdit()
+}
+
+class VariableTypeEdit <<modified>> {
+    +doEdit()
+}
+
+class SetPotentialEdit <<modified>> {
+    +doEdit() / undo() / redo()
+}
+
+class CEPotentialOperation <<modified>> {
+    +removeSuperValueNodes()
+}
+
+class EvidenceManager <<modified>> {
+    calcula rango de utilidad
+}
+
+AbsorbNodeEdit --> NodeAbsorptionHandler : usa
+VariableTypeEdit --> VariableTypeConverter : usa
+SetPotentialEdit --> LinkRestrictionPotentialOperations : usa
+CEPotentialOperation --> UtilityFunctionComputer : usa
+EvidenceManager --> UtilityFunctionComputer : usa
+
+NodeAbsorptionHandler ..> Node : opera sobre
+VariableTypeConverter ..> Node : opera sobre
+UtilityFunctionComputer ..> Node : opera sobre
+LinkRestrictionPotentialOperations ..> Node : opera sobre
+
+legend bottom center
+  <b>Leyenda de colores</b>
+  |<back:#D4EDDA>   </back>| Verde = Clase nueva (extraida de Node) |
+  |<back:#FFF3CD>   </back>| Amarillo = Clase existente modificada |
+  |<back:#E8E8FF>   </back>| Azul = Node simplificado |
+  |<back:#F0F0F0>   </back>| Gris = Clase existente (metodo nuevo) |
+end legend
+
+@enduml

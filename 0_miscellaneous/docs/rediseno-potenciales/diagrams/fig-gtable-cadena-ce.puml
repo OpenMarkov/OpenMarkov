@@ -1,0 +1,100 @@
+@startuml fig-gtable-cadena-ce
+' ============================================================
+' Cadena de tipos en el analisis CE que bloquea el cambio de
+' superclase de GTablePotential.
+' Muestra los tres bloqueadores B1, B2, B3.
+' ============================================================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam defaultFontSize 11
+skinparam dpi 150
+left to right direction
+
+package "org.openmarkov.core  (jerarquia actual)" #F4F4F4 {
+
+    abstract class AbstractIndexedPotential #FFD580 {
+        #dimensions : int[]
+        #offsets : int[]
+    }
+
+    class TablePotential #BDD7FF {
+        +values : double[]
+    }
+
+    class "GTablePotential<E>" as GTP #E8D7FF {
+        +elementTable : List<E>
+    }
+
+    AbstractIndexedPotential <|-- TablePotential
+    TablePotential <|-- GTP : herencia actual\n(a cambiar)
+}
+
+package "org.openmarkov.costEffectiveness  (bloqueadores)" #FFF0E0 {
+
+    class DANInference #FFDAB9 {
+        - utility : TablePotential
+        + getUtility() : TablePotential
+    }
+
+    note top of DANInference
+        B1: El campo utility se asigna como
+        GTablePotential<CEP> pero se declara
+        TablePotential.  Si GTablePotential dejara
+        de extender TablePotential, la asignacion
+        ya no compilaria.
+    end note
+
+    class DANCEAnalysis #FFDAB9 {
+        + analyze(DANInference process)
+    }
+
+    note right of DANCEAnalysis
+        B2: GTablePotential<CEP> u =
+          (GTablePotential<CEP>)
+          process.getUtility();
+        Si getUtility() devolviera Potential,
+        el compilador rechazaria el cast
+        como "inconvertible types".
+    end note
+
+    class TablePotentialMerge #FFDAB9 {
+        + merge(List<TablePotential>) : TablePotential
+    }
+
+    note bottom of TablePotentialMerge
+        B3: El flujo CE pasa instancias de
+        GTablePotential en la lista.  Si
+        GTablePotential ya no extiende
+        TablePotential, el sitio de llamada
+        no compilaria.
+    end note
+
+    class CEDecisionTreeNode #FFDAB9 {
+        + setOnlyValueForUtility(TablePotential)
+    }
+
+    note bottom of CEDecisionTreeNode
+        B3 bis: Recibe TablePotential y
+        hace cast interno a GTablePotential.
+        Misma restriccion que B3.
+    end note
+}
+
+DANInference --> GTP          : instancia utility\ncomo GTablePotential<CEP>
+DANInference ..> TablePotential : tipo declarado [B1]
+DANCEAnalysis --> DANInference : getUtility()
+DANCEAnalysis --> GTP         : cast [B2]
+TablePotentialMerge ..> TablePotential : List<TablePotential> [B3]
+CEDecisionTreeNode ..> TablePotential  : parametro TablePotential [B3]
+CEDecisionTreeNode --> GTP    : cast interno
+
+legend right
+  |= Bloqueador |= Descripcion |
+  | B1 | Tipo TablePotential en DANInference.getUtility() |
+  | B2 | Cast a GTablePotential en DANCEAnalysis |
+  | B3 | Parametros List<TablePotential> en merge y setOnlyValueForUtility |
+endlegend
+
+@enduml

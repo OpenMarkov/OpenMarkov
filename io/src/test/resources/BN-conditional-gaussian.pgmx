@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="1.0.0">
+  <ProbNet type="BayesianNetwork">
+    <Comment><![CDATA[A.0 fixture: BayesianNetwork with a ConditionalGaussianPotential.
+The XML below is the shape the A.1 parser will be implemented against.
+Structure: <Potential type="Conditional Gaussian"> with nested <Mean>
+and <Variance> holding TablePotentials over the parents.]]></Comment>
+    <Variables>
+      <Variable name="Age" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="100" y="100" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="young" />
+          <State name="old" />
+        </States>
+      </Variable>
+      <Variable name="Height" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="300" y="100" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="low" />
+          <State name="medium" />
+          <State name="high" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Age" />
+        <Variable name="Height" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="Conditional Gaussian" role="conditionalProbability">
+        <Variables>
+          <Variable name="Height" />
+          <Variable name="Age" />
+        </Variables>
+        <Mean>
+          <Potential type="Table" role="conditionalProbability">
+            <Variables>
+              <Variable name="Age" />
+            </Variables>
+            <Values>170.0 175.0</Values>
+          </Potential>
+        </Mean>
+        <Variance>
+          <Potential type="Table" role="conditionalProbability">
+            <Variables>
+              <Variable name="Age" />
+            </Variables>
+            <Values>25.0 30.0</Values>
+          </Potential>
+        </Variance>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+</ProbModelXML>

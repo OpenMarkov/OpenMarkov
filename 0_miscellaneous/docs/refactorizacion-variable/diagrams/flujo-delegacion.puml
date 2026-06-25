@@ -1,0 +1,27 @@
+@startuml flujo-delegacion
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam sequenceArrowThickness 1.5
+
+participant "NodeStateEdit" as edit #FFEBEE
+participant "Variable" as var #E8F5E9
+participant "VariableState\nOperations" as ops #E3F2FD
+participant "Node" as node #FFF3E0
+participant "ProbNet" as net #FFF3E0
+
+edit -> var : modifyState(node, ADD, 0, "new")
+activate var
+var -> ops : modifyState(this, node, ADD, 0, "new")
+activate ops
+ops -> var : getStates()
+ops -> var : setStates(newStates)
+ops -> node : getNodeType()
+ops -> net : getChildren(node)
+ops -> node : setPotentials(uniform)
+ops -> net : getLinks(node)
+note right of ops : resetLink() limpia\nrestricciones y\ncondiciones de revelacion
+ops --> var
+deactivate ops
+deactivate var
+
+@enduml

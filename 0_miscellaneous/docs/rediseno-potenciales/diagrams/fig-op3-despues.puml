@@ -1,0 +1,147 @@
+@startuml fig-op3-despues
+' ============================================================
+' Estado DESPUES del Rediseno 3 (propuesta con interfaces)
+' Colores:
+'   #70D7F0 = interfaces de proyecto/orden/escala
+'   #C0A8FF = interfaces de capacidad especifica
+'   #FFD580 = clases abstractas base (limpias)
+'   #BDD7FF = jerarquia TablePotential
+'   #C8F0C8 = clases con capacidades especiales
+'   #E8E8E8 = otras implementaciones
+' ============================================================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 30
+skinparam ranksep 35
+skinparam dpi 150
+
+hide empty fields
+
+' ==== INTERFACES DE CAPACIDAD ====
+package "Interfaces de capacidad" #D0F5FF {
+
+    interface Projectable #70D7F0 {
+        +tableProject(EvidenceCase, InferenceOptions) : TablePotential
+    }
+
+    interface Reorderable #70D7F0 {
+        +reorder(List<Variable>) : Potential
+    }
+
+    interface Scalable #70D7F0 {
+        +scale(double)
+    }
+
+    interface UncertaintyCarrier #C0A8FF {
+        +getUncertainValues() : UncertainValue[]
+        +setUncertainValues(UncertainValue[])
+        +isUncertain() : boolean
+    }
+
+    interface StrategyCarrier #C0A8FF {
+        +getStrategyTrees() : StrategyTree[]
+        +hasInterventions() : boolean
+        +hasInterventionForDecision(Variable) : boolean
+    }
+
+}
+
+' ==== JERARQUIA DE CLASES ====
+abstract class Potential #FFD580 {
+    #variables : List<Variable>
+    #role : PotentialRole
+    --
+    +{abstract} deepCopy(ProbNet) : Potential
+}
+
+note right of Potential #FFFDE7
+  Ya no declara tableProject(),
+  reorder() ni scale() como
+  abstractos. Solo implementa
+  las interfaces que soporta.
+end note
+
+abstract class AbstractIndexedPotential #FFD580 {
+    #dimensions : int[]
+    #offsets : int[]
+    #tableSize : int
+}
+
+class TablePotential #BDD7FF {
+    +values : double[]
+}
+
+class StrategicTablePotential #C8F0C8 {
+    +strategyTrees : StrategyTree[]
+}
+
+class UncertainTablePotential #C8F0C8 {
+    +uncertainValues : UncertainValue[]
+}
+
+class AugmentedProbTable #C8F0C8 {
+    +distributions : ...
+}
+
+UncertainTablePotential -[hidden]right- AugmentedProbTable
+
+class "GTablePotential<E>" as GTablePotential #FFF3CD {
+    +elementTable : List<E>
+}
+
+class UniformPotential #E8E8E8
+class DeltaPotential #E8E8E8 {
+    -state : State
+}
+abstract class ICIPotential #E8E8E8 {
+    #noisyParameters : double[][]
+}
+class ConditionalGaussianPotential #E8E8E8
+
+' ==== HERENCIA ====
+Potential <|-- AbstractIndexedPotential
+AbstractIndexedPotential <|-- TablePotential
+TablePotential <|-- StrategicTablePotential
+TablePotential <|-- UncertainTablePotential
+UncertainTablePotential <|-- AugmentedProbTable
+AbstractIndexedPotential <|-- GTablePotential
+Potential <|-- UniformPotential
+Potential <|-- DeltaPotential
+Potential <|-- ICIPotential
+Potential <|-- ConditionalGaussianPotential
+
+' ==== IMPLEMENTACIONES DE INTERFACES ====
+TablePotential ..|> Projectable
+TablePotential ..|> Reorderable
+TablePotential ..|> Scalable
+
+StrategicTablePotential ..|> StrategyCarrier
+
+UncertainTablePotential ..|> UncertaintyCarrier
+
+UniformPotential ..|> Projectable
+
+DeltaPotential ..|> Projectable
+DeltaPotential ..|> Scalable
+
+ICIPotential ..|> Projectable
+
+ConditionalGaussianPotential ..|> Projectable
+
+GTablePotential ..|> Reorderable
+
+legend right
+  |= Color |= Significado |
+  | <#70D7F0> | Interfaz de operacion general |
+  | <#C0A8FF> | Interfaz de capacidad especifica |
+  | <#FFD580> | Clase abstracta base |
+  | <#BDD7FF> | Jerarquia TablePotential |
+  | <#C8F0C8> | Subclase especializada |
+  | <#E8E8E8> | Potencial generico |
+  | <#FFF3CD> | Pendiente cambio de superclase (fase 5) |
+endlegend
+
+@enduml

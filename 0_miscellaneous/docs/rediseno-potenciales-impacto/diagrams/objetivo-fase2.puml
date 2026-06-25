@@ -1,0 +1,108 @@
+@startuml objetivo-fase2
+' ============================================================
+'  Estado objetivo tras la Fase 2 del plan de accion
+'  - capacidades canonicas, sin defaults que lanzan
+'  - campos publicos privatizados
+'  - PotentialRole.UTILITY restaurado
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam dpi 150
+skinparam nodesep 40
+skinparam ranksep 50
+hide empty methods
+
+skinparam class {
+    BackgroundColor<<base>> #F0F0F0
+    BorderColor<<base>> #555555
+    BackgroundColor<<cap>> #CCEEFF
+    BorderColor<<cap>> #2266AA
+    BackgroundColor<<carrier>> #DDEEDD
+    BorderColor<<carrier>> #44AA44
+    BackgroundColor<<changed>> #FFFFCC
+    BorderColor<<changed>> #BB8800
+}
+
+abstract class Potential <<changed>> {
+    -variables : List<Variable>
+    -role : PotentialRole
+    -properties : Map  ' privado
+    --
+    +copy() : Potential
+    +deepCopy(net) : Potential
+    +equals(o) / hashCode()
+    +getVariables() / getRole() / ...
+    -- (sin tableProject default) --
+    -- (sin reorder default) --
+    -- (sin scalePotential default) --
+    -- (sin sampleConditionedVariable) --
+}
+
+interface Projectable <<cap>> {
+    +tableProject(evidence, opts, ctx) : TablePotential
+}
+interface Reorderable <<cap>> {
+    +reorder(newOrder) : Potential
+    +reorder(variable, newOrder) : Potential
+}
+interface Scalable <<cap>> {
+    +scaled(factor) : Potential   ' inmutable
+}
+interface Sampleable <<cap>> {
+    +sample(rng, parents) : int
+    +probabilityAt(config) : double
+}
+interface UncertaintyCarrier <<carrier>> {
+    +getUncertainValues() : UncertainValue[]
+    +withUncertainValues(uv) : Potential
+}
+interface StrategyCarrier <<carrier>> {
+    +getStrategyTrees() : StrategyTree[]
+    +hasInterventions() : boolean
+}
+interface CEUtilityPotential <<carrier>>
+
+class TablePotential <<changed>> {
+    -values : double[]   ' privado
+    +getValues() : DoubleVector  ' wrapper inmutable
+    +withValues(v) : TablePotential
+}
+class UncertainTablePotential <<changed>> {
+    -uncertainValues : UncertainValue[]   ' privado
+}
+class StrategicTablePotential <<changed>> {
+    -strategyTrees : StrategyTree[]   ' privado
+}
+
+Potential <|-- TablePotential
+TablePotential <|-- UncertainTablePotential
+TablePotential <|-- StrategicTablePotential
+
+TablePotential ..|> Projectable
+TablePotential ..|> Reorderable
+TablePotential ..|> Scalable
+TablePotential ..|> Sampleable
+TablePotential ..|> CEUtilityPotential
+UncertainTablePotential ..|> UncertaintyCarrier
+StrategicTablePotential ..|> StrategyCarrier
+
+note right of Potential #FFFFCC
+  Fase 2:
+  + privatiza properties
+  + anade hashCode
+  + extrae Sampleable
+  - elimina defaults que lanzan
+end note
+
+note right of TablePotential #FFFFCC
+  Fase 3:
+  + getValues -> vista de solo lectura
+  + setValue / withValues como
+    unico canal de mutacion
+  - cadena instanceof PGMX se sustituye
+    por strategy/visitor
+end note
+
+@enduml

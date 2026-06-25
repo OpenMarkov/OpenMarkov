@@ -1,0 +1,113 @@
+@startuml arquitectura-undo-redo
+' ============================================================
+' Arquitectura del sistema de undo/redo en OpenMarkov
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 30
+
+skinparam class {
+    BackgroundColor<<support>> #E8E8FF
+    BorderColor<<support>> #6666AA
+    BackgroundColor<<history>> #E8FFE8
+    BorderColor<<history>> #44AA44
+    BackgroundColor<<edit>> #FFF3CD
+    BorderColor<<edit>> #D4A017
+    BackgroundColor<<listener>> #FFE8E8
+    BorderColor<<listener>> #CC4444
+}
+
+class PNESupport <<support>> {
+    -withUndo : boolean
+    -listeners : Set<PNEditListener>
+    +undo() : PNEdit
+    +redo() : PNEdit
+    +openNewSubEditHistory()
+    +closeSubEditHistory()
+}
+
+class EditsHistoryStacker <<history>> {
+    -mainEditsHistory : EditsHistory
+    -uncommitedHistories : ArrayDeque
+    +openNewSubEditHistory()
+    +closeSubEditHistory()
+    +getCurrentUndoManager()
+}
+
+class EditsHistory <<history>> {
+    -doneEdits : ArrayDeque<PNEdit>
+    -undoneEdits : ArrayDeque<PNEdit>
+    +addEdit(PNEdit)
+    +undo() : PNEdit
+    +redo() : PNEdit
+    +getDoneEdits() : ArrayList
+}
+
+abstract class PNEdit <<edit>> {
+    #probNet : ProbNet
+    +executeEdit()
+    +undo()
+    +redo()
+    +doEdit()
+}
+
+abstract class CompoundPNEdit <<edit>> {
+    #edits : ArrayList<PNEdit>
+    +getEdits() : ArrayList
+    +undo()
+    +redo()
+}
+
+class ListPNEdit <<edit>> {
+    +generateEdits() : ArrayList
+}
+
+class AddNodeEdit <<edit>> {}
+class RemoveNodeEdit <<edit>> {}
+class AddLinkEdit <<edit>> {}
+
+interface PNEditListener <<listener>> {
+    +beforeEditExecutes(PNEdit)
+    +afterEditExecutes(PNEdit)
+    +afterUndoingEdit(PNEdit)
+    +afterRedoingEdit(PNEdit)
+}
+
+class VisualNetwork <<listener>> {
+    +afterUndoingEdit() : refreshUI()
+    +afterRedoingEdit() : refreshUI()
+}
+
+PNESupport *-right- EditsHistoryStacker
+EditsHistoryStacker o-down- "1..*" EditsHistory
+EditsHistory o-down- "*" PNEdit
+PNEdit <|-- CompoundPNEdit
+CompoundPNEdit <|-- ListPNEdit
+PNEdit <|-- AddNodeEdit
+PNEdit <|-- RemoveNodeEdit
+PNEdit <|-- AddLinkEdit
+ListPNEdit o-right- "2..*" PNEdit : sub-edits
+PNESupport -right-> PNEditListener : notifica
+PNEditListener <|.. VisualNetwork
+
+note bottom of EditsHistory
+  <b>doneEdits</b> es una pila (LIFO):
+  addFirst() para apilar,
+  getFirst() para ver el tope.
+
+  <b>getDoneEdits()</b> devuelve
+  los edits del mas reciente
+  al mas antiguo.
+end note
+
+note bottom of ListPNEdit
+  Agrupa N sub-edits como
+  una sola unidad de undo.
+  Se crea al cerrar un
+  sub-edit history con 2+ edits.
+end note
+
+@enduml

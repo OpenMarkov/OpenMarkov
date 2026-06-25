@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <CostEffectivenessDeterministic value="Análisis de coste-efectividad determinista">
+        <Error value="Error al realizar el análisis de coste-efectividad"/>
+    </CostEffectivenessDeterministic>
+    <CostEffectivenessResults>
+        <Title value="Resultados del análisis de coste-efectividad"/>
+        <Cost value="Coste"/>
+        <Effectiveness value="Efectividad"/>
+        <Intervention value="Intervención"/>
+        <ICER value="RCEI"/>
+        <Scope value="Selección de escenario"/>
+        <Intervals value="Intervalos">
+            <Title value="Intervalos de coste-efectividad"/>
+            <InterventionTooltip value="Haz clic para mostrar la intervención"/>
+        </Intervals>
+        <Plane value="Plano de coste-efectividad">
+            <Tab value="Plano de CE"/>
+        </Plane>
+        <Analysis>
+            <Tab value="Análisis"/>
+        </Analysis>
+        <FrontierInterventions>
+            <Tab value="Intervenciones fronterizas"/>
+        </FrontierInterventions>
+        <AcceptabilityCurve value="Curva de aceptabilidad">
+            <Tab value="CACE"/>
+            <Vertical value="Probabilidad de ser coste-efectiva"/>
+            <Horizontal value="Disposición a pagar"/>
+        </AcceptabilityCurve>
+        <EVPI value="Valor esperado de la información perfecta">
+            <Tab value="VEIP"/>
+            <Vertical value="VEIP"/>
+            <Horizontal value="Disposición a pagar"/>
+            <MaxRatio value="Razón máxima"/>
+            <Population value="Población anual"/>
+            <Lifetime value="Ciclo de vida de la tecnología"/>
+            <Discount value="Tasa de descuento"/>
+        </EVPI>
+        <Controls>
+            <Display value="Mostrar:"/>
+            <Absolute value="Absoluto"/>
+            <Relative value="Relativo a:"/>
+            <ShowHide value="Mostrar/ocultar intervenciones"/>
+        </Controls>
+    </CostEffectivenessResults>
+</properties>

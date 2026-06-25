@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassLocalizations>
+    <Localization class="org.openmarkov.gui.action.AddFindingEdit"
+                  value="Add {finding} on {evidenceCase} on {visualNode}. Previous finding was {previousFinding}"/>
+    <Localization class="org.openmarkov.gui.action.AugmentedPotentialValueEdit"
+                  value="Augmented change potential for {node} from {oldPotential} to {newPotential}"/>
+    <Localization class="org.openmarkov.gui.action.ICITablePotentialValueEdit" value="ICI Table potential value edit"/>
+    <Localization class="org.openmarkov.gui.action.ImposePolicyEdit"
+                  value="Impose policy {newPolicy} on {visualDecisionNode}. Last policy was {lastPolicy}"/>
+    <Localization class="org.openmarkov.gui.action.LinkRestrictionPotentialValueEdit" value="Restrict link {link}"/>
+    <Localization class="org.openmarkov.gui.action.MoveNodeEdit"
+                  value="Movements: {movements}"/>
+    <Localization class="org.openmarkov.gui.action.NetworkAgentEdit"
+                  value="Edit agent {agentName} with action {stateAction}"/>
+    <Localization class="org.openmarkov.gui.action.NodeAgentEdit"
+                  value="Replace agent for {node} from {currentAgent} to {newAgent}"/>
+    <Localization class="org.openmarkov.gui.action.NodeDecisionCriteriaEdit"
+                  value="Replace decision criteria for {node} from {currentDecisionCriteria} to {newDecisionCriteria}"/>
+    <Localization class="org.openmarkov.gui.action.NodePartitionedIntervalEdit"
+                  value="Edit partitioned interval of node {node} with action {stateAction}"/>
+    <Localization class="org.openmarkov.gui.action.OtherPropertyEdit"
+                  value="Set property {otherPropertyAction} of node {node} to data: {newProperty}"/>
+    <Localization class="org.openmarkov.gui.action.PartitionedIntervalEdit"
+                  value="Replace partitioned interval of node {node} from {currentPartitionedInterval} to {newPartitionedInterval}"/>
+    <Localization class="org.openmarkov.gui.action.PasteEdit" value="Paste {clipboardContent}"/>
+    <Localization class="org.openmarkov.gui.action.PasteEdit$1" value="Paste finalizer"/>
+    <Localization class="org.openmarkov.gui.action.RemoveFindingEdit"
+                  value="Remove {finding} on {evidenceCase} on {visualNode}."/>
+    <Localization class="org.openmarkov.gui.action.RemoveLinkRestrictionEdit"
+                  value="Remove link restrictions of: {links}"/>
+    <Localization class="org.openmarkov.gui.action.RemoveSelectedEdit"
+                  value="Remove nodes: {nodesToRemove}\nRemove links: {linksToRemove};"/>
+    <Localization class="org.openmarkov.gui.action.RevelationIntervalEdit"
+                  value="Edit revelation interval from link {link} with action {stateAction}"/>
+    <Localization class="org.openmarkov.gui.action.TablePotentialValueEdit"
+                  value="Change potential for {node} from {oldPotential} to {newPotential}"/>
+    <Localization class="org.openmarkov.gui.exception.BinomialPotentialWrongValueException$NValuesIsWrong"
+                  value="N value must be positive, but it was {nValue}."/>
+    <Localization class="org.openmarkov.gui.exception.BinomialPotentialWrongValueException$ThetaValueIsWrong"
+                  value="Theta value must be in range 0..1, but it was {thetaValue}."/>
+    <Localization class="org.openmarkov.gui.exception.CannotInvertUndirectedLinks"
+                  value="Undirected links cannot be inverted, meaning it is not possible to invert {link}"/>
+    <Localization class="org.openmarkov.gui.exception.ChangeDomainOfTreeADDIsNotAllowedException"
+                  value="You are trying to change the domain of a TreeADD, but that is not allowed."/>
+    <Localization class="org.openmarkov.gui.exception.CorruptNetworkFile"
+                  value="Network from {fileToRead} is corrupted and could not be loaded."/>
+    <Localization class="org.openmarkov.gui.exception.FamilyDistributionRuleBrokenException$Rule1Broken"
+                  value="Family rule nº1 has been broken.\nIf one of the distributions is Exact with v != 0, Range, or Triangular, then:\n· all the others must be either Exact, Range, Triangular, or Complement\n· at least one of the others must be Complement;\n· the sum of the maxima of all the distributions (different from Complement) cannot be greater than 1;"/>
+    <Localization class="org.openmarkov.gui.exception.FamilyDistributionRuleBrokenException$Rule2Broken"
+                  value="Family rule nº2 has been broken.\nIf one of the distributions is a Beta, then:\n· all the others must be Exact with v = 0 or Complement\n· at least one of the others must be Complement."/>
+    <Localization class="org.openmarkov.gui.exception.FamilyDistributionRuleBrokenException$Rule3Broken"
+                  value="Family rule nº3 has been broken.\nIf one of the distributions is a Dirichlet, then:\n· all the others must be Exact with v = 0 or Dirichlet.\n· at least one of the others must also be a Dirichlet."/>
+    <Localization class="org.openmarkov.gui.exception.FamilyDistributionRuleBrokenException$Rule4Broken"
+                  value="Family rule nº4 has been broken.\nThe specification of sensitivity analysis in ProbModelXML has been violated. Please, check the distributions and its parameters."/>
+    <Localization class="org.openmarkov.gui.exception.InvalidLimitInTreeADDException"
+                  value="Introduced limit ({introducedLimit}) is equal to the limit of an interval ({interval}) and both belong to the same side."/>
+    <Localization class="org.openmarkov.gui.exception.LinkInversionRequiresChanceVariablesWithPotential"
+                  value="Link inversion is only possible for Chance nodes that have a potential, which is not the case for {wrongNode}"/>
+    <Localization class="org.openmarkov.gui.exception.MismatchedValueException"
+                  value="It was expecting {expected}, but {foundAsString} was found instead."/>
+    <Localization class="org.openmarkov.gui.exception.NoNetOpenedException" value="There is no network opened."/>
+    <Localization class="org.openmarkov.gui.exception.NoRowSelectedException"
+                  value="There is no row selected, and at least one it is required."/>
+    <Localization class="org.openmarkov.gui.exception.NoSelectedNodeException"
+                  value="There should be a node selected in the network."/>
+    <Localization class="org.openmarkov.gui.exception.NotEnoughMemoryException"
+                  value="The system has run out of memory"/>
+    <Localization class="org.openmarkov.gui.exception.NotEnoughtMemoryException"
+                  value="This operation requires more memory than available in your system."/>
+    <Localization class="org.openmarkov.gui.exception.OtherPropertyAlreadyExistsException"
+                  value="There is already a property named {propertyName}."/>
+    <Localization class="org.openmarkov.gui.exception.PreResolutionNodeInInferenceException"
+                  value="Node {node} has a Pre-Resolution Finding that cannot be modified in Inference Mode."/>
+    <Localization class="org.openmarkov.gui.exception.RemovingAllStatesIsNotAllowedException"
+                  value="You have selected all states to remove, you must leave at least one in each branch."/>
+    <Localization class="org.openmarkov.gui.exception.ResourceNotFoundException" value="Could not find resource {resource}."/>
+    <Localization class="org.openmarkov.gui.exception.ThereIsNoNextEvidenceCaseException"
+                  value="There is no next Evidence Case."/>
+    <Localization class="org.openmarkov.gui.exception.ThereIsNoNodeInDataException" value="There is no node in data."/>
+    <Localization class="org.openmarkov.gui.exception.ThereIsNoPreviousEvidenceCaseException"
+                  value="There is no previous Evidence Case."/>
+    <Localization class="org.openmarkov.gui.exception.TriedToSplitIntervalOutsideBoundsException"
+                  value="Intervals cannot be split out of their bounds"/>
+    <Localization class="org.openmarkov.gui.exception.TriedToSplitInvervalOutsideBoundsException"
+                  value="Tried to split interval outside its bounds."/>
+    <Localization class="org.openmarkov.gui.exception.UnexpectedMenuActionException"
+                  value="Unexpected menu action found: {actionCommand}"/>
+    <Localization class="org.openmarkov.gui.exception.ValueOutOfDomainRangeException"
+                  value="Value {numericValue} is out of {domain}"/>
+    <Localization class="org.openmarkov.gui.exception.ValueOutOfDomaingRangeException"
+                  value="Value {numericValue} is outside the domain of the variable, which is [{domain.getMin}..{domain.getMax}]."/>
+    <Localization class="org.openmarkov.gui.exception.WrongClassException"
+                  value="Expected class {expectedClass}, found: {foundClass}"/>
+    <Localization class="org.openmarkov.gui.exception.WrongIntervalException$InfinityInIntervalNotAllowed"
+                  value="Infinity cannot belong to the interval"/>
+    <Localization class="org.openmarkov.gui.exception.WrongIntervalException$LimitsValuesAreWrong"
+                  value="Limits values are wrong."/>
+    <Localization class="org.openmarkov.gui.exception.WrongRoleException"
+                  value="Expected role {expectedRole}, found: {foundRole}"/>
+    <Localization class="org.openmarkov.gui.exception.ZoomOutOfRangeException"
+                  value="Requested zoomManager ({requestedZoom}) is out of the range [{minZoom}..{maxZoom}]."/>
+    <Localization class="org.openmarkov.gui.graphic.VisualLink" value="Visual {link}"/>
+    <Localization class="org.openmarkov.gui.window.edition.SelectedContent"
+                  value="Selected nodes: {nodes}\nSelected links: {links}"/>
+</ClassLocalizations>

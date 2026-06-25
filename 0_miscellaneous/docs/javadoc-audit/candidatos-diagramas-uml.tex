@@ -1,0 +1,460 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish, es-nodecimaldot]{babel}
+\addto\captionsspanish{\renewcommand{\tablename}{Tabla}}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
+\usepackage{parskip}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{longtable}
+
+\definecolor{codegray}{RGB}{100,100,100}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\pkg}[1]{\texttt{\small #1}}
+
+\title{Candidatos a diagramas UML en OpenMarkov\\
+       \large Informe de la auditor\'ia de Javadoc\\[4pt]
+       \normalsize Marzo de 2026}
+\author{Manuel Arias Calleja}
+\date{Marzo de 2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+% ===================================================================
+\section{Introducci\'on}
+
+Este documento identifica las clases, paquetes y componentes de
+OpenMarkov que, por su complejidad estructural, merecen ser acompa\~nados
+de diagramas UML (de clases, secuencia o paquetes) para facilitar su
+comprensi\'on.
+
+Los candidatos se han identificado durante una auditor\'ia sistem\'atica
+de Javadoc que ha recorrido los 19~m\'odulos del proyecto ($\sim$1000
+ficheros Java).  Los criterios para incluir un candidato son:
+
+\begin{itemize}[nosep]
+  \item Jerarqu\'ias de herencia profundas ($>$5 subclases directas).
+  \item Paquetes con 5 o m\'as clases interrelacionadas.
+  \item Patrones de dise\~no complejos (Strategy, Composite, Command).
+  \item Clases centrales con muchas dependencias entrantes/salientes.
+\end{itemize}
+
+Para cada candidato se indica el tipo de diagrama recomendado, la
+ubicaci\'on del c\'odigo y una breve justificaci\'on.
+
+% ===================================================================
+\section{M\'odulo \code{org.openmarkov.core}}
+
+\subsection{Modelo de dominio central}
+
+\begin{description}
+  \item[Paquete:] \pkg{core.model.network}
+  \item[Clases clave:] \code{ProbNet}, \code{Node}, \code{Variable},
+        \code{EvidenceCase}, \code{Finding}, \code{State},
+        \code{NodeTypeDepot}
+  \item[Tipo de diagrama:] Diagrama de clases (estilo ER).
+  \item[Justificaci\'on:] Es el n\'ucleo del dominio.  \code{ProbNet}
+        posee \code{Node}s que contienen \code{Variable}s y
+        \code{Potential}es; \code{EvidenceCase} agrupa \code{Finding}s.
+        Un diagrama de las relaciones de composici\'on/agregaci\'on
+        facilitar\'ia la comprensi\'on a cualquier nuevo desarrollador.
+\end{description}
+
+\subsection{Jerarqu\'ia de potenciales}
+
+\begin{description}
+  \item[Paquete:] \pkg{core.model.network.potential}
+  \item[Clases clave:] \code{Potential} (abstracta),
+        \code{TablePotential}, \code{UniformPotential},
+        \code{ICIPotential}, \code{GLMPotential},
+        \code{FunctionPotential}, \code{TreeADDPotential},
+        \code{ExactDistrPotential}, \code{SameAsPrevious}, etc.
+  \item[Tipo de diagrama:] Diagrama de clases jer\'arquico.
+  \item[Justificaci\'on:] 30+ subclases de \code{Potential} organizadas
+        en m\'ultiples niveles de herencia.  Incluye el subpaquete
+        \code{canonical/} (ICIPotential $\to$ Max/Min/Tuning) y
+        \code{treeadd/} (TreeADDPotential, Branches, TreeADDBranch).
+        Sin un diagrama es dif\'icil entender qu\'e potencial usar en
+        cada situaci\'on.
+\end{description}
+
+\subsection{Operaciones sobre potenciales}
+
+\begin{description}
+  \item[Paquete:] \pkg{core.model.network.potential.operation}
+  \item[Clases clave:] \code{PotentialOperations},
+        \code{DiscretePotentialOperations} y sus clases auxiliares
+        (Arithmetic, Elimination, Factory, Transform), m\'as las
+        versiones concurrentes en \code{concurrent/}.
+  \item[Tipo de diagrama:] Diagrama de colaboraci\'on.
+  \item[Justificaci\'on:] Las operaciones de multiplicaci\'on,
+        marginalizaci\'on y proyecci\'on sobre potenciales est\'an
+        repartidas en m\'ultiples clases est\'aticas con dependencias
+        cruzadas.  Un diagrama mostrar\'ia qui\'en llama a qui\'en.
+\end{description}
+
+\subsection{Sistema de ediciones (Undo/Redo)}
+
+\begin{description}
+  \item[Paquetes:] \pkg{core.action.base} + \pkg{core.action.core}
+  \item[Clases clave:] \code{PNEdit} (abstracta),
+        \code{CompoundPNEdit}, \code{PNESupport},
+        \code{EditsHistory}, \code{ConstraintChecker},
+        y 37+ ediciones concretas (\code{AddNodeEdit},
+        \code{RemoveNodeEdit}, \code{NodeStateEdit}, etc.)
+  \item[Tipo de diagrama:] (1)~Diagrama de clases de la jerarqu\'ia.
+        (2)~Diagrama de secuencia del flujo doEdit/undo/redo.
+  \item[Justificaci\'on:] El patr\'on Command con 37+ comandos
+        concretos es uno de los componentes m\'as complejos del core.
+        \code{PNESupport} orquesta la ejecuci\'on, el historial y los
+        listeners.  Sin diagramas, es dif\'icil entender c\'omo a\~nadir
+        una nueva edici\'on.
+\end{description}
+
+\subsection{Restricciones de red}
+
+\begin{description}
+  \item[Paquete:] \pkg{core.model.network.constraint}
+  \item[Clases clave:] \code{PNConstraint} (abstracta),
+        \code{ConstraintManager}, y 35+ restricciones concretas.
+  \item[Tipo de diagrama:] Diagrama de clases simplificado (lista de
+        restricciones agrupadas por categor\'ia).
+  \item[Justificaci\'on:] Muchas restricciones peque\~nas con nombres
+        similares.  Un diagrama que las agrupe por categor\'ia
+        (topolog\'ia, tipos de nodo, temporalidad, agentes) evitar\'ia
+        la confusi\'on.
+\end{description}
+
+\subsection{Tipos de red}
+
+\begin{description}
+  \item[Paquete:] \pkg{core.model.network.type}
+  \item[Clases clave:] \code{NetworkType} (abstracta) y 12 tipos
+        concretos (BN, ID, LIMID, DynamicLIMID, MDP, POMDP, DAN, etc.)
+  \item[Tipo de diagrama:] Diagrama de clases + tabla de restricciones
+        por tipo.
+  \item[Justificaci\'on:] Cada tipo de red activa diferentes
+        restricciones.  Un diagrama que cruce tipos con restricciones
+        (estilo matriz) ser\'ia muy \'util como referencia r\'apida.
+\end{description}
+
+% ===================================================================
+\section{M\'odulo \code{org.openmarkov.inference}}
+
+\subsection{Motor de eliminaci\'on de variables}
+
+\begin{description}
+  \item[Paquete:] \pkg{inference.algorithm.variableElimination}
+  \item[Clases clave:] \code{VariableElimination} (abstracta),
+        \code{VariableEliminationCore},
+        \code{ChanceVariableElimination},
+        \code{DecisionVariableElimination};
+        tareas: \code{VEPropagation}, \code{VEEvaluation},
+        \code{VECEAnalysis}; operaciones: \code{VariableEliminationOperations}
+  \item[Tipo de diagrama:] (1)~Diagrama de clases. (2)~Diagrama de
+        actividad del bucle de eliminaci\'on.
+  \item[Justificaci\'on:] Es el algoritmo de inferencia principal.
+        La orquestaci\'on entre Core, Chance/DecisionElimination y las
+        tareas concretas no es evidente sin un diagrama.
+\end{description}
+
+\subsection{Heur\'isticas de eliminaci\'on}
+
+\begin{description}
+  \item[Paquete:] \pkg{inference.heuristic}
+  \item[Clases clave:] \code{EliminationHeuristic} (abstracta) y 9
+        implementaciones: \code{SimpleElimination},
+        \code{MinimalFillIn}, \code{CanoMoralElimination},
+        \code{TimeSliceElimination}, etc.
+  \item[Tipo de diagrama:] Diagrama de clases (patr\'on Strategy).
+  \item[Justificaci\'on:] Patr\'on Strategy cl\'asico con 9
+        implementaciones.  Un diagrama mostrar\'ia las alternativas
+        disponibles y sus criterios de selecci\'on.
+\end{description}
+
+\subsection{Descomposici\'on en DANs sim\'etricos}
+
+\begin{description}
+  \item[Paquete:] \pkg{inference.algorithm.decompositionIntoSymmetricDANs}
+  \item[Subpaquetes:] \code{core/}, \code{evaluation/},
+        \code{ceanalysis/}
+  \item[Tipo de diagrama:] Diagrama de paquetes con dependencias.
+  \item[Justificaci\'on:] Paquete complejo con m\'ultiples subpaquetes
+        que implementan la inferencia en redes de an\'alisis de
+        decisi\'on.  Un diagrama de paquetes mostrar\'ia la
+        organizaci\'on interna.
+\end{description}
+
+% ===================================================================
+\section{M\'odulo \code{org.openmarkov.gui}}
+
+\subsection{Paneles de edici\'on de red}
+
+\begin{description}
+  \item[Paquete:] \pkg{gui.window.edition}
+  \item[Clases clave:] \code{NetworkEditorPanel},
+        \code{EditorPanel}, \code{NetworkEditorPanel},
+        \code{EditorInputHandler} y los modos de edici\'on
+        (\code{EditionMode}, \code{NodeEditionMode},
+        \code{LinkEditionMode}, \code{SelectionMode}).
+  \item[Tipo de diagrama:] Diagrama de clases + diagrama de estados
+        (modos de edici\'on).
+  \item[Justificaci\'on:] La interacci\'on entre paneles, modos de
+        edici\'on e input handlers es el coraz\'on del editor visual.
+        Sin diagrama, es dif\'icil entender d\'onde a\~nadir un nuevo
+        modo de edici\'on.
+\end{description}
+
+\subsection{Di\'alogos de nodo}
+
+\begin{description}
+  \item[Paquete:] \pkg{gui.dialog.node}
+  \item[Clases clave:] \code{NodePropertiesDialog} y sus paneles
+        internos: \code{NodeDefinitionPanel},
+        \code{NodeDomainValuesTablePanel},
+        \code{NodeProbsValuesTablePanel}, \code{NodeParentsPanel}.
+  \item[Tipo de diagrama:] Diagrama de clases (composici\'on de paneles).
+  \item[Justificaci\'on:] El di\'alogo de propiedades del nodo es la
+        interfaz m\'as compleja del GUI.  Compone m\'ultiples paneles
+        que interact\'uan entre s\'i.
+\end{description}
+
+\subsection{Componentes de visualizaci\'on gr\'afica}
+
+\begin{description}
+  \item[Paquete:] \pkg{gui.graphic}
+  \item[Clases clave:] \code{VisualNode}, \code{VisualLink},
+        \code{VisualNetwork}, \code{InnerBox}, \code{FSVariableBox},
+        \code{NumericVariableBox}.
+  \item[Tipo de diagrama:] Diagrama de clases.
+  \item[Justificaci\'on:] Jerarqu\'ia de componentes visuales con
+        relaciones de composici\'on (VisualNode contiene InnerBox, etc.)
+        Esencial para entender el renderizado del grafo.
+\end{description}
+
+% ===================================================================
+\subsection{Jerarqu\'ia de di\'alogos}
+
+\begin{description}
+  \item[Paquete:] \pkg{gui.dialog.common}
+  \item[Clases clave:] \code{DialogBase}, \code{BottomPanelButtonDialog},
+        \code{OkCancelDialog}; \code{PotentialPanel} (abstracta) con 12+
+        implementaciones por plugin; \code{RequestDialogger} (builder
+        fluido con generics).
+  \item[Tipo de diagrama:] Diagrama de clases (Template Method +
+        Strategy/Plugin).
+  \item[Justificaci\'on:] Toda ventana de di\'alogo extiende esta
+        cadena de herencia.  Los paneles de potenciales se descubren
+        por anotaci\'on \code{@PotentialPanelPlugin} --- un diagrama
+        mostrar\'ia c\'omo se conectan.
+\end{description}
+
+\subsection{Ediciones GUI (Command)}
+
+\begin{description}
+  \item[Paquete:] \pkg{gui.action}
+  \item[Clases clave:] 18 subclases de \code{PNEdit}
+        (\code{AddFindingEdit}, \code{RemoveSelectedEdit},
+        \code{PasteEdit}, \code{ICITablePotentialValueEdit}, etc.)
+  \item[Tipo de diagrama:] Diagrama de clases.
+  \item[Justificaci\'on:] Patr\'on Command espec\'ifico de la GUI,
+        complementario al del core (action/core).  Incluye ediciones
+        compuestas y relaciones con \code{PotentialChangeEdit}.
+\end{description}
+
+\subsection{Men\'us y barras de herramientas}
+
+\begin{description}
+  \item[Paquete:] \pkg{gui.menutoolbar}
+  \item[Clases clave:] \code{MenuToolBarBasic} (interfaz),
+        \code{ContextualMenu}, \code{MainMenu}, \code{ToolBarBasic};
+        \code{MenuAssistant} (mediador);
+        \code{ContextualMenuFactory} (factory).
+  \item[Tipo de diagrama:] Diagrama de clases.
+  \item[Justificaci\'on:] M\'ultiples patrones (Factory, Mediator,
+        Plugin v\'ia \code{@Toolbar}) en un paquete con 22 ficheros.
+\end{description}
+
+\subsection{\'Arbol de decisi\'on visual}
+
+\begin{description}
+  \item[Paquete:] \pkg{gui.window.decisiontree}
+  \item[Clases clave:] \code{DecisionTreeWindow},
+        \code{DecisionTreePanel}, \code{DecisionTreeModel},
+        \code{VisualDecisionTree} y paneles de elementos.
+  \item[Tipo de diagrama:] Diagrama de clases (MVC).
+  \item[Justificaci\'on:] Subsistema autocontenido de visualizaci\'on
+        con patr\'on MVC.  Merece un diagrama independiente.
+\end{description}
+
+\subsection{Editor de TreeADD}
+
+\begin{description}
+  \item[Paquete:] \pkg{gui.dialog.treeadd}
+  \item[Clases clave:] \code{TreeADDEditorPanel},
+        \code{TreeADDModel}, \code{TreeADDPanel},
+        \code{TreeADDCellRenderer}.
+  \item[Tipo de diagrama:] Diagrama de clases (MVC).
+  \item[Justificaci\'on:] Editor MVC autocontenido para potenciales
+        TreeADD, con 18 ficheros en el paquete.
+\end{description}
+
+% ===================================================================
+\section{M\'odulo \code{org.openmarkov.learning}}
+
+\subsection{Framework de aprendizaje}
+
+\begin{description}
+  \item[Paquetes:] \pkg{learning.core} + \pkg{learning.metric} +
+        \pkg{learning.algorithm}
+  \item[Clases clave:] \code{LearningAlgorithm} (abstracta),
+        \code{LearningEditProposal}, \code{ScoreAndPenalize} y
+        m\'etricas (\code{BayesianMetric}, \code{K2Metric},
+        \code{BDeMetric}, etc.)
+  \item[Tipo de diagrama:] Diagrama de clases inter-m\'odulos.
+  \item[Justificaci\'on:] El framework de aprendizaje se reparte en
+        3~m\'odulos con dependencias cruzadas.  Un diagrama global
+        mostrar\'ia c\'omo se conectan algoritmos, m\'etricas y
+        propuestas de edici\'on.
+\end{description}
+
+\subsection{Configuraci\'on de algoritmos (GUI)}
+
+\begin{description}
+  \item[Paquete:] \pkg{learning.gui}
+  \item[Clases clave:] \code{AlgorithmConfiguration} (anotaci\'on),
+        \code{AlgorithmConfigurationManager} (registro),
+        \code{AlgorithmParametersDialog} (abstracta) con 8+
+        implementaciones concretas.
+  \item[Tipo de diagrama:] Diagrama de clases (Strategy/Registry).
+  \item[Justificaci\'on:] Cada algoritmo de aprendizaje tiene su propio
+        di\'alogo de par\'ametros, descubierto por anotaci\'on.
+\end{description}
+
+% ===================================================================
+\section{M\'odulo \code{org.openmarkov.io}}
+
+\subsection{Lectores y escritores de redes}
+
+\begin{description}
+  \item[Paquetes:] \pkg{io} + \pkg{io.probmodel.reader} +
+        \pkg{io.probmodel.writer}
+  \item[Clases clave:] \code{ProbNetReader} / \code{ProbNetWriter}
+        (interfaces), \code{PGMXReader\_0\_2}, \code{PGMXWriter\_0\_2},
+        y los formatos alternativos en \code{io.database.elvira},
+        \code{io.database.weka}, \code{io.database.excel}.
+  \item[Tipo de diagrama:] Diagrama de clases (patr\'on Strategy/Factory
+        para formatos).
+  \item[Justificaci\'on:] M\'ultiples formatos de archivo con
+        interfaces comunes.  Un diagrama mostrar\'ia qu\'e formatos
+        existen y c\'omo se descubren via \code{@ProbNetFormatType}.
+\end{description}
+
+% ===================================================================
+\section{M\'odulos \code{bnEvaluation} y \code{sensitivityAnalysis}}
+
+\subsection{Framework de evaluaci\'on de redes}
+
+\begin{description}
+  \item[Paquete:] \pkg{bnEvaluation}
+  \item[Clases clave:] \code{NetEvaluator}, \code{LearningEvaluator},
+        \code{SplitSetManager}, \code{SplitSet}; jerarqu\'ia de
+        medidas: \code{Measure} $\to$ \code{MeasureValue},
+        \code{MeasureMatrix}, \code{MeasuresSet}.
+  \item[Tipo de diagrama:] (1)~Diagrama de clases de la jerarqu\'ia
+        de medidas. (2)~Diagrama de actividad del pipeline
+        (split $\to$ evaluate $\to$ aggregate).
+  \item[Justificaci\'on:] Pipeline de evaluaci\'on con m\'ultiples
+        clases de datos (medidas, matrices, conjuntos) que se acumulan
+        y promedian.
+\end{description}
+
+\subsection{An\'alisis de sensibilidad (MVC)}
+
+\begin{description}
+  \item[Paquete:] \pkg{sensitivityAnalysis}
+  \item[Clases clave:] \code{SensitivityAnalysisModel} (observable),
+        \code{SensitivityAnalysisController},
+        \code{SensitivityAnalysisConfiguration};
+        6+ di\'alogos concretos seg\'un \code{AnalysisType}.
+  \item[Tipo de diagrama:] Diagrama de clases (MVC).
+  \item[Justificaci\'on:] Patr\'on MVC expl\'icito con modelo
+        observable y m\'ultiples vistas especializadas.
+\end{description}
+
+% ===================================================================
+\section{M\'odulo \code{org.openmarkov.annotationProcessing}}
+
+\subsection{Pipeline de procesamiento de anotaciones}
+
+\begin{description}
+  \item[Paquete:] \pkg{annotationProcessing.localization\_bindings}
+  \item[Clases clave:] \code{BindLocalizations} (anotaci\'on),
+        \code{BindLocalizationsProcessor} (APT),
+        \code{XMLConstantsParser}, \code{ClassDefinition} (record).
+  \item[Tipo de diagrama:] Diagrama de actividad.
+  \item[Justificaci\'on:] Pipeline de generaci\'on de c\'odigo en
+        tiempo de compilaci\'on: anotaci\'on $\to$ procesador $\to$
+        parser XML $\to$ \'arbol de clases $\to$ ficheros generados.
+\end{description}
+
+% ===================================================================
+\section{Resumen}
+
+\begin{longtable}{clp{5cm}l}
+\toprule
+\textbf{\#} & \textbf{M\'odulo} & \textbf{Componente} & \textbf{Tipo de diagrama} \\
+\midrule
+\endhead
+1  & core & Modelo de dominio (ProbNet, Node, Variable) & Clases (ER) \\
+2  & core & Jerarqu\'ia de potenciales (30+) & Clases jer\'arquico \\
+3  & core & Operaciones sobre potenciales & Colaboraci\'on \\
+4  & core & Sistema de ediciones (Undo/Redo) & Clases + secuencia \\
+5  & core & Restricciones de red (35+) & Clases agrupado \\
+6  & core & Tipos de red (12) & Clases + matriz \\
+7  & inference & Eliminaci\'on de variables & Clases + actividad \\
+8  & inference & Heur\'isticas (Strategy) & Clases \\
+9  & inference & Descomposici\'on en DANs & Paquetes \\
+10 & gui & Paneles de edici\'on de red & Clases + estados \\
+11 & gui & Di\'alogos de nodo & Composici\'on \\
+12 & gui & Componentes gr\'aficos & Clases \\
+13 & gui & Jerarqu\'ia de di\'alogos & Clases (Template) \\
+14 & gui & Ediciones GUI (Command) & Clases \\
+15 & gui & Men\'us y toolbars & Clases \\
+16 & gui & \'Arbol de decisi\'on visual & Clases (MVC) \\
+17 & gui & Editor de TreeADD & Clases (MVC) \\
+18 & learning & Framework (3 m\'odulos) & Clases inter-m\'odulos \\
+19 & learning & Config. de algoritmos GUI & Clases (Strategy) \\
+20 & io & Lectores/escritores de redes & Clases (Strategy) \\
+21 & bnEvaluation & Medidas y pipeline & Clases + actividad \\
+22 & sensitivityAn. & MVC de an\'alisis & Clases (MVC) \\
+23 & annotationProc. & Pipeline de anotaciones & Actividad \\
+\bottomrule
+\end{longtable}
+
+\textbf{Total: 23 diagramas recomendados}, distribuidos en 8~m\'odulos.
+
+\textbf{Prioridad alta} (componentes m\'as referenciados y complejos):
+n\'umeros 1~(modelo de dominio), 2~(potenciales), 4~(sistema de
+ediciones) y 7~(eliminaci\'on de variables).
+
+\textbf{Prioridad media}: 10--12~(editor visual), 13~(jerarqu\'ia de
+di\'alogos), 18~(learning) y 20~(I/O).
+
+\textbf{Prioridad baja}: el resto, \'utiles para documentaci\'on
+completa pero menos cr\'iticos para el desarrollo diario.
+
+\end{document}

@@ -1,0 +1,132 @@
+@startuml fig-gtable-opcionB
+' ============================================================
+' Opcion B: nueva interfaz CEUtilityPotential
+' GTablePotential con superclase cambiada a AbstractIndexedPotential.
+' Los tres bloqueadores quedan resueltos con cambios localizados.
+' ============================================================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 40
+skinparam dpi 150
+left to right direction
+
+hide empty fields
+
+' ==== NUEVA INTERFAZ ====
+interface CEUtilityPotential #90EE90 {
+    ' Interfaz de dominio que marca un potencial como
+    ' valido para actuar de utilidad en analisis CE.
+    ' Implementada por TablePotential y GTablePotential.
+    ' Puede ampliarse con metodos comunes si se requieren
+    ' (getDimensions(), getOffsets()) para evitar casts.
+}
+
+note right of CEUtilityPotential #F0FFF0
+  Interfaz de marcado (marker interface).
+  Su nombre documenta el dominio:
+  "potencial que puede actuar de
+  utilidad en el analisis CE de DANs".
+  Actua como lista blanca de tipos
+  validos en la cadena CE.
+end note
+
+' ==== JERARQUIA CORE (tras cambio de superclase) ====
+package "org.openmarkov.core" #F4F4F4 {
+
+    abstract class AbstractIndexedPotential #FFD580 {
+        #dimensions : int[]
+        #offsets : int[]
+        #tableSize : int
+    }
+
+    class TablePotential #BDD7FF {
+        +values : double[]
+    }
+
+    class "GTablePotential<E>" as GTP #C8F0C8 {
+        +elementTable : List<E>
+    }
+
+    note bottom of GTP
+      Ahora extiende directamente
+      AbstractIndexedPotential.
+      Ya no hereda Projectable ni Scalable.
+      Solo implementa Reorderable y
+      CEUtilityPotential.
+    end note
+
+    interface Reorderable #70D7F0 {
+        +reorder(List<Variable>) : Potential
+    }
+
+    AbstractIndexedPotential <|-- TablePotential
+    AbstractIndexedPotential <|-- GTP
+
+    TablePotential ..|> CEUtilityPotential
+    GTP ..|> CEUtilityPotential
+    GTP ..|> Reorderable
+}
+
+' ==== CADENA CE (tras migracion a CEUtilityPotential) ====
+package "org.openmarkov.costEffectiveness" #FFF0E0 {
+
+    class DANInference #FFEAA0 {
+        - utility : CEUtilityPotential
+        + getUtility() : CEUtilityPotential
+    }
+
+    note top of DANInference
+        [B1 resuelto]
+        El campo utility se declara como
+        CEUtilityPotential; GTablePotential
+        implementa esa interfaz, por lo que
+        la asignacion sigue siendo valida.
+    end note
+
+    class DANCEAnalysis #FFEAA0 {
+        + analyze(DANInference process)
+    }
+
+    note right of DANCEAnalysis
+        [B2 resuelto]
+        GTablePotential<CEP> u =
+          (GTablePotential<CEP>)
+          process.getUtility();
+        Cast valido: GTablePotential
+        implementa CEUtilityPotential,
+        por lo que el cast es "convertible".
+    end note
+
+    class TablePotentialMerge #FFEAA0 {
+        + merge(List<CEUtilityPotential>) : CEUtilityPotential
+    }
+
+    note bottom of TablePotentialMerge
+        [B3 resuelto]
+        Acepta List<CEUtilityPotential>.
+        Solo TablePotential y GTablePotential
+        implementan esa interfaz: el compilador
+        garantiza que no llegan tipos inadecuados.
+    end note
+}
+
+DANInference --> GTP         : instancia como GTablePotential<CEP>
+DANCEAnalysis --> DANInference : getUtility(): CEUtilityPotential
+DANCEAnalysis --> GTP        : (GTablePotential<CEP>) cast
+TablePotentialMerge ..> CEUtilityPotential : acepta
+
+legend right
+  |= Color |= Significado |
+  | <#90EE90> | Nueva interfaz CEUtilityPotential |
+  | <#70D7F0> | Interfaz de capacidad existente |
+  | <#FFD580> | Clase abstracta base |
+  | <#BDD7FF> | TablePotential (sin cambios) |
+  | <#C8F0C8> | GTablePotential (superclase cambiada) |
+  | <#FFEAA0> | Clases CE migradas a CEUtilityPotential |
+endlegend
+
+@enduml

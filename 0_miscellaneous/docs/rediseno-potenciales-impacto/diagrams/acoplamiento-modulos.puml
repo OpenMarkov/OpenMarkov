@@ -1,0 +1,67 @@
+@startuml acoplamiento-modulos
+' ============================================================
+'  Acoplamiento de modulos externos al paquete potential
+'  Numeros = ficheros distintos que importan o referencian
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam linetype ortho
+skinparam dpi 150
+skinparam nodesep 30
+skinparam ranksep 40
+
+skinparam component {
+    BackgroundColor<<core>> #DDEEDD
+    BorderColor<<core>> #44AA44
+    BackgroundColor<<inference>> #FFEECC
+    BorderColor<<inference>> #DDAA44
+    BackgroundColor<<gui>> #FFE0E0
+    BorderColor<<gui>> #CC4444
+    BackgroundColor<<io>> #E0E0FF
+    BorderColor<<io>> #4444CC
+    BackgroundColor<<learning>> #E8E8E8
+    BorderColor<<learning>> #888888
+    BackgroundColor<<sa>> #F0E0FF
+    BorderColor<<sa>> #8844CC
+    BackgroundColor<<other>> #FFFFE0
+    BorderColor<<other>> #BB8800
+    BackgroundColor<<target>> #CCEEFF
+    BorderColor<<target>> #2266AA
+}
+
+[org.openmarkov.core.\nmodel.network.potential] <<target>> as POT
+
+component "core (resto)" <<core>> as CORE
+component "inference" <<inference>> as INF
+component "gui" <<gui>> as GUI
+component "io" <<io>> as IO
+component "learning.*" <<learning>> as LEARN
+component "sensitivityAnalysis" <<sa>> as SA
+component "bnEvaluation" <<other>> as BN
+component "stochasticPropagationOutput" <<other>> as SPO
+component "costEffectiveness" <<other>> as CE
+component "integrationtests" <<other>> as IT
+component "dbGenerator" <<other>> as DBG
+
+CORE  --> POT : 100+ refs\nProbNetOperations,\nVariable, Link,\nNodeAbsorptionHandler,\nTemporalNetOperations,\nedits/*.java
+INF   --> POT : 60+ refs\nVE, Hugin, DAN,\ndlimid, temporal\n(usa instanceof)
+GUI   --> POT : ~40 refs\nPotentialPanel\n(plugin propio),\nedits propios,\nValuesTable
+IO    --> POT : ~25 refs\nPGMXReader/Writer,\nElviraParser,\nXMLBIFReader\n(cadena instanceof)
+LEARN --> POT : 4 refs\nLearningAlgorithm,\nEMAlgorithm
+SA    --> POT : 6 refs\nMapDialog,\nPlotDialog,\nTornadoSpiderDialog
+BN    --> POT : 1 ref\nNetEvaluator
+SPO   --> POT : 2 refs\nXlsxWrite,\nExampleNets (test)
+CE    --> POT : 0 refs\n(sin uso directo)
+IT    --> POT : 6 refs\nTools, AllPotentialsHaveAPanel,\nPGMXReadersTest
+DBG   --> POT : 0 refs\n(sin uso directo)
+
+note bottom of POT
+  <b>Total:</b>
+  - 372 .java importan algo del paquete
+  - 0 subclases externas
+  - 14 paneles GUI con @PotentialPanelPlugin
+  - 80+ ficheros usan PotentialOperations o
+    DiscretePotentialOperations
+end note
+
+@enduml

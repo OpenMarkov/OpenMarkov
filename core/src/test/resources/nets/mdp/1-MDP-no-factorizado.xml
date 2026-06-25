@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ProbNet>
+
+    <Constraints>
+        <Constraint>carmen.networks.constraints.compound.IDConstraint</Constraint>
+    </Constraints>
+
+    <Variables>
+        <Variable name="X_0" type="DISCRETE" role="CHANCE">
+            <coordinateX>190</coordinateX>
+            <coordinateY>137</coordinateY>
+            <states>
+                <state>absent</state>
+                <state>present</state>
+            </states>
+        </Variable>
+        <Variable name="X_1" type="DISCRETE" role="CHANCE">
+            <coordinateX>387</coordinateX>
+            <coordinateY>136</coordinateY>
+            <states>
+                <state>absent</state>
+                <state>present</state>
+            </states>
+        </Variable>
+        <Variable name="D_0" type="DISCRETE" role="DECISION">
+            <coordinateX>191</coordinateX>
+            <coordinateY>283</coordinateY>
+            <states>
+                <state>no</state>
+                <state>yes</state>
+            </states>
+        </Variable>
+        <Variable name="D_1" type="DISCRETE" role="DECISION">
+            <coordinateX>375</coordinateX>
+            <coordinateY>276</coordinateY>
+            <states>
+                <state>no</state>
+                <state>yes</state>
+            </states>
+        </Variable>
+        <Variable name="U" type="CONTINUOUS" role="UTILITY">
+            <coordinateX>460</coordinateX>
+            <coordinateY>396</coordinateY>
+            <interval min="-1.7976931348623157E308" max="1.7976931348623157E308" leftClosed="true" rightClosed="false"
+                      precision="0.0"/>
+        </Variable>
+    </Variables>
+
+    <Links>
+        <Link var1="X_0" var2="X_1" directed="true"/>
+        <Link var1="X_1" var2="U" directed="true"/>
+        <Link var1="D_0" var2="X_1" directed="true"/>
+        <Link var1="D_1" var2="U" directed="true"/>
+    </Links>
+
+    <Potentials>
+        <Potential type="carmen.networks.TablePotential">
+            <Variables>
+                <Variable>X_0</Variable>
+            </Variables>
+            <deterministic>false</deterministic>
+            <Table>
+                <double>0.5</double>
+                <double>0.5</double>
+            </Table>
+        </Potential>
+        <Potential type="carmen.networks.TablePotential">
+            <Variables>
+                <Variable>X_1</Variable>
+                <Variable>D_0</Variable>
+                <Variable>X_0</Variable>
+            </Variables>
+            <deterministic>false</deterministic>
+            <Table>
+                <double>0.05</double>
+                <double>0.95</double>
+                <double>0.2</double>
+                <double>0.8</double>
+                <double>0.7</double>
+                <double>0.3</double>
+                <double>0.41</double>
+                <double>0.59</double>
+            </Table>
+        </Potential>
+        <Potential type="carmen.networks.TablePotential">
+            <Variables>
+                <Variable>U</Variable>
+                <Variable>D_1</Variable>
+                <Variable>X_1</Variable>
+            </Variables>
+            <relationKind>utility</relationKind>
+            <deterministic>false</deterministic>
+            <Table>
+                <double>10.0</double>
+                <double>-5.0</double>
+                <double>-0.1</double>
+                <double>-0.1</double>
+            </Table>
+        </Potential>
+    </Potentials>
+
+</ProbNet>
+

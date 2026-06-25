@@ -1,0 +1,4 @@
+To push to the two branches configured in this git repository, write:
+
+git push origin (bitbucket neowiki master)
+git push current (bitbucket openmarkov neowiki)

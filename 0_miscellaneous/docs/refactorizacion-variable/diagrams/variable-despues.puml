@@ -1,0 +1,130 @@
+@startuml variable-despues
+skinparam classAttributeIconSize 0
+skinparam classFontSize 11
+skinparam defaultFontSize 10
+skinparam shadowing false
+skinparam linetype ortho
+
+skinparam class {
+  BackgroundColor<<domain>> #E8F5E9
+  BackgroundColor<<utility>> #E3F2FD
+  BackgroundColor<<graph>> #FFEBEE
+  BorderColor #333333
+}
+
+class Variable <<domain>> {
+  .. Campos de dominio ..
+  # name : String
+  - baseName : String
+  - timeSlice : int
+  - states : State[]
+  - variableType : VariableType
+  # partitionedInterval : PartitionedInterval
+  - additionalProperties : Map<String,String>
+  # statesAdditionalProperties : HashMap  <<eager init>>
+  - precision : double
+  - unit : StringWithProperties
+  - agent : StringWithProperties
+  - decisionCriterion : Criterion
+  __
+  .. Constructores (7) ..
+  + Variable(name, states)
+  + Variable(name, stateNames...)
+  + Variable(name, numStates)
+  + Variable(variable)  // copy
+  + Variable(name)  // continuous
+  + Variable(name, leftClosed, min, max, rightClosed, precision)
+  + Variable(name, states, partitionedInterval, precision)
+  __
+  .. Getters / Setters ..
+  + getName() / setName()
+  + getBaseName() / setBaseName()
+  + getTimeSlice() / setTimeSlice()
+  + isTemporal()
+  + getStates() / setStates()
+  + getVariableType() / setVariableType()
+  + getPartitionedInterval() / setPartitionedInterval()
+  + getPrecision() / setPrecision()
+  + getUnit() / setUnit()
+  + getAgent() / setAgent()
+  + getDecisionCriterion() / setDecisionCriterion()
+  + getAdditionalProperty() / setAdditionalProperty()
+  + getStateAdditionalProperty() / ...
+  + getNumStates()
+  + getStateName() / getState()
+  + getStateIndex()  // 3 sobrecargas
+  + containsState()
+  + renameState(State, String)
+  + getNewValidName()
+  __
+  .. Parsing temporal (consolidado) ..
+  - parseNameIntoParts(String)
+  - rebuildFullName()
+  __
+  .. Delegacion a VariableStateOperations ..
+  + modifyState(Node, StateAction, int, String)
+  + replaceStates(Node, State[])
+  __
+  .. Potenciales delta (unificado) ..
+  + deltaTablePotential(String)
+  + deltaTablePotential(State)
+  + createDeltaTablePotential(int)
+  __
+  + compareTo(Variable)  <<por nombre>>
+  + clone()
+  + toString()
+}
+
+class VariableStateOperations <<utility>> {
+  - VariableStateOperations()  <<privado>>
+  __
+  + {static} modifyState(Variable, Node, StateAction, int, String)
+  + {static} replaceStates(Variable, Node, State[])
+  __
+  - {static} addStateAt(Variable, Node, int, String)
+  - {static} removeStateAt(Variable, Node, int)
+  - {static} moveStateDown(Variable, Node, int)
+  - {static} moveStateUp(Variable, Node, int)
+  - {static} renameState(Variable, int, String)
+  - {static} setUniformPotential(Node)
+  - {static} resetLink(Node)
+  - {static} getNewPartitionedInterval(Variable, PI)
+  - {static} reorderStatesInNodeAndChildren(Node, Variable, State[])
+  - {static} setPotentialAfterReorderingFirstPotential(Node, Variable, State[])
+}
+
+class Node <<graph>> {
+  + getVariable()
+  + getPotentials()
+  + setPotentials()
+  + getChildren()
+  + getNodeType()
+  + getProbNet()
+}
+
+class ProbNet <<graph>> {
+  + getChildren(Node)
+  + getLinks(Node)
+  + getLink(Node, Node, boolean)
+}
+
+Variable .right.> VariableStateOperations : delega
+VariableStateOperations .down.> Node : usa
+VariableStateOperations .down.> ProbNet : usa
+
+note bottom of Variable
+  <b>690 lineas (-30%)</b>
+  Modelo de dominio puro.
+  Sin dependencias del grafo
+  (salvo delegacion).
+end note
+
+note bottom of VariableStateOperations
+  <b>263 lineas</b>
+  Logica de edicion de estados
+  con efectos en el grafo.
+  Sigue el patron de
+  VariableTypeConverter.
+end note
+
+@enduml

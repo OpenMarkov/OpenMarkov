@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <GenericError>
+        <Text value="Ha ocurrido un error. Lea la Ventana de Mensajes para obtener más información."/>
+    </GenericError>
+    <AddAgent>
+        <Title value="Añadir agente"/>
+        <Text value="Proporcione el nuevo agente"/>
+    </AddAgent>
+    <AddCriterion>
+        <Title value="Añadir criterio"/>
+        <Text value="Proporcione el nuevo criterio de decision"/>
+    </AddCriterion>
+    <AddState>
+        <Text value="Proporcione el nuevo estado"/>
+    </AddState>
+    <CheckMessageWindow>
+        <Text value="Si quiere más información, mire en la ventana de mensajes."/>
+    </CheckMessageWindow>
+    <ErrorSavingNetwork>
+        <Text value="Se encontró un error al tratar de guardar la red"/>
+    </ErrorSavingNetwork>
+    <ConstraintViolationException value="Violación de restricción">
+        <OnlyDiscreteVariables value="Sólo son permitidas variables discretas "/>
+        <NoCycles value="Los ciclos no son permitidos en Redes Bayesianas."/>
+        <OnlyContinuousVariables value="Sólo son permitidas variables continuas"/>
+        <ValidName>
+            <Exists value="Nombre no válido, el nodo ya existe."/>
+        </ValidName>
+    </ConstraintViolationException>
+    <InvalidDataValue>
+        <Title value="Error de datos"/>
+        <Text value="Valor invalido"/>
+    </InvalidDataValue>
+    <MessageResourceNotExists>
+        <Text value="Recurso de imagen no encontrado: ~"/>
+    </MessageResourceNotExists>
+    <WarningWindow>
+        <Title value="Aviso"/>
+    </WarningWindow>
+    <NodePurposeEmpty>
+        <Text value="Debe especificar el propósito del nodo"/>
+        <Title value="Propósito del nodo vacío"/>
+    </NodePurposeEmpty>
+    <BUNDLEFILE>
+        <Text value="Español"/>
+    </BUNDLEFILE>
+    <LinkMakesCycle>
+        <Text value="No se puede crear el enlace ~ -&gt; ~ porque produciría un ciclo en la red"/>
+    </LinkMakesCycle>
+    <SaveNetwork>
+        <Title value="Guardar red"/>
+    </SaveNetwork>
+    <ExceptionInvalidState>
+        <Text value="Estado no válido. "/>
+        <Title value="Error - Estado no válido"/>
+    </ExceptionInvalidState>
+    <LoadEvidence>
+        <Error>
+            <UnknownVariable>
+                <Text value="Variable desconocida"/>
+            </UnknownVariable>
+            <InvalidState>
+                <Text value="Estado no válido."/>
+            </InvalidState>
+            <IncompatibleEvidence>
+                <Text value="Evidencia incompatible"/>
+            </IncompatibleEvidence>
+            <Text value="Esta evidencia no se puede cargar. Compruebe la ventana de mensajes."/>
+        </Error>
+        <Title value="Load evidence"/>
+    </LoadEvidence>
+    <LinkedNodesNotExist>
+        <Text value="Alguno de los nodos que enlazar no existe"/>
+    </LinkedNodesNotExist>
+    <ExceptionGeneric>
+        <Title value="Error"/>
+    </ExceptionGeneric>
+    <DuplicatedState>
+        <Title value="Estado duplicado"/>
+        <Text value="Cada estado sólo puede aparecer una vez"/>
+    </DuplicatedState>
+    <ClipboardNotSet>
+        <Text value="Este panel no tiene acceso al portapapeles"/>
+    </ClipboardNotSet>
+    <ExceptionIncompatibleEvidence>
+        <Text value="Evidencia Incompatible. "/>
+        <Title value="Error - Evidencia incompatible"/>
+    </ExceptionIncompatibleEvidence>
+    <NoPropagationCanBeDoneMessage>
+        <Title value="No se puede realizar la propagación"/>
+    </NoPropagationCanBeDoneMessage>
+    <ErrorWindow>
+        <Title value="Error"/>
+    </ErrorWindow>
+    <NetworkCommentWindow>
+        <Title value="Comentario de la red"/>
+    </NetworkCommentWindow>
+    <MissingStringResource>
+        <Text value="No existe el recurso de texto '~'"/>
+    </MissingStringResource>
+    <ExceptionNormalizeNullVector>
+        <Title value="Error - Normalizar Vector Nulo"/>
+        <Text value="Normalizar Vector Nulo. "/>
+    </ExceptionNormalizeNullVector>
+    <CursorResourceNotExists>
+        <Text value="Cursor estándar inexistente: ~"/>
+    </CursorResourceNotExists>
+    <NetworkLoaded>
+        <Text value="Red cargada satisfactoriamente"/>
+    </NetworkLoaded>
+    <SelectionVetoed>
+        <Text value="Selección de la ventana interna prohibida"/>
+    </SelectionVetoed>
+    <NetworkNotSaved>
+        <Text value="La red &quot;~&quot; ha sido modificada. ¿Desea guardar los cambios?"/>
+        <Title value="Guardar red"/>
+    </NetworkNotSaved>
+    <NotEnoughMemoryForExactInference>
+        <Title value="Memoria insuficiente para la inferencia exacta"/>
+        <Text value="No hay memoria suficiente para llevar a cabo inferencia exacta.&#10; Se utilizará un algoritmo de inferencia aproximada. "/>
+    </NotEnoughMemoryForExactInference>
+    <IntervalOverlap>
+        <Text value="Los intervalos no pueden solaparse."/>
+    </IntervalOverlap>
+    <WrongJVMVersion>
+        <Text value="Esta aplicación necesita la versión ~ de la Máquina Virtual de Java pero su sistema tiene instalada la versión ~"/>
+    </WrongJVMVersion>
+    <NetworkSaved>
+        <Text value="Red guardada satisfactoriamente"/>
+    </NetworkSaved>
+    <ClipboardContentEmpty>
+        <Text value="No se puede copiar algo vacío al portapapeles"/>
+    </ClipboardContentEmpty>
+    <LinkNotAllowed>
+        <Text value="Enlace no permitido"/>
+    </LinkNotAllowed>
+    <LinkNotReversible>
+        <Text>
+            <Parent value="El potencial del padre no permite invertir el arco"/>
+            <Child value="El potencial del hijo no permite invertir el arco"/>
+        </Text>
+    </LinkNotReversible>
+    <IconResourceNotExists>
+        <Text value="Recurso de icono inexistente: ~"/>
+    </IconResourceNotExists>
+    <LinkExists>
+        <Text value="No se puede crear el enlace ~ -&gt; ~ porque ya existe"/>
+    </LinkExists>
+    <ErrorLoadingNetwork>
+        <Text value="Se encontró un error tratando de abrir la red."/>
+    </ErrorLoadingNetwork>
+    <ErrorLoadingNetworkURL>
+        <Text value="Se encontró un error tratando de abrir la red desde URL."/>
+    </ErrorLoadingNetworkURL>
+    <Edit>
+        <AddProbNodeEdit>
+            <Undo value="Deshacer agregar nodo"/>
+            <Redo value="Rehacer agregar nodo"/>
+        </AddProbNodeEdit>
+    </Edit>
+    <Action>
+        <AddNode value="añadir nodo"/>
+        <MoveNodes value="mover"/>
+        <PasteObjects value="pegar"/>
+        <RemoveObjects value="eliminar"/>
+        <NodeProperties value="propiedades del nodo"/>
+        <CutObjects value="cortar"/>
+        <NetworkProperties value="propiedades de la red"/>
+        <AddLink value="añadir enlace"/>
+    </Action>
+    <IncompatibleEvidenceException>
+        <Text value="La evidencia introducida es incompatible con la red"/>
+    </IncompatibleEvidenceException>
+    <RadiusGreaterThanZero>
+        <Text value="El radio del círculo debe ser mayor que 0."/>
+    </RadiusGreaterThanZero>
+    <CannotPasteAllNodes>
+        <Text value="Algunos nodos del portapapeles no pueden ser pegados en este tipo de redes"/>
+    </CannotPasteAllNodes>
+    <CanNotRecognisedFileExtension>
+        <Text value="Extension de red no reconocida. La red no se ha guardado."/>
+    </CanNotRecognisedFileExtension>
+    <NodeTitleEmpty>
+        <Text value="Debe especificar el título del nodo"/>
+        <Title value="Título del nodo vacío"/>
+    </NodeTitleEmpty>
+    <WrongNodeType>
+        <Text value="No se puede crear este tipo de nodo en este tipo de red"/>
+    </WrongNodeType>
+    <EmptyStateList>
+        <Title value="Lista de estados vacía"/>
+        <Text value="Debe especificar al menos un estado"/>
+    </EmptyStateList>
+    <OverwriteNetwork>
+        <Title value="Confirmación"/>
+        <Text value="ya existe. ¿Desea reemplazarlo?"/>
+    </OverwriteNetwork>
+    <NetworkBackup>
+        <Text value="Respaldo realizado correctamente."/>
+    </NetworkBackup>
+    <RestorationVetoed>
+        <Text value="Restauración de la ventana interna prohibida"/>
+    </RestorationVetoed>
+    <NodeNotCreated>
+        <Text value="El nodo ~ no puede ser creado"/>
+    </NodeNotCreated>
+    <NoPreviousEvidenceCaseMessage>
+        <Title value="Error - Navegación imposible entre casos de evidencia"/>
+        <Text value="No hay caso de evidencia previo."/>
+    </NoPreviousEvidenceCaseMessage>
+    <ExceptionNotEvaluableNetwork>
+        <Text value="Red No Evaluable. "/>
+        <Title value="Error - Red No Evaluable"/>
+    </ExceptionNotEvaluableNetwork>
+    <NodeNameEmpty>
+        <Title value="Nombre del nodo vacío"/>
+        <Text value="Debe especificar el nombre del nodo"/>
+    </NodeNameEmpty>
+    <WrongVersionFormat>
+        <Text value="La versión debe ser un valor real"/>
+        <Title value="Formato de versión no válido"/>
+    </WrongVersionFormat>
+    <DuplicatedNode>
+        <Text value="Ya existe un nodo con ese nombre"/>
+        <Title value="Nodo duplicado"/>
+    </DuplicatedNode>
+    <NoRowsSelected>
+        <Text value="Debe seleccionar al menos una fila"/>
+    </NoRowsSelected>
+    <NetworkNameEmpty>
+        <Title value="Nombre de red vacío"/>
+        <Text value="Debe especificar el nombre de la red"/>
+    </NetworkNameEmpty>
+    <LinkNotExist>
+        <Text value="El enlace no existe"/>
+    </LinkNotExist>
+    <IconificationVetoed>
+        <Text value="Minimización de la ventana interna prohibida"/>
+    </IconificationVetoed>
+    <ErrorLoadingInference>
+        <Text value="Esta evidencia no se puede abrir. Compruebe la ventana de mensajes."/>
+    </ErrorLoadingInference>
+    <EmptyState>
+        <Text value="Debe especificar el texto del estado"/>
+        <Title value="Estado vacío"/>
+    </EmptyState>
+    <InternalFrame>
+        <Title value="Sin título"/>
+    </InternalFrame>
+    <NetworkBackupError>
+        <Text value="Error en la creación del respaldo."/>
+    </NetworkBackupError>
+    <NodeStateEmpty>
+        <Title value="Nombre del estado vacío"/>
+        <Text value="Debe especificar el estado del nodo"/>
+    </NodeStateEmpty>
+    <ExceptionNoFinding>
+        <Text value="Se intenta eliminar un hallazgo que no existe. "/>
+        <Title value="Error - Hallazgo ausente"/>
+    </ExceptionNoFinding>
+    <NodeNotExist>
+        <Text value="El nodo no existe"/>
+    </NodeNotExist>
+    <OpenNetwork>
+        <Title value="Abrir red"/>
+    </OpenNetwork>
+    <CannotUndo>
+        <Text value="No se puede deshacer"/>
+    </CannotUndo>
+    <LoadingNetwork>
+        <Text value="Cargando red"/>
+    </LoadingNetwork>
+    <LoadingNetworkURL>
+        <Text value="Cargando red desde URL"/>
+    </LoadingNetworkURL>
+    <ExceptionNotEnoughMemory>
+        <Text value="No Hay Memoria Suficiente. "/>
+        <Title value="Error - No Hay Memoria Suficiente"/>
+    </ExceptionNotEnoughMemory>
+    <NoPropagationCanBeDoneMessage1>
+        <Text value="Por el momento no se puede realizar la propagación."/>
+    </NoPropagationCanBeDoneMessage1>
+    <WrongZoomValue>
+        <Text value="Debe escribir un valor entero entre 10 y 500"/>
+    </WrongZoomValue>
+    <CannotRedo>
+        <Text value="No se puede rehacer"/>
+    </CannotRedo>
+    <FileNotExists>
+        <Text value="no existe"/>
+        <Title value="Error"/>
+    </FileNotExists>
+    <NodesNotUndoneRedone>
+        <Text value="Al deshacer o rehacer, el tipo de algunos de los nodos que se quiere añadir a la red no es compatible con el tipo de ésta"/>
+    </NodesNotUndoneRedone>
+    <IntervalInconsistent>
+        <Text value="Intervalo inconsistente. Revise el valor introducido."/>
+    </IntervalInconsistent>
+    <MessageWindow>
+        <Title value="OpenMarkov: Ventana de mensajes"/>
+    </MessageWindow>
+    <CursorStandardNotExists>
+        <Text value="Recurso de cursor inexistente: ~"/>
+    </CursorStandardNotExists>
+    <NoPropagationCanBeDoneMessage2>
+        <Text value="Esta red no es ni una Red Bayesiana ni un Diagrama de Influencia. Sus restricciones son"/>
+    </NoPropagationCanBeDoneMessage2>
+    <InverseLinkExists>
+        <Text value="No se puede crear el enlace ~ -&gt; ~ porque el enlace inverso ya existe"/>
+    </InverseLinkExists>
+    <Generic value="I/O error         = I/O error"/>
+    <NoNextEvidenceCaseMessage>
+        <Title value="Error - Navegación imposible entre casos de evidencia"/>
+        <Text value="No hay siguiente caso de evidencia. "/>
+    </NoNextEvidenceCaseMessage>
+    <WrongClipboardData>
+        <Text value="Los datos almacenados en el portapapeles no son válidos"/>
+    </WrongClipboardData>
+    <SavingNetwork>
+        <Text value="Guardando red"/>
+    </SavingNetwork>
+    <IntervalEditError>
+        <Text value="Error edición de intervalo"/>
+    </IntervalEditError>
+    <CostEffectiveness>
+        <VariableTooLow value="es más bajo que el mínimo del dominio de la variable"/>
+        <VariableTooHigh value="es más alto que el máximo del dominio de la variable"/>
+        <ExceedsTimeHorizon value="excede el límite temporal"/>
+        <Error value="Se produjo un error durante el análisis de coste-efectividad"/>
+    </CostEffectiveness>
+    <NumberFormatException>
+        <Title value="Error"/>
+        <Text value="El valor introducido no es válido."/>
+    </NumberFormatException>
+    <OverwriteFile>
+        <Title value="Confirmación de sobrescritura"/>
+        <Text value="El archivo seleccionado ya existe. ¿Deseas sobreescribirlo?"/>
+    </OverwriteFile>
+    <!-- 28/11/2022 MID temporal evolution when there is more than one node without policy -->
+    <DecisionWithoutPolicyWarning>
+        <Text value="Hay más de un nodo de decisión sin política asociada"/>
+    </DecisionWithoutPolicyWarning>
+    <UnexpectedInferenceException>
+        <TemporalEvolution value="Más de una variable condicionante"/>
+    </UnexpectedInferenceException>
+    <!-- 28/11/2022 Text for ProgressMonitor; Message is dependent on its use; To be used with MID and DES (TODO integrate the last ) -->
+    <ProgressMonitor>
+        <ProgressText value="Progreso..."/>
+        <Message>
+            <TemporalEvolution value="Evolución temporal"/>
+        </Message>
+        <Note>
+            <TemporalEvolution value="Evaluando"/>
+        </Note>
+    </ProgressMonitor>
+</properties>

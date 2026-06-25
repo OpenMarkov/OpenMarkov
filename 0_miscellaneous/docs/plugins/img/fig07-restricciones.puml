@@ -1,0 +1,86 @@
+@startuml fig07-restricciones
+skinparam backgroundColor white
+skinparam shadowing false
+
+annotation "@Constraint" <<annotation>> #FFE066 {
+    + name() : String
+    + defaultBehavior() : ConstraintBehavior
+}
+
+enum ConstraintBehavior #FFFACD {
+    YES
+    NO
+    OPTIONAL
+}
+
+class ConstraintManager #90EE90 {
+    - {static} INSTANCE : ConstraintManager
+    - defaultConstraintBehaviors : HashMap<Class, ConstraintBehavior>
+    --
+    + {static} getUniqueInstance()
+    + buildConstraintList(type, optionals) : List<PNConstraint>
+    + getDefaultBehavior(class) : ConstraintBehavior
+    + {static} findAllConstraints() : Stream<Class>
+}
+
+abstract class PNConstraint #FFCF8B {
+    + {abstract} checkProbNet(net, checker)
+    + isMetBy(net) : boolean
+}
+
+' --- Columna izquierda ---
+class NoCycle #E8F5E9 {
+    + checkProbNet(net, checker)
+}
+class NoSelfLoop #E8F5E9 {
+    + checkProbNet(net, checker)
+}
+class DistinctLinks #E8F5E9 {
+    + checkProbNet(net, checker)
+}
+class DistinctVariableNames #E8F5E9 {
+    + checkProbNet(net, checker)
+}
+
+' --- Columna derecha ---
+class OnlyChanceNodes #E8F5E9 {
+    + checkProbNet(net, checker)
+}
+class MaxNumParents #E8F5E9 {
+    + checkProbNet(net, checker)
+}
+class OnlyDirectedLinks #E8F5E9 {
+    + checkProbNet(net, checker)
+}
+class NoBackwardLink #E8F5E9 {
+    + checkProbNet(net, checker)
+}
+
+' --- Forzar dos columnas verticales ---
+NoCycle             -[hidden]d-> NoSelfLoop
+NoSelfLoop          -[hidden]d-> DistinctLinks
+DistinctLinks       -[hidden]d-> DistinctVariableNames
+OnlyChanceNodes     -[hidden]d-> MaxNumParents
+MaxNumParents       -[hidden]d-> OnlyDirectedLinks
+OnlyDirectedLinks   -[hidden]d-> NoBackwardLink
+NoCycle             -[hidden]r-> OnlyChanceNodes
+
+note right of NoCycle : defaultBehavior = YES
+note right of OnlyChanceNodes : defaultBehavior = NO\n(activa en BayesianNetworkType)
+
+' --- Herencias ---
+PNConstraint <|-- NoCycle
+PNConstraint <|-- NoSelfLoop
+PNConstraint <|-- DistinctLinks
+PNConstraint <|-- DistinctVariableNames
+PNConstraint <|-- OnlyChanceNodes
+PNConstraint <|-- MaxNumParents
+PNConstraint <|-- OnlyDirectedLinks
+PNConstraint <|-- NoBackwardLink
+
+' --- Manager y anotación ---
+ConstraintManager ..> "@Constraint" : busca con PluginSearch
+ConstraintManager --> PNConstraint  : gestiona
+"@Constraint" --> ConstraintBehavior : usa
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml cobertura-clasificacion-agentes-io
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam classFontSize 11
+skinparam nodesep 30
+
+skinparam class {
+  BackgroundColor<<tested>> #C8E6C9
+  BackgroundColor<<partial>> #FFF9C4
+  BackgroundColor<<untested>> #FFCDD2
+  BorderColor #333333
+}
+
+class "Clasificacion de red (0%)" as Classif <<untested>> {
+  <color:red>[NO]</color> variablesCouldBeTemporal()
+  <color:red>[NO]</color> isMultiagent()
+  <color:red>[NO]</color> onlyTemporal()
+  <color:red>[NO]</color> onlyChanceNodes()
+  <color:red>[NO]</color> thereAreTemporalNodes()
+  <color:red>[NO]</color> getNumCriteria()
+  --
+  <b>6 metodos sin ningun test.</b>
+  <b>Incluye logica duplicada.</b>
+}
+
+class "Agentes (0%)" as Agents <<untested>> {
+  <color:red>[NO]</color> modifyAgent(StateAction, ...)
+  <color:red>[NO]</color> getAgents()
+  <color:red>[NO]</color> setAgents(List)
+  --
+  <b>modifyAgent() tiene un bug</b>
+  <b>conocido y codigo complejo.</b>
+}
+
+class "I/O y metadatos (0%)" as IO <<untested>> {
+  <color:red>[NO]</color> getReader / setReader
+  <color:red>[NO]</color> getWriter / setWriter
+  <color:red>[NO]</color> buildMarkovDecisionNetwork()
+  <color:red>[NO]</color> getDefaultStates / setDefaultStates
+  <color:red>[NO]</color> getComment / setComment
+  <color:red>[NO]</color> getShowCommentWhenOpening / set...
+  <color:red>[NO]</color> getName / setName
+  --
+  <b>12 metodos sin ningun test.</b>
+}
+
+@enduml

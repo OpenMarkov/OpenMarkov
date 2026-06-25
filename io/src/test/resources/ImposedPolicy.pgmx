@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="InfluenceDiagram">
+    <Variables>
+      <Variable name="A" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="677" y="133" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="B" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="888" y="231" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="D" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="737" y="386" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="sí" />
+        </States>
+      </Variable>
+      <Variable name="U" type="finiteStates" role="utility" isInput="false">
+        <Coordinates x="811" y="492" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="Default" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="A" />
+        <Variable name="B" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A" />
+        <Variable name="B" />
+      </Link>
+      <Link directed="true">
+        <Variable name="B" />
+        <Variable name="U" />
+      </Link>
+      <Link directed="true">
+        <Variable name="B" />
+        <Variable name="D" />
+      </Link>
+      <Link directed="true">
+        <Variable name="B" />
+        <Variable name="U" />
+      </Link>
+      <Link directed="true">
+        <Variable name="B" />
+        <Variable name="D" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D" />
+        <Variable name="U" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D" />
+        <Variable name="U" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="A" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="B" />
+          <Variable name="A" />
+        </Variables>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties />
+  </ProbNet>
+  <Evidence>
+    <EvidenceCase />
+    <EvidenceCase />
+  </Evidence>
+  <Policies>
+    <Potential type="Table" role="policy">
+      <Variables>
+        <Variable name="D" />
+        <Variable name="B" />
+      </Variables>
+      <Values>0.0 1.0 0.5 0.5</Values>
+    </Potential>
+  </Policies>
+</ProbModelXML>
+

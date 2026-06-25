@@ -1,0 +1,6 @@
+<map id="class-diagram_map" name="class-diagram_map">
+<area shape="rect" id="id1" href="java:org.openmarkov.plugin.PluginManager" title="java:org.openmarkov.plugin.PluginManager" alt="" coords="1095,458,1279,575"/>
+<area shape="rect" id="id2" href="java:org.openmarkov.plugin.service.PluginException" title="java:org.openmarkov.plugin.service.PluginException" alt="" coords="1341,168,1638,285"/>
+<area shape="rect" id="id3" href="java:org.openmarkov.plugin.PluginLoader" title="java:org.openmarkov.plugin.PluginLoader" alt="" coords="630,458,1027,575"/>
+<area shape="rect" id="id4" href="java:org.openmarkov.plugin.Filter" title="java:org.openmarkov.plugin.Filter" alt="" coords="113,346,351,687"/>
+</map>

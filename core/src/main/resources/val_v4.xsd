@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="ProbModelXML">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="ProbNet">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="AdditionalConstraints" minOccurs="0"/>
+                            <xs:element name="Comment" minOccurs="0"/>
+                            <xs:element name="DecisionCriteria" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:choice maxOccurs="unbounded">
+                                        <xs:element name="Criterion" maxOccurs="unbounded"/>
+                                        <xs:element name="AdditionalProperties" maxOccurs="1" minOccurs="0"/>
+                                    </xs:choice>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="TimeUnit" minOccurs="0"/>
+                            <xs:element name="Agents" minOccurs="0"/>
+                            <xs:element name="Language" minOccurs="0"/>
+                            <xs:element name="AdditionalProperties" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Property" maxOccurs="unbounded" minOccurs="0"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Properties" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Property" maxOccurs="unbounded" minOccurs="0"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <!--____________________________________________________________-->
+                            <xs:element name="Variables" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Variable" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:all>
+                                                    <xs:element name="Comment" minOccurs="0"/>
+                                                    <xs:element name="AdditionalProperties" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Property" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Properties" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Property" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Coordinates" minOccurs="0"/>
+                                                    <xs:element name="Criterion" minOccurs="0"/>
+                                                    <xs:element name="Agent" minOccurs="0"/>
+                                                    <xs:element name="AlwaysObserved" minOccurs="0"/>
+                                                    <xs:element name="Precision" minOccurs="0"/>
+                                                    <xs:element name="States" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="State" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Unit" minOccurs="0"/>
+                                                    <xs:element name="Thresholds" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Threshold" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:all>
+                                                <xs:anyAttribute processContents="skip"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <!--____________________________________________________________-->
+                            <xs:element name="Links" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Link" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="Variable" maxOccurs="unbounded"/>
+                                                    <xs:element name="Comment" minOccurs="0"/>
+                                                    <xs:element name="AdditionalProperties" minOccurs="0"/>
+                                                    <xs:element name="Potential" maxOccurs="unbounded" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:all>
+                                                                <xs:element name="Variables">
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>
+                                                                            <xs:element name="Variable"
+                                                                                        maxOccurs="unbounded"/>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                                <xs:element name="Values"/>
+                                                            </xs:all>
+                                                            <xs:anyAttribute processContents="skip"/>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="RevelationCondition" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="State" minOccurs="0"
+                                                                            maxOccurs="unbounded"/>
+                                                                <xs:element name="Threshold" minOccurs="0"
+                                                                            maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                                <xs:anyAttribute processContents="skip"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <!--____________________________________________________________-->
+                            <xs:element name="Potentials" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Potential" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:choice maxOccurs="unbounded" minOccurs="0">
+                                                    <xs:element name="Comment" minOccurs="0"/>
+                                                    <xs:element name="AdditionalProperties" minOccurs="0">
+                                                    </xs:element>
+                                                    <!-- Table Structure -->
+                                                    <xs:element name="UtilityVariable" minOccurs="0"/>
+                                                    <xs:element name="Variables" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Variable" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Values" minOccurs="0"/>
+                                                    <xs:element name="UncertainParameters" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Param" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <!-- temporal admission -->
+                                                    <xs:element name="UncertainValues" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Value" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Functions" minOccurs="0"/>
+                                                    <!-- ICIModel Structure -->
+                                                    <xs:element name="Model" minOccurs="0"/>
+                                                    <xs:element name="Subpotentials" minOccurs="0"/>
+                                                    <!-- Tree/ADD Structure -->
+                                                    <xs:element name="TopVariable" minOccurs="0"/>
+                                                    <xs:element name="Branches" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Branch" maxOccurs="unbounded">
+                                                                    <xs:complexType>
+                                                                        <xs:all>
+                                                                            <xs:element name="States" minOccurs="0">
+                                                                                <xs:complexType>
+                                                                                    <xs:sequence>
+                                                                                        <xs:element name="State"
+                                                                                                    maxOccurs="unbounded"/>
+                                                                                    </xs:sequence>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                            <xs:element name="Thresholds" minOccurs="0">
+                                                                                <xs:complexType>
+                                                                                    <xs:sequence>
+                                                                                        <xs:element name="Threshold"
+                                                                                                    maxOccurs="unbounded"/>
+                                                                                    </xs:sequence>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                            <xs:element name="Potential"/>
+                                                                            <xs:element name="Label" minOccurs="0"/>
+                                                                            <xs:element name="Reference" minOccurs="0"/>
+                                                                        </xs:all>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <!-- Delta Structure -->
+                                                    <xs:element name="State" minOccurs="0"/>
+                                                    <xs:element name="StateIndex" minOccurs="0"/>
+                                                    <xs:element name="NumericValue" minOccurs="0"/>
+                                                    <!-- LinearCombination Structure  -->
+                                                    <xs:element name="Covariates" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Covariate" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Coefficients" minOccurs="0"/>
+                                                    <xs:element name="CovarianceMatrix" minOccurs="0"/>
+                                                    <xs:element name="CholeskyMatrix" minOccurs="0"/>
+                                                    <!-- ConditionalGaussian / DiscretizedCauchy Structure -->
+                                                    <xs:element name="Mean" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Potential"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Variance" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Potential"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Median" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Potential"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Scale" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Potential"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <!-- Hazard (Exponential) Structure -->
+                                                    <xs:element name="Log" minOccurs="0"/>
+                                                    <!-- Function Structure -->
+                                                    <xs:element name="Function" minOccurs="0"/>
+                                                    <xs:element name="Parameters" minOccurs="0"/>
+                                                    <!--Event potentials structure -->
+                                                    <xs:element name="Value" minOccurs="0"/>
+                                                </xs:choice>
+                                                <xs:anyAttribute processContents="skip"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <!--____________________________________________________________-->
+                        </xs:all>
+                        <xs:anyAttribute processContents="skip"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="InferenceOptions" minOccurs="0">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="MulticriteriaOptions">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="SelectedAnalysisType"/>
+                                        <xs:element name="Unicriterion" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:all>
+                                                    <xs:element name="Scales">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Scale" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Unit" minOccurs="0"/>
+                                                </xs:all>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="CostEffectiveness" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:all>
+                                                    <xs:element name="Scales" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Scale" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="CE_Criteria" minOccurs="0">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="CE_Criterion" maxOccurs="unbounded"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:all>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="TemporalOptions" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="Slices" minOccurs="0"/>
+                                        <xs:element name="Transition" minOccurs="0"/>
+                                        <xs:element name="DiscountRates" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="DiscountRate" maxOccurs="unbounded"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Policies" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Potential" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Evidence" minOccurs="0"/>
+                <xs:element name="VariableType" minOccurs="0"/>
+                <xs:element name="DefaultStates" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="State" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:all>
+            <xs:anyAttribute processContents="skip"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

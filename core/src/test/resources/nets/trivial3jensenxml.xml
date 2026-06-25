@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenMarkov formatVersion="1.0">
+    <ProbNet type="InfluenceDiagram">
+        <Variables>
+            <Variable name="A" type="finiteStates" role="chance">
+                <Coordinates x="328" y="142"/>
+                <AdditionalProperties>
+                    <Property name="Relevance" value="7.0"/>
+                </AdditionalProperties>
+                <Precision>0.01</Precision>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="B" type="finiteStates" role="chance">
+                <Coordinates x="642" y="142"/>
+                <AdditionalProperties>
+                    <Property name="Relevance" value="7.0"/>
+                </AdditionalProperties>
+                <Precision>0.01</Precision>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="T" type="finiteStates" role="chance">
+                <Coordinates x="642" y="303"/>
+                <AdditionalProperties>
+                    <Property name="Relevance" value="7.0"/>
+                </AdditionalProperties>
+                <Precision>0.01</Precision>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="D2" type="finiteStates" role="decision">
+                <Coordinates x="643" y="467"/>
+                <AdditionalProperties>
+                    <Property name="Relevance" value="7.0"/>
+                </AdditionalProperties>
+                <Precision>0.01</Precision>
+                <States>
+                    <State name="no"/>
+                    <State name="yes"/>
+                </States>
+            </Variable>
+            <Variable name="D1" type="finiteStates" role="decision">
+                <Coordinates x="145" y="317"/>
+                <AdditionalProperties>
+                    <Property name="Relevance" value="7.0"/>
+                </AdditionalProperties>
+                <Precision>0.01</Precision>
+                <States>
+                    <State name="no"/>
+                    <State name="yes"/>
+                    <State name="maybe"/>
+                </States>
+            </Variable>
+            <Variable name="U" type="numeric" role="utility">
+                <Coordinates x="322" y="465"/>
+                <AdditionalProperties>
+                    <Property name="Relevance" value="7.0"/>
+                </AdditionalProperties>
+                <Precision>2.0</Precision>
+                <States>
+                    <State name="Only one state"/>
+                </States>
+            </Variable>
+        </Variables>
+        <Links>
+            <Link var1="A" var2="B" directed="true"/>
+            <Link var1="A" var2="T" directed="true"/>
+            <Link var1="A" var2="U" directed="true"/>
+            <Link var1="B" var2="T" directed="true"/>
+            <Link var1="T" var2="D2" directed="true"/>
+            <Link var1="D2" var2="U" directed="true"/>
+            <Link var1="D1" var2="A" directed="true"/>
+        </Links>
+        <Potentials>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="A"/>
+                    <Variable name="D1"/>
+                </Variables>
+                <Values>0.7 0.3 0.4 0.6 0.5 0.5</Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="B"/>
+                    <Variable name="A"/>
+                </Variables>
+                <Values>0.05 0.95 0.7 0.3</Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="T"/>
+                    <Variable name="A"/>
+                    <Variable name="B"/>
+                </Variables>
+                <Values>0.6 0.4 0.8 0.2 0.7 0.3 0.9 0.1</Values>
+            </Potential>
+            <Potential type="Table" role="utility">
+                <UtilityVariable name="U"/>
+                <Variables>
+                    <Variable name="A"/>
+                    <Variable name="D2"/>
+                </Variables>
+                <Values>10.0 1.0 9.0 2.0</Values>
+            </Potential>
+        </Potentials>
+    </ProbNet>
+</OpenMarkov>
+

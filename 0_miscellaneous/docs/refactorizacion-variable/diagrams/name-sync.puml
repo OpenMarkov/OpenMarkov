@@ -1,0 +1,39 @@
+@startuml name-sync
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam activityFontSize 11
+
+title Sincronizacion name / baseName / timeSlice
+
+|Antes (fragil)|
+start
+:setName("X [3]");
+:getTimeSlice(name)
+<b>side-effect</b>:
+modifica baseName;
+note right
+  Si se llama setBaseName()
+  despues de setName(),
+  la reconstruccion puede
+  ser inconsistente
+end note
+stop
+
+|Despues (consolidado)|
+start
+:setName("X [3]");
+:parseNameIntoParts("X [3]");
+note right
+  Extrae baseName = "X"
+  y timeSlice = 3
+  sin side-effects
+end note
+:rebuildFullName();
+note right
+  Reconstruye name
+  desde baseName + timeSlice
+  <b>Unico punto de composicion</b>
+end note
+stop
+
+@enduml

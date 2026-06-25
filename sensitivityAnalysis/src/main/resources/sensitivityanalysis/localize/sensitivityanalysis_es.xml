@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <SensitivityAnalysis value="Análisis de sensibilidad">
+        <Title value="Análisis de sensibilidad"/>
+        <Type>
+            <Title value="Tipo de análisis"/>
+            <!-- Deterministic analysis -->
+            <Tornado value="Diagrama de tornado"/>
+            <Spider value="Diagrama de araña"/>
+            <TornadoSpider value="Diagrama de tornado/araña"/>
+            <Plot value="Análisis sobre un parámetro"/>
+            <Map value="Análisis sobre dos parámetros"/>
+            <SpiderCE value="Diagrama de araña coste-efectividad"/>
+            <TornadoCE value="Diagrama de tornado coste-efectividad"/>
+            <CESpiderDiagram value="Diagrama de araña Coste-effectividad"/>
+            <!-- Probabilistic analysis -->
+            <Acceptability value="Aceptabilidad"/>
+            <EVPI value="EVPI"/>
+            <CEPlane value="Plano de coste-efectividad"/>
+            <AcceptabilityCurve value="Curva de aceptabilidad"/>
+        </Type>
+        <Axis>
+            <Horizontal value="Parámetro del eje horizontal: "/>
+            <Vertical value="Parámetro del eje vertical: "/>
+            <Variation>
+                <PORV value="Porcentaje sobre el valor de referencia"/>
+                <RORV value="Tasa sobre el valor de referencia"/>
+                <POPP value="Porcentaje de la probabilidad de segundo orden"/>
+                <UDIN value="Intervalo definido por el usuario"/>
+                <PREV value="Misma variación que para el parámetro del eje horizontal"/>
+            </Variation>
+            <VariationSpiderLegend>
+                <PORV value="Porcentaje sobre el valor de referencia"/>
+                <RORV value="Tasa sobre el valor de referencia"/>
+                <POPP value="Porcentaje sobre el valor de referencia"/>
+                <UDIN value="Intervalo definido por el usuario"/>
+                <PREV value="Misma variación que para el parámetro del eje horizontal"/>
+            </VariationSpiderLegend>
+        </Axis>
+        <General>
+            <From value="Entre:"/>
+            <To value="y:"/>
+            <Draw value="Empate"/>
+            <Parameter value="Parámetro"/>
+            <Parameters value="Parámetros"/>
+            <All value="TODOS"/>
+            <GlobalUtility value="Utilidad global"/>
+            <ExpectedUtility value="Utilidad esperada"/>
+            <Unnamed value="anónimo"/>
+            <Network value="Red:"/>
+            <PointsPerParameter value="Puntos por parámetro"/>
+            <Simulations value="Simulaciones"/>
+            <Multithreading value="Usar multihilo"/>
+            <ProbabilityAboveOne value="Cuando la probabilidad de un parámetro es mayor que 1: "/>
+            <Ignore value="Ignorar"/>
+            <ThrowError value="Mostrar mensaje de error"/>
+            <IterationsRequired value="Iteraciones requeridas"/>
+            <SimulationsRequired value="Simulaciones requeridas"/>
+            <Scale value="Escala"/>
+            <values value="Valores:"/>
+            <absolute value="absolutos"/>
+            <relativeTo value="relativos a:"/>
+            <intervention value="Intervención:"/>
+            <display value="Mostrar"/>
+            <Reference value="Referencia"/>
+            <Effectiveness value="Efectividad"/>
+            <Cost value="Coste"/>
+            <WTP value="DAP"/>
+            <line0 value="Muestra linea 0"/>
+        </General>
+    </SensitivityAnalysis>
+</properties>

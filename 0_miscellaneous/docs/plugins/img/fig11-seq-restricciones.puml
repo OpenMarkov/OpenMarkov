@@ -1,0 +1,42 @@
+@startuml fig11-seq-restricciones
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam sequenceArrowThickness 1.5
+
+participant "ProbNet\nconstructor" as NET #FFE0C0
+participant "ConstraintManager" as CM #90EE90
+participant "BayesianNetworkType" as NT #B3D9FF
+participant "PluginSearch" as PS #AAE0FF
+
+NET -> CM : getUniqueInstance()
+activate CM
+
+note over CM : Primera llamada:\ndescubrimiento de todas\nlas restricciones
+
+CM -> PS : findAllConstraints()
+activate PS
+PS --> CM : Stream<Class<PNConstraint>>
+deactivate PS
+
+loop para cada clase anotada con @Constraint
+    CM -> CM : leer defaultBehavior
+    CM -> CM : defaultConstraintBehaviors.put(class, behavior)
+end
+CM --> NET : ConstraintManager instancia
+deactivate CM
+
+NET -> CM : buildConstraintList(BayesianNetworkType, false)
+activate CM
+
+loop para cada restricción registrada
+    CM -> CM : si defaultBehavior == YES\n→ instanciar y añadir
+end
+
+CM -> NT : getOverwrittenConstraints()
+NT --> CM : {OnlyChanceNodes → YES}
+
+CM -> CM : añadir OnlyChanceNodes\n(sobrescritura del tipo)
+
+CM --> NET : [NoCycle, NoSelfLoop,\nDistinctVariableNames,\n..., OnlyChanceNodes]
+deactivate CM
+@enduml

@@ -1,0 +1,25 @@
+/*
+ * Copyright (c) CISIAD, UNED, Spain,  2019. Licensed under the GPLv3 licence
+ * Unless required by applicable law or agreed to in writing,
+ * this code is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OF ANY KIND.
+ */
+
+package org.openmarkov.core.model.network;
+
+import org.openmarkov.java.enumUtils.EnumUtils;
+
+/**
+ * Enumerates the policy types that can be assigned to a decision node:
+ * optimal (to be computed), deterministic, or probabilistic.
+ */
+public enum PolicyType {
+    OPTIMAL,
+    DETERMINISTIC,
+    PROBABILISTIC;
+    
+    public String toString() {
+        return EnumUtils.toPascalCase(this);
+	}
+
+}

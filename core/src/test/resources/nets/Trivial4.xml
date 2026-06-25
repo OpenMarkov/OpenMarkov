@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OpenMarkov formatVersion="1.0">
+    <ProbNet type="InfluenceDiagram">
+
+        <Variables>
+            <Variable name="A" type="finiteStates" role="chance">
+                <Coordinates x="405" y="119"/>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="B" type="finiteStates" role="chance">
+                <Coordinates x="707" y="119"/>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="T" type="finiteStates" role="chance">
+                <Coordinates x="707" y="276"/>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="D1" type="finiteStates" role="decision">
+                <Coordinates x="163" y="119"/>
+                <States>
+                    <State name="no"/>
+                    <State name="yes"/>
+                </States>
+            </Variable>
+            <Variable name="D2" type="finiteStates" role="decision">
+                <Coordinates x="707" y="449"/>
+                <States>
+                    <State name="no"/>
+                    <State name="yes"/>
+                </States>
+            </Variable>
+            <Variable name="U" type="numeric" role="utility">
+                <Coordinates x="404" y="449"/>
+                <States>
+                    <State name="Only one state"/>
+                </States>
+            </Variable>
+        </Variables>
+
+        <Links>
+            <Link var1="A" var2="B" directed="true"/>
+            <Link var1="A" var2="T" directed="true"/>
+            <Link var1="A" var2="U" directed="true"/>
+            <Link var1="B" var2="T" directed="true"/>
+            <Link var1="T" var2="D2" directed="true"/>
+            <Link var1="D1" var2="A" directed="true"/>
+            <Link var1="D2" var2="U" directed="true"/>
+        </Links>
+
+        <Potentials>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="A"/>
+                    <Variable name="D1"/>
+                </Variables>
+                <Values>
+                    0.1 0.9 0.8 0.2
+                </Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="B"/>
+                    <Variable name="A"/>
+                </Variables>
+                <Values>
+                    0.7 0.3 0.8 0.2
+                </Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="T"/>
+                    <Variable name="A"/>
+                    <Variable name="B"/>
+                </Variables>
+                <Values>
+                    0.3 0.7 0.1 0.9
+                    0.2 0.8 1.0 0.0
+                </Values>
+            </Potential>
+            <Potential type="Table" role="utility">
+                <UtilityVariable name="U"/>
+                <Variables>
+                    <Variable name="A"/>
+                    <Variable name="D2"/>
+                </Variables>
+                <Values>
+                    0.0 2.0 1.0 3.0
+                </Values>
+            </Potential>
+        </Potentials>
+
+    </ProbNet>
+
+</OpenMarkov>

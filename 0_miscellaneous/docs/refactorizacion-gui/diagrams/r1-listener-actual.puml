@@ -1,0 +1,63 @@
+@startuml r1-listener-actual
+' ============================================================
+' R1 — Estructura actual de MainPanelListenerAssistant
+' Clase monolítica con 64 ramas case y 15 try-catch
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 40
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<problem>> #FFDDD8
+  BorderColor<<problem>> #CC4444
+  BackgroundColor<<neutral>> #E8E8FF
+  BorderColor<<neutral>> #6666AA
+}
+
+class MainPanelListenerAssistant <<problem>> {
+  -- 1.575 líneas --
+  --  Ficheros (12 comandos)  --
+  - createNewNetwork()
+  - openNetwork()
+  - saveNetwork()
+  - closeCurrentTab()
+  - loadEvidence()
+  - saveEvidence()
+  --  Edición (8 comandos)  --
+  - undo()
+  - redo()
+  - exportToClipboard()
+  - pasteFromClipboard()
+  - removeSelectedObjects()
+  - selectAllObjects()
+  --  Inferencia (6 comandos)  --
+  - toggleWorkingMode()
+  - setWorkingMode()
+  - propagate()
+  --  Vista (8 comandos)  --
+  - zoomIn() / zoomOut()
+  - expandNetwork()
+  - changeNetworkProperties()
+  --  Modos edición (6 comandos)  --
+  - activateEditionMode()
+  __
+  + actionPerformed(ActionEvent)
+  .. 64 ramas case ..
+  .. 15 bloques try-catch ..
+}
+
+interface ActionListener <<neutral>>
+class MainPanel <<neutral>>
+class NetworkEditorPanel <<neutral>>
+class MainMenu <<neutral>>
+
+ActionListener <|.. MainPanelListenerAssistant
+MainPanel --> MainPanelListenerAssistant : crea
+MainPanelListenerAssistant --> NetworkEditorPanel : gestiona
+MainPanelListenerAssistant --> MainMenu : habilita/\ndeshabilita
+
+@enduml

@@ -1,0 +1,15 @@
+// Evidence case 
+//   Elvira format 
+
+evidence  NoName { 
+
+// Evidence Properties
+
+title = "Untitled";
+version = 1.0;
+
+BP = NORMAL,
+INSUFFANESTH = FALSE,
+HREKG = LOW,
+HRBP = HIGH,
+}

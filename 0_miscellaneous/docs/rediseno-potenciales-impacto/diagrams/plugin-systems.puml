@@ -1,0 +1,88 @@
+@startuml plugin-systems
+' ============================================================
+'  Sistemas de plugin alrededor de Potential
+'  - @PotentialType (core, descubrimiento por nombre)
+'  - @PotentialPanelPlugin (gui, descubrimiento por clase)
+'  - PotentialParser (io, mapeo por Class)
+'  - @ImplementationRequirements (constructor por reflexion)
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam dpi 150
+skinparam linetype ortho
+skinparam nodesep 35
+skinparam ranksep 40
+
+hide empty members
+
+package "core (descubrimiento por @PotentialType)" #DDEEDD {
+  class PotentialUtils {
+    +POTENTIALS_BY_NAME : Map<String, Class>
+    +getClassByName(name) : Class
+    +getPotentialName(clazz) : String
+    +getFilteredPotentialClasses(node)
+    +instanciateSafely(clazz, vars, role, ...)
+  }
+  annotation "@PotentialType(names)" as PT
+  class "Potential\n(jerarquia)" as POT
+}
+
+package "io (mapeo Class -> PotentialParser)" #E0E0FF {
+  class PGMXReader_0_2 {
+    +potentialParsers : Map<Class, PotentialParser>
+    +buildPotentialParsers()
+    -- usa instanceof y --
+    -- PotentialUtils.getClassByName --
+  }
+  class PGMXWriter_0_2 {
+    -- cadena instanceof --
+    -- de 14 subtipos --
+    +writePotential(potential)
+  }
+  class PGMXPotentialParsers {
+    +parse(xml) : Potential
+    -- usa --
+    -- PotentialUtils.getPotentialName --
+  }
+}
+
+package "gui (descubrimiento por @PotentialPanelPlugin)" #FFE0E0 {
+  annotation "@PotentialPanelPlugin\n(potentialClasses)" as PPP
+  class PotentialPanelManager {
+    +potentialPanelClassesByClass : Map<Class, Class>
+    +getPotentialPanelClassOf(clazz)
+  }
+  abstract class PotentialPanel
+  class TablePotentialPanel
+  class BinomialPotentialPanel
+  class ICIPotentialsTablePanel
+  class "...11 paneles mas..." as MORE
+}
+
+PT ..> POT : decora
+PotentialUtils ..> PT : escanea
+PotentialUtils ..> POT : instancia\nvia reflexion
+
+PGMXReader_0_2 ..> POT : crea
+PGMXReader_0_2 ..> PotentialUtils : usa
+PGMXWriter_0_2 ..> POT : serializa
+PGMXPotentialParsers ..> PotentialUtils : usa
+
+PPP ..> POT : referencia\npor Class
+PotentialPanelManager ..> PPP : escanea
+PotentialPanel <|-- TablePotentialPanel
+PotentialPanel <|-- BinomialPotentialPanel
+PotentialPanel <|-- ICIPotentialsTablePanel
+PotentialPanel <|-- MORE
+
+note bottom of POT
+  Cada nuevo subtipo de Potential
+  obliga a actualizar 4 sitios:
+  1. Anotacion @PotentialType
+  2. Constructor que cumpla
+     @ImplementationRequirements
+  3. Cadena instanceof en PGMXWriter
+  4. Crear @PotentialPanelPlugin propio
+end note
+
+@enduml

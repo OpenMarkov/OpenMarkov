@@ -1,0 +1,68 @@
+@startuml phase5-proposed
+' ============================================================
+' Fase 5 propuesta: Cambiar la superclase de GTablePotential
+' Colores:
+'   verde     = estado propuesto (cambio)
+'   gris      = sin cambios
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 40
+skinparam dpi 150
+
+hide empty methods
+
+skinparam class {
+    BackgroundColor<<proposed>> #D4EDDA
+    BorderColor<<proposed>> #28A745
+    BackgroundColor<<current>> #E8E8FF
+    BorderColor<<current>> #6666AA
+}
+
+package "potential" {
+
+    abstract class Potential <<current>> {
+        #variables : List<Variable>
+        #role : PotentialRole
+    }
+
+    abstract class AbstractIndexedPotential <<current>> {
+        #dimensions : int[]
+        #offsets : int[]
+        #initialPosition : int
+        #tableSize : int
+    }
+
+    class TablePotential <<current>> {
+        +values : double[]
+    }
+
+    class StrategicTablePotential <<current>> {
+        +strategyTrees : StrategyTree[]
+    }
+
+    class UncertainTablePotential <<current>> {
+        +uncertainValues : UncertainValue[]
+    }
+
+    class "GTablePotential<E>" as GTablePotential <<proposed>> {
+        +elementTable : List<E>
+        --
+        Ya NO hereda values[].
+        Solo usa dimensions,
+        offsets, tableSize
+        de AbstractIndexedPotential.
+    }
+
+    Potential <|-- AbstractIndexedPotential
+    AbstractIndexedPotential <|-- TablePotential
+    TablePotential <|-- StrategicTablePotential
+    TablePotential <|-- UncertainTablePotential
+    AbstractIndexedPotential <|-- GTablePotential : "Fase 5"
+
+}
+
+@enduml

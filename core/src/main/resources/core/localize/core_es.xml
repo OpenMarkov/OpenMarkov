@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <NetworkTypes>
+        <InfluenceDiagram value="Diagrama de influencia"/>
+        <POMDP value="POMDP"/>
+        <TuningNetwork value="Ajustes"/>
+        <MarkovNetwork value="Markov"/>
+        <DAN value="Análisis de decisiones"/>
+        <DBN value="Bayesiana dinámica"/>
+        <DynamicLIMID value="LIMID dinámico"/>
+        <LIMID value="LIMID"/>
+        <OOBN value="OOBN"/>
+        <BayesianNetwork value="Bayesiana"/>
+        <DEC_POMDP value="Dec-POMDP"/>
+        <MDP value="Proceso de decisión de Markov"/>
+        <MID value="MID"/>
+        <MPAD value="MPAD"/>
+    </NetworkTypes>
+</properties>

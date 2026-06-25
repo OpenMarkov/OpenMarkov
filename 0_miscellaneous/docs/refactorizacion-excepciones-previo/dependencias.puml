@@ -1,0 +1,238 @@
+@startuml
+hide empty description
+[inference]
+[inference]
+[weka]
+[weka]
+[core]
+[core]
+[gui]
+[gui]
+[elvira]
+[elvira]
+[algorithm]
+[algorithm]
+[annotationProcessing]
+[annotationProcessing]
+[excel]
+[excel]
+[dbGenerator]
+[dbGenerator]
+[full]
+[full]
+[gui]
+[gui]
+[core]
+[core]
+[openmarkov]
+[io]
+[io]
+[costEffectiveness]
+[costEffectiveness]
+[integrationTests]
+[integrationTests]
+[metric]
+[metric]
+[stochasticPropagationOutput]
+[stochasticPropagationOutput]
+
+[inference] ..> [core] #000000
+[inference] ..> [core] #000000
+[weka] ..> [core] #000000
+[weka] ..> [core] #000000
+[core] ..> [core] #000000
+[core] ..> [core] #000000
+[gui] ..> [gui] #000000
+[gui] ..> [core] #000000
+[gui] ..> [gui] #000000
+[gui] ..> [core] #000000
+[elvira] ..> [core] #000000
+[elvira] ..> [core] #000000
+[algorithm] ..> [core] #000000
+[algorithm] ..> [core] #000000
+[algorithm] ..> [gui] #000000
+[algorithm] ..> [gui] #000000
+[algorithm] ..> [excel] #000000
+[algorithm] ..> [core] #000000
+[algorithm] ..> [core] #000000
+[algorithm] ..> [gui] #000000
+[algorithm] ..> [gui] #000000
+[algorithm] ..> [excel] #000000
+[annotationProcessing] ..> [annotations] #000000
+[annotationProcessing] ..> [auto-service-annotations] #000000
+[annotationProcessing] ..> [annotations] #000000
+[annotationProcessing] ..> [auto-service-annotations] #000000
+[excel] ..> [core] #000000
+[excel] ..> [core] #000000
+[dbGenerator] ..> [gui] #000000
+[dbGenerator] ..> [excel] #000000
+[dbGenerator] ..> [io] #000000
+[dbGenerator] ..> [gui] #000000
+[dbGenerator] ..> [excel] #000000
+[dbGenerator] ..> [io] #000000
+[full] ..> [gui] #000000
+[full] ..> [costEffectiveness] #000000
+[full] ..> [sensitivityAnalysis] #000000
+[full] ..> [dbGenerator] #000000
+[full] ..> [stochasticPropagationOutput] #000000
+[full] ..> [elvira] #000000
+[full] ..> [io] #000000
+[full] ..> [algorithm] #000000
+[full] ..> [metric] #000000
+[full] ..> [inference] #000000
+[full] ..> [gui] #000000
+[full] ..> [costEffectiveness] #000000
+[full] ..> [sensitivityAnalysis] #000000
+[full] ..> [dbGenerator] #000000
+[full] ..> [stochasticPropagationOutput] #000000
+[full] ..> [elvira] #000000
+[full] ..> [io] #000000
+[full] ..> [algorithm] #000000
+[full] ..> [metric] #000000
+[full] ..> [inference] #000000
+[gui] ..> [inference] #000000
+[gui] ..> [io] #000000
+[gui] ..> [inference] #000000
+[gui] ..> [io] #000000
+[openmarkov] ..> [annotationProcessing] #000000
+[openmarkov] ..> [jdom2] #000000
+[openmarkov] ..> [jeval] #000000
+[openmarkov] ..> [jfreechart] #000000
+[openmarkov] ..> [annotations] #000000
+[openmarkov] ..> [log4j-api] #000000
+[openmarkov] ..> [poi-ooxml] #000000
+[openmarkov] ..> [auto-service-annotations] #000000
+[io] ..> [core] #000000
+[io] ..> [core] #000000
+[costEffectiveness] ..> [gui] #000000
+[costEffectiveness] ..> [gui] #000000
+[integrationTests] ..> [full] #000000
+[integrationTests] ..> [json] #000000
+[integrationTests] ..> [full] #000000
+[integrationTests] ..> [json] #000000
+[metric] ..> [core] #000000
+[metric] ..> [core] #000000
+[metric] ..> [algorithm] #000000
+[metric] ..> [core] #000000
+[metric] ..> [core] #000000
+[metric] ..> [algorithm] #000000
+[stochasticPropagationOutput] ..> [gui] #000000
+[stochasticPropagationOutput] ..> [gui] #000000
+
+[inference] ..> [core] #00008B : requires
+[inference] ..> [log4j] #00008B : requires
+[inference] ..> [desktop] #00008B : requires
+[weka] ..> [core] #00008B : requires
+[weka] ..> [log4j] #00008B : requires
+[weka] ..> [prefs] #00008B : requires
+[weka] ..> [io] #00008B : requires
+[weka] ..> [jdom2] #00008B : requires
+[weka] ..> [core] #00008B : requires
+[weka] ..> [plugin] #00008B : requires
+[weka] ..> [dlimidevaluation] #00008B : requires
+[weka] ..> [poi] #00008B : requires
+[weka] ..> [ooxml] #00008B : requires
+[weka] ..> [ekit] #00008B : requires
+[weka] ..> [ooxml] #00008B : requires
+[core] ..> [core] #00008B : requires
+[core] ..> [math3] #00008B : requires
+[gui] ..> [core] #00008B : requires
+[gui] ..> [gui] #00008B : requires
+[gui] ..> [core] #00008B : requires
+[gui] ..> [io] #00008B : requires
+[gui] ..> [layout] #00008B : requires
+[gui] ..> [logging] #00008B : requires
+[gui] ..> [annotations] #00008B : requires
+[gui] ..> [desktop] #00008B : requires
+[gui] ..> [annotationProcessing] #00008B : requires
+[elvira] ..> [core] #00008B : requires
+[elvira] ..> [log4j] #00008B : requires
+[algorithm] ..> [core] #00008B : requires
+[algorithm] ..> [core] #00008B : requires
+[algorithm] ..> [desktop] #00008B : requires
+[algorithm] ..> [gui] #00008B : requires
+[algorithm] ..> [gui] #00008B : requires
+[algorithm] ..> [log4j] #00008B : requires
+[algorithm] ..> [io] #00008B : requires
+[algorithm] ..> [inference] #00008B : requires
+[annotationProcessing] ..> [annotations] #00008B : requires
+[annotationProcessing] ..> [compiler] #00008B : requires
+[annotationProcessing] ..> [xml] #00008B : requires
+[annotationProcessing] ..> [service] #00008B : requires
+[excel] ..> [core] #00008B : requires
+[excel] ..> [poi] #00008B : requires
+[excel] ..> [ooxml] #00008B : requires
+[dbGenerator] ..> [core] #00008B : requires
+[dbGenerator] ..> [gui] #00008B : requires
+[dbGenerator] ..> [io] #00008B : requires
+[dbGenerator] ..> [layout] #00008B : requires
+[dbGenerator] ..> [annotations] #00008B : requires
+[dbGenerator] ..> [desktop] #00008B : requires
+[dbGenerator] ..> [annotationProcessing] #00008B : requires
+[dbGenerator] ..> [gui] #00008B : requires
+[dbGenerator] ..> [jfreechart] #00008B : requires
+[dbGenerator] ..> [desktop] #00008B : requires
+[full] ..> [core] #00008B : requires
+[full] ..> [gui] #00008B : requires
+[full] ..> [inference] #00008B : requires
+[full] ..> [io] #00008B : requires
+[full] ..> [elvira] #00008B : requires
+[full] ..> [log4j] #00008B : requires
+[full] ..> [core] #00008B : requires
+[full] ..> [poi] #00008B : requires
+[full] ..> [jdom2] #00008B : requires
+[full] ..> [ooxml] #00008B : requires
+[gui] ..> [io] #00008B : requires
+[gui] ..> [jdom2] #00008B : requires
+[gui] ..> [core] #00008B : requires
+[gui] ..> [io] #00008B : requires
+[gui] ..> [inference] #00008B : requires
+[gui] ..> [log4j] #00008B : requires
+[gui] ..> [poi] #00008B : requires
+[gui] ..> [ooxml] #00008B : requires
+[gui] ..> [jfreechart] #00008B : requires
+[gui] ..> [ekit] #00008B : requires
+[gui] ..> [annotationProcessing] #00008B : requires
+[gui] ..> [annotations] #00008B : requires
+[gui] ..> [desktop] #00008B : requires
+[gui] ..> [prefs] #00008B : requires
+[gui] ..> [jeval] #00008B : requires
+[core] ..> [math3] #00008B : requires
+[core] ..> [jeval] #00008B : requires
+[core] ..> [log4j] #00008B : requires
+[core] ..> [annotations] #00008B : requires
+[core] ..> [desktop] #00008B : requires
+[core] ..> [instrument] #00008B : requires
+[core] ..> [annotationProcessing] #00008B : requires
+[core] ..> [jdom2] #00008B : requires
+[io] ..> [core] #00008B : requires
+[io] ..> [jdom2] #00008B : requires
+[io] ..> [io] #00008B : requires
+[io] ..> [desktop] #00008B : requires
+[costEffectiveness] ..> [desktop] #00008B : requires
+[costEffectiveness] ..> [io] #00008B : requires
+[costEffectiveness] ..> [annotations] #00008B : requires
+[costEffectiveness] ..> [jfreechart] #00008B : requires
+[costEffectiveness] ..> [annotationProcessing] #00008B : requires
+[costEffectiveness] ..> [core] #00008B : requires
+[costEffectiveness] ..> [gui] #00008B : requires
+[costEffectiveness] ..> [inference] #00008B : requires
+[costEffectiveness] ..> [layout] #00008B : requires
+[metric] ..> [core] #00008B : requires
+[metric] ..> [core] #00008B : requires
+[metric] ..> [algorithm] #00008B : requires
+[stochasticPropagationOutput] ..> [core] #00008B : requires
+[stochasticPropagationOutput] ..> [gui] #00008B : requires
+[stochasticPropagationOutput] ..> [log4j] #00008B : requires
+[stochasticPropagationOutput] ..> [poi] #00008B : requires
+[stochasticPropagationOutput] ..> [ooxml] #00008B : requires
+[stochasticPropagationOutput] ..> [annotations] #00008B : requires
+[stochasticPropagationOutput] ..> [desktop] #00008B : requires
+[stochasticPropagationOutput] ..> [annotationProcessing] #00008B : requires
+[stochasticPropagationOutput] ..> [inference] #00008B : requires
+[stochasticPropagationOutput] ..> [core] #00008B : requires
+[stochasticPropagationOutput] ..> [gui] #00008B : requires
+[stochasticPropagationOutput] ..> [layout] #00008B : requires
+[stochasticPropagationOutput] ..> [jfreechart] #00008B : requires
+[stochasticPropagationOutput] ..> [variableelimination] #00008B : requires
+@enduml

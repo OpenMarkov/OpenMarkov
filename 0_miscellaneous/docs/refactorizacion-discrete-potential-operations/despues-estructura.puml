@@ -1,0 +1,82 @@
+@startuml despues-estructura
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam classFontSize 11
+skinparam noteBackgroundColor #FFFFCC
+skinparam noteBorderColor #999999
+left to right direction
+
+title Después — Estructura general (patrón Facade)
+
+class DiscretePotentialOperations <<public facade>> {
+  +{static} maxRoundErrorAllowed : double
+  +{static} almostEqual(...) : boolean
+  +{static} thereAreRelevantUtilities(...) : boolean
+  .. 28 métodos públicos (todos delegados) ..
+}
+
+note top of DiscretePotentialOperations
+  ~460 líneas
+  API pública inalterada
+  28 llamadas en core e inference
+end note
+
+class TablePotentialArithmetic <<pkg-private>> {
+  multiply, sum, divide
+  sumByCriterion
+  evaluateFunctionPotential
+}
+
+class TablePotentialElimination <<pkg-private>> {
+  multiplyAndMarginalize
+  marginalize
+  multiplyAndEliminate
+}
+
+class TablePotentialMaximization <<pkg-private>> {
+  multiplyAndMaximize
+  multiplyAndMaximizeUniformly
+  maximize
+}
+
+class TablePotentialMerge <<pkg-private>> {
+  merge
+  orderPotentialsByTotalOrder
+}
+
+class TablePotentialTransform <<pkg-private>> {
+  normalize
+  projectOutVariable
+  imposeOtherDistribution...
+  matrixPotential
+}
+
+class TablePotentialFactory <<pkg-private>> {
+  createOneValuePotential
+  createUnityProbabilityPotential
+  createZeroProbabilityPotential
+  createZeroUtilityPotential
+}
+
+class AuxiliaryOperations <<package>> {
+  findNextConfiguration...
+  getUnionVariables
+  getAccumulatedOffsets
+  getConstantFactor
+}
+
+DiscretePotentialOperations ..> TablePotentialArithmetic   : delega
+DiscretePotentialOperations ..> TablePotentialElimination  : delega
+DiscretePotentialOperations ..> TablePotentialMaximization : delega
+DiscretePotentialOperations ..> TablePotentialMerge        : delega
+DiscretePotentialOperations ..> TablePotentialTransform    : delega
+DiscretePotentialOperations ..> TablePotentialFactory      : delega
+
+TablePotentialArithmetic   ..> AuxiliaryOperations : usa
+TablePotentialElimination  ..> AuxiliaryOperations : usa
+TablePotentialMaximization ..> AuxiliaryOperations : usa
+TablePotentialMerge        ..> AuxiliaryOperations : usa
+
+@enduml

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.1.0">
+  <ProbNet type="SMM">
+    <Variables>
+      <Variable name="Age [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="425" y="191" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="10.0" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="Only one state" />
+        </States>
+      </Variable>
+      <Variable name="Age [1]" timeSlice="1" type="numeric" role="chance">
+        <Coordinates x="737" y="191" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="10.0" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="Only one state" />
+        </States>
+      </Variable>
+      <Variable name="A [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="433" y="314" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="A [1]" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="739" y="324" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="B [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="646" y="410" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="D" type="finiteStates" role="decision">
+        <Coordinates x="564" y="124" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Eff [0]" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="534" y="463" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="effectiveness" />
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Cost" type="numeric" role="utility">
+        <Coordinates x="675" y="127" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="cost" />
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Age [0]" timeSlice="0" />
+        <Variable name="Age [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [0]" timeSlice="0" />
+        <Variable name="A [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [0]" timeSlice="0" />
+        <Variable name="B [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [1]" timeSlice="1" />
+        <Variable name="A [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A [0]" timeSlice="0" />
+        <Variable name="Eff [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="B [0]" timeSlice="0" />
+        <Variable name="Eff [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D" />
+        <Variable name="B [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D" />
+        <Variable name="Cost" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="CycleLengthShift" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age [1]" timeSlice="1" />
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="A [0]" timeSlice="0" />
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Age [0]" />
+        <Branches>
+          <Branch>
+            <Interval>
+              <Threshold value="10.0" belongsTo="right" />
+              <Threshold value="15.0" belongsTo="right" />
+            </Interval>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="A [0]" />
+              </Variables>
+              <Values>0.9 0.1</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Interval>
+              <Threshold value="15.0" belongsTo="right" />
+              <Threshold value="20.0" belongsTo="right" />
+            </Interval>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="A [0]" />
+              </Variables>
+              <Values>0.8 0.2</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Interval>
+              <Threshold value="20.0" belongsTo="right" />
+              <Threshold value="Infinity" belongsTo="right" />
+            </Interval>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="A [0]" />
+              </Variables>
+              <Values>0.7 0.3</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="SameAsPrevious" role="conditionalProbability">
+        <Variables>
+          <Variable name="A [1]" timeSlice="1" />
+          <Variable name="Age [1]" timeSlice="1" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="B [0]" timeSlice="0" />
+          <Variable name="Age [0]" timeSlice="0" />
+          <Variable name="D" />
+        </Variables>
+        <TopVariable name="Age [0]" />
+        <Branches>
+          <Branch>
+            <Interval>
+              <Threshold value="10.0" belongsTo="right" />
+              <Threshold value="15.0" belongsTo="right" />
+            </Interval>
+            <Potential type="Tree/ADD">
+              <TopVariable name="D" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="B [0]" />
+                    </Variables>
+                    <Values>0.9 0.1</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="B [0]" />
+                    </Variables>
+                    <Values>0.5 0.5</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Interval>
+              <Threshold value="15.0" belongsTo="right" />
+              <Threshold value="Infinity" belongsTo="right" />
+            </Interval>
+            <Potential type="Tree/ADD">
+              <TopVariable name="D" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="B [0]" />
+                    </Variables>
+                    <Values>0.8 0.2</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="B [0]" />
+                    </Variables>
+                    <Values>0.4 0.6</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Eff [0]" timeSlice="0" />
+        <Variables>
+          <Variable name="A [0]" timeSlice="0" />
+          <Variable name="B [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.0 20.0 10.0 25.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost" />
+        <Variables>
+          <Variable name="D" />
+        </Variables>
+        <Values>0.0 150.0</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+</ProbModelXML>
+

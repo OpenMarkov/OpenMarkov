@@ -15,3 +15,13 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+/integrationTests/src/main/resources/clone_of_probmodelxml_networks/
+/integrationTests/src/main/resources/clone_of_probmodelxml_networks_cache.json
+
+!/.idea
+
+/.idea/*
+!/.idea/runConfigurations/
+
+
+

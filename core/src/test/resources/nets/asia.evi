@@ -1,0 +1,38 @@
+// Case 
+//   Elvira format 
+
+case Caso número 1 { 
+
+// Evidence case 
+//   Elvira format 
+
+evidence  NoName { 
+
+// Evidence Properties
+
+title = "Untitled";
+version = 1.0;
+
+A = yes,
+X = no,
+S = yes,
+}
+// Case Properties
+
+color = java.awt.Color[r=255,g=0,b=51];
+
+shown = true;
+propagated = true;
+BnetName = "Asia";
+Observed nodes
+[X = true,B = false,D = false,A = true,S = true,L = false,T = false,E = false,]
+Probabilities
+[0.0,1.0,],
+[0.6,0.39999999999999997,],
+[0.5210672882291603,0.4789327117708397,],
+[1.0,0.0,],
+[1.0,0.0,],
+[0.0024535361589891436,0.997546463841011,],
+[0.0012267680794945718,0.9987732319205055,],
+[0.0035576274305342587,0.9964423725694658,],
+}

@@ -1,0 +1,81 @@
+@startuml r1-listener-propuesto
+' ============================================================
+' R1 — Estructura propuesta: fachada + delegados
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 35
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<new>> #D8FFD8
+  BorderColor<<new>> #44AA44
+  BackgroundColor<<refactored>> #FFFFD8
+  BorderColor<<refactored>> #AAAA44
+  BackgroundColor<<neutral>> #E8E8FF
+  BorderColor<<neutral>> #6666AA
+}
+
+class MainPanelListenerAssistant <<refactored>> {
+  -- ~300 líneas (fachada) --
+  - fileHandler: FileOperationsHandler
+  - editHandler: EditOperationsHandler
+  - inferenceHandler: InferenceOperationsHandler
+  - viewHandler: ViewOperationsHandler
+  - modeHandler: EditionModeHandler
+  __
+  + actionPerformed(ActionEvent)
+  .. despacha al handler correspondiente ..
+}
+
+class FileOperationsHandler <<new>> {
+  -- ~350 líneas --
+  + createNewNetwork()
+  + openNetwork()
+  + saveNetwork()
+  + closeCurrentTab()
+  + loadEvidence()
+  + saveEvidence()
+}
+
+class EditOperationsHandler <<new>> {
+  -- ~200 líneas --
+  + undo()
+  + redo()
+  + copy() / cut() / paste()
+  + removeSelected()
+  + selectAll()
+}
+
+class InferenceOperationsHandler <<new>> {
+  -- ~250 líneas --
+  + toggleWorkingMode()
+  + setWorkingMode()
+  + propagate()
+}
+
+class ViewOperationsHandler <<new>> {
+  -- ~150 líneas --
+  + zoomIn() / zoomOut()
+  + expandNetwork()
+  + changeNetworkProperties()
+}
+
+class EditionModeHandler <<new>> {
+  -- ~100 líneas --
+  + activateEditionMode()
+}
+
+interface ActionListener <<neutral>>
+
+ActionListener <|.. MainPanelListenerAssistant
+MainPanelListenerAssistant --> FileOperationsHandler
+MainPanelListenerAssistant --> EditOperationsHandler
+MainPanelListenerAssistant --> InferenceOperationsHandler
+MainPanelListenerAssistant --> ViewOperationsHandler
+MainPanelListenerAssistant --> EditionModeHandler
+
+@enduml

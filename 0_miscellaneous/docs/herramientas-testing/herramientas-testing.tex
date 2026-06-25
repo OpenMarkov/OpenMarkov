@@ -1,0 +1,663 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{titlesec}
+
+\geometry{margin=2.5cm}
+
+% Cambiar "Cuadro" (babel español) por "Tabla"
+\addto\captionsspanish{\renewcommand{\tablename}{Tabla}}
+
+% Cambiar "Listing" por "Listado"
+\renewcommand{\lstlistingname}{Listado}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  urlcolor=blue!60!black,
+  citecolor=blue!60!black
+}
+
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\definecolor{codecomment}{rgb}{0.4,0.4,0.4}
+\definecolor{codekeyword}{rgb}{0.0,0.3,0.7}
+\definecolor{codestring}{rgb}{0.2,0.5,0.2}
+\definecolor{codeannotation}{rgb}{0.6,0.3,0.0}
+
+\lstset{
+  language=Java,
+  backgroundcolor=\color{codegray},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codekeyword}\bfseries,
+  commentstyle=\color{codecomment}\itshape,
+  stringstyle=\color{codestring},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  breaklines=true,
+  showstringspaces=false,
+  frame=single,
+  framerule=0pt,
+  xleftmargin=1em,
+  xrightmargin=0.5em,
+  captionpos=b,
+  extendedchars=true,
+  literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {Ü}{{\"U}}1
+    {@}{{{\color{codeannotation}@}}}1
+}
+
+\title{\textbf{Herramientas de testing en OpenMarkov}\\[0.5em]
+\large Informe de referencia}
+\author{Manuel Arias Calleja --- CISIAD, UNED}
+\date{Abril 2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Introducción}
+\label{sec:intro}
+
+Este documento describe las herramientas de testing disponibles en OpenMarkov,
+tanto las que ya se usaban antes del esfuerzo actual de cobertura como las que
+se han incorporado recientemente. El objetivo es servir de referencia rápida
+para cualquier desarrollador que necesite escribir o interpretar tests en el
+proyecto.
+
+La Tabla~\ref{tab:resumen} resume el conjunto completo de herramientas.
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{llcX}
+\toprule
+\textbf{Herramienta} & \textbf{Versión} & \textbf{Origen} & \textbf{Propósito} \\
+\midrule
+JUnit 5 (JUnit Platform + Jupiter) & 5.13.0 & Preexistente & Plataforma y anotaciones de tests \\
+AssertJ Core & 4.0.0-M1 & Preexistente & Aserciones fluidas \\
+AssertJ Swing & 3.17.1 & Preexistente & Tests de interfaz gráfica Swing \\
+jqwik & 1.9.2 & Nuevo & Tests basados en propiedades \\
+PITest (pitest-maven) & 1.17.3 & Nuevo & Testing de mutaciones \\
+pitest-junit5-plugin & 1.2.0 & Nuevo & Integración PITest con JUnit 5 \\
+JaCoCo & 0.8.11 & Preexistente & Cobertura de código \\
+Maven Surefire & 3.5.2 & Preexistente & Ejecución de tests en Maven \\
+\bottomrule
+\end{tabularx}
+\caption{Herramientas de testing en OpenMarkov}
+\label{tab:resumen}
+\end{table}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Herramientas preexistentes}
+\label{sec:preexistentes}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{JUnit 5}
+\label{sec:junit5}
+
+JUnit 5 es la plataforma de ejecución de tests del proyecto. Está gestionado
+mediante un BOM (\emph{Bill of Materials}) en el POM padre, lo que garantiza
+versiones coherentes en todos los módulos.
+
+La anotación fundamental es \texttt{@Test}, que marca un método como caso de
+prueba. JUnit se encarga de descubrir estos métodos, ejecutarlos y reportar
+los resultados.
+
+\begin{lstlisting}[caption={Test básico con JUnit 5}, label={lst:junit-test}]
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+
+class VariableTest {
+
+    @Test
+    void numStatesMatchesConstructorArgument() {
+        Variable v = new Variable("Rain", 3);
+        assertThat(v.getNumStates()).isEqualTo(3);
+    }
+}
+\end{lstlisting}
+
+Otras anotaciones de JUnit 5 usadas en el proyecto:
+
+\begin{description}[leftmargin=2em, style=nextline]
+  \item[\texttt{@BeforeEach}] Método ejecutado antes de \emph{cada} test.
+    Se usa para inicializar el estado compartido (por ejemplo, crear una red
+    \texttt{ProbNet} fresca).
+  \item[\texttt{@AfterEach}] Método ejecutado después de cada test.
+    Se usa para liberar recursos.
+  \item[\texttt{@Disabled}] Desactiva un test temporalmente sin eliminarlo.
+    Surefire lo contabiliza como \emph{skipped}.
+  \item[\texttt{@Nested}] Agrupa tests relacionados en clases internas,
+    creando una jerarquía legible en los informes.
+\end{description}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{AssertJ Core}
+\label{sec:assertj}
+
+AssertJ proporciona una API fluida de aserciones que sustituye a los
+\texttt{assertEquals}/\texttt{assertTrue} clásicos de JUnit. Su principal
+ventaja es la legibilidad y los mensajes de error detallados.
+
+\begin{lstlisting}[caption={Aserciones fluidas con AssertJ}, label={lst:assertj}]
+// Comparación simple
+assertThat(node.getParents()).contains(parentNode);
+
+// Comparación numérica con tolerancia
+assertThat(sum).isCloseTo(1.0, within(1e-10));
+
+// Verificar excepciones
+assertThatThrownBy(edit::executeEdit)
+    .isInstanceOf(ConstraintViolatedException.class);
+
+// Verificar identidad de objeto (misma referencia)
+assertThat(restored).isSameAs(original);
+
+// Verificar contenido exacto de una colección
+assertThat(copy.getValues()).containsExactly(original.getValues());
+\end{lstlisting}
+
+Los métodos más usados en el proyecto son:
+
+\begin{description}[leftmargin=2em, style=nextline]
+  \item[\texttt{isEqualTo(expected)}] Igualdad por \texttt{equals()}.
+  \item[\texttt{isSameAs(expected)}] Identidad de referencia (\texttt{==}).
+  \item[\texttt{isNull()} / \texttt{isNotNull()}] Verificar nulidad.
+  \item[\texttt{contains(element)}] La colección contiene el elemento.
+  \item[\texttt{containsExactly(elements...)}] Contenido y orden exactos.
+  \item[\texttt{doesNotContain(element)}] Ausencia en una colección.
+  \item[\texttt{isCloseTo(value, within(delta))}] Comparación numérica con
+    tolerancia, imprescindible para valores de potenciales.
+  \item[\texttt{as(format, args...)}] Añade un mensaje descriptivo que
+    aparece en caso de fallo. Muy útil en bucles.
+  \item[\texttt{assertThatThrownBy(callable)}] Verifica que una lambda
+    lanza una excepción del tipo esperado.
+\end{description}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{AssertJ Swing}
+\label{sec:assertj-swing}
+
+Librería para tests funcionales de interfaces Swing. Permite localizar
+componentes, simular clicks y teclas, y verificar el estado visual. Se usa
+en el módulo \texttt{org.openmarkov.gui} y en
+\texttt{org.openmarkov.integrationtests}.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{JaCoCo}
+\label{sec:jacoco}
+
+JaCoCo (\emph{Java Code Coverage}) instrumenta el bytecode para medir qué
+líneas y ramas se ejecutan durante los tests. Se configura en el POM padre y
+genera informes HTML en \texttt{target/site/jacoco/index.html} de cada módulo.
+
+El script \texttt{test.sh} del workspace ofrece la opción \texttt{-r} para
+abrir el informe de cobertura automáticamente tras ejecutar los tests.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Maven Surefire}
+\label{sec:surefire}
+
+Plugin de Maven que descubre y ejecuta los tests. Está configurado con la
+versión 3.5.2 y usa el motor de JUnit Platform, que permite ejecutar
+tanto tests de JUnit 5 como de jqwik en la misma pasada.
+
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Herramientas incorporadas}
+\label{sec:nuevas}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{jqwik --- tests basados en propiedades}
+\label{sec:jqwik}
+
+jqwik\footnote{\url{https://jqwik.net/}} es un motor de \emph{property-based
+testing} para Java que se integra con JUnit Platform. En lugar de verificar
+un ejemplo concreto, una propiedad expresa un invariante que debe cumplirse
+para \emph{cualquier} entrada válida. jqwik genera automáticamente cientos de
+entradas aleatorias y, si encuentra un contraejemplo, lo reduce al caso
+mínimo que reproduce el fallo (\emph{shrinking}).
+
+\subsubsection{Anotaciones principales}
+
+\begin{description}[leftmargin=2em, style=nextline]
+
+  \item[\texttt{@Property}]
+    Marca un método como test de propiedad. A diferencia de \texttt{@Test},
+    que se ejecuta una sola vez, jqwik ejecuta un método \texttt{@Property}
+    múltiples veces (por defecto 1000) con valores diferentes generados
+    automáticamente para cada parámetro anotado con \texttt{@ForAll}.
+
+    La idea fundamental es expresar un \textbf{invariante}: una condición
+    que debe cumplirse para \emph{cualquier} entrada válida, no sólo para
+    un ejemplo concreto. Si jqwik encuentra una combinación de valores que
+    viola el invariante, reporta el contraejemplo y lo reduce automáticamente
+    al caso mínimo que reproduce el fallo.
+
+    En el siguiente ejemplo, el invariante es: <<el tamaño de la tabla de un
+    potencial siempre es igual al producto del número de estados de todas sus
+    variables>>. jqwik generará 1000 listas de variables con distintos números
+    de estados y verificará que la propiedad se cumple en todos los casos.
+
+\begin{lstlisting}[caption={\texttt{@Property}: invariante de tamaño de tabla}, label={lst:property}]
+@Property
+void tableSizeIsProductOfAllStateCounts(
+        @ForAll("variableLists") List<Variable> variables) {
+    TablePotential tp = new TablePotential(
+            variables, PotentialRole.CONDITIONAL_PROBABILITY);
+    int expected = variables.stream()
+            .mapToInt(Variable::getNumStates)
+            .reduce(1, (a, b) -> a * b);
+    assertThat(tp.getTableSize()).isEqualTo(expected);
+}
+\end{lstlisting}
+
+  \item[\texttt{@ForAll}]
+    Se coloca delante de un parámetro de un método \texttt{@Property} para
+    indicar a jqwik que debe generar un valor aleatorio para ese parámetro
+    en cada ejecución.
+
+    Para tipos primitivos (\texttt{int}, \texttt{double}, \texttt{String},
+    etc.), jqwik sabe generar valores automáticamente. Se puede acotar el
+    rango con anotaciones de restricción como \texttt{@IntRange} o
+    \texttt{@DoubleRange}. Para tipos de dominio como \texttt{Variable} o
+    \texttt{List<Variable>}, es necesario indicar un generador personalizado
+    mediante \texttt{@ForAll("nombreDelGenerador")} (véase \texttt{@Provide}).
+
+    En el siguiente ejemplo, jqwik genera automáticamente valores de
+    \texttt{numStates} entre 1 y 50 sin necesidad de un generador
+    personalizado:
+
+\begin{lstlisting}[caption={\texttt{@ForAll} con tipos primitivos y restricciones}, label={lst:forall}]
+@Property
+void numStatesMatchesIntConstructor(
+        @ForAll @IntRange(min = 1, max = 50) int numStates) {
+    Variable v = new Variable("X", numStates);
+    assertThat(v.getNumStates()).isEqualTo(numStates);
+}
+\end{lstlisting}
+
+    Se pueden combinar múltiples parámetros \texttt{@ForAll} en una misma
+    propiedad. jqwik genera todas las combinaciones:
+
+\begin{lstlisting}[caption={\texttt{@ForAll} con múltiples parámetros}, label={lst:forall-multi}]
+@Property
+void reorderSwap_preservesValues(
+        @ForAll @IntRange(min = 2, max = 5) int sA,
+        @ForAll @IntRange(min = 2, max = 5) int sB) {
+    Variable a = new Variable("A", sA);
+    Variable b = new Variable("B", sB);
+    // jqwik prueba con (sA=2,sB=2), (sA=3,sB=5), etc.
+    // ...
+}
+\end{lstlisting}
+
+  \item[\texttt{@Provide}]
+    Marca un método que devuelve un \texttt{Arbitrary<T>} --- es decir,
+    un generador de valores aleatorios de tipo \texttt{T} (véase la
+    Sección~\ref{sec:generadores}). Este generador se conecta a un
+    parámetro \texttt{@ForAll} por nombre: si el parámetro dice
+    \texttt{@ForAll("variableLists")}, jqwik buscará un método anotado
+    con \texttt{@Provide} que se llame \texttt{variableLists()}.
+
+    IntelliJ marca estos métodos como no usados porque jqwik los invoca
+    por reflexión; se recomienda añadir \texttt{@SuppressWarnings("unused")}.
+
+    El siguiente generador produce listas de 1 a 4 variables, cada una con
+    entre 2 y 5 estados, con nombres únicos (\texttt{V0}, \texttt{V1}, \ldots):
+
+\begin{lstlisting}[caption={\texttt{@Provide}: generador de listas de variables}, label={lst:provide}]
+@Provide
+@SuppressWarnings("unused")
+Arbitrary<List<Variable>> variableLists() {
+    return Arbitraries.integers().between(1, 4).flatMap(numVars ->
+        Arbitraries.integers().between(2, 5)
+            .list().ofSize(numVars)
+            .map(stateCounts -> {
+                List<Variable> vars = new ArrayList<>(numVars);
+                for (int i = 0; i < numVars; i++) {
+                    vars.add(new Variable("V" + i,
+                                          stateCounts.get(i)));
+                }
+                return vars;
+            })
+    );
+}
+\end{lstlisting}
+
+    El generador se usaría así en una propiedad:
+
+\begin{lstlisting}[caption={Uso de un generador personalizado en una propiedad}, label={lst:provide-usage}]
+@Property
+void valuesLengthEqualsTableSize(
+        @ForAll("variableLists") List<Variable> variables) {
+    TablePotential tp = new TablePotential(
+            variables, PotentialRole.CONDITIONAL_PROBABILITY);
+    assertThat(tp.getValues()).hasSize(tp.getTableSize());
+}
+\end{lstlisting}
+
+  \item[\texttt{@Example}]
+    Equivalente a \texttt{@Test} de JUnit, pero dentro de una clase
+    gestionada por jqwik. Se usa para tests de regresión específicos
+    que conviven con propiedades en la misma clase. A diferencia de
+    \texttt{@Property}, un \texttt{@Example} se ejecuta exactamente una
+    vez, con valores fijos elegidos por el desarrollador.
+
+    Es especialmente útil para documentar bugs concretos que se han
+    descubierto: el test de regresión asegura que el bug no reaparezca.
+    En el siguiente ejemplo, se verifica que hacer undo de un
+    \texttt{AddLinkEdit} no muta la lista de variables del potencial
+    original de un nodo UTILITY:
+
+\begin{lstlisting}[caption={\texttt{@Example}: test de regresión específico}, label={lst:example}]
+@Example
+void undoDoesNotMutateOldUtilityPotentialVariables()
+        throws DoEditException {
+    ProbNet net = new ProbNet(
+            InfluenceDiagramType.getUniqueInstance());
+    net.getPNESupport().setWithUndo(true);
+    Variable vC = new Variable("C", 2);
+    Variable vU = new Variable("U"); // utility
+    new AddNodeEdit(net, vC, NodeType.CHANCE).executeEdit();
+    new AddNodeEdit(net, vU, NodeType.UTILITY).executeEdit();
+
+    AddLinkEdit edit = new AddLinkEdit(net, vC, vU, true);
+    edit.executeEdit();
+    edit.undo();
+
+    List<Variable> varsAfterUndo =
+            net.getNode(vU).getPotentials().getFirst()
+               .getVariables();
+    assertThat(varsAfterUndo).doesNotContain(vC);
+}
+\end{lstlisting}
+
+\end{description}
+
+\subsubsection{Anotaciones de restricción}
+
+Estas anotaciones se combinan con \texttt{@ForAll} para acotar el rango de
+los valores generados:
+
+\begin{description}[leftmargin=2em, style=nextline]
+  \item[\texttt{@IntRange(min, max)}]
+    Restringe un \texttt{int} al rango \texttt{[min, max]}. Los valores
+    por defecto son \texttt{min = 0}, \texttt{max = Integer.MAX\_VALUE},
+    así que \texttt{@IntRange(max = 100)} es equivalente a
+    \texttt{@IntRange(min = 0, max = 100)}.
+
+  \item[\texttt{@DoubleRange(min, max)}]
+    Restringe un \texttt{double} al rango especificado. Útil para factores
+    de escala o probabilidades.
+\end{description}
+
+\subsubsection{API de generadores (\texttt{Arbitraries})}
+\label{sec:generadores}
+
+Un \textbf{generador} (tipo \texttt{Arbitrary<T>} en jqwik) es un objeto
+que sabe producir valores aleatorios de tipo \texttt{T}. Cuando jqwik
+ejecuta una propiedad, pide a cada generador que produzca un valor
+distinto en cada iteración, usando un generador de números pseudoaleatorios
+interno. Además, si el test falla, jqwik usa el generador para
+\emph{reducir} (\emph{shrink}) el valor hacia el contraejemplo más
+pequeño posible --- por ejemplo, reduciendo una lista de 5 elementos a
+una de 2 si con eso basta para reproducir el fallo.
+
+Para tipos primitivos como \texttt{int} o \texttt{String}, jqwik
+proporciona generadores predefinidos. Para tipos de dominio como
+\texttt{Variable} o \texttt{List<Variable>}, hay que construir generadores
+personalizados componiendo los primitivos. La clase \texttt{Arbitraries}
+es el punto de entrada para esta composición.
+
+Los combinadores más usados en el proyecto son:
+
+\begin{description}[leftmargin=2em, style=nextline]
+  \item[\texttt{Arbitraries.integers().between(a, b)}]
+    Genera enteros en el rango \texttt{[a, b]}, con distribución uniforme.
+  \item[\texttt{Arbitraries.strings().alpha().ofMinLength(n).ofMaxLength(m)}]
+    Genera cadenas compuestas sólo de letras, de longitud entre
+    \texttt{n} y \texttt{m}.
+  \item[\texttt{.flatMap(f)}]
+    Encadena un generador con otro que \emph{depende} del valor generado.
+    Imprescindible cuando un valor determina la estructura de otro --- por
+    ejemplo, generar primero el número de variables y luego una lista de
+    ese tamaño.
+  \item[\texttt{.map(f)}]
+    Transforma el valor generado sin cambiar la estructura del generador.
+    Se usa para construir objetos de dominio (\texttt{Variable},
+    \texttt{State[]}) a partir de valores primitivos.
+  \item[\texttt{.list().ofSize(n)}]
+    Genera una lista de exactamente \texttt{n} elementos del tipo base.
+\end{description}
+
+El Listado~\ref{lst:provide} muestra un ejemplo completo de composición:
+\texttt{flatMap} genera primero el número de variables (1--4), luego
+\texttt{.list().ofSize(numVars)} genera una lista de enteros de ese tamaño
+(los números de estados), y finalmente \texttt{.map} transforma la lista
+de enteros en una lista de objetos \texttt{Variable}.
+
+\subsubsection{Fichero de semillas}
+
+jqwik usa internamente un generador de números pseudoaleatorios para
+producir los valores de cada ejecución. La \textbf{semilla}
+(\emph{seed}) es el valor inicial de ese generador: dada la misma semilla,
+jqwik produce exactamente la misma secuencia de valores, lo que permite
+reproducir un fallo de forma determinista.
+
+jqwik almacena las semillas de las ejecuciones anteriores en un fichero
+\texttt{.jqwik-database} en la raíz de cada módulo. Si un test falló en
+la ejecución anterior, jqwik reutiliza la misma semilla para verificar
+que el fallo se ha corregido antes de probar semillas nuevas.
+
+Este fichero es local a cada máquina de desarrollo y está excluido del
+control de versiones mediante \texttt{.gitignore} en todos los módulos.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{PITest --- testing de mutaciones}
+\label{sec:pitest}
+
+PITest\footnote{\url{https://pitest.org/}} es una herramienta de
+\emph{mutation testing}. Introduce pequeñas modificaciones (\emph{mutantes})
+en el código fuente compilado --- por ejemplo, cambiar un \texttt{+} por un
+\texttt{-}, invertir una condición, o sustituir un valor de retorno --- y
+ejecuta los tests. Si un test falla, el mutante ha sido \emph{eliminado}
+(\emph{killed}); si todos los tests pasan, el mutante ha \emph{sobrevivido},
+lo que indica que los tests no detectan esa alteración del código.
+
+\subsubsection{Configuración}
+
+PITest está configurado en el \texttt{pluginManagement} del POM padre y
+activado con targets específicos en los módulos que lo usan (actualmente
+\texttt{org.openmarkov.core}):
+
+\begin{lstlisting}[caption={Configuración de PITest en el POM del módulo core},
+  label={lst:pitest-config}, language=XML]
+<plugin>
+    <groupId>org.pitest</groupId>
+    <artifactId>pitest-maven</artifactId>
+    <configuration>
+        <targetClasses>
+            <param>org.openmarkov.core.*</param>
+        </targetClasses>
+        <targetTests>
+            <param>org.openmarkov.core.*</param>
+        </targetTests>
+    </configuration>
+</plugin>
+\end{lstlisting}
+
+\subsubsection{Ejecución e informe}
+
+\begin{lstlisting}[caption={Ejecución de PITest}, label={lst:pitest-run},
+  language=bash]
+# Ejecutar mutation testing en el módulo core
+mvn -f org.openmarkov.core/pom.xml pitest:mutationCoverage
+
+# El informe HTML se genera en:
+# org.openmarkov.core/target/pit-reports/YYYYMMDDHHMI/index.html
+\end{lstlisting}
+
+\subsubsection{Interpretación de resultados}
+
+PITest genera un informe HTML que muestra, para cada clase:
+
+\begin{itemize}
+  \item El número de mutantes generados.
+  \item Cuántos fueron eliminados (\emph{killed}) por los tests.
+  \item Cuántos sobrevivieron (\emph{survived}) --- indican debilidades en
+    los tests.
+  \item La \emph{mutation score}: porcentaje de mutantes eliminados.
+\end{itemize}
+
+Un mutation score bajo no indica necesariamente que el código esté mal, sino
+que los tests no son suficientemente sensibles a ciertos cambios. Es una
+métrica complementaria a la cobertura de líneas de JaCoCo: un código puede
+tener 100\% de cobertura de líneas pero un mutation score bajo si los tests
+no verifican los valores correctos.
+
+\subsubsection{Ejemplo ilustrativo}
+
+Para entender cómo funciona PITest en la práctica, consideremos un método
+sencillo que calcula el número de estados de una variable discreta:
+
+\begin{lstlisting}[caption={Método original que será mutado por PITest},
+  label={lst:pitest-original}]
+public int getNumStates() {
+    return states.size();
+}
+\end{lstlisting}
+
+Un test que simplemente invoque el método sin verificar el resultado no
+eliminará ningún mutante:
+
+\begin{lstlisting}[caption={Test débil --- no elimina mutantes},
+  label={lst:pitest-weak}]
+@Test
+void testGetNumStates() {
+    Variable v = new Variable("X", 3);
+    v.getNumStates(); // no hay asercion!
+}
+\end{lstlisting}
+
+PITest genera varios mutantes a partir del código original. Por ejemplo,
+el mutador \texttt{RETURN\_VALS} sustituye el valor de retorno por 0:
+
+\begin{lstlisting}[caption={Mutante generado: valor de retorno reemplazado por 0},
+  label={lst:pitest-mutant}]
+// Mutante: replaced int return with 0
+public int getNumStates() {
+    return 0; // <-- mutacion introducida
+}
+\end{lstlisting}
+
+El test débil del Listado~\ref{lst:pitest-weak} no detecta este cambio,
+porque no comprueba el valor devuelto --- el mutante \emph{sobrevive}.
+Un test que sí verifica el resultado elimina al mutante:
+
+\begin{lstlisting}[caption={Test robusto --- elimina el mutante},
+  label={lst:pitest-strong}]
+@Test
+void testGetNumStates() {
+    Variable v = new Variable("X", 3);
+    assertThat(v.getNumStates()).isEqualTo(3);
+}
+\end{lstlisting}
+
+Con esta aserción, cuando PITest sustituye \texttt{states.size()} por
+\texttt{0}, el test falla y el mutante queda eliminado (\emph{killed}).
+Otros mutadores típicos de PITest incluyen:
+
+\begin{itemize}
+  \item \textbf{CONDITIONALS\_BOUNDARY}: cambia \texttt{<} por \texttt{<=}
+    (y viceversa).
+  \item \textbf{NEGATE\_CONDITIONALS}: invierte condiciones
+    (\texttt{==} $\to$ \texttt{!=}).
+  \item \textbf{MATH}: sustituye operadores aritméticos
+    (\texttt{+} $\to$ \texttt{-}, \texttt{*} $\to$ \texttt{/}).
+  \item \textbf{VOID\_METHOD\_CALLS}: elimina llamadas a métodos
+    \texttt{void}.
+  \item \textbf{EMPTY\_RETURNS}: devuelve colecciones vacías o cadenas vacías
+    en lugar del valor real.
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Convenciones del proyecto}
+\label{sec:convenciones}
+
+\begin{itemize}
+  \item Las clases de test se nombran \texttt{*Test} para tests de ejemplo
+    y \texttt{*PropertyTest} para tests basados en propiedades.
+  \item Los tests de propiedades conviven con tests \texttt{@Example} en la
+    misma clase cuando el ejemplo es una regresión del mismo componente.
+  \item Los proveedores (\texttt{@Provide}) se agrupan al final de la clase
+    en una sección separada por comentarios.
+  \item Se usa \texttt{@SuppressWarnings("unused")} en los métodos
+    \texttt{@Provide} para evitar advertencias de IntelliJ.
+  \item Se declara \texttt{throws DoEditException} en las propiedades que
+    ejecutan edits, en lugar de capturar la excepción.
+  \item Los helpers de creación de redes (\texttt{freshBayesianNet()},
+    \texttt{twoNodeBN()}) se definen como métodos privados o records
+    al inicio de la clase de test.
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Inventario de tests existentes}
+\label{sec:inventario}
+
+La Tabla~\ref{tab:tests} lista las clases de test basadas en propiedades
+añadidas hasta la fecha, todas en el módulo \texttt{org.openmarkov.core}.
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lrX}
+\toprule
+\textbf{Clase de test} & \textbf{Props.} & \textbf{Qué verifica} \\
+\midrule
+\texttt{VariablePropertyTest} & 12 &
+  Invariantes de nombre/baseName/timeSlice, índice de estados, constructor
+  copia, potenciales delta \\
+\texttt{TablePotentialPropertyTest} & 11 &
+  Tamaño de tabla, offsets, \texttt{scalePotential}, constructor copia,
+  \texttt{setUniform} \\
+\texttt{TablePotentialReorderProject\-PropertyTest} & 10 &
+  \texttt{reorder()} preserva valores para 2 y 3 variables,
+  identidad, round-trip; \texttt{tableProject()} con evidencia parcial,
+  total y nula \\
+\texttt{AddNodeEditPropertyTest} & 9 &
+  Ciclo do/undo/redo de \texttt{AddNodeEdit}, rechazo de nombres
+  duplicados \\
+\texttt{AddLinkEditPropertyTest} & 11 &
+  Ciclo do/undo/redo de \texttt{AddLinkEdit}, rechazo de
+  self-loop y links duplicados, regresión de mutación de potencial
+  UTILITY \\
+\texttt{ProbNetOperationsBarren\-NodesPropertyTest} & 12 &
+  \texttt{removeBarrenNodes()}: seguridad de nodos de interés/evidencia,
+  eliminación de hojas/cadenas/diamantes, idempotencia,
+  completitud \\
+\midrule
+\textbf{Total} & \textbf{65} & \\
+\bottomrule
+\end{tabularx}
+\caption{Clases de test basadas en propiedades (jqwik)}
+\label{tab:tests}
+\end{table}
+
+\end{document}

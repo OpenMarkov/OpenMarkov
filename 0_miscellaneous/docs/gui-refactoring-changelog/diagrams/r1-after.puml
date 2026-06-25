@@ -1,0 +1,83 @@
+@startuml r1-after
+' ============================================================
+' R1 After -- Facade + 3 domain handlers
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 40
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<facade>> #E8E8FF
+  BorderColor<<facade>> #6666AA
+  BackgroundColor<<handler>> #D8FFD8
+  BorderColor<<handler>> #44AA44
+  BackgroundColor<<ext>> #FFF8E0
+  BorderColor<<ext>> #AA9944
+}
+
+class MainPanelListenerAssistant <<facade>> {
+  <b>Facade: 401 lines</b>
+  __
+  + actionPerformed(): switch → delegates
+  + getCurrentNetworkEditorPanel()
+  + openNetwork(String/ProbNet)
+  + saveNetwork(), saveNetworkAs()
+  + networkCanBeClosed()
+  __
+  Node/link/decision ops (inline)
+  UIAction + executeUIAction()
+}
+
+class NetworkFileHandler <<handler>> {
+  <b>File I/O: 467 lines</b>
+  __
+  createNewNetwork()
+  createNewFrame(ProbNet)
+  openNetwork() (3 overloads)
+  openNetworkURL()
+  saveNetwork(), saveNetworkAs()
+  closeCurrentTab(), closeApplication()
+  networkCanBeClosed()
+  loadEvidence(), saveEvidence()
+}
+
+class InferenceHandler <<handler>> {
+  <b>Inference: 238 lines</b>
+  __
+  toggleWorkingMode()
+  setWorkingMode()
+  evidenceCasesNavigationOption()
+  expandNetwork()
+  setPropagationOptions()
+  showDecisionTree()
+  showOptimalStrategy()
+}
+
+class EditAndViewHandler <<handler>> {
+  <b>Edit/View: 121 lines</b>
+  __
+  undo(), redo()
+  activateEditionMode()
+  activateByTitle()
+  setZoom(), incrementZoom()
+  showAbout(), showShortcuts()
+  showLanguageChangeDialog()
+  showUserConfigurationDialog()
+}
+
+class "MainMenu\nInferenceToolBar\nToolbar plugins" as Ext <<ext>> {
+  receives ActionListener
+}
+
+MainPanelListenerAssistant --> NetworkFileHandler : fileHandler
+MainPanelListenerAssistant --> InferenceHandler : inferenceHandler
+MainPanelListenerAssistant --> EditAndViewHandler : editAndViewHandler
+InferenceHandler --> NetworkFileHandler : createNewFrame()
+
+Ext ..> MainPanelListenerAssistant : ActionListener
+
+@enduml

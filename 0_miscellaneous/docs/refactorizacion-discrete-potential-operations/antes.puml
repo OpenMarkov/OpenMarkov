@@ -1,0 +1,70 @@
+@startuml antes
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam classFontSize 11
+skinparam noteBackgroundColor #FFFFCC
+skinparam noteBorderColor #999999
+
+title Antes de la refactorización
+
+class DiscretePotentialOperations {
+  +{static} maxRoundErrorAllowed : double
+  +{static} almostEqual(a, b) : boolean
+  +{static} thereAreRelevantUtilities(...) : boolean
+  == Aritmética ==
+  +{static} multiply(...) : TablePotential
+  +{static} sum(...) : TablePotential
+  +{static} sumByCriterion(...) : TablePotential
+  +{static} divide(...) : Potential
+  +{static} evaluateFunctionPotential(...) : TablePotential
+  == Eliminación ==
+  +{static} multiplyAndMarginalize(...) : TablePotential
+  +{static} marginalize(...) : TablePotential
+  +{static} multiplyAndEliminate(...) : Potential
+  == Maximización ==
+  +{static} multiplyAndMaximize(...) : Object[]
+  +{static} multiplyAndMaximizeUniformly(...) : TablePotential[]
+  +{static} maximize(...) : Object[] / TablePotential
+  == Fusión ==
+  +{static} merge(...) : TablePotential
+  +{static} orderPotentialsByTotalOrder(...) : List
+  == Transformación ==
+  +{static} normalize(...) : TablePotential
+  +{static} projectOutVariable(...) : TablePotential
+  +{static} imposeOtherDistributionWhenDistributionIsZero(...) : TablePotential
+  +{static} matrixPotential(...) : TablePotential
+  == Factoría ==
+  +{static} createOneValuePotential(...) : TablePotential
+  +{static} createUnityProbabilityPotential() : TablePotential
+  +{static} createZeroProbabilityPotential() : TablePotential
+  +{static} createZeroUtilityPotential() : TablePotential
+  == Métodos privados (~15) ==
+  -{static} findNextConfiguration...() : int
+  -{static} initializeCoordinates() : void
+  -{static} buildResultPotential(...) : TablePotential
+  -{static} findFirstNonNullCriterion(...) : Criterion
+  -{static} getConstantFactor(...) : double
+  -{static} getAccumulatedOffsets(...) : int[][]
+  -{static} assignProbUniformlyInTies(...) : void
+  -{static} throwExceptionIfNecessary...() : void
+  ... (más métodos privados) ...
+}
+
+note right of DiscretePotentialOperations
+  ~2.175 líneas
+  28 métodos públicos
+  ~15 métodos privados
+  6 responsabilidades distintas
+  mezcladas en una sola clase
+end note
+
+class AuxiliaryOperations {
+  +{static} getUnionVariables(...) : List<Variable>
+  +{static} getAccumulatedOffsets(...) : int[][]
+}
+
+DiscretePotentialOperations ..> AuxiliaryOperations : usa
+
+@enduml

@@ -1,0 +1,107 @@
+@startuml phase5-implemented
+' ============================================================
+' Fase 5 implementada: GTablePotential con superclase cambiada a
+' AbstractIndexedPotential.
+' Colores:
+'   verde     = cambio realizado
+'   azul      = sin cambios relevantes en esta fase
+'   amarillo  = cambio de firma (API ripple)
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 35
+skinparam dpi 150
+
+hide empty methods
+
+skinparam class {
+    BackgroundColor<<done>>    #D4EDDA
+    BorderColor<<done>>        #28A745
+    BackgroundColor<<current>> #E8E8FF
+    BorderColor<<current>>     #6666AA
+    BackgroundColor<<ripple>>  #FFF3CD
+    BorderColor<<ripple>>      #B8860B
+}
+
+package "potential" {
+
+    abstract class Potential <<current>> {
+        #variables : List<Variable>
+        #role : PotentialRole
+    }
+
+    abstract class AbstractIndexedPotential <<current>> {
+        #dimensions : int[]
+        #offsets : int[]
+        #initialPosition : int
+        #tableSize : int
+    }
+
+    class TablePotential <<current>> {
+        +values : double[]
+    }
+
+    class StrategicTablePotential <<current>> {
+        +strategyTrees : StrategyTree[]
+    }
+
+    class UncertainTablePotential <<current>> {
+        +uncertainValues : UncertainValue[]
+    }
+
+    class "GTablePotential<E>" as GTablePotential <<done>> {
+        +elementTable : List<E>
+        --
+        Ya NO hereda values[].
+        role se almacena correctamente.
+        Implementa project() y copy().
+    }
+
+    Potential <|-- AbstractIndexedPotential
+    AbstractIndexedPotential <|-- TablePotential
+    TablePotential <|-- StrategicTablePotential
+    TablePotential <|-- UncertainTablePotential
+    AbstractIndexedPotential <|-- GTablePotential
+
+    note right of GTablePotential #D4EDDA
+      <b><color:green>REALIZADO</color></b>
+      GTablePotential extiende
+      AbstractIndexedPotential
+      (no TablePotential)
+    end note
+
+}
+
+package "potential/operation" {
+
+    class DiscretePotentialOperations <<ripple>> {
+        +{static} merge(decision,\n  List<? extends AbstractIndexedPotential>)\n  : AbstractIndexedPotential
+    }
+
+    class TablePotentialMerge <<ripple>> {
+        ~{static} merge(decision,\n  List<? extends AbstractIndexedPotential>)\n  : AbstractIndexedPotential
+    }
+
+    class AuxiliaryOperations <<ripple>> {
+        +{static} getAccumulatedOffsets(\n  List<? extends Potential>, vars)\n  : int[][]
+    }
+
+    DiscretePotentialOperations ..> TablePotentialMerge : delega
+
+    note right of DiscretePotentialOperations #FFF3CD
+      <b><color:#B8860B>API ripple</color></b>
+      merge() amplía el tipo de
+      parámetro y de retorno.
+      DANInference.java: 3 casts
+      explícitos a TablePotential.
+    end note
+
+}
+
+' Forzar que potential/operation quede debajo de potential
+GTablePotential -[hidden]down-> DiscretePotentialOperations
+
+@enduml

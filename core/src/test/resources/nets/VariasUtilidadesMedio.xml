@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OpenMarkov formatVersion="1.0">
+    <ProbNet type="InfluenceDiagram">
+
+        <Variables>
+            <Variable name="A" type="finiteStates" role="chance">
+                <Coordinates x="151" y="52"/>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="B" type="finiteStates" role="chance">
+                <Coordinates x="332" y="73"/>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="C" type="finiteStates" role="chance">
+                <Coordinates x="574" y="38"/>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="D" type="finiteStates" role="chance">
+                <Coordinates x="446" y="227"/>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="E" type="finiteStates" role="chance">
+                <Coordinates x="78" y="130"/>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="F" type="finiteStates" role="chance">
+                <Coordinates x="309" y="223"/>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="G" type="finiteStates" role="chance">
+                <Coordinates x="464" y="109"/>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="D1" type="finiteStates" role="decision">
+                <Coordinates x="73" y="283"/>
+                <States>
+                    <State name="no"/>
+                    <State name="yes"/>
+                </States>
+            </Variable>
+            <Variable name="D2" type="finiteStates" role="decision">
+                <Coordinates x="347" y="357"/>
+                <States>
+                    <State name="no"/>
+                    <State name="yes"/>
+                </States>
+            </Variable>
+            <Variable name="D3" type="finiteStates" role="decision">
+                <Coordinates x="568" y="291"/>
+                <States>
+                    <State name="no"/>
+                    <State name="yes"/>
+                </States>
+            </Variable>
+            <Variable name="D4" type="finiteStates" role="decision">
+                <Coordinates x="751" y="167"/>
+                <States>
+                    <State name="yes"/>
+                    <State name="no"/>
+                </States>
+            </Variable>
+            <Variable name="U" type="numeric" role="utility">
+                <Coordinates x="160" y="414"/>
+                <States>
+                    <State name="Only one state"/>
+                </States>
+            </Variable>
+            <Variable name="U1" type="numeric" role="utility">
+                <Coordinates x="481" y="436"/>
+                <States>
+                    <State name="Only one state"/>
+                </States>
+            </Variable>
+            <Variable name="U2" type="numeric" role="utility">
+                <Coordinates x="302" y="468"/>
+                <States>
+                    <State name="Only one state"/>
+                </States>
+            </Variable>
+        </Variables>
+
+        <Links>
+            <Link var1="A" var2="E" directed="true"/>
+            <Link var1="A" var2="F" directed="true"/>
+            <Link var1="A" var2="U" directed="true"/>
+            <Link var1="B" var2="F" directed="true"/>
+            <Link var1="C" var2="D3" directed="true"/>
+            <Link var1="C" var2="G" directed="true"/>
+            <Link var1="C" var2="D4" directed="true"/>
+            <Link var1="D" var2="D3" directed="true"/>
+            <Link var1="E" var2="D1" directed="true"/>
+            <Link var1="F" var2="D" directed="true"/>
+            <Link var1="F" var2="D2" directed="true"/>
+            <Link var1="F" var2="U2" directed="true"/>
+            <Link var1="G" var2="D" directed="true"/>
+            <Link var1="G" var2="U1" directed="true"/>
+            <Link var1="D1" var2="D2" directed="true"/>
+            <Link var1="D1" var2="U" directed="true"/>
+            <Link var1="D2" var2="D3" directed="true"/>
+            <Link var1="D2" var2="U2" directed="true"/>
+            <Link var1="D3" var2="U1" directed="true"/>
+        </Links>
+
+        <Potentials>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="A"/>
+                </Variables>
+                <Values>
+                    0.7 0.3
+                </Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="B"/>
+                </Variables>
+                <Values>
+                    0.2 0.8
+                </Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="C"/>
+                </Variables>
+                <Values>
+                    0.1 0.9
+                </Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="D"/>
+                    <Variable name="F"/>
+                    <Variable name="G"/>
+                </Variables>
+                <Values>
+                    0.9 0.1 0.2 0.8
+                    0.4 0.6 0.1 0.9
+                </Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="E"/>
+                    <Variable name="A"/>
+                </Variables>
+                <Values>
+                    0.7 0.3 0.8 0.2
+                </Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="F"/>
+                    <Variable name="A"/>
+                    <Variable name="B"/>
+                </Variables>
+                <Values>
+                    0.1 0.9 0.5 0.5
+                    0.6 0.4 0.7 0.3
+                </Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="G"/>
+                    <Variable name="C"/>
+                </Variables>
+                <Values>
+                    0.2 0.8 0.5 0.5
+                </Values>
+            </Potential>
+            <Potential type="Table" role="decision">
+                <Variables>
+                    <Variable name="D4"/>
+                    <Variable name="C"/>
+                </Variables>
+                <Values>
+                    0.5 0.5 0.5 0.5
+                </Values>
+            </Potential>
+            <Potential type="Table" role="utility">
+                <UtilityVariable name="U"/>
+                <Variables>
+                    <Variable name="A"/>
+                    <Variable name="D1"/>
+                </Variables>
+                <Values>
+                    0.0 -2.0 -1.0 -0.5
+                </Values>
+            </Potential>
+            <Potential type="Table" role="utility">
+                <UtilityVariable name="U1"/>
+                <Variables>
+                    <Variable name="D3"/>
+                    <Variable name="G"/>
+                </Variables>
+                <Values>
+                    0.0 -1.0 -2.0 -3.0
+                </Values>
+            </Potential>
+            <Potential type="Table" role="utility">
+                <UtilityVariable name="U2"/>
+                <Variables>
+                    <Variable name="D2"/>
+                    <Variable name="F"/>
+                </Variables>
+                <Values>
+                    5.0 2.0 -1.0 1.0
+                </Values>
+            </Potential>
+        </Potentials>
+
+    </ProbNet>
+
+</OpenMarkov>

@@ -1,0 +1,98 @@
+@startuml exception-hierarchy-current-a
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 10
+skinparam classAttributeIconSize 0
+skinparam padding 4
+skinparam nodesep 25
+skinparam ranksep 40
+skinparam shadowing false
+skinparam dpi 110
+skinparam wrapWidth 160
+
+skinparam class {
+    BackgroundColor White
+    BorderColor #666666
+    ArrowColor #555555
+    FontSize 10
+}
+skinparam package {
+    BackgroundColor White
+    BorderColor #AAAAAA
+    FontSize 10
+    FontStyle bold
+}
+skinparam interface {
+    BackgroundColor #C9DFF7
+    BorderColor #2566A8
+    FontSize 10
+}
+skinparam note {
+    BackgroundColor #FFFBE6
+    BorderColor #CCAA00
+    FontSize 9
+}
+skinparam legend {
+    BackgroundColor #F8F8F8
+    BorderColor #AAAAAA
+    FontSize 9
+}
+
+top to bottom direction
+
+legend top right
+|= Color |= Significado |
+|<#D5E8D4>| Checked correcto: el caller puede recuperarse |
+|<#FFF2CC>| Namespace abstracto (sealed/abstract) |
+|<#EEEEEE>| Clase estándar de Java |
+|<#C9DFF7>| Interfaz OpenMarkov |
+endlegend
+
+' ── Raíces Java ───────────────────────────────────────
+class "Exception" as JEx #EEEEEE
+class "RuntimeException" as JRT #EEEEEE
+JRT -up-|> JEx
+
+' ── Interfaces OpenMarkov ─────────────────────────────
+interface "IOpenMarkovException" as IOM #C9DFF7
+interface "IBundledOpenMarkovException" as IBOM #C9DFF7
+IBOM -up-|> IOM
+note right of IBOM
+  Añade soporte de mensajes
+  localizados (multiidioma)
+end note
+
+' ── Unchecked correctas ───────────────────────────────
+package "Unchecked (correctas)" as PKG_RT #EEF8EE {
+    class "UnreacheableException\n//typo: Unreacheable//" as URE #D5E8D4
+    class "UnrecoverableException" as UREC #D5E8D4
+}
+PKG_RT -up-|> JRT
+
+' ── Jerarquías con herencia propia ────────────────────
+package "Jerarquías con herencia propia" as PKG_HIER #F0F0FF {
+    abstract "ParserException\n//15 variantes internas//" as PE #D5E8D4
+    PE ..|> IBOM
+    abstract "PGMXParserException\n//14 variantes (formato PGMX)//\n//sombrea NonProjectable...//" as PGMX #FFF2CC
+    PGMX -down-|> PE
+    abstract "DoEditException\n//TODO: debería ser unchecked//\n//5 variantes internas//" as DEE #FFCCCC
+    DEE ..|> IBOM
+    abstract "ConstraintViolatedException\n//42 variantes (restricciones de red)//" as CVE #FFF2CC
+    CVE -down-|> DEE
+}
+PE -up-|> JEx
+DEE -up-|> JEx
+
+' ── Checked correctas (resto) ─────────────────────────
+package "Checked correctas\n(el caller puede recuperarse)" as PKG_OK #EEF8EE {
+    class "WriterException\n//6 variantes: CannotCreateFile, ...//" as WE #D5E8D4
+    class "IncompatibleEvidenceException\n//el usuario puede retirar la evidencia//" as IEE #D5E8D4
+    class "EmptyDatabaseException" as EDE #D5E8D4
+    class "NoReaderForFileException" as NRFE #D5E8D4
+    class "LearningException\n//2 variantes: NoDatabasePresent, ...//" as LE #D5E8D4
+    class "UnobservedVariablesException\nEmptyModelNetException" as UVEEMNE #D5E8D4
+}
+PKG_OK -up-|> JEx
+
+@enduml

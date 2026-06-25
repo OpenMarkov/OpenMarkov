@@ -1,0 +1,142 @@
+@startuml fig-op5-immutable
+' ============================================================
+' Opcion 5: Potenciales inmutables con Builder
+' TablePotential es inmutable; la construccion se realiza
+' exclusivamente a traves de un Builder.
+' Las operaciones devuelven nuevas instancias.
+' ============================================================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 30
+skinparam ranksep 35
+skinparam dpi 150
+
+hide empty fields
+
+' ==== CLASE INMUTABLE ====
+class TablePotential <<immutable>> #BDD7FF {
+    -<b>final</b> variables : List<Variable>
+    -<b>final</b> values : double[]
+    -<b>final</b> role : PotentialRole
+    -<b>final</b> dimensions : int[]
+    -<b>final</b> offsets : int[]
+    --
+    -TablePotential(Builder)  <color:#228B22>// privado</color>
+    ..
+    +getValues() : double[]  <color:#888888>// copia defensiva</color>
+    +getVariables() : List<Variable>  <color:#888888>// inmutable</color>
+    +getPosition(int[]) : int
+    ..
+    <b>Operaciones funcionales</b>
+    (devuelven nueva instancia):
+    +normalize() : TablePotential
+    +reorder(List<Variable>) : TablePotential
+    +tableProject(EvidenceCase) : TablePotential
+    +scale(double) : TablePotential
+    ..
+    +{static} builder(List<Variable>, PotentialRole) : Builder
+}
+
+note right of TablePotential #FFFDE7
+  <b>Inmutable</b>: todos los campos son
+  final. Una vez creado, el objeto
+  nunca cambia de estado.
+
+  <b>Seguro frente a aliasing</b>:
+  getValues() devuelve una copia.
+
+  <b>Thread-safe por diseno</b>:
+  no requiere sincronizacion
+  para acceso concurrente.
+end note
+
+' ==== BUILDER ====
+class "TablePotential.Builder" as Builder #C8F0C8 {
+    -values : double[]
+    -variables : List<Variable>
+    -role : PotentialRole
+    --
+    +withValues(double[]) : Builder
+    +withValue(int, double) : Builder
+    +build() : TablePotential
+}
+
+note bottom of Builder #FFFDE7
+  El Builder acumula estado mutable.
+  build() produce un objeto inmutable
+  mediante copia defensiva.
+end note
+
+' ==== SUBCLASES INMUTABLES ====
+class UncertainTablePotential <<immutable>> #C8E8FF {
+    -<b>final</b> uncertainValues : UncertainValue[]
+    --
+    -UncertainTablePotential(UncertainBuilder)
+    +getUncertainValues() : UncertainValue[]
+    +isUncertain() : boolean
+    ..
+    +{static} builder(...) : UncertainBuilder
+}
+
+class StrategicTablePotential <<immutable>> #FFE0B2 {
+    -<b>final</b> strategyTrees : StrategyTree[]
+    --
+    -StrategicTablePotential(StrategicBuilder)
+    +getStrategyTrees() : StrategyTree[]
+    +hasInterventions() : boolean
+    ..
+    +{static} builder(...) : StrategicBuilder
+}
+
+' ==== OPERACIONES COMO METODOS ESTATICOS ====
+class DiscretePotentialOperations #F0F0F0 {
+    +{static} multiply(List<TablePotential>) : TablePotential
+    +{static} marginalize(TablePotential, List<Variable>) : TablePotential
+    +{static} normalize(TablePotential) : TablePotential
+    --
+    <color:#888888>Todas devuelven nuevas instancias.</color>
+    <color:#888888>Usan Builder internamente.</color>
+}
+
+' ==== CONTRASTE: MUTABLE vs INMUTABLE ====
+package "Contraste de API" #F5F5F5 {
+    note as N1
+      <b>API mutable (antes):</b>
+      <code>potential.values[i] = x;</code>
+      <code>DiscretePotentialOperations</code>
+      <code>    .normalize(potential);</code>
+      <color:#CC4444>// modifica potential in-place</color>
+
+      <b>API inmutable (despues):</b>
+      <code>TablePotential normalized =</code>
+      <code>    potential.normalize();</code>
+      <color:#228B22>// potential no cambia</color>
+      <color:#228B22>// normalized es nueva instancia</color>
+    end note
+}
+
+' ==== RELACIONES ====
+TablePotential <|-- UncertainTablePotential
+TablePotential <|-- StrategicTablePotential
+TablePotential +-- Builder
+DiscretePotentialOperations ..> TablePotential : crea via Builder
+DiscretePotentialOperations ..> Builder : usa
+
+legend right
+  |= Color |= Significado |
+  | <#BDD7FF> | Clase inmutable principal |
+  | <#C8F0C8> | Builder (mutable, transitorio) |
+  | <#C8E8FF> | Subclase inmutable (incertidumbre) |
+  | <#FFE0B2> | Subclase inmutable (estrategias) |
+  | <#F0F0F0> | Operaciones estaticas |
+  --
+  Todas las operaciones devuelven
+  **nuevas instancias**. Los campos
+  son **final** y el constructor es
+  **privado** (solo accesible via Builder).
+endlegend
+
+@enduml

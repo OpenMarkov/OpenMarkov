@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <StandardDomain>
+        <Text value="Standard domains">
+            <Mnemonic value="s"/>
+        </Text>
+    </StandardDomain>
+    <StandardCriteria>
+        <Text value="Standard criteria"/>
+    </StandardCriteria>
+    <Apply>
+        <Text value="Apply">
+            <Mnemonic value="a"/>
+        </Text>
+    </Apply>
+    <Up>
+        <Text value="Up">
+            <Mnemonic value="u"/>
+        </Text>
+    </Up>
+    <Ok>
+        <Text value="Ok">
+            <Mnemonic value="o"/>
+        </Text>
+    </Ok>
+    <Cancel>
+        <Text value="Cancel">
+            <Mnemonic value="c"/>
+        </Text>
+    </Cancel>
+    <InfinitePositive>
+        <Text value="Insert positive infinity"/>
+    </InfinitePositive>
+    <Add>
+        <Text value="Add">
+            <Mnemonic value="d"/>
+        </Text>
+    </Add>
+    <BUNDLEFILE>
+        <Text value="Default (english)"/>
+    </BUNDLEFILE>
+    <Copy>
+        <Text value="Copy">
+            <Mnemonic value="c"/>
+        </Text>
+    </Copy>
+    <Clear>
+        <Text value="Clear">
+            <Mnemonic value="l"/>
+        </Text>
+    </Clear>
+    <Delete>
+        <Text value="Delete">
+            <Mnemonic value="e"/>
+        </Text>
+    </Delete>
+    <InfiniteNegative>
+        <Text value="Insert negative infinity"/>
+    </InfiniteNegative>
+    <Down>
+        <Text value="Down">
+            <Mnemonic value="w"/>
+        </Text>
+    </Down>
+</properties>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <DBGenerator value="Dataset generator">
+        <Mnemonic value="g"/>
+        <IncorrectFileFormat value="Unsupported data file format.&#10;Supported formats are: .elv y .xml"/>
+        <UnableToLoadNet value="Unable to load net."/>
+        <Open value="Open"/>
+        <ChooseNet value="Choose Net"/>
+        <TakeOpenModelNet value="Use network already open"/>
+        <Net value="Net:"/>
+        <Finished value="Dataset generated successfully."/>
+        <Cancel value="Cancel"/>
+        <Ok value="OK"/>
+        <Error value="Error during DB generation"/>
+        <Generate value="Generate"/>
+        <CaseFile value="Case file"/>
+        <Title value="OpenMarkov - Generate dataset randomly"/>
+        <Database value="Dataset"/>
+        <NumberOfCases value="Number of cases"/>
+        <SelectNet value="Select Net"/>
+        <LoadNetFromFile value="Load Net from file"/>
+        <IncorrectCaseDatabaseFileFormat
+                value="Unsupported data file format.&#10;Supported formats are: .dbc, .arff  y.xls"/>
+    </DBGenerator>
+</properties>

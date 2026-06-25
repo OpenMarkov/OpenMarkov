@@ -1,0 +1,103 @@
+@startuml overview
+' ============================================================
+' Dependencias entre subsistemas de org.openmarkov.gui
+' Los paquetes en rojo concentran las oportunidades de
+' refactorización más críticas.
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 40
+skinparam dpi 150
+skinparam packageStyle rectangle
+
+skinparam package {
+  BackgroundColor<<critical>> #FFDDD8
+  BorderColor<<critical>> #CC4444
+  BackgroundColor<<normal>> #E8E8FF
+  BorderColor<<normal>> #6666AA
+  BackgroundColor<<external>> #F0F0F0
+  BorderColor<<external>> #999999
+}
+
+' -- Subsistemas GUI --
+
+package "window/" <<critical>> {
+  class "MainPanelListener\nAssistant" as MPLA <<R1>> #FFCCCC
+  class "MainPanel" as MP
+  class "NetworkEditorPanel" as NP
+  class "EditorPanel" as EP
+}
+
+package "window/edition/mode/" <<critical>> {
+  class "EditionModeManager" as EMM
+  class "NodeEditionMode" as NEM <<R2>> #FFCCCC
+  class "SelectionEditionMode" as SEM
+  class "LinkEditionMode" as LEM
+}
+
+package "graphic/" <<normal>> {
+  class "VisualNetwork" as VN <<R7>> #FFE8CC
+  class "VisualNode" as VNo
+  class "VisualLink" as VL
+}
+
+package "menutoolbar/" <<critical>> {
+  class "MainMenu" as MM <<R4>> #FFCCCC
+  class "ContextualMenuFactory" as CMF
+  class "EditionToolBar" as ETB
+  class "StandardToolBar" as STB
+}
+
+package "action/" <<critical>> {
+  class "TablePotentialValueEdit" as TPVE <<R5>> #FFCCCC
+  class "ICITablePotentialValueEdit" as ICIVE <<R5>> #FFCCCC
+  class "MoveNodeEdit" as MNE
+  class "RemoveSelectedEdit" as RSE
+}
+
+package "dialog/" <<normal>> {
+  class "NodePropertiesDialog" as NPD
+  class "PotentialEditDialog" as PED
+  class "PotentialPanel" as PP
+}
+
+package "component/" <<critical>> {
+  class "ValuesTable" as VT <<R6>> #FFCCCC
+  class "ICIValuesTable" as IVT <<R6>> #FFCCCC
+  class "AugmentedValuesTable" as AVT <<R6>> #FFCCCC
+}
+
+package "org.openmarkov.core" <<external>> {
+  class "ProbNet" as PN
+  class "PNESupport" as PNES
+  class "PNEdit" as PNE
+  class "TablePotential" as TP
+}
+
+' -- Dependencias --
+
+MPLA --> MM : escucha
+MPLA --> NP : gestiona
+MPLA --> ETB
+MP --> MPLA : crea
+EP --> EMM : delega eventos
+EMM --> NEM
+EMM --> SEM
+EMM --> LEM
+NP --> VN : contiene
+VN --> VNo : mantiene
+VN --> VL : mantiene
+VN ..> ETB : <<R7: acoplamiento>>
+NPD --> PED
+PED --> PP
+PP ..> VT : actualiza
+TPVE --|> PNE
+ICIVE --|> PNE
+MNE --|> PNE
+VT ..> TP : <<R3: casts>>
+TPVE ..> TP : <<R3: casts>>
+VN ..|> PN : PNEditListener
+
+@enduml

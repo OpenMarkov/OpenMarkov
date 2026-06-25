@@ -1,0 +1,94 @@
+@startuml r5-before
+' ============================================================
+' R5 Before -- Redistribution algorithm duplicated 3 times
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 50
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<base>> #E8E8FF
+  BorderColor<<base>> #6666AA
+  BackgroundColor<<problem>> #FFDDD8
+  BorderColor<<problem>> #CC4444
+  BackgroundColor<<ok>> #FFF8E0
+  BorderColor<<ok>> #AA9944
+}
+
+abstract class PNEdit <<base>> {
+  # probNet: ProbNet
+  __
+  + executeEdit()
+  # {abstract} doEdit()
+  + undo()
+}
+
+class PotentialChangeEdit <<base>> {
+  # oldPotential: Potential
+  # newPotential: Potential
+  __
+  # doEdit()
+  .. remove old, add new ..
+}
+
+class TablePotentialValueEdit <<problem>> {
+  - row, col: int
+  - newValue: Double
+  - priorityList: List<Integer>
+  __
+  //constructor://
+  .. <color:#CC4444>redistribution algorithm</color> ..
+  .. <color:#CC4444>(~40 lines)</color> ..
+}
+
+class ICITablePotentialValueEdit <<problem>> {
+  - row, col: int
+  - newValue: Double
+  - priorityList: List<Integer>
+  - leakyFlag: boolean
+  __
+  # doEdit():
+  .. <color:#CC4444>redistribution (leaky)</color> ..
+  .. <color:#CC4444>(~35 lines)</color> ..
+  .. <color:#CC4444>redistribution (noisy)</color> ..
+  .. <color:#CC4444>(~35 lines, identical)</color> ..
+}
+
+class AugmentedPotentialValueEdit <<ok>> {
+  - row, col: int
+  __
+  //constructor://
+  .. symbolic expressions ..
+  .. <color:#44AA44>no redistribution</color> ..
+}
+
+class LinkRestrictionPotentialValueEdit <<ok>> {
+  - row, col: int
+  - newValue: Integer
+  __
+  # doEdit():
+  .. binary 0/1 values ..
+  .. <color:#44AA44>no redistribution</color> ..
+}
+
+PNEdit <|-- PotentialChangeEdit
+PNEdit <|-- ICITablePotentialValueEdit
+PNEdit <|-- LinkRestrictionPotentialValueEdit
+PotentialChangeEdit <|-- TablePotentialValueEdit
+PotentialChangeEdit <|-- AugmentedPotentialValueEdit
+
+note right of TablePotentialValueEdit
+  Same redistribution
+  algorithm as ICI
+end note
+
+note right of ICITablePotentialValueEdit
+  Leaky and noisy blocks
+  are copy-paste of each other
+end note
+
+@enduml

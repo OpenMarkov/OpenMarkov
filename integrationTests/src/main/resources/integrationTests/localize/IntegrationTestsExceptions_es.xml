@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <NoUncertainParameter>
+        <title value="Parámetros de incertidumbre sin nombre"/>
+        <message
+                value="Ningún parámetro de incertidumbre tiene nombre. Note que el análisis de sensibilidad sólo reconoce parámetros de incertidumbre con nombre."/>
+    </NoUncertainParameter>
+    <BelowTwoUncertainParameters>
+        <title value="Menos de dos parámetros de incertidumbre con nombre"/>
+        <message
+                value="Menos de dos parámetros de incertidumbre tienen nombre. Note que este análisis de sensibilidad sólo reconoce aquellos parámetros de incertidumbre con nombre."/>
+    </BelowTwoUncertainParameters>
+
+    <TrialException>
+        <title value="Este es mí mensaje de título para el programa: {program}"/>
+        <message value="Este es mí mensaje, el cual explica que hay un error en {program} usando la red {netName}"/>
+    </TrialException>
+    <SubTrialException>
+        <title value="Código de error: {errorCode}, este es mí mensaje de título para el programa: {program}"/>
+        <message
+                value="Este es mí mensaje, el cual explica que hay un error en {program} usando la red {netName}. Su código de error es: {errorCode}"/>
+    </SubTrialException>
+
+    <CharConversionException>
+        <title value="Error en conversión de carácteres"/>
+        <message value="No se pudo convertir el caracter"/>
+    </CharConversionException>
+    <IOException>
+        <title value="Error ES"/>
+        <message value="No se pudo realizar una operación ES"/>
+    </IOException>
+</properties>

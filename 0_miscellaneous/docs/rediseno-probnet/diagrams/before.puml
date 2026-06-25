@@ -1,0 +1,114 @@
+@startuml before
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 35
+skinparam ranksep 35
+
+skinparam class {
+  BackgroundColor<<core>>        #FFEBEE
+  BackgroundColor<<graph>>       #F5F5F5
+  BackgroundColor<<edit>>        #E8EAF6
+  BackgroundColor<<io>>          #F3E5F5
+  BorderColor #444444
+}
+
+class "ProbNet\n(1440 lineas)" as ProbNet <<core>> {
+  .. <color:#880000>Campos (16)</color> ..
+  # nodeDepot : NodeTypeDepot
+  - networkType : NetworkType
+  - constraints : TreeSet<PNConstraint>
+  - agents : List<StringWithProperties>
+  - decisionCriteria : List<Criterion>
+  - cycleLength : CycleLength
+  - pNESupport : PNESupport
+  - name : String
+  - comment : String
+  - defaultStates : State[]
+  - inferenceOptions : InferenceOptions
+  - constantPotentials : Set<TablePotential>
+  - <color:#880000>reader : ProbNetReader</color>
+  - <color:#880000>writer : ProbNetWriter</color>
+  __
+  .. Gestion de nodos y links ..
+  + addNode / removeNode / getNode
+  + getNodes / getNumNodes
+  + addLink / removeLink / invertLink
+  + addShiftedNode  <color:#880000>// TODO falta copiar potenciales</color>
+  + moveNode        <color:#880000>// NPE potencial (B2)</color>
+  __
+  .. Variables ..
+  + getVariable / containsVariable
+  + getVariables / getVariablesNames
+  + <color:#880000>getChanceAndDecisionVariables</color>  <color:#880000>// B1: nombre erroneo</color>
+  __
+  .. Potenciales ..
+  + addPotential / removePotential
+  + getPotentials (5 sobrecargas)
+  + <color:#880000>getProbPotentials</color>     <color:#880000>// patron duplicado</color>
+  + <color:#880000>getUtilityPotentials</color>  <color:#880000>// patron duplicado</color>
+  + tableProjectPotentials
+  __
+  .. Restricciones ..
+  + add/remove/get/check Constraints
+  + <color:#880000>checkProbNet</color>          <color:#880000>// duplica getUnsatisfied... (S1)</color>
+  __
+  .. <color:#880000>Clasificacion de red (6 metodos)</color> ..
+  + <color:#880000>variablesCouldBeTemporal</color>  <color:#880000>// bucle manual (S2)</color>
+  + <color:#880000>isMultiagent</color>              <color:#880000>// bucle manual (S2)</color>
+  + onlyTemporal / onlyChanceNodes
+  + thereAreTemporalNodes
+  + <color:#880000>getNumCriteria</color>            <color:#880000>// O(n*m) innecesario (S4)</color>
+  __
+  .. <color:#880000>Gestion de agentes</color> ..
+  + <color:#880000>modifyAgent</color>  <color:#880000>// switch largo, bug agents=null (B3)</color>
+  + getAgents / setAgents
+  __
+  .. <color:#880000>Metadatos + I/O</color> ..
+  + get/set: Name, Comment, DefaultStates
+  + get/set: <color:#880000>Reader, Writer</color>
+  + copy / deepCopy
+  + buildMarkovDecisionNetwork
+}
+
+class "Graph<Node>" as Graph <<graph>> {
+  + addNode / removeNode
+  + addLink / removeLink
+  + getNodes / getLinks
+  + getParents / getChildren
+  + existsPath
+}
+
+class NodeTypeDepot <<graph>> {
+  + getNode (4 sobrecargas)
+  + getNodes / getNumNodes
+}
+
+class PNESupport <<edit>> {
+  + doEdit / undo / redo
+}
+
+Graph <|-- ProbNet : <color:#880000>herencia directa</color>
+ProbNet *-- NodeTypeDepot
+ProbNet *-- PNESupport
+
+note top of ProbNet
+  <b><color:#880000>God Class</color></b>
+  1440 lineas / 80+ metodos publicos
+  490 ficheros dependientes
+  6 areas de responsabilidad distintas
+  4 bugs conocidos / 7 code smells
+end note
+
+note right of Graph
+  <color:#880000>Herencia inapropiada:</color>
+  ProbNet hereda de Graph
+  pero no es "un tipo de grafo
+  generico": es una red
+  probabilistica con topologia
+  de grafo.
+end note
+
+@enduml

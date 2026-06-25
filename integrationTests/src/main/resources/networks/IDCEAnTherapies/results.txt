@@ -1,0 +1,3 @@
+Inference times
+---------------
+networks/IDCEAnTherapies/DAN-2tests.pgmx: 5 milisegundos

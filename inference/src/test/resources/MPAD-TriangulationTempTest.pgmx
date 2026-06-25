@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.1.0">
+  <ProbNet type="MPAD">
+    <Variables>
+      <Variable name="A" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="214" y="140" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="B" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="365" y="141" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="C" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="217" y="249" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="E" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="372" y="249" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="F" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="135" y="359" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="G" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="289" y="357" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="H" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="435" y="350" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="B" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="831" y="149" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="U" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="197" y="451" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="U1" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="355" y="441" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="U2" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="496" y="435" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="SV" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="441" y="506" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="A" timeSlice="0" />
+        <Variable name="B" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="A" timeSlice="0" />
+        <Variable name="C" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="B" timeSlice="0" />
+        <Variable name="E" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="B" timeSlice="0" />
+        <Variable name="B" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="C" timeSlice="0" />
+        <Variable name="F" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="C" timeSlice="0" />
+        <Variable name="G" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="E" timeSlice="0" />
+        <Variable name="G" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="E" timeSlice="0" />
+        <Variable name="H" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="F" timeSlice="0" />
+        <Variable name="U" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="G" timeSlice="0" />
+        <Variable name="U1" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="H" timeSlice="0" />
+        <Variable name="U2" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="U1" timeSlice="0" />
+        <Variable name="SV" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="U2" timeSlice="0" />
+        <Variable name="SV" timeSlice="0" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="A" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="B" timeSlice="0" />
+          <Variable name="A" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="C" timeSlice="0" />
+          <Variable name="A" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="E" timeSlice="0" />
+          <Variable name="B" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="F" timeSlice="0" />
+          <Variable name="C" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="G" timeSlice="0" />
+          <Variable name="C" timeSlice="0" />
+          <Variable name="E" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="H" timeSlice="0" />
+          <Variable name="E" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="B" timeSlice="1" />
+          <Variable name="B" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="U" timeSlice="0" />
+        <Variables>
+          <Variable name="F" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="U1" timeSlice="0" />
+        <Variables>
+          <Variable name="G" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="U2" timeSlice="0" />
+        <Variables>
+          <Variable name="H" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Product" role="utility">
+        <UtilityVariable name="SV" timeSlice="0" />
+        <Variables>
+          <Variable name="U1" timeSlice="0" />
+          <Variable name="U2" timeSlice="0" />
+        </Variables>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+</ProbModelXML>
+

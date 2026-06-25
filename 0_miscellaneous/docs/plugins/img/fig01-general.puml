@@ -1,0 +1,94 @@
+@startuml fig01-general
+skinparam backgroundColor white
+skinparam defaultFontName Helvetica
+skinparam ArrowColor #555555
+skinparam shadowing false
+skinparam classBackgroundColor white
+skinparam classBorderColor #888888
+
+left to right direction
+
+' ==============================
+' Columna 1: Anotaciones
+' ==============================
+package "Anotaciones de descubrimiento" #FFFACD {
+    annotation "@PotentialType" <<annotation>> #FFE066
+    annotation "@Constraint" <<annotation>> #FFE066
+    annotation "@NetworkTypeInfo" <<annotation>> #FFE066
+    annotation "@FormatType" <<annotation>> #FFE066
+}
+' Forzar disposición vertical interna
+"@PotentialType"   -[hidden]d-> "@Constraint"
+"@Constraint"      -[hidden]d-> "@NetworkTypeInfo"
+"@NetworkTypeInfo" -[hidden]d-> "@FormatType"
+
+' ==============================
+' Columna 2: Clases base
+' ==============================
+package "Clases base (puntos de extensión)" #FFE0C0 {
+    abstract class Potential    #FFCF8B
+    abstract class PNConstraint #FFCF8B
+    abstract class NetworkType  #FFCF8B
+    interface ProbNetReader     #FFCF8B
+    interface ProbNetWriter     #FFCF8B
+}
+Potential    -[hidden]d-> PNConstraint
+PNConstraint -[hidden]d-> NetworkType
+NetworkType  -[hidden]d-> ProbNetReader
+ProbNetReader -[hidden]d-> ProbNetWriter
+
+' ==============================
+' Columna 3: Managers
+' ==============================
+package "Managers (singletons)" #D0FFD8 {
+    class PotentialUtils   #90EE90
+    class ConstraintManager #90EE90
+    class NetworkTypeUtils  #90EE90
+    class FormatManager     #90EE90
+}
+PotentialUtils   -[hidden]d-> ConstraintManager
+ConstraintManager -[hidden]d-> NetworkTypeUtils
+NetworkTypeUtils  -[hidden]d-> FormatManager
+
+' ==============================
+' Columna 4: Motor (sin cambios)
+' ==============================
+package "Motor de búsqueda\n(org.openmarkov.plugin)" #D0F0FF {
+    class PluginSearch #AAE0FF
+    class PluginLoader #AAE0FF
+    class ExtensionTree #AAE0FF
+    enum PluginClassCategory #C8F0FF {
+        OPENMARKOV
+        JAVA
+        EXTERNAL_DEPENDENCY
+    }
+}
+
+' ======== Relaciones entre columnas ========
+
+' Anotaciones marcan clases base
+"@PotentialType"   ..> Potential    : marca subclases
+"@Constraint"      ..> PNConstraint : marca subclases
+"@NetworkTypeInfo" ..> NetworkType  : marca subclases
+"@FormatType"      ..> ProbNetReader  : marca\nimplementaciones
+"@FormatType"      ..> ProbNetWriter  : marca\nimplementaciones
+
+' Managers gestionan clases base
+PotentialUtils    --> Potential     : gestiona
+ConstraintManager --> PNConstraint  : gestiona
+NetworkTypeUtils  --> NetworkType   : gestiona
+FormatManager     --> ProbNetReader : gestiona
+FormatManager     --> ProbNetWriter : gestiona
+
+' Managers usan el motor
+PotentialUtils    ..> PluginSearch : init()
+ConstraintManager ..> PluginSearch : init()
+NetworkTypeUtils  ..> PluginSearch : init()
+FormatManager     ..> PluginSearch : init()
+
+' Motor interno
+PluginSearch --> PluginLoader  : usa
+PluginSearch --> ExtensionTree : construye
+PluginLoader --> PluginClassCategory : categoriza
+
+@enduml

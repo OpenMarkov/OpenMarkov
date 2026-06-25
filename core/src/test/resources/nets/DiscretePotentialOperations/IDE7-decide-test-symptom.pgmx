@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="InfluenceDiagram">
+    <Variables>
+      <Variable name="Disease" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="122" y="44" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="X" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Result of test" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="346" y="274" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Y" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="not-performed" />
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Symptom" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="357" y="108" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Therapy" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="416" y="388" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="D" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Do test?" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="572" y="185" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="T" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Health state" type="numeric" role="utility" isInput="false">
+        <Coordinates x="175" y="484" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="U" />
+          <Property name="Min" value="0.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+      </Variable>
+      <Variable name="Cost of test" type="numeric" role="utility" isInput="false">
+        <Coordinates x="640" y="486" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="C" />
+          <Property name="Min" value="0.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+      </Variable>
+      <Variable name="Cost of therapy" type="numeric" role="utility" isInput="false">
+        <Coordinates x="432" y="485" />
+        <Unit />
+        <Precision>0.01</Precision>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Health state" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of test" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Symptom" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Result of test" />
+        <Variable name="Therapy" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom" />
+        <Variable name="Do test?" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Health state" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Cost of therapy" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Cost of test" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Therapy" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Result of test" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.86 0.14</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Result of test" />
+          <Variable name="Disease" />
+          <Variable name="Do test?" />
+        </Variables>
+        <Values>1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.97 0.03 0.0 0.09 0.91</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptom" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.95 0.05 0.2 0.8</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Health state" />
+        <Variables>
+          <Variable name="Disease" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>10.0 3.0 9.0 8.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of test" />
+        <Variables>
+          <Variable name="Do test?" />
+        </Variables>
+        <Values>0.0 -0.2</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of therapy" />
+        <Variables>
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>0.0 -0.25</Values>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties />
+  </ProbNet>
+</ProbModelXML>

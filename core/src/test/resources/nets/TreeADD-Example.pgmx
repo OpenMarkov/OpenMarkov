@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.0.1">
+  <ProbNet type="SMM">
+    <Variables>
+      <Variable name="A" type="finiteStates" role="chance">
+        <Coordinates x="649" y="178" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="B" type="finiteStates" role="chance">
+        <Coordinates x="647" y="264" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="A" />
+        <Variable name="B" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="A" />
+        </Variables>
+        <Values>0.9 0.1</Values>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="B" />
+          <Variable name="A" />
+        </Variables>
+        <TopVariable name="A" />
+        <Branches>
+          <Branch>
+            <State name="absent" />
+            <Potential type="Table">
+              <Variables>
+                <Variable name="B" />
+              </Variables>
+              <Values>1.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <State name="present" />
+            <Potential type="Table">
+              <Variables>
+                <Variable name="B" />
+              </Variables>
+              <Values>0.9 0.1</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+</ProbModelXML>
+

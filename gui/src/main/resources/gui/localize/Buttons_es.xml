@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <StandardDomain>
+        <Text value="Dominios estándar">
+            <Mnemonic value="d"/>
+        </Text>
+    </StandardDomain>
+    <StandardCriteria>
+        <Text value="Criterios estándar"/>
+    </StandardCriteria>
+    <Apply>
+        <Text value="Aplicar">
+            <Mnemonic value="a"/>
+        </Text>
+    </Apply>
+    <Up>
+        <Text value="Subir">
+            <Mnemonic value="s"/>
+        </Text>
+    </Up>
+    <Ok>
+        <Text value="Aceptar">
+            <Mnemonic value="a"/>
+        </Text>
+    </Ok>
+    <Cancel>
+        <Text value="Cancelar">
+            <Mnemonic value="c"/>
+        </Text>
+    </Cancel>
+    <InfinitePositive>
+        <Text value="Insertar infinito positivo"/>
+    </InfinitePositive>
+    <Add>
+        <Text value="Añadir">
+            <Mnemonic value="ñ"/>
+        </Text>
+    </Add>
+    <BUNDLEFILE>
+        <Text value="Español"/>
+    </BUNDLEFILE>
+    <Copy>
+        <Text value="Copiar">
+            <Mnemonic value="c"/>
+        </Text>
+    </Copy>
+    <Clear>
+        <Text value="Limpiar">
+            <Mnemonic value="l"/>
+        </Text>
+    </Clear>
+    <Delete>
+        <Text value="Borrar">
+            <Mnemonic value="b"/>
+        </Text>
+    </Delete>
+    <InfiniteNegative>
+        <Text value="Insertar infinito negativo"/>
+    </InfiniteNegative>
+    <Down>
+        <Text value="Bajar">
+            <Mnemonic value="j"/>
+        </Text>
+    </Down>
+</properties>

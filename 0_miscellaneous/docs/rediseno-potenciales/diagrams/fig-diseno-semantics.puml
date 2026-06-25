@@ -1,0 +1,128 @@
+@startuml fig-diseno-semantics
+' ============================================================
+' Diseno ideal: PotentialSemantics
+' Cada rol es un objeto de comportamiento, no un enum.
+' ============================================================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam nodesep 40
+skinparam ranksep 40
+skinparam dpi 150
+
+hide empty fields
+
+skinparam class {
+    BackgroundColor<<iface>> #C0A8FF
+    BorderColor<<iface>> #7744BB
+    BackgroundColor<<prob>> #C8E8FF
+    BorderColor<<prob>> #4499CC
+    BackgroundColor<<utility>> #FFE0B2
+    BorderColor<<utility>> #CC8844
+    BackgroundColor<<policy>> #C8F0C8
+    BorderColor<<policy>> #44AA44
+    BackgroundColor<<other>> #E8E8E8
+    BorderColor<<other>> #888888
+    BackgroundColor<<table>> #BDD7FF
+    BorderColor<<table>> #4477BB
+    BackgroundColor<<old>> #FFDDD8
+    BorderColor<<old>> #CC4444
+}
+
+' ==== NUEVO DISENO ====
+interface PotentialSemantics <<iface>> {
+    +initializeUniform(double[], List<Variable>)
+    +normalize(double[], int[], List<Variable>)
+    +canInduceFindings() : boolean
+    +isAdditive() : boolean
+}
+
+class ConditionalProbability <<prob>> {
+    {static} +INSTANCE
+    --
+    initializeUniform: 1 / numStates[0]
+    normalize: por rodajas
+    canInduceFindings: true
+    isAdditive: false
+}
+
+class JointProbability <<prob>> {
+    {static} +INSTANCE
+    --
+    initializeUniform: 1 / totalStates
+    normalize: global
+    canInduceFindings: false
+    isAdditive: false
+}
+
+class UtilitySemantics <<utility>> {
+    -criterion : Criterion
+    --
+    initializeUniform: 0.0
+    normalize: no-op
+    canInduceFindings: false
+    isAdditive: true
+}
+
+class PolicySemantics <<policy>> {
+    {static} +INSTANCE
+    --
+    initializeUniform: 1 / numStates[0]
+    normalize: por rodajas
+    canInduceFindings: true
+    isAdditive: false
+}
+
+class RestrictionSemantics <<other>> {
+    {static} +INSTANCE
+    --
+    initializeUniform: 1.0
+    normalize: no-op
+    canInduceFindings: false
+    isAdditive: false
+}
+
+PotentialSemantics <|.. ConditionalProbability
+PotentialSemantics <|.. JointProbability
+PotentialSemantics <|.. UtilitySemantics
+PotentialSemantics <|.. PolicySemantics
+PotentialSemantics <|.. RestrictionSemantics
+
+' ==== DISENO ANTERIOR (contraste) ====
+note as NAntes #FFDDD8
+  <b>Antes</b> (enum PotentialRole):
+
+  <code>switch (role) {</code>
+  <code>  case CONDITIONAL_PROBABILITY:</code>
+  <code>    value = 1.0 / numStates;</code>
+  <code>  case JOINT_PROBABILITY:</code>
+  <code>    value = 1.0 / totalStates;</code>
+  <code>  case LINK_RESTRICTION:</code>
+  <code>    value = 1.0;</code>
+  <code>  default: value = 0.0;</code>
+  <code>}</code>
+
+  Cada nuevo rol obliga a rastrear
+  y actualizar todos los <b>switch</b>.
+end note
+
+note as NDespues #E8F5E9
+  <b>Despues</b> (PotentialSemantics):
+
+  <code>table.getSemantics()</code>
+  <code>  .initializeUniform(</code>
+  <code>      values, variables);</code>
+
+  Cada nuevo rol = nueva clase.
+  Sin <b>switch</b>. Principio OCP.
+end note
+
+' ==== USO ====
+class DiscreteTable <<table>> {
+    -semantics : PotentialSemantics
+}
+
+DiscreteTable --> PotentialSemantics : delega
+
+@enduml

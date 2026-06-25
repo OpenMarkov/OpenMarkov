@@ -1,0 +1,88 @@
+@startuml exception-hierarchy-proposed-unchecked
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 10
+skinparam classAttributeIconSize 0
+skinparam padding 4
+skinparam nodesep 20
+skinparam ranksep 40
+skinparam shadowing false
+skinparam dpi 110
+skinparam wrapWidth 180
+
+skinparam class {
+    BackgroundColor White
+    BorderColor #666666
+    ArrowColor #555555
+    FontSize 10
+}
+skinparam package {
+    BackgroundColor White
+    BorderColor #AAAAAA
+    FontSize 10
+    FontStyle bold
+}
+skinparam note {
+    BackgroundColor #EEF4FF
+    BorderColor #6688BB
+    FontSize 9
+}
+skinparam legend {
+    BackgroundColor #F8F8F8
+    BorderColor #AAAAAA
+    FontSize 9
+}
+
+top to bottom direction
+
+legend top right
+|= Color |= Significado |
+|<#BBDDFF>| Unchecked nueva — reemplaza excepciones erróneas |
+|<#FFCCCC>| Eliminada o sustituida |
+|<#EEEEEE>| Clase estándar de Java (reutilizada) |
+endlegend
+
+' ── Raíces Java ───────────────────────────────────────
+class "RuntimeException\n//Java estándar//" as JRT #EEEEEE
+class "IllegalArgumentException\n//Java estándar//" as JIAE #EEEEEE
+class "UnsupportedOperationException\n//Java estándar//" as JUOE #EEEEEE
+JIAE -up-|> JRT
+JUOE -up-|> JRT
+
+' ── Base unchecked ────────────────────────────────────
+abstract "OpenMarkovRuntimeException\n**[nueva — base unchecked]**" as OMRE #BBDDFF
+OMRE -up-|> JRT
+note right of OMRE
+  Para errores que indican un fallo de programación
+  o estado interno imposible. No se capturan en
+  código de negocio normal; solo en la capa más
+  externa del programa.
+end note
+
+class "InternalConsistencyException\n**[reemplaza UnreacheableException]**\n//Estado que el diseño garantizaba inalcanzable.//\n//Equivalente a un assert con traza completa.//" as ICE #BBDDFF
+class "PotentialComputationException\n**[reemplaza NonProjectablePotentialException]**\n//Fallo al calcular una tabla de probabilidad.//\n//Nombre comprensible sin vocabulario matemático.//" as PCE #BBDDFF
+class "PluginConfigurationException\n**[nueva — reemplaza catch→null de FormatManager]**\n//Plugin no instanciable: falla rápido y visible,//\n//con nombre del plugin y causa en la traza.//" as PLCE #BBDDFF
+class "UIActionException\n**[nueva]**\n//Simplifica los 20+ bloques catch idénticos//\n//de MainPanelListenerAssistant.//" as UAE #BBDDFF
+ICE -up-|> OMRE
+PCE -up-|> OMRE
+PLCE -up-|> OMRE
+UAE -up-|> OMRE
+
+' ── Eliminadas / sustituidas ──────────────────────────
+package "Eliminadas / sustituidas" as PKG_ELIM #FFF4F4 {
+    class "<s>DoEditException</s>\n//→ CVE hereda de NetworkStructureException//" as DEE #FFCCCC
+    class "<s>UnreacheableException</s>\n//→ InternalConsistencyException//" as URE #FFCCCC
+    class "<s>UnrecoverableException</s>\n//→ UIActionException//" as UREC #FFCCCC
+    class "<s>InvalidArgumentException</s>\n//→ IllegalArgumentException//" as IAE #FFCCCC
+    class "<s>NotSupportedOperationException</s>\n//→ UnsupportedOperationException//" as NSOE #FFCCCC
+    class "<s>NonProjectablePotentialException</s>\n<s>CannotNormalizePotentialException</s>\n<s>InvalidNetworkTypeException</s>\n//→ PotentialComputationException//" as NPPE #FFCCCC
+}
+DEE   ..> ICE   : sustituida por\nInternalConsistencyException
+URE   ..> ICE   : sustituida por
+UREC  ..> UAE   : sustituida por
+IAE   ..> JIAE  : sustituida por
+NSOE  ..> JUOE  : sustituida por
+NPPE  ..> PCE   : sustituidas por
+
+@enduml

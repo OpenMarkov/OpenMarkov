@@ -1,0 +1,181 @@
+@startuml fig-op4-visitor
+' ============================================================
+' Opcion 4: Patron Visitor
+' Separacion completa entre datos (Potential) y operaciones
+' (PotentialVisitor). Las clases de datos solo implementan
+' accept(); toda la logica esta en los visitantes.
+' ============================================================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 30
+skinparam ranksep 35
+skinparam dpi 150
+
+hide empty fields
+
+' ==== DATOS: JERARQUIA DE POTENCIALES ====
+package "Datos (solo estado + accept)" #E8F5E9 {
+
+    abstract class Potential #FFD580 {
+        #variables : List<Variable>
+        --
+        +{abstract} accept(PotentialVisitor<R>) : R
+    }
+
+    class TablePotential #BDD7FF {
+        -values : double[]
+        -dimensions : int[]
+        -offsets : int[]
+        --
+        +accept(v) : R
+        ..
+        <color:#228B22>return v.visit(this)</color>
+    }
+
+    class UniformPotential #E8E8E8 {
+        --
+        +accept(v) : R
+        ..
+        <color:#228B22>return v.visit(this)</color>
+    }
+
+    class DeltaPotential #E8E8E8 {
+        -state : State
+        --
+        +accept(v) : R
+        ..
+        <color:#228B22>return v.visit(this)</color>
+    }
+
+    abstract class ICIPotential #E8E8E8 {
+        #noisyParameters : double[][]
+        --
+        +accept(v) : R
+    }
+
+    class TreeADDPotential #E8E8E8 {
+        -rootNode : ...
+        --
+        +accept(v) : R
+    }
+
+    class "GTablePotential<E>" as GTablePotential #FFF3CD {
+        -elementTable : List<E>
+        --
+        +accept(v) : R
+    }
+
+    Potential <|-- TablePotential
+    Potential <|-- UniformPotential
+    Potential <|-- DeltaPotential
+    Potential <|-- ICIPotential
+    Potential <|-- TreeADDPotential
+    Potential <|-- GTablePotential
+}
+
+' ==== OPERACIONES: VISITANTES ====
+package "Operaciones (Visitors)" #FFF3E0 {
+
+    interface "PotentialVisitor<R>" as PotentialVisitor #70D7F0 {
+        +visit(TablePotential) : R
+        +visit(UniformPotential) : R
+        +visit(DeltaPotential) : R
+        +visit(ICIPotential) : R
+        +visit(TreeADDPotential) : R
+        +visit(GTablePotential) : R
+    }
+
+    class ProjectionVisitor #C8F0C8 {
+        -evidence : EvidenceCase
+        -options : InferenceOptions
+        --
+        <color:#228B22>implements PotentialVisitor<TablePotential></color>
+        ..
+        +visit(TablePotential) : TablePotential
+        +visit(UniformPotential) : TablePotential
+        +visit(DeltaPotential) : TablePotential
+        +visit(ICIPotential) : TablePotential
+        +visit(TreeADDPotential) : TablePotential
+        +visit(GTablePotential) : TablePotential
+    }
+
+    class ReorderVisitor #C8F0C8 {
+        -newOrder : List<Variable>
+        --
+        <color:#228B22>implements PotentialVisitor<Potential></color>
+        ..
+        +visit(TablePotential) : Potential
+        +visit(UniformPotential) : Potential
+        +visit(...) : Potential
+    }
+
+    class DeepCopyVisitor #C8F0C8 {
+        -targetNet : ProbNet
+        --
+        <color:#228B22>implements PotentialVisitor<Potential></color>
+        ..
+        +visit(TablePotential) : Potential
+        +visit(UniformPotential) : Potential
+        +visit(...) : Potential
+    }
+
+    class ScaleVisitor #C8F0C8 {
+        -factor : double
+        --
+        <color:#228B22>implements PotentialVisitor<Void></color>
+        ..
+        +visit(TablePotential) : Void
+        +visit(UniformPotential) : Void
+        +visit(...) : Void
+    }
+
+    class SerializationVisitor #E8E8E8 {
+        --
+        <color:#888888>Futuro: serializar a binario,</color>
+        <color:#888888>exportar a GPU, etc.</color>
+    }
+
+    PotentialVisitor <|.. ProjectionVisitor
+    PotentialVisitor <|.. ReorderVisitor
+    PotentialVisitor <|.. DeepCopyVisitor
+    PotentialVisitor <|.. ScaleVisitor
+    PotentialVisitor <|.. SerializationVisitor
+}
+
+' ==== RELACION ACCEPT-VISIT ====
+Potential ..> PotentialVisitor : accept(visitor)\n<color:#228B22>doble despacho</color>
+
+note bottom of ProjectionVisitor #FFFDE7
+  Cada visitante contiene la logica
+  que antes estaba dispersa en los
+  metodos abstractos de Potential.
+
+  <b>Ventaja</b>: anadir una nueva operacion
+  (nuevo Visitor) no toca las clases
+  de datos.
+
+  <b>Coste</b>: anadir un nuevo tipo de
+  Potential obliga a actualizar
+  <b>todos</b> los visitantes existentes.
+end note
+
+legend right
+  |= Color |= Significado |
+  | <#FFD580> | Clase abstracta base |
+  | <#BDD7FF> | TablePotential (datos) |
+  | <#70D7F0> | Interfaz Visitor |
+  | <#C8F0C8> | Visitante concreto |
+  | <#E8E8E8> | Potencial / visitante generico |
+  --
+  <b>Patron Visitor</b> (GoF):
+  Las clases de datos solo conocen
+  accept(). Toda la logica de operacion
+  esta encapsulada en los visitantes.
+  La doble indireccion garantiza
+  despacho correcto sin downcasts.
+endlegend
+
+@enduml

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassLocalizations>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$BinomialPotentialMissingCasesAndProbabilities" value="Binomial potential of role {role} must specify both the number of cases and a probaility theta."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$CannotAsignPotentialToStaticVariable" value="Cannot assign a potential of type {potentialType} to a static variable."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$ConstraintNotFound" value="Constraint {constraintName} does not exist or cannot be instantiated."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DataCouldNotBeConverted" value="Data could not be converted due to {reason}."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DeltaPotentialWithoutState" value="Delta potential of role {role} must specify a state. This can be done using the XML element State, StateIndex or NumericValue."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$EvidenceIsIncompatibleWithOther" value="{sourceException}"/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$FoundUnknownState" value="Variable {variable} does not have state {stateName}."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$InvalidState" value="State {stateName} is invalid for variable {variableName}."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$NoNetworkTypeFound" value="No network type found."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$PotentialTypeNotSupported" value="Potential type {potentialType} is not supported."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TreeADDWithoutPotentialOrReferenfe" value="TreeADD branch should specify either a potential or a reference."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TreeADDWithoutTwoThresholds" value="TreeADD branch has {thresholds.size} thresholds, but it should have only 2."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownNetworkType" value="There is no network type matching {unknownType}."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$VariableHasNoStates" value="Variable {variableName} has no states, while a list of states must be provided."/>
+</ClassLocalizations>

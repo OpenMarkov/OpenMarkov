@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <SensitivityAnalysis value="Sensitivity analysis">
+        <Title value="Sensitivity analysis"/>
+        <Type>
+            <Title value="Analysis type"/>
+            <!-- Deterministic analysis -->
+            <Tornado value="Tornado diagram"/>
+            <Spider value="Spider diagram"/>
+            <TornadoSpider value="Tornado/Spider diagram"/>
+            <Plot value="Plot (one-way analysis)"/>
+            <Map value="Map (two-way analysis)"/>
+            <SpiderCE value="CE-Spider diagram"/>
+            <TornadoCE value="CE-Tornado diagram"/>
+            <CESpiderDiagram value="Cost-effectiveness spider diagram"/>
+            <!-- Probabilistic analysis -->
+            <Acceptability value="Acceptability"/>
+            <EVPI value="EVPI"/>
+            <CEPlane value="Cost-effectiveness plot"/>
+            <AcceptabilityCurve value="Acceptability curve"/>
+        </Type>
+        <Axis>
+            <Horizontal value="Horizontal axis parameter: "/>
+            <Vertical value="Vertical axis parameter: "/>
+            <Variation>
+                <PORV value="Percentage over reference value"/>
+                <RORV value="Ratio over reference value"/>
+                <POPP value="Percentage of the 2nd order probability"/>
+                <UDIN value="User defined interval"/>
+                <PREV value="Same variation as for parameter in horizontal axis"/>
+            </Variation>
+            <VariationSpiderLegend>
+                <PORV value="Percentage over reference value"/>
+                <RORV value="Ratio over reference value"/>
+                <POPP value="Percentage over reference value"/>
+                <UDIN value="User defined interval"/>
+                <PREV value="Same variation as for parameter in horizontal axis"/>
+            </VariationSpiderLegend>
+        </Axis>
+        <General>
+            <Decision value="Decision:"/>
+            <From value="From:"/>
+            <To value="To:"/>
+            <Draw value="draw"/>
+            <Parameter value="Parameter"/>
+            <Parameters value="Parameters"/>
+            <All value="ALL"/>
+            <GlobalUtility value="Global utility"/>
+            <ExpectedUtility value="Expected utility"/>
+            <ICER value="ICER"/>
+            <Unnamed value="unnamed"/>
+            <Network value="Network:"/>
+            <PointsPerParameter value="Points per parameter"/>
+            <Simulations value="Simulations"/>
+            <Multithreading value="Use multithreading"/>
+            <ProbabilityAboveOne value="When a probability parameter is above 1: "/>
+            <Ignore value="Ignore case"/>
+            <ThrowError value="Throw error message"/>
+            <IterationsRequired value="Iterations required"/>
+            <SimulationsRequired value="Simulations required"/>
+            <Scale value="Scale"/>
+            <values value="Values:"/>
+            <absolute value="absolute"/>
+            <relativeTo value="relative to:"/>
+            <intervention value="Intervention:"/>
+            <display value="Values"/>
+            <Reference value="Reference"/>
+            <Effectiveness value="Effectiveness"/>
+            <Cost value="Cost"/>
+            <WTP value="WTP"/>
+            <line0 value="Show 0 line"/>
+        </General>
+    </SensitivityAnalysis>
+</properties>

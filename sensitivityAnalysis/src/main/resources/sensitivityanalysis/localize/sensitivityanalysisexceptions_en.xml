@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <NoUncertainParameter>
+        <title value="Unnamed uncertain parameters"/>
+        <message
+                value="No uncertain parameter has name. Note that the sensitivity analysis only recognizes named parameters."/>
+    </NoUncertainParameter>
+    <BelowTwoUncertainParameters>
+        <title value="Less than two named uncertain parameters"/>
+        <message
+                value="Less than two uncertain parameters have names. Note that the sensitivity analysis only recognizes named parameters"/>
+    </BelowTwoUncertainParameters>
+</properties>

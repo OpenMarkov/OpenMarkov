@@ -1,0 +1,71 @@
+@startuml srp
+' ============================================================
+' Diagrama conceptual: Principio de Responsabilidad Unica
+' aplicado a la refactorizacion de Node
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam nodesep 30
+skinparam ranksep 20
+
+hide empty members
+
+skinparam class {
+    BackgroundColor<<identity>> #E8E8FF
+    BorderColor<<identity>> #6666AA
+    BackgroundColor<<absorption>> #D4EDDA
+    BorderColor<<absorption>> #28A745
+    BackgroundColor<<conversion>> #FFEAA7
+    BorderColor<<conversion>> #FDCB6E
+    BackgroundColor<<utility>> #DFE6E9
+    BorderColor<<utility>> #636E72
+    BackgroundColor<<restriction>> #FAD7A0
+    BorderColor<<restriction>> #E67E22
+}
+
+package "Antes: 1 clase, 6 razones para cambiar" {
+    class "Node\n(1.037 lineas)" as NodeBefore {
+        Identidad + CRUD
+        Absorcion de nodos
+        Conversion de tipos
+        Funciones de utilidad
+        Restricciones de enlace
+        Codigo muerto
+    }
+}
+
+package "Despues: cada clase tiene 1 razon para cambiar" {
+    class "Node\n(670 lineas)" as NodeAfter <<identity>> {
+        Identidad del nodo
+        CRUD de potenciales
+        Delegacion al grafo
+        Metadatos
+    }
+
+    class "NodeAbsorptionHandler" as NAH <<absorption>> {
+        Absorcion de nodos
+        padre en hijo utilidad
+    }
+
+    class "VariableTypeConverter" as VTC <<conversion>> {
+        Conversion de tipos
+        de variable y cascada
+        de potenciales
+    }
+
+    class "UtilityFunctionComputer" as UFC <<utility>> {
+        Calculo recursivo de
+        funciones de utilidad
+    }
+
+    class "LinkRestriction\nPotentialOperations" as LRPO <<restriction>> {
+        Aplicacion de
+        restricciones de
+        enlace a potenciales
+    }
+}
+
+NodeBefore -[hidden]right-> NodeAfter
+
+@enduml

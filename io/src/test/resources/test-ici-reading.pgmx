@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="BayesianNetwork">
+    <Comment><![CDATA[<<Double click to add/modify comment>>]]></Comment>
+    <Variables>
+      <Variable name="A" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="173" y="186" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="B" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="267" y="63" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="C" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="425" y="218" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="E" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="544" y="137" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="low" />
+          <State name="medium" />
+          <State name="high" />
+        </States>
+      </Variable>
+      <Variable name="F" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="637" y="57" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="low" />
+          <State name="medium" />
+          <State name="high" />
+        </States>
+      </Variable>
+      <Variable name="G" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="731" y="199" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="low" />
+          <State name="medium" />
+          <State name="high" />
+        </States>
+      </Variable>
+      <Variable name="H" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="336" y="304" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="I" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="599" y="315" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="low" />
+          <State name="medium" />
+          <State name="high" />
+        </States>
+      </Variable>
+      <Variable name="J" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="508" y="414" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="A" />
+        <Variable name="H" />
+      </Link>
+      <Link directed="true">
+        <Variable name="B" />
+        <Variable name="H" />
+      </Link>
+      <Link directed="true">
+        <Variable name="C" />
+        <Variable name="H" />
+      </Link>
+      <Link directed="true">
+        <Variable name="E" />
+        <Variable name="I" />
+      </Link>
+      <Link directed="true">
+        <Variable name="F" />
+        <Variable name="I" />
+      </Link>
+      <Link directed="true">
+        <Variable name="G" />
+        <Variable name="I" />
+      </Link>
+      <Link directed="true">
+        <Variable name="H" />
+        <Variable name="J" />
+      </Link>
+      <Link directed="true">
+        <Variable name="I" />
+        <Variable name="J" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="A" />
+        </Variables>
+        <Values>0.95 0.05</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="B" />
+        </Variables>
+        <Values>0.99 0.01</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="C" />
+        </Variables>
+        <Values>0.7 0.3</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="E" />
+        </Variables>
+        <Values>0.6 0.3 0.1</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="F" />
+        </Variables>
+        <Values>0.05 0.7 0.25</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="G" />
+        </Variables>
+        <Values>0.4 0.4 0.2</Values>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>OR / MAX</Model>
+        <Variables>
+          <Variable name="H" />
+          <Variable name="A" />
+          <Variable name="B" />
+          <Variable name="C" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="H" />
+              <Variable name="A" />
+            </Variables>
+            <Values>1.0 0.0 0.0 1.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="H" />
+              <Variable name="B" />
+            </Variables>
+            <Values>1.0 0.0 0.0 1.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="H" />
+              <Variable name="C" />
+            </Variables>
+            <Values>1.0 0.0 0.0 1.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="H" />
+            </Variables>
+            <Values>0.99 0.01</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="ICIModel" role="conditionalProbability">
+        <Model>Tuning</Model>
+        <Variables>
+          <Variable name="I" />
+          <Variable name="E" />
+          <Variable name="F" />
+          <Variable name="G" />
+        </Variables>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="I" />
+              <Variable name="E" />
+            </Variables>
+            <Values>0.9 0.1 0.0 0.2 0.8 0.0 0.3 0.0 0.7</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="I" />
+              <Variable name="F" />
+            </Variables>
+            <Values>0.2 0.8 0.0 0.7 0.3 0.0 0.75 0.0 0.25</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="I" />
+              <Variable name="G" />
+            </Variables>
+            <Values>1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="I" />
+            </Variables>
+            <Values>0.03 0.95 0.02</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="J" />
+          <Variable name="H" />
+          <Variable name="I" />
+        </Variables>
+        <Values>0.1 0.9 0.2 0.8 0.3 0.7 0.5 0.5 0.7 0.3 0.9 0.1</Values>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties />
+  </ProbNet>
+</ProbModelXML>

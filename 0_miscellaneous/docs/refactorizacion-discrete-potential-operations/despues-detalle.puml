@@ -1,0 +1,73 @@
+@startuml despues-detalle
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam classFontSize 11
+
+title Después — Métodos de las clases extraídas
+
+together {
+  class TablePotentialArithmetic <<package-private>> {
+    ~{static} multiply(potentials) : TablePotential
+    ~{static} multiply(prob, util) : TablePotential
+    ~{static} multiply(p1, p2) : TablePotential
+    ~{static} sum(potentials) : TablePotential
+    ~{static} sum(values) : double
+    ~{static} sumByCriterion(pots, crit) : TablePotential
+    ~{static} divide(p1, p2) : Potential
+    ~{static} dividePotentials(pots) : TablePotential
+    ~{static} evaluateFunctionPotential(fp, ev) : TablePotential
+    ~{static} getRole(potentials) : PotentialRole
+  }
+
+  class TablePotentialElimination <<package-private>> {
+    ~{static} multiplyAndMarginalize(pots, keep, elim) : TablePotential
+    ~{static} multiplyAndMarginalize(prob, util, var) : TablePotential
+    ~{static} multiplyAndMarginalize(pots, interest) : TablePotential
+    ~{static} multiplyAndMarginalize(pots, var) : TablePotential
+    ~{static} marginalize(pot, var) : TablePotential
+    ~{static} marginalize(pot, interest) : TablePotential
+    ~{static} marginalize(pot, keep, elim) : Potential
+    ~{static} multiplyAndEliminate(pots, elim) : Potential
+  }
+}
+
+together {
+  class TablePotentialMaximization <<package-private>> {
+    ~{static} multiplyAndMaximize(pots, keep, var) : Object[]
+    ~{static} multiplyAndMaximize(pots, var) : Object[]
+    ~{static} multiplyAndMaximizeUniformly(pots, keep, var) : TablePotential[]
+    ~{static} multiplyAndMaximizeUniformly(pots, var) : TablePotential[]
+    ~{static} maximize(pot, var) : Object[]
+    ~{static} maximize(potentials) : TablePotential
+    ~{static} isThereAUtilityPotential(pots) : boolean
+  }
+
+  class TablePotentialMerge <<package-private>> {
+    ~{static} merge(decision, potentials) : TablePotential
+    ~{static} orderPotentialsByTotalOrder(pots, order) : List
+  }
+}
+
+together {
+  class TablePotentialTransform <<package-private>> {
+    ~{static} normalize(potential) : TablePotential
+    ~{static} projectOutVariable(var, pot) : TablePotential
+    ~{static} imposeOtherDistributionWhenDistributionIsZero(pot) : TablePotential
+    ~{static} matrixPotential(potentials) : TablePotential
+  }
+
+  class TablePotentialFactory <<package-private>> {
+    ~{static} createOneValuePotential(role, value) : TablePotential
+    ~{static} createUnityProbabilityPotential() : TablePotential
+    ~{static} createZeroProbabilityPotential() : TablePotential
+    ~{static} createZeroUtilityPotential() : TablePotential
+  }
+}
+
+TablePotentialArithmetic -[hidden]- TablePotentialElimination
+TablePotentialMaximization -[hidden]- TablePotentialMerge
+TablePotentialTransform -[hidden]- TablePotentialFactory
+
+@enduml

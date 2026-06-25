@@ -1,0 +1,21 @@
+/*
+cmyago 14/01/2023 to be moved to the GUI or replaced with a new results presentation
+Styles for the result table
+ */
+table {
+    width: 100%;
+}
+
+table, th, td {
+    font-family: sans-serif;
+    text-align: center;
+}
+
+th {
+    background-color: #CFE3FD;
+    font-weight: bold;
+}
+
+td.even {
+    background-color: #dddddd;
+}

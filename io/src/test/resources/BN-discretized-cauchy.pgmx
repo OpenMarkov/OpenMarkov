@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="1.0.0">
+  <ProbNet type="BayesianNetwork">
+    <Comment><![CDATA[A.0 fixture: BayesianNetwork with a DiscretizedCauchyPotential.
+The XML below is the shape the A.2 parser will be implemented against.
+Structure: <Potential type="Discretized Cauchy"> with nested <Median>
+and <Scale> holding TablePotentials over the parents.]]></Comment>
+    <Variables>
+      <Variable name="Climate" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="100" y="100" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="cold" />
+          <State name="warm" />
+        </States>
+      </Variable>
+      <Variable name="Rainfall" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="300" y="100" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="dry" />
+          <State name="wet" />
+          <State name="flood" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Climate" />
+        <Variable name="Rainfall" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Climate" />
+        </Variables>
+        <Values>0.4 0.6</Values>
+      </Potential>
+      <Potential type="Discretized Cauchy" role="conditionalProbability">
+        <Variables>
+          <Variable name="Rainfall" />
+          <Variable name="Climate" />
+        </Variables>
+        <Median>
+          <Potential type="Table" role="conditionalProbability">
+            <Variables>
+              <Variable name="Climate" />
+            </Variables>
+            <Values>40.0 120.0</Values>
+          </Potential>
+        </Median>
+        <Scale>
+          <Potential type="Table" role="conditionalProbability">
+            <Variables>
+              <Variable name="Climate" />
+            </Variables>
+            <Values>10.0 20.0</Values>
+          </Potential>
+        </Scale>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+</ProbModelXML>

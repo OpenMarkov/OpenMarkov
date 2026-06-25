@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.0.1">
+  <ProbNet type="SMM">
+    <Variables>
+      <Variable name="Disease [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="438" y="121" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Symptom [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="419" y="212" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Disease [1]" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="958" y="121" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Test [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="556" y="250" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Dec:Test [0]" timeSlice="0" type="finiteStates" role="decision">
+        <Coordinates x="424" y="299" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="yes" />
+          <State name="no" />
+        </States>
+      </Variable>
+      <Variable name="Dec:Therapy [0]" timeSlice="0" type="finiteStates" role="decision">
+        <Coordinates x="538" y="363" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="yes" />
+          <State name="no" />
+        </States>
+      </Variable>
+      <Variable name="Quality of life [0]" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="310" y="259" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Cost of test [0]" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="435" y="417" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Cost of therapy [0]" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="595" y="421" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Economic cost [0]" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="543" y="483" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Disease [0]" timeSlice="0" />
+        <Variable name="Quality of life [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease [0]" timeSlice="0" />
+        <Variable name="Symptom [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease [0]" timeSlice="0" />
+        <Variable name="Disease [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease [0]" timeSlice="0" />
+        <Variable name="Test [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom [0]" timeSlice="0" />
+        <Variable name="Quality of life [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom [0]" timeSlice="0" />
+        <Variable name="Dec:Test [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom [0]" timeSlice="0" />
+        <Variable name="Dec:Therapy [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:Test [0]" timeSlice="0" />
+        <Variable name="Cost of test [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:Test [0]" timeSlice="0" />
+        <Variable name="Test [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:Therapy [0]" timeSlice="0" />
+        <Variable name="Cost of therapy [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:Therapy [0]" timeSlice="0" />
+        <Variable name="Disease [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost of test [0]" timeSlice="0" />
+        <Variable name="Economic cost [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost of therapy [0]" timeSlice="0" />
+        <Variable name="Economic cost [0]" timeSlice="0" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptom [0]" timeSlice="0" />
+          <Variable name="Disease [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease [1]" timeSlice="1" />
+          <Variable name="Disease [0]" timeSlice="0" />
+          <Variable name="Dec:Therapy [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Test [0]" timeSlice="0" />
+          <Variable name="Disease [0]" timeSlice="0" />
+          <Variable name="Dec:Test [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Dec:Test [0]" timeSlice="0" />
+          <Variable name="Symptom [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5 0.5 0.5</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Dec:Therapy [0]" timeSlice="0" />
+          <Variable name="Symptom [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5 0.5 0.5</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Quality of life [0]" timeSlice="0" />
+        <Variables>
+          <Variable name="Disease [0]" timeSlice="0" />
+          <Variable name="Symptom [0]" timeSlice="0" />
+        </Variables>
+        <Values>1.0 1.0 1.0 1.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of test [0]" timeSlice="0" />
+        <Variables>
+          <Variable name="Dec:Test [0]" timeSlice="0" />
+        </Variables>
+        <Values>1.0 1.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of therapy [0]" timeSlice="0" />
+        <Variables>
+          <Variable name="Dec:Therapy [0]" timeSlice="0" />
+        </Variables>
+        <Values>1.0 1.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Economic cost [0]" timeSlice="0" />
+        <Variables>
+          <Variable name="Cost of test [0]" timeSlice="0" />
+          <Variable name="Cost of therapy [0]" timeSlice="0" />
+        </Variables>
+        <Values>1.0</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+</ProbModelXML>
+

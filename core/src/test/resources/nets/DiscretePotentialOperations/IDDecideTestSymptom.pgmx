@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="InfluenceDiagram">
+    <Variables>
+      <Variable name="Disease" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="512" y="38" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Result of test" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="706" y="182" />
+        <States>
+          <State name="not-performed" />
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Symptom" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="712" y="70" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Therapy" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="797" y="268" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Do test?" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="970" y="105" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Health state" type="numeric" role="utility" isInput="false">
+        <Coordinates x="585" y="405" />
+        <Unit />
+        <Precision>0.0</Precision>
+      </Variable>
+      <Variable name="Cost of test" type="numeric" role="utility" isInput="false">
+        <Coordinates x="1047" y="408" />
+        <Unit />
+        <Precision>0.0</Precision>
+      </Variable>
+      <Variable name="Cost of therapy" type="numeric" role="utility" isInput="false">
+        <Coordinates x="819" y="404" />
+        <Unit />
+        <Precision>0.0</Precision>
+      </Variable>
+      <Variable name="U" type="numeric" role="utility" isInput="false">
+        <Coordinates x="805" y="533" />
+        <Unit />
+        <Precision>0.01</Precision>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Health state" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of test" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Symptom" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Result of test" />
+        <Variable name="Therapy" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom" />
+        <Variable name="Do test?" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Health state" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Cost of therapy" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Cost of test" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Therapy" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Result of test" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Health state" />
+        <Variable name="U" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost of test" />
+        <Variable name="U" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost of therapy" />
+        <Variable name="U" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.98 0.02</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Result of test" />
+          <Variable name="Disease" />
+          <Variable name="Do test?" />
+        </Variables>
+        <Values>1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.97 0.03 0.0 0.09 0.91</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptom" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.95 0.05 0.2 0.8</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Health state" />
+        <Variables>
+          <Variable name="Disease" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>10.0 3.0 9.0 8.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of test" />
+        <Variables>
+          <Variable name="Do test?" />
+        </Variables>
+        <Values>0.0 -0.2</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of therapy" />
+        <Variables>
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>0.0 -0.25</Values>
+      </Potential>
+      <Potential type="Sum" role="utility">
+        <UtilityVariable name="U" />
+        <Variables>
+          <Variable name="Cost of test" />
+          <Variable name="Cost of therapy" />
+          <Variable name="Health state" />
+        </Variables>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties />
+  </ProbNet>
+</ProbModelXML>

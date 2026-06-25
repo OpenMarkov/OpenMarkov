@@ -1,0 +1,160 @@
+@startuml fig-op3-implementado
+' ============================================================
+' Estado REAL tras completar el Rediseno 3 (pasos 1-4)
+' GTablePotential aun extiende TablePotential (cambio de superclase aplazado)
+' Potential tiene implementaciones por defecto en vez de metodos abstractos
+' ============================================================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 30
+skinparam ranksep 35
+skinparam dpi 150
+
+hide empty fields
+
+' ==== INTERFACES DE CAPACIDAD ====
+package "Interfaces de capacidad" #D0F5FF {
+
+    interface Projectable #70D7F0 {
+        +tableProject(EvidenceCase, InferenceOptions) : TablePotential
+    }
+
+    interface Reorderable #70D7F0 {
+        +reorder(List<Variable>) : Potential
+    }
+
+    interface Scalable #70D7F0 {
+        +scalePotential(double)
+        +scale(double)
+    }
+
+    interface UncertaintyCarrier #C0A8FF {
+        +getUncertainValues() : UncertainValue[]
+        +setUncertainValues(UncertainValue[])
+        +isUncertain() : boolean
+    }
+
+    interface StrategyCarrier #C0A8FF {
+        +getStrategyTrees() : StrategyTree[]
+        +hasInterventions() : boolean
+        +hasInterventionForDecision(Variable) : boolean
+    }
+
+}
+
+' ==== JERARQUIA DE CLASES ====
+abstract class Potential #FFD580 {
+    #variables : List<Variable>
+    #role : PotentialRole
+    --
+    +{abstract} project(EvidenceCase) : Potential
+    +{abstract} copy() : Potential
+    --
+    +tableProject(...) : throws NonProjectable
+    +isUncertain() : boolean
+    +scalePotential(double)
+    +reorder(List<Variable>) : Potential
+    +reorder(Variable, State[]) : Potential
+}
+
+note right of Potential #FFFDE7
+  Solo project() y copy() son abstractos.
+  Los 5 metodos que antes eran abstractos
+  ahora tienen implementaciones por defecto:
+  - tableProject: lanza NonProjectablePotentialException
+  - isUncertain: devuelve false
+  - scalePotential, reorder (x2): lanzan
+    UnsupportedOperationException indicando
+    el nombre de la clase concreta
+end note
+
+abstract class AbstractIndexedPotential #FFD580 {
+    #dimensions : int[]
+    #offsets : int[]
+    #tableSize : int
+}
+
+class TablePotential #BDD7FF {
+    +values : double[]
+}
+
+class StrategicTablePotential #C8F0C8 {
+    +strategyTrees : StrategyTree[]
+}
+
+class UncertainTablePotential #C8F0C8 {
+    +uncertainValues : UncertainValue[]
+}
+
+class AugmentedProbTable #C8F0C8
+
+UncertainTablePotential -[hidden]right- AugmentedProbTable
+
+class "GTablePotential<E>" as GTablePotential #E8D7FF {
+    +elementTable : List<E>
+}
+
+note bottom of GTablePotential #FFF8E1
+  Candidata a cambio de superclase (fase pendiente).
+  Actualmente hereda Projectable, Reorderable
+  y Scalable de TablePotential, aunque solo
+  Reorderable tiene sentido semantico para
+  un contenedor generico de objetos.
+  El campo values[] se reserva con tamano 0
+  (desperdicio de memoria).
+end note
+
+class UniformPotential #E8E8E8
+class DeltaPotential #E8E8E8 {
+    -state : State
+}
+abstract class ICIPotential #E8E8E8 {
+    #noisyParameters : double[][]
+}
+class ConditionalGaussianPotential #E8E8E8
+
+' ==== HERENCIA ====
+Potential <|-- AbstractIndexedPotential
+AbstractIndexedPotential <|-- TablePotential
+TablePotential <|-- StrategicTablePotential
+TablePotential <|-- UncertainTablePotential
+UncertainTablePotential <|-- AugmentedProbTable
+TablePotential <|-- GTablePotential
+Potential <|-- UniformPotential
+Potential <|-- DeltaPotential
+Potential <|-- ICIPotential
+Potential <|-- ConditionalGaussianPotential
+
+' ==== IMPLEMENTACIONES DE INTERFACES ====
+TablePotential ..|> Projectable
+TablePotential ..|> Reorderable
+TablePotential ..|> Scalable
+
+StrategicTablePotential ..|> StrategyCarrier
+
+UncertainTablePotential ..|> UncertaintyCarrier
+
+UniformPotential ..|> Projectable
+
+DeltaPotential ..|> Projectable
+DeltaPotential ..|> Scalable
+
+ICIPotential ..|> Projectable
+
+ConditionalGaussianPotential ..|> Projectable
+
+legend right
+  |= Color |= Significado |
+  | <#70D7F0> | Interfaz de operacion general |
+  | <#C0A8FF> | Interfaz de capacidad especifica |
+  | <#FFD580> | Clase abstracta base |
+  | <#BDD7FF> | Jerarquia TablePotential |
+  | <#C8F0C8> | Subclase especializada |
+  | <#E8E8E8> | Potencial generico |
+  | <#E8D7FF> | Candidata a cambio de superclase |
+endlegend
+
+@enduml

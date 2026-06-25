@@ -1,0 +1,65 @@
+@startuml orden-edits
+' ============================================================
+' Ejemplo: orden de sub-edits en ListPNEdit antes y despues
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam objectAttributeIconSize 0
+skinparam nodesep 20
+
+title Orden de sub-edits en ListPNEdit: antes vs despues
+
+together {
+    object "EditsHistory\n(pila LIFO)" as EH {
+        doneEdits[0] = AddLinkEdit(A->B)
+        doneEdits[1] = AddNodeEdit(B)
+        doneEdits[2] = AddNodeEdit(A)
+    }
+
+    note right of EH
+        addFirst() apila cada edit.
+        <b>getDoneEdits()</b> devuelve
+        [Link, B, A]
+        (mas reciente primero)
+    end note
+}
+
+together {
+    object "ListPNEdit\n<b>ANTES</b> (bug)" as LP_ANTES #FFDDD8 {
+        edits[0] = AddLinkEdit(A->B)
+        edits[1] = AddNodeEdit(B)
+        edits[2] = AddNodeEdit(A)
+    }
+
+    note bottom of LP_ANTES #FFDDD8
+        <b>redo()</b> ejecuta en este orden:
+        1. Link(A->B) -- A y B no existen! <b>NPE</b>
+        2. Node(B)
+        3. Node(A)
+    end note
+}
+
+together {
+    object "ListPNEdit\n<b>DESPUES</b> (correcto)" as LP_DESPUES #E8FFE8 {
+        edits[0] = AddNodeEdit(A)
+        edits[1] = AddNodeEdit(B)
+        edits[2] = AddLinkEdit(A->B)
+    }
+
+    note bottom of LP_DESPUES #E8FFE8
+        <b>redo()</b> ejecuta en este orden:
+        1. Node(A) -- crea nodo A
+        2. Node(B) -- crea nodo B
+        3. Link(A->B) -- A y B existen, OK
+
+        <b>undo()</b> ejecuta reversed():
+        1. Link(A->B) -- elimina arco
+        2. Node(B) -- elimina B
+        3. Node(A) -- elimina A
+    end note
+}
+
+EH -down-> LP_ANTES : getDoneEdits()\nsin reverse\n(bug)
+EH -down-> LP_DESPUES : getDoneEdits()\n+ Collections.reverse()\n(corregido)
+
+@enduml

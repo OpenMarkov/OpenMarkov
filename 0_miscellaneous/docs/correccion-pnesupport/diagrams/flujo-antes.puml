@@ -1,0 +1,68 @@
+@startuml flujo-antes
+' ============================================================
+' Flujo de undo/redo ANTES de la correccion (con 3 bugs)
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam sequenceArrowThickness 2
+skinparam sequenceParticipantPadding 20
+
+title Flujo de redo() con compound edit — ANTES (con bugs)
+
+participant "GUI\n(Ctrl+Y)" as GUI
+participant "PNESupport" as PNE
+participant "EditsHistory" as EH
+participant "ListPNEdit\n[B, A]" as LP #FFDDD8
+participant "flattenEdit()" as FE #FFDDD8
+participant "PNEditListener" as L
+
+note over LP #FFDDD8
+  <b>Bug 3</b>: sub-edits
+  almacenados en orden
+  inverso [B, A] en vez
+  de [A, B]
+end note
+
+GUI -> PNE : redo()
+PNE -> EH : redo()
+EH -> LP : redo()
+
+note right of LP #FFDDD8
+  <b>Bug 3</b>: ejecuta
+  B.redo() antes que A.redo()
+  (orden inverso al original)
+  Si B depende de A -> NPE
+end note
+
+LP -> LP : B.redo()
+LP -> LP : A.redo()
+LP --> EH : return ListPNEdit
+EH --> PNE : return ListPNEdit
+
+PNE -> FE : flattenEdit(ListPNEdit)
+
+note right of FE #FFDDD8
+  BFS: devuelve
+  [ListPNEdit, B, A]
+end note
+
+FE --> PNE : [ListPNEdit, B, A]
+
+PNE -> L : afterRedoingEdit(<b>ListPNEdit</b>)
+note right of L #FFDDD8
+  <b>Bug 1</b>: notificacion
+  duplicada (compound)
+  <b>Bug 2</b>: evento
+  asimetrico
+end note
+
+PNE -> L : afterRedoingEdit(B)
+PNE -> L : afterRedoingEdit(A)
+
+note over L #FFDDD8
+  El listener recibe
+  <b>3 notificaciones</b>
+  en vez de 1
+end note
+
+@enduml

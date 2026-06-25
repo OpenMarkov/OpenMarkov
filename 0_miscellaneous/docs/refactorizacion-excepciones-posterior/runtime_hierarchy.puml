@@ -1,0 +1,84 @@
+@startuml runtime_hierarchy
+skinparam backgroundColor white
+skinparam defaultFontName Sans
+skinparam defaultFontSize 10
+skinparam ArrowColor #444444
+skinparam nodesep 25
+skinparam ranksep 35
+skinparam linetype ortho
+
+skinparam class {
+  BackgroundColor #F5F5F5
+  BorderColor #888888
+  FontStyle bold
+}
+
+skinparam class<<domain>> {
+  BackgroundColor #E8F5E9
+  BorderColor #2E7D32
+}
+
+skinparam class<<infra>> {
+  BackgroundColor #FFF3E0
+  BorderColor #E65100
+}
+
+skinparam class<<jdk>> {
+  BackgroundColor #F3E5F5
+  BorderColor #7B1FA2
+}
+
+class RuntimeException <<jdk>>
+
+abstract class OpenMarkovRuntimeException {
+  {abstract}
+}
+
+together {
+  class "NonProjectablePotentialException" as E1 <<domain>> {
+    {abstract} sealed
+  }
+  class "NotEvaluableNetworkException" as E2 <<domain>> {
+    {abstract} sealed
+  }
+  class "UnexpectedInferenceException" as E3 <<domain>> {
+    {abstract} sealed
+  }
+}
+
+together {
+  class "CannotNormalizePotentialException" as E4 <<domain>>
+  class "InvalidNetworkTypeException" as E5 <<domain>>
+}
+
+together {
+  class "UnreachableException" as U1 <<infra>>
+  class "UnrecoverableException" as U2 <<infra>>
+}
+
+RuntimeException <|-- OpenMarkovRuntimeException
+RuntimeException <|-- U1
+RuntimeException <|-- U2
+
+OpenMarkovRuntimeException <|-- E1
+OpenMarkovRuntimeException <|-- E2
+OpenMarkovRuntimeException <|-- E3
+OpenMarkovRuntimeException <|-- E4
+OpenMarkovRuntimeException <|-- E5
+
+note right of U1
+  error de programación
+end note
+
+note right of U2
+  infraestructura GUI
+end note
+
+legend bottom
+  |= Fondo |= Semántica |
+  |<#E8F5E9>  | Excepción de dominio OpenMarkov |
+  |<#FFF3E0>  | Infraestructura / error de programación |
+  |<#F3E5F5>  | Biblioteca estándar Java (JDK) |
+endlegend
+
+@enduml
