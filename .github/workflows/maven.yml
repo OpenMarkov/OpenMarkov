@@ -1,35 +1,45 @@
-name: CI
+name: Continuous Integration and Continuous Delivery
 
 on:
+  # This workflow is triggered pushing changes to "development". Other branches, such as TFG/TFG/Thesis branches would
+  # be ignored, and so would main.
   push:
     branches:
       - "development"
+    # It is only triggered when modifying a java or xml file, as any other kind of files would usually be pdfs for the
+    # docs directory, or .md and .png for the wiki.
     paths:
       - '**.java'
       - '**.xml'
+
+  # Same configuration from "push" on Pull requests
   pull_request:
     branches:
       - "development"
     paths:
       - '**.java'
       - '**.xml'
+
+  # This allows to create a button in GitHub to manually trigger the workflow. It might be useful.
   workflow_dispatch:
 
+# This is required to allow writing to OpenMarkov's GitHub pages, which is where OpenMarkov.jar is stored.
 permissions:
   contents: read
   pages: write
   id-token: write
 
-
-
 jobs:
 
   Build_and_test:
     runs-on: ubuntu-latest
+    # If the workflow takes longer than 5 minutes, then it automatically fails. This is a failsafe just in case a commit
+    # causes an infinite loop, like a wrong written test that never ends.
     timeout-minutes: 5
     steps:
     - uses: actions/checkout@v6
-    
+
+      # We use Java 25 with the "temurin" distribution. There is no OpenJDK distribution available.
     - name: Set up JDK 25
       uses: actions/setup-java@v5
       with:
@@ -37,9 +47,11 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+      # First, we run tests. Meaning if the tests fail, nothing else would execute on the workflow.
     - name: Run tests
       run: mvn test --batch-mode
 
+      # Compilation of "full" as a .jar with all dependencies.
     - name: Build OpenMarkov.jar
       run: mvn package -pl full -am -DskipTests --batch-mode
 
@@ -53,9 +65,6 @@ jobs:
       with:
         path: 'public'
 
-
-
-
   deploy:
     needs:
       - Build_and_test
@@ -63,6 +72,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    # Deploys the GitHub page that contains the compilation of "OpenMarkov.jar".
     steps:
     - name: Deploy to GitHub Pages
       id: deployment
