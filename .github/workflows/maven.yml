@@ -27,8 +27,8 @@ jobs:
     - name: Run tests
       run: mvn test
 
-    - name: Build with no tests
-      run: mvn install -DskipTests
+    - name: Build OpenMarkov.jar
+      run: mvn package -pl full -am -DskipTests
 
     - name: Move JAR to public web folder
       run: |
