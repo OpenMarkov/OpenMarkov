@@ -28,10 +28,10 @@ jobs:
         cache: maven
 
     - name: Run tests
-      run: mvn test --batch-mode
+      run: mvn test --batch-mode --quiet
 
     - name: Build OpenMarkov.jar
-      run: mvn package -pl full -am -DskipTests --batch-mode
+      run: mvn package -pl full -am -DskipTests --batch-mode --quiet
 
     - name: Move JAR to public web folder
       run: |
