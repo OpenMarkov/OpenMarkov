@@ -29,12 +29,22 @@ jobs:
     - name: Build with no tests
       run: mvn install -DskipTests
 
-    - run: mkdir staging && cp OpenMarkov.jar staging
-    - uses: actions/upload-artifact@v4
-      with:
-        name: Package
-        path: staging
+    - name: Move JAR to public web folder
+      run: |
+        mkdir public
+        cp OpenMarkov.jar public/
 
+    - name: Upload Pages Artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: 'public'
+
+#    - name: Upload artifact 
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: Package
+#        path: OpenMarkov.jar
+        
 #    - name: Run tests
 #      run: mvn test
 
