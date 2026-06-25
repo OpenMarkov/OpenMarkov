@@ -8,6 +8,7 @@
 package org.openmarkov.gui.loader.element;
 
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.java.initialization.Lazy;
 
 import java.awt.Cursor;
 import java.awt.Image;
@@ -36,7 +37,7 @@ public class CursorLoader {
      */
     public static final Cursor CURSOR_MULTIPLE_SELECTION = new Cursor(Cursor.CROSSHAIR_CURSOR);
     
-    public static final Cursor CURSOR_LINK = load("link.png");
+    public static final Lazy<Cursor> CURSOR_LINK = Lazy.of(() -> load("link.png"));
     
     /**
      * Folder where cursors are saved.

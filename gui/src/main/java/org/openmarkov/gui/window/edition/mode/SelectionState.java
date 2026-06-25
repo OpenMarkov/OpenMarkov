@@ -9,7 +9,7 @@ package org.openmarkov.gui.window.edition.mode;
 
 import org.openmarkov.gui.loader.element.CursorLoader;
 
-import java.awt.*;
+import java.awt.Cursor;
 
 /**
  * Types of states when selecting nodes: - DEFAULT: the mouse cursor is set to
@@ -43,7 +43,7 @@ public enum SelectionState {
                 case NOTHING -> CursorLoader.CURSOR_DEFAULT;
                 case MOVING -> CursorLoader.CURSOR_NODES_MOVEMENT;
                 case SELECTING -> CursorLoader.CURSOR_MULTIPLE_SELECTION;
-                case CREATING_LINK -> CursorLoader.CURSOR_LINK;
+                case CREATING_LINK -> CursorLoader.CURSOR_LINK.get();
             };
         }
     }
