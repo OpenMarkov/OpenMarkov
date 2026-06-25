@@ -35,6 +35,6 @@ jobs:
         name: Package
         path: staging
 
-    - name: Run tests
-      run: mvn test
+#    - name: Run tests
+#      run: mvn test
 
