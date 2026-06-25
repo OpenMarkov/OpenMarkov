@@ -54,7 +54,9 @@ jobs:
         run: mvn test --batch-mode
 
   deploy:
-    needs: build
+    needs:
+      - build
+      - test
     runs-on: ubuntu-latest
     environment:
       name: github-pages
