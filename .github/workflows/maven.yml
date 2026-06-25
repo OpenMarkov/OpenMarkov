@@ -11,7 +11,10 @@ permissions:
   pages: write
   id-token: write
 
+
+
 jobs:
+      
   build:
     runs-on: ubuntu-latest
     steps:
@@ -24,11 +27,8 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Run tests
-      run: mvn test
-
     - name: Build OpenMarkov.jar
-      run: mvn package -pl full -am -DskipTests
+      run: mvn package -pl full -am -DskipTests --batch-mode
 
     - name: Move JAR to public web folder
       run: |
@@ -39,6 +39,19 @@ jobs:
       uses: actions/upload-pages-artifact@v3
       with:
         path: 'public'
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: maven
+      - name: Run tests
+        run: mvn test --batch-mode
 
   deploy:
     needs: build
