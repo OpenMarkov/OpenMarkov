@@ -14,8 +14,8 @@ permissions:
 
 
 jobs:
-      
-  build:
+
+  Build_and_test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -26,6 +26,9 @@ jobs:
         java-version: '25'
         distribution: 'temurin'
         cache: maven
+
+    - name: Run tests
+      run: mvn test --batch-mode
 
     - name: Build OpenMarkov.jar
       run: mvn package -pl full -am -DskipTests --batch-mode
@@ -40,18 +43,8 @@ jobs:
       with:
         path: 'public'
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 25
-        uses: actions/setup-java@v5
-        with:
-          java-version: '25'
-          distribution: 'temurin'
-          cache: maven
-      - name: Run tests
-        run: mvn test --batch-mode
+
+
 
   deploy:
     needs:
