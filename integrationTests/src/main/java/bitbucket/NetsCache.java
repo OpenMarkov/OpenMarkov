@@ -76,25 +76,25 @@ class NetsCache {
         return allPaths
                 .sorted(NetsCache.getListComparator())
                 .map(path -> {
-                    //System.out.println("Resolving URL for "+path);
+                    System.out.println("Resolving URL for " + path);
                     if (localCachesByPath.containsKey(path)) {
                         BitbucketFile bitbucketFile = new BitbucketFile(CacheMethod.USES_LOCAL_CACHE, localCachesByPath.get(path).fileRef);
                         try (var stream = bitbucketFile.resolveURL().openStream()) {
-                            //System.out.println("URL is being used from the FileSystem");
+                            System.out.println("URL is being used from the FileSystem");
                             return bitbucketFile;
                         } catch (IOException ignored) {
-                            //System.err.println("Cannot use URL from FileSystem due to "+ignored);
-                            //ignored.printStackTrace();
+                            System.err.println("Cannot use URL from FileSystem due to " + ignored);
+                            ignored.printStackTrace();
                         }
                     }
                     if (remoteFilesByPath.containsKey(path)) {
                         BitbucketFile bitbucketFile = new BitbucketFile(CacheMethod.USES_BITBUCKET_FILE_REFS, remoteFilesByPath.get(path));
                         try (var stream = bitbucketFile.resolveURL().openStream()) {
-                            //System.out.println("URL is being used from an HTTP URL");
+                            System.out.println("URL is being used from an HTTP URL");
                             return bitbucketFile;
                         } catch (IOException ignored) {
-                            //System.err.println("Cannot use URL from HTTP URL due to "+ignored);
-                            //ignored.printStackTrace();
+                            System.err.println("Cannot use URL from HTTP URL due to " + ignored);
+                            ignored.printStackTrace();
                         }
                     }
                     return null;
@@ -218,15 +218,15 @@ class NetsCache {
         if (resultingFile.getParentFile() != null) {
             resultingFile.getParentFile().mkdirs();
         }
-        //System.out.println("Downloading " + bitbucketFileRes.href() + " into " + resultingFile);
+        System.out.println("Downloading " + bitbucketFileRes.href() + " into " + resultingFile.getAbsolutePath());
         try {
             String bitbucketFileContents = new String(
                     bitbucketFileRes.href().openStream().readAllBytes(), StandardCharsets.UTF_8);
             Files.writeString(resultingFile.toPath(), bitbucketFileContents);
             localCaches.add(new BitbucketFileCache(bitbucketFileRes, DigestUtils.sha256Hex(bitbucketFileContents)));
-            //System.out.println("Downloaded!");
+            System.out.println("Downloaded!");
         }catch (IOException|RuntimeException exception){
-            //System.out.println("Could not download "+bitbucketFileRes.href());
+            System.out.println("Could not download " + bitbucketFileRes.href());
             throw exception;
         }
     }
