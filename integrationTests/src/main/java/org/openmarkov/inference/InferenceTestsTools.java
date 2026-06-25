@@ -160,10 +160,7 @@ public class InferenceTestsTools {
                 assertNotNull(veTemporalEvolution.getTemporalEvolution().get(variableInSlicei));
                 
             }
-            
         }
-        
-        System.out.println("VETemporalEvolution successful");
     }
     
     
@@ -186,7 +183,6 @@ public class InferenceTestsTools {
             veceaDecision.setDecisionVariable(decisionVariable);
             assertNotNull(veceaDecision.getUtility());
         }
-        System.out.println("VECEADecision successful");
     }
     
     private static boolean hasCostEffectiveness(ProbNet probNet) {
