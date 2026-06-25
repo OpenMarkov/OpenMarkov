@@ -3,14 +3,12 @@ name: CI
 on:
   push:
     branches:
-      - "main"
       - "development"
     paths:
       - '**.java'
       - '**.xml'
   pull_request:
     branches:
-      - "main"
       - "development"
     paths:
       - '**.java'
