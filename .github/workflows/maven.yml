@@ -48,8 +48,7 @@ jobs:
 
   deploy:
     needs:
-      - build
-      - test
+      - Build_and_test
     runs-on: ubuntu-latest
     environment:
       name: github-pages
