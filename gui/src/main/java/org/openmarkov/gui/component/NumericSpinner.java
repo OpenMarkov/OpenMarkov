@@ -1,8 +1,13 @@
 package org.openmarkov.gui.component;
 
-import javax.swing.*;
+import javax.swing.JFormattedTextField;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Map;
@@ -38,6 +43,20 @@ public class NumericSpinner<N extends Number & Comparable<N>> extends JSpinner {
             this.removeChangeListener(this.getChangeListeners()[0]);
         }
         var listeners = this.getChangeListeners();
+        
+        while (this.getFocusListeners().length > 0) {
+            this.removeFocusListener(this.getFocusListeners()[0]);
+        }
+        
+        ((JSpinner.DefaultEditor) this.getEditor()).getTextField().addFocusListener(new FocusListener() {
+            @Override public void focusGained(FocusEvent e) {
+            }
+            
+            @Override public void focusLost(FocusEvent e) {
+                var rawValue = ((DefaultEditor) NumericSpinner.this.getEditor()).getTextField().getText();
+                NumericSpinner.this.model.setValue(rawValue);
+            }
+        });
         System.out.println(listeners);
     }
     
@@ -181,13 +200,13 @@ public class NumericSpinner<N extends Number & Comparable<N>> extends JSpinner {
     
     
     private static final NumericInfo<Integer> INTEGER_NUMERIC_INFO = new NumericInfo<>(
-            Integer.class, Integer::valueOf, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, (a, b) -> a + b, (a, b) -> a - b);
+            Integer.class, Integer::valueOf, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, Integer::sum, (a, b) -> a - b);
     
     private static final NumericInfo<Byte> BYTE_NUMERIC_INFO = new NumericInfo<>(
             Byte.class, Byte::valueOf, Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1, (a, b) -> (byte) (a + b), (a, b) -> (byte) (a - b));
     
     private static final NumericInfo<Long> LONG_NUMERIC_INFO = new NumericInfo<>(
-            Long.class, Long::valueOf, Long.MIN_VALUE, Long.MAX_VALUE, (long) 1, (a, b) -> a + b, (a, b) -> a - b);
+            Long.class, Long::valueOf, Long.MIN_VALUE, Long.MAX_VALUE, (long) 1, Long::sum, (a, b) -> a - b);
     
     private static final NumericInfo<Short> SHORT_NUMERIC_INFO = new NumericInfo<>(
             Short.class, Short::valueOf, Short.MIN_VALUE, Short.MAX_VALUE, (short) 1, (a, b) -> (short) (a + b), (a, b) -> (short) (a - b));
@@ -197,10 +216,16 @@ public class NumericSpinner<N extends Number & Comparable<N>> extends JSpinner {
     
     
     private static final NumericInfo<Double> DOUBLE_NUMERIC_INFO = new NumericInfo<>(
-            Double.class, Double::valueOf, Double.MIN_VALUE, Double.MAX_VALUE, 1.0, (a, b) -> a + b, (a, b) -> a - b);
+            Double.class, Double::valueOf, Double.MIN_VALUE, Double.MAX_VALUE, 1.0,
+            (a, b) -> BigDecimal.valueOf(a).add(BigDecimal.valueOf(b)).doubleValue(),
+            (a, b) -> BigDecimal.valueOf(a).subtract(BigDecimal.valueOf(b)).doubleValue()
+    );
     
     private static final NumericInfo<Float> FLOAT_NUMERIC_INFO = new NumericInfo<>(
-            Float.class, Float::valueOf, Float.MIN_VALUE, Float.MAX_VALUE, (float) 1, (a, b) -> a + b, (a, b) -> a - b);
+            Float.class, Float::valueOf, Float.MIN_VALUE, Float.MAX_VALUE, (float) 1,
+            (a, b) -> BigDecimal.valueOf(a).add(BigDecimal.valueOf(b)).floatValue(),
+            (a, b) -> BigDecimal.valueOf(a).subtract(BigDecimal.valueOf(b)).floatValue()
+    );
     
     private static final NumericInfo<BigDecimal> BIG_DECIMAL_NUMERIC_INFO = new NumericInfo<>(
             BigDecimal.class, BigDecimal::new, BigDecimal.valueOf(Double.MIN_VALUE), BigDecimal.valueOf(Double.MAX_VALUE), BigDecimal.ONE, BigDecimal::add, BigDecimal::subtract);

@@ -39,28 +39,23 @@ org.openmarkov.learning.metric.entropy
 org.openmarkov.learning.metric.k2  
 org.openmarkov.learning.metric.mdlm  
 org.openmarkov.plugin  
-org.openmarkov.stochasticPropagationOutput
+org.openmarkov.stochasticPropagationOutput  
 
 ### Only internal developers (unlinked in Maven poms but it must compile)
-
 org.openmarkov.sensitivity-analysis  
-org.openmarkov.hardTesting
+org.openmarkov.hardTesting  
 
 ### Only internal developers (unlinked in Maven poms)
-
-#### Plugins (full)
-
+#### Plugins (full)  
 org.openmarkov.evaluation  
 org.openmarkov.objectorientednetworks  
-org.openmarkov.utilityCalculator
+org.openmarkov.utilityCalculator  
 
-#### Learning
-
+#### Learning  
 org.openmarkov.learning.algorithm.em  
-org.openmarkov.learning.metric.cmi
-
-#### Inference
-
+org.openmarkov.learning.metric.cmi  
+ 
+#### Inference  
 org.openmarkov.inference.adaptiveimportancesampling  
 org.openmarkov.inference.arcreversal  
 org.openmarkov.inference.lazypropagation  

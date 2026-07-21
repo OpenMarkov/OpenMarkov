@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * project to create a binding every XML element containing a 'value' attribute.
  *
  * <p>Example of use:</p>
- * <p>
+ *
  * Having a file in {@code src/main/resources/my_localization_files/Dialogs_en.xml} with these contents:
  *
  * <blockquote><pre>
@@ -79,7 +79,7 @@ import java.lang.annotation.*;
  * }
  * }
  * </pre></blockquote><br>
- * <p>
+ *
  * Take a look at how every xml element that had a value is now represented by a class, for example,
  * 'AddOtherProperty.Name.Title' is now represented by the hierarchy of a nested class, so we can find it accessing
  * {@code AddOtherProperty}, then {@code Name}, and then {@code Title} (This is basically
@@ -113,7 +113,7 @@ import java.lang.annotation.*;
  * }
  * }
  * </pre></blockquote><br>
- * <p>
+ *
  * And upon executing, this would be its results:
  *
  * <pre>{@code
@@ -156,6 +156,7 @@ public @interface BindLocalizations {
      * When left as empty, it uses the name of the binding file as the name for the generated class, which is the
      * default behavior.
      *
+     *
      * @return the name of the class where the bindings will be generated.
      */
     String inBaseClass() default "Nls";
@@ -177,14 +178,14 @@ public @interface BindLocalizations {
     /**
      * Different languages that Localization files are written in.
      */
-    enum Language {
-        ENGLISH, SPANISH;
+    enum Language{
+        ENGLISH,SPANISH;
         
         /**
          * @return The final characters of a localization file
          */
-        String fileTerminator() {
-            return switch (this) {
+        String fileTerminator(){
+            return switch (this){
                 case ENGLISH -> "_en.xml";
                 case SPANISH -> "_es.xml";
             };

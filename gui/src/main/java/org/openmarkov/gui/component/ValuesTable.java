@@ -7,10 +7,14 @@
 package org.openmarkov.gui.component;
 
 import org.jetbrains.annotations.UnknownNullability;
-import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.action.base.PNEdit;
+import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.action.core.UncertainValuesEdit;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -21,17 +25,18 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.action.TablePotentialValueEdit;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.dialog.common.KeyTable;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.exception.MismatchedValueException;
 
-import javax.swing.*;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.ToolTipManager;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import java.awt.*;
+import java.awt.Component;
 import java.io.Serial;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -120,7 +125,7 @@ public class ValuesTable extends KeyTable implements PNEditListener {
      * Define the priority list when potential values are edited
      */
     
-    protected List<Integer> priorityList = new LinkedList<>();
+    protected LinkedList<Integer> priorityList = new LinkedList<>();
     /**
      * first editable row. By default, it is zero until runtime initialisation
      */
@@ -212,6 +217,7 @@ public class ValuesTable extends KeyTable implements PNEditListener {
                 }
             }
             case Double newValueDouble -> newValueDouble;
+            case Integer newValueInteger -> Double.valueOf(newValueInteger);
             case null, default -> throw new UnrecoverableException(new MismatchedValueException("a number", newValue));
         };
     }

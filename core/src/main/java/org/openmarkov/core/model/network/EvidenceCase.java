@@ -181,16 +181,12 @@ public class EvidenceCase implements ClassLocalizable {
      * @return the removed {@code Finding}, or {@code null} if no finding matched
      */
     public @Nullable Finding removeFinding(String variableName) {
-        ArrayList<Variable> findingsVariables = new ArrayList<>(findings.keySet());
-        int i = 0, numVariables = findingsVariables.size();
-        Variable variable;
-        do {
-            variable = findingsVariables.get(i++);
-        } while (i < numVariables && !variable.getName().contentEquals(variableName));
-        if (variable == null) {
-            return null;
+        for (Variable variable : findings.keySet()) {
+            if (variable.getName().contentEquals(variableName)) {
+                return findings.remove(variable);
+            }
         }
-        return findings.remove(variable);
+        return null;
     }
     
     /**

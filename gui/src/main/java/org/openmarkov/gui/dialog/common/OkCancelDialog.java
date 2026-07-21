@@ -8,11 +8,11 @@
 package org.openmarkov.gui.dialog.common;
 
 import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.gui.loader.element.IconBind;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.gui.loader.element.IconBind;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import java.awt.Window;
 import java.io.Serial;
 
 /**
@@ -95,7 +95,7 @@ public class OkCancelDialog extends BottomPanelButtonDialog {
      *
      * @return a new Ok button.
      */
-    protected JButton getOKButton() {
+    public JButton getOKButton() {
         return this.jButtonOK;
     }
     

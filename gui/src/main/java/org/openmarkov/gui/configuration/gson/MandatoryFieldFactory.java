@@ -1,11 +1,15 @@
 package org.openmarkov.gui.configuration.gson;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -14,13 +18,22 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class MandatoryFieldFactory implements TypeAdapterFactory {
     
     @Override
-    public <T> @NotNull TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        // Only apply validation to your specific package
+    public <T> @Nullable TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+        Class<? super T> rawType = type.getRawType();
+        
+        if (rawType.isPrimitive() ||
+                rawType == String.class ||
+                Map.class.isAssignableFrom(rawType) ||
+                java.util.Collection.class.isAssignableFrom(rawType)) {
+            return null; // These are handled by Gson, and not by us.
+        }
+        
         TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
         TypeAdapter<JsonElement> jsonElementAdapter = gson.getAdapter(JsonElement.class);
         return new MandatoryFieldVerifier<>(delegate, jsonElementAdapter, type.getRawType());

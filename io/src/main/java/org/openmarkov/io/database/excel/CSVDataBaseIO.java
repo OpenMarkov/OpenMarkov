@@ -23,6 +23,7 @@ import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -210,15 +211,9 @@ import java.util.Scanner;
      * @return Variables list. {@code ArrayList} of {@code String}
      */
     private static ArrayList<String> getVariableNames(String firstLine) {
-        ArrayList<String> variableNames = new ArrayList<String>();
-        // Use a second Scanner to parse the content of each line
-        Scanner scanner = new Scanner(firstLine);
-        scanner.useDelimiter("[,;]");
-        while (scanner.hasNext()) {
-            variableNames.add(scanner.next());
-        }
-        scanner.close();
-        return variableNames;
+        // split with limit -1 keeps empty fields, so the column count matches the data rows.
+        // A Scanner with a "[,;]" delimiter silently drops leading and trailing empty tokens.
+        return new ArrayList<>(Arrays.asList(firstLine.split("[,;]", -1)));
     }
     
     /**
@@ -236,11 +231,11 @@ import java.util.Scanner;
     private static int[] getDataLine(String line, List<Map<String, Integer>> variablesStates,
                                      List<List<String>> variablesStatesNames) {
         int[] statesLines = new int[variablesStates.size()];
-        Scanner scanner = new Scanner(line);
-        scanner.useDelimiter("[,;]");
-        int numVariable = 0;
-        while (scanner.hasNext()) {
-            String stateVariable = scanner.next();
+        // split with limit -1 keeps empty fields, so a leading/trailing empty value does not
+        // shift the whole row by a column (as a Scanner with a "[,;]" delimiter would).
+        String[] fields = line.split("[,;]", -1);
+        for (int numVariable = 0; numVariable < fields.length; numVariable++) {
+            String stateVariable = fields[numVariable];
             switch (translateToLowerUpperCase) {
                 case 1:
                     stateVariable = stateVariable.toLowerCase();
@@ -259,9 +254,7 @@ import java.util.Scanner;
                 variablesStatesNames.get(numVariable).add(stateVariable);
             }
             statesLines[numVariable] = stateNumber;
-            numVariable++;
         }
-        scanner.close();
         return statesLines;
     }
     

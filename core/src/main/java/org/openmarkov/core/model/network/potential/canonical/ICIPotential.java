@@ -609,7 +609,14 @@ public abstract class ICIPotential extends Potential implements Projectable {
         if (this.leakyVariable != null) {
             potential.leakyVariable = copyNet.getVariable(this.leakyVariable.getName());
         }
-        potential.noisyParameters = this.noisyParameters.clone();
+        // Deep-clone the 2D noisy parameters: double[][].clone() is shallow and would share the
+        // inner rows with the original, breaking the independence deepCopy promises (and being
+        // inconsistent with the copy constructor, which clones each row). Latent today -- no code
+        // mutates the rows in place -- but the shared state is a trap.
+        potential.noisyParameters = new double[this.noisyParameters.length][];
+        for (int i = 0; i < this.noisyParameters.length; i++) {
+            potential.noisyParameters[i] = this.noisyParameters[i] == null ? null : this.noisyParameters[i].clone();
+        }
         potential.zVariables = new HashMap<>(this.zVariables);
         return potential;
     }

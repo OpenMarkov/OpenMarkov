@@ -35,15 +35,14 @@ class XMLConstantsParser {
      * Parses the given XML file and produces a list of top-level {@link ClassDefinition} objects
      * that mirror the element hierarchy of the file.
      *
-     * @param bundleName         the resource bundle name used to look up strings at runtime
-     * @param xmlFilePath        absolute path to the XML localization file
-     * @param xmlElementsToAvoid element names to skip during parsing
-     *
+     * @param bundleName           the resource bundle name used to look up strings at runtime
+     * @param xmlFilePath          absolute path to the XML localization file
+     * @param xmlElementsToAvoid   element names to skip during parsing
      * @return a list of top-level class definitions representing the parsed XML structure
      */
     public static List<ClassDefinition> parseFiles(String bundleName, String xmlFilePath,
                                                    Set<@NotNull String> xmlElementsToAvoid) throws SAXException, IOException, ParserConfigurationException {
-        SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
+        SAXParser saxParser= SAXParserFactory.newInstance().newSAXParser();
         var endPointClasses = new ArrayList<PropertyAndValue>();
         BiConsumer<Stack<String>, String> onFindPropertyWithValue = (elements, value) -> {
             Stream<String> elementsStream = elements.stream();
@@ -143,7 +142,6 @@ class XMLConstantsParser {
      * Gets the {@code arguments} names of a {@code pattern} as it is done in StringFormat or org.openmarkov.core.
      *
      * @param pattern the message pattern containing named placeholders
-     *
      * @return the {@code arguments} names of a {@code pattern}.
      */
     public static List<String> extractParameterNames(CharSequence pattern) {

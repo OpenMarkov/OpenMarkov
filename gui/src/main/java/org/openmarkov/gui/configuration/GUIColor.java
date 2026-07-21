@@ -3,7 +3,7 @@ package org.openmarkov.gui.configuration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.function.Supplier;
@@ -64,7 +64,7 @@ public class GUIColor {
         if (this.themedColors == null) {
             return this.defaultColor;
         }
-        Theme theme = LocalPreferences.PREFERRED_THEME.get();
+        Theme theme = UserPreferences.PREFERRED_THEME.get();
         HashSet<Theme> visitedThemes = new HashSet<>();
         while (theme != null) {
             if (!visitedThemes.add(theme)) {

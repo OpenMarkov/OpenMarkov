@@ -549,7 +549,7 @@ public class PotentialEditPanel extends JPanel {
     boolean potentialHasChanged() {
         Potential newPotential = this.node.getPotential();
         boolean potentialsAreDifferent = !ReflectionEquality.areEquals(this.originalPotential, newPotential);
-        OpenMarkovLogger.debug("Potentials are different "+potentialsAreDifferent);
+        OpenMarkovLogger.LOGGER.trace("Potentials are different " + potentialsAreDifferent);
         return potentialsAreDifferent;
     }
     

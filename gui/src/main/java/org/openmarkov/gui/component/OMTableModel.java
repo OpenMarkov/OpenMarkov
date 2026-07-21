@@ -8,7 +8,10 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class OMTableModel extends DefaultTableModel {
@@ -68,4 +71,23 @@ public class OMTableModel extends DefaultTableModel {
         return OMTableModel.construct(false, Stream.empty());
     }
     
+    List<Class<?>> speciallyHandledClasses = java.util.List.of(Boolean.class, Integer.class, Double.class, String.class);
+    
+    @Override public Class<?> getColumnClass(int columnIndex) {
+        Class<?> columnClass = super.getColumnClass(columnIndex);
+        Object firstValue = IntStream.range(0, this.getRowCount())
+                                     .mapToObj(i -> this.getValueAt(i, columnIndex))
+                                     .filter(Objects::nonNull)
+                                     .findFirst()
+                                     .orElse(null);
+        if (firstValue != null) {
+            var valueClass = firstValue.getClass();
+            for (var clazz : speciallyHandledClasses) {
+                if (clazz.isAssignableFrom(valueClass)) {
+                    return clazz;
+                }
+            }
+        }
+        return columnClass;
+    }
 }

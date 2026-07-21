@@ -7,11 +7,20 @@
 
 package org.openmarkov.gui.util;
 
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.UnrecoverableException;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Window;
 import java.awt.event.MouseEvent;
 
 /**
@@ -19,7 +28,6 @@ import java.awt.event.MouseEvent;
  * the application.
  *
  * @author jmendoza
- * @version 1.2 jlgozalo - 10/05/10 - set private constructor, remove functions.
  * @version 1.3 jrico - Added showDialog.
  * and fix warnings
  */
@@ -71,6 +79,32 @@ public final class GUIUtils {
         dialog.setVisible(true);
     }
     
+    public static @NotNull JPanel wrapInJPanel(@NotNull Component component,
+                                               @SuppressWarnings("AbsoluteAlignmentInUserInterface")
+                                               @MagicConstant(intValues = {FlowLayout.LEFT, FlowLayout.CENTER, FlowLayout.RIGHT, FlowLayout.LEADING, FlowLayout.TRAILING})
+                                               int alignment) {
+        JPanel wrapper = new JPanel(new FlowLayout(alignment, 0, 0));
+        wrapper.setOpaque(false);
+        wrapper.add(component);
+        return wrapper;
+    }
+    
+    public static @NotNull JPanel wrapInJPanel(@NotNull Component component) {
+        return wrapInJPanel(component, FlowLayout.LEADING);
+    }
+    
+    public static @NotNull JPanel joinComponents(
+            @SuppressWarnings("AbsoluteAlignmentInUserInterface")
+            @MagicConstant(intValues = {FlowLayout.LEFT, FlowLayout.CENTER, FlowLayout.RIGHT, FlowLayout.LEADING, FlowLayout.TRAILING})
+            int align, Component... components) {
+        JPanel wrapper = new JPanel(new FlowLayout(align, 0, 0));
+        wrapper.setOpaque(false);
+        for (Component component : components) {
+            wrapper.add(component);
+        }
+        return wrapper;
+    }
+    
     
     // ── Exception wrapper ─────────────────────────────────────────
     
@@ -102,5 +136,13 @@ public final class GUIUtils {
         } catch (Exception ex) {
             throw new UnrecoverableException(ex);
         }
+    }
+    
+    public static @NotNull JLabel generateTooltipElement(String toolTipText) {
+        var restoreDimensionsVisualTooltip = new JLabel("ⓘ");
+        Font defaultFont = UIManager.getFont("Label.font");
+        restoreDimensionsVisualTooltip.setFont(defaultFont.deriveFont(Font.PLAIN, 20));
+        restoreDimensionsVisualTooltip.setToolTipText(toolTipText);
+        return restoreDimensionsVisualTooltip;
     }
 }

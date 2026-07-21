@@ -7,83 +7,31 @@
 
 package org.openmarkov.learning.metric.bde;
 
-import org.junit.jupiter.api.*;
-import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
-import org.openmarkov.core.action.base.linkEdits.InvertLinkEdit;
-import org.openmarkov.core.action.base.linkEdits.RemoveLinkEdit;
-import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.model.database.CaseDatabase;
-import org.openmarkov.core.model.network.NodeType;
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.Variable;
-//import org.openmarkov.io.database.elvira.ElviraDataBaseIO;
+import org.junit.jupiter.api.Test;
+import org.openmarkov.learning.metric.MetricTestSupport;
 
-import java.util.ArrayList;
+import java.util.List;
 
-@Disabled("Elvira's Database is not properly implemented yet")
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class BDMetricTest {
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-	private final double maxError = 1E-6;
-	ProbNet probNet;
-	BDeMetric metric;
-	private double alpha = 0.5;
-	private String dbFilename = "/learnTestDataBase.dbc";
+class BDMetricTest {
 
-	@BeforeEach
-	public void setUp() {
-		//TODO Commented and making CaseDatabase = null until fixing Elvira database parser with antlr4
-		//ElviraDataBaseIO databaseIO = new ElviraDataBaseIO();
-		//CaseDatabase database = databaseIO.load(getClass().getResource(dbFilename).getFile());
-		CaseDatabase database = null;
-		probNet = new ProbNet();
+    /** Incremental deltas must agree with a full recompute for every add/remove/invert. */
+    @Test
+    public void incrementalScoringIsConsistent() {
+        List<String> mismatches = MetricTestSupport.deltaMismatches(() -> new BDeMetric(1.0));
+        assertTrue(mismatches.isEmpty(), "incremental scoring inconsistent: " + mismatches);
+    }
 
-		for (Variable variable : database.getVariables()) {
-			probNet.addNode(variable, NodeType.CHANCE);
-		}
-		ArrayList<Integer> variableIndex = new ArrayList<Integer>();
-		for (int i = 0; i < probNet.getNumNodes(); i++) {
-			variableIndex.add(i);
-		}
-
-		metric = new BDeMetric(alpha);
-		metric.init(probNet, database);
-	}
-
-	@Test
-	public void testScores() {
-		double score = metric.getScore();
-		Assertions.assertEquals(score, -4003.30495017, maxError);
-	}
-
-	@Test
-	public void testScoreLinkAdded() {
-		AddLinkEdit edition = new AddLinkEdit(probNet, probNet.getVariable("E"), probNet.getVariable("D"), true);
-		double score = metric.getScore(edition);
-		Assertions.assertEquals(score, 257.07201665, maxError);
-	}
-
-	@Test
-    public void testScoreLinkInverted() throws DoEditException {
-		AddLinkEdit auxiliarEdition = new AddLinkEdit(probNet, probNet.getVariable("E"), probNet.getVariable("D"),
-				true);
-        
-        auxiliarEdition.executeEdit();
-        
-        InvertLinkEdit edition = new InvertLinkEdit(probNet, probNet.getVariable("E"), probNet.getVariable("D"), true);
-		double score = metric.getScore(edition);
-		Assertions.assertEquals(score, 4.5474735e-13, maxError);
-	}
-
-	@Test
-    public void testScoreLinkRemoved() throws DoEditException {
-		AddLinkEdit auxiliarEdition = new AddLinkEdit(probNet, probNet.getVariable("D"), probNet.getVariable("E"),
-				true);
-        
-        auxiliarEdition.executeEdit();
-        
-        RemoveLinkEdit edition = new RemoveLinkEdit(probNet, probNet.getVariable("D"), probNet.getVariable("E"), true);
-		double score = metric.getScore(edition);
-		Assertions.assertEquals(score, -257.07201665, maxError);
-	}
+    /**
+     * The equivalent sample size (alpha) passed to the constructor must affect the score;
+     * it used to be ignored because the prior was hard-coded to 1.
+     */
+    @Test
+    public void equivalentSampleSizeAffectsScore() {
+        double scoreAlpha1 = MetricTestSupport.fullScore(() -> new BDeMetric(1.0), new int[][] {});
+        double scoreAlpha8 = MetricTestSupport.fullScore(() -> new BDeMetric(8.0), new int[][] {});
+        assertTrue(Math.abs(scoreAlpha1 - scoreAlpha8) > 1e-6,
+                "different equivalent sample sizes must give different scores, both were " + scoreAlpha1);
+    }
 }

@@ -24,6 +24,7 @@ import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionType;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 import org.openmarkov.core.model.network.type.DESNetworkType;
+import org.openmarkov.java.cloneUtils.CloneUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -129,7 +130,6 @@ public class UnivariateDistrPotential extends TableWithEvents implements DESSimu
      * @param potential Univariate distribution potential
      */
     public UnivariateDistrPotential(UnivariateDistrPotential potential) {
-        
         super(potential);
         finiteStatesVariables = potential.getFiniteStatesVariables();
         parameterVariables = potential.getParameterVariables();
@@ -137,6 +137,8 @@ public class UnivariateDistrPotential extends TableWithEvents implements DESSimu
         setProbDensFunctionClass(potential.getProbDensFunctionClass());
         setDistributionTable((AugmentedProbTable) (potential.getDistributionTable()).copy());
         
+        this.impossibleConfigurations = CloneUtils.safeClone(potential.impossibleConfigurations);
+        this.tableVariables = new ArrayList<>(potential.tableVariables);
     }
     
     /**

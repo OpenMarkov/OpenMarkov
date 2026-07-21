@@ -2,8 +2,14 @@ package org.openmarkov.gui.configuration;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import org.openmarkov.core.exception.UnreachableException;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.Window;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public enum Theme {
     SYNC_OS,
@@ -36,5 +42,31 @@ public enum Theme {
     
     public static boolean OSisDark() {
         return com.jthemedetecor.OsThemeDetector.getDetector().isDark();
+    }
+    
+    public static void updateInterfaceToLook() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        UserPreferences.PREFERRED_THEME.get().setlookAndFeel();
+        Arrays.stream(Window.getWindows()).forEach(SwingUtilities::updateComponentTreeUI);
+    }
+    
+    static {
+        AtomicBoolean lastWasDark = new AtomicBoolean(Theme.OSisDark());
+        com.jthemedetecor.OsThemeDetector.getDetector().registerListener(newIsDark -> {
+            if (UserPreferences.PREFERRED_THEME.get() != Theme.SYNC_OS) {
+                return;
+            }
+            if (lastWasDark.get() == newIsDark) {
+                return;
+            }
+            lastWasDark.set(newIsDark);
+            SwingUtilities.invokeLater(() -> {
+                try {
+                    Theme.updateInterfaceToLook();
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                         UnsupportedLookAndFeelException e) {
+                    throw new UnreachableException(e);
+                }
+            });
+        });
     }
 }

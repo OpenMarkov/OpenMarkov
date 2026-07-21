@@ -16,7 +16,7 @@ import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.component.PotentialsTablePanelOperations;
 
-import java.util.List;
+import java.util.LinkedList;
 
 /**
  * {@code NodePotentialEdit} is a simple edit that allows to modify the
@@ -43,7 +43,7 @@ public class TablePotentialValueEdit extends PotentialChangeEdit {
     /**
      * A list that store the edition order
      */
-    private final List<Integer> priorityList;
+    private final LinkedList<Integer> priorityList;
     /**
      * The index of the value selected in the graphic table
      */
@@ -96,7 +96,7 @@ public class TablePotentialValueEdit extends PotentialChangeEdit {
      *                             positions.
      *                             cmyago added the new initialisation of getExactDistrPotential
      */
-    public TablePotentialValueEdit(Node node, Double newValue, int row, int col, List<Integer> priorityList,
+    public TablePotentialValueEdit(Node node, Double newValue, int row, int col, LinkedList<Integer> priorityList,
                                    Object[][] notEditablePositions) throws ThereIsNoPotentialsInNodeException {
         super(node, null, null);
         this.node = node;
@@ -205,10 +205,11 @@ public class TablePotentialValueEdit extends PotentialChangeEdit {
      * <p>
      * revised --&gt; not changed
      */
-    private List<Integer> getPriorityListInitialization() {
+    private LinkedList<Integer> getPriorityListInitialization() {
         for (int i = 0; i < node.getVariable().getNumStates(); i++) {
-            if (i != indexSelected)
+            if (i != indexSelected) {
                 priorityList.add(i + increment);
+            }
         }
         priorityList.add(indexSelected + increment);
         return priorityList;
@@ -219,7 +220,7 @@ public class TablePotentialValueEdit extends PotentialChangeEdit {
      *
      * @return the priority list
      */
-    public List<Integer> getPriorityList() {
+    public LinkedList<Integer> getPriorityList() {
         return priorityList;
     }
     

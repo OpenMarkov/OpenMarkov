@@ -14,6 +14,7 @@ import org.openmarkov.core.exception.InvalidArgumentException;
  * This class is based on https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/distribution/WeibullDistribution.html
  * 16/01/2023 FIXME Use WeibullDistribution from Apache Commons; currently it is not used for homogeneity
  * @author cmyago
+ * @author Manuel Arias
  * @version 1.0 - 19/03/2020 Adapted from ExponentialFunction
  */
 public class WeibullFunction extends ProbDensFunctionWithKnownInverseCDF {
@@ -162,13 +163,14 @@ public class WeibullFunction extends ProbDensFunctionWithKnownInverseCDF {
 
 
     /**
-     * @return the
-     * Returns the mean of this WeibullFunction distribution. The mean of a Weibull distribution is lambda*Gamma_Funcion(1+1/k)
-     * * @return the mean of this WeibullFunction distribution.
+     * Returns the variance of this WeibullFunction distribution. The variance of a Weibull distribution is
+     * lambda^2*Gamma_Funcion(1+2/k) - mean^2
+     *
+     * @return the variance of this WeibullFunction distribution.
      */
     @Override
     public double getVariance() {
-        return (k * k) * FastMath.exp(Gamma.logGamma(1 + (2 / lambda))) -
+        return (lambda * lambda) * FastMath.exp(Gamma.logGamma(1 + (2 / k))) -
                 (getMean() * getMean());
     }
 

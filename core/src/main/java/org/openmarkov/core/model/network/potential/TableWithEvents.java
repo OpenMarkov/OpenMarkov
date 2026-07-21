@@ -14,7 +14,6 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
-import org.openmarkov.java.cloneUtils.CloneUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,9 +92,7 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     //TODO
     public TableWithEvents(TableWithEvents potential) {
         super(potential);
-        this.tablePotential = new TablePotential(potential.getTablePotential());
-        this.impossibleConfigurations = CloneUtils.safeClone(potential.impossibleConfigurations);
-        this.tableVariables = new ArrayList<>(potential.tableVariables);
+        this.setTablePotential(new TablePotential(potential.getTablePotential()));
     }
     
     
@@ -232,7 +229,6 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     @Override public void setVariables(List<Variable> variables) {
         super.setVariables(variables);
         this.getTablePotential().setVariables(variables);
-        System.out.println();
     }
     
     /**

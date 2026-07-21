@@ -1,26 +1,24 @@
 Table of contents:
 <!-- TOC -->
-
 * [Meta-programming](#meta-programming)
 * [Meta-programming in Java](#meta-programming-in-java)
 * [Creating custom Annotations for Annotation Processing](#creating-custom-annotations-for-annotation-processing)
-    * [Adding fields to an annotation](#adding-fields-to-an-annotation)
-    * [Limiting the elements of code the annotation can be applied to](#limiting-the-elements-of-code-the-annotation-can-be-applied-to)
-    * [Setting the scope where this annotation is available](#setting-the-scope-where-this-annotation-is-available)
+  * [Adding fields to an annotation](#adding-fields-to-an-annotation)
+  * [Limiting the elements of code the annotation can be applied to](#limiting-the-elements-of-code-the-annotation-can-be-applied-to)
+  * [Setting the scope where this annotation is available](#setting-the-scope-where-this-annotation-is-available)
 * [Creating custom Annotation Processors](#creating-custom-annotation-processors)
-    * [Common Dependencies for Annotation Processing](#common-dependencies-for-annotation-processing)
-    * [Defining an annotation processor](#defining-an-annotation-processor)
-    * [Generating the logic of the Processor](#generating-the-logic-of-the-processor)
-    * [Advice on defining processor logic](#advice-on-defining-processor-logic)
-    * [Registering the processor](#registering-the-processor)
-    * [Using the processor from another project](#using-the-processor-from-another-project)
+  * [Common Dependencies for Annotation Processing](#common-dependencies-for-annotation-processing)
+  * [Defining an annotation processor](#defining-an-annotation-processor)
+  * [Generating the logic of the Processor](#generating-the-logic-of-the-processor)
+  * [Advice on defining processor logic](#advice-on-defining-processor-logic)
+  * [Registering the processor](#registering-the-processor)
+  * [Using the processor from another project](#using-the-processor-from-another-project)
 * [Tutorial](#tutorial)
-    * [Defining the Annotation Processing project](#defining-the-annotation-processing-project)
-    * [Defining the annotation](#defining-the-annotation)
-    * [Specifying the processor](#specifying-the-processor)
-    * [Registering the processor](#registering-the-processor-1)
-    * [Using the processor in a different project](#using-the-processor-in-a-different-project)
-
+  * [Defining the Annotation Processing project](#defining-the-annotation-processing-project)
+  * [Defining the annotation](#defining-the-annotation)
+  * [Specifying the processor](#specifying-the-processor)
+  * [Registering the processor](#registering-the-processor-1)
+  * [Using the processor in a different project](#using-the-processor-in-a-different-project)
 <!-- TOC -->
 
 # Meta-programming
@@ -48,12 +46,11 @@ to take said components that have the annotation attached as an input and allowi
 said code behaves or to emit information about it.
 
 It's main use is to reduce code by auto-generating it, ex: If we have a ``Person`` class with the
-fields ``age`` and ``name``, and we want to apply
-the [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern)
+fields ``age`` and ``name``, and we want to apply the [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern)
 to it by creating a class named ```PersonBuilder``` with the methods ``withAge(age)``,
-``withName(name)`` and ``build()``, it would lead us to a very long class whose definition is
-obvious by just looking at the ```Person``` class, so instead, we can attach a  ```@Builder```
-annotation to it that will create the boilerplate code for us, meaning once we declare our
+``withName(name)`` and ``build()``, it would lead us to a very long class whose definition is 
+obvious by just looking at the ```Person``` class, so instead, we can attach a  ```@Builder``` 
+annotation to it that will create the boilerplate code for us, meaning once we declare our 
 ``Person`` class as follows:
 
 ````java
@@ -69,7 +66,7 @@ public class Person {
 }
 ````
 
-... And then the ``@Builder`` annotation would be process to give a ``BuilderPerson`` class like
+... And then the ``@Builder`` annotation would be process to give a ``BuilderPerson`` class like 
 this one:
 
 ````java
@@ -134,7 +131,7 @@ allow them to modify the AST
 of the code during the compilation phase, specifically after the compiler verifies the syntax and
 generates the AST, and before the compiler begins to create the Java bytecode; This has been around
 since the year 2011, meaning it is unlikely to change, but if Java's compiler was to change or the
-Compiler's API was to change either the way it works or its visibility, projects such as this one
+Compiler's API was to change either the way it works or its visibility, projects such as this one 
 could be exposed.
 
 Java also has another metaprogramming system called
@@ -171,7 +168,7 @@ package my.projectpackage;
 Fields (properly called
 [Annotation Interface Elements](https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.6.1)
 ) can be assigned for Annotations, as long as their type is a primitive, a ``String``, a ``class``,
-an ``enum``, a sub-``annotation``, or an array of the previous (This means multidimensional arrays
+an ``enum``, a sub-``annotation``, or an array of the previous (This means multidimensional arrays 
 are <span style="color:red">**not**</span> allowed), this is useful when there is information that
 is needed for the developer using the annotation to provide, or to allow them more refined
 configuration about how their annotation will be used, for example:
@@ -193,6 +190,7 @@ This ```XMLToConstants``` annotation has three fields:
 - ``maxRecursion``(): It's an ``int`` without a default value, so the user is forced to write a
   value for this field.
 
+
 ## Limiting the elements of code the annotation can be applied to
 
 It is possible to limit the elements an annotation can be applied to just certain elements such as
@@ -201,8 +199,7 @@ the Annotation Processor to reduce its scope and therefore to be able to expand 
 source code components it can use.
 
 For doing this, the annotation has to be annotated with
-[
-``@Target({ *types here* })`` ](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Target.html)
+[``@Target({ *types here* })`` ](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Target.html)
 specifying said elements, for example:
 
 ````java
@@ -214,11 +211,9 @@ public @interface NotNull { }
 ````
 
 Here, the annotation ```NotNull``` can be applied to a field of a class (
-[
-``ElementType.FIELD``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#FIELD)
+[``ElementType.FIELD``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#FIELD)
 ), or to a parameter of a method (
-[
-``ElementType.PARAMETER``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#PARAMETER)
+[``ElementType.PARAMETER``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#PARAMETER)
 ), you can find more information about every target possible either in the
 [@Target Annotation Reference](https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.6.4.1),
 where every possible target is defined, or in the
@@ -227,35 +222,29 @@ where every possible target is defined, or in the
 ## Setting the scope where this annotation is available
 
 By attaching the
-[
-``@Retention(*Retention policy*)``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Retention.html)
+[``@Retention(*Retention policy*)``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Retention.html)
 annotation it is possible to limit how long an annotation will be recorded, having the following
 [Retention Policies](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html):
 
-- [
-  ``RetentionPolicy.SOURCE``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#SOURCE):
+- [``RetentionPolicy.SOURCE``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#SOURCE):
   The annotation will only be available to the compiler, and once the compilation is done, the
   annotation is discarded, meaning nor Java's Virtual Machine nor us as programmers can access the
   annotation using reflections, as they won't exist.
-- [
-  ``RetentionPolicy.CLASS``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#CLASS):
+- [``RetentionPolicy.CLASS``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#CLASS):
   The annotation will be saved once the compilation is done, but won't be read by the Java's Virtual
-  Machine, meaning we still cannot access it using reflections, as, just like before, they won't
+  Machine, meaning we still cannot access it using reflections, as, just  like before, they won't
   exist.
   <br>This is the default RetentionPolicy when none is set.
-- [
-  ``RetentionPolicy.RUNTIME``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME):
+- [``RetentionPolicy.RUNTIME``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME):
   The annotation will be saved once the compilation is done and also by the Java's Virtual Machine,
   meaning we can access them using
   [Reflections](https://docs.oracle.com/javase/8/docs/technotes/guides/reflection/index.html), which
   allows other means of meta-programming, but those are different to the Annotation Processor
-  described here, and whose main difference is that Annotation Processing happens during
-  compilation,
+  described here, and whose main difference is that Annotation Processing happens during compilation,
   while Reflections' metaprogramming happens at runtime.
 
 If an annotation will only be used by an Annotation Processor and Reflections won't be used, using
-[
-``RetentionPolicy.SOURCE``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#SOURCE)
+[``RetentionPolicy.SOURCE``](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#SOURCE)
 is advised to both prevent others from accessing the annotation at runtime and saving (a bit) of
 resources, this can be done as follows:
 
@@ -274,8 +263,7 @@ public @interface MyCompileTimeAnnotation {
 An Annotation Processor is a class implementing the
 [Processor](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Processor.html)
 interface, this class is able to receive the fulfilled
-[Annotation](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/Annotation.html)
-s
+[Annotation](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/Annotation.html)s
 the user wrote, and to call a
 [process](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Processor.html#process(java.util.Set,javax.annotation.processing.RoundEnvironment))
 method where an output to said annotations is created, such as the generation of code.
@@ -294,12 +282,10 @@ making this process more comfortable and less boilerplate:
 
 - [Google's Auto-Service](https://mvnrepository.com/artifact/com.google.auto.service/auto-service):
   Annotation Processors follow
-  [Java's Service System](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html),
-  and
+  [Java's Service System](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html), and
   as such, projects are required to register their processor(s) as service(s), this library
   automatically handles registering most of the information about it as a service in our stead.
-  <br>This act as a dependency, meaning it should appear inside the ```depencencies``` tag inside
-  the
+  <br>This act as a dependency, meaning it should appear inside the ```depencencies``` tag inside the
   ``pom.xml`` file.
 - [Apache Maven's Compiler Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin):
   This allows for Maven to compile the processor(s)'s code at compile time and to use it when
@@ -449,86 +435,80 @@ utilities:
   <br>Said utilities are given by multiple
   [getters](https://docs.oracle.com/javaee/6/tutorial/doc/gjbbp.html) inside
   ``ProcessingEnvironment``, they are:
-    - [ProcessingEnvironment.getElementUtils()](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/ProcessingEnvironment.html#getElementUtils())
-      -> [Elements](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/lang/model/util/Elements.html):
-      Contains implementations of utility methods for operating on elements, such as
-      [getPackageOf(Element element)](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/lang/model/util/Elements.html#getPackageOf(javax.lang.model.element.Element))
-      to get the full name of the package where an element is originated from.
-    - [ProcessingEnvironment.getFiler()](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/ProcessingEnvironment.html#getFiler())
-      -> [Filer](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Filer.html):
-      Contains implementations for creating new source files, including new classes and new
-      resources,
-      for example:
-      [createSourceFile(CharSequence name, Element... originatingElements)](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Filer.html#createSourceFile(java.lang.CharSequence,javax.lang.model.element.Element...))
-      allows to create a new source file with the indicated name for the source code file.
-      Ex: A class ``Human`` could be created in the package ``org.project`` with the following code:
+  - [ProcessingEnvironment.getElementUtils()](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/ProcessingEnvironment.html#getElementUtils())
+    -> [Elements](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/lang/model/util/Elements.html):
+    Contains implementations of utility methods for operating on elements, such as
+    [getPackageOf(Element element)](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/lang/model/util/Elements.html#getPackageOf(javax.lang.model.element.Element))
+    to get the full name of the package where an element is originated from.
+  - [ProcessingEnvironment.getFiler()](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/ProcessingEnvironment.html#getFiler())
+    -> [Filer](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Filer.html):
+    Contains implementations for creating new source files, including new classes and new resources,
+    for example:
+    [createSourceFile(CharSequence name, Element... originatingElements)](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Filer.html#createSourceFile(java.lang.CharSequence,javax.lang.model.element.Element...))
+    allows to create a new source file with the indicated name for the source code file.
+    Ex: A class ``Human`` could be created in the package ``org.project`` with the following code:
 
-      ````java
-      import javax.annotation.processing.AbstractProcessor;
-      import javax.tools.JavaFileObject;
-      import java.io.Writer;
-      //...
-      public class OurProcessor extends AbstractProcessor {
-          @Override
-          public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-            JavaFileObject fileObject = processingEnv.getFiler().createSourceFile("org.project.Human");
-            try (Writer writer = fileObject.openWriter()) {
-              writer.write("package org.project.Human; public class Human{ public Human(){ " +
-               "System.out.println(\"You called the default constructor!\") } }");
+    ````java
+    import javax.annotation.processing.AbstractProcessor;
+    import javax.tools.JavaFileObject;
+    import java.io.Writer;
+    //...
+    public class OurProcessor extends AbstractProcessor {
+        @Override
+        public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+          JavaFileObject fileObject = processingEnv.getFiler().createSourceFile("org.project.Human");
+          try (Writer writer = fileObject.openWriter()) {
+            writer.write("package org.project.Human; public class Human{ public Human(){ " +
+             "System.out.println(\"You called the default constructor!\") } }");
+          }
+          return true;
+        }
+        //...
+    }
+    ````
+  - [ProcessingEnvironment.getMessager()](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/ProcessingEnvironment.html#getMessager())
+    -> [Messager](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Messager.html):
+    Allows to print information to the developer when compiling its source code, each one of these
+    messages have a diagnostic level indicated either by calling
+    [Messager.printMessage](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Messager.html#printMessage(javax.tools.Diagnostic.Kind,java.lang.CharSequence))
+    with the level indicated through a [Diagnostic.Kind](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/tools/Diagnostic.Kind.html),
+    such as [Diagnostic.Kind.ERROR](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/tools/Diagnostic.Kind.html#ERROR)
+    or [Diagnostic.Kind.WARNING](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/tools/Diagnostic.Kind.html#WARNING),
+    or through the concise methods created from Java 18, such as [Messager.printError](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Messager.html#printError(java.lang.CharSequence))
+    or [Messager.printWarning](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Messager.html#printWarning(java.lang.CharSequence)).
+    <br>When printing a message, you can also attach the message to an element of the source code,
+    this is extremely useful to tell the user when something needs to change.
+    <br>The following code serves to check whether a class follows a name convention or not, and in
+    case it doesn't, it shows a warning on the class, so the developer can check it:
+
+    ````java
+    import javax.annotation.processing.*;
+    import javax.lang.model.element.Element;
+    import javax.lang.model.element.TypeElement;
+    import java.util.Set;
+      
+    //...
+    public class ClassNameVerifierProcessor extends AbstractProcessor {
+          
+        @Override
+        public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+            for (TypeElement annotation : annotations) {
+                for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
+                    var className = element.getSimpleName().toString();
+                    var firstChar =  String.valueOf(className.charAt(0)) ;
+                    if (!firstChar.equals(firstChar.toUpperCase())){
+                        processingEnv.getMessager().printWarning(
+                              "This class name doesn't start with a capitalised letter", element);
+                    }
+                }
             }
             return true;
-          }
-          //...
-      }
-      ````
-    - [ProcessingEnvironment.getMessager()](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/ProcessingEnvironment.html#getMessager())
-      -> [Messager](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Messager.html):
-      Allows to print information to the developer when compiling its source code, each one of these
-      messages have a diagnostic level indicated either by calling
-      [Messager.printMessage](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Messager.html#printMessage(javax.tools.Diagnostic.Kind,java.lang.CharSequence))
-      with the level indicated through
-      a [Diagnostic.Kind](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/tools/Diagnostic.Kind.html),
-      such
-      as [Diagnostic.Kind.ERROR](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/tools/Diagnostic.Kind.html#ERROR)
-      or [Diagnostic.Kind.WARNING](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/tools/Diagnostic.Kind.html#WARNING),
-      or through the concise methods created from Java 18, such
-      as [Messager.printError](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Messager.html#printError(java.lang.CharSequence))
-      or [Messager.printWarning](https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/annotation/processing/Messager.html#printWarning(java.lang.CharSequence)).
-      <br>When printing a message, you can also attach the message to an element of the source code,
-      this is extremely useful to tell the user when something needs to change.
-      <br>The following code serves to check whether a class follows a name convention or not, and
-      in
-      case it doesn't, it shows a warning on the class, so the developer can check it:
-
-      ````java
-      import javax.annotation.processing.*;
-      import javax.lang.model.element.Element;
-      import javax.lang.model.element.TypeElement;
-      import java.util.Set;
-        
-      //...
-      public class ClassNameVerifierProcessor extends AbstractProcessor {
-            
-          @Override
-          public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-              for (TypeElement annotation : annotations) {
-                  for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
-                      var className = element.getSimpleName().toString();
-                      var firstChar =  String.valueOf(className.charAt(0)) ;
-                      if (!firstChar.equals(firstChar.toUpperCase())){
-                          processingEnv.getMessager().printWarning(
-                                "This class name doesn't start with a capitalised letter", element);
-                      }
-                  }
-              }
-              return true;
-          }
-          //...   
-      }
-      ````
-      Note: Printing an error message will prevent the code from being compiled, it is pretty much
-      the
-      same as allowing to throw an error that a compiler would throw.
+        }
+        //...   
+    }
+    ````
+    Note: Printing an error message will prevent the code from being compiled, it is pretty much the
+    same as allowing to throw an error that a compiler would throw.
 
 ## Advice on defining processor logic
 
@@ -590,6 +570,7 @@ in their ``pom.xml``:
 
 </project>
 ````
+
 
 # Tutorial
 
@@ -749,7 +730,7 @@ public class BuilderProcessor extends AbstractProcessor {
 ````
 
 On this point, we start to define how the processor will generate the output, for this, we will take
-every source code's element marked with our annotation, and then we will extract information about
+every source code's  element marked with our annotation, and then we will extract information about
 it, like its constructors, the name of the class, or it's package.
 
 We also should be aware some of these inputs might be incorrect, for example, if the element is not
@@ -1446,7 +1427,6 @@ locations:
   the processor, with no refining made by the compiler.
   <br>They would look for the class in here, meaning they need to go to
   ``org.openmarkov.using_annotation.HumanBuilder`` and they would find this:
-
 ````java
 package org.openmarkov.annotation_using;
 
@@ -1482,7 +1462,6 @@ public class HumanBuilder {
   <br>They would look for the class in here, meaning they need to go to
   ``org.openmarkov.using_annotation.HumanBuilder`` and they would find this (Notice IntelliJ's
   header and the lack of calling the ```Human``` class by its full path):
-
 ````java
 //
 // Source code recreated from a .class file by IntelliJ IDEA

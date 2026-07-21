@@ -1371,8 +1371,11 @@ public class PGMXReader_0_2 {
      *
      * @return the result
      */
-    protected PotentialRole getPotentialRole(Element xmlPotential) {
+    protected PotentialRole getPotentialRole(Element xmlPotential) throws PGMXParserException {
         String xmlPotentialRole = xmlPotential.getAttributeValue(XMLAttributes.ROLE.toString());
+        if (xmlPotentialRole == null) {
+            throw new PGMXParserException.PotentialWithoutRole(xmlPotential);
+        }
         PotentialRole xmlRole;
         if (xmlPotentialRole.equalsIgnoreCase("utility")) {
             xmlRole = PotentialRole.UNSPECIFIED;

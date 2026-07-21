@@ -107,7 +107,7 @@ public class NetEvaluator {
     /** Most-probable-state index per row of {@code prob}. */
     private static int[] argmaxByRow(double[][] prob) {
         int numCases = prob.length;
-        int numStates = prob[0].length;
+        int numStates = (numCases == 0) ? 0 : prob[0].length;
         int[] estimated = new int[numCases];
         for (int i = 0; i < numCases; i++) {
             int bestJ = 0;
@@ -212,6 +212,10 @@ public class NetEvaluator {
                 continue;
             }
             Variable variable = probNet.getVariable(caseVar.getName());
+            if (variable == null) {
+                throw new IllegalArgumentException(
+                        "Case-database variable '" + caseVar.getName() + "' is not present in the network");
+            }
             State state = variable.getState(variable.getStateName(cases[caseIndex][j]));
             findings.add(new Finding(variable, state));
         }

@@ -9,7 +9,6 @@ package org.openmarkov.gui.component;
 
 import org.jetbrains.annotations.UnknownNullability;
 import org.openmarkov.core.action.base.PNEdit;
-import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.expression.VariableExpression;
@@ -19,8 +18,12 @@ import org.openmarkov.core.model.network.potential.AugmentedProbTablePotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
 import org.openmarkov.gui.action.AugmentedPotentialValueEdit;
+import org.openmarkov.gui.configuration.GUIColors;
+import org.openmarkov.gui.dialog.common.VariableExpressionTextField;
 
-import javax.swing.*;
+import javax.swing.JTable;
+import javax.swing.ToolTipManager;
+import java.util.Collections;
 
 /**
  * This table implementation is responsible for the graphical and data model
@@ -38,7 +41,7 @@ import javax.swing.*;
  * @author carmenyago
  * @version 1 Apr/2017
  */
-public class AugmentedValuesTable extends ValuesTable implements PNEditListener {
+public class AugmentedValuesTable extends ValuesTable {
     /**
      * default serial ID
      */
@@ -57,10 +60,10 @@ public class AugmentedValuesTable extends ValuesTable implements PNEditListener 
     }
     
     /**
-     * @param node the node
-     * @param tableModel the table model
+     * @param node               the node
+     * @param tableModel         the table model
      * @param AugmentedProbTable the augmented prob table
-     * @param modifiable the modifiable
+     * @param modifiable         the modifiable
      */
     public AugmentedValuesTable(Node node, ValuesTableModel tableModel, AugmentedProbTable AugmentedProbTable,
                                 final boolean modifiable) {
@@ -75,21 +78,42 @@ public class AugmentedValuesTable extends ValuesTable implements PNEditListener 
         super.defaultConfiguration();
         //CMI
         //CHANGED
-        this.onTables(omjTable -> omjTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS));
+        this.onTables(omjTable -> {
+            omjTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            omjTable.setRowSelectionAllowed(true);
+            omjTable.setColumnSelectionAllowed(true);
+            omjTable.setGridColor(GUIColors.Tables.ValuesTable.GRID_COLOR.getColor());
+            // next two lines is a cool trick to enhance table performance
+            ToolTipManager.sharedInstance().unregisterComponent(omjTable);
+            ToolTipManager.sharedInstance().unregisterComponent(omjTable.getTableHeader());
+        });
         //CMF
     }
     
-
     
     @Override public void setValueAt(Object newValue, int row, int column, Object source) {
         Object oldValue = getValueAt(row, column, source);
         if (oldValue.equals(newValue)) {
             return;
         }
-        VariableExpression expression = (VariableExpression) newValue;
-        AugmentedPotentialValueEdit nodePotentialEdit = new AugmentedPotentialValueEdit(node, expression, row, column);
+        var editorComponent = this.getEditorComponent(source);
+        
+        VariableExpression expression;
+        if (editorComponent instanceof VariableExpressionTextField textField) {
+            if (!textField.isValidExpression()) {
+                return;
+            }
+            expression = textField.getExpression();
+        } else {
+            expression = (VariableExpression) newValue;
+        }
+        
+        AugmentedPotentialValueEdit nodePotentialEdit = new AugmentedPotentialValueEdit(node, expression, row, column, Collections.unmodifiableList(this.priorityList));
         try {
             nodePotentialEdit.executeEdit();
+            var modifiedIndex = PotentialsTablePanelOperations.getPotentialIndex(row, column, ((AugmentedProbTablePotential) node.getPotential()).getAugmentedProbTable());
+            priorityList.removeIf(value -> value == modifiedIndex);
+            priorityList.add(modifiedIndex);
         } catch (DoEditException e) {
             throw new UnrecoverableException(e);
         }
@@ -122,8 +146,13 @@ public class AugmentedValuesTable extends ValuesTable implements PNEditListener 
             int rowPosition = edit.getRowPosition(position);
             int columnPosition = edit.getColumnPosition();
             if (editPotential instanceof AugmentedProbTablePotential) {
-                for (int i = lastEditableRow; i <= lastEditableRow; i++) {
-                    super.getModel().setValueAt("Complement", i, columnPosition);
+                int firstEditableRow = PotentialsTablePanelOperations.calculateFirstEditableRow(editTable);
+                int lastEditableRow = PotentialsTablePanelOperations.calculateLastEditableRow(editTable);
+                
+                for (int i = firstEditableRow; i <= lastEditableRow; i++) {
+                    var a = PotentialsTablePanelOperations.getPotentialIndex(i, columnPosition, editTable);
+                    var v = editTable.getFunctionValues()[a];
+                    super.getModel().setValueAt(v, i, columnPosition);
                 }
             }
             super.getModel().setValueAt(functionValues[position], rowPosition, columnPosition);
@@ -146,7 +175,7 @@ public class AugmentedValuesTable extends ValuesTable implements PNEditListener 
                  .setValueAt(editTable.getFunctionValues()[augmentedEdit.getIndexSelected()], augmentedEdit.getRowPosition(),
                              augmentedEdit.getColumnPosition());
         }
-
+        
     }
     
 }

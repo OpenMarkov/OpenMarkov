@@ -177,7 +177,6 @@
         <Mnemonic value="i"/>
     </Inference>
     <View value="View">
-        <ChangeScale value="Change app scale"/>
         <GoNextTab value="Go to next tab"/>
         <GoPreviousTab value="Go to previous tab"/>
         <Toolbars value="Toolbars">
@@ -274,10 +273,10 @@
         <Mnemonic value="t"/>
     </Tools>
     <File value="File">
-        <SaveAs value="Save as...">
+        <SaveAs value="Save network as...">
             <Mnemonic value="a"/>
         </SaveAs>
-        <Close value="Close">
+        <Close value="Close network">
             <Mnemonic value="c"/>
         </Close>
         <NetworkProperties value="Network properties...">
@@ -286,24 +285,27 @@
         <Exit value="Exit">
             <Mnemonic value="e"/>
         </Exit>
-        <LoadEvidence value="Load Evidence..."/>
-        <Save value="Save">
+        <LoadEvidence value="Load evidence..."/>
+        <Save value="Save network">
             <Mnemonic value="s"/>
         </Save>
-        <New value="New...">
+        <New value="New network...">
             <Mnemonic value="n"/>
         </New>
-        <SaveOpen value="Save and reopen">
+        <SaveOpen value="Save network and reopen">
             <Mnemonic value="w"/>
         </SaveOpen>
-        <Open value="Open...">
+        <Open value="Open network...">
             <Mnemonic value="o"/>
         </Open>
-        <OpenURL value="Open file from URL">
+        <OpenURL value="Open network from URL...">
             <Mnemonic value="o"/>
         </OpenURL>
+        <OpenRecent value="Open recent network...">
+            <NoRecent value="No recently opened networks."/>
+        </OpenRecent>
         <Mnemonic value="f"/>
-        <SaveEvidence value="Save Evidence..."/>
+        <SaveEvidence value="Save evidence..."/>
     </File>
     <Decision>
         <ShowExpectedUtility value="Show expected utility"/>

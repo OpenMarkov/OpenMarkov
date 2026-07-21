@@ -58,22 +58,22 @@ public class Discretization {
      * @return true if the variable is numeric
      */
     public static boolean isNumeric(Variable variable) {
-        
-        State[] states = variable.getStates();
-        boolean hasMissingValues = false;
-        for (int i = 0; i < states.length; i++) {
+        // A variable read from a case database is FINITE_STATES with the values as state
+        // names, so numeric-ness cannot be read from its VariableType; it is decided by
+        // whether every state name (other than the "?" missing marker) parses as a number.
+        boolean hasNumericState = false;
+        for (State state : variable.getStates()) {
+            if (state.getName().equals("?")) {
+                continue;
+            }
             try {
-                if (!states[i].getName().equals("?")) {
-                    Double.parseDouble(states[i].getName());
-                } else {
-                    hasMissingValues = true;
-                }
+                Double.parseDouble(state.getName());
+                hasNumericState = true;
             } catch (NumberFormatException e) {
                 return false;
             }
         }
-        
-        return states.length > 4 || (!hasMissingValues && states.length == 3);
+        return hasNumericState;
     }
     
     /**
@@ -322,23 +322,30 @@ public class Discretization {
         }
         intervalLimits.add(Double.POSITIVE_INFINITY);
         
-        //Create a new discretized variable
+        //Create a new discretized variable.
+        // The equal-frequency split produces a data-dependent number of cut points, so
+        // the number of intervals actually produced may differ from the requested
+        // numIntervals: fewer when the distribution is skewed (a single value can exhaust
+        // an interval's frequency, leaving too little for the rest), or more when values
+        // line up with the target frequency. Build the variable from the boundaries that
+        // were actually produced rather than assuming exactly numIntervals+1 of them.
+        int actualNumIntervals = intervalLimits.size() - 1;
         boolean containsMissingValues = variable.containsState("?");
-        int numStates = (containsMissingValues) ? numIntervals + 1 : numIntervals;
+        int numStates = (containsMissingValues) ? actualNumIntervals + 1 : actualNumIntervals;
         State[] newStates = new State[numStates];
-        double[] limits = new double[numIntervals + 1];
-        boolean[] belongsToLeftSide = new boolean[numIntervals + 1];
-        for (int i = 0; i < numIntervals; i++) {
+        double[] limits = new double[actualNumIntervals + 1];
+        boolean[] belongsToLeftSide = new boolean[actualNumIntervals + 1];
+        for (int i = 0; i < actualNumIntervals; i++) {
             newStates[i] = new State("(" + intervalLimits.get(i) + " , " + intervalLimits.get(i + 1) + "]");
             belongsToLeftSide[i] = true;
             limits[i] = intervalLimits.get(i);
         }
         limits[limits.length - 1] = intervalLimits.get(limits.length - 1);
         // open the last interval
-        newStates[numIntervals - 1] = new State(newStates[numIntervals - 1].getName().replace(']', ')'));
+        newStates[actualNumIntervals - 1] = new State(newStates[actualNumIntervals - 1].getName().replace(']', ')'));
         // Minimum and Maximum must be in the interval
         belongsToLeftSide[0] = false;
-        belongsToLeftSide[numIntervals] = true;
+        belongsToLeftSide[actualNumIntervals] = true;
         
         if (containsMissingValues) {
             newStates[numStates - 1] = new State("?");

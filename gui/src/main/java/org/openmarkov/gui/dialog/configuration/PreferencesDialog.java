@@ -11,22 +11,37 @@
 package org.openmarkov.gui.dialog.configuration;
 
 import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.gui.configuration.LocalPreference;
-import org.openmarkov.gui.configuration.LocalPreferences;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.gui.configuration.UserPreference;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.WindowConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.InvalidPreferencesFormatException;
 import java.util.prefs.Preferences;
@@ -361,8 +376,8 @@ public class PreferencesDialog extends JDialog implements ActionListener {
      * execute the Reset action by cleaning preferences in the user preferences
      */
     protected void actionPerformedReset() {
-        LocalPreferences.getAllPreferences().forEach(LocalPreference::clear);
-        LocalPreferences.getAllPreferences().forEach(LocalPreference::initialize);
+        UserPreferences.getAllPreferences().forEach(UserPreference::clear);
+        UserPreferences.getAllPreferences().forEach(UserPreference::initialize);
         this.jTableEdition.repaint();
         this.jTreePreferences.repaint();
         this.repaint();

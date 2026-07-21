@@ -8,7 +8,7 @@ package org.openmarkov.gui.dialog.io;
 
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
-import org.openmarkov.gui.configuration.LocalPreferences;
+import org.openmarkov.gui.configuration.UserPreferences;
 
 import java.io.File;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
 			FileFilterByExtension<? extends Class<? extends CaseDatabaseWriter>> filter = new FileFilterByExtension<>(writerClass, List.of(info.extension()), info.name());
             addChoosableFileFilter(filter);
 		});
-		File currentDirectory = LocalPreferences.LATEST_SAVED_DATASET_DIRECTORY.get();
+		File currentDirectory = UserPreferences.LATEST_SAVED_DATASET_DIRECTORY.get();
         setCurrentDirectory(currentDirectory);
 	}
 	

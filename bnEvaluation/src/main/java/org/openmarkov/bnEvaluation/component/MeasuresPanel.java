@@ -175,7 +175,6 @@ public class MeasuresPanel extends JPanel {
      * @param title       descriptive title for the evaluation
      * @param coherence   the coherence level between network and database
      * @param netdatabase the case database aligned to the network variables
-     *
      * @return a configured {@link MeasuresSet} ready for evaluation
      */
     public MeasuresSet measuresSet(String title, Coherence coherence, CaseDatabase netdatabase) {

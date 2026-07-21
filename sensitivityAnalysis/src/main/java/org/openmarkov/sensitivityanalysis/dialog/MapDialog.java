@@ -60,6 +60,7 @@ import javax.swing.JPanel;
  * Dialog that shows Map sensitivity analysis
  *
  * @author jperez-martin
+ * @author Manuel Arias
  */
 public class MapDialog extends JDialog {
     
@@ -231,17 +232,17 @@ public class MapDialog extends JDialog {
             vDecimalFormat = new DecimalFormat("0.000;-0.000");
         }
         
-        // Get the minimum and maximum values of variation to define horizontal intervals
+        // Get the minimum and maximum values of variation to define vertical intervals
         double vMinVariationValue, vMaxVariationValue;
-        if (hAxisVariation.getVariationType() == DeterministicAxisVariationType.UDIN) {
-            vMinVariationValue = hAxisVariation.getVariationBounds()[0];
-            vMaxVariationValue = hAxisVariation.getVariationBounds()[1];
+        if (vAxisVariation.getVariationType() == DeterministicAxisVariationType.UDIN) {
+            vMinVariationValue = vAxisVariation.getVariationBounds()[0];
+            vMaxVariationValue = vAxisVariation.getVariationBounds()[1];
         } else {
-            vMinVariationValue = -hAxisVariation.getVariationValue() / 100;
-            vMaxVariationValue = +hAxisVariation.getVariationValue() / 100;
+            vMinVariationValue = -vAxisVariation.getVariationValue() / 100;
+            vMaxVariationValue = +vAxisVariation.getVariationValue() / 100;
         }
-        
-        // Size of every horizontal interval
+
+        // Size of every vertical interval
         double vVariationInterval = (vMaxVariationValue - vMinVariationValue) / iterations;
         
         double minRangeUtility = Double.MAX_VALUE;

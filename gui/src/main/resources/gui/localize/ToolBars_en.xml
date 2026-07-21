@@ -21,6 +21,7 @@
                 <ToolTip value="Insert chance nodes"/>
             </Chance>
         </Mode>
+        <OpenSettings value="Settings..."/>
     </Edit>
     <ClearOutAllEvidenceCases>
         <ToolTip value="Clear out the list of evidence cases"/>

@@ -121,7 +121,8 @@ public class MenuItemNames {
 	 * String database token for the item 'Edit - Redo'.
 	 */
 	public static final String EDIT_REDO_MENUITEM = EDIT_MENU + ".Redo";
-
+	
+	
 	/**
 	 * String database token for the item 'Edit - Select all'.
 	 */
@@ -171,7 +172,9 @@ public class MenuItemNames {
 	 * String database token for the item 'Edit - Instance Name'.
 	 */
 	public static final String EDIT_INSTANCE_NAME_MENUITEM = EDIT_MENU + ".EditInstanceName";
-
+	
+	
+	public static final String EDIT_OPENSETTINGS_MENUITEM = EDIT_MENU + ".OpenSettings";
 	/**
 	 * String database token for the item 'Arity'.
 	 */
@@ -319,11 +322,6 @@ public class MenuItemNames {
 	 * String database token for the menu 'View'.
 	 */
 	public static final String VIEW_MENU = "View";
-    
-    /**
-     * String database token for the item 'View - Change scale'.
-     */
-    public static final String VIEW_CHANGE_SCALE = VIEW_MENU + ".ChangeScale";
     
     /**
      * String database token for the item 'View - Go next tab'.
@@ -586,5 +584,5 @@ public class MenuItemNames {
 	 * String database token for the item 'Next Slice' in a temporal node's contextual menu
 	 */
 	public static final String NEXT_SLICE_NODE = "Edit.NextSliceNode";
-
+	
 }

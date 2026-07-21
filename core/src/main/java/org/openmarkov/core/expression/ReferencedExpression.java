@@ -5,7 +5,10 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.java.regexUtils.SplitByRegex;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -109,6 +112,16 @@ public class ReferencedExpression<T> {
             return new net.sourceforge.jeval.Evaluator().evaluate(processedExpression);
         } catch (EvaluationException e) {
             throw new NonProjectablePotentialException.CannotEvaluate(processedExpression, e);
+        }
+    }
+    
+    public boolean isEvaluable(Map<T, String> variablesValues) {
+        try {
+            String processedExpression = this.processedExpression(variablesValues);
+            new net.sourceforge.jeval.Evaluator().evaluate(processedExpression);
+            return true;
+        } catch (EvaluationException | NonProjectablePotentialException.CannotResolveVariable e) {
+            return false;
         }
     }
     

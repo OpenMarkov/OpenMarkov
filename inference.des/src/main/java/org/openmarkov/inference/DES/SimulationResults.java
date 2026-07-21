@@ -73,7 +73,7 @@ public class SimulationResults {
 //        discountedSum =  StatUtils.sum(discountedValues);
         discountedMean = StatUtils.mean(discountedValues);
 //        Returns 0 for a single-value (i.e. length = 1) sample.
-        discountedSampleVariance = StatUtils.variance(discountedValues, mean);
+        discountedSampleVariance = StatUtils.variance(discountedValues, discountedMean);
         discountedSampleSD = Math.sqrt(discountedSampleVariance);
 //        discountedMedian = StatUtils.percentile(discountedValues,0.5);
 //        discountedPercentile25 =StatUtils.percentile(discountedValues,0.25);

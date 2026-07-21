@@ -78,7 +78,17 @@
     <Localization class="org.openmarkov.core.action.core.VariableTypeConstraintEdit"
                   value="Change (network's) variable constraint from {lastConstraint} to {newVariableTypeConstraint}"/>
     <Localization class="org.openmarkov.core.action.core.VariableTypeEdit"
-                  value="Change variable type from {currentType} to {newType} for {node}"/>
+                  value="Change variable type to {newType} for {node}"/>
+    <Localization class="org.openmarkov.core.action.core.VariableTypeEdit$RawSetPartitionedInterval"
+                  value="Raw set of interval to {interval}"/>
+    <Localization class="org.openmarkov.core.action.core.VariableTypeEdit$RawSetPotentialEdit"
+                  value="Raw set of potential(s) to {newPotentials}"/>
+    <Localization class="org.openmarkov.core.action.core.VariableTypeEdit$RawSetRestriction"
+                  value="Raw set of restriction for {link}"/>
+    <Localization class="org.openmarkov.core.action.core.VariableTypeEdit$RawSetRevelation"
+                  value="Raw set of revelations to new intervals {newRevealingIntervals}"/>
+    <Localization class="org.openmarkov.core.action.core.VariableTypeEdit$RawSetType"
+                  value="Raw set of type to {originalVariableType}"/>
     <Localization class="org.openmarkov.core.exception.CannotNormalizePotentialException"
                   value="All the values are 0.0 in potential {potential}"/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException"
@@ -261,7 +271,7 @@
                   value="Cannot recognize network type {networkType}."/>
     <Localization
             class="org.openmarkov.core.exception.ProbNetParserException$SomeSubpotentialsArentLinkedToAnICIPotential"
-                  value="There are {subPotentials.size} not linked no an ICIPotential ({subPotentials})."/>
+            value="There are {subPotentials.size} not linked no an ICIPotential ({subPotentials})."/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$WrongNumberOfStates"
                   value="There was expected to find {expectedLength} states in variable {variableName}, but {actualLength} were found."/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$WrongVersion"
@@ -338,14 +348,12 @@
     <Localization class="org.openmarkov.core.model.network.constraint.NoEmptyName" value="Names aren't empty"/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoLinkRestriction"
                   value="Links must have no restrictions"/>
-
     <Localization class="org.openmarkov.core.model.network.constraint.NoEventNodes"
                   value="No event nodes allowed"/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlyOneOrphanInitialEvent"
                   value="There must be only one Initial Event with no parent"/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlySelfLoopsWithEventAndChanceNodes"
                   value="Self loops only allowed in event nodes"/>
-
     <Localization class="org.openmarkov.core.model.network.constraint.NoLoops" value="There must be no loops"/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoMixedParents"
                   value="Utility nodes can not have mixed parents."/>

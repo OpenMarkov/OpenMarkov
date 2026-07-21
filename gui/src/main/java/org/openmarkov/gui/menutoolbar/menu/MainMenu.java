@@ -7,13 +7,13 @@
 
 package org.openmarkov.gui.menutoolbar.menu;
 
-import com.google.gson.reflect.TypeToken;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.component.LastRecentFilesMenuItem;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.configuration.LastOpenFiles;
-import org.openmarkov.gui.configuration.LocalPreferences;
-import org.openmarkov.gui.dialog.common.RequestDialogger;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.loader.element.IconBind;
 import org.openmarkov.gui.localize.LocalizedCheckBoxMenuItem;
 import org.openmarkov.gui.localize.LocalizedMenuItem;
@@ -30,12 +30,27 @@ import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Main menu bar of the OpenMarkov application.
@@ -94,6 +109,20 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         fileMenu.removeAll();
         fileMenu.add(items.get(ActionCommands.NEW_NETWORK));
         fileMenu.add(items.get(ActionCommands.OPEN_NETWORK));
+        
+        Stream<? extends @NotNull Component> recentNetworkItems;
+        if (LastOpenFiles.existLastOpenFiles()) {
+            recentNetworkItems = getLastOpenFiles().stream();
+        } else {
+            JLabel noRecentItems = new JLabel(StringDatabase.INSTANCE.getString("File.OpenRecent.NoRecent"));
+            noRecentItems.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            recentNetworkItems = Stream.of(noRecentItems);
+        }
+        
+        fileMenu.add(new JMenuItemBuilder(StringDatabase.INSTANCE.getString("File.OpenRecent")).withItems(
+                recentNetworkItems
+        ).build());
+        
         fileMenu.add(items.get(ActionCommands.OPEN_NETWORK_URL));
         fileMenu.addSeparator();
         fileMenu.add(items.get(ActionCommands.SAVE_NETWORK));
@@ -103,10 +132,6 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         fileMenu.addSeparator();
         fileMenu.add(items.get(ActionCommands.NETWORK_PROPERTIES));
         fileMenu.add(items.get(ActionCommands.LOAD_EVIDENCE));
-        if (LastOpenFiles.existLastOpenFiles()) {
-            fileMenu.addSeparator();
-            getLastOpenFiles().forEach(fileMenu::add);
-        }
         fileMenu.addSeparator();
         fileMenu.add(items.get(ActionCommands.EXIT_APPLICATION));
         fileMenu.repaint();
@@ -175,6 +200,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         createItem(MenuItemNames.EDIT_NODEPROPERTIES_MENUITEM, ActionCommands.NODE_PROPERTIES);
         createItem(MenuItemNames.EDIT_NODERELATION_MENUITEM, ActionCommands.EDIT_POTENTIAL);
         createItem(MenuItemNames.EDIT_LINKPROPERTIES_MENUITEM, ActionCommands.LINK_PROPERTIES);
+        createItem(MenuItemNames.EDIT_OPENSETTINGS_MENUITEM, ActionCommands.OPEN_SETTINGS, IconBind.SETTINGS_ENABLED, null);
         
         // Inference
         createItem(MenuItemNames.INFERENCE_SWITCH_TO_EDITION_MODE_MENUITEM, ActionCommands.CHANGE_TO_EDITION_MODE, null, ctrl(KeyEvent.VK_I));
@@ -238,6 +264,8 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         editMenu.add(items.get(ActionCommands.CHANGE_TO_EDITION_MODE));
         editMenu.add(items.get(ActionCommands.PROPAGATION_OPTIONS));
         editMenu.add(items.get(ActionCommands.INFERENCE_OPTIONS));
+        editMenu.addSeparator();
+        editMenu.add(items.get(ActionCommands.OPEN_SETTINGS));
         return editMenu;
     }
     
@@ -295,26 +323,6 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
                 if (previous == -1) previous = networksTabPanel.getTabCount() - 1;
                 networksTabPanel.setSelectedIndex(previous);
             });
-            
-            LocalizedMenuItem changeScale = new LocalizedMenuItem(MenuItemNames.VIEW_CHANGE_SCALE, null);
-            viewMenu.add(changeScale);
-            changeScale.addActionListener(e -> RequestDialogger
-                    .of(this.mainPanel.mainGUI, new JTextField(LocalPreferences.UI_SCALE.get().toString()))
-                    .validating((textField, validator) -> {
-                        if (!validator.addErrorWhen(!stringIsDouble(textField.getText()), "The value must be a number")) {
-                            validator.addErrorWhen(Double.parseDouble(textField.getText()) > UI_SCALE_MAX, "Scale should not be greater than " + UI_SCALE_MAX);
-                            validator.addErrorWhen(Double.parseDouble(textField.getText()) < UI_SCALE_MIN, "Scale should not be lower than " + UI_SCALE_MIN);
-                        }
-                    })
-                    .mapInputAs(new TypeToken<>() {
-                    }, textField -> Double.parseDouble(textField.getText()))
-                    .withTitle("Change scale")
-                    .onOk(num -> {
-                        LocalPreferences.UI_SCALE.set(num);
-                        JOptionPane.showMessageDialog(this.mainPanel.mainGUI, "Scale changed to " + num + "." + System.lineSeparator() + "Your changes will be applied in the next reset.",
-                                                      "Changes accepted", JOptionPane.INFORMATION_MESSAGE, IconBind.OPENMARKOV_LOGO_16.icon());
-                    })
-                    .request());
         }
         return viewMenu;
     }
@@ -388,7 +396,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
     private List<LastRecentFilesMenuItem> getLastOpenFiles() {
         var lastOpenFilesItems = new ArrayList<LastRecentFilesMenuItem>();
         int index = 0;
-        for (String recentFile : LocalPreferences.LAST_OPEN_NETWORKS_FILES.get()) {
+        for (String recentFile : UserPreferences.LAST_OPEN_NETWORKS_FILES.get()) {
             LastRecentFilesMenuItem item = new LastRecentFilesMenuItem();
             item.setName("lastRecentFilesMenuItem" + index);
             item.setText(recentFile);

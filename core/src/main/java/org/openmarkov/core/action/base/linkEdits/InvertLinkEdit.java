@@ -23,6 +23,8 @@ import java.util.List;
 
 /**
  * Inverts an existing link.
+ *
+ * @author Manuel Arias
  */
 @SuppressWarnings("serial") public final class InvertLinkEdit extends BaseLinkEdit {
     
@@ -136,8 +138,13 @@ import java.util.List;
         super.undo();
         probNet.removeLink(variableTo, variableFrom, isDirected);
         probNet.addLink(variableFrom, variableTo, isDirected);
-        parent.setPotentials(parentOldPotentials);
-        child.setPotentials(childOldPotentials);
+        // doEdit only updates (and therefore only saves) the potentials when the child is not a
+        // decision node. Restoring them unconditionally would set them to the never-assigned null
+        // fields and wipe the parent's potentials. Mirror the doEdit guard.
+        if (child.getNodeType() != NodeType.DECISION) {
+            parent.setPotentials(parentOldPotentials);
+            child.setPotentials(childOldPotentials);
+        }
     }
     
     /**

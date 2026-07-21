@@ -10,7 +10,6 @@ package org.openmarkov.gui.component;
 
 import org.jetbrains.annotations.UnknownNullability;
 import org.openmarkov.core.action.base.PNEdit;
-import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.graph.Link;
@@ -47,25 +46,25 @@ public class LinkRestrictionValuesTable extends ValuesTable {
     private final Node node2;
 
     public LinkRestrictionValuesTable(Link<Node> link, ValuesTableModel tableModel, final boolean modifiable) {
-        super(null, tableModel, modifiable);
+        super(link.getFrom(), tableModel, modifiable);
         this.link = link;
         node2 = link.getTo();
     }
     
     @Override public void setValueAt(Object newValue, int row, int column, Object source) {
         if (newValue == null) return;
-        Integer newNumericValue = (Integer) newValue;
+        Integer newNumericValue = Integer.valueOf(newValue.toString());
         if (!newNumericValue.equals(INCOMPATIBILITY_VALUE) && !newNumericValue.equals(COMPATIBILITY_VALUE)) {
-            newValue = INCOMPATIBILITY_VALUE;
+            newNumericValue = INCOMPATIBILITY_VALUE;
         }
         LinkRestrictionPotentialValueEdit linkPotentialEdit =
-                new LinkRestrictionPotentialValueEdit(link, (Integer) newValue, row, column);
+                new LinkRestrictionPotentialValueEdit(link, newNumericValue, row, column);
         try {
             linkPotentialEdit.executeEdit();
-            super.setValueAt(newValue, row, column, source);
+            super.setValueAt(newNumericValue, row, column, source);
             int variable1Index = column - 1;
             int variable2Index = node2.getVariable().getNumStates() - row;
-            if ((Integer) newValue == 0) {
+            if (newNumericValue == 0) {
                 if (!node2.getPotentials().isEmpty() && node2.getPotentials().getFirst() instanceof TablePotential) {
                     Potential potential = LinkRestrictionPotentialOperations
                             .updatePotentialByAddLinkRestriction(node2,

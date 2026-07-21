@@ -147,7 +147,13 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
             super(element);
             this.potentialType = potentialType;
         }
-        
+
         public final String potentialType;
+    }
+
+    public static final class PotentialWithoutRole extends PGMXParserException {
+        public PotentialWithoutRole(Element element) {
+            super(element);
+        }
     }
 }

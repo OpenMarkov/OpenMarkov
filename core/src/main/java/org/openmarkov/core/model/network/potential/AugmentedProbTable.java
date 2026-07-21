@@ -17,6 +17,7 @@ import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,12 +31,6 @@ import java.util.List;
  * @author Manuel Arias
  */
 public class AugmentedProbTable extends UncertainTablePotential {
-    
-    /**
-     * The default function
-     */
-    public static final VariableExpression DEFAULT_FUNCTION = new VariableExpression(Collections.emptyList(), "1");
-    public static final VariableExpression COMPLEMENT_FUNCTION = new VariableExpression(Collections.emptyList(), "Complement");
     
     private VariableExpression[] functionValues;
     
@@ -57,6 +52,10 @@ public class AugmentedProbTable extends UncertainTablePotential {
             try {
                 functionValues = new VariableExpression[tableSize];
                 // Get  public int getPosition(int[] coordinates)
+                var defaultFunction = new VariableExpression(Collections.emptyList(), String.valueOf(1.0 / variables.getFirst()
+                                                                                                                    .getNumStates()));
+                Arrays.fill(functionValues, defaultFunction);
+                /*
                 int increment = variables.getFirst().getNumStates();
                 for (int i = 0; i < tableSize; i++) {
                     functionValues[i] = COMPLEMENT_FUNCTION;
@@ -64,6 +63,8 @@ public class AugmentedProbTable extends UncertainTablePotential {
                 for (int i = 0; i < tableSize; i += increment) {
                     functionValues[i] = DEFAULT_FUNCTION;
                 }
+                */
+                
             } catch (NegativeArraySizeException e) {
                 throw new IllegalArgumentException("Negative table size: " + tableSize, e);
             }

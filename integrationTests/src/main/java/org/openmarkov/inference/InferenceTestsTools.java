@@ -207,7 +207,6 @@ public class InferenceTestsTools {
         CEAnalysis veceaGlobal = new VECEAnalysis(probNet);
         veceaGlobal.setPreResolutionEvidence(evidenceCase);
         assertNotNull(veceaGlobal.getUtility());
-        System.out.println("VECEAGlobal successful");
     }
     
     
@@ -231,9 +230,7 @@ public class InferenceTestsTools {
             vecepsa.setNumSimulations(numSimulations);
             vecepsa.setUseMultithreading(useMultithreading);
             assertNotNull(vecepsa.getCEPPotentials());
-            
         }
-        System.out.println("VECEPSA successful");
     }
     
     

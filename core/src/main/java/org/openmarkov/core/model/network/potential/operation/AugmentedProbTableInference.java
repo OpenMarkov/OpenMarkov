@@ -7,7 +7,7 @@ import org.openmarkov.core.model.network.Variable;
 import java.util.Arrays;
 import java.util.Map;
 
-import static org.openmarkov.core.model.network.potential.AugmentedProbTable.COMPLEMENT_FUNCTION;
+import static org.openmarkov.core.expression.VariableExpression.Common.COMPLEMENT;
 
 public class AugmentedProbTableInference {
     
@@ -21,7 +21,7 @@ public class AugmentedProbTableInference {
                     for (int rowIndex = 0; rowIndex < processingValues.length; rowIndex++) {
                         if (processingValues[rowIndex] instanceof VariableExpression variableExpression
                                 && !variableExpression.asStringExpression()
-                                                      .equals(COMPLEMENT_FUNCTION.asStringExpression())) {
+                                                      .equals(COMPLEMENT.asStringExpression())) {
                             processingValues[rowIndex] = Float.valueOf(variableExpression.evaluateWith(findingsMap));
                         }
                     }
@@ -32,7 +32,7 @@ public class AugmentedProbTableInference {
                     for (int rowIndex = 0; rowIndex < processingValues.length; rowIndex++) {
                         if (processingValues[rowIndex] instanceof VariableExpression variableExpression
                                 && variableExpression.asStringExpression()
-                                                     .equals(COMPLEMENT_FUNCTION.asStringExpression())) {
+                                                     .equals(COMPLEMENT.asStringExpression())) {
                             numOfComplements++;
                         } else if(processingValues[rowIndex] instanceof Float value){
                             accumulated += value;
@@ -45,7 +45,7 @@ public class AugmentedProbTableInference {
                     for (int rowIndex = 0; rowIndex < processingValues.length; rowIndex++) {
                         if (processingValues[rowIndex] instanceof VariableExpression variableExpression
                                 && variableExpression.asStringExpression()
-                                                     .equals(COMPLEMENT_FUNCTION.asStringExpression())) {
+                                                     .equals(COMPLEMENT.asStringExpression())) {
                             processingValues[rowIndex] = valueForEachComplemented;
                         }
                     }

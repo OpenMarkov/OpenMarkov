@@ -9,16 +9,17 @@ package org.openmarkov.gui.dialog.node;
 
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Window;
+import java.util.List;
 
 /**
  * Dialog for selecting a standard domain (predefined set of states) to apply
  * to a discrete variable.
  */
 @SuppressWarnings("serial") public class StandardDomainsDialog extends OkCancelDialog {
-
-	private JPanel standardDomainsPanel;
+    
+    private StandardDomainPanel standardDomainsPanel;
 
 	public StandardDomainsDialog(Window owner) {
 		super(owner);
@@ -41,9 +42,8 @@ import java.awt.*;
 		getComponentsPanel().add(getJPanelStandardDomains(), BorderLayout.CENTER);
 
 	}
-
-	public JPanel getJPanelStandardDomains() {
-
+    
+    public StandardDomainPanel getJPanelStandardDomains() {
 		if (standardDomainsPanel == null) {
 			standardDomainsPanel = new StandardDomainPanel();
 			//statesCheckBoxPanel.setLayout( new FlowLayout());
@@ -53,6 +53,10 @@ import java.awt.*;
 
 	}
     
+    public List<String> getChosenStates() {
+        return standardDomainsPanel.getChosenStates();
+    }
+	
     public ChosenOption requestValues() {
 
 		setVisible(true);

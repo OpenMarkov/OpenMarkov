@@ -31,6 +31,8 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 	protected List<DecisionTreeElement> children;
 	private DecisionTreeElement parent = null;
 	private ProbNet network;
+	private DecisionTreeNodeEvaluation evaluation;
+
 	/**
 	 * This is attribute represents what in the past was the utility for
 	 * uni-criteria decision trees, but now it is generalized
@@ -46,6 +48,7 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 	public T getUtility() {
 		return utility;
 	}
+
 
 	/**
 	 * Constructor creating a decision tree node from a network node.
@@ -78,6 +81,25 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 	 */
 	public DecisionTreeNode(Variable variable, ProbNet probNet) {
 		this(probNet.getNode(variable), probNet);
+	}
+
+	/**
+	 * Returns the evaluation attached to this node, or {@code null} if the node
+	 * has not been evaluated yet.
+	 *
+	 * @return the evaluation of this node.
+	 */
+	public DecisionTreeNodeEvaluation getEvaluation() {
+		return evaluation;
+	}
+
+	/**
+	 * Attaches the evaluation of this node.
+	 *
+	 * @param evaluation the evaluation of this node.
+	 */
+	public void setEvaluation(DecisionTreeNodeEvaluation evaluation) {
+		this.evaluation = evaluation;
 	}
 
 	/**

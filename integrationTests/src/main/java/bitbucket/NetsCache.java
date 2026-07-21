@@ -56,7 +56,7 @@ class NetsCache {
         ArrayList<BitbucketFileCache> localCaches = new ArrayList<>();
         try {
             localCaches = JavaSerializationUtils
-                    .javaDeserialize(Files.readString(NetsCache.LOCAL_REPOSITORIES_CACHE_TRACKER_FILE.toPath()));
+                    .deserialize(Files.readString(NetsCache.LOCAL_REPOSITORIES_CACHE_TRACKER_FILE.toPath()));
         } catch (RuntimeException | IOException e) {
             NetsCache.LOCAL_REPOSITORIES_CACHE_TRACKER_FILE.delete();
         }
@@ -132,7 +132,7 @@ class NetsCache {
             NetsCache.reloadCache_downloadMissingFiles(localCaches, bitbucketFilesByPath);
         }
         try {
-            var asJson = JavaSerializationUtils.javaSerialize(localCaches);
+            var asJson = JavaSerializationUtils.serialize(localCaches);
             Files.writeString(NetsCache.LOCAL_REPOSITORIES_CACHE_TRACKER_FILE.toPath(), asJson);
         } catch (IOException e) {
             throw new UnreachableException(e);

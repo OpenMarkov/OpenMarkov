@@ -7,8 +7,8 @@
 
 package org.openmarkov.gui.action;
 
-import org.openmarkov.core.action.core.ICIPotentialEdit;
 import org.openmarkov.core.action.base.PNEdit;
+import org.openmarkov.core.action.core.ICIPotentialEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Variable;
@@ -16,6 +16,7 @@ import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.canonical.ICIPotential;
 import org.openmarkov.gui.component.PotentialsTablePanelOperations;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -69,7 +70,7 @@ import java.util.List;
     /**
      * A list that store the edition order
      */
-    private List<Integer> priorityList;
+    private LinkedList<Integer> priorityList;
     // Constructor
     
     /**
@@ -82,7 +83,7 @@ import java.util.List;
      * @param col      the column in the edited table
      * @param row      the row in the edited table
      */
-    public ICITablePotentialValueEdit(Node node, Double newValue, int row, int col, List<Integer> priorityList) {
+    public ICITablePotentialValueEdit(Node node, Double newValue, int row, int col, LinkedList<Integer> priorityList) {
         super(node.getProbNet());
         this.node = node;
         this.row = row;
@@ -209,7 +210,7 @@ import java.util.List;
      *
      * @return the initialized priority list
      */
-    public List<Integer> getPriorityListInitialization() {
+    public LinkedList<Integer> getPriorityListInitialization() {
         
         if (!leakyFlag) {
             //noisy parameters
@@ -318,7 +319,7 @@ import java.util.List;
      *
      * @return the priority list
      */
-    public List<Integer> getPriorityList() {
+    public LinkedList<Integer> getPriorityList() {
         return priorityList;
     }
     

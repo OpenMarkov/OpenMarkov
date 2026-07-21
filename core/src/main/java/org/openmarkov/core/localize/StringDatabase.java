@@ -10,10 +10,18 @@ package org.openmarkov.core.localize;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.localize.spi.LocalizeResourcesProvider;
+import org.openmarkov.java.initialization.Lazy;
 import org.openmarkov.plugin.PluginSearch;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -41,7 +49,7 @@ public class StringDatabase {
     /**
      * Unique instance of this class.
      */
-    private static final StringDatabase INSTANCE = new StringDatabase();
+    public static final StringDatabase INSTANCE = new StringDatabase();
     
     /**
      * Language to use.
@@ -56,8 +64,21 @@ public class StringDatabase {
      * Map containing all the bundles
      */
     private Map<String, StringBundle> bundles = null;
+    
+    
+    private final Lazy<HashMap<String, String>> keysToValues = new Lazy<>(() -> {
+        var keysToValues = new HashMap<String, String>();
+        for (var bundle : getAllBundles().values()) {
+            for (var key : bundle.getKeys()) {
+                keysToValues.put(key, bundle.getString(key));
+            }
+        }
+        return keysToValues;
+    });
+    
     // Create the listener list
     private List<LocaleChangeListener> listenerList = null;
+    
     
     /**
      * This constructor initializes the object with the language of the class.
@@ -70,8 +91,6 @@ public class StringDatabase {
         /* Set format locale to english (to format decimal point)*/
         Locale.setDefault(Locale.Category.FORMAT, Locale.ENGLISH);
         listenerList = new ArrayList<>();
-        
-        
     }
     
     
@@ -142,8 +161,7 @@ public class StringDatabase {
     
     private Map<String, StringBundle> calculateAllBundles() {
         //Iterable<LocalizeResourcesProvider> providers = ServiceLoader.load(LocalizeResourcesProvider.class);
-        Iterable<? extends LocalizeResourcesProvider> providers = getBundleProviders()
-                .toList();
+        Iterable<? extends LocalizeResourcesProvider> providers = StringDatabase.getBundleProviders().toList();
         Map<String, StringBundle> bundlesMap = new LinkedHashMap<>();
         for (LocalizeResourcesProvider provider : providers) {
             bundlesMap.putAll(provider.getBundlesMap(this.locale));
@@ -212,29 +230,7 @@ public class StringDatabase {
     }
     
     public @Nullable String getNullableString(String key) {
-        if (key == null) return null;
-        for (StringBundle bundle : this.getAllBundles().values()) {
-            String value = bundle.getString(key);
-            if (value != null) {
-                return value;
-            }
-        }
-        return null;
-    }
-    
-    
-    public String getString(String bundle, String key) {
-        String value = this.getNullableString(bundle, key);
-        return value != null ? value : StringDatabase.surrondAsUnknown(key);
-    }
-    
-    public @Nullable String getNullableString(@Nullable String bundle, String key) {
-        if (key == null) return null;
-        StringBundle stringBundle = this.getAllBundles().get(bundle);
-        if (stringBundle == null) {
-            return null;
-        }
-        return stringBundle.getString(key);
+        return keysToValues.get().get(key);
     }
     
     /**
@@ -276,4 +272,5 @@ public class StringDatabase {
             return StringDatabase.surrondAsUnknown(key);
         }
     }
+    
 }

@@ -17,7 +17,6 @@ import org.openmarkov.gui.component.OMTableModel;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
@@ -70,7 +69,8 @@ public class SelectableKeyTablePanel extends PrefixedKeyTablePanel implements Ta
      */
     @Override protected OMTableModel getTableModel() {
         if (tableModel == null) {
-            tableModel = new SelectableTableModel(data, columns);
+            tableModel = new OMTableModel(data, columns, true);
+            //tableModel = new SelectableTableModel(data, columns);
         }
         return tableModel;
     }
@@ -103,7 +103,6 @@ public class SelectableKeyTablePanel extends PrefixedKeyTablePanel implements Ta
         
         public SelectableTableModel(Object[][] data, String[] columns) {
             super(data, columns, true);
-            
         }
         
         @Override public boolean isCellEditable(int row, int col) {

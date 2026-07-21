@@ -29,7 +29,7 @@ import java.util.Map;
 @PotentialType(names = "Hazard (Exponential)")
 public class ExponentialHazardPotential extends WeibullHazardPotential {
     
-    protected static final VariableExpression[] MANDATORY_COVARIATES = new VariableExpression[]{CONSTANT};
+    protected static final VariableExpression[] MANDATORY_COVARIATES = new VariableExpression[]{VariableExpression.Common.CONSTANT};
 
 	public ExponentialHazardPotential(List<Variable> variables, PotentialRole role) {
 		super(variables, role, getDefaultCovariates(variables, role, MANDATORY_COVARIATES),
@@ -84,7 +84,7 @@ public class ExponentialHazardPotential extends WeibullHazardPotential {
 	}
     
     public static VariableExpression[] getMandatoryCovariates() {
-        return new VariableExpression[]{CONSTANT};
+        return new VariableExpression[]{VariableExpression.Common.CONSTANT};
 	}
     
     /**
@@ -99,7 +99,7 @@ public class ExponentialHazardPotential extends WeibullHazardPotential {
         VariableExpression[] weibullCovariates = new VariableExpression[covariates.length + 1];
 		// The exponential is a special case of Weibull where k=1 (gamma= ln(k));
 		weibullCoeficients[0] = 0;
-		weibullCovariates[0] = GAMMA;
+        weibullCovariates[0] = VariableExpression.Common.GAMMA;
 		for (int i = 0; i < coefficients.length; ++i) {
 			weibullCoeficients[i + 1] = coefficients[i];
 			weibullCovariates[i + 1] = covariates[i];

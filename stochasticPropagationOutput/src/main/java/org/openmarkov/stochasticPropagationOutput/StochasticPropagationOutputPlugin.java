@@ -7,7 +7,7 @@ import org.openmarkov.gui.toolplugin.ToolPlugin;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
 
 /**
  * Tool plugin that registers the stochastic propagation output export option
@@ -35,7 +35,7 @@ public class StochasticPropagationOutputPlugin implements ToolPlugin {
     @Override public JMenuItem toMenuItem() {
         return new JMenuItemBuilder(
                 StringDatabase.getUniqueInstance()
-                              .getString("stochasticPropagationOutput", "StochasticPropagationOutput"))
+                              .getString("StochasticPropagationOutput"))
                 .enabled(MainPanel.getCurrentProbNet() != null)
                 .onClick(() -> {
                     StochasticPropagationOutputFrame frame = new StochasticPropagationOutputFrame(MainGUI.INSTANCE.mainPanel.getMainFrame());

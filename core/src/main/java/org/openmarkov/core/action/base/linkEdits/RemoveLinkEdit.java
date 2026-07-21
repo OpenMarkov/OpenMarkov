@@ -33,6 +33,8 @@ import java.util.List;
 /**
  * Removes a directed or undirected link between two nodes and optionally
  * updates the destination node's potentials to no longer reference the removed parent.
+ *
+ * @author Manuel Arias
  */
 public final class RemoveLinkEdit extends BaseLinkEdit {
     
@@ -170,7 +172,7 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
     
     @Override public void undo() {
         super.undo();
-        
+
         if (updatePotentials) {
             node2.setPotentials(oldPotentials);
         }
@@ -185,6 +187,26 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
                 List<PartitionedInterval> revealingIntervals = link.getRevealingIntervals();
                 newLink.setRevealingIntervals(revealingIntervals);
             }
+        }
+    }
+
+    /**
+     * Re-applies the edit without re-running {@code doEdit()}. Re-running it would append a second
+     * batch to the persistent {@code newPotentials} list (never cleared) and leave the child with
+     * twice its potentials. Instead we call {@code setTypicalRedo(false)} and re-apply the removal
+     * and the already-computed {@code newPotentials}, mirroring the fix of issue #472 in
+     * {@link InvertLinkAndUpdatePotentialsEdit}.
+     */
+    @Override public void redo() {
+        setTypicalRedo(false);
+        super.redo();
+
+        if (probNet.hasExplicitLinks()) {
+            this.link = probNet.getLink(node1, node2, isDirected);
+        }
+        probNet.removeLink(node1, node2, isDirected);
+        if (updatePotentials) {
+            node2.setPotentials(newPotentials);
         }
     }
     

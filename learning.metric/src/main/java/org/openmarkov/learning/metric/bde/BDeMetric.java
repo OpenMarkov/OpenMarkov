@@ -50,12 +50,12 @@ import org.openmarkov.learning.metric.bayesian.BayesianMetric;
 			for (int k = 0; k < numStates; k++) {
 				n_ijk = freq[position];
 				n_ij += n_ijk;
-				sumStates += (MathUtils.lnGamma((1.0 / (numStates * parentConfigurations)) + n_ijk));
+				sumStates += (MathUtils.lnGamma((alpha / (numStates * parentConfigurations)) + n_ijk));
 				position++;
 			}
-			nodeScore += (MathUtils.lnGamma(1.0 / parentConfigurations)) - MathUtils
-					.lnGamma(n_ij + (1.0 / parentConfigurations)) - numStates * MathUtils
-					.lnGamma(1.0 / (numStates * parentConfigurations)) + sumStates;
+			nodeScore += (MathUtils.lnGamma(alpha / parentConfigurations)) - MathUtils
+					.lnGamma(n_ij + (alpha / parentConfigurations)) - numStates * MathUtils
+					.lnGamma(alpha / (numStates * parentConfigurations)) + sumStates;
 		}
 		return nodeScore;
 	}

@@ -37,21 +37,15 @@ public class RevelationArcDiscretizeTablePanel extends DiscretizeTablePanel {
      *
      */
     public RevelationArcDiscretizeTablePanel(String[] newColumns, Link<Node> link) {
-        this(newColumns, new Object[0][0], "s", link.getFrom());
         this.link = link;
-        
-    }
-    
-    public RevelationArcDiscretizeTablePanel(String[] newColumns, Object[][] noKeyData, String newKeyPrefix,
-                                             Node node) {
-        super(newColumns, noKeyData, newKeyPrefix, node);
+        super(newColumns, new Object[0][0], "s", link.getFrom());
         super.getDownValueButton().setVisible(false);
         super.getUpValueButton().setVisible(false);
         super.getNegativeInfinityButton().setVisible(false);
         super.getPositiveInfinityButton().setVisible(false);
         super.getStandardDomainButton().setVisible(false);
     }
-
+    
     @Override public void setPartitionedInterval() {
         
         int subIntervals = 0;
@@ -108,6 +102,9 @@ public class RevelationArcDiscretizeTablePanel extends DiscretizeTablePanel {
         boolean lower = (column - 1 == DiscretizeTablePanel.LOWER_BOUND_SYMBOL_COLUMN_INDEX);
         if (!(tableEvent.getType() == TableModelEvent.UPDATE && table
                 .getValueAt(row, column) instanceof Double newValue)) {
+            return;
+        }
+        if (this.valuesTable.getRowMoveTransferHandler() instanceof RowMoveTransferHandler rowMoveTransferHandler && rowMoveTransferHandler.isMovingRows()) {
             return;
         }
         if (lower) {

@@ -18,10 +18,14 @@ buildNumber.properties
 /integrationTests/src/main/resources/clone_of_probmodelxml_networks/
 /integrationTests/src/main/resources/clone_of_probmodelxml_networks_cache.json
 
-!/.idea
+# This allows to share run configurations in IDEA IDE's.
+# !/.idea
+# /.idea/*
+# !/.idea/runConfigurations/
 
-/.idea/*
-!/.idea/runConfigurations/
 
+/.idea/
+/OpenMarkov.jar
 
-
+# Claude Code
+/CLAUDE.md

@@ -7,91 +7,30 @@
 
 package org.openmarkov.learning.metric.bayesian;
 
-
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
-import org.openmarkov.core.action.base.linkEdits.InvertLinkEdit;
-import org.openmarkov.core.action.base.linkEdits.RemoveLinkEdit;
-import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.model.database.CaseDatabase;
-import org.openmarkov.core.model.network.NodeType;
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.Variable;
-//import org.openmarkov.io.database.elvira.ElviraDataBaseIO;
+import org.openmarkov.learning.metric.MetricTestSupport;
 
-import java.util.ArrayList;
+import java.util.List;
 
-@Disabled("Elvira's Database is not properly implemented yet")
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class BayesianMetricTest {
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-	private final double maxError = 1E-6;
-	ProbNet probNet;
-	BayesianMetric metric;
-	private double alpha = 0.5;
-	private String dbFilename = "/learnTestDataBase.dbc";
+class BayesianMetricTest {
 
-	@BeforeEach
-	public void setUp() {
-		//TODO Commented and making CaseDatabase = null until fixing Elvira database parser with antlr4
-		//ElviraDataBaseIO databaseIO = new ElviraDataBaseIO();
-		//CaseDatabase database = databaseIO.load(getClass().getResource(dbFilename).getFile());
-		CaseDatabase database = null;
-		probNet = new ProbNet();
-		for (Variable variable : database.getVariables()) {
-			probNet.addNode(variable, NodeType.CHANCE);
-		}
+    /** Incremental deltas must agree with a full recompute for every add/remove/invert. */
+    @Test
+    public void incrementalScoringIsConsistent() {
+        List<String> mismatches = MetricTestSupport.deltaMismatches(() -> new BayesianMetric(1.0));
+        assertTrue(mismatches.isEmpty(), "incremental scoring inconsistent: " + mismatches);
+    }
 
-		ArrayList<Integer> variableIndex = new ArrayList<Integer>();
-		for (int i = 0; i < probNet.getNumNodes(); i++) {
-			variableIndex.add(i);
-		}
-
-		metric = new BayesianMetric(alpha);
-		metric.init(probNet, database);
-
-	}
-
-	@Test
-	public void testScores() {
-		double score = metric.getScore();
-		assertEquals(score, -4003.30495017, maxError);
-	}
-
-	@Test
-	public void testScoreLinkAdded() {
-		AddLinkEdit edition = new AddLinkEdit(probNet, probNet.getVariable("E"), probNet.getVariable("D"), true);
-		double score = metric.getScore(edition);
-		assertEquals(score, 257.74000879, maxError);
-	}
-
-	@Test
-    public void testScoreLinkInverted() throws DoEditException {
-		AddLinkEdit auxiliarEdition = new AddLinkEdit(probNet, probNet.getVariable("E"), probNet.getVariable("D"),
-				true);
-        
-        auxiliarEdition.executeEdit();
-        
-        InvertLinkEdit edition = new InvertLinkEdit(probNet, probNet.getVariable("E"), probNet.getVariable("D"), true);
-		double score = metric.getScore(edition);
-		assertEquals(score, -0.00626448, maxError);
-	}
-
-	@Test
-    public void testScoreLinkRemoved() throws DoEditException {
-		AddLinkEdit auxiliarEdition = new AddLinkEdit(probNet, probNet.getVariable("D"), probNet.getVariable("E"),
-				true);
-        
-        auxiliarEdition.executeEdit();
-        
-        RemoveLinkEdit edition = new RemoveLinkEdit(probNet, probNet.getVariable("D"), probNet.getVariable("E"), true);
-		double score = metric.getScore(edition);
-		assertEquals(score, -257.73374431, maxError);
-	}
+    /**
+     * With alpha = 0 the Dirichlet prior vanishes and the metric must still yield a finite
+     * score. The guarded {@code alpha != 0} branches are meant to handle this, but lnGamma(0)
+     * used to be evaluated unconditionally.
+     */
+    @Test
+    public void alphaZeroYieldsAFiniteScore() {
+        double score = MetricTestSupport.fullScore(() -> new BayesianMetric(0.0), new int[][] {});
+        assertTrue(Double.isFinite(score), "score should be finite for alpha = 0, was " + score);
+    }
 }

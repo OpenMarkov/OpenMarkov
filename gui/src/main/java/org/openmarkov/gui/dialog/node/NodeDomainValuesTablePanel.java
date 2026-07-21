@@ -12,24 +12,45 @@ import org.openmarkov.core.action.core.PrecisionEdit;
 import org.openmarkov.core.action.core.VariableTypeEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.model.network.DefaultStates;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.PartitionedInterval;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.TemporalNetOperations;
+import org.openmarkov.core.model.network.Util;
+import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.gui.action.PartitionedIntervalEdit;
 import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.component.DiscretizeTablePanel;
 import org.openmarkov.gui.dialog.common.CommentHTMLScrollPane;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.util.GUIDefaultStates;
 import org.openmarkov.gui.util.GUIUtils;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.ItemSelectable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -471,7 +492,6 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
         if (jLabelStatesValues == null) {
             jLabelStatesValues = new JLabel();
             jLabelStatesValues.setName("jLabelStatesValues");
-            jLabelStatesValues.setText("a Label");
             jLabelStatesValues.setText(stringDatabase.getString("NodeDomainValuesTablePanel.jLabelStatesValues.Text"));
             jLabelStatesValues.setVisible(false);
             jLabelStatesValues.setEnabled(false);
@@ -1069,20 +1089,10 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
         if (standardDomainDialog.requestValues() != OkCancelDialog.ChosenOption.Ok) {
             return;
         }
-        List<JRadioButton> radioButtons = ((StandardDomainPanel) (standardDomainDialog.getJPanelStandardDomains()))
-                .getRadioButtons();
-        int index = 0;
-        for (int j = 0; j < radioButtons.size(); j++) {
-            if (radioButtons.get(j).isSelected()) {
-                index = j;
-            }
-        }
-        int i = 0;
-        State[] newStates = new State[DefaultStates.getByIndex(index).length];
-        for (String str : DefaultStates.getByIndex(index)) {
-            newStates[i] = new State(GUIDefaultStates.getString(str));
-            i++;
-        }
+        var chosenStates = standardDomainDialog.getJPanelStandardDomains().getChosenStates();
+        
+        State[] newStates = chosenStates.stream().map(State::new).toArray(State[]::new);
+        
         NodeReplaceStatesEdit nodeReplaceStatesEdit = new NodeReplaceStatesEdit(node, newStates);
         
         ProbNet nodeProbNet = node.getProbNet();

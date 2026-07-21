@@ -7,28 +7,43 @@
 
 package org.openmarkov.gui.component;
 
-import org.openmarkov.core.action.core.NodeStateEdit;
 import org.openmarkov.core.action.base.StateAction;
+import org.openmarkov.core.action.core.NodeStateEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.PartitionedInterval;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.TemporalNetOperations;
+import org.openmarkov.core.model.network.Util;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.gui.action.NodePartitionedIntervalEdit;
 import org.openmarkov.gui.action.PartitionedIntervalEdit;
 import org.openmarkov.gui.dialog.common.KeyTablePanel;
 import org.openmarkov.gui.exception.WrongIntervalException;
 import org.openmarkov.gui.loader.element.IconBind;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.util.GUIDefaultStates;
 
-import javax.swing.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import java.awt.*;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -153,8 +168,23 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
         // define the look and feel for the table element
         defineTableLookAndFeel();
         // define specific listeners
-        defineTableSpecificListeners();
         getTableModel().addTableModelListener(this);
+        valuesTable.addMouseListener(this);
+        valuesTable.makeRowsMovable()
+                   .onRowMoved((from, to) -> {
+                       int movedRows = Math.abs(from - to);
+                       boolean directionIsUp = from < to;
+                       StateAction stateAction = directionIsUp ? StateAction.UP : StateAction.DOWN;
+                       for (int i = 0; i < movedRows; i++) {
+                           var selectedRow = from + (i * (directionIsUp ? 1 : -1)) - 1;
+                           try {
+                               new NodeStateEdit(node, stateAction, selectedRow, "").executeEdit();
+                               propagateNodeStateEditRelatedVariables(stateAction, selectedRow, "");
+                           } catch (DoEditException e) {
+                               throw new UnrecoverableException(e);
+                           }
+                       }
+                   });
     }
     
     /**
@@ -291,14 +321,6 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
         return upperSymbolComboBox;
     }
     
-    /**
-     * Method to define the specific listeners in this table (not defined in the
-     * common KeyTable hierarchy
-     */
-    protected void defineTableSpecificListeners() {
-        valuesTable.addMouseListener(this);
-    }
-    
     
     enum IntervalSide {
         LOWER(LOWER_BOUND_VALUE_COLUMN_INDEX, LOWER_BOUND_SYMBOL_COLUMN_INDEX, "(", "[", 1),
@@ -318,10 +340,6 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
             this.relativeNextIntervalColumn = relativeNextIntervalColumn;
         }
     }
-    
-    // @ 2014/11/18. Issue 145.
-    // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
-    // Propagation of the domain in related variables in temporal models
     
     /**
      * This method is used to change the interval's type in a discretize Table
@@ -762,20 +780,6 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
      * Invoked when the button 'add' is pressed.
      */
     @Override protected void actionPerformedAddValue(ActionEvent e) throws DoEditException {
-        /*
-        //The newStateName was requested in a dialog, now it takes a default value.
-        String newStateName = (String) JOptionPane
-                .showInputDialog(this,
-                                 stringDatabase.getString("AddState.Text"),
-                                 stringDatabase.getString("AddState.Text"),
-                                 JOptionPane.QUESTION_MESSAGE, null, //no icon
-                                 null, //no predefined values
-                                 node.getVariable()
-                                     .getNewValidName()); // preset value in field
-        if (newStateName == null) {
-            return;
-        }
-         */
         var currentStateNames = Arrays.stream(node.getVariable().getStates())
                                       .map(State::getName)
                                       .collect(Collectors.toSet());
@@ -791,9 +795,6 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
         NodeStateEdit nodeStateEdit = new NodeStateEdit(node, StateAction.ADD, newStateIndex, newStateName);
         ProbNet probNet = node.getProbNet();
         nodeStateEdit.executeEdit();
-        // @ 2014/11/18. Issue 145.
-        // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
-        // Propagation of the domain in related variables in temporal models
         propagateNodeStateEditRelatedVariables(StateAction.ADD, newIndex, newStateName);
         //
         if (variable.getVariableType() == VariableType.DISCRETIZED) {
@@ -805,7 +806,7 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
         valuesTable.setRowSelectionInterval(newIndex, newIndex);
         valuesTable.requestFocus();
         valuesTable.editCellAt(newIndex, 1, e.getSource());
-        if(variable.getVariableType() != VariableType.DISCRETIZED) {
+        if (variable.getVariableType() != VariableType.DISCRETIZED) {
             valuesTable.setValueAt(newStateName, newIndex, 1, e.getSource());
         }
         var stateNameField = (JTextField) valuesTable.getEditorComponent(e.getSource());
@@ -832,9 +833,6 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
         NodeStateEdit nodeStateEdit = new NodeStateEdit(node, StateAction.REMOVE, selectedRow, "");
         ProbNet probNet = node.getProbNet();
         nodeStateEdit.executeEdit();
-        // @ 2014/11/18. Issue 145.
-        // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
-        // Propagation of the domain in related variables in temporal models
         propagateNodeStateEditRelatedVariables(StateAction.REMOVE, selectedRow, "");
         //
         cancelCellEditing();
@@ -871,27 +869,6 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
         // change partitioned interval values
     }
     
-    /**
-     * Invoked when the button 'up' is pressed.
-     */
-    @Override protected void actionPerformedUpValue(ActionEvent e) throws DoEditException {
-        int selectedRow = valuesTable.getSelectedRow();
-        Object swap;
-        NodeStateEdit nodeStateEdit = new NodeStateEdit(node, StateAction.UP, selectedRow, "");
-        ProbNet probNet = node.getProbNet();
-        nodeStateEdit.executeEdit();
-        // @ 2014/11/18. Issue 145.
-        // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
-        // Propagation of the domain in related variables in temporal models
-        propagateNodeStateEditRelatedVariables(StateAction.UP, selectedRow, "");
-        //
-        stopCellEditing();
-        cancelCellEditing();
-        swap = valuesTable.getValueAt(selectedRow, 1, e.getSource());
-        valuesTable.setValueAt(valuesTable.getValueAt(selectedRow - 1, 1, e.getSource()), selectedRow, 1, e.getSource());
-        valuesTable.setValueAt(swap, selectedRow - 1, 1, e.getSource());
-        valuesTable.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
-    }
     
     /**
      * Invoked when the button 'down' is pressed.
@@ -900,11 +877,7 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
         int selectedRow = valuesTable.getSelectedRow();
         Object swap;
         NodeStateEdit nodeStateEdit = new NodeStateEdit(node, StateAction.DOWN, selectedRow, "");
-        ProbNet probNet = node.getProbNet();
         nodeStateEdit.executeEdit();
-        // @ 2014/11/18. Issue 145.
-        // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
-        // Propagation of the domain in related variables in temporal models
         propagateNodeStateEditRelatedVariables(StateAction.DOWN, selectedRow, "");
         //
         stopCellEditing();
@@ -913,6 +886,24 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
         valuesTable.setValueAt(valuesTable.getValueAt(selectedRow + 1, 1, e.getSource()), selectedRow, 1, e.getSource());
         valuesTable.setValueAt(swap, selectedRow + 1, 1, e.getSource());
         valuesTable.setRowSelectionInterval(selectedRow + 1, selectedRow + 1);
+    }
+    
+    /**
+     * Invoked when the button 'up' is pressed.
+     */
+    @Override protected void actionPerformedUpValue(ActionEvent e) throws DoEditException {
+        int selectedRow = valuesTable.getSelectedRow();
+        Object swap;
+        NodeStateEdit nodeStateEdit = new NodeStateEdit(node, StateAction.UP, selectedRow, "");
+        nodeStateEdit.executeEdit();
+        propagateNodeStateEditRelatedVariables(StateAction.UP, selectedRow, "");
+        //
+        stopCellEditing();
+        cancelCellEditing();
+        swap = valuesTable.getValueAt(selectedRow, 1, e.getSource());
+        valuesTable.setValueAt(valuesTable.getValueAt(selectedRow - 1, 1, e.getSource()), selectedRow, 1, e.getSource());
+        valuesTable.setValueAt(swap, selectedRow - 1, 1, e.getSource());
+        valuesTable.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
     }
     
     /**
@@ -970,6 +961,9 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
         if (tableEvent.getType() != TableModelEvent.UPDATE) {
             return;
         }
+        if (this.valuesTable.getRowMoveTransferHandler() instanceof RowMoveTransferHandler rowMoveTransferHandler && rowMoveTransferHandler.isMovingRows()) {
+            return;
+        }
         Object value = ((DiscretizeTableModel) tableEvent.getSource()).getValueAt(row, column);
         boolean lower = column == LOWER_BOUND_VALUE_COLUMN_INDEX;
         if (value instanceof String && column == INTERVAL_NAME_COLUMN_INDEX) {
@@ -978,11 +972,7 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
             if (!newName.equals(node.getVariable().getStateName(indexState))) {
                 NodeStateEdit nodeStateEdit = new NodeStateEdit(node, StateAction.RENAME, row, newName);
                 try {
-                    ProbNet probNet = node.getProbNet();
                     nodeStateEdit.executeEdit();
-                    // @ 2014/11/18. Issue 145.
-                    // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
-                    // Propagation of the domain in related variables in temporal models
                     propagateNodeStateEditRelatedVariables(StateAction.RENAME, row, newName);
                     //
                 } catch (DoEditException e) {
@@ -1124,9 +1114,6 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
     @Override public void mouseReleased(MouseEvent e) {
     }
     
-    // @ 2014/11/18. Issue 145.
-    // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
-    // Propagation of the domain in related variables in temporal models
     private void propagateNodeStateEditRelatedVariables(StateAction stateAction, int selectedRow, String option) throws DoEditException {
         // First we get the nodes in the same time slide as the node currently being edited
         List<Node> nodeRelatedNodes = TemporalNetOperations.getRelatedNodesOtherTimeSlices(node);
@@ -1144,12 +1131,8 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
                 }
             }
         }
-        
     }
     
-    // @ 2014/11/18. Issue 145.
-    // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
-    // Propagation of the domain in related variables in temporal models
     private void propagateNodePartitionedIntervalEditRelatedVariables(StateAction stateAction, int selectedRow,
                                                                       boolean option) throws DoEditException {
         // First we get the nodes in the same time slide as the node currently being edited

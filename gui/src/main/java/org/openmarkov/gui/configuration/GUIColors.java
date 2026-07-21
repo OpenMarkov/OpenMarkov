@@ -16,7 +16,9 @@ public class GUIColors {
         public static final GUIColor WRONG = new GUIColor(new Color(255, 0, 0));
         public static final GUIColor TEXT = new GUIColor(new Color(0, 0, 0));
         
-        public static final GUIColor ATTENTION = new GUIColor(new Color(212, 56, 56));
+        
+        public static final GUIColor ATTENTION_BG = new GUIColor(new Color(212, 56, 56));
+        public static final GUIColor ATTENTION_FG = new GUIColor(new Color(255, 255, 255));
         public static final GUIColor TRANSPARENT = new GUIColor(new Color(0, 0, 0, 0));
     }
     
@@ -105,6 +107,9 @@ public class GUIColors {
         public static final GUIColor HEADER_BACKGROUND = new GUIColor(new Color(220, 220, 220));
         public static final GUIColor FROZEN_CELL_BACKGROUND = new GUIColor(new Color(192, 192, 192));
         public static final GUIColor FROZEN_CELL_FOREGROUND = new GUIColor(new Color(0, 0, 0));
+        
+        public static final GUIColor EDITING_BACKGROUND = new GUIColor(new Color(54, 54, 54));
+        public static final GUIColor EDITING_FOREGROUND = new GUIColor(new Color(255, 255, 255));
         
         public static final ValuesTableCellRenderer.EditableCellColor EDITABLE_CELL_COLOR = (isSelected, rowIndex, columnIndex) -> {
             ValuesTableCellRenderer.CellColor cellColor = new ValuesTableCellRenderer.CellColor();

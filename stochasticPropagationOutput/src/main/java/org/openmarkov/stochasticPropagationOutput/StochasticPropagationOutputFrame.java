@@ -8,14 +8,21 @@
 package org.openmarkov.stochasticPropagationOutput;
 
 
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.InvalidNetworkTypeException;
+import org.openmarkov.core.exception.NetworkHasNoNodesException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
-import org.openmarkov.gui.configuration.LocalPreferences;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.gui.exception.NoNetOpenedException;
 import org.openmarkov.gui.window.MainGUI;
@@ -26,9 +33,24 @@ import org.openmarkov.inference.algorithm.likelihoodWeighting.LikelihoodWeightin
 import org.openmarkov.inference.algorithm.likelihoodWeighting.LogicSampling;
 import org.openmarkov.inference.algorithm.likelihoodWeighting.StochasticPropagation;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -253,7 +275,7 @@ public class StochasticPropagationOutputFrame extends JDialog implements ActionL
                 super.approveSelection();
             }
         };
-        omFileChooser.setCurrentDirectory(LocalPreferences.LATEST_OPEN_DIRECTORY.get());
+        omFileChooser.setCurrentDirectory(UserPreferences.LATEST_OPEN_DIRECTORY.get());
         
         // Choose where to save the file
         

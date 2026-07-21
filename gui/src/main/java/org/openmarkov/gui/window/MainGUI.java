@@ -9,16 +9,14 @@ package org.openmarkov.gui.window;
 
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.component.FrameMirror;
-import org.openmarkov.gui.configuration.LocalPreferences;
-import org.openmarkov.gui.dialog.SplashScreenLoader;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.common.WindowDimensions;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
-import org.openmarkov.plugin.PluginSearch;
 
 import javax.swing.JFrame;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import java.awt.Dimension;
@@ -52,6 +50,7 @@ public class MainGUI extends JFrame {
      * Launch the MainGUIInit runnable process
      */
     private MainGUI() {
+        ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
         UIManager.put("MenuItem.disabledAreNavigable", Boolean.FALSE);
         setIconImage(OpenMarkovLogoIcon.getUniqueInstance().getOpenMarkovLogoIconImage16());
         Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
@@ -64,8 +63,8 @@ public class MainGUI extends JFrame {
         setName("MainGUI");
         setMinimumSize(new Dimension(700, 250));
         this.frameMirror = new FrameMirror(this);
-        if (LocalPreferences.LATEST_MAIN_GUI_DIMENSIONS.isSet()) {
-            LocalPreferences.LATEST_MAIN_GUI_DIMENSIONS.get().set(this);
+        if (UserPreferences.RESTORE_LATEST_MAIN_GUI_DIMENSIONS.get() && UserPreferences.LATEST_MAIN_GUI_DIMENSIONS.isSet()) {
+            UserPreferences.LATEST_MAIN_GUI_DIMENSIONS.get().set(this);
         }
         addComponentListener(new ComponentListener() {
             
@@ -87,35 +86,19 @@ public class MainGUI extends JFrame {
         });
     }
     
-    public static void loadWithSplash() {
-        SplashScreenLoader splash = new SplashScreenLoader();
-        splash.splashScreenInit();
-        splash.getSplash().setProgress("Loading preferences", 0);
-        MainGUI.doReadPreferences();
-        splash.getSplash().setProgress("Loading resources", 50);
-        StringDatabase.getUniqueInstance();
-        // This forces static loading of every OpenMarkov's class. We might want to change into 'full' instead of 'init'
-        // to preload every class available.
-        PluginSearch.init().stream().forEach(ignored -> {
-        });
-        splash.getSplash().setProgress("Completed", 100);
-        // loading the application
-        splash.splashScreenDestroy();
-    }
-    
     private void updatePreferenceDimensions() {
         /*
         var isMaximized = getExtendedState() == Frame.MAXIMIZED_BOTH;
-        var originalDimensions = LocalPreferences.LATEST_MAIN_GUI_DIMENSIONS.get();
+        var originalDimensions = UserPreferences.LATEST_MAIN_GUI_DIMENSIONS.get();
         Point location = isMaximized ? originalDimensions.location() : getLocation();
         Dimension size = isMaximized ? originalDimensions.size() : getSize();
         int extendedState = getExtendedState();
         WindowDimensions newDimensions = new WindowDimensions(location, size, extendedState);
-        LocalPreferences.LATEST_MAIN_GUI_DIMENSIONS.set(newDimensions);
+        UserPreferences.LATEST_MAIN_GUI_DIMENSIONS.set(newDimensions);
         */
-        LocalPreferences.LATEST_MAIN_GUI_DIMENSIONS.set(
-                LocalPreferences.LATEST_MAIN_GUI_DIMENSIONS.isSet() ?
-                        WindowDimensions.of(this, LocalPreferences.LATEST_MAIN_GUI_DIMENSIONS.get()) :
+        UserPreferences.LATEST_MAIN_GUI_DIMENSIONS.set(
+                UserPreferences.LATEST_MAIN_GUI_DIMENSIONS.isSet() ?
+                        WindowDimensions.of(this, UserPreferences.LATEST_MAIN_GUI_DIMENSIONS.get()) :
                         WindowDimensions.of(this)
         );
     }
@@ -136,8 +119,8 @@ public class MainGUI extends JFrame {
      * read the {@code OpenMarkovPreferences} configuration, and set the
      * LastConnection preference to current Time
      */
-    private static void doReadPreferences() {
-        LocalPreferences.initializeAllPreferences();
+    public static void doReadPreferences() {
+        UserPreferences.initializeAllPreferences();
     }
     
     /**

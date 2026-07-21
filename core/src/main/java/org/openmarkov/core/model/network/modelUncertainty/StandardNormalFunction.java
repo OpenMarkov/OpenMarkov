@@ -12,6 +12,8 @@ package org.openmarkov.core.model.network.modelUncertainty;
  * cumulative distribution function is approximated with the rational
  * polynomial of Odeh and Evans, which avoids depending on the Apache Commons
  * Math implementation for this very common case.
+ *
+ * @author Manuel Arias
  */
 public class StandardNormalFunction extends ProbDensFunctionWithKnownInverseCDF {
 	// Odeh and Evans' coefficients
@@ -78,8 +80,13 @@ public class StandardNormalFunction extends ProbDensFunctionWithKnownInverseCDF 
 		return inverse;
 	}
 
+	/**
+	 * Odeh and Evans' rational approximation, valid for beta &lt;= 0.5. The argument of the
+	 * logarithm is the tail probability beta itself; using 1 - beta evaluates the approximation
+	 * outside the range it was fitted for and yields a mirrored, inaccurate curve.
+	 */
 	private double odehAndEvansApproximation(double beta) {
-		double y = Math.sqrt(-2.0 * Math.log(1.0 - beta));
+		double y = Math.sqrt(-2.0 * Math.log(beta));
 		return -y - numerator.evaluate(y) / denominator.evaluate(y);
 	}
 

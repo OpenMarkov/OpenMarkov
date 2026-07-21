@@ -11,13 +11,13 @@ import org.assertj.swing.timing.Timeout;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.full.OpenMarkov;
-import org.openmarkov.gui.configuration.LocalPreference;
-import org.openmarkov.gui.configuration.LocalPreferences;
+import org.openmarkov.gui.configuration.UserPreference;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Frame;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -38,13 +38,13 @@ public abstract class BaseOpenMarkovAppTest extends BaseWindowTest<FrameFixture,
      * <p>
      * Before setting the application, the {@link org.openmarkov.full.HoverLoggerPlugin} is enabled, and storing
      * preferences are disabled in order to preserve the developer's preferences (otherwise, it would be highly possible
-     * a test might override at least one {@link LocalPreference}).
+     * a test might override at least one {@link UserPreference}).
      *
      * @return A {@link FrameFixture} containing the {@link MainGUI#INSTANCE}.
      */
     @Override protected FrameFixture setUpWindow() {
-        LocalPreference.IGNORE_STORAGE = true;
-        LocalPreferences.HOVER_LOGGER_ENABLED.set(true);
+        UserPreference.IGNORE_STORAGE = true;
+        UserPreferences.HOVER_LOGGER_ENABLED.set(true);
         org.assertj.swing.launcher.ApplicationLauncher.application(OpenMarkov.class).start();
         return WindowFinder.findFrame(new GenericTypeMatcher<>(Frame.class) {
             @Override protected boolean isMatching(Frame component) {

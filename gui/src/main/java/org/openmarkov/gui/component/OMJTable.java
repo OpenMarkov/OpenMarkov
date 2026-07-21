@@ -29,7 +29,14 @@ public class OMJTable extends JTable {
     
     private List<BiPredicate<Integer, Integer>> canGenerateEditor = new ArrayList<>();
     
+    private final ArrayList<OnPrepareEditor> onPrepareEditor;
+    private final ArrayList<OnEditCell> onEditCell;
+    
+    private @Nullable PrepareEditor prepareEditorAs;
+    
     public OMJTable(OMTableModel dm) {
+        this.onPrepareEditor = new ArrayList<OnPrepareEditor>();
+        this.onEditCell = new ArrayList<OnEditCell>();
         super(dm);
     }
     
@@ -38,7 +45,10 @@ public class OMJTable extends JTable {
     }
     
     @Override public final Component prepareEditor(TableCellEditor editor, int row, int column) {
-        Component component = super.prepareEditor(editor, row, column);
+        Component component = this.prepareEditorAs != null ?
+                this.prepareEditorAs.prepareEditor(editor, row, column) :
+                super.prepareEditor(editor, row, column);
+        this.onPrepareEditor.forEach(onPrepareEditor -> onPrepareEditor.onPrepareEditor(component, row, column));
         component.addFocusListener(new FocusListener() {
             @Override public void focusGained(FocusEvent e) {
             
@@ -71,7 +81,7 @@ public class OMJTable extends JTable {
      * @return the editor for this cell.
      */
     @Override public final @Nullable TableCellEditor getCellEditor(int row, int column) {
-        if (this.canGenerateEditor.stream().allMatch(verifier->verifier.test(row, column))) {
+        if (this.canGenerateEditor.stream().allMatch(verifier -> verifier.test(row, column))) {
             return super.getCellEditor(row, column);
         }
         return null;
@@ -91,13 +101,17 @@ public class OMJTable extends JTable {
         }
         System.out.println();
     }
-
+    
     @Override public void setValueAt(Object newValue, int row, int col) {
         Object oldValue = this.getValueAt(row, col);
-        if(newValue.equals(oldValue)) {
+        if (newValue.equals(oldValue)) {
             return;
         }
         super.setValueAt(newValue, row, col);
+    }
+    
+    @Override public Class<?> getColumnClass(int column) {
+        return this.getModel().getColumnClass(column);
     }
     
     /**
@@ -132,7 +146,11 @@ public class OMJTable extends JTable {
      * @param e      - event to pass into shouldSelectCell;
      */
     @Override public final boolean editCellAt(int row, int column, EventObject e) {
-        boolean result = super.editCellAt(row, column, e);
+        boolean result = super.editCellAt(row, column, e) &&
+                this.onEditCell.stream().allMatch(onEditCell -> onEditCell.editCellAt(row, column, e));
+        if (!result) {
+            return result;
+        }
         // Returns the component that is handling the editing session.
         final Component editor = this.getEditorComponent();
         if (editor instanceof JTextComponent) {
@@ -152,5 +170,51 @@ public class OMJTable extends JTable {
             }
         }
         return result;
+    }
+    
+    
+    public void onPrepareEditor(OnPrepareEditor onPrepareEditor) {
+        this.onPrepareEditor.add(onPrepareEditor);
+    }
+    
+    @FunctionalInterface
+    public interface OnPrepareEditor {
+        void onPrepareEditor(Component editorComponent, int row, int column);
+    }
+    
+    public void prepareEditorAs(PrepareEditor prepareEditorAs) {
+        this.prepareEditorAs = prepareEditorAs;
+    }
+    
+    @FunctionalInterface
+    public interface PrepareEditor {
+        Component prepareEditor(TableCellEditor editor, int row, int column);
+    }
+    
+    public void onEditCell(OnEditCell onEditCell) {
+        this.onEditCell.add(onEditCell);
+    }
+    
+    @FunctionalInterface
+    public interface OnEditCell {
+        /**
+         * Programmatically starts editing the cell at <code>row</code> and
+         * <code>column</code>, if those indices are in the valid range, and
+         * the cell at those indices is editable.
+         * To prevent the <code>JTable</code> from
+         * editing a particular table, column or cell value, return false from
+         * the <code>isCellEditable</code> method in the <code>TableModel</code>
+         * interface.
+         *
+         * @param row    the row to be edited
+         * @param column the column to be edited
+         * @param e      event to pass into <code>shouldSelectCell</code>;
+         *               note that as of Java 2 platform v1.2, the call to
+         *               <code>shouldSelectCell</code> is no longer made
+         *
+         * @return false if for any reason the cell cannot be edited,
+         * or if the indices are invalid
+         */
+        boolean editCellAt(int row, int column, EventObject e);
     }
 }

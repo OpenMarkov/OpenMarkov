@@ -196,6 +196,25 @@ class AddLinkEditPropertyTest {
         assertThat(potVars).contains(g.vA());
     }
 
+    /**
+     * After executeEdit + undo + redo, node B must still have exactly ONE potential.
+     * Without a proper redo(), the default {@code PNEdit.redo()} re-runs {@code doEdit()},
+     * which appends a second batch to the persistent {@code newPotentials} list, leaving B
+     * with two potentials. The existing redo tests only inspect {@code getFirst()}, so they
+     * miss this.
+     */
+    @Property
+    void afterUndoRedo_childHasExactlyOnePotential(
+            @ForAll @IntRange(min = 2, max = 5) int sA,
+            @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
+        var g = twoNodeBN(sA, sB);
+        AddLinkEdit edit = new AddLinkEdit(g.net(), g.vA(), g.vB(), true);
+        edit.executeEdit();
+        edit.undo();
+        edit.redo();
+        assertThat(g.nodeB().getPotentials()).hasSize(1);
+    }
+
     // -----------------------------------------------------------------------
     // Constraint invariants
     // -----------------------------------------------------------------------

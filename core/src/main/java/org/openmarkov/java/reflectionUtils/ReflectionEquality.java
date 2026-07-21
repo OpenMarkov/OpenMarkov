@@ -53,7 +53,7 @@ public final class ReflectionEquality {
     
     private boolean checkAreEquals(@Nullable Object o1, @Nullable Object o2, int indent) {
         String indentString = "\t".repeat(indent);
-        OpenMarkovLogger.LOGGER.debug(indentString+"Comparing " + o1 + " with " + o2);
+        OpenMarkovLogger.LOGGER.trace(indentString + "Comparing " + o1 + " with " + o2);
         if (o1 == null && o2 == null) {
             return true;
         }
@@ -66,7 +66,7 @@ public final class ReflectionEquality {
             case null -> null;
         };
         if (preresolved != null) {
-            OpenMarkovLogger.LOGGER.debug(indentString+"Comparison was already cached (" + preresolved + ") for comparison of " + o1 + " and " + o2);
+            OpenMarkovLogger.LOGGER.trace(indentString + "Comparison was already cached (" + preresolved + ") for comparison of " + o1 + " and " + o2);
             return preresolved;
         }
         this.chaches.put(new Comparison(o1, o2), new Unresolved());
@@ -138,7 +138,7 @@ public final class ReflectionEquality {
             };
         }
         this.chaches.put(new Comparison(o1, o2), new Resolved(comparisonResult));
-        OpenMarkovLogger.LOGGER.debug(indentString +"Just resolved (" + comparisonResult + ") comparison of " + o1 + " and " + o2);
+        OpenMarkovLogger.LOGGER.trace(indentString + "Just resolved (" + comparisonResult + ") comparison of " + o1 + " and " + o2);
         return comparisonResult;
     }
     

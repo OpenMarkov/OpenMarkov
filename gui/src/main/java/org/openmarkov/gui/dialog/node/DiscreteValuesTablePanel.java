@@ -7,15 +7,20 @@
 
 package org.openmarkov.gui.dialog.node;
 
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.DefaultStates;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.gui.dialog.common.PrefixedKeyTablePanel;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.util.GUIDefaultStates;
 
-import javax.swing.*;
+import javax.swing.GroupLayout;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.LayoutStyle;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -182,7 +187,6 @@ public class DiscreteValuesTablePanel extends JPanel implements ItemListener {
         if (jLabelStatesValues == null) {
             jLabelStatesValues = new JLabel();
             jLabelStatesValues.setName("jLabelStatesValues");
-            jLabelStatesValues.setText("a Label");
             jLabelStatesValues.setText(stringDatabase.getString("DiscreteValuesTablePanel.jLabelStatesValues.Text"));
         }
         return jLabelStatesValues;

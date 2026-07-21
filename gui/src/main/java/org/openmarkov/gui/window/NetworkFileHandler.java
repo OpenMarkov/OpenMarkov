@@ -33,7 +33,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.gui.configuration.LastOpenFiles;
-import org.openmarkov.gui.configuration.LocalPreferences;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.common.CommentHTMLScrollPane;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.io.DBReaderOMFileChooser;
@@ -151,7 +151,7 @@ class NetworkFileHandler {
         networkPanels.add(networkPanel);
         LastOpenFiles.setLastFileName(fileName);
         getDirectoryFileName(fileName);
-        LocalPreferences.LATEST_OPEN_DIRECTORY.set(new File(fileName).getAbsoluteFile());
+        UserPreferences.LATEST_OPEN_DIRECTORY.set(new File(fileName).getAbsoluteFile());
         System.out.println(stringDatabase.getString("NetworkLoaded.Text"));
         mainPanel.getMainMenu().rechargeFileMenu();
         
@@ -264,14 +264,14 @@ class NetworkFileHandler {
         networkPanel.setNetworkFile(fileName);
         mainPanel.getMainPanelMenuAssistant().updateOptionsNetworkSaved();
         LastOpenFiles.setLastFileName(fileName);
-        LocalPreferences.LATEST_SAVED_DIRECTORY.set(new File(fileName).getAbsoluteFile());
+        UserPreferences.LATEST_SAVED_DIRECTORY.set(new File(fileName).getAbsoluteFile());
         System.out.println(stringDatabase.getString("NetworkSaved.Text"));
         mainPanel.getMainMenu().rechargeFileMenu();
         return true;
     }
     
     private boolean saveNetworkActions(NetworkEditorPanel networkPanel, String fileName) throws WriterException {
-        String fileFormat = LocalPreferences.LATEST_NETWORK_FORMAT.get();
+        String fileFormat = UserPreferences.LATEST_NETWORK_FORMAT.get();
         return saveNetworkActions(networkPanel, fileName, fileFormat);
     }
     
@@ -383,7 +383,7 @@ class NetworkFileHandler {
     void loadEvidence(NetworkEditorPanel currentNetworkEditorPanel) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ParsingSourceException, IOException, EmptyDatabaseException, ConstraintViolatedException, CannotNormalizePotentialException {
         OMFileChooser evidenceOMFileChooser = new DBReaderOMFileChooser(false);
         evidenceOMFileChooser.setDialogTitle(stringDatabase.getString("LoadEvidence.Title"));
-        String lastFileFilter = LocalPreferences.LATEST_LOADED_EVIDENCE_FORMAT.get();
+        String lastFileFilter = UserPreferences.LATEST_LOADED_EVIDENCE_FORMAT.get();
         evidenceOMFileChooser.setFileFilter(lastFileFilter);
         if ((evidenceOMFileChooser.showOpenDialog(GUIUtils.getOwner(mainPanel)) == JFileChooser.APPROVE_OPTION)) {
             System.out.println("Load evidence file " + evidenceOMFileChooser.getSelectedFile().getAbsolutePath());
@@ -413,9 +413,9 @@ class NetworkFileHandler {
                 }
                 currentNetworkEditorPanel.getEditorPanel().getEvidenceManager().addNewEvidenceCase(newEvidenceCase);
             }
-            LocalPreferences.LATEST_LOADED_EVIDENCE_FORMAT.set(((FileFilterByExtension<?>) evidenceOMFileChooser.getFileFilter()).getExtensions()
-                                                                                                                                 .getFirst());
-            LocalPreferences.LATEST_OPEN_DIRECTORY.set(evidenceOMFileChooser.getSelectedFile());
+            UserPreferences.LATEST_LOADED_EVIDENCE_FORMAT.set(((FileFilterByExtension<?>) evidenceOMFileChooser.getFileFilter()).getExtensions()
+                                                                                                                                .getFirst());
+            UserPreferences.LATEST_OPEN_DIRECTORY.set(evidenceOMFileChooser.getSelectedFile());
         }
     }
     
@@ -423,7 +423,7 @@ class NetworkFileHandler {
         List<EvidenceCase> evidence = currentNetworkEditorPanel.getEditorPanel().getEvidenceManager().getEvidence();
         evidence.add(0, currentNetworkEditorPanel.getEditorPanel().getEvidenceManager().getPreResolutionEvidence());
         OMFileChooser omFileChooser = new OMFileChooser();
-        File currentDirectory = LocalPreferences.LATEST_OPEN_DIRECTORY.get();
+        File currentDirectory = UserPreferences.LATEST_OPEN_DIRECTORY.get();
         omFileChooser.setCurrentDirectory(currentDirectory);
         String suggestedFileName = currentNetworkEditorPanel.getProbNet().getName();
         omFileChooser.setSelectedFile(new File(suggestedFileName));
@@ -460,7 +460,7 @@ class NetworkFileHandler {
         NetworkOMFileChooser fileChooser = new NetworkOMFileChooser(false, false);
         String title = stringDatabase.getString("SaveNetwork.Title");
         fileChooser.setDialogTitle(title);
-        fileChooser.setCurrentDirectory(LocalPreferences.LATEST_SAVED_DIRECTORY.get());
+        fileChooser.setCurrentDirectory(UserPreferences.LATEST_SAVED_DIRECTORY.get());
         fileChooser.setSelectedFile(new File(fileChooser.getCurrentDirectory(), new File(suggestedFileName).getName()));
         if (networkPanel.getWriter() != null) {
             for (var filter : fileChooser.getChoosableFileFilters()) {

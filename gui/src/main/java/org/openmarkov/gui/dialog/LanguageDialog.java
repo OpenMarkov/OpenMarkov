@@ -7,15 +7,24 @@
 
 package org.openmarkov.gui.dialog;
 
-import org.openmarkov.gui.configuration.LocalPreferences;
-import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.core.localize.Languages;
 import org.openmarkov.core.localize.LocaleChangeEvent;
 import org.openmarkov.core.localize.LocaleChangeListener;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.gui.configuration.UserPreferences;
+import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.gui.localize.UpdateLocalizationInComponents;
 
-import javax.swing.*;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.LayoutStyle;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -193,7 +202,7 @@ public class LanguageDialog extends JDialog implements LocaleChangeListener {
 				@Override public void actionPerformed(final ActionEvent e) {
 					String newLanguage = Languages.getShortNameByIndex(jComboBoxLanguages.getSelectedIndex());
 					stringDatabase.setLanguage(newLanguage);
-                    LocalPreferences.PREFERENCE_LANGUAGE.set(newLanguage);
+                    UserPreferences.PREFERENCE_LANGUAGE.set(newLanguage);
 					// next line must be re-written to use some Event method
 					// to notify visibility to false instead calling
 					// getParent()
@@ -239,7 +248,7 @@ public class LanguageDialog extends JDialog implements LocaleChangeListener {
 				@Override public void actionPerformed(final ActionEvent arg0) {
 					String newLanguage = Languages.getShortNameByIndex(jComboBoxLanguages.getSelectedIndex());
 					StringDatabase.getUniqueInstance().setLanguage(newLanguage);
-                    LocalPreferences.PREFERENCE_LANGUAGE.set(newLanguage);
+                    UserPreferences.PREFERENCE_LANGUAGE.set(newLanguage);
 				}
 			});
 			jButtonApply.setName("Apply");

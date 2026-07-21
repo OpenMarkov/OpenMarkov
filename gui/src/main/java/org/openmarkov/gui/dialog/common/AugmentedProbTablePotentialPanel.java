@@ -24,7 +24,8 @@ import org.openmarkov.gui.component.ValuesTable;
 import org.openmarkov.gui.component.ValuesTableModel;
 import org.openmarkov.gui.exception.BinomialPotentialWrongValueException;
 
-import java.awt.*;
+import javax.swing.DefaultCellEditor;
+import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -109,7 +110,6 @@ public class AugmentedProbTablePotentialPanel extends TablePotentialPanel {
         valuesTable.setVisible(true);
         modifiable = true;
         // Previous--&gt;Ok
-        setTableSpecificListeners();
         
         setData();
         
@@ -119,6 +119,7 @@ public class AugmentedProbTablePotentialPanel extends TablePotentialPanel {
         // Then add the element to the Layout.
         add(getValuesTable(), BorderLayout.CENTER);
         
+        setTableSpecificListeners();
         repaint();
     }
     
@@ -354,8 +355,38 @@ public class AugmentedProbTablePotentialPanel extends TablePotentialPanel {
      * when the user do right click on the table.
      */
     @Override protected void setTableSpecificListeners() {
-        valuesTable.onTables(omjTable -> omjTable.addMouseListener(new MouseClickedListener()));
+        valuesTable.onScrollableTable(omjTable -> {
+            VariableExpressionTextField variableExpressionTextField = new VariableExpressionTextField();
+            variableExpressionTextField.setMinWidthOnEditing(200);
+            DefaultCellEditor defaultCellEditor = new DefaultCellEditor(variableExpressionTextField) {
+                @Override public boolean stopCellEditing() {
+                    if (variableExpressionTextField.isShowing() && !variableExpressionTextField.isValidExpression()) {
+                        return false;
+                    }
+                    return super.stopCellEditing();
+                }
+            };
+            omjTable.setCellEditor(defaultCellEditor);
+            var columnModel = omjTable.getColumnModel();
+            for (int i = 0; i < columnModel.getColumnCount(); i++) {
+                columnModel.getColumn(i).setCellEditor(defaultCellEditor);
+            }
+            omjTable.onPrepareEditor((editorComponent, row, column) -> {
+                var variableExpressingEditor = (VariableExpressionTextField) editorComponent;
+                VariableExpression value = (VariableExpression) valuesTable.getValueAt(row, column, omjTable);
+                AugmentedProbTablePotential potential = getPotential();
+                List<Variable> parameterVariables = potential.getParameterVariables();
+                variableExpressingEditor.setupWith(parameterVariables, value.asStringExpression());
+                
+                var bounds = editorComponent.getBounds();
+                editorComponent.setBounds(bounds.x, bounds.y, 500, bounds.height);
+                
+                System.out.println(editorComponent);
+            });
+            
+        });
     }
+    
     
     @Override
     public boolean saveChanges() throws BinomialPotentialWrongValueException.ThetaValueIsWrong, BinomialPotentialWrongValueException.NValuesIsWrong, DoEditException {

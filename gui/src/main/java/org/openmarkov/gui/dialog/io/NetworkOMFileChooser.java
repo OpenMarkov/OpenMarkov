@@ -11,8 +11,8 @@ import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
-import org.openmarkov.gui.configuration.LocalPreferences;
 import org.openmarkov.core.io.format.annotation.FormatManager;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.io.elvira.ElviraParser;
 import org.openmarkov.io.elvira.ElviraWriter;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
@@ -21,13 +21,14 @@ import org.openmarkov.io.probmodel.writer.PGMXWriter_1_0;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.awt.*;
+import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -60,10 +61,10 @@ public class NetworkOMFileChooser extends OMFileChooser {
 
         File currentDirectory = null;
         if (isOpening) {
-            currentDirectory = LocalPreferences.LATEST_OPEN_DIRECTORY.get();
+            currentDirectory = UserPreferences.LATEST_OPEN_DIRECTORY.get();
             for (var filter : getChoosableFileFilters()) {
                 if (filter instanceof FileFilterByExtension<?> fileFilterByExtension) {
-                    if (fileFilterByExtension.getFormatInfo() instanceof Class<?> formatClass && formatClass == LocalPreferences.LATEST_SAVED_NETWORK_READER_CLASS.get()) {
+                    if (fileFilterByExtension.getFormatInfo() instanceof Class<?> formatClass && formatClass == UserPreferences.LATEST_SAVED_NETWORK_READER_CLASS.get()) {
                         this.setFileFilter(fileFilterByExtension);
                         break;
                     }
@@ -73,7 +74,7 @@ public class NetworkOMFileChooser extends OMFileChooser {
         } else {
             for (var filter : getChoosableFileFilters()) {
                 if (filter instanceof FileFilterByExtension<?> fileFilterByExtension) {
-                    if (fileFilterByExtension.getFormatInfo() instanceof Class<?> formatClass && formatClass == LocalPreferences.LATEST_SAVED_NETWORK_WRITER_CLASS.get()) {
+                    if (fileFilterByExtension.getFormatInfo() instanceof Class<?> formatClass && formatClass == UserPreferences.LATEST_SAVED_NETWORK_WRITER_CLASS.get()) {
                         this.setFileFilter(fileFilterByExtension);
                         break;
                     }
@@ -93,14 +94,14 @@ public class NetworkOMFileChooser extends OMFileChooser {
     public int showOpenDialog(Component parent) {
         int result = super.showOpenDialog(parent);
         if (result == JFileChooser.APPROVE_OPTION) {
-            LocalPreferences.LATEST_OPEN_DIRECTORY.set(getSelectedFile());
+            UserPreferences.LATEST_OPEN_DIRECTORY.set(getSelectedFile());
             /*
              * OpenMarkovPreferences.set (OpenMarkovPreferences.LAST_OPENED_FORMAT,
              * ((FileFilterBasic) getFileFilter ()).getFilterExtension (),
              * OpenMarkovPreferences.OPENMARKOV_FORMATS);
              */
             try {
-                LocalPreferences.LATEST_NETWORK_FORMAT.set(getPgmxFileFormat());
+                UserPreferences.LATEST_NETWORK_FORMAT.set(getPgmxFileFormat());
             } catch (SAXException | IOException e) {
                 throw new UnrecoverableException(e);
             }
@@ -112,7 +113,7 @@ public class NetworkOMFileChooser extends OMFileChooser {
     public int showSaveDialog(Component parent) {
         int result = super.showSaveDialog(parent);
         if (result == JFileChooser.APPROVE_OPTION) {
-            LocalPreferences.LATEST_OPEN_DIRECTORY.set(getSelectedFile());
+            UserPreferences.LATEST_OPEN_DIRECTORY.set(getSelectedFile());
             /*
              * OpenMarkovPreferences.set (OpenMarkovPreferences.LAST_OPENED_FORMAT,
              * ((FileFilterBasic) getFileFilter ()).getFilterExtension (),
@@ -127,8 +128,8 @@ public class NetworkOMFileChooser extends OMFileChooser {
                     readerClass = PGMXReader.class;
                 }
                 if (readerClass != null) {
-                    LocalPreferences.LATEST_SAVED_NETWORK_READER_CLASS.set(readerClass);
-                    LocalPreferences.LATEST_SAVED_NETWORK_WRITER_CLASS.set(writerClass);
+                    UserPreferences.LATEST_SAVED_NETWORK_READER_CLASS.set(readerClass);
+                    UserPreferences.LATEST_SAVED_NETWORK_WRITER_CLASS.set(writerClass);
                 }
             }
         }

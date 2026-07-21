@@ -10,7 +10,7 @@ package org.openmarkov.gui.loader.element;
 import io.github.jorgericovivas.rust_essentials.tuples.Tuple3Record;
 import io.github.jorgericovivas.rust_essentials.tuples.Tuples;
 import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.gui.configuration.LocalPreferences;
+import org.openmarkov.gui.configuration.UserPreferences;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
@@ -22,6 +22,8 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.MissingResourceException;
 
 /**
@@ -31,6 +33,10 @@ import java.util.MissingResourceException;
  * @version 1.0 jlgozalo 25/08 based on IconLoader
  */
 public class ImageLoader {
+    
+    public enum ImageOptions {
+        SkipAutoScale
+    }
     
     private static class OMImageIcon extends ImageIcon {
         
@@ -67,8 +73,8 @@ public class ImageLoader {
      *
      * @throws MissingResourceException if the resource doesn't exist.
      */
-    public static ImageIcon load(URL location) throws MissingResourceException {
-        return ImageLoader.createImage(location);
+    public static ImageIcon load(URL location, ImageOptions... imageOptions) throws MissingResourceException {
+        return ImageLoader.createImage(location, imageOptions);
     }
     
     
@@ -84,16 +90,21 @@ public class ImageLoader {
         return g2d;
     }
     
-    public static ImageIcon createImage(URL url) {
+    public static ImageIcon createImage(URL url, ImageOptions... imageOptions) {
         try {
-            return createImage(ImageIO.read(url));
+            return createImage(ImageIO.read(url), imageOptions);
         } catch (IOException e) {
             throw new UnreachableException(e);
         }
     }
     
-    public static ImageIcon createImage(Image source) {
-        Double uiScale = LocalPreferences.UI_SCALE.get();
+    public static ImageIcon createImage(Image source, ImageOptions... imageOptions) {
+        var options = EnumSet.noneOf(ImageOptions.class);
+        options.addAll(Arrays.asList(imageOptions));
+        if (options.contains(ImageOptions.SkipAutoScale)) {
+            return new OMImageIcon(source);
+        }
+        Double uiScale = UserPreferences.UI_SCALE.get();
         var desiredScale = ImageLoader.SCALES[ImageLoader.SCALES.length - 1];
         for (var scale : ImageLoader.SCALES) {
             if (uiScale >= scale.v0() && uiScale < scale.v1()) {

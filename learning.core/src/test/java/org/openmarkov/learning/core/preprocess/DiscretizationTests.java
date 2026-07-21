@@ -103,7 +103,102 @@ public class DiscretizationTests {
 		Assertions.assertEquals(2, newCases[7][0]);
 		Assertions.assertEquals(1, newCases[7][1]);
 	}
-	
+
+	/**
+	 * Regression for B-Discretize (too few cut points). A skewed distribution
+	 * (values 1,2,3 with counts 98,1,1) yields fewer cut points than
+	 * {@code numIntervals-1}, which used to overrun {@code intervalLimits} with an
+	 * {@code IndexOutOfBoundsException}. The result must instead honour the cuts
+	 * actually produced: the dominant value gets its own interval and the rest
+	 * collapse into one, giving two intervals.
+	 */
+	@Test public void testDiscretizeEqualFreqSkewedDoesNotCrash() {
+		Variable x = new Variable("X", "1", "2", "3");
+		int[][] cases = new int[100][1];
+		for (int i = 0; i < 98; i++) cases[i][0] = 0;
+		cases[98][0] = 1;
+		cases[99][0] = 2;
+		CaseDatabase db = new CaseDatabase(List.of(x), cases);
+
+		Map<String, Discretization.Option> discretizeOptions = new HashMap<>();
+		discretizeOptions.put("X", Discretization.Option.EQUAL_FREQ);
+		Map<String, Integer> numIntervalsPerVariable = new HashMap<>();
+		numIntervalsPerVariable.put("X", 3);
+
+		CaseDatabase newDatabase = Discretization.process(db, discretizeOptions, numIntervalsPerVariable);
+		Variable newVarX = newDatabase.getVariable("X");
+		Assertions.assertEquals(2, newVarX.getStates().length);
+		Assertions.assertEquals("(-Infinity , 1.0]", newVarX.getStates()[0].getName());
+		Assertions.assertEquals("(1.0 , Infinity)", newVarX.getStates()[1].getName());
+	}
+
+	/**
+	 * Regression for B-Discretize (too many cut points). When the split produces
+	 * more boundaries than {@code numIntervals} (values 1,2,3,4 uniformly, asking
+	 * for 2 intervals), the trailing interval used to be dropped and the last bound
+	 * clamped to a finite value instead of {@code +Infinity}. The natural boundaries
+	 * are 2.0 and 4.0, so three intervals must survive with the last open to infinity.
+	 */
+	@Test public void testDiscretizeEqualFreqDoesNotDropTail() {
+		Variable x = new Variable("X", "1", "2", "3", "4");
+		int[][] cases = new int[120][1];
+		int row = 0;
+		for (int s = 0; s < 4; s++)
+			for (int c = 0; c < 30; c++) cases[row++][0] = s;
+		CaseDatabase db = new CaseDatabase(List.of(x), cases);
+
+		Map<String, Discretization.Option> discretizeOptions = new HashMap<>();
+		discretizeOptions.put("X", Discretization.Option.EQUAL_FREQ);
+		Map<String, Integer> numIntervalsPerVariable = new HashMap<>();
+		numIntervalsPerVariable.put("X", 2);
+
+		CaseDatabase newDatabase = Discretization.process(db, discretizeOptions, numIntervalsPerVariable);
+		Variable newVarX = newDatabase.getVariable("X");
+		Assertions.assertEquals(3, newVarX.getStates().length);
+		Assertions.assertEquals("(-Infinity , 2.0]", newVarX.getStates()[0].getName());
+		Assertions.assertEquals("(2.0 , 4.0]", newVarX.getStates()[1].getName());
+		Assertions.assertEquals("(4.0 , Infinity)", newVarX.getStates()[2].getName());
+	}
+
+	/**
+	 * Regression for B-isNumeric: numeric-ness must depend only on whether the state names
+	 * parse as numbers (ignoring the "?" marker), not on how many states there are. Numeric
+	 * variables with exactly 2 or 4 states used to be misclassified as non-numeric.
+	 */
+	@Test public void testIsNumericIgnoresStateCount() {
+		Assertions.assertTrue(Discretization.isNumeric(new Variable("X", "1.0", "2.0")));               // 2 states
+		Assertions.assertTrue(Discretization.isNumeric(new Variable("X", "1.0", "2.0", "3.0", "4.0"))); // 4 states
+		Assertions.assertTrue(Discretization.isNumeric(new Variable("X", "1.0", "2.0", "3.0")));        // 3 states
+		Assertions.assertTrue(Discretization.isNumeric(new Variable("X", "1.0", "?", "2.0")));          // numeric + missing
+		Assertions.assertFalse(Discretization.isNumeric(new Variable("X", "low", "high")));             // categorical
+		Assertions.assertFalse(Discretization.isNumeric(new Variable("X", "?")));                       // only missing
+	}
+
+	/**
+	 * Regression for B-isNumeric (end to end): discretizing a 2-state numeric variable used
+	 * to route it through the non-numeric branch of discretizeCases, mapping every case to
+	 * state 0. The cases must instead be mapped to their real intervals.
+	 */
+	@Test public void testDiscretizeTwoStateNumericDoesNotCollapse() {
+		Variable x = new Variable("X", "1.0", "2.0");
+		int[][] cases = { { 0 }, { 1 }, { 0 }, { 1 } };  // values 1.0, 2.0, 1.0, 2.0
+		CaseDatabase db = new CaseDatabase(List.of(x), cases);
+
+		Map<String, Discretization.Option> discretizeOptions = new HashMap<>();
+		discretizeOptions.put("X", Discretization.Option.EQUAL_WIDTH);
+		Map<String, Integer> numIntervalsPerVariable = new HashMap<>();
+		numIntervalsPerVariable.put("X", 2);
+
+		CaseDatabase newDatabase = Discretization.process(db, discretizeOptions, numIntervalsPerVariable);
+
+		Assertions.assertEquals(2, newDatabase.getVariable("X").getStates().length);
+		int[][] newCases = newDatabase.getCases();
+		Assertions.assertEquals(0, newCases[0][0]);
+		Assertions.assertEquals(1, newCases[1][0]);
+		Assertions.assertEquals(0, newCases[2][0]);
+		Assertions.assertEquals(1, newCases[3][0]);
+	}
+
 	@Tag(TestSpeed.SLOW)
 	@Test public void testDiscretizeModelNet() {
 

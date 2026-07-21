@@ -58,7 +58,7 @@ public class BindLocalizationsProcessor extends AbstractProcessor {
     public final boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         this.processingEnv.getMessager()
                           .printMessage(Diagnostic.Kind.NOTE, "- BindLocalizations processing round start -");
-        
+
         
         annotations
                 .stream()
@@ -90,7 +90,7 @@ public class BindLocalizationsProcessor extends AbstractProcessor {
      * If writing fails, it is ignored and just a note is written on the element, as this usually happens when the
      * project has already been built.
      *
-     * @throws IOException  When IO handling.
+     * @throws IOException When IO handling.
      * @throws SAXException When XML format is wrong.
      */
     @SuppressWarnings({"SpellCheckingInspection", "DuplicateStringLiteralInspection"})

@@ -268,7 +268,7 @@ public final class SplitDatasetDialog extends OkCancelDialog {
         int numTrain = trainNumberSpinner.getCurrentValue();
         double fraction = 100. * (numTest) / numCases;
         String title = "Division of the dataset " + this.dbOpenerPanel.getDatabaseFile()
-                                                                      .getAbsolutePath() + " with " + numCases +
+                                                                  .getAbsolutePath() + " with " + numCases +
                 " cases into " + numTrain + " training-cases and " + numTest + " test-cases\n" +
                 "Test sampling fraction=" + String.format("%3.2f", fraction) + "%.\n";
         if (randomCasesButton.isSelected()) {

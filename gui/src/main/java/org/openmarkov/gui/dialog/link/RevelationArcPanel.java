@@ -8,6 +8,7 @@
 
 package org.openmarkov.gui.dialog.link;
 
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.State;
@@ -17,11 +18,14 @@ import org.openmarkov.gui.component.RevelationArcDiscretizeTablePanel;
 import org.openmarkov.gui.dialog.common.KeyTablePanel;
 import org.openmarkov.gui.dialog.common.PrefixedKeyTablePanel;
 import org.openmarkov.gui.dialog.common.SelectableKeyTablePanel;
-import org.openmarkov.core.localize.StringDatabase;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.MessageFormat;

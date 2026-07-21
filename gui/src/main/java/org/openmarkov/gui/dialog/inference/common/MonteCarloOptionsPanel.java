@@ -170,7 +170,8 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 		firstLinePanel.add(numSimulationsPanel,BorderLayout.WEST);
 		firstLinePanel.add(numSeriesPanel,BorderLayout.EAST);
 		this.add(firstLinePanel);
-		
+
+
 		this.add(Box.createRigidArea(new Dimension()));
 		this.add(getDesNetLogOptionsPanel());
 		this.add(Box.createRigidArea(new Dimension(0,10)));

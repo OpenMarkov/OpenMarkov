@@ -8,7 +8,7 @@ import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.sensitivityanalysis.dialog.SensitivityAnalysisFrameGenerator;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
 
 /**
  * Tool plugin that adds a "Sensitivity Analysis" entry to the Tools menu,
@@ -29,7 +29,7 @@ public final class SensitivityAnalysisPlugin implements ToolPlugin {
     }
     
     @Override public JMenuItem toMenuItem() {
-        return new JMenuItemBuilder(StringDatabase.getUniqueInstance().getString("Menus", "Tools.SensitivityAnalysis"))
+        return new JMenuItemBuilder(StringDatabase.getUniqueInstance().getString("Tools.SensitivityAnalysis"))
                 .enabled(MainPanel.getCurrentProbNet() != null)
                 .onClick(() -> {
                     var dialog = SensitivityAnalysisFrameGenerator.create(MainGUI.INSTANCE.mainPanel.getMainFrame());

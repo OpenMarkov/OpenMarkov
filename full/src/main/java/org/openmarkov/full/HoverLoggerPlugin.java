@@ -3,11 +3,13 @@ package org.openmarkov.full;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
-import org.openmarkov.gui.configuration.LocalPreferences;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JMenuItem;
+import java.awt.AWTEvent;
+import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
@@ -29,8 +31,8 @@ public class HoverLoggerPlugin implements ToolPlugin {
     @Override public JMenuItem toMenuItem() {
         return new JMenuItemBuilder("Hover GUI logger (Developers' tool)")
                 .asCheckbox()
-                .selected(LocalPreferences.HOVER_LOGGER_ENABLED.get())
-                .onItemEvent(e -> LocalPreferences.HOVER_LOGGER_ENABLED.set(e.getStateChange() == ItemEvent.SELECTED))
+                .selected(UserPreferences.HOVER_LOGGER_ENABLED.get())
+                .onItemEvent(e -> UserPreferences.HOVER_LOGGER_ENABLED.set(e.getStateChange() == ItemEvent.SELECTED))
                 .build();
     }
     
@@ -49,7 +51,7 @@ public class HoverLoggerPlugin implements ToolPlugin {
                 return;
             }
             HoverLoggerPlugin.HOVERED_COMPONENT = hoveredComponent;
-            if (!LocalPreferences.HOVER_LOGGER_ENABLED.get()) {
+            if (!UserPreferences.HOVER_LOGGER_ENABLED.get()) {
                 return;
             }
             var componentTree = org.openmarkov.java.swing.ComponentUtilities.parents(hoveredComponent);

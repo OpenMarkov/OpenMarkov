@@ -9,20 +9,8 @@ package org.openmarkov.gui.dialog.common;
 
 import org.openmarkov.core.action.core.UncertainValuesEdit;
 import org.openmarkov.core.action.core.UncertainValuesRemoveEdit;
-import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
-import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.Finding;
-import org.openmarkov.core.model.network.Node;
-import org.openmarkov.core.model.network.NodeType;
-import org.openmarkov.core.model.network.PolicyType;
-import org.openmarkov.core.model.network.State;
-import org.openmarkov.core.model.network.Util;
-import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.exception.*;
+import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -38,11 +26,9 @@ import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 import org.openmarkov.gui.menutoolbar.menu.UncertaintyContextualMenu;
 import org.openmarkov.gui.util.GUIUtils;
 
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -168,7 +154,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
             tablePotential = exactDistr.getTablePotential();
         } else if (potential instanceof TablePotential table) {
             tablePotential = table;
-            if (tablePotential.getTableSize() < 2) {
+            if(tablePotential.getTableSize() < 2){
                 tablePotential.setTableSize(2);
             }
         }

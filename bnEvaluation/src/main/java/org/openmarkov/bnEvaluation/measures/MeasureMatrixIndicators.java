@@ -63,10 +63,15 @@ public class MeasureMatrixIndicators {
         double accuracy = 0.0;
         // loop in each state
         for (int i = 0; i < this.numStates; i++) {
-            this.tp[i] = ((double) matrix[i][i] / sumRows[i]);
-            this.fp[i] = ((double) sumCols[i] - matrix[i][i]) / ((double) numCases - sumRows[i]);
-            this.precision[i] = ((double) matrix[i][i] / sumCols[i]);
-            this.fMeasure[i] = (2.0 * this.precision[i] * this.tp[i]) / (this.precision[i] + this.tp[i]);
+            // Guard the undefined ratios (a class with no real instances, no predictions of it,
+            // or all cases in one class). Reporting 0 for those keeps the weighted means finite:
+            // an absent class has weight sumRows[i] = 0, but NaN * 0 would still poison the sum.
+            this.tp[i] = (sumRows[i] == 0) ? 0.0 : ((double) matrix[i][i] / sumRows[i]);
+            this.fp[i] = (numCases - sumRows[i] == 0) ? 0.0
+                    : (((double) sumCols[i] - matrix[i][i]) / ((double) numCases - sumRows[i]));
+            this.precision[i] = (sumCols[i] == 0) ? 0.0 : ((double) matrix[i][i] / sumCols[i]);
+            this.fMeasure[i] = (this.precision[i] + this.tp[i] == 0) ? 0.0
+                    : ((2.0 * this.precision[i] * this.tp[i]) / (this.precision[i] + this.tp[i]));
             accuracy = accuracy + matrix[i][i];
             // sum of the indicators with weights=num cases of real states
             tpAcum = tpAcum + this.tp[i] * sumRows[i];

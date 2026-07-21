@@ -1,7 +1,12 @@
 package org.openmarkov.costEffectiveness;
 
 import org.jetbrains.annotations.NotNull;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.PotentialOperationException;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.CEP;
@@ -22,7 +27,9 @@ import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.ceanalysis.DANDecompositionIntoSymmetricDANsCEA;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEAnalysis;
 
-import javax.swing.*;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 
 /**
  * Tool plugin that registers the cost-effectiveness analysis option in the Tools menu.
@@ -48,7 +55,7 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
     }
     
     @Override public JMenuItem toMenuItem() {
-        return new JMenuItemBuilder(StringDatabase.getUniqueInstance().getString("Menus", "Tools.CostEffectiveness"))
+        return new JMenuItemBuilder(StringDatabase.getUniqueInstance().getString("Tools.CostEffectiveness"))
                 .enabled(MainPanel.getCurrentProbNet() != null)
                 .onClick(CostEffectivenessPlugin::onClick)
                 .build();

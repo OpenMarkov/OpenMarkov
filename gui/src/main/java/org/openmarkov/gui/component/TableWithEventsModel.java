@@ -41,7 +41,7 @@ public class TableWithEventsModel extends ValuesTableModel {
 	 * This method determines the default renderer/editor for each cell. First
 	 * column is a String class type and the others are double type.
 	 */
-	public Class<?> getColumnClass(int c) {
+	@Override public Class<?> getColumnClass(int c) {
 		return (c == 0) ? String.class : Double.class;
 	}
 

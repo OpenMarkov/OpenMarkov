@@ -26,12 +26,9 @@ import java.util.stream.Collectors;
  * it is attached to a {@link Node} in a {@link ProbNet}.  These operations
  * have side-effects on potentials, links and child nodes, so they do not
  * belong on {@code Variable} itself (which is a pure domain-model class).
- * <p>
- * Follows the same pattern as {@link VariableTypeConverter}.
  *
  * @author Manuel Arias
  * @see Variable
- * @see VariableTypeConverter
  */
 public final class VariableStateOperations {
 

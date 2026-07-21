@@ -1,0 +1,44 @@
+@startuml
+skinparam linetype polyline
+skinparam ArrowThickness 1.5
+skinparam ranksep 100
+left to right direction
+
+component core
+component costEffectiveness
+component dbGenerator
+component gui
+component inference
+component inference.des
+component io
+component learning.algorithm
+component learning.core
+component learning.gui
+component learning.metric
+component sensitivityAnalysis
+component stochasticPropagationOutput
+costEffectiveness --> gui
+dbGenerator --> gui
+dbGenerator --> io
+gui --> inference
+gui --> io
+gui --> inference.des
+inference --> core
+inference.des --> core
+io --> core
+io --> inference
+learning.algorithm --> core
+learning.algorithm --> learning.core
+learning.algorithm --> learning.metric
+learning.algorithm --> inference
+learning.core --> core
+learning.gui --> gui
+learning.gui --> learning.core
+learning.gui --> learning.algorithm
+learning.gui --> learning.metric
+learning.metric --> core
+learning.metric --> learning.core
+sensitivityAnalysis --> gui
+stochasticPropagationOutput --> gui
+
+@enduml

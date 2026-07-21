@@ -13,16 +13,34 @@ import org.openmarkov.core.model.network.constraint.OnlyDirectedLinks;
 import org.openmarkov.core.model.network.factory.BNFactory;
 import org.openmarkov.core.model.network.factory.DANFactory;
 import org.openmarkov.core.model.network.factory.IDFactory;
-import org.openmarkov.core.model.network.potential.*;
+import org.openmarkov.core.model.network.potential.CycleLengthShift;
+import org.openmarkov.core.model.network.potential.DeltaPotential;
+import org.openmarkov.core.model.network.potential.ExactDistrPotential;
+import org.openmarkov.core.model.network.potential.LinearCombinationPotential;
+import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.PotentialRole;
+import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.core.model.network.potential.UniformPotential;
+import org.openmarkov.core.model.network.potential.WeibullHazardPotential;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
 import org.openmarkov.core.util.UtilTestMethods;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.openmarkov.core.util.UtilTestMethods.addLink;
 //TODO - Adapt these test to
 
@@ -577,7 +595,7 @@ public class ProbNetOperationsTest {
                                                                                                              timeInStateVar_0),
                                                                                                role);
         ageAtStateEntryPotential_0.setCovariates(new VariableExpression[]{
-                new VariableExpression(Collections.emptyList(), "Constant"),
+                VariableExpression.Common.CONSTANT,
                 ageAtStateEntryVar_0.asVariableExpression(),
                 timeInStateVar_0.asVariableExpression()}
         );
@@ -588,7 +606,7 @@ public class ProbNetOperationsTest {
                                                                                                              timeInStateVar_1),
                                                                                                role);
         ageAtStateEntryPotential_1.setCovariates(new VariableExpression[]{
-                new VariableExpression(Collections.emptyList(), "Constant"),
+                VariableExpression.Common.CONSTANT,
                 ageAtStateEntryVar_1.asVariableExpression(),
                 timeInStateVar_1.asVariableExpression()}
         );
@@ -600,7 +618,7 @@ public class ProbNetOperationsTest {
                                                                                                              timeInStateVar_2),
                                                                                                role);
         ageAtStateEntryPotential_2.setCovariates(new VariableExpression[]{
-                new VariableExpression(Collections.emptyList(), "Constant"),
+                VariableExpression.Common.CONSTANT,
                 ageAtStateEntryVar_2.asVariableExpression(),
                 timeInStateVar_2.asVariableExpression()}
         );
@@ -633,8 +651,8 @@ public class ProbNetOperationsTest {
         WeibullHazardPotential transitionPotential_1 = new WeibullHazardPotential(Arrays.asList(transitionVar_1, ageAtStateEntryVar_0, timeInStateVar_0), role);
         transitionPotential_1.setTimeVariable(timeInStateVar_0);
         transitionPotential_1.setCovariates(new VariableExpression[]{
-                new VariableExpression(Collections.emptyList(), "Gamma"),
-                new VariableExpression(Collections.emptyList(), "Constant"),
+                VariableExpression.Common.GAMMA,
+                VariableExpression.Common.CONSTANT,
                 ageAtStateEntryVar_0.asVariableExpression()
         });
         transitionPotential_1.setCoefficients(new double[]{0.3757164, -1.166541, 0.002097});
@@ -642,8 +660,8 @@ public class ProbNetOperationsTest {
         WeibullHazardPotential transitionPotential_2 = new WeibullHazardPotential(Arrays.asList(transitionVar_2, ageAtStateEntryVar_1, timeInStateVar_1), role);
         transitionPotential_2.setTimeVariable(timeInStateVar_1);
         transitionPotential_2.setCovariates(new VariableExpression[]{
-                new VariableExpression(Collections.emptyList(), "Gamma"),
-                new VariableExpression(Collections.emptyList(), "Constant"),
+                VariableExpression.Common.GAMMA,
+                VariableExpression.Common.CONSTANT,
                 ageAtStateEntryVar_1.asVariableExpression()
         });
         transitionPotential_2.setCoefficients(new double[]{0.3757164, -1.166541, 0.002097});

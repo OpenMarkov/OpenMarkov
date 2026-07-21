@@ -12,10 +12,7 @@ import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 import org.openmarkov.gui.menutoolbar.common.ZoomMenuToolBar;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JToggleButton;
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -342,8 +339,6 @@ public class StandardToolBar extends ToolBarBasic implements ZoomMenuToolBar, Mo
         workingModeButton.setSelected(workingMode == NetworkEditorPanel.WorkingMode.INFERENCE);
     }
     
-    // 2019/09/09
-    
     /**
      * Returns the component that corresponds to an action command.
      *
@@ -365,7 +360,7 @@ public class StandardToolBar extends ToolBarBasic implements ZoomMenuToolBar, Mo
             case ActionCommands.DECISION_SHOW_OPTIMAL_STRATEGY -> showOptimalStrategyButton;
             case ActionCommands.CHANGE_TO_EDITION_MODE, ActionCommands.CHANGE_TO_INFERENCE_MODE,
                  ActionCommands.CHANGE_WORKING_MODE -> workingModeButton;
-            case ActionCommands.MC_SIMULATE_NETWORK -> monteCarloSimulationButton;
+            // case ActionCommands.MC_SIMULATE_NETWORK -> monteCarloSimulationButton;
             case null, default -> null;
         };
     }

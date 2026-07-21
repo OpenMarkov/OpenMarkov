@@ -7,24 +7,36 @@
 
 package org.openmarkov.full;
 
+import it.sauronsoftware.junique.AlreadyLockedException;
+import it.sauronsoftware.junique.JUnique;
+import it.sauronsoftware.junique.MessageHandler;
+import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.gui.configuration.LocalPreferences;
-import org.openmarkov.gui.configuration.UILookAndFeelPlugin;
+import org.openmarkov.core.logging.OpenMarkovLogger;
+import org.openmarkov.gui.configuration.JavaSerializationUtils;
+import org.openmarkov.gui.configuration.Theme;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.OMExceptionHandler;
+import org.openmarkov.gui.dialog.SplashScreenLoader;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.window.MainGUI;
 
-import javax.swing.SwingUtilities;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.Component;
+import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.List;
-
-import static org.openmarkov.gui.window.MainGUI.loadWithSplash;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class stores a set of additionalProperties and the {@code main}
@@ -44,29 +56,76 @@ import static org.openmarkov.gui.window.MainGUI.loadWithSplash;
  */
 public class OpenMarkov {
     
+    private static final String JUNIQUE_ID = "org.openmarkov.OpenMarkov";
+    
     /**
      * OpenMarkov main class
      *
-     * @param args Arguments
+     * @param baseArgs Arguments
      */
-    public static void main(String[] args) {
-        if (LocalPreferences.UI_SCALE.isSet()) {
-            System.setProperty("sun.java2d.uiScale", LocalPreferences.UI_SCALE.get().toString());
+    public static void main(String[] baseArgs) {
+        try {
+            OpenMarkov.onSingleInstance(baseArgs);
+        } catch (AlreadyLockedException e) {
+            OpenMarkov.onInstanceRejected(baseArgs);
         }
-        System.setProperty("flatlaf.uiScale", String.valueOf(LocalPreferences.UI_SCALE.get()));
+    }
+    
+    
+    private static void onSingleInstance(String[] baseArgs) throws AlreadyLockedException {
+        OpenMarkovLogger.LOGGER.debug("Start");
+        AtomicBoolean appLoaded = new AtomicBoolean(false);
+        MessageHandler instanceMessageHandler = new MessageHandler() {
+            public @NotNull String handle(String message) {
+                return OpenMarkov.readSingleInstanceMessage(message, appLoaded);
+            }
+        };
+        
+        boolean canBeStandAloneInstance = OpenMarkov.readArguments(baseArgs).isEmpty();
+        
+        try {
+            JUnique.acquireLock(OpenMarkov.JUNIQUE_ID, instanceMessageHandler);
+        } catch (AlreadyLockedException e) {
+            if (!canBeStandAloneInstance) {
+                throw e;
+            }
+            new Thread(() -> {
+                while (true) {
+                    try {
+                        JUnique.acquireLock(OpenMarkov.JUNIQUE_ID, instanceMessageHandler);
+                        return;
+                    } catch (AlreadyLockedException ex) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException exc) {
+                            throw new RuntimeException(exc);
+                        }
+                    }
+                }
+            }).start();
+        }
+        if (UserPreferences.UI_SCALE.isSet()) {
+            System.setProperty("sun.java2d.uiScale", UserPreferences.UI_SCALE.get().toString());
+        }
+        System.setProperty("flatlaf.uiScale", String.valueOf(UserPreferences.UI_SCALE.get()));
         Thread.setDefaultUncaughtExceptionHandler(new OMExceptionHandler());
         try {
-            UILookAndFeelPlugin.updateInterfaceToLook();
+            Theme.updateInterfaceToLook();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
                  UnsupportedLookAndFeelException e) {
             throw new UnreachableException(e);
         }
-        loadWithSplash();
-        SwingUtilities.invokeLater(() -> {
-            OpenMarkov.processArguments(args, MainGUI.INSTANCE);
+        OpenMarkovLogger.LOGGER.debug("Splash start");
+        
+        SplashScreenLoader.asyncLoadWithSplash(() -> {
             MainGUI.INSTANCE.setVisible(true);
+            OpenMarkov.executeArguments(OpenMarkov.readArguments(baseArgs));
+            appLoaded.set(true);
+            OpenMarkovLogger.LOGGER.debug("Loaded");
         });
-    /*
+        
+
+        /*
         var developmentTheme = new File("development.theme.json").getAbsoluteFile();
         System.out.println("Reading changes at " + developmentTheme);
         long lastModified;
@@ -96,31 +155,98 @@ public class OpenMarkov {
         */
     }
     
-    private static void processArguments(String[] args, MainGUI mainGUI) {
-        List<String> filesToOpen = new ArrayList<>();
-        boolean languageWasSet = false;
-        for (int i = 0; i < args.length; ++i) {
-            if (args[i].equals("-l") || args[i].equals("-language")) {
-                if (i + 1 < args.length) {
-                    StringDatabase.getUniqueInstance().setLanguage(args[i + 1]);
-                    ++i;
-                    languageWasSet = true;
-                }
-            } else if (new File(args[i]).exists()) {
-                filesToOpen.add(args[i]);
+    private static @NotNull String readSingleInstanceMessage(String message, AtomicBoolean appLoaded) {
+        while (!appLoaded.get()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
-        if (!languageWasSet) {
-            StringDatabase.getUniqueInstance().setLanguage(LocalPreferences.PREFERENCE_LANGUAGE.get());
+        var childWindowsOfMainGUI = new ArrayList<Window>();
+        var toVisit = new ArrayDeque<Window>();
+        toVisit.add(MainGUI.INSTANCE);
+        while (!toVisit.isEmpty()) {
+            Window visitingWindow = toVisit.removeFirst();
+            childWindowsOfMainGUI.add(visitingWindow);
+            toVisit.addAll(Arrays.stream(visitingWindow.getOwnedWindows()).toList());
         }
-        for (String filename : filesToOpen) {
+        //The first windows is the MainGUI, so we have to remove it.
+        childWindowsOfMainGUI.removeFirst();
+        var isAModalOpen = childWindowsOfMainGUI.stream()
+                                                .filter(Component::isVisible)
+                                                .anyMatch(window -> window instanceof JDialog dialog && dialog.isModal());
+        if (isAModalOpen) {
+            return "-1";
+        }
+        OpenMarkov.executeArguments(OpenMarkov.readArguments(JavaSerializationUtils.deserialize(message)));
+        return "0";
+    }
+    
+    private static void onInstanceRejected(String[] baseArgs) {
+        var res = JUnique.sendMessage(OpenMarkov.JUNIQUE_ID, JavaSerializationUtils.serialize(baseArgs));
+        if ("-1".equals(res)) {
+            if (UserPreferences.UI_SCALE.isSet()) {
+                System.setProperty("sun.java2d.uiScale", UserPreferences.UI_SCALE.get().toString());
+            }
+            System.setProperty("flatlaf.uiScale", String.valueOf(UserPreferences.UI_SCALE.get()));
             try {
-                mainGUI.openNetwork(filename);
-            } catch (ProbNetParserException | IOException | NoReaderForFileException | CorruptNetworkFile e) {
-                Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                Theme.updateInterfaceToLook();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                     UnsupportedLookAndFeelException _) {
+            }
+            JOptionPane.showMessageDialog(MainGUI.INSTANCE, "<html>Make yourself sure you don't have any dialogs open in OpenMarkov.</html>", "OpenMarkov is busy", JOptionPane.ERROR_MESSAGE);
+        }
+        //Ensure no leftover of the instance rejection is left. When showing the error message a leftover might be left,
+        //so we need to ensure the closing of this instance.
+        System.exit(0);
+    }
+    
+    public sealed interface OMArgument extends Serializable {
+        
+        record SetLanguage(String language) implements OMArgument {
+        }
+        
+        record OpenFile(File file) implements OMArgument {
+        }
+        
+    }
+    
+    private static @NotNull ArrayList<OMArgument> readArguments(String[] args) {
+        String languageToSet = null;
+        Collection<File> filesToOpen = new ArrayList<>();
+        for (int i = 0; i < args.length; ++i) {
+            if ("-l".equals(args[i]) || "-language".equals(args[i])) {
+                if (i + 1 < args.length) {
+                    languageToSet = args[i + 1];
+                    ++i;
+                }
+            } else if (new File(args[i]).exists()) {
+                filesToOpen.add(new File(args[i]));
+            }
+        }
+        ArrayList<OMArgument> arguments = new ArrayList<>();
+        if (languageToSet != null) {
+            arguments.add(new OMArgument.SetLanguage(languageToSet));
+        }
+        filesToOpen.stream().map(OMArgument.OpenFile::new).forEach(arguments::add);
+        return arguments;
+    }
+    
+    private static void executeArguments(Iterable<? extends OMArgument> args) {
+        for (var arg : args) {
+            switch (arg) {
+                case OMArgument.SetLanguage setLanguage ->
+                        StringDatabase.getUniqueInstance().setLanguage(setLanguage.language);
+                case OMArgument.OpenFile openFile -> {
+                    try {
+                        MainGUI.INSTANCE.openNetwork(openFile.file.getAbsolutePath());
+                    } catch (ProbNetParserException | IOException | NoReaderForFileException | CorruptNetworkFile e) {
+                        Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                    }
+                }
             }
         }
     }
-    
     
 }

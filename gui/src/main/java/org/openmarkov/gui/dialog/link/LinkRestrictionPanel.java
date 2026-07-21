@@ -20,8 +20,8 @@ import org.openmarkov.gui.component.ValuesTable;
 import org.openmarkov.gui.component.ValuesTableModel;
 import org.openmarkov.gui.dialog.common.ProbabilityTablePanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JScrollPane;
+import java.awt.BorderLayout;
 import java.util.List;
 
 /*****
@@ -327,6 +327,7 @@ public class LinkRestrictionPanel extends ProbabilityTablePanel {
 	}
 	
 	@Override protected void setFirstEditableRow(int firstEditableRow) {
+		getLinkRestrictionValuesTable();
 		super.setFirstEditableRow(firstEditableRow);
 		this.valuesTable.setFirstEditableRow(firstEditableRow);
 	}

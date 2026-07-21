@@ -359,4 +359,5 @@ public abstract class AbstractIndexedPotential extends Potential {
         return tableSize;
     }
     
+    
 }

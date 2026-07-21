@@ -8,7 +8,7 @@ import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
 import org.openmarkov.gui.window.MainGUI;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
 
 /**
  * Tool plugin that adds a "DB Generator" entry to the Tools menu, allowing users
@@ -17,7 +17,7 @@ import javax.swing.*;
 public final class DBGeneratorPlugin implements ToolPlugin {
     
     public @Nullable Character mnemonic() {
-        var mnemonic = StringDatabase.getUniqueInstance().getString("Menus", "Tools.DBGenerator.Mnemonic");
+        var mnemonic = StringDatabase.getUniqueInstance().getString("Tools.DBGenerator.Mnemonic");
         if (mnemonic == null || mnemonic.isEmpty()) return null;
         return mnemonic.charAt(0);
     }
@@ -31,7 +31,7 @@ public final class DBGeneratorPlugin implements ToolPlugin {
     }
     
     @Override public JMenuItem toMenuItem() {
-        return new JMenuItemBuilder(StringDatabase.getUniqueInstance().getString("Menus", "Tools.DBGenerator"))
+        return new JMenuItemBuilder(StringDatabase.getUniqueInstance().getString("Tools.DBGenerator"))
                 .onClick(() -> new DBGeneratorGUI(MainGUI.INSTANCE.mainPanel.getMainFrame()).setVisible(true))
                 .build();
     }

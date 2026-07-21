@@ -5,8 +5,11 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openmarkov.core.model.network.potential.AugmentedProbTable;
+import org.openmarkov.core.model.network.potential.FunctionPotentialOld;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.TableWithEvents;
+import org.openmarkov.core.model.network.potential.TableWithFunctions;
 import org.openmarkov.core.model.network.potential.StrategicTablePotential;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.potential.UncertainTablePotential;
@@ -41,6 +44,10 @@ class AllPotentialsCanBeReadByPGMXReadersTest {
      *   <li>{@link StrategyTree}, {@link SDAGStrategyTree} – read via the {@code TreeADD} parser.</li>
      *   <li>{@link MinPotential}, {@link MaxPotential}, {@link TuningPotential} – read via the
      *       {@code ICIPotential} parser with type discrimination.</li>
+     *   <li>{@link TableWithEvents}, {@link TableWithFunctions} – internal components of
+     *       {@code DistributionTablePotential}; read through its parser, never first-class elements.</li>
+     *   <li>{@link FunctionPotentialOld} – legacy potential ({@code @PotentialType "FunctionOld"},
+     *       superseded by {@code FunctionPotential}); no PGMX writer emits it.</li>
      * </ul>
      */
     static final HashSet<Class<? extends Potential>> POTENTIALS_WITHOUT_PGMX_REPRESENTATION;
@@ -54,7 +61,10 @@ class AllPotentialsCanBeReadByPGMXReadersTest {
                 StrategyTree.class,
                 MinPotential.class,
                 MaxPotential.class,
-                TuningPotential.class
+                TuningPotential.class,
+                TableWithEvents.class,
+                TableWithFunctions.class,
+                FunctionPotentialOld.class
         ));
         try {
             // SDAGStrategyTree is in a non-exported package; reference via reflection

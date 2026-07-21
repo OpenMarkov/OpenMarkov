@@ -37,33 +37,33 @@ jobs:
     # causes an infinite loop, like a wrong written test that never ends.
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v6
+    - uses: actions/checkout@v6
 
-        # We use Java 25 with the "temurin" distribution. There is no OpenJDK distribution available.
-      - name: Set up JDK 25
-        uses: actions/setup-java@v5
-        with:
-          java-version: '25'
-          distribution: 'temurin'
-          cache: maven
+      # We use Java 25 with the "temurin" distribution. There is no OpenJDK distribution available.
+    - name: Set up JDK 25
+      uses: actions/setup-java@v5
+      with:
+        java-version: '25'
+        distribution: 'temurin'
+        cache: maven
 
-        # First, we run tests. Meaning if the tests fail, nothing else would execute on the workflow.
-      - name: Run tests
-        run: mvn test --batch-mode
+      # First, we run tests. Meaning if the tests fail, nothing else would execute on the workflow.
+    - name: Run tests
+      run: mvn test --batch-mode
 
-        # Compilation of "full" as a .jar with all dependencies.
-      - name: Build OpenMarkov.jar
-        run: mvn package -pl full -am -DskipTests --batch-mode
+      # Compilation of "full" as a .jar with all dependencies.
+    - name: Build OpenMarkov.jar
+      run: mvn package -pl full -am -DskipTests --batch-mode -PGenerateFullJar
 
-      - name: Move JAR to public web folder
-        run: |
-          mkdir public
-          cp OpenMarkov.jar public/
+    - name: Move JAR to public web folder
+      run: |
+        mkdir public
+        cp OpenMarkov.jar public/
 
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'public'
+    - name: Upload Pages Artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: 'public'
 
   deploy:
     needs:
@@ -74,6 +74,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     # Deploys the GitHub page that contains the compilation of "OpenMarkov.jar".
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4

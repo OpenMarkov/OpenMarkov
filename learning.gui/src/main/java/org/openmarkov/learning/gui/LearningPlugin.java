@@ -7,7 +7,7 @@ import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
 import org.openmarkov.gui.window.MainGUI;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
 
 /**
  * Tool plugin that adds a "Learning" entry to the Tools menu, launching
@@ -16,7 +16,7 @@ import javax.swing.*;
 public final class LearningPlugin implements ToolPlugin {
     
     public @Nullable Character mnemonic() {
-        var mnemonic = StringDatabase.getUniqueInstance().getString("Menus", "Tools.Learning.Mnemonic");
+        var mnemonic = StringDatabase.getUniqueInstance().getString("Tools.Learning.Mnemonic");
         if (mnemonic == null || mnemonic.isEmpty()) return null;
         return mnemonic.charAt(0);
     }
@@ -30,7 +30,7 @@ public final class LearningPlugin implements ToolPlugin {
     }
     
     @Override public JMenuItem toMenuItem() {
-        return new JMenuItemBuilder(StringDatabase.getUniqueInstance().getString("Menus", "Tools.Learning"))
+        return new JMenuItemBuilder(StringDatabase.getUniqueInstance().getString("Tools.Learning"))
                 .onClick(() -> new LearningDialog(MainGUI.INSTANCE).setVisible(true))
                 .build();
     }

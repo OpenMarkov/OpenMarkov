@@ -1,0 +1,322 @@
+<?plantuml 1.2026.2?>
+<svg xmlns="http://www.w3.org/2000/svg" contentStyleType="text/css"
+     data-diagram-type="DESCRIPTION" height="516px" preserveAspectRatio="none"
+     style="width:1107px;height:516px;background:#FFFFFF;" version="1.1" viewBox="0 0 1107 516" width="1107px"
+     zoomAndPan="magnify">
+    <defs/>
+    <g><!--entity core-->
+        <g class="entity" data-qualified-name="core" data-source-line="6" id="ent0002">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="67.2344" x="1034" y="245"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="1081.2344" y="250"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="1079.2344" y="252"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="1079.2344" y="256"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="27.2344"
+                  x="1049" y="279.0752">core
+            </text>
+        </g><!--entity costEffectiveness-->
+        <g class="entity" data-qualified-name="costEffectiveness" data-source-line="7" id="ent0003">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="148.9375" x="42.5" y="253"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="171.4375" y="258"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="169.4375" y="260"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="169.4375" y="264"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108.9375"
+                  x="57.5" y="287.0752">costEffectiveness
+            </text>
+        </g><!--entity dbGenerator-->
+        <g class="entity" data-qualified-name="dbGenerator" data-source-line="8" id="ent0004">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="118.6064" x="57.5" y="7"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="156.1064" y="12"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="154.1064" y="14"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="154.1064" y="18"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="78.6064"
+                  x="72.5" y="41.0752">dbGenerator
+            </text>
+        </g><!--entity gui-->
+        <g class="entity" data-qualified-name="gui" data-source-line="9" id="ent0005">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="58.6826" x="373" y="122"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="411.6826" y="127"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="409.6826" y="129"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="409.6826" y="133"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="18.6826"
+                  x="388" y="156.0752">gui
+            </text>
+        </g><!--entity inference-->
+        <g class="entity" data-qualified-name="inference" data-source-line="10" id="ent0006">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="97.5928" x="823" y="193"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="900.5928" y="198"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="898.5928" y="200"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="898.5928" y="204"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="57.5928"
+                  x="838" y="227.0752">inference
+            </text>
+        </g><!--entity inference.des-->
+        <g class="entity" data-qualified-name="inference.des" data-source-line="11" id="ent0007">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="124.0547" x="810" y="98"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="914.0547" y="103"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="912.0547" y="105"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="912.0547" y="109"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="84.0547"
+                  x="825" y="132.0752">inference.des
+            </text>
+        </g><!--entity io-->
+        <g class="entity" data-qualified-name="io" data-source-line="12" id="ent0008">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="50.8965" x="618.5" y="7"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="649.3965" y="12"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="647.3965" y="14"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="647.3965" y="18"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="10.8965"
+                  x="633.5" y="41.0752">io
+            </text>
+        </g><!--entity learning.algorithm-->
+        <g class="entity" data-qualified-name="learning.algorithm" data-source-line="13" id="ent0009">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="151.2822" x="327" y="368"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="458.2822" y="373"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="456.2822" y="375"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="456.2822" y="379"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111.2822"
+                  x="342" y="402.0752">learning.algorithm
+            </text>
+        </g><!--entity learning.core-->
+        <g class="entity" data-qualified-name="learning.core" data-source-line="14" id="ent0010">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="120.9375" x="811.5" y="374"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="912.4375" y="379"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="910.4375" y="381"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="910.4375" y="385"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="80.9375"
+                  x="826.5" y="408.0752">learning.core
+            </text>
+        </g><!--entity learning.gui-->
+        <g class="entity" data-qualified-name="learning.gui" data-source-line="15" id="ent0011">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="112.3857" x="61" y="406"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="153.3857" y="411"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="151.3857" y="413"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="151.3857" y="417"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72.3857"
+                  x="76" y="440.0752">learning.gui
+            </text>
+        </g><!--entity learning.metric-->
+        <g class="entity" data-qualified-name="learning.metric" data-source-line="16" id="ent0012">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="131.8135" x="578" y="445"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="689.8135" y="450"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="687.8135" y="452"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="687.8135" y="456"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="91.8135"
+                  x="593" y="479.0752">learning.metric
+            </text>
+        </g><!--entity sensitivityAnalysis-->
+        <g class="entity" data-qualified-name="sensitivityAnalysis" data-source-line="17" id="ent0013">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="152.8135" x="40.5" y="89"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="173.3135" y="94"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="171.3135" y="96"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="171.3135" y="100"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112.8135"
+                  x="55.5" y="123.0752">sensitivityAnalysis
+            </text>
+        </g><!--entity stochasticPropagationOutput-->
+        <g class="entity" data-qualified-name="stochasticPropagationOutput" data-source-line="18" id="ent0014">
+            <rect fill="#F1F1F1" height="47.1514" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="219.7783" x="7" y="171"/>
+            <rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="206.7783" y="176"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="204.7783" y="178"/>
+            <rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="204.7783" y="182"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="179.7783"
+                  x="22" y="205.0752">stochasticPropagationOutput
+            </text>
+        </g><!--link costEffectiveness to gui-->
+        <g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency"
+           data-source-line="19" id="lnk15">
+            <path d="M180.77,252.89 C205,243.77 227,235.5 227,235.5 C227,235.5 317.7874,188.6702 367.3474,163.1102"
+                  fill="none" id="costEffectiveness-to-gui" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="372.68,160.36,362.8477,160.9303,368.2362,162.6518,366.5146,168.0404,372.68,160.36"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link dbGenerator to gui-->
+        <g class="link" data-entity-1="ent0004" data-entity-2="ent0005" data-link-type="dependency"
+           data-source-line="20" id="lnk16">
+            <path d="M176.65,52.56 C202.45,62.26 227,71.5 227,71.5 C227,71.5 317.5963,109.9172 367.1563,130.9372"
+                  fill="none" id="dbGenerator-to-gui" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="372.68,133.28,365.9563,126.0834,368.0769,131.3277,362.8326,133.4483,372.68,133.28"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link dbGenerator to io-->
+        <g class="link" data-entity-1="ent0004" data-entity-2="ent0008" data-link-type="dependency"
+           data-source-line="21" id="lnk17">
+            <path d="M176.7,30.5 C291.08,30.5 533.54,30.5 612.44,30.5" fill="none" id="dbGenerator-to-io"
+                  style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818" points="618.44,30.5,609.44,26.5,613.44,30.5,609.44,34.5,618.44,30.5"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link gui to inference-->
+        <g class="link" data-entity-1="ent0005" data-entity-2="ent0006" data-link-type="dependency"
+           data-source-line="22" id="lnk18">
+            <path d="M432.04,149.83 C509.75,161.64 719.8481,193.5385 816.8381,208.2785" fill="none"
+                  id="gui-to-inference" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="822.77,209.18,814.4732,203.8732,817.8268,208.4288,813.2712,211.7823,822.77,209.18"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link gui to io-->
+        <g class="link" data-entity-1="ent0005" data-entity-2="ent0008" data-link-type="dependency"
+           data-source-line="23" id="lnk19">
+            <path d="M432.39,131.63 C479.92,108.81 568.3517,66.348 612.9417,44.928" fill="none" id="gui-to-io"
+                  style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818" points="618.35,42.33,608.5055,42.6215,613.843,44.495,611.9695,49.8326,618.35,42.33"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link gui to inference.des-->
+        <g class="link" data-entity-1="ent0005" data-entity-2="ent0007" data-link-type="dependency"
+           data-source-line="24" id="lnk20">
+            <path d="M432.04,144.03 C506.48,140.21 701.8479,130.1876 803.9179,124.9476" fill="none"
+                  id="gui-to-inference.des" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="809.91,124.64,800.7168,121.1067,804.9166,124.8963,801.1269,129.0962,809.91,124.64"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link inference to core-->
+        <g class="link" data-entity-1="ent0006" data-entity-2="ent0002" data-link-type="dependency"
+           data-source-line="25" id="lnk21">
+            <path d="M921.33,229.49 C956.48,238.93 997.3256,249.9128 1028.1356,258.1928" fill="none"
+                  id="inference-to-core" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="1033.93,259.75,1026.2765,253.5512,1029.1013,258.4523,1024.2003,261.2771,1033.93,259.75"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link inference.des to core-->
+        <g class="link" data-entity-1="ent0007" data-entity-2="ent0002" data-link-type="dependency"
+           data-source-line="26" id="lnk22">
+            <path d="M904.09,145.12 C940.2,172.55 994.6323,213.9004 1030.7123,241.3104" fill="none"
+                  id="inference.des-to-core" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="1035.49,244.94,1030.7432,236.3105,1031.5086,241.9153,1025.9038,242.6807,1035.49,244.94"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link io to core-->
+        <g class="link" data-entity-1="ent0008" data-entity-2="ent0002" data-link-type="dependency"
+           data-source-line="27" id="lnk23">
+            <path d="M669.64,34.76 C739.53,46.85 934,80.5 934,80.5 C934,80.5 1010.6032,189.1959 1046.2632,239.7859"
+                  fill="none" id="io-to-core" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="1049.72,244.69,1047.8042,235.0293,1046.8393,240.6032,1041.2654,239.6384,1049.72,244.69"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link io to inference-->
+        <g class="link" data-entity-1="ent0008" data-entity-2="ent0006" data-link-type="dependency"
+           data-source-line="28" id="lnk24">
+            <path d="M669.62,50.76 C711.72,85.41 792.6975,152.0569 837.5275,188.9569" fill="none" id="io-to-inference"
+                  style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="842.16,192.77,837.7533,183.962,838.2996,189.5924,832.6691,190.1387,842.16,192.77"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.algorithm to core-->
+        <g class="link" data-entity-1="ent0009" data-entity-2="ent0002" data-link-type="dependency"
+           data-source-line="29" id="lnk25">
+            <path d="M478.27,377.63 C622.19,350.93 926.5906,294.4543 1027.8906,275.6643" fill="none"
+                  id="learning.algorithm-to-core" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="1033.79,274.57,1024.2114,272.2785,1028.8739,275.4819,1025.6705,280.1443,1033.79,274.57"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.algorithm to learning.core-->
+        <g class="link" data-entity-1="ent0009" data-entity-2="ent0010" data-link-type="dependency"
+           data-source-line="30" id="lnk26">
+            <path d="M478.09,392.46 C570.51,393.64 720.1405,395.5631 805.1505,396.6531" fill="none"
+                  id="learning.algorithm-to-learning.core" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="811.15,396.73,802.202,392.6149,806.1504,396.6659,802.0995,400.6143,811.15,396.73"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.algorithm to learning.metric-->
+        <g class="link" data-entity-1="ent0009" data-entity-2="ent0012" data-link-type="dependency"
+           data-source-line="31" id="lnk27">
+            <path d="M476.66,415.02 C508.85,425.37 540.6481,435.5931 571.8981,445.6431" fill="none"
+                  id="learning.algorithm-to-learning.metric" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="577.61,447.48,570.2668,440.9167,572.8501,445.9492,567.8175,448.5325,577.61,447.48"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.algorithm to inference-->
+        <g class="link" data-entity-1="ent0009" data-entity-2="ent0006" data-link-type="dependency"
+           data-source-line="32" id="lnk28">
+            <path d="M446.19,367.77 C497.85,339.05 578,294.5 578,294.5 C578,294.5 734.0219,252.9635 817.1519,230.8335"
+                  fill="none" id="learning.algorithm-to-inference" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="822.95,229.29,813.2239,227.7399,818.1183,230.5763,815.2819,235.4706,822.95,229.29"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.core to core-->
+        <g class="link" data-entity-1="ent0010" data-entity-2="ent0002" data-link-type="dependency"
+           data-source-line="33" id="lnk29">
+            <path d="M908.49,373.84 C944.28,349.98 994.0679,316.7885 1028.8179,293.6185" fill="none"
+                  id="learning.core-to-core" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="1033.81,290.29,1024.1029,291.9547,1029.6499,293.0638,1028.5409,298.6109,1033.81,290.29"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.gui to gui-->
+        <g class="link" data-entity-1="ent0011" data-entity-2="ent0005" data-link-type="dependency"
+           data-source-line="34" id="lnk30">
+            <path d="M141.68,405.77 C195.05,352.32 319.9613,227.1866 373.4413,173.6066" fill="none"
+                  id="learning.gui-to-gui" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="377.68,169.36,368.4909,172.9041,374.1478,172.8988,374.1531,178.5557,377.68,169.36"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.gui to learning.core-->
+        <g class="link" data-entity-1="ent0011" data-entity-2="ent0010" data-link-type="dependency"
+           data-source-line="35" id="lnk31">
+            <path d="M173.03,439.07 C295.13,460.3 578,509.5 578,509.5 C578,509.5 710,509.5 710,509.5 C710,509.5 784.6747,457.5566 831.9347,424.6766"
+                  fill="none" id="learning.gui-to-learning.core" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="836.86,421.25,827.1877,423.1064,832.7556,424.1055,831.7565,429.6735,836.86,421.25"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.gui to learning.algorithm-->
+        <g class="link" data-entity-1="ent0011" data-entity-2="ent0009" data-link-type="dependency"
+           data-source-line="36" id="lnk32">
+            <path d="M173.33,422.08 C217.16,416.21 272.8731,408.7363 321.0431,402.2863" fill="none"
+                  id="learning.gui-to-learning.algorithm" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="326.99,401.49,317.5387,398.7198,322.0342,402.1536,318.6005,406.6491,326.99,401.49"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.gui to learning.metric-->
+        <g class="link" data-entity-1="ent0011" data-entity-2="ent0012" data-link-type="dependency"
+           data-source-line="37" id="lnk33">
+            <path d="M173.19,433.6 C270.86,440.86 467.6765,455.4754 571.9765,463.2254" fill="none"
+                  id="learning.gui-to-learning.metric" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="577.96,463.67,569.2811,459.0141,572.9737,463.2995,568.6883,466.9921,577.96,463.67"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.metric to core-->
+        <g class="link" data-entity-1="ent0012" data-entity-2="ent0002" data-link-type="dependency"
+           data-source-line="38" id="lnk34">
+            <path d="M710.22,461.73 C795.46,452.88 934,438.5 934,438.5 C934,438.5 1007.9813,343.5822 1044.3913,296.8722"
+                  fill="none" id="learning.metric-to-core" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="1048.08,292.14,1039.3922,296.7791,1045.0061,296.0835,1045.7018,301.6974,1048.08,292.14"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link learning.metric to learning.core-->
+        <g class="link" data-entity-1="ent0012" data-entity-2="ent0010" data-link-type="dependency"
+           data-source-line="39" id="lnk35">
+            <path d="M710.07,448.06 C742.01,438.02 774.5157,427.8079 805.6857,418.0179" fill="none"
+                  id="learning.metric-to-learning.core" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="811.41,416.22,801.625,415.1007,806.6398,417.7183,804.0222,422.7331,811.41,416.22"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link sensitivityAnalysis to gui-->
+        <g class="link" data-entity-1="ent0013" data-entity-2="ent0005" data-link-type="dependency"
+           data-source-line="40" id="lnk36">
+            <path d="M193.6,121.3 C252.49,128.15 325.0502,136.5963 366.7202,141.4463" fill="none"
+                  id="sensitivityAnalysis-to-gui" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="372.68,142.14,364.2028,137.1263,367.7135,141.5619,363.2779,145.0727,372.68,142.14"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g><!--link stochasticPropagationOutput to gui-->
+        <g class="link" data-entity-1="ent0014" data-entity-2="ent0005" data-link-type="dependency"
+           data-source-line="41" id="lnk37">
+            <path d="M227.2,175.63 C279.77,166.54 332.7375,157.381 366.8475,151.491" fill="none"
+                  id="stochasticPropagationOutput-to-gui" style="stroke:#181818;stroke-width:1.5;"/>
+            <polygon fill="#181818"
+                     points="372.76,150.47,363.2106,148.0598,367.8329,151.3208,364.5719,155.9431,372.76,150.47"
+                     style="stroke:#181818;stroke-width:1.5;"/>
+        </g>
+        <?plantuml-src XLBDReCm3Bxp57c1LkrXrqazJ3jkXxr0cXgm03jop2RUVa2t44hORlb-v7p-vD0WUIksCoqIwE31U6w72HGXQXSH_lgeqJK48PZpyIaHnL8Jm9lpwLIqKAfHDe9LhUQ60awHgIWSTvu9I8rZWHKC-bAMa-yJfkc9Thk-ZfHOPKdOgiS48PKWG0votF46wJpa1BHWXP2gesqh5jIwouaFQIE_3X7f3bJG9Ke02ZYkXZfSoBP3m3HGK7Qr3OhkNTZRoavblVNgUoqsnPZ3uNbUFgbbbnjN7UdxCpOKcOmuLnNHhCsxhmm9pPltyi-ssiMyewqB_y_qK_EEBHDacfh9yDl2rE26t8cqaPVxsVSy1hxZJA94MF-VEQGO_OypYfvl?>
+    </g>
+</svg>

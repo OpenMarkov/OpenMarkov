@@ -223,6 +223,24 @@ class RemoveLinkEditPropertyTest {
         assertThat(potVars).doesNotContain(g.vA());
     }
 
+    /**
+     * After removeLink + undo + redo, node B must still have exactly ONE potential.
+     * Without a proper redo(), the default {@code PNEdit.redo()} re-runs {@code doEdit()},
+     * appending a second batch to the persistent {@code newPotentials} list and leaving B
+     * with two potentials. The existing redo tests only inspect {@code getFirst()}.
+     */
+    @Property
+    void afterUndoRedo_childHasExactlyOnePotential(
+            @ForAll @IntRange(min = 2, max = 5) int sA,
+            @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
+        var g = linkedBN(sA, sB);
+        RemoveLinkEdit edit = new RemoveLinkEdit(g.net(), g.vA(), g.vB(), true);
+        edit.executeEdit();
+        edit.undo();
+        edit.redo();
+        assertThat(g.nodeB().getPotentials()).hasSize(1);
+    }
+
     // -----------------------------------------------------------------------
     // Structural round-trip: add then remove restores original state
     // -----------------------------------------------------------------------

@@ -1,6 +1,10 @@
 package org.openmarkov.gui.configuration;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Map;
@@ -18,7 +22,7 @@ public final class JavaSerializationUtils {
      * @param <T>    the expected type of the deserialized object
      * @return the deserialized object
      */
-    public static <T> T javaDeserialize(String string) {
+    public static <T> T deserialize(String string) {
         byte[] bytes = Base64.getDecoder().decode(string);
         try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
             return (T) in.readObject();
@@ -34,7 +38,7 @@ public final class JavaSerializationUtils {
      * @param <T>   the type of the object
      * @return the Base64-encoded serialized representation
      */
-    public static <T> String javaSerialize(T value) {
+    public static <T> String serialize(T value) {
         try (
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 ObjectOutputStream out = new ObjectOutputStream(bos)

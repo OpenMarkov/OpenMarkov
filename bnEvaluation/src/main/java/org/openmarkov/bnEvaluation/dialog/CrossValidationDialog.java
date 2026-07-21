@@ -143,7 +143,7 @@ public final class CrossValidationDialog extends OkCancelDialog {
         // algorithm ComboBox
         algorithmComboBox = new JComboBox<>();
         algorithmComboBox.setRenderer(new JComboBoxFunctionRender<Class<? extends LearningAlgorithm>>
-                                              (item -> LearningAlgorithmManager.info(item).name()));
+                                              (item-> LearningAlgorithmManager.info(item).name()));
         optionsButton = new JButton();
         optionsTextArea = new JTextArea();
         JScrollPane optionsTextScrollPane = new JScrollPane();
@@ -299,7 +299,7 @@ public final class CrossValidationDialog extends OkCancelDialog {
             this.measuresPanel = new MeasuresPanel();
             this.measuresPanel.setEnabled(false);
             measuresPanel.allMeasureRelatedCheckboxes()
-                         .forEach(metricCheckbox -> metricCheckbox.addChangeListener(e -> checkOkButton()));
+                          .forEach(metricCheckbox -> metricCheckbox.addChangeListener(e -> checkOkButton()));
         }
         return this.measuresPanel;
     }
@@ -355,14 +355,14 @@ public final class CrossValidationDialog extends OkCancelDialog {
         Stream<Class<? extends LearningAlgorithm>> algorithms;
         if (discriminative) {
             algorithms = LearningAlgorithmManager.INSTANCE.getDiscriminativeAlgorithms()
-                                                          .sorted(new PriorityComparator<>(
-                                                                  NaiveBayesAlgorithm.class,
-                                                                  SelectiveNBAlgorithm.class,
-                                                                  KDBAlgorithm.class,
-                                                                  TreeAugmentedNBAlgorithm.class,
-                                                                  ForestAugmentedNBAlgorithm.class,
-                                                                  SuperParentNBAlgorithm.class
-                                                          ));
+                                        .sorted(new PriorityComparator<>(
+                                                NaiveBayesAlgorithm.class,
+                                                SelectiveNBAlgorithm.class,
+                                                KDBAlgorithm.class,
+                                                TreeAugmentedNBAlgorithm.class,
+                                                ForestAugmentedNBAlgorithm.class,
+                                                SuperParentNBAlgorithm.class
+                                        ));
         } else {
             algorithms = LearningAlgorithmManager.INSTANCE.getGenerativeAlgorithms();
         }
@@ -396,7 +396,7 @@ public final class CrossValidationDialog extends OkCancelDialog {
      */
     private void algorithmComboBoxActionPerformed() {
         Class<? extends LearningAlgorithm> selectedAlgorithm = (Class<? extends LearningAlgorithm>) algorithmComboBox.getSelectedItem();
-        if (selectedAlgorithm == null) {
+        if(selectedAlgorithm==null){
             return;
         }
         optionsGUI = algorithmConfigurationManager.instanciateForAlgorithm(selectedAlgorithm);
@@ -429,7 +429,7 @@ public final class CrossValidationDialog extends OkCancelDialog {
     @Override
     protected boolean doOkClickBeforeHide() throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
         Class<? extends LearningAlgorithm> algorithmType = (Class<? extends LearningAlgorithm>) algorithmComboBox.getSelectedItem();
-        String algorithmName = (String) LearningAlgorithmManager.info(algorithmType).name();
+        String algorithmName = (String) LearningAlgorithmManager.info( algorithmType).name();
         // options
         @ToCheck(reasonKind = ToCheck.ReasonKind.PROBABLE_BUG, reasonDescription = "This options variable was used to" +
                 " be taken out from optionsGUI, and that method has been removed")
@@ -463,7 +463,7 @@ public final class CrossValidationDialog extends OkCancelDialog {
         LearningEvaluator evaluator = new LearningEvaluator(algorithmType, options,
                                                             sets, measuresSet);
         if (discriminativeAlgorithmButton.isSelected()) {
-            evaluator.setVariable(((Variable) variableCombobox.getSelectedItem()).getName());
+            evaluator.setVariable(((Variable)variableCombobox.getSelectedItem()).getName());
         }
         ResultsDialog resultsDialog = new ResultsDialog(owner, evaluator.runEvaluator());
         this.setVisible(false);

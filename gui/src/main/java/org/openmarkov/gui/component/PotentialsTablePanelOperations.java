@@ -66,7 +66,7 @@ public class PotentialsTablePanelOperations {
     
     public int getPotentialIndex(int row, int column, Node node) throws ThereIsNoPotentialsInNodeException {
 		// First of all we get the start index of the column
-		int potentialIndex = getPotentialStartIndexOfColumn(column, node);
+		int potentialIndex = PotentialsTablePanelOperations.getPotentialStartIndexOfColumn(column, node);
 		// We get the last editable row in the JTable
 		int lastRow = calculateLastEditableRow(node);
 		// Then we move a number of positions equals to the row (without the headers)
@@ -81,10 +81,10 @@ public class PotentialsTablePanelOperations {
     
     public static int getPotentialIndex(int row, int column, TablePotential tableDistribution) {
 		// First of all we get the start index of the column
-		int potentialIndex = getPotentialStartIndexOfColumn(column, tableDistribution);
+		int potentialIndex = PotentialsTablePanelOperations.getPotentialStartIndexOfColumn(column, tableDistribution);
 
 		// We get the last editable row in the JTable
-		int lastRow = calculateLastEditableRow(tableDistribution);
+		int lastRow = PotentialsTablePanelOperations.calculateLastEditableRow(tableDistribution);
 
 		// Then we move a number of positions equals to the row (without the headers)
 		potentialIndex += (lastRow - row);
@@ -176,7 +176,7 @@ public class PotentialsTablePanelOperations {
         int numberOfDimensions = dimensions.length - 1;
         
         int lowerBound = 0;
-		if (getIsExactDistrPotential(potential))
+		if (PotentialsTablePanelOperations.getIsExactDistrPotential(potential))
 			lowerBound = -1;
 		for (int i = numberOfDimensions; i > lowerBound; i--) {
 			int dimension = dimensions[i];
@@ -185,6 +185,9 @@ public class PotentialsTablePanelOperations {
 		}
 		return position;
 	}
+	
+	public static final int DEFAULT_MAX_DECIMALS = 10;
+	public static final double DEFAULT_EPSILON = Math.pow(10, -(PotentialsTablePanelOperations.DEFAULT_MAX_DECIMALS + 2));
 
 	/**
 	 * Redistributes probability values so they sum to 1.0, following the priority list order.
@@ -201,25 +204,23 @@ public class PotentialsTablePanelOperations {
 	public static void redistributeProbabilities(
 			double[] values, int editedPosition, double newValue,
 			List<Integer> priorityList, IntPredicate isEditable) {
-		int maxDecimals = 10;
-		double epsilon = Math.pow(10, -(maxDecimals + 2));
-		values[editedPosition] = Util.roundAndReduce(newValue, epsilon, maxDecimals);
+		values[editedPosition] = Util.roundAndReduce(newValue, PotentialsTablePanelOperations.DEFAULT_EPSILON, PotentialsTablePanelOperations.DEFAULT_MAX_DECIMALS);
 
 		double sum = 0.0;
 		for (int pos : priorityList) {
 			if (isEditable.test(pos)) {
-				sum = Util.roundAndReduce(sum + values[pos], epsilon, maxDecimals);
+				sum = Util.roundAndReduce(sum + values[pos], PotentialsTablePanelOperations.DEFAULT_EPSILON, PotentialsTablePanelOperations.DEFAULT_MAX_DECIMALS);
 			}
 		}
-
-		double rest = Math.abs(Util.roundAndReduce(1 - sum, epsilon, maxDecimals));
+		
+		double rest = Math.abs(Util.roundAndReduce(1 - sum, PotentialsTablePanelOperations.DEFAULT_EPSILON, PotentialsTablePanelOperations.DEFAULT_MAX_DECIMALS));
 		if (sum > 1.0) {
 			for (int pos : priorityList) {
 				if (rest == 0) break;
 				if (isEditable.test(pos)) {
-					rest = Util.roundAndReduce(rest - values[pos], epsilon, maxDecimals);
+					rest = Util.roundAndReduce(rest - values[pos], PotentialsTablePanelOperations.DEFAULT_EPSILON, PotentialsTablePanelOperations.DEFAULT_MAX_DECIMALS);
 					if (rest < 0) {
-						values[pos] = Math.abs(Util.roundAndReduce(rest, epsilon, maxDecimals));
+						values[pos] = Math.abs(Util.roundAndReduce(rest, PotentialsTablePanelOperations.DEFAULT_EPSILON, PotentialsTablePanelOperations.DEFAULT_MAX_DECIMALS));
 						break;
 					}
 					values[pos] = 0.0;
@@ -228,11 +229,13 @@ public class PotentialsTablePanelOperations {
 		} else {
 			for (int pos : priorityList) {
 				if (isEditable.test(pos)) {
-					values[pos] = Util.roundAndReduce(values[pos] + rest, epsilon, maxDecimals);
+					values[pos] = Util.roundAndReduce(values[pos] + rest, PotentialsTablePanelOperations.DEFAULT_EPSILON, PotentialsTablePanelOperations.DEFAULT_MAX_DECIMALS);
 					break;
 				}
 			}
 		}
+		
+		
 	}
 
 }

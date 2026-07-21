@@ -55,7 +55,7 @@ import java.util.HashMap;
 	 *
      * @return {@code double} score of the net
 	 */
-	public double score() {
+	@Override public double getScore() {
 		return super.getScore() - (calculateDimension() / 2) * Math.log(caseDatabase.getCases().length);
 	}
 
@@ -151,7 +151,7 @@ import java.util.HashMap;
 
 		/* We do the calculations for the final destination node*/
         lastNodeDimension = nodesDimensions.get(initialOriginNode.getName());
-        newNodeDimension = ((edit.getVariableFrom().getNumStates()) * lastNodeDimension);
+        newNodeDimension = ((edit.getVariableTo().getNumStates()) * lastNodeDimension);
 
 		/*If change is true it's because we have to update the probNet values
 		 * and store the node dimension and entropy to avoid repeating the

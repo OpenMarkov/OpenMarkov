@@ -219,7 +219,8 @@ class RemoveNodeEditPropertyTest {
         RemoveNodeEdit edit = new RemoveNodeEdit(net, vU);
         assertThatThrownBy(edit::executeEdit)
                 .as("removing the only utility node should be rejected")
-                .isInstanceOf(DoEditException.class);
+                .isInstanceOf(DoEditException.CannotDoEditException.class)
+                .hasCauseInstanceOf(ConstraintViolatedException.class);
     }
 
     /**

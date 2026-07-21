@@ -120,15 +120,15 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         discretizeComboBox.addItem(GeneralMode.asSetAllTo(Discretization.Option.KMEANS));
         discretizeComboBox.setSelectedIndex(0);
         discretizeComboBox.addActionListener(e -> discretizeComboBoxActionPerformed());
-        
+
         classVariableComboBox = new JComboBox<>();
         classVariableComboBox.setEnabled(false);
-        
+
         outliersComboBox = new JComboBox<>();
         outliersComboBox.setRenderer(new JComboBoxFunctionRender<Outliers.Option>(Localizable::localize));
         for (Outliers.Option opt : Outliers.Option.values()) outliersComboBox.addItem(opt);
         outliersComboBox.setSelectedItem(Outliers.Option.NONE);
-        
+
         featureSelectionComboBox = new JComboBox<>();
         featureSelectionComboBox.setRenderer(new JComboBoxFunctionRender<FeatureSelection.Method>(Localizable::localize));
         for (FeatureSelection.Method m : FeatureSelection.Method.values()) featureSelectionComboBox.addItem(m);
@@ -384,7 +384,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         });
         
         //tabbedPane.addTab("Preprocess variables", variablesPanel);
-        
+
         JPanel classVariablePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 2));
         classVariablePanel.add(new JLabel("Class variable (for MDLP / ChiMerge):"));
         classVariablePanel.add(classVariableComboBox);
@@ -397,7 +397,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         classVariablePanel.add(new JLabel("top-k:"));
         classVariablePanel.add(featureSelectionTopKSpinner);
         mainPanel.add(classVariablePanel);
-        
+
         mainPanel.add(variablesPanel);
         
         cancelButton = DialogBase.generateGenericCancelButton();
@@ -609,7 +609,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
             discretizeOptions.addItem(Discretization.Option.MDLP);
             discretizeOptions.addItem(Discretization.Option.CHIMERGE);
             discretizeOptions.addItem(Discretization.Option.KMEANS);
-            
+
             discretizeOptions.setSelectedIndex(0);
             discretizeOptions.setPreferredSize(new Dimension(175, 18));
             discretizeOptions.addItemListener(new ItemListener() {
@@ -671,7 +671,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
     }
     
     private Map<String, Discretization.Option> getSelectedDiscretizeOptions() {
-        
+
         Map<String, Discretization.Option> selectedDiscretizeOptions = new HashMap<>();
         for (int i = 0; i < varSelectionPanel.getComponents().length; ++i) {
             Component comp = varSelectionPanel.getComponents()[i];
@@ -686,7 +686,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         }
         return selectedDiscretizeOptions;
     }
-    
+
     private Variable getSelectedClassVariable() {
         Object selected = classVariableComboBox.getSelectedItem();
         if (selected == null || "(none)".equals(selected)) return null;
@@ -717,7 +717,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         preprocessedDatabase = Outliers.process(preprocessedDatabase, getSelectedOutliersOptions(preprocessedDatabase));
         preprocessedDatabase = MissingValues.process(preprocessedDatabase, getSelectedMissingValuesOptions());
         preprocessedDatabase = Discretization.process(preprocessedDatabase, discretizeOpts,
-                                                      getSelectedNumIntervals(), null, classVariable);
+                getSelectedNumIntervals(), null, classVariable);
         FeatureSelection.Method fsMethod = (FeatureSelection.Method) featureSelectionComboBox.getSelectedItem();
         if (fsMethod != null && fsMethod != FeatureSelection.Method.NONE) {
             Variable fsClass = (classVariable != null)
@@ -728,7 +728,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         }
         return preprocessedDatabase;
     }
-    
+
     private Map<String, Outliers.Option> getSelectedOutliersOptions(CaseDatabase database) {
         Outliers.Option selected = (Outliers.Option) outliersComboBox.getSelectedItem();
         if (selected == null) selected = Outliers.Option.NONE;
@@ -738,7 +738,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         }
         return map;
     }
-    
+
     private boolean validateBeforeSave() {
         Map<String, Discretization.Option> opts = getSelectedDiscretizeOptions();
         boolean supervisedUsed = opts.values().stream().anyMatch(
@@ -749,15 +749,15 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         Variable classVar = getSelectedClassVariable();
         if (classVar == null) {
             JOptionPane.showMessageDialog(this,
-                                          "Supervised discretization (MDLP / ChiMerge) and feature selection require selecting a class variable.",
-                                          "Class variable required", JOptionPane.WARNING_MESSAGE);
+                    "Supervised discretization (MDLP / ChiMerge) and feature selection require selecting a class variable.",
+                    "Class variable required", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         Discretization.Option classVarOpt = opts.get(classVar.getName());
         if (classVarOpt == Discretization.Option.MDLP || classVarOpt == Discretization.Option.CHIMERGE) {
             JOptionPane.showMessageDialog(this,
-                                          "The class variable cannot itself be discretized with a supervised method.",
-                                          "Invalid class variable", JOptionPane.WARNING_MESSAGE);
+                    "The class variable cannot itself be discretized with a supervised method.",
+                    "Invalid class variable", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;

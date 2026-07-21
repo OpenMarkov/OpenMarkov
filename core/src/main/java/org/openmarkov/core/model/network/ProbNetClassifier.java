@@ -21,8 +21,7 @@ import java.util.TreeSet;
  * constraints and contents (temporal, multiagent, chance-only, etc.).
  * <p>
  * These methods are pure queries that do not modify the network.
- * Follows the same pattern as {@link VariableTypeConverter} and
- * {@link VariableStateOperations}.
+ * Follows the same pattern as {@link VariableStateOperations}.
  *
  * @author Manuel Arias
  * @see ProbNet

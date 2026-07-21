@@ -19,6 +19,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -126,6 +129,39 @@ public class EvidenceCaseTest {
         
     }
     
+    @Test public void removeFindingByNameOnEmptyEvidenceReturnsNull() {
+        EvidenceCase evidence = new EvidenceCase();
+        assertDoesNotThrow(() -> assertNull(evidence.removeFinding("A")));
+    }
+
+    @Test public void removeFindingByNameWithNoMatchLeavesEvidenceUntouched() throws Exception {
+        EvidenceCase evidence = new EvidenceCase();
+        evidence.addFinding(new Finding(variableA, 0));
+        evidence.addFinding(new Finding(variableB, 1));
+
+        Finding removed = evidence.removeFinding("Z");
+
+        assertNull(removed);
+        assertEquals(2, evidence.getFindings().size());
+        assertNotNull(evidence.getFinding(variableA));
+        assertNotNull(evidence.getFinding(variableB));
+    }
+
+    @Test public void removeFindingByNameRemovesOnlyTheMatchingFinding() throws Exception {
+        EvidenceCase evidence = new EvidenceCase();
+        Finding findingA = new Finding(variableA, 0);
+        Finding findingB = new Finding(variableB, 1);
+        evidence.addFinding(findingA);
+        evidence.addFinding(findingB);
+
+        Finding removed = evidence.removeFinding("A");
+
+        assertSame(findingA, removed);
+        assertEquals(1, evidence.getFindings().size());
+        assertNull(evidence.getFinding(variableA));
+        assertNotNull(evidence.getFinding(variableB));
+    }
+
     @Disabled
     @Test public void extendEvidence() {
         

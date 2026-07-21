@@ -17,16 +17,30 @@ import org.openmarkov.bnEvaluation.measures.MeasuresSet;
 import org.openmarkov.bnEvaluation.view.OverwriteAwareFileChooser;
 import org.openmarkov.bnEvaluation.view.ScoresTableStyler;
 import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.gui.configuration.LocalPreferences;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.common.BottomPanelButtonDialog;
 import org.openmarkov.gui.dialog.common.DialogBase;
 import org.openmarkov.gui.util.JTableGeneration;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextPane;
+import javax.swing.LayoutStyle;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,7 +58,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
     private SplitSet splitSet = null;
     private final ResultKind resultKind;
     
-    enum ResultKind {
+    enum ResultKind{
         Measures,
         SplitSet
     }
@@ -107,7 +121,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         };
         resultsPanel.setBorder(BorderFactory.createTitledBorder(title + " results:"));
         resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.PAGE_AXIS));
-        resultsPanel.add(switch (resultKind) {
+        resultsPanel.add(switch (resultKind){
             case Measures -> generateTableResultsMeasurePanel();
             case SplitSet -> generateTableResultsDatasetSplitPanel();
         });
@@ -125,7 +139,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         informationPanel.setBorder(BorderFactory.createTitledBorder("Information"));
         // informationPanel components
         JTextPane textMetaInformation = new JTextPane();
-        textMetaInformation.setText(switch (resultKind) {
+        textMetaInformation.setText(switch (resultKind){
             case Measures -> measures.getMeasureInformation();
             case SplitSet -> splitSet.getTitle();
         });
@@ -181,7 +195,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
             tabbedPane.addTab("Confusion matrix", tabMatrix);
             JTable jTablaMatrix = measureMatrix.matrixToTable();
             tabMatrix.add(fittingScrollPane(jTablaMatrix));
-            
+
             JPanel tabIndicators = new JPanel();
             tabIndicators.setLayout(new BoxLayout(tabIndicators, BoxLayout.PAGE_AXIS));
             tabbedPane.addTab("Indicators", tabIndicators);
@@ -228,9 +242,9 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         };
         
         OverwriteAwareFileChooser omFileChooser = new OverwriteAwareFileChooser();
-        omFileChooser.setCurrentDirectory(LocalPreferences.LATEST_OPEN_DIRECTORY.get());
+        omFileChooser.setCurrentDirectory(UserPreferences.LATEST_OPEN_DIRECTORY.get());
         // Choose where to save the file
-        String nameDefect = switch (resultKind) {
+        String nameDefect = switch (resultKind){
             case Measures -> "EvaluationNet";
             case SplitSet -> "SplitSet";
         };
@@ -264,8 +278,8 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         sp.setPreferredSize(new Dimension(500, Math.min(contentH + 4, 350)));
         return sp;
     }
-    
-    
+
+
     /**
      * Installs tooltips on the column headers of the Indicators table.
      */
@@ -279,46 +293,46 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
             return c;
         });
     }
-    
+
     private static String indicatorHeaderTooltip(String header) {
         return switch (header) {
-            case "TP rate" -> "<html>True Positive rate (sensitivity / recall):<br>"
-                    + "proportion of actual positives correctly classified</html>";
-            case "FP rate" -> "<html>False Positive rate (1 − specificity):<br>"
-                    + "proportion of actual negatives incorrectly classified as positive</html>";
+            case "TP rate"   -> "<html>True Positive rate (sensitivity / recall):<br>"
+                                + "proportion of actual positives correctly classified</html>";
+            case "FP rate"   -> "<html>False Positive rate (1 − specificity):<br>"
+                                + "proportion of actual negatives incorrectly classified as positive</html>";
             case "F Measure" -> "<html>F-measure (F1-score):<br>"
-                    + "harmonic mean of Precision and Recall</html>";
-            default -> null;
+                                + "harmonic mean of Precision and Recall</html>";
+            default          -> null;
         };
     }
-    
+
     private static String scoreRowTooltip(String label) {
         if (label == null) return null;
         if (label.contains("LOGLIKELIHOOD") && label.contains("score"))
             return "<html>Log-Likelihood score:<br>"
-                    + "logarithm of the probability of observing the dataset given the model</html>";
+                   + "logarithm of the probability of observing the dataset given the model</html>";
         if (label.contains("LOGLIKELIHOOD") && label.contains("Loss"))
             return "<html>Log-Likelihood Loss:<br>"
-                    + "average negative log-likelihood per case (lower is better)</html>";
+                   + "average negative log-likelihood per case (lower is better)</html>";
         if (label.startsWith("BAYES"))
             return "<html>Bayesian score:<br>"
-                    + "marginal likelihood of the network structure under a Bayesian Dirichlet prior</html>";
+                   + "marginal likelihood of the network structure under a Bayesian Dirichlet prior</html>";
         if (label.startsWith("AIC"))
             return "<html>AIC (Akaike Information Criterion):<br>"
-                    + "log-likelihood penalised by the number of free parameters</html>";
+                   + "log-likelihood penalised by the number of free parameters</html>";
         if (label.startsWith("ENTROPY"))
             return "<html>Entropy score:<br>"
-                    + "total conditional entropy of the network structure</html>";
+                   + "total conditional entropy of the network structure</html>";
         if (label.startsWith("BDE"))
             return "<html>BDe (Bayesian Dirichlet equivalent):<br>"
-                    + "likelihood score with an equivalent sample size prior</html>";
+                   + "likelihood score with an equivalent sample size prior</html>";
         if (label.startsWith("K2"))
             return "<html>K2:<br>"
-                    + "scoring function from the K2 structure-learning algorithm (Cooper & Herskovits, 1992)</html>";
+                   + "scoring function from the K2 structure-learning algorithm (Cooper & Herskovits, 1992)</html>";
         if (label.startsWith("MDL"))
             return "<html>MDL (Minimum Description Length):<br>"
-                    + "information-theoretic measure balancing model fit and complexity</html>";
+                   + "information-theoretic measure balancing model fit and complexity</html>";
         return null;
     }
-    
+
 }

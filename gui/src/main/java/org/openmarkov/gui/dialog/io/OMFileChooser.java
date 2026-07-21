@@ -8,11 +8,12 @@
 package org.openmarkov.gui.dialog.io;
 
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.gui.configuration.LocalPreferences;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.configuration.OperatingSystem;
+import org.openmarkov.gui.configuration.UserPreferences;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 import java.util.Arrays;
@@ -148,7 +149,7 @@ public class OMFileChooser extends JFileChooser {
         }
         // In case there is an outdated value in the register
         if (!isSet) {
-            LocalPreferences.LATEST_NETWORK_FORMAT.set(OMFileChooser.DEFAULT_FILE_FORMAT);
+            UserPreferences.LATEST_NETWORK_FORMAT.set(OMFileChooser.DEFAULT_FILE_FORMAT);
             description = OMFileChooser.DEFAULT_FILE_FORMAT;
             for (FileFilter filter : getChoosableFileFilters()) {
                 if (filter instanceof FileFilterByExtension && ((FileFilterByExtension) filter).getFileDescription()

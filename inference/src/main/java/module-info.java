@@ -8,6 +8,7 @@ open module org.openmarkov.inference {
 
 	exports org.openmarkov.inference.heuristic.canoAndMoral;
 
+	exports org.openmarkov.inference.algorithm;
 	exports org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs;
 	exports org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.ceanalysis;
 	exports org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core;

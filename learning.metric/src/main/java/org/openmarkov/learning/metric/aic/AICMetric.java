@@ -161,7 +161,7 @@ import java.util.HashMap;
         double result = super.score(edition, change) - (newNodeDimension - lastNodeDimension);
         
         lastNodeDimension = nodesDimensions.get(initialOriginNode.getName());
-        newNodeDimension = ((edition.getVariableFrom().getNumStates()) * lastNodeDimension);
+        newNodeDimension = ((edition.getVariableTo().getNumStates()) * lastNodeDimension);
         
         /*If change is true it's because we have to update the probNet values
          * and store the node dimension and entropy to avoid repeating the

@@ -11,5 +11,6 @@ public class GsonCommon {
             .registerTypeAdapterFactory(new MandatoryFieldFactory())
             .registerTypeAdapter(java.io.File.class, new GsonAdapters.FileAdapter())
             .registerTypeHierarchyAdapter(Class.class, new GsonAdapters.ClassTypeAdapter())
+            .enableComplexMapKeySerialization()
             .create();
 }

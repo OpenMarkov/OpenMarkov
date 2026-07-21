@@ -222,16 +222,17 @@ import java.util.List;
 		int numParents = functionVariables.size() - 1;
 		int numStates = variables.get(0).getNumStates();
 		// Set the values for the deterministic f function
+		// Every f-function variable (child, z variables and leaky) has numStates states.
 		for (int i = 0; i < tablePotential.getValues().length; i += numStates) {
 			int index = i / numStates;
-			int min = 0;
+			int min = numStates - 1;
 			for (int j = 0; j < numParents; ++j) {
                 min = Math.min((index % numStates), min);
-				index /= variables.get(j + 1).getNumStates();
+				index /= numStates;
 			}
-			// min function
-			for (int j = 0; j < numParents; ++j) {
-				tablePotential.getValues()[j] = j == min ? 1.0 : 0.0;
+			// The deterministic child state for this column is the minimum of the parents' states.
+			for (int s = 0; s < numStates; ++s) {
+				tablePotential.getValues()[i + s] = s == min ? 1.0 : 0.0;
 			}
 		}
 		return tablePotential;

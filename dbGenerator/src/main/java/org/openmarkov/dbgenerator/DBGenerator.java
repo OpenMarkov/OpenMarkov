@@ -25,15 +25,33 @@ public class DBGenerator  {
 
 	/**
 	 * Generates a database of sampled cases from the given network using forward sampling.
+	 * The random generator is unseeded, so successive calls produce different databases.
 	 *
 	 * @param probNet       the Bayesian network to sample from
 	 * @param numberOfCases the number of cases to generate
 	 * @return a {@link CaseDatabase} containing the sampled cases
 	 */
 	public static CaseDatabase generate(ProbNet probNet, int numberOfCases) {
+		return generate(probNet, numberOfCases, new Random());
+	}
+
+	/**
+	 * Generates a database of sampled cases from the given network using forward sampling with a
+	 * fixed seed. Two calls with the same seed, network and number of cases produce identical
+	 * databases, which makes the generation reproducible.
+	 *
+	 * @param probNet       the Bayesian network to sample from
+	 * @param numberOfCases the number of cases to generate
+	 * @param seed          the seed for the random generator
+	 * @return a {@link CaseDatabase} containing the sampled cases
+	 */
+	public static CaseDatabase generate(ProbNet probNet, int numberOfCases, long seed) {
+		return generate(probNet, numberOfCases, new Random(seed));
+	}
+
+	private static CaseDatabase generate(ProbNet probNet, int numberOfCases, Random randomGenerator) {
 		List<Node> nodes = probNet.getNodes();
 		int[][] cases = new int[numberOfCases][nodes.size()];
-		Random randomGenerator = new Random();
 		List<Node> sortedNodes = ProbNetOperations.sortTopologically(probNet);
 		List<Integer> sortedNodeIndexes = new ArrayList<>();
 		for (Node node : sortedNodes) {

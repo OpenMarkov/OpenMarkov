@@ -16,15 +16,31 @@ public class SplitSetManager {
     
     private CaseDatabase caseDatabase;
     private int numCases;
-    
+    private final Random random;
+
     /**
-     * Creates a manager for the given case database.
+     * Creates a manager for the given case database, with a non-reproducible random source.
      *
      * @param caseDatabase the database to split
      */
     public SplitSetManager(CaseDatabase caseDatabase) {
+        this(caseDatabase, new Random());
+    }
+
+    /**
+     * Creates a manager whose splits are reproducible for a given seed.
+     *
+     * @param caseDatabase the database to split
+     * @param seed         seed of the random source
+     */
+    public SplitSetManager(CaseDatabase caseDatabase, long seed) {
+        this(caseDatabase, new Random(seed));
+    }
+
+    private SplitSetManager(CaseDatabase caseDatabase, Random random) {
         this.caseDatabase = caseDatabase;
-        numCases = caseDatabase.getNumCases();
+        this.numCases = caseDatabase.getNumCases();
+        this.random = random;
     }
     
     /**
@@ -91,8 +107,7 @@ public class SplitSetManager {
         for (int i = 0; i < m; i++) {
             population.add(i);
         }
-        // Crear un generador de números aleatorios
-        Random random = new Random();
+        Random random = this.random;
         for (int i = 0; i < n; i++) {
             // random index from 0 to population.size()-1
             int index = random.nextInt(population.size());
@@ -123,7 +138,7 @@ public class SplitSetManager {
             population.add(i);
         }
         // random number generator
-        Random random = new Random();
+        Random random = this.random;
         for (int i = 0; i < n; i++) {
             // random index from 0 to population.size()-1
             int index = random.nextInt(population.size());
@@ -223,7 +238,7 @@ public class SplitSetManager {
         // loop in k (folders)
         for (int k = 0; k < K; k++) {
             if (resto > 0) {
-                numTestCases = (k <= resto) ? (n + 1) : n;
+                numTestCases = (k < resto) ? (n + 1) : n;
                 numTrainCases = numCases - numTestCases;
             }
             int[][] testCases = new int[numTestCases][numVariables];
@@ -231,7 +246,7 @@ public class SplitSetManager {
             int ik_test_index = 0;
             int ik_train_index = 0;
             // split the loop in cases in three loops: before-test, test, after-test
-            int indexStarsTest = (k <= resto) ? (k * numTestCases) : (k * n + resto);
+            int indexStarsTest = (k < resto) ? (k * numTestCases) : (k * n + resto);
             int indexEndsTest = indexStarsTest + numTestCases;
             for (int i = 0; i < indexStarsTest; i++) {
                 for (int j = 0; j < numVariables; j++) {

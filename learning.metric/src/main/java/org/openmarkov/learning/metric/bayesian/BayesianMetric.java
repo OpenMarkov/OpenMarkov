@@ -56,9 +56,10 @@ import org.openmarkov.learning.metric.util.MathUtils;
 		double n_ijk;
 
 		double scoreCorrectionAlpha = 0.0;
-		double logGammaAlpha = MathUtils.lnGamma(alpha);
+		double logGammaAlpha = 0.0;
 
 		if (alpha != 0) {
+			logGammaAlpha = MathUtils.lnGamma(alpha);
 			scoreCorrectionAlpha += MathUtils.lnGamma(numStates * alpha);
 			scoreCorrectionAlpha -= numStates * logGammaAlpha;
 		}

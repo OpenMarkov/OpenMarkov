@@ -5,9 +5,9 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.UnrecoverableException;
 
 public class Lazy<T> {
-    private boolean isInitialized;
+    private volatile boolean isInitialized;
     private final @NotNull ThrowingSupplier<? extends T, Exception> initializer;
-    private @Nullable T value;
+    private volatile @Nullable T value;
     
     public Lazy(@NotNull ThrowingSupplier<? extends T, Exception> initializer) {
         this.initializer = initializer;
@@ -19,24 +19,28 @@ public class Lazy<T> {
         return new Lazy<>(initializer);
     }
     
-    public @NotNull T get() {
-        synchronized (this) {
-            if (!this.isInitialized) {
-                try {
-                    this.value = this.initializer.get();
-                } catch (RuntimeException e) {
-                    throw e;
-                } catch (Exception e) {
-                    throw new UnrecoverableException(e);
+    public T get() {
+        if (!this.isInitialized) {
+            synchronized (this) {
+                if (!this.isInitialized) {
+                    try {
+                        this.value = this.initializer.get();
+                    } catch (RuntimeException e) {
+                        throw e;
+                    } catch (Exception e) {
+                        throw new UnrecoverableException(e);
+                    }
+                    this.isInitialized = true;
                 }
-                this.isInitialized = true;
             }
-            return this.value;
         }
+        return this.value;
     }
     
     public boolean isInitialized() {
-        return this.isInitialized;
+        synchronized (this) {
+            return this.isInitialized;
+        }
     }
     
     public void reset() {

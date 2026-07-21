@@ -60,4 +60,28 @@ class MeasureMatrixIndicatorsTest {
         // Accuracy = (40 + 30) / 100 = 0.7
         assertThat(indicators.getAccuracy()).isCloseTo(0.7, within(1e-9));
     }
+
+    @Test
+    void absentClassKeepsMeanIndicatorsFinite() {
+        // Class index 2 has no real instances (row 2 all zeros) -- common in small CV folds.
+        // Its per-state ratios are 0/0; without a guard, NaN * weight-0 poisons the weighted means.
+        int[][] matrix = {
+                {3, 1, 0},   // real 0: 4 cases
+                {0, 2, 0},   // real 1: 2 cases
+                {0, 0, 0}    // real 2: 0 cases (absent)
+        };
+        MeasureMatrixIndicators indicators = new MeasureMatrixIndicators(matrix, 6);
+        int mean = indicators.getNumStates(); // last entry is the weighted mean
+
+        // The absent class yields defined (0) indicators, not NaN.
+        assertThat(indicators.getTpRates()[2]).isEqualTo(0.0);
+        assertThat(indicators.getPrecisions()[2]).isEqualTo(0.0);
+
+        // The weighted means stay finite and take their expected values.
+        assertThat(indicators.getTpRates()[mean]).isCloseTo(5.0 / 6.0, within(1e-9));         // (0.75·4 + 1·2)/6
+        assertThat(indicators.getPrecisions()[mean]).isCloseTo((4.0 + 4.0 / 3.0) / 6.0, within(1e-9));
+        assertThat(indicators.getFMeasures()[mean]).isFinite();
+        assertThat(indicators.getFpRates()[mean]).isFinite();
+        assertThat(indicators.getAccuracy()).isCloseTo(5.0 / 6.0, within(1e-9));
+    }
 }

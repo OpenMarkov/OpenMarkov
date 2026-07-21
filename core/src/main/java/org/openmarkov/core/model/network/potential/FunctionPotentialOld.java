@@ -41,12 +41,6 @@ import java.util.Map;
 public class FunctionPotentialOld extends GLMPotential implements DESSimulablePotential {
     
     /**
-     * The default function
-     */
-    
-    public static final VariableExpression DEFAULT_FUNCTION = new VariableExpression(List.of(), "0");
-    
-    /**
      * The coefficient
      */
     protected static final double COEFFICIENT = 1;
@@ -63,7 +57,7 @@ public class FunctionPotentialOld extends GLMPotential implements DESSimulablePo
      * @param role Potential role
      */
     public FunctionPotentialOld(List<Variable> variables, PotentialRole role) {
-        super(variables, role, new VariableExpression[]{DEFAULT_FUNCTION}, new double[]{COEFFICIENT});
+        super(variables, role, new VariableExpression[]{VariableExpression.Common.ZERO}, new double[]{COEFFICIENT});
     }
     
     /**

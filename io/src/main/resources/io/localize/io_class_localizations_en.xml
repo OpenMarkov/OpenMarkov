@@ -10,6 +10,7 @@
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$InvalidState" value="State {stateName} is invalid for variable {variableName}."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$NoNetworkTypeFound" value="No network type found."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$PotentialTypeNotSupported" value="Potential type {potentialType} is not supported."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$PotentialWithoutRole" value="A potential has no role attribute."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TreeADDWithoutPotentialOrReferenfe" value="TreeADD branch should specify either a potential or a reference."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TreeADDWithoutTwoThresholds" value="TreeADD branch has {thresholds.size} thresholds, but it should have only 2."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownNetworkType" value="There is no network type matching {unknownType}."/>

@@ -7,11 +7,11 @@
 
 package org.openmarkov.gui.dialog.inference.common;
 
+import org.openmarkov.core.action.core.MonteCarloOptionsEdit;
 import org.openmarkov.core.action.core.MulticriteriaEdit;
 import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.inference.TemporalOptions;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.CycleLength;
 import org.openmarkov.core.model.network.ProbNet;
@@ -19,18 +19,10 @@ import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.gui.component.ValuesTableCellRenderer;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.java.reflectionUtils.ReflectionEquality;
 
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -38,13 +30,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.JTextComponent;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -204,7 +190,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
     private JPanel multicriteriaPanel;
     
     private JPanel temporalPanel;
-    
+
     private boolean expandNetwork = false;
     //  16/12/2019 Extracted Monte Carlo Panel to an independent class
     /**
@@ -215,8 +201,8 @@ public class InferenceOptionsDialog extends OkCancelDialog {
     /**
      * Constructor of the dialog
      *
-     * @param probNet          the prob net
-     * @param owner            the owner
+     * @param probNet the prob net
+     * @param owner the owner
      * @param onlyShowThisType The task must filter by multicriteria type. Null if not necessary
      */
     public InferenceOptionsDialog(ProbNet probNet, Window owner, MulticriteriaOptions.Type onlyShowThisType) {
@@ -263,7 +249,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
             mainPanel.add(getMonteCarloOptionsPanel());
         }
         
-        if (isTemporal && !(probNet.getNetworkType() instanceof DESNetworkType)) {
+        if (isTemporal&& !(probNet.getNetworkType() instanceof DESNetworkType)) {
             mainPanel.add(getTemporalPanel());
         }
         
@@ -300,7 +286,8 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                 probNet.getInferenceOptions().getMultiCriteriaOptions().setCeOptionsShowed(true);
                 multicriteriaOptions.setCeOptionsShowed(true);
             }
-        } else {
+        }
+        else {
             if (probNet.getInferenceOptions()
                        .getMultiCriteriaOptions()
                        .getMulticriteriaType() == MulticriteriaOptions.Type.UNICRITERION) {
@@ -313,7 +300,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                 multicriteriaOptions.setCeOptionsShowed(true);
             }
         }
-        
+
         // Center dialog
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
@@ -322,7 +309,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
         this.setLocation(x, y);
         if (isTemporal || isMonteCarloSimulation || isMulticriteria)
             this.setVisible(true);
-        
+
         
     }
     
@@ -331,31 +318,31 @@ public class InferenceOptionsDialog extends OkCancelDialog {
      **/
     public InferenceOptionsDialog(ProbNet probNet, Window owner) {
         super(owner);
-        
+
         this.probNet = probNet;
         expandNetwork = true;
-        
+
         setTitle(stringDatabase.getString("InferenceOptionsDialog.ExpandNetwork"));
-        
+
         isTemporal = !probNet.hasConstraintOfClass(OnlyAtemporalVariables.class);
-        
-        
+
+
         setLocationRelativeTo(owner);
-        
+
         this.temporalOptions = probNet.getInferenceOptions().getTemporalOptions().clone();
-        
+
         mainPanel = new JPanel();
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-        
+
         mainPanel.add(getNumSlicesPanel());
-        
+
         add(mainPanel);
         setIconImage(null);
         setResizable(false);
-        
+
         pack();
-        
+
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         int x = (screenSize.width - getWidth()) / 2;
@@ -422,7 +409,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
         
         JComboBox<String> comboBoxUse = null;
         JComboBox<String> comboBoxDiscountUnits = null;
-        
+
         MultiCriteriaTableModel model = new MultiCriteriaTableModel();
         
         // Construction of the TableModel
@@ -571,7 +558,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                 
             }
         }
-        
+
         // Creates table with the model
         table = new JTable(model) {
             /**
@@ -929,7 +916,6 @@ public class InferenceOptionsDialog extends OkCancelDialog {
     }
     
     // -16/12/2019 extracted Monte Carlo Options to an independent panel
-    
     /**
      * Returns a panel with the Monte Carlo Options
      *
@@ -937,7 +923,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
      */
     public JPanel getMonteCarloOptionsPanel() {
         if (monteCarloOptionsPanel == null) {
-            monteCarloOptionsPanel = new MonteCarloOptionsPanel(probNet);
+            monteCarloOptionsPanel= new MonteCarloOptionsPanel(probNet);
         }
         return monteCarloOptionsPanel;
     }
@@ -1027,7 +1013,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
             transitionsPanel.add(getBeginningOfCycleButton());
             transitionsPanel.add(getHalfCycleButton());
             transitionsPanel.add(getEndOfCycleButton());
-            if (isMonteCarloSimulation) {
+            if (isMonteCarloSimulation){
                 getBeginningOfCycleButton().setEnabled(false);
                 getHalfCycleButton().setEnabled(false);
                 getEndOfCycleButton().setEnabled(false);
@@ -1052,15 +1038,14 @@ public class InferenceOptionsDialog extends OkCancelDialog {
         probNet.getPNESupport().openNewSubEditHistory();
         if (isMulticriteria) {
             boolean decisionCriteriaIsTheSame = ReflectionEquality.areEquals(probNet.getDecisionCriteria(), decisionCriteria);
-            boolean multiCriteriaOptionsIsTheSame = ReflectionEquality.areEquals(probNet.getInferenceOptions()
-                                                                                        .getMultiCriteriaOptions(), multicriteriaOptions);
+            boolean multiCriteriaOptionsIsTheSame = ReflectionEquality.areEquals(probNet.getInferenceOptions().getMultiCriteriaOptions(), multicriteriaOptions);
             
-            if (!decisionCriteriaIsTheSame || !multiCriteriaOptionsIsTheSame) {
+            if(!decisionCriteriaIsTheSame || !multiCriteriaOptionsIsTheSame) {
                 MulticriteriaEdit editMulticriteria = new MulticriteriaEdit(probNet, decisionCriteria, multicriteriaOptions);
                 editMulticriteria.executeEdit();
             }
         }
-        if (isTemporal && !(probNet.getNetworkType() instanceof DESNetworkType)) {
+        if (isTemporal&& !(probNet.getNetworkType() instanceof DESNetworkType)) {
             int numSlices;
             try {
                 numSlices = Integer.parseInt(numSlicesTextField.getText());
@@ -1068,7 +1053,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                 throw new InvalidArgumentException("Slices number", numSlicesTextField.getText(), "is not a valid number, as it must be a number between " + Integer.MIN_VALUE + " and " + Integer.MAX_VALUE);
             }
             this.temporalOptions.setHorizon(numSlices);
-            if (!expandNetwork && !isMonteCarloSimulation) {
+            if(!expandNetwork && !isMonteCarloSimulation) {
                 if (beginningOfCycleButton.isSelected()) {
                     this.temporalOptions.setTransition(TemporalOptions.TransitionTime.BEGINNING);
                 } else if (halfCycleButton.isSelected()) {
@@ -1078,7 +1063,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                 }
             }
             probNet.getInferenceOptions().setTemporalOptions(temporalOptions);
-            
+
         }
         
         if (isMonteCarloSimulation) {

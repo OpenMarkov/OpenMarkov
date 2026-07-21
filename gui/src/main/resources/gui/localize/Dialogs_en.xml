@@ -357,6 +357,9 @@
         <Weka>
             <Description value="Weka file"/>
         </Weka>
+        <JSON>
+            <Description value="JavaScript Object Notation"/>
+        </JSON>
         <OpenMarkov>
             <Description value="OpenMarkov file"/>
         </OpenMarkov>

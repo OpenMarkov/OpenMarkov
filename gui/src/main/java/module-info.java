@@ -28,6 +28,7 @@ open module org.openmarkov.gui {
     requires inference.DES;
     requires com.jthemedetector;
     requires rust.essentials;
+    requires swingx;
     
     exports org.openmarkov.gui.action;
     exports org.openmarkov.gui.layout.bayesian;

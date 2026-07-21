@@ -36,8 +36,7 @@ la versión.
 **Problema.** El plugin `maven-assembly-plugin` estaba configurado con
 `<appendAssemblyId>false</appendAssemblyId>`, lo que hacía que el artefacto ensamblado ("fat JAR")
 se publicara con el mismo nombre de artefacto que el JAR normal del módulo. Esto provocaba un
-conflicto de `module-info.class` durante la compilación de los tests de integración (
-`integrationtests`),
+conflicto de `module-info.class` durante la compilación de los tests de integración (`integrationtests`),
 que dependen de `org.openmarkov.full` y encontraban dos entradas incompatibles para el mismo módulo
 JPMS en el classpath.
 
@@ -47,8 +46,7 @@ JPMS en el classpath.
 <appendAssemblyId>true</appendAssemblyId>
 ```
 
-Con esto el artefacto ensamblado recibe el sufijo del descriptor de ensamblado (p. ej.
-`-jar-with-dependencies`),
+Con esto el artefacto ensamblado recibe el sufijo del descriptor de ensamblado (p. ej. `-jar-with-dependencies`),
 diferenciándolo del JAR normal y eliminando el conflicto.
 
 ---
@@ -78,8 +76,8 @@ aislamiento.
 
 ## Resumen
 
-| Módulo                  | Cambio                                        | Motivo                                             |
-|-------------------------|-----------------------------------------------|----------------------------------------------------|
-| `org.openmarkov` (raíz) | Añadir `assertj-swing:3.17.1` (test)          | Tests de GUI no compilaban                         |
-| `org.openmarkov.full`   | `appendAssemblyId` → `true`                   | Conflicto `module-info` en integrationtests        |
-| `org.openmarkov.io`     | Añadir dependencia `org.openmarkov.inference` | Errores de compilación por visibilidad de paquetes |
+| Módulo | Cambio | Motivo |
+|---|---|---|
+| `org.openmarkov` (raíz) | Añadir `assertj-swing:3.17.1` (test) | Tests de GUI no compilaban |
+| `org.openmarkov.full` | `appendAssemblyId` → `true` | Conflicto `module-info` en integrationtests |
+| `org.openmarkov.io` | Añadir dependencia `org.openmarkov.inference` | Errores de compilación por visibilidad de paquetes |

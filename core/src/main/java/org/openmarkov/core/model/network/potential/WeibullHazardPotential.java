@@ -21,7 +21,9 @@ import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Weibull hazard potential for survival analysis. Models the probability of a binary
@@ -31,8 +33,10 @@ import java.util.*;
  */
 @PotentialType(names = "Hazard (Weibull)") public class WeibullHazardPotential extends GLMPotential implements DESSimulablePotential {
     
-    protected static final VariableExpression GAMMA = new VariableExpression(Collections.emptyList(), "Gamma");
-    protected static final VariableExpression[] MANDATORY_COVARIATES = new VariableExpression[]{GAMMA, CONSTANT};
+    protected static final VariableExpression[] MANDATORY_COVARIATES = new VariableExpression[]{
+            VariableExpression.Common.GAMMA,
+            VariableExpression.Common.CONSTANT
+    };
     
     /**
      * Determines whether it represents a log hazard
@@ -319,7 +323,7 @@ import java.util.*;
         int gammaIndex = -1;
         int i = 0;
         while (i < covariates.length && gammaIndex == -1) {
-            if (covariates[i].asStringExpression().equals(GAMMA.asStringExpression())) {
+            if (covariates[i].asStringExpression().equals(VariableExpression.Common.GAMMA.asStringExpression())) {
                 gammaIndex = i;
             }
             ++i;

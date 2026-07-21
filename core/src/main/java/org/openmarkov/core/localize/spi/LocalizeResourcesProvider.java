@@ -6,7 +6,11 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.ImplementationRequirements;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.RequiredConstructor;
 import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.core.localize.*;
+import org.openmarkov.core.localize.RawStringBundle;
+import org.openmarkov.core.localize.StringBundle;
+import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.localize.XMLResourceBundle;
+import org.openmarkov.core.localize.XMLStringBundle;
 import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.core.stringformat.LocalizationFormatter;
 import org.xml.sax.Attributes;
@@ -16,11 +20,21 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -119,7 +133,7 @@ public interface LocalizeResourcesProvider extends ResourceBundleProvider {
      * source.
      */
     private static void addBundlesOfJar(@NotNull URL bundleFile, @NotNull Consumer<? super BundleSource> addBundleSource) {
-        String fileName = bundleFile.toString().substring("jar:file:".length());
+        String fileName = bundleFile.toString().substring("jar:file:".length()).replaceAll("%20", " ");
         int entrySeparatorIndex = fileName.indexOf('!');
         try (JarFile jarFile = new JarFile(fileName.substring(0, entrySeparatorIndex))) {
             String askedEntries = fileName.substring(entrySeparatorIndex + 2);

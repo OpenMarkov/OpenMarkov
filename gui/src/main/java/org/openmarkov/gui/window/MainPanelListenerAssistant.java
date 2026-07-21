@@ -26,7 +26,6 @@ import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.type.DESNetworkType;
-import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.gui.action.RemoveLinkRestrictionEdit;
 import org.openmarkov.gui.configuration.LastOpenFiles;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
@@ -41,6 +40,7 @@ import org.openmarkov.gui.toolplugin.ToolPlugin;
 import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.util.PropertyNames;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
+import org.openmarkov.gui.window.settings.SettingsDialog;
 
 import javax.swing.JButton;
 import javax.swing.ProgressMonitor;
@@ -299,8 +299,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
                                             .getProbNet(), newVariable, selectedNode.getNodeType(), position).executeEdit();
             });
             case ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC -> {
-                NetworkType networkType = getCurrentNetworkEditorPanel().getProbNet().getNetworkType();
-                if (networkType instanceof DESNetworkType) {
+                if (getCurrentNetworkEditorPanel().getProbNet().getNetworkType() instanceof DESNetworkType){
                     monteCarloSimulation();
                     break;
                 }
@@ -320,7 +319,8 @@ public class MainPanelListenerAssistant extends WindowAdapter
                 }
             }
             case ActionCommands.CONFIGURATION ->
-                    GUIUtils.executeUIAction(() -> editAndViewHandler.showUserConfigurationDialog());
+                    GUIUtils.executeUIAction(editAndViewHandler::showUserConfigurationDialog);
+            case ActionCommands.OPEN_SETTINGS -> GUIUtils.showDialog(new SettingsDialog(this.mainPanel.getMainFrame()));
             case ActionCommands.HELP_CHANGE_LANGUAGE -> editAndViewHandler.showLanguageChangeDialog();
             case ActionCommands.HELP_SHORTCUTS -> editAndViewHandler.showShortcuts();
             case ActionCommands.HELP_ABOUT -> editAndViewHandler.showAbout();
@@ -425,7 +425,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
      */
     protected void monteCarloSimulation() {
         boolean performInference = true;
-        //mainPanel.selecMonteCarloButton(false);
+        // mainPanel.selecMonteCarloButton(false);
         
         InferenceOptionsDialog dialog = new InferenceOptionsDialog(getCurrentNetworkEditorPanel().getProbNet(), SwingUtilities.getWindowAncestor(mainPanel), MulticriteriaOptions.Type.COST_EFFECTIVENESS);
         ProbNet probNet = getCurrentNetworkEditorPanel().getProbNet();

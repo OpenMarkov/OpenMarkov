@@ -1,0 +1,6 @@
+jdk:
+  - openjdk25
+
+before_install:
+  - sdk install java 25-open || echo "Already installed"
+  - sdk use java 25-open

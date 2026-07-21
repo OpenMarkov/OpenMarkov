@@ -1,14 +1,10 @@
 To clone all OpenMarkov to your computer:
 
-1. Copy and paste the next lines in your git terminal of the desired folder (*git Bash* in windows
-   and the default *shell/terminal* in Linux).
-2. Press *Enter*. All the lines **except the last one** will run automatically as the terminal sees
-   a line-break as the order "run that command".
-3. Because of this, when the download ends, you should press *Enter* again to "run" the last command
-   or you will miss the last repository.
+1. Copy and paste the next lines in your git terminal of the desired folder (*git Bash* in windows and the default *shell/terminal* in Linux).
+2. Press *Enter*. All the lines **except the last one** will run automatically as the terminal sees a line-break as the order "run that command".
+3. Because of this, when the download ends, you should press *Enter* again to "run" the last command or you will miss the last repository.
 
-To clone only some of them, copy only those lines but don't forget to keep `org.openmarkov` and
-`org.openmarkov.full`:
+To clone only some of them, copy only those lines but don't forget to keep `org.openmarkov` and `org.openmarkov.full`:  
 
 ```
 git clone -b development https://bitbucket.org/cisiad/org.openmarkov

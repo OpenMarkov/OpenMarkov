@@ -18,13 +18,16 @@ import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.modelUncertainty.NormalFunction;
 import org.openmarkov.core.model.network.modelUncertainty.XORShiftRandom;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Generalised Linear Model potential
  */
 public abstract class GLMPotential extends Potential {
-    protected static final VariableExpression CONSTANT = new VariableExpression(Collections.emptyList(), "Constant");
     /**
      * Covariates
      */
@@ -123,7 +126,7 @@ public abstract class GLMPotential extends Potential {
     }
     
     public static VariableExpression[] getMandatoryCovariates() {
-        return new VariableExpression[]{CONSTANT};
+        return new VariableExpression[]{VariableExpression.Common.CONSTANT};
     }
     
     protected static VariableExpression[] getDefaultCovariates(List<Variable> variables, PotentialRole role) {
@@ -297,7 +300,7 @@ public abstract class GLMPotential extends Potential {
         int constantIndex = -1;
         int i = 0;
         while (i < covariates.length && constantIndex == -1) {
-            if (covariates[i].asStringExpression().equals(CONSTANT.asStringExpression())) {
+            if (covariates[i].asStringExpression().equals(VariableExpression.Common.CONSTANT.asStringExpression())) {
                 constantIndex = i;
             }
             ++i;

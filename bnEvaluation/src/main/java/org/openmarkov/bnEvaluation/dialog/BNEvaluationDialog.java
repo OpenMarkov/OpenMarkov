@@ -95,7 +95,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         }
         
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        
+
         JPanel mainPanel = new JPanel();
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         mainPanel.setPreferredSize(new Dimension(840, 520));
@@ -108,7 +108,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         this.measuresPanel = new MeasuresPanel();
         this.measuresPanel.setEnabled(false);
         this.measuresPanel.allMeasureRelatedCheckboxes()
-                          .forEach(metricCheckbox -> metricCheckbox.addChangeListener(e -> this.checkOkButton()));
+                           .forEach(metricCheckbox -> metricCheckbox.addChangeListener(e -> this.checkOkButton()));
         mainPanel.add(this.measuresPanel);
         this.add(mainPanel);
         JRadioButton buttonToClick = currentlyOpenNetIsElegible ? this.fromOpenMarkovRadioButton : this.fromFileRadioButton;
@@ -322,7 +322,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
     
     private void checkOkButton() {
         boolean aMeasureIsSelected = this.measuresPanel.allMeasureRelatedCheckboxes()
-                                                       .anyMatch(AbstractButton::isSelected);
+                                                        .anyMatch(AbstractButton::isSelected);
         this.getOKButton()
             .setEnabled(aMeasureIsSelected && this.dbOpenerPanel.getDatabase() != null && this.probNet != null);
     }
@@ -434,7 +434,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
     @Override
     protected boolean doOkClickBeforeHide() throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
         boolean aMeasureIsSeleteced = this.measuresPanel.allMeasureRelatedCheckboxes()
-                                                        .anyMatch(AbstractButton::isSelected);
+                                                         .anyMatch(AbstractButton::isSelected);
         if (!aMeasureIsSeleteced) {
             JOptionPane.showMessageDialog(null,
                                           "There arent measures selected",

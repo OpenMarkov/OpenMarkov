@@ -231,6 +231,8 @@ public enum ActionCommands {
 //	EXPAND_NETWORK_CE("CostEffectiveness.ExpandNetworkCE"),
     /** Action invoked when the user wants to configure OPENMARKOV options */
     CONFIGURATION("Tools.Configuration"),
+    /** Action invoked when the user wants to configure their OpenMarkov settings */
+    OPEN_SETTINGS("OpenSettings"),
     /** Action invoked when the user wants to set the inference options. */
     PROPAGATION_OPTIONS("PropagationOptions"),
     /** TODO - Action invoked when the user wants to set the multicriteria options */

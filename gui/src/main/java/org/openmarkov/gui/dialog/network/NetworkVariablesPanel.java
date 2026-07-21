@@ -12,19 +12,26 @@ import org.openmarkov.core.action.core.RemoveConstraintEdit;
 import org.openmarkov.core.action.core.VariableTypeConstraintEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.DefaultStates;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.constraint.OnlyContinuousVariables;
 import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
-import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.util.GUIDefaultStates;
 
-import javax.swing.*;
+import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Panel to set the definition of the variables of a network. It will have a
@@ -163,7 +170,13 @@ public class NetworkVariablesPanel extends JPanel {
      */
     private JComboBox<String> getJComboBoxDefaultStates() {
         if (jComboBoxDefaultStates == null) {
-            jComboBoxDefaultStates = new JComboBox<String>(GUIDefaultStates.getListStrings());
+            jComboBoxDefaultStates = new JComboBox<>();
+            for (ArrayList<String> states : UserPreferences.CUSTOM_DOMAINS.get()) {
+                jComboBoxDefaultStates.addItem(states.stream().collect(Collectors.joining(" - ")));
+            }
+            for (String states : GUIDefaultStates.getListStrings()) {
+                jComboBoxDefaultStates.addItem(states);
+            }
             jComboBoxDefaultStates.setName("jComboBoxDefaultStates");
             // jComboBoxDefaultStates.addItemListener(this);
         }
@@ -237,25 +250,25 @@ public class NetworkVariablesPanel extends JPanel {
         Object itemSelected = jComboBoxVariableType.getSelectedItem();
         if (itemSelected != null && itemSelected.equals(stringDatabase
                                                                 .getString("NetworkVariablesPanel.ConstraintVariableType." + "Items.onlydiscrete"))) {
-
+            
             variableTypeCE = new VariableTypeConstraintEdit(probNet, new OnlyDiscreteVariables());
-
+            
         } else if (itemSelected != null && itemSelected.equals(stringDatabase
                                                                        .getString("NetworkVariablesPanel.ConstraintVariableType." + "Items.onlycontinuous"))) {
-
+            
             variableTypeCE = new VariableTypeConstraintEdit(probNet, new OnlyContinuousVariables());
-
+            
         } else if (itemSelected != null && itemSelected.equals(stringDatabase
-                                                                        .getString("NetworkVariablesPanel.ConstraintVariableType." + "Items.discreteandcontinuous"))) {
-
+                                                                       .getString("NetworkVariablesPanel.ConstraintVariableType." + "Items.discreteandcontinuous"))) {
+            
             List<PNConstraint> constraints = probNet.getConstraints().stream()
-                    .filter(o -> o.equals(new OnlyDiscreteVariables()) || o.equals(new OnlyContinuousVariables()))
-                    .toList();
-            if(!constraints.isEmpty()){
+                                                    .filter(o -> o.equals(new OnlyDiscreteVariables()) || o.equals(new OnlyContinuousVariables()))
+                                                    .toList();
+            if (!constraints.isEmpty()) {
                 removeCE = new RemoveConstraintEdit(probNet, constraints.getFirst());
                 removeCE.executeEdit();
             }
-
+            
         }
         if (variableTypeCE != null) {
             variableTypeCE.executeEdit();
@@ -265,23 +278,14 @@ public class NetworkVariablesPanel extends JPanel {
     private void defaultStatesChanged() throws DoEditException {
         // warning mpalacios relative function to options position.
         // Review "otros" option
-        Object itemSelected = jComboBoxDefaultStates.getSelectedItem();
-        if (itemSelected == null) {
+        if (!(jComboBoxDefaultStates.getSelectedItem() instanceof String selectedStatesNames)) {
             return;
         }
-        NetworkDefaultStatesEdit networkDefaultStatesEdit = new NetworkDefaultStatesEdit(probNet, getDefaultStates());
+        State[] defaultStates = Arrays.stream(selectedStatesNames.split("-"))
+                                      .map(stateName -> new State(stateName.trim()))
+                                      .toArray(State[]::new);
+        NetworkDefaultStatesEdit networkDefaultStatesEdit = new NetworkDefaultStatesEdit(probNet, defaultStates);
         networkDefaultStatesEdit.executeEdit();
     }
     
-    public State[] getDefaultStates() {
-        int i = 0;
-        int selectedIndex = jComboBoxDefaultStates.getSelectedIndex();
-        String[] defaultStateNames = DefaultStates.getByIndex(selectedIndex);
-        State[] defaultStates = new State[defaultStateNames.length];
-        for (String str : defaultStateNames) {
-            defaultStates[i] = new State(str);
-            i++;
-        }
-        return defaultStates;
-    }
 }

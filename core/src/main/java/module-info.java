@@ -65,5 +65,6 @@ open module org.openmarkov.core {
     exports org.openmarkov.java.collectionsUtils;
     exports org.openmarkov.core.model.database;
     exports org.openmarkov.core.model.network.modelUncertainty.ParametrizedFunction;
+    exports org.openmarkov.java.langUtils;
     
 }

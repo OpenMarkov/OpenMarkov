@@ -17,7 +17,6 @@ import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Variable;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -35,7 +34,7 @@ public class LinearRegressionPotentialTest {
         List<Variable> variables = Arrays.asList(ageAtStateEntryVar, ageVar, timeInStateVar);
         double[] coefficients = new double[]{0, 1, -1};
         VariableExpression[] covariates = new VariableExpression[]{
-                new VariableExpression(Collections.emptyList(), "Constant"),
+                VariableExpression.Common.CONSTANT,
                 ageVar.asVariableExpression(),
                 timeInStateVar.asVariableExpression()
         };

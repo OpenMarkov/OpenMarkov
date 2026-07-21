@@ -141,6 +141,15 @@ public class PGMXWriter_1_0 extends PGMXWriter_0_2 {
         // HashMap of declared TablePotentials
         List<Potential> potentials = probNet.getPotentials();
         for (Potential potential : potentials) {
+            // Constant potentials (no domain variables) can appear after eliminating
+            // all variables of a utility/probability factor; they have no associated
+            // node and cannot be filtered by node type.
+            if (potential.getNumVariables() == 0) {
+                Element potentialElement = new Element(XMLTags.POTENTIAL.toString());
+                getPotential(probNet, potential, potentialElement);
+                potentialsElement.addContent(potentialElement);
+                continue;
+            }
             Variable potentialVariable = potential.getVariable(0);
             // Do not write here policies
             if ((probNet.getNode(potentialVariable).getNodeType() != NodeType.DECISION)

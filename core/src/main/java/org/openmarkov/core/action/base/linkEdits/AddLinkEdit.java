@@ -28,6 +28,8 @@ import java.util.List;
 /**
  * Creates a directed or undirected link between two nodes associated to two
  * variables in a {@code ProbNet}
+ *
+ * @author Manuel Arias
  */
 public final class AddLinkEdit extends BaseLinkEdit {
     
@@ -238,13 +240,32 @@ public final class AddLinkEdit extends BaseLinkEdit {
     
     @Override public void undo() {
         super.undo();
-        
+
         nodeTo = probNet.getNode(variableTo.getName());
-        
+
         if (updatePotentials) {
             nodeTo.setPotentials(oldPotentials);
         }
         probNet.removeLink(variableFrom, variableTo, isDirected);
+    }
+
+    /**
+     * Re-applies the edit without re-running {@code doEdit()}. Re-running it would append a second
+     * batch to the persistent {@code newPotentials} list (never cleared) and leave the child with
+     * twice its potentials. Instead we call {@code setTypicalRedo(false)} and re-apply the link and
+     * the already-computed {@code newPotentials}, mirroring the fix of issue #472 in
+     * {@link InvertLinkAndUpdatePotentialsEdit}.
+     */
+    @Override public void redo() {
+        setTypicalRedo(false);
+        super.redo();
+
+        nodeTo = probNet.getNode(variableTo.getName());
+        probNet.addLink(nodeFrom, nodeTo, isDirected);
+        this.link = probNet.getLink(nodeFrom, nodeTo, isDirected);
+        if (updatePotentials) {
+            nodeTo.setPotentials(newPotentials);
+        }
     }
     
     /**

@@ -8,16 +8,12 @@
 package org.openmarkov.gui.window;
 
 import org.openmarkov.core.action.base.PNEdit;
-import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.action.core.ChangeNetworkTypeEdit;
+import org.openmarkov.core.action.base.PNEditListener;
+import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.core.model.network.Node;
-import org.openmarkov.core.model.network.NodeType;
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.StringWithProperties;
-import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.constraint.NoEventNodes;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
@@ -29,20 +25,15 @@ import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
 import org.openmarkov.core.model.network.type.NetworkType;
-import org.openmarkov.gui.graphic.SelectionListener;
-import org.openmarkov.gui.graphic.VisualLink;
-import org.openmarkov.gui.graphic.VisualNode;
+import org.openmarkov.gui.graphic.*;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.localize.MenuLocalizer;
-import org.openmarkov.gui.menutoolbar.common.ActionCommands;
-import org.openmarkov.gui.menutoolbar.common.MenuAssistant;
-import org.openmarkov.gui.menutoolbar.common.MenuItemNames;
-import org.openmarkov.gui.menutoolbar.common.MenuToolBarBasic;
-import org.openmarkov.gui.menutoolbar.common.ZoomMenuToolBar;
+import org.openmarkov.gui.menutoolbar.common.*;
 import org.openmarkov.gui.window.decisiontree.DecisionTreeEditor;
-import org.openmarkov.gui.window.edition.ZoomManager;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
+import org.openmarkov.gui.window.edition.ZoomManager;
 
-import java.awt.Component;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -81,8 +72,8 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
      * Composed action command that contains all the viewing actions (except
      * view message window).
      */
-    public static final ActionCommands[] VIEWING_ACTION_COMMANDS = { ActionCommands.ZOOM, ActionCommands.ZOOM_IN,
-            ActionCommands.ZOOM_OUT, ActionCommands.NODES };
+    public static final ActionCommands[] VIEWING_ACTION_COMMANDS = {ActionCommands.ZOOM, ActionCommands.ZOOM_IN,
+            ActionCommands.ZOOM_OUT, ActionCommands.NODES};
     
     /**
      * Menus and toolbar that manage zoomManager.
@@ -211,12 +202,11 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         setOptionEnabled(ActionCommands.CHANGE_WORKING_MODE, getEnableWorkingModeButton());
         setOptionEnabled(ActionCommands.PROPAGATION_OPTIONS, true);
         
-
         
         setOptionEnabled(ActionCommands.TEMPORAL_EVOLUTION_BY_CRITERION, false);
         setOptionEnabled(ActionCommands.NEXT_SLICE_NODE, false);
         
-
+        
         checkInferenceOptions();
     }
     
@@ -397,7 +387,6 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                                 .getNetworkType() instanceof InfluenceDiagramType || currentProbNet
                                 .getNetworkType() instanceof DecisionAnalysisNetworkType
                 ) && currentProbNet.getDecisionCriteria() != null && currentProbNet.getDecisionCriteria().size() > 1;
-                
                 setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC, canPerformCE);
                 setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_SENSITIVITY, canPerformCE);
                 setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC, currentProbNet.getNetworkType() instanceof DESNetworkType);
@@ -437,7 +426,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                        currentNetworkEditorPanel.getProbNet().getPNESupport().getCanRedo());
         // updateUndoRedo(networkPanel.getUndoManager());
         mainPanel.setToolBarPanel(currentNetworkEditorPanel.getWorkingMode());
-
+        
         
     }
     
@@ -670,7 +659,9 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                                     }
                                 }
                                 case INFERENCE -> {
-                                    if (visualNode.getNode().getPotentials().isEmpty()) { // ...asaez...if network compiled...currently
+                                    if (visualNode.getNode()
+                                                  .getPotentials()
+                                                  .isEmpty()) { // ...asaez...if network compiled...currently
                                         // not needed
                                         // ...because if not compiled, those options
                                         // are not shown.
@@ -703,7 +694,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                             || (
                             workingMode == NetworkEditorPanel.WorkingMode.INFERENCE && visualNode.isPostResolutionFinding()
                     );
-                    canAddFinding &= visualNode.getNode().getNodeType()!=NodeType.UTILITY;
+                    canAddFinding &= visualNode.getNode().getNodeType() != NodeType.UTILITY;
                     boolean addOrChange =
                             (workingMode == NetworkEditorPanel.WorkingMode.EDITION && !visualNode.isPreResolutionFinding())
                                     || (
