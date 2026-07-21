@@ -1,0 +1,5 @@
+# Ficheros auxiliares generados por LaTeX
+**/*.aux
+**/*.log
+**/*.out
+**/*.toc

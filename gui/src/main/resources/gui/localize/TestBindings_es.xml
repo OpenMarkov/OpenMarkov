@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <Edit>
+        <StringWithoutParameters value="Esta cadena no tiene ningún parámetro"/>
+        <StringWithParameters value="Esta cadena tiene un parámetro cuyo valor es: {parameter}"/>
+    </Edit>
+    <AStringInTopLevel value="Esta cadena es hija de la raíz"/>
+    <BUNDLEFILE>
+        <Text value="Español"/>
+    </BUNDLEFILE>
+</properties>

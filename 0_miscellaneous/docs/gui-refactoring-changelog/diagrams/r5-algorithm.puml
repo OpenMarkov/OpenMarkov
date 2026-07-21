@@ -1,0 +1,56 @@
+@startuml r5-algorithm
+' ============================================================
+' R5 -- Probability redistribution algorithm flow
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam dpi 150
+
+skinparam activity {
+  BackgroundColor #FFF8E0
+  BorderColor #AA9944
+}
+
+start
+:Set values[editedPosition] = roundAndReduce(newValue);
+
+:sum = 0;
+while (for each pos in priorityList) is (next)
+  if (isEditable(pos)?) then (yes)
+    :sum += values[pos];
+    :sum = roundAndReduce(sum);
+  endif
+endwhile (done)
+
+:rest = |1 - sum|;
+
+if (sum > 1.0?) then (yes)
+  :// Subtract from low-priority cells //;
+  while (for each pos in priorityList) is (next)
+    if (rest == 0?) then (yes)
+      -[#green]->
+      break
+    endif
+    if (isEditable(pos)?) then (yes)
+      :rest -= values[pos];
+      if (rest < 0?) then (yes)
+        :values[pos] = |rest|;
+        break
+      else (no)
+        :values[pos] = 0.0;
+      endif
+    endif
+  endwhile (done)
+else (no)
+  :// Add remainder to first editable cell //;
+  while (for each pos in priorityList) is (next)
+    if (isEditable(pos)?) then (yes)
+      :values[pos] += rest;
+      break
+    endif
+  endwhile (done)
+endif
+
+stop
+
+@enduml

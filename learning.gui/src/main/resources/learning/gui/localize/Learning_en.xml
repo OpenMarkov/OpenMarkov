@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <Learning value="Learning">
+        <Ok value="OK"/>
+        <Discretize>
+            <NoDiscretize value="Do not discretize"/>
+            <SameWidth value="Equal width intervals"/>
+            <SameFreq value="Equal frequency intervals"/>
+            <ModelNet value="Use model network"/>
+        </Discretize>
+        <CaseFile value="Dataset"/>
+        <MissingValues>
+            <KeepMissing value="Keep records with missing values"/>
+            <Eliminate value="Erase records with missing values"/>
+        </MissingValues>
+        <Open value="Open"/>
+        <Algorithm value="Algorithm">
+            <Type value="Algorithm type">
+                <Discriminative value="Discriminative"/>
+                <Generative value="Generative"/>
+            </Type>
+        </Algorithm>
+        <Variable value="Variable">
+            <Class value="Class variable:"/>
+        </Variable>
+        <ModelNetUseOnlyPositions value="Use the information of the nodes"/>
+        <AllowLinkRemoval value="Allow link removal"/>
+        <Alpha>
+            <Error value="A numeric value between 0 and 1 must be introduced for the alpha parameter."/>
+            <Tooltip
+                    value="Alpha parameter used during the structural learning.&#10;Its value must be inside the interval [0, 1].&#10;A value of 1 corresponds to the Laplace correction.&#10;A value of 0 implies using no correction.&#10;"/>
+        </Alpha>
+        <UseModelNetVariables value="Use only the variables in the model network"/>
+        <NotAllowedEdit value="Not allowed edit "/>
+        <PC>
+            <SignificanceLevel value="Significance level">
+                <Tooltip value="Significance level"/>
+            </SignificanceLevel>
+            <Title value="PC algorithm: Options"/>
+            <IndependenceTest>
+                <Short value="Independence test"/>
+            </IndependenceTest>
+            <IncorrectParameter
+                    value="A numerical value between 0 and 1 must be entered for the alpha parameter and the accuracy degree."/>
+            <Adaptive value="Adaptive"/>
+            <G2 value="G² (Laplace smoothing)"/>
+            <CrossEntropy value="Cross entropy"/>
+            <IndependenceTest value="Independence test"/>
+        </PC>
+        <Interactive>
+            <BlockedEdits value="Blocked edits"/>
+            <Score value="Score"/>
+            <Undo value="Undo"/>
+            <EditDescription value="Edit description"/>
+            <BlockEdit value="Block edit"/>
+            <ApplyEdit value="Apply edit"/>
+            <UnblockEdit value="Unblock edit"/>
+            <NextPhase value="Complete phase">
+                <ToolTip value="Runs the algorithm until the end of the current phase"/>
+            </NextPhase>
+            <OnlyPositiveEdits value="Only positive edits"/>
+            <OnlyAllowedEdits value="Only allowed edits"/>
+            <Redo value="Redo"/>
+            <PValue value="p-value"/>
+            <Run value="Finish">
+                <ToolTip value="Launches the algorithm from the current state"/>
+            </Run>
+            <ShowBlocked value="Show blocked"/>
+            <Title value="Interactive learning"/>
+            <Motivation value="Motivation"/>
+        </Interactive>
+        <LearningType value="Learning type"/>
+        <Intervals value="Number of intervals:"/>
+        <IncorrectFileFormat value="Unsupported data file format.&#10;Supported formats are: .elv y .xml"/>
+        <LoadModelNetFromFile value="Load model network from file"/>
+        <LearningFinished value="&#10; * Learning finished.&#10;&#9; Ellapsed time: "/>
+        <Title value="OpenMarkov - Learning"/>
+        <LearnNet value="Learn"/>
+        <UseAllVariables value="Use all variables"/>
+        <ChooseModelNet value="Choose Model Net"/>
+        <ErrorPreprocessing value="Error during the preprocessing"/>
+        <NoOpenNet value="There is no open net"/>
+        <SelectAllVariables value="Select / unselect all variables"/>
+        <Interactive value="Interactive learning"/>
+        <IncorrectCaseDatabaseFileFormat
+                value="Unsupported data file format.&#10;Supported formats are: .dbc, .arff  y.xls"/>
+        <MustChooseVariables value="The variables to use during learning must be chosen."/>
+        <SameIntervalNumber value="Same number of intervals"/>
+        <TreatAbsentValues value="Treat missing values:"/>
+        <DefaultOption value="Specify for each variable "/>
+        <InitialValues value="Reset values"/>
+        <Discretization value="Discretization"/>
+        <TakeOpenModelNet value="Use the already open network"/>
+        <Automatic value="Automatic learning"/>
+        <IntervalCount value="Number of intervals"/>
+        <Preprocessing value="Preprocessing"/>
+        <MustLoadACaseDatabase value="A dataset must be loaded."/>
+        <UnableToLoadModelNet value="Unable to load model network."/>
+        <LoadError value="Error loading file. Check message window for further information"/>
+        <Cancel value="Cancel"/>
+        <General value="General   "/>
+        <AbsentValues value="Missing values"/>
+        <EM>
+            <Title value="Expectation Maximization: Options"/>
+        </EM>
+        <HillClimbing>
+            <Metric value="Metric"/>
+            <Title value="Hillclimbing algorithm: Options"/>
+            <MaxNumParents value="Maximum number of parents"/>
+            <MaxNumParents.Tooltip value="Maximum number of parents allowed for any node (0 = unlimited)"/>
+        </HillClimbing>
+        <SaveDatabase value="Save dataset"/>
+        <Alpha value="Alpha parameter (Laplace-like correction)"/>
+        <AllowLinkInversion value="Allow link inversion"/>
+        <DontUseModelNet value="Do not use any model network"/>
+        <AllowLinkAddition value="Allow link addition"/>
+        <ModelNetUse value="Model network use"/>
+        <UseSelectedVariables value="Use selected variables"/>
+        <ModelNet value="Model network"/>
+        <Error value="Error during learning">
+            <UnobservedVariables
+                    value="The selected algorithm cannot learn with unobserved variables, please select another algorithm or another model network. This is the list of latent variables"/>
+            <OutOfMemory
+                    value="OpenMarkov run out of memory while trying to learn the network. Please try again after discretizing the numeric variables."/>
+        </Error>
+        <NetSuffix value="_learned"/>
+        <Discretize value="Discretize:"/>
+        <NoModelNet value="There is no model network."/>
+        <Options value="Options"/>
+        <StartFromModelNet value="Start learning from model network"/>
+        <OpenDatabase value="Open dataset"/>
+        <Mnemonic value="l"/>
+        <TreeAugmentedNaiveBayes>
+            <Title value="TANB Algorithm : Options"/>
+            <Metric value="Metric"/>
+            <Algorithm value="Tree augmented naive bayes "/>
+            <IncorrectParameter value="The alpha parameter must be a numeric value between 0 an 1"/>
+        </TreeAugmentedNaiveBayes>
+        <DiscriminativeAlgorithm value="Discriminative Algorithms (classifiers)"/>
+        <SelectiveNaiveBayes>
+            <Title value="SNB Algorithm : Options"/>
+            <Metric value="Metric"/>
+            <Algorithm value="Selective naive bayes "/>
+            <IncorrectParameter value="The alpha parameter must be a numeric value between 0 an 1"/>
+            <Forward value="Forward"/>
+        </SelectiveNaiveBayes>
+        <SuperParentNaiveBayes>
+            <Title value="SPNB Algorithm : Options"/>
+            <Metric value="Metric"/>
+            <Algorithm value="Superparent naive bayes "/>
+            <IncorrectParameter value="The alpha parameter must be a numeric value between 0 an 1"/>
+            <SameSP value="Unique superparent ">
+                <Tooltip value="If selected only the superparent would be commont to all features"/>
+            </SameSP>
+        </SuperParentNaiveBayes>
+        <KDB>
+            <Title value="KDB Algorithm : Options"/>
+            <Metric value="Metric"/>
+            <Metrics value="Metrics"/>
+            <Algorithm value="K-Dependence bayesian "/>
+            <kValue value="k Value">
+                <Tooltip
+                        value="Maximum number of parents, apart from the class variable, that can be set to each node"/>
+            </kValue>
+            <IncorrectParameter value="The alpha parameter must be a numeric value between 0 an 1"/>
+            <KIncorrectParents value="The k value must be an integer greater or equals to 0"/>
+        </KDB>
+        <FANB>
+            <Title value="FANB Algorithm : Options"/>
+            <Metric value="Metric"/>
+            <Metrics value="Metrics"/>
+            <Algorithm value="Forest augmented naive bayes "/>
+            <IncorrectParameter value="The alpha parameter must be a numeric value between 0 an 1"/>
+        </FANB>
+        <NaiveBayes>
+            <Title value="NB Algorithm : Options"/>
+            <Metric value="Metric"/>
+            <Algorithm value="Naive bayes"/>
+            <IncorrectParameter value="The alpha parameter must be a numeric value between 0 an 1"/>
+        </NaiveBayes>
+    </Learning>
+</properties>

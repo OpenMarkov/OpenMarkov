@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassLocalizations>
+    <Localization class="org.openmarkov.sensitivityanalysis.exceptions.UncertainParameterException$FewUncertainParameters" value="There is {actual} uncertain parameters, but there should be at least {required}."/>
+</ClassLocalizations>

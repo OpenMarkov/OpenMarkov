@@ -1,0 +1,56 @@
+@startuml
+skinparam classBackgroundColor white
+skinparam classBorderColor #777
+skinparam arrowColor #444
+skinparam classFontSize 11
+skinparam noteBackgroundColor #FFFDE7
+skinparam noteBorderColor #BBAA00
+hide empty members
+left to right direction
+
+class RuntimeException          <<JDK>> #FFD6D6
+class IllegalArgumentException  <<JDK>> #FFD6D6
+class UnsupportedOperationException <<JDK>> #FFD6D6
+
+abstract class OpenMarkovRuntimeException #D6EAF8
+
+abstract class NonProjectablePotentialException <<sealed>>
+abstract class NotEvaluableNetworkException     <<sealed>>
+abstract class InvalidNetworkTypeException      <<sealed>>
+abstract class UnexpectedInferenceException     <<sealed>>
+class CannotNormalizePotentialException
+
+class UnreachableException
+class UnrecoverableException
+
+class InvalidArgumentException
+class NotSupportedOperationException
+
+RuntimeException              <|-- OpenMarkovRuntimeException
+RuntimeException              <|-- UnreachableException
+RuntimeException              <|-- UnrecoverableException
+IllegalArgumentException      <|-- InvalidArgumentException
+UnsupportedOperationException <|-- NotSupportedOperationException
+
+OpenMarkovRuntimeException  <|-- NonProjectablePotentialException
+OpenMarkovRuntimeException  <|-- NotEvaluableNetworkException
+OpenMarkovRuntimeException  <|-- InvalidNetworkTypeException
+OpenMarkovRuntimeException  <|-- UnexpectedInferenceException
+OpenMarkovRuntimeException  <|-- CannotNormalizePotentialException
+
+note bottom of NonProjectablePotentialException : 8 inner classes
+note bottom of NotEvaluableNetworkException     : 3 inner classes
+note bottom of InvalidNetworkTypeException      : 2 inner classes
+note bottom of UnexpectedInferenceException     : 1 inner class
+
+note right of UnreachableException
+  Fuera de la jerarquía
+  de dominio
+end note
+
+note right of InvalidArgumentException
+  Bridge: extiende clase JDK
+  + implements IBundled...
+end note
+
+@enduml

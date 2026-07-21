@@ -1,0 +1,83 @@
+@startuml r2-modos-actual
+' ============================================================
+' R2 — Jerarquía actual de modos de edición
+' Las tres subclases en rojo son idénticas excepto por NodeType
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 40
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<problem>> #FFDDD8
+  BorderColor<<problem>> #CC4444
+  BackgroundColor<<ok>> #E8E8FF
+  BorderColor<<ok>> #6666AA
+}
+
+abstract class EditionMode <<ok>> {
+  # networkEditorPanel
+  # probNet
+  __
+  + mousePressed()
+  + mouseDragged()
+  + mouseReleased()
+  + keyPressed()
+}
+
+abstract class NodeEditionMode <<ok>> {
+  # nodeType: NodeType
+  __
+  + mousePressed()
+  .. crea AddNodeEdit con this.nodeType ..
+}
+
+class ChanceNodeEditionMode <<problem>> {
+  .. 22 líneas ..
+  .. solo pasa NodeType.CHANCE ..
+  @EditionState(name="Edit.Mode.Chance",
+    icon="chance.gif", cursor="chance.gif")
+}
+
+class DecisionNodeEditionMode <<problem>> {
+  .. 22 líneas ..
+  .. solo pasa NodeType.DECISION ..
+  @EditionState(name="Edit.Mode.Decision",
+    icon="decision.gif", cursor="decision.gif")
+}
+
+class UtilityNodeEditionMode <<problem>> {
+  .. 22 líneas ..
+  .. solo pasa NodeType.UTILITY ..
+  @EditionState(name="Edit.Mode.Utility",
+    icon="utility.gif", cursor="utility.gif")
+}
+
+class SelectionEditionMode <<ok>> {
+  .. 111 líneas ..
+}
+
+class LinkEditionMode <<ok>> {
+  .. 53 líneas ..
+}
+
+class EditionModeManager <<ok>> {
+  - currentMode: EditionMode
+  - modes: Map<String, EditionMode>
+  __
+  + setEditionMode(String)
+  + getCurrentMode()
+}
+
+EditionMode <|-- NodeEditionMode
+EditionMode <|-- SelectionEditionMode
+EditionMode <|-- LinkEditionMode
+NodeEditionMode <|-- ChanceNodeEditionMode
+NodeEditionMode <|-- DecisionNodeEditionMode
+NodeEditionMode <|-- UtilityNodeEditionMode
+EditionModeManager o--> EditionMode : currentMode
+
+@enduml

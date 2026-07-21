@@ -1,0 +1,42 @@
+@startuml r3-instanceof
+' ============================================================
+' R3 -- Pattern matching instanceof (before/after)
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam dpi 150
+
+skinparam activity {
+  BackgroundColor #FFF8E0
+  BorderColor #AA9944
+  BackgroundColor<<before>> #FFDDD8
+  BorderColor<<before>> #CC4444
+  BackgroundColor<<after>> #D8FFD8
+  BorderColor<<after>> #44AA44
+}
+
+|Before|
+start
+:potential = node.getFirstPotential();
+:isExactDistrPotential = potential instanceof ExactDistrPotential;
+if (getExactDistrPotential()?) then (yes)
+  :oldExactDistr = **(ExactDistrPotential)** potential;
+  :oldTablePotential = **((ExactDistrPotential) potential)**.getTablePotential();
+else (no)
+  :oldTablePotential = **(TablePotential)** potential;
+endif
+stop
+
+|After|
+start
+:potential = node.getFirstPotential();
+:isExactDistrPotential = potential instanceof ExactDistrPotential;
+if (potential instanceof ExactDistrPotential **exactDistr**?) then (yes)
+  :oldExactDistr = exactDistr;
+  :oldTablePotential = exactDistr.getTablePotential();
+else if (potential instanceof TablePotential **table**?) then (yes)
+  :oldTablePotential = table;
+endif
+stop
+
+@enduml

@@ -1,0 +1,85 @@
+@startuml fig08-tiposred
+skinparam backgroundColor white
+skinparam shadowing false
+
+annotation "@NetworkTypeInfo" <<annotation>> #FFE066 {
+    + name() : String
+    + visualName() : String
+    + alternativeNames() : String[]
+}
+
+class NetworkTypeUtils #90EE90 {
+    + {static} NETWORK_TYPE_CLASSES : List<Class>
+    --
+    + {static} getInfo(clazz) : NetworkTypeInfo
+    + {static} safeInstanciate(clazz) : NetworkType
+    + {static} getNetworkClassByName(name) : Class
+}
+
+abstract class NetworkType #FFCF8B {
+    # constraints : HashMap<Class, ConstraintBehavior>
+    --
+    # overrideConstraintBehavior(class, behavior)
+    + getOverwrittenConstraints() : HashMap
+    + isApplicableConstraint(c) : boolean
+}
+
+class BayesianNetworkType #B3D9FF {
+    - {static} INSTANCE
+    + {static} getUniqueInstance()
+}
+class InfluenceDiagramType #B3D9FF {
+    - {static} INSTANCE
+    + {static} getUniqueInstance()
+}
+class LIMIDType #B3D9FF {
+    - {static} INSTANCE
+    + {static} getUniqueInstance()
+}
+class DynamicBayesianNetworkType #B3D9FF {
+    - {static} INSTANCE
+    + {static} getUniqueInstance()
+}
+class MDPType #B3D9FF {
+    - {static} INSTANCE
+    + {static} getUniqueInstance()
+}
+class MarkovNetworkType #B3D9FF {
+    - {static} INSTANCE
+    + {static} getUniqueInstance()
+}
+class POMDPType #B3D9FF {
+    - {static} INSTANCE
+    + {static} getUniqueInstance()
+}
+class DecisionAnalysisNetworkType #B3D9FF {
+    - {static} INSTANCE
+    + {static} getUniqueInstance()
+}
+
+"@NetworkTypeInfo" ..> BayesianNetworkType
+"@NetworkTypeInfo" ..> InfluenceDiagramType
+"@NetworkTypeInfo" ..> LIMIDType
+"@NetworkTypeInfo" ..> DynamicBayesianNetworkType
+"@NetworkTypeInfo" ..> MDPType
+"@NetworkTypeInfo" ..> MarkovNetworkType
+"@NetworkTypeInfo" ..> POMDPType
+"@NetworkTypeInfo" ..> DecisionAnalysisNetworkType
+
+NetworkType <|-- BayesianNetworkType
+NetworkType <|-- InfluenceDiagramType
+NetworkType <|-- LIMIDType
+NetworkType <|-- DynamicBayesianNetworkType
+NetworkType <|-- MDPType
+NetworkType <|-- MarkovNetworkType
+NetworkType <|-- POMDPType
+NetworkType <|-- DecisionAnalysisNetworkType
+
+NetworkTypeUtils ..> "@NetworkTypeInfo" : busca con PluginSearch
+NetworkTypeUtils --> NetworkType : gestiona
+
+note right of BayesianNetworkType
+  overrides:
+  OnlyChanceNodes -> YES
+end note
+@enduml

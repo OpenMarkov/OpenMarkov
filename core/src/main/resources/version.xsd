@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="ProbModelXML">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip" />
+        </xs:sequence>
+        <xs:attribute name="formatVersion">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="0.2.0"/>
+                    <xs:enumeration value="1.0.0"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+</xs:element>
+</xs:schema>

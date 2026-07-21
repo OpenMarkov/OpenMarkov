@@ -1,0 +1,161 @@
+@startuml fig-op2-roles
+' ============================================================
+' Opcion 2: Jerarquia basada en roles
+' Cada PotentialRole se convierte en una subclase de
+' DiscretePotential, eliminando el enum como type code.
+' ============================================================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam nodesep 40
+skinparam ranksep 40
+skinparam dpi 150
+
+hide empty fields
+
+' ==== CLASE RAIZ ====
+abstract class Potential <<base>> {
+    #variables : List<Variable>
+    --
+    +{abstract} deepCopy(ProbNet) : Potential
+}
+
+note right of Potential
+  Ya no tiene PotentialRole.
+  No declara tableProject(),
+  reorder() ni scalePotential()
+  como abstractos.
+end note
+
+' ==== CAPA INTERMEDIA: DISCRETO ====
+abstract class DiscretePotential <<discrete>> {
+    #values : double[]
+    #dimensions : int[]
+    #offsets : int[]
+    --
+    +getPosition(int[]) : int
+    +getValues() : double[]
+    +{abstract} tableProject(...) : DiscretePotential
+    +{abstract} reorder(...) : DiscretePotential
+}
+
+' ==== SUBCLASES POR ROL ====
+class ProbabilityPotential <<probability>> {
+    --
+    +tableProject(...) : ProbabilityPotential
+    +reorder(...) : ProbabilityPotential
+    +setUniform()
+    +normalize() : ProbabilityPotential
+    +getInducedFindings() : List<Finding>
+}
+
+class UtilityPotential <<utility>> {
+    --
+    +tableProject(...) : UtilityPotential
+    +reorder(...) : UtilityPotential
+    +setUniform()
+    +scale(double)
+}
+
+class PolicyPotential <<policy>> {
+    --
+    +tableProject(...) : PolicyPotential
+    +reorder(...) : PolicyPotential
+    +setUniform()
+}
+
+class LinkRestrictionPotential <<other>> {
+    --
+    +setUniform()
+}
+
+' ==== DECORADORES / SUBCLASES ESPECIALIZADAS ====
+class UncertainProbabilityPotential <<uncertain>> {
+    -uncertainValues : UncertainValue[]
+    --
+    +isUncertain() : boolean
+    +getUncertainValues() : UncertainValue[]
+}
+
+class StrategicUtilityPotential <<strategic>> {
+    -strategyTrees : StrategyTree[]
+    --
+    +hasInterventions() : boolean
+    +getStrategyTrees() : StrategyTree[]
+}
+
+' ==== POTENCIALES NO DISCRETOS ====
+class UniformPotential <<other>> {
+    --
+    +tableProject(...) : ProbabilityPotential
+}
+
+class DeltaPotential <<other>> {
+    -state : State
+    --
+    +tableProject(...) : ProbabilityPotential
+}
+
+abstract class ICIPotential <<other>> {
+    #noisyParameters : double[][]
+    --
+    +tableProject(...) : ProbabilityPotential
+}
+
+' ==== HERENCIA ====
+Potential <|-- DiscretePotential
+DiscretePotential <|-- ProbabilityPotential
+DiscretePotential <|-- UtilityPotential
+DiscretePotential <|-- PolicyPotential
+DiscretePotential <|-- LinkRestrictionPotential
+
+ProbabilityPotential <|-- UncertainProbabilityPotential
+UtilityPotential <|-- StrategicUtilityPotential
+
+Potential <|-- UniformPotential
+Potential <|-- DeltaPotential
+Potential <|-- ICIPotential
+
+' ==== LAYOUT HINTS ====
+ProbabilityPotential -[hidden]right- UtilityPotential
+PolicyPotential -[hidden]right- LinkRestrictionPotential
+
+' ==== COLORES ====
+skinparam class {
+    BackgroundColor<<base>> #FFD580
+    BorderColor<<base>> #CC8800
+    BackgroundColor<<discrete>> #E0C8FF
+    BorderColor<<discrete>> #7744BB
+    BackgroundColor<<probability>> #BDD7FF
+    BorderColor<<probability>> #4477BB
+    BackgroundColor<<utility>> #FFD580
+    BorderColor<<utility>> #CC8800
+    BackgroundColor<<policy>> #C8F0C8
+    BorderColor<<policy>> #44AA44
+    BackgroundColor<<uncertain>> #C8E8FF
+    BorderColor<<uncertain>> #4499CC
+    BackgroundColor<<strategic>> #FFE0B2
+    BorderColor<<strategic>> #CC8844
+    BackgroundColor<<other>> #E8E8E8
+    BorderColor<<other>> #888888
+}
+
+note as NOperations
+  <b>DiscretePotentialOperations</b> recibe
+  tipos precisos en sus firmas:
+
+  multiply(<b>List<ProbabilityPotential></b>)
+  multiplyAndMarginalize(
+      <b>List<ProbabilityPotential></b>,
+      <b>List<UtilityPotential></b>)
+  normalize(<b>ProbabilityPotential</b>)
+
+  Cada rol anterior del enum PotentialRole
+  es ahora un <b>tipo</b> en la jerarquia.
+end note
+
+NOperations .. ProbabilityPotential
+NOperations .. UtilityPotential
+
+@enduml

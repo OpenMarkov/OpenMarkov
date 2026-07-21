@@ -1,0 +1,119 @@
+@startuml before
+' ============================================================
+' Node.java ANTES de la refactorizacion (1.037 lineas)
+' Colores: rojo = responsabilidades que no pertenecen a Node
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 30
+skinparam ranksep 25
+
+hide empty methods
+
+skinparam class {
+    BackgroundColor<<core>> #E8E8FF
+    BorderColor<<core>> #6666AA
+    BackgroundColor<<problem>> #FFDDD8
+    BorderColor<<problem>> #CC4444
+    BackgroundColor<<caller>> #FFF3CD
+    BorderColor<<caller>> #D4A017
+}
+
+class Node <<problem>> {
+    .. Identidad (correcto) ..
+    -variable : Variable
+    -nodeType : NodeType
+    #probNet : ProbNet
+    -hashCode : int
+    .. Metadatos (correcto) ..
+    -purpose : String
+    -relevance : double
+    -comment : String
+    -policyType : PolicyType
+    -isInput : boolean
+    -alwaysObserved : boolean
+    -additionalProperties : Map
+    .. Presentacion (correcto) ..
+    -coordinateX : double
+    -coordinateY : double
+    .. Potenciales CRUD (correcto) ..
+    #potentials : List<Potential>
+    +setPotential(Potential)
+    +addPotential(Potential)
+    +removePotential(Potential)
+    +getPotentials() : List
+    .. Delegacion al grafo (correcto) ..
+    +getParents() : List<Node>
+    +getChildren() : List<Node>
+    +getLinks() : List<Link>
+    == Logica de absorcion (78 lin.) ==
+    **+absorbNodeConsistently(Variable)**
+    == Conversion de tipos (140 lin.) ==
+    **+setVariableTypeConsistently(VariableType)**
+    **-setPotentialsNodeAndChildren()**
+    **+resetLink()**
+    **+setUniformPotential()**
+    **+setUniformPotential2Node(Node)**
+    == Funciones utilidad (90 lin.) ==
+    **+getUtilityFunction() : TablePotential**
+    **+getApproximateMaximumUtilityFunction()**
+    **+getApproximateMinimumUtilityFunction()**
+    **-getApproximateMaxOrMinUtilityFunction()**
+    == Potencial con restricciones ==
+    **+setPotentialConsistently(Potential)**
+    == Codigo muerto ==
+    **+samplePotentials()**
+}
+
+together {
+    class AbsorbNodeEdit <<caller>> {
+        +doEdit()
+        llama absorbNodeConsistently()
+    }
+
+    class VariableTypeEdit <<caller>> {
+        +doEdit()
+        llama setVariableTypeConsistently()
+        llama resetLink()
+    }
+}
+
+together {
+    class SetPotentialEdit <<caller>> {
+        +doEdit()
+        llama setPotentialConsistently()
+    }
+
+    class CEPotentialOperation <<caller>> {
+        +removeSuperValueNodes()
+        llama getUtilityFunction()
+    }
+
+    class EvidenceManager <<caller>> {
+        llama getApproximateMax/Min
+        UtilityFunction()
+    }
+}
+
+AbsorbNodeEdit -down-> Node
+VariableTypeEdit -down-> Node
+SetPotentialEdit -down-> Node
+CEPotentialOperation -down-> Node
+EvidenceManager -down-> Node
+
+note right of Node
+  <b>Problema</b>: Node mezcla 6+
+  responsabilidades en 1.037 lineas.
+
+  Los metodos en <b>negrita</b> contienen
+  logica compleja que no pertenece
+  a la identidad ni al CRUD del nodo.
+
+  <b>308 lineas</b> de logica de
+  transformacion mezcladas con
+  la gestion basica del nodo.
+end note
+
+@enduml

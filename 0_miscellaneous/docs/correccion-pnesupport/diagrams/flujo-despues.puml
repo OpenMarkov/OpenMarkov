@@ -1,0 +1,50 @@
+@startuml flujo-despues
+' ============================================================
+' Flujo de undo/redo DESPUES de la correccion
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam sequenceArrowThickness 2
+skinparam sequenceParticipantPadding 20
+
+title Flujo de redo() con compound edit — DESPUES (corregido)
+
+participant "GUI\n(Ctrl+Y)" as GUI
+participant "PNESupport" as PNE
+participant "EditsHistory" as EH
+participant "ListPNEdit\n[A, B]" as LP #E8FFE8
+participant "PNEditListener" as L
+
+note over LP #E8FFE8
+  Sub-edits en orden
+  de ejecucion original:
+  [A, B]
+end note
+
+GUI -> PNE : redo()
+PNE -> EH : redo()
+EH -> LP : redo()
+
+note right of LP #E8FFE8
+  Ejecuta en orden correcto:
+  A.redo() primero,
+  B.redo() despues
+end note
+
+LP -> LP : A.redo()
+LP -> LP : B.redo()
+LP --> EH : return ListPNEdit
+EH --> PNE : return ListPNEdit
+
+PNE -> L : afterRedoingEdit(<b>ListPNEdit</b>)
+
+note over L #E8FFE8
+  El listener recibe
+  <b>1 sola notificacion</b>
+  con el compound edit.
+  Puede inspeccionar
+  getEdits() si necesita
+  los sub-edits.
+end note
+
+@enduml

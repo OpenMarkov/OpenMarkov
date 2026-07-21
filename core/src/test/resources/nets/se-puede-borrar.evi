@@ -1,0 +1,15 @@
+//	   Evidence case
+//	   Elvira format
+
+evidence NoName {
+
+//	   Evidence adittionalProperties
+
+title = "Untitled";
+version = 1.0;
+
+H = 0,     // presente
+F = 0,     // severo
+I = 1,     // ausente
+
+}

@@ -1,0 +1,7 @@
+spring:
+  mvc:
+    converters:
+      # Preferred use of Gson
+      preferred-json: gson
+server:
+  port: 80

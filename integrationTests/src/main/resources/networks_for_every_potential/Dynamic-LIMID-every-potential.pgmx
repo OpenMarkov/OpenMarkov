@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="1.0.0">
+  <ProbNet type="DynamicLIMID">
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <TimeUnit unit="YEAR" Value="1.0" />
+    <Variables>
+      <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="147" y="493" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="149" y="547" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="AugmentedProbTable [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="492" y="33" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="ShouldBe_Binomial [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="485" y="87" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="ShouldBe_ConditionalGaussian [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="532" y="135" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="CycleLengthShift_Parent1 [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="885" y="197" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="CycleLengthShift [1]" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="478" y="196" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Delta [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="439" y="253" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="ShouldBe_DiscretizedCauchy [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="527" y="307" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="ShouldBe_Exact [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="480" y="363" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="ExponentialHazard [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="486" y="423" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Exponential [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="463" y="474" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="Function [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="451" y="527" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="LinearCombination [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="488" y="580" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="Product [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="448" y="635" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="SameAsPrevious [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="795" y="687" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="SameAsPrevious [1]" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="480" y="689" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Sum [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="435" y="744" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="Table [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="437" y="798" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Uniform [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="444" y="851" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="UnivariateDistribution [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="493" y="905" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="WeibullHazard [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="466" y="959" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Max_Canonical [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="467" y="1010" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Min_Canonical [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="461" y="1062" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Tuning_Canonical_Parent1 [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="811" y="1096" />
+        <States>
+          <State name="absent" />
+          <State name="uncertain" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Tuning_Canonical_Parent2 [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="812" y="1138" />
+        <States>
+          <State name="absent" />
+          <State name="uncertain" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Tuning_Canonical [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="473" y="1123" />
+        <States>
+          <State name="absent" />
+          <State name="uncertain" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="TreeAdd [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="436" y="1202" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+        <Variable name="AugmentedProbTable [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+        <Variable name="ShouldBe_Binomial [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+        <Variable name="ShouldBe_ConditionalGaussian [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+        <Variable name="Max_Canonical [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+        <Variable name="Min_Canonical [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+        <Variable name="TreeAdd [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        <Variable name="AugmentedProbTable [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        <Variable name="ShouldBe_Binomial [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        <Variable name="ShouldBe_ConditionalGaussian [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        <Variable name="Max_Canonical [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        <Variable name="Min_Canonical [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        <Variable name="TreeAdd [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CycleLengthShift_Parent1 [0]" timeSlice="0" />
+        <Variable name="CycleLengthShift [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Tuning_Canonical_Parent1 [0]" timeSlice="0" />
+        <Variable name="Tuning_Canonical [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Tuning_Canonical_Parent2 [0]" timeSlice="0" />
+        <Variable name="Tuning_Canonical [0]" timeSlice="0" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table">
+        <Variables>
+          <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="Table">
+        <Variables>
+          <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="AugmentedProbTable">
+        <Variables>
+          <Variable name="AugmentedProbTable [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        </Variables>
+        <Functions>"1" "Complement" "1" "Complement" "1" "Complement" "1" "Complement"</Functions>
+      </Potential>
+      <Potential type="Uniform">
+        <Variables>
+          <Variable name="ShouldBe_Binomial [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Table">
+        <Variables>
+          <Variable name="ShouldBe_ConditionalGaussian [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</Values>
+      </Potential>
+      <Potential type="Table">
+        <Variables>
+          <Variable name="CycleLengthShift_Parent1 [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="CycleLengthShift">
+        <Variables>
+          <Variable name="CycleLengthShift [1]" timeSlice="1" />
+          <Variable name="CycleLengthShift_Parent1 [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Delta">
+        <Variables>
+          <Variable name="Delta [0]" timeSlice="0" />
+        </Variables>
+        <NumericValue>0.0</NumericValue>
+      </Potential>
+      <Potential type="Uniform">
+        <Variables>
+          <Variable name="ShouldBe_DiscretizedCauchy [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform">
+        <Variables>
+          <Variable name="ShouldBe_Exact [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Hazard (Weibull)">
+        <Variables>
+          <Variable name="ExponentialHazard [0]" timeSlice="0" />
+        </Variables>
+        <Log>false</Log>
+        <Coefficients>0.0</Coefficients>
+        <Covariates>
+          <Covariate>Constant</Covariate>
+        </Covariates>
+      </Potential>
+      <Potential type="Exponential">
+        <Variables>
+          <Variable name="Exponential [0]" timeSlice="0" />
+        </Variables>
+        <Coefficients>0.0</Coefficients>
+        <Covariates>
+          <Covariate>Constant</Covariate>
+        </Covariates>
+      </Potential>
+      <Potential type="Function">
+        <Variables>
+          <Variable name="Function [0]" timeSlice="0" />
+        </Variables>
+        <Function>0</Function>
+      </Potential>
+      <Potential type="Linear combination">
+        <Variables>
+          <Variable name="LinearCombination [0]" timeSlice="0" />
+        </Variables>
+        <Coefficients>0.0</Coefficients>
+        <Covariates>
+          <Covariate>Constant</Covariate>
+        </Covariates>
+      </Potential>
+      <Potential type="Product">
+        <Variables>
+          <Variable name="Product [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Table">
+        <Variables>
+          <Variable name="SameAsPrevious [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="Same as previous">
+        <Variables>
+          <Variable name="SameAsPrevious [1]" timeSlice="1" />
+        </Variables>
+      </Potential>
+      <Potential type="Sum">
+        <Variables>
+          <Variable name="Sum [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Table">
+        <Variables>
+          <Variable name="Table [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="Uniform">
+        <Variables>
+          <Variable name="Uniform [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Normal" parametrization="mu, sigma">
+        <Variables>
+          <Variable name="UnivariateDistribution [0]" timeSlice="0" />
+        </Variables>
+        <Functions>"1" "1"</Functions>
+        <Parameters>0.5 0.5</Parameters>
+      </Potential>
+      <Potential type="Hazard (Weibull)">
+        <Variables>
+          <Variable name="WeibullHazard [0]" timeSlice="0" />
+        </Variables>
+        <Log>false</Log>
+        <Coefficients>0.0 0.0</Coefficients>
+        <Covariates>
+          <Covariate>Gamma</Covariate>
+          <Covariate>Constant</Covariate>
+        </Covariates>
+      </Potential>
+      <Potential type="ICIModel">
+        <Variables>
+          <Variable name="Max_Canonical [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        </Variables>
+        <Model>OR / MAX</Model>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Max_Canonical [0]" />
+              <Variable name="Chance_FiniteStates_Parent1 [0]" />
+            </Variables>
+            <Values>1.0 0.0 0.0 1.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Max_Canonical [0]" />
+              <Variable name="Chance_FiniteStates_Parent2 [0]" />
+            </Variables>
+            <Values>1.0 0.0 0.0 1.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Max_Canonical [0]" />
+            </Variables>
+            <Values>1.0 0.0</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="ICIModel">
+        <Variables>
+          <Variable name="Min_Canonical [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        </Variables>
+        <Model>AND / MIN</Model>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Min_Canonical [0]" />
+              <Variable name="Chance_FiniteStates_Parent1 [0]" />
+            </Variables>
+            <Values>1.0 0.0 0.0 1.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Min_Canonical [0]" />
+              <Variable name="Chance_FiniteStates_Parent2 [0]" />
+            </Variables>
+            <Values>1.0 0.0 0.0 1.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Min_Canonical [0]" />
+            </Variables>
+            <Values>0.0 1.0</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="Uniform">
+        <Variables>
+          <Variable name="Tuning_Canonical_Parent1 [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform">
+        <Variables>
+          <Variable name="Tuning_Canonical_Parent2 [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="ICIModel">
+        <Variables>
+          <Variable name="Tuning_Canonical [0]" timeSlice="0" />
+          <Variable name="Tuning_Canonical_Parent1 [0]" timeSlice="0" />
+          <Variable name="Tuning_Canonical_Parent2 [0]" timeSlice="0" />
+        </Variables>
+        <Model>Tuning</Model>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Tuning_Canonical [0]" />
+              <Variable name="Tuning_Canonical_Parent1 [0]" />
+            </Variables>
+            <Values>1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Tuning_Canonical [0]" />
+              <Variable name="Tuning_Canonical_Parent2 [0]" />
+            </Variables>
+            <Values>1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Tuning_Canonical [0]" />
+            </Variables>
+            <Values>0.0 1.0 0.0</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+      <Potential type="Tree/ADD">
+        <Variables>
+          <Variable name="TreeAdd [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+          <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="present" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="TreeAdd [0]" timeSlice="0" />
+                <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
+                <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="present" />
+                  </States>
+                  <Potential type="Uniform">
+                    <Variables>
+                      <Variable name="TreeAdd [0]" timeSlice="0" />
+                    </Variables>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="absent" />
+                  </States>
+                  <Potential type="Uniform">
+                    <Variables>
+                      <Variable name="TreeAdd [0]" timeSlice="0" />
+                    </Variables>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="absent" />
+            </States>
+            <Potential type="Uniform">
+              <Variables>
+                <Variable name="TreeAdd [0]" timeSlice="0" />
+              </Variables>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+    <TemporalOptions>
+      <Slices>0</Slices>
+      <Transition>BEGINNING</Transition>
+      <DiscountRates>
+        <DiscountRate Criterion="---" value="0.0" unit="YEAR" />
+      </DiscountRates>
+    </TemporalOptions>
+  </InferenceOptions>
+</ProbModelXML>

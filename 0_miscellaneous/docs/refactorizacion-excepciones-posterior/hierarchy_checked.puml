@@ -1,0 +1,75 @@
+@startuml
+skinparam classBackgroundColor white
+skinparam classBorderColor #777
+skinparam arrowColor #444
+skinparam classFontSize 11
+skinparam noteBackgroundColor #FFFDE7
+skinparam noteBorderColor #BBAA00
+hide empty members
+left to right direction
+
+class Exception <<JDK>> #FFD6D6
+abstract class OpenMarkovException #D4EDDA
+abstract class UserInputException #A8D5A2
+
+abstract class ParserException
+abstract class WriterException <<sealed>>
+abstract class IncompatibleEvidenceException
+abstract class ParsingSourceException <<sealed>>
+class EmptyDatabaseException
+class NoReaderForFileException
+class NoReaderForExtension
+class NoWriterForExtensionException
+
+abstract class DoEditException
+abstract class ConstraintViolatedException
+
+abstract class CostEffectivenessException <<sealed>>
+abstract class PotentialOperationException <<sealed>>
+class NetworkHasNoNodesException
+class ThereIsNoPotentialsInNodeException
+class IntervalsAreNotEvenException
+class IntervalsAreNotMultipleOf3Exception
+class NotAllNodesHavePoliciesException
+class EmptyCaseDatabaseException
+class "otras (GUI, learning...)" as OTRAS
+
+Exception           <|-- OpenMarkovException
+
+OpenMarkovException <|-- UserInputException
+OpenMarkovException <|-- DoEditException
+OpenMarkovException <|-- CostEffectivenessException
+OpenMarkovException <|-- PotentialOperationException
+OpenMarkovException <|-- NetworkHasNoNodesException
+OpenMarkovException <|-- ThereIsNoPotentialsInNodeException
+OpenMarkovException <|-- IntervalsAreNotEvenException
+OpenMarkovException <|-- IntervalsAreNotMultipleOf3Exception
+OpenMarkovException <|-- NotAllNodesHavePoliciesException
+OpenMarkovException <|-- EmptyCaseDatabaseException
+OpenMarkovException <|-- OTRAS
+
+UserInputException  <|-- ParserException
+UserInputException  <|-- WriterException
+UserInputException  <|-- IncompatibleEvidenceException
+UserInputException  <|-- EmptyDatabaseException
+UserInputException  <|-- ParsingSourceException
+UserInputException  <|-- NoReaderForFileException
+UserInputException  <|-- NoReaderForExtension
+UserInputException  <|-- NoWriterForExtensionException
+
+DoEditException     <|-- ConstraintViolatedException
+
+note bottom of ParserException               : 16 inner classes
+note bottom of WriterException               : 5 inner classes
+note bottom of IncompatibleEvidenceException : 3 inner classes
+note bottom of ParsingSourceException        : 1 inner class
+note bottom of ConstraintViolatedException   : 42 inner classes
+note bottom of CostEffectivenessException    : 4 inner classes
+note right of OTRAS
+  27 clases directas
+  (19 GUI · 4 learning
+  · 2 io · 1 sensitivity
+  · 1 stochastic)
+end note
+
+@enduml

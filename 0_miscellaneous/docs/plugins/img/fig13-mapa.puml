@@ -1,0 +1,80 @@
+@startuml fig13-mapa
+skinparam backgroundColor white
+skinparam shadowing false
+
+top to bottom direction
+
+' ==============================
+' Fila superior: Motor + Managers + Dominio
+' ==============================
+package "Motor (org.openmarkov.plugin)" #D0F0FF {
+    class PluginLoader  #AAE0FF
+    class PluginSearch  #AAE0FF
+    class ExtensionTree #AAE0FF
+}
+
+package "Managers" #D0FFD8 {
+    class PotentialUtils   #90EE90
+    class ConstraintManager #90EE90
+    class NetworkTypeUtils  #90EE90
+    class FormatManager     #90EE90
+}
+
+package "Código de dominio" #FFE0C0 {
+    class ProbNet              #FFCF8B
+    class PNEdit               #FFCF8B
+    class InferenceAlgorithm   #FFCF8B
+}
+
+' Forzar orden horizontal Motor | Managers | Dominio
+PluginSearch   -[hidden]r-> PotentialUtils
+PotentialUtils -[hidden]r-> ProbNet
+
+' ==============================
+' Fila inferior: Classpath (horizontal)
+' ==============================
+package "Classpath (JARs + directorios)" #F5F5F5 {
+    class TablePotential       #FFE066
+    class UniformPotential     #FFE066
+    class ICIPotential         #FFE066
+    class NoCycle              #99DD99
+    class OnlyChanceNodes      #99DD99
+    class BayesianNetworkType  #99BBFF
+    class InfluenceDiagramType #99BBFF
+    class PGMXReader           #FF9999
+    class ElviraReader         #FF9999
+}
+
+' Forzar disposición horizontal dentro del Classpath
+TablePotential      -[hidden]r-> UniformPotential
+UniformPotential    -[hidden]r-> ICIPotential
+ICIPotential        -[hidden]r-> NoCycle
+NoCycle             -[hidden]r-> OnlyChanceNodes
+OnlyChanceNodes     -[hidden]r-> BayesianNetworkType
+BayesianNetworkType -[hidden]r-> InfluenceDiagramType
+InfluenceDiagramType -[hidden]r-> PGMXReader
+PGMXReader          -[hidden]r-> ElviraReader
+
+' Forzar Classpath debajo de los otros tres paquetes
+PluginLoader -[hidden]d-> TablePotential
+
+' ==============================
+' Relaciones entre paquetes
+' ==============================
+PluginSearch  --> PluginLoader  : usa
+PluginSearch  --> ExtensionTree : construye
+PluginLoader  ..> TablePotential      : carga
+PluginLoader  ..> NoCycle             : carga
+PluginLoader  ..> BayesianNetworkType : carga
+PluginLoader  ..> PGMXReader          : carga
+
+PotentialUtils    --> PluginSearch : descubre potenciales
+ConstraintManager --> PluginSearch : descubre restricciones
+NetworkTypeUtils  --> PluginSearch : descubre tipos de red
+FormatManager     --> PluginSearch : descubre formatos
+
+ProbNet --> ConstraintManager : buildConstraintList()
+ProbNet --> NetworkTypeUtils  : getNetworkClassByName()
+PNEdit  --> PotentialUtils    : getClassByName()
+
+@enduml

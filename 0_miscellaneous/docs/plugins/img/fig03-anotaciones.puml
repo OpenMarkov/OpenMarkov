@@ -1,0 +1,66 @@
+@startuml fig03-anotaciones
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classBackgroundColor #FFE066
+skinparam classBorderColor #CC9900
+skinparam stereotypeCBackgroundColor #FFD700
+
+annotation "@PotentialType" <<annotation>> #FFE066 {
+    + names() : String[]
+}
+
+annotation "@Constraint" <<annotation>> #FFE066 {
+    + name() : String
+    + defaultBehavior() : ConstraintBehavior
+}
+
+annotation "@NetworkTypeInfo" <<annotation>> #FFE066 {
+    + name() : String
+    + visualName() : String
+    + alternativeNames() : String[]
+}
+
+annotation "@FormatType" <<annotation>> #FFE066 {
+    + name() : String
+    + version() : String
+    + extension() : String
+    + description() : String
+}
+
+annotation "@ImplementationRequirements" <<annotation>> #E8E8FF {
+    + hasToExtendOneOfTheseClasses() : Class[]
+    + requiresOneOfTheseConstructors() : RequiredConstructor[]
+    + requiresMethods() : RequiredMethod[]
+}
+
+annotation "@RequiredConstructor" <<annotation>> #E8E8FF {
+    + value() : Class[]
+}
+
+annotation "@RequiredMethod" <<annotation>> #E8E8FF {
+    + methodName() : String
+    + parameters() : Class[]
+    + returnType() : Class
+    + methodKind() : MethodKind
+}
+
+enum ConstraintBehavior #FFFACD {
+    YES
+    NO
+    OPTIONAL
+}
+
+enum MethodKind #F0F0FF {
+    Instance
+    Static
+    Abstract
+}
+
+"@Constraint" --> ConstraintBehavior : usa
+"@ImplementationRequirements" --> "@RequiredConstructor" : contiene
+"@ImplementationRequirements" --> "@RequiredMethod" : contiene
+"@RequiredMethod" --> MethodKind : usa
+
+note top of "@PotentialType" : Descubrimiento\nde plugins
+note top of "@ImplementationRequirements" : Contrato de\nimplementación
+@enduml

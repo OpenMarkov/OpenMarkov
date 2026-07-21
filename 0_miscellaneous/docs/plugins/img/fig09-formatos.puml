@@ -1,0 +1,61 @@
+@startuml fig09-formatos
+skinparam backgroundColor white
+skinparam shadowing false
+
+annotation "@FormatType" <<annotation>> #FFE066 {
+    + name() : String
+    + version() : String
+    + extension() : String
+    + description() : String
+}
+
+class FormatManager #90EE90 {
+    - {static} INSTANCE : FormatManager
+    - readerInstances : List<ProbNetReader>
+    - writerInstances : List<ProbNetWriter>
+    --
+    + {static} getInstance() : FormatManager
+    + getProbNetReader(url) : ProbNetReader
+    + getProbNetReaderInstanceFor(ext, ver) : ProbNetReader
+    + {static} readersInstances() : Stream<ProbNetReader>
+    + {static} writersInstances() : Stream<ProbNetWriter>
+    + {static} info(reader) : FormatType
+}
+
+interface ProbNetReader #FFCF8B {
+    + loadProbNetInfo(name, stream) : ProbNetInfo
+    + loadProbNet(name, stream) : ProbNet
+}
+
+interface ProbNetWriter #FFCF8B {
+    + writeProbNet(name, net)
+    + writeProbNet(name, net, evidence)
+}
+
+class "PGMXReader\n(pgmx, 0.2)" as PGMXReader #FFD8B8 {
+    + loadProbNet(name, stream) : ProbNet
+}
+class "PGMXWriter\n(pgmx, 0.2)" as PGMXWriter #FFD8B8 {
+    + writeProbNet(name, net)
+}
+class "ElviraReader\n(elv, 1.0)" as ElviraReader #FFD8B8 {
+    + loadProbNet(name, stream) : ProbNet
+}
+class "XDSLReader\n(xdsl, 1.0)" as XDSLReader #FFD8B8 {
+    + loadProbNet(name, stream) : ProbNet
+}
+
+"@FormatType" ..> PGMXReader : extension="pgmx" version="0.2"
+"@FormatType" ..> PGMXWriter : extension="pgmx" version="0.2"
+"@FormatType" ..> ElviraReader : extension="elv" version="1.0"
+"@FormatType" ..> XDSLReader : extension="xdsl" version="1.0"
+
+ProbNetReader <|.. PGMXReader
+ProbNetReader <|.. ElviraReader
+ProbNetReader <|.. XDSLReader
+ProbNetWriter <|.. PGMXWriter
+
+FormatManager ..> "@FormatType" : busca con PluginSearch
+FormatManager --> ProbNetReader : gestiona
+FormatManager --> ProbNetWriter : gestiona
+@enduml

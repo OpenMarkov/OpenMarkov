@@ -1,0 +1,96 @@
+@startuml
+
+hide circle
+
+interface FilterIF {
++checkPlugin(aClass:Class):boolean
+}
+note top of FilterIF : This interface represents a contract for plugin filters.\nA plugin filter is used to characterize a plugin by its internal structure\nin terms of a set of constrains related to extended classes, implemented\ninterfaces and present annotations. Once defined the plugin can be used\nto validate whether a class fulfills that constrains.
+
+interface PluginLoaderIF {
++loadPlugin(name:String):Class<?>
++loadAllPlugins():List<Class<?>>
++loadAllPlugins(filter:FilterIf):List<Class<?>>
+}
+note top of PluginLoaderIF : This interface is a contract for plugin loaders\nA plugin loader is responsible for find and load plugins.
+
+interface PluginManagerIF {
++addPlugin(plugin:Class<?>):void
++removePlugin(plugin:Class<?>):void
++clearPlugins():void
++containsPlugin(plugin:Class<?>):boolean
+}
+note top of PluginManagerIF : This interface is a contract for plugin managers.\nA plugin manager manages a set of plugins.
+
+class Filter [[java:org.openmarkov.plugin.Filter]] {
+	-{static} CONSTRAINT_CLASS: String
+	-{static} CONSTRAINT_INTERFACE: String
+	-{static} CONSTRAINT_ANNOTATION: String
+	-{static} COMBINATION_AND: String
+	-{static} COMBINATION_OR: String
+	-cls: Class<?>
+	-type: String
+	-children: List<FilterIF>
+	-combination: String
+	-Filter()
+	-Filter(combination: String, parent: Filter)
+	-Filter(aClass: Class<?>, type: String)
+	+{static} filter(): Filter
+	+toExtend(aClass: Class<?>): Filter
+	+toImplement(aClass: Class<?>): Filter
+	+toBeAnnotatedBy(aClass: Class<?>): Filter
+	+hashCode(): int
+	+equals(other: Object): boolean
+	+toString(): String
+	-isSimpleFilter(): boolean
+}
+class Filter {
+}
+Filter --> "0..1" Filter : parent
+class Filter {
+}
+Filter --> "0..1" Filter : and()
+class Filter {
+}
+Filter --> "0..1" Filter : or()
+class Filter {
+}
+Filter --> "0..1" Filter : end()
+interface FilterIF {
+}
+FilterIF <|.. Filter
+
+
+class PluginLoader [[java:org.openmarkov.plugin.PluginLoader]] {
+	-classLoader: ClassLoader
+	+PluginLoader()
+	-getResources(classpath: String): List<String>
+	-getResourcesFromJar(file: File): List<String>
+	-getResourcesFromDirectory(directory: File, classpath: File): List<String>
+}
+interface PluginLoaderIF {
+}
+PluginLoaderIF <|.. PluginLoader
+
+class PluginManager [[java:org.openmarkov.plugin.PluginManager]] {
+	-plugins: List<Class<?>>
+	+PluginManager()
+	+hashCode(): int
+	+equals(other: Object): boolean
+	+toString(): String
+}
+interface PluginManagerIF {
+}
+PluginManagerIF <|.. PluginManager
+
+class PluginException [[java:org.openmarkov.plugin.service.PluginException]] {
+	-{static} serialVersionUID: long
+	+PluginException()
+	+PluginException(message: String, cause: Throwable)
+	+PluginException(message: String)
+	+PluginException(cause: Throwable)
+}
+class Exception {
+}
+Exception <|-- PluginException
+@enduml

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <Edit>
+        <Mode>
+            <Link>
+                <ToolTip value="Añadir enlaces"/>
+            </Link>
+            <Selection>
+                <ToolTip value="Seleción de objetos"/>
+            </Selection>
+            <Event>
+                <ToolTip value="Añadir nodos de eventos"/>
+            </Event>
+            <Decision>
+                <ToolTip value="Añadir nodos de decisión"/>
+            </Decision>
+            <Utility>
+                <ToolTip value="Añadir nodos de utilidad"/>
+            </Utility>
+            <Chance>
+                <ToolTip value="Añadir nodos de probabilidad"/>
+            </Chance>
+        </Mode>
+    </Edit>
+    <ClearOutAllEvidenceCases>
+        <ToolTip value="Vaciar la lista de casos de evidencia"/>
+    </ClearOutAllEvidenceCases>
+    <GoToFirstEvidenceCase>
+        <ToolTip value="Ir al primer caso de evidencia"/>
+    </GoToFirstEvidenceCase>
+    <ClipboardPaste>
+        <ToolTip value="Pega el contenido del portapapeles"/>
+    </ClipboardPaste>
+    <ChangeWorkingMode>
+        <ToolTip value="modo Inferencia/Edición"/>
+    </ChangeWorkingMode>
+    <MCSimulateNetwork>
+        <ToolTip value="Simulación DES"/>
+    </MCSimulateNetwork>
+    <Undo>
+        <ToolTip value="Deshace la última operación"/>
+    </Undo>
+    <CreateNewEvidenceCase>
+        <ToolTip value="Crear un nuevo caso de evidencia"/>
+    </CreateNewEvidenceCase>
+    <PropagateEvidence>
+        <ToolTip value="Propagar evidencia"/>
+    </PropagateEvidence>
+    <OpenNetwork>
+        <ToolTip value="Abre una red existente"/>
+    </OpenNetwork>
+    <GoToNextEvidenceCase>
+        <ToolTip value="Ir al siguiente caso de evidencia"/>
+    </GoToNextEvidenceCase>
+    <ClipboardCopy>
+        <ToolTip value="Copia los nodos seleccionados al portapapeles"/>
+    </ClipboardCopy>
+    <GoToPreviousEvidenceCase>
+        <ToolTip value="Ir al anterior caso de evidencia"/>
+    </GoToPreviousEvidenceCase>
+    <BUNDLEFILE>
+        <Text value="Español"/>
+    </BUNDLEFILE>
+    <ClipboardCut>
+        <ToolTip value="Corta los nodos seleccionados y los guarda en el portapapeles"/>
+    </ClipboardCut>
+    <GoToLastEvidenceCase>
+        <ToolTip value="Ir al último caso de evidencia"/>
+    </GoToLastEvidenceCase>
+    <NotCompiledNet value="¡No Compilada!"/>
+    <ObjectRemoval>
+        <ToolTip value="Elimina los objetos seleccionados"/>
+    </ObjectRemoval>
+    <NewNetwork>
+        <ToolTip value="Crea una nueva red"/>
+    </NewNetwork>
+    <CloseNetwork>
+        <ToolTip value="Cierra la red actual"/>
+    </CloseNetwork>
+    <SaveNetwork>
+        <ToolTip value="Guarda la red actual"/>
+    </SaveNetwork>
+    <CaseNumber value="Caso Número"/>
+    <Redo>
+        <ToolTip value="Rehace la última operación deshecha"/>
+    </Redo>
+    <ExpansionThreshold value="Umbral de expansión"/>
+    <ZoomIn>
+        <ToolTip value="Aumenta el zoomManager de la red actual en un 20%"/>
+    </ZoomIn>
+    <ZoomOut>
+        <ToolTip value="Reduce el zoomManager de la red actual en un 20%"/>
+    </ZoomOut>
+    <DecisionTree>
+        <ToolTip value="Arbol de decisiones"/>
+    </DecisionTree>
+    <ShowOptimalStrategy>
+        <ToolTip value="Mostrar estrategia óptima"/>
+    </ShowOptimalStrategy>
+    <SensitivityAnalysis>
+        <ToolTip value="Análisis de sensibilidad"/>
+    </SensitivityAnalysis>
+</properties>

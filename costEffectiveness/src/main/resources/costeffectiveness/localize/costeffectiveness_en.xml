@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <CostEffectivenessDeterministic value="Deterministic cost-effectiveness analysis">
+        <Error value="Error while trying to perform cost-effectiveness analysis"/>
+    </CostEffectivenessDeterministic>
+    <CostEffectivenessResults>
+        <Title value="Cost-Effectiveness Analisys Results"/>
+        <Cost value="Cost"/>
+        <Effectiveness value="Effectiveness"/>
+        <Intervention value="Intervention"/>
+        <ICER value="ICER"/>
+        <Scope value="Scope selector"/>
+        <Intervals value="Intervals">
+            <Title value="Cost-effectiveness intervals"/>
+            <InterventionTooltip value="Click to show intervention"/>
+        </Intervals>
+        <Plane value="Cost-Effectiveness Plane">
+            <Tab value="CE Plane"/>
+        </Plane>
+        <Analysis>
+            <Tab value="Analysis"/>
+        </Analysis>
+        <FrontierInterventions>
+            <Tab value="Frontier interventions"/>
+        </FrontierInterventions>
+        <AcceptabilityCurve value="Acceptability Curve">
+            <Tab value="CEAC"/>
+            <Vertical value="Probability of being cost-effective"/>
+            <Horizontal value="Willingness to pay"/>
+        </AcceptabilityCurve>
+        <EVPI value="Expected Value of Information">
+            <Tab value="EVPI"/>
+            <Vertical value="EVPI"/>
+            <Horizontal value="Willingness to pay"/>
+            <MaxRatio value="Max ratio"/>
+            <Population value="Population per annum"/>
+            <Lifetime value="Technology lifetime"/>
+            <Discount value="Discount rate"/>
+        </EVPI>
+        <Controls>
+            <Display value="Display:"/>
+            <Absolute value="Absolute"/>
+            <Relative value="Relative to:"/>
+            <ShowHide value="Show/hide interventions"/>
+        </Controls>
+    </CostEffectivenessResults>
+</properties>

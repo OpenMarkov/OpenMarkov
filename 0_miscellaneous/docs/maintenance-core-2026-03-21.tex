@@ -1,0 +1,168 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish, es-nodecimaldot]{babel}
+\addto\captionsspanish{\renewcommand{\tablename}{Tabla}}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
+\usepackage{parskip}
+
+\title{Informe de mantenimiento — \texttt{org.openmarkov.core}}
+\author{Manuel Arias Calleja}
+\date{Semana del 16 al 21 de marzo de 2026}
+
+\begin{document}
+
+\maketitle
+
+\section*{Resumen ejecutivo}
+
+Durante esta semana se llevó a cabo una campaña sistemática de mantenimiento y modernización del
+módulo \texttt{core}. El trabajo se agrupó en cuatro áreas: modernización de colecciones,
+migración del sistema de \emph{logging}, limpieza de código estático y ampliación de la suite de
+tests.
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Área} & \textbf{Commits} & \textbf{Ficheros afectados} \\
+\midrule
+Colecciones modernas & 2 & 11 \\
+\emph{Logging} con log4j2 & 2 & 6 \\
+Limpieza de código & 2 & 21 \\
+Nuevos tests & 1 & 4 nuevas clases \\
+Otros & 1 & 1 \\
+\bottomrule
+\end{tabular}
+\caption{Resumen de actividad por área.}
+\end{table}
+
+% ---------------------------------------------------------------
+\section{Modernización de colecciones}
+
+\subsection{\texttt{Hashtable} → \texttt{HashMap} / \texttt{Map}}
+
+\emph{20 mar, \texttt{8a44d8c0}.}
+Se sustituyeron todos los usos de la clase obsoleta \texttt{java.util.Hashtable} por
+\texttt{HashMap} o por la interfaz \texttt{Map} en cinco clases: \texttt{Strategy},
+\texttt{StrategyUtilities}, \texttt{SystematicSampling}, \texttt{StrategyTree} y
+\texttt{DiscretePotentialOperations}. \texttt{Hashtable} es una clase legada, sincronizada de
+forma incondicional y sin soporte para \texttt{null} como clave; \texttt{HashMap} es su sustituto
+moderno para contextos de hilo único, que es el caso de todos estos usos.
+
+\subsection{\texttt{Stack} → \texttt{ArrayDeque} / \texttt{Deque}}
+
+\emph{20 mar, \texttt{f9a4c833}.}
+Se sustituyeron todos los usos de \texttt{java.util.Stack} por \texttt{ArrayDeque} en seis clases:
+\texttt{BasicOperations}, \texttt{ProbNetOperations}, \texttt{Graph}, \texttt{UniqueStack},
+\texttt{TreeADDPotential} y \texttt{Util}. \texttt{Stack} extiende \texttt{Vector} (también legado
+y sincronizado) e impone una semántica de acceso aleatorio innecesaria para las pilas usadas aquí.
+
+El cambio más delicado fue en \texttt{ProbNetOperations.getSequenceOfDecisions()}, cuyo tipo de
+retorno pasó de \texttt{Stack<Variable>} a \texttt{Deque<Variable>}. Para preservar el orden de
+iteración compatible con el comportamiento previo se usó \texttt{addLast()} en lugar de
+\texttt{push()} (que en \texttt{ArrayDeque} añade por el frente). Se actualizó
+\texttt{DANOperations} (módulo \texttt{inference}) para usar \texttt{peekLast()} en lugar del
+método \texttt{Stack}-específico \texttt{lastElement()}.
+
+% ---------------------------------------------------------------
+\section{Migración del sistema de \emph{logging}}
+
+\emph{21 mar, \texttt{ec670741} + \texttt{4d1f59c3}.}
+Se eliminaron todos los usos de \texttt{System.out.println} que quedaban en el módulo y se
+reemplazaron por llamadas al \emph{logger} log4j2 con el nivel semántico correcto en seis ficheros:
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Fichero} & \textbf{Situación anterior} & \textbf{Nivel nuevo} \\
+\midrule
+\texttt{BasicOperations}      & Advertencia: red con >1 nodo de decisión   & \texttt{WARN}  \\
+\texttt{TemporalNetOperations}& Copia de enlaces de decisión               & \texttt{DEBUG} \\
+\texttt{ExtensionTree}        & Impresión del árbol de extensión           & \texttt{INFO}  \\
+\texttt{ProbNet}              & Mensajes de diagnóstico de red             & \texttt{DEBUG} \\
+\texttt{Variable}             & Traza de estados de variable               & \texttt{DEBUG} \\
+\bottomrule
+\end{tabular}
+\caption{Sustituciones de \texttt{System.out.println} por log4j2.}
+\end{table}
+
+% ---------------------------------------------------------------
+\section{Limpieza de código estático}
+
+\subsection{Corrección del orden de modificadores}
+
+\emph{21 mar, \texttt{b6b65634}.}
+Se corrigió el orden de los modificadores \texttt{final static} → \texttt{static final} en diez
+constantes distribuidas en cinco clases: \texttt{DiscretePotentialOperations} (3 campos),
+\texttt{Variable}, \texttt{Node}, \texttt{NetworkTypeUtils} y \texttt{Criterion} (2 campos).
+El orden correcto según la especificación del lenguaje Java (JLS §8.3.1) es \texttt{static} antes
+de \texttt{final}.
+
+\subsection{Eliminación de código comentado}
+
+\emph{21 mar, \texttt{356fe856}.}
+Se eliminaron 290 líneas de código comentado en 16 ficheros. El mayor bloque correspondía a
+\texttt{DiscretePotentialOperations} (203 líneas), que contenía implementaciones alternativas
+desechadas de operaciones sobre potenciales. El resto se distribuyó entre ficheros de potenciales,
+inferencia y localización.
+
+% ---------------------------------------------------------------
+\section{Nuevos tests de regresión}
+
+\emph{20 mar, \texttt{9c1f1115}.}
+Se añadieron cuatro nuevas clases de test que suman 1\,596 líneas:
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Clase} & \textbf{Cobertura} \\
+\midrule
+\texttt{ProbNetCopyTest}
+  & Copia profunda de redes: nodos, arcos, potenciales, evidencias \\
+\texttt{VariableModifyStateTest}
+  & Modificación de estados: añadir, renombrar, eliminar, reordenar \\
+\texttt{TablePotentialRegressionTest}
+  & Operaciones sobre \texttt{TablePotential}: suma, producto, marginalización \\
+\texttt{DiscretePotentialOperationsRegressionTest}
+  & Operaciones discretas: multiplicación, eliminación de variables \\
+\bottomrule
+\end{tabular}
+\caption{Nuevas clases de test añadidas.}
+\end{table}
+
+% ---------------------------------------------------------------
+\section{Otras contribuciones}
+
+\textbf{Refactorización de \texttt{ProbNet}} \emph{(18 mar, \texttt{348f87a2}, Jose Andres):}
+simplificación menor de dos líneas en la gestión de ediciones.
+
+% ---------------------------------------------------------------
+\section*{Estadísticas globales}
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{lr}
+\toprule
+\textbf{Métrica} & \textbf{Valor} \\
+\midrule
+Commits                             & 8 \\
+Días activos                        & 4 (18–21 mar) \\
+Ficheros modificados                & $\approx$30 \\
+Líneas eliminadas                   & $\approx$330 \\
+Líneas añadidas                     & $\approx$1\,650 \\
+Clases de test nuevas               & 4 \\
+\bottomrule
+\end{tabular}
+\caption{Estadísticas globales de la semana.}
+\end{table}
+
+\end{document}

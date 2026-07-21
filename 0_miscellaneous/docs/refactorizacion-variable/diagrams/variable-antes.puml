@@ -1,0 +1,131 @@
+@startuml variable-antes
+skinparam classAttributeIconSize 0
+skinparam classFontSize 11
+skinparam defaultFontSize 10
+skinparam shadowing false
+skinparam linetype ortho
+
+skinparam class {
+  BackgroundColor<<domain>> #E8F5E9
+  BackgroundColor<<graph>> #FFEBEE
+  BackgroundColor<<potential>> #FFF3E0
+  BorderColor #333333
+}
+
+class Variable <<domain>> {
+  .. Campos de dominio ..
+  # name : String
+  - baseName : String
+  - timeSlice : int
+  - states : State[]
+  - variableType : VariableType
+  # partitionedInterval : PartitionedInterval
+  - additionalProperties : Map<String,String>
+  # statesAdditionalProperties : HashMap  <<nullable>>
+  - precision : double
+  - unit : StringWithProperties
+  - agent : StringWithProperties
+  - decisionCriterion : Criterion
+  __
+  .. Constructores (7) ..
+  + Variable(name, states)
+  + Variable(name, stateNames...)
+  + Variable(name, numStates)
+  + Variable(variable)  // copy
+  + Variable(name)  // continuous
+  + Variable(name, leftClosed, min, max, rightClosed, precision)
+  + Variable(name, states, partitionedInterval, precision)
+  __
+  .. Getters / Setters (30+) ..
+  + getName() / setName()
+  + getBaseName() / setBaseName()
+  + getTimeSlice() / setTimeSlice()
+  + isTemporal()
+  + getStates() / setStates()
+  + getVariableType() / setVariableType()
+  + getPartitionedInterval() / setPartitionedInterval()
+  + getPrecision() / setPrecision()
+  + getUnit() / setUnit()
+  + getAgent() / setAgent()
+  + getDecisionCriterion() / setDecisionCriterion()
+  + getAdditionalProperty() / setAdditionalProperty()
+  + getStateAdditionalProperty() / ...
+  + getNumStates()
+  + getStateName()
+  + getState()
+  + getStateIndex() // 3 sobrecargas
+  + containsState()
+  + renameState(State, String)
+  + chekNewStateName()  <<typo>>
+  + getNewValidName()
+  __
+  .. Parsing temporal (fragil) ..
+  - getTimeSlice(String)  <<side-effect>>
+  __
+  .. <color:red>Edicion de estados</color> (depende de Node) ..
+  + <color:red>modifyState(Node, StateAction, int, String)</color>
+  + <color:red>replaceStates(Node, State[])</color>
+  - <color:red>addStateAt(Node, int, String)</color>
+  - <color:red>removeStateAt(Node, int)</color>
+  - <color:red>moveStateDown(Node, int)</color>
+  - <color:red>moveStateUp(Node, int)</color>
+  - <color:red>renameState(int, String)</color>
+  - <color:red>setUniformPotential(Node)</color>
+  - <color:red>resetLink(Node)</color>
+  - <color:red>getNewPartitionedInterval(Node, PI)</color>
+  - <color:red>setPotentialAfter...(Node, Variable, State[])</color>
+  __
+  .. Creacion de potenciales ..
+  + deltaTablePotential(String)  <<duplicado>>
+  + deltaTablePotential(State)  <<duplicado>>
+  + createDeltaTablePotential(int)  <<duplicado>>
+  __
+  + compareTo(Variable)  <<usa hashCode>>
+  + clone()
+  + toString()
+}
+
+class Node <<graph>> {
+  + getVariable()
+  + getPotentials()
+  + setPotentials()
+  + getChildren()
+  + getNodeType()
+  + getProbNet()
+}
+
+class ProbNet <<graph>> {
+  + getChildren(Node)
+  + getLinks(Node)
+  + getLink(Node, Node, boolean)
+}
+
+class "Link<Node>" as Link <<graph>> {
+  + hasRestrictions()
+  + hasRevealingConditions()
+  + setRestrictionsPotential()
+  + setRevealingStates()
+}
+
+class TablePotential <<potential>> {
+  + values : double[]
+  + reorder()
+}
+
+class UniformPotential <<potential>>
+
+Variable .right.> Node : <color:red>depende de
+Variable ..> ProbNet : <color:red>depende de
+Variable ..> Link : <color:red>depende de
+Variable ..> TablePotential : crea
+Variable ..> UniformPotential : <color:red>crea
+
+note bottom of Variable
+  <b>986 lineas</b>
+  Mezcla modelo de dominio
+  con logica de edicion del grafo.
+  El parsing name/baseName/timeSlice
+  es fragil y tiene side-effects.
+end note
+
+@enduml

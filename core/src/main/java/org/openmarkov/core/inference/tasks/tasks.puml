@@ -1,0 +1,112 @@
+// @author Manuel Arias
+
+@startuml
+    class TaskUtilities {
+        +{static} expandNetwork(probNet, isTemporal): ProbNet
+        +{static} extendPreResolutionEvidence(probNet, preResolutionEvidence): ProbNet
+        +{static} extendPostResolutionEvidence(probNet, postResolutionEvidence): ProbNet
+        +{static} imposePolicies(probNet): ProbNet
+        +{static} applyTransitionTime(probNet, isTemporal): ProbNet
+        +{static} applyDiscounts(probNet, isTemporal): ProbNet
+        +{static} scaleUtilitiesUnicriterion(probNet): ProbNet
+        +{static} scaleUtilitiesCostEffectiveness(probNet): ProbNet
+        +{static} discretizeNonObservedNumericVariables(probNet, preResolutionEvidence): ProbNet
+        +{static} addPoliciesFromResolution(probNet): ProbNet
+        +{static} absorbAllIntermediateNumericNodes(probNet, evidenceCase): ProbNet
+        +{static} hasDecisions(network): boolean
+        +{static} hasDecisionsWithoutImposedPolicy(network): boolean
+        +{static} hasOnlyChanceNodes(network): boolean
+        -{static} replaceDecisionsWithPoliciesByChanceNodes(probNet, informationalPredecessors): void
+        +{static} hasImposedPolicy(probNet, decision): boolean
+        -{static} getPolicy(probNet, decision): Potential
+        +{static} projectTablesAndBuildMarkovDecisionNetwork(network, evidence): ProbNet
+    }
+
+package "Analysis" {
+	together {
+    interface CE_PSA {
+        getCEPPotentials(): Collection<GTablePotential>
+        setDecisionVariable(decisionSelected): void
+    }
+    interface CEAnalysis {
+        getUtility(): GTablePotential
+        getProbability(): TablePotential
+        setDecisionVariable(decisionVariable): void
+        getCEP(): CEP
+    }
+    interface Evaluation {
+        getProbability(): TablePotential
+        getUtility(): TablePotential
+        getOptimalStrategyTree(): StrategyTree
+    }
+    interface ExpectedUtilityDecision {
+        getExpectedUtility(): TablePotential
+    }
+    }
+}
+
+package "DecisionMaking" {
+	together {
+    interface GenerateDecisionTree {
+        getDecisionTree(): DecisionTreeNode
+    }
+    interface OptimalIntervention {
+        getOptimalIntervention(): StrategyTree
+    }
+    interface OptimalPolicies {
+        getOptimalPolicies(): HashMap<Variable, Potential>
+        getOptimalPolicy(decision: Variable): Potential
+    }
+	}
+}
+
+
+package "Propagation" {
+	together {
+    interface Propagation {
+        getPosteriorValues(): HashMap<Variable, TablePotential>
+        setPostResolutionEvidence(postResolutionEvidence): void
+        setVariablesOfInterest(variablesOfInterest): void
+    }
+    }
+}
+
+package "SensitivityAnalysis" {
+	together {
+    interface SensAnMap {
+        getUncertainParametersPotentials(): HashMap<UncertainParameter, TablePotential>
+    }
+    interface SensAnPlot {
+        getUncertainParametersPotentials(): HashMap<UncertainParameter, TablePotential>
+    }
+    interface SensAnTornadoSpider {
+        getUncertainParametersPotentials(): HashMap<UncertainParameter, TablePotential>
+    }
+    }
+}
+
+package "Temporal" {
+    together {
+    interface TemporalEvolution {
+        getTemporalEvolution(): HashMap<Variable, TablePotential>
+        getTemporalEvolutionWithDiscount(): HashMap<Variable, TablePotential>
+        getTemporalEvolutionWithDiscount(criterion): HashMap<Variable, TablePotential>
+        getAtemporalUtility(): TablePotential
+        setDecisionVariable(decisionSelected): void
+        getExpandedNetwork(): ProbNet
+    }
+    }
+}
+
+interface Task {
+setPreResolutionEvidence(EvidenceCase preresolutionEvidence):void
+setConditioningVariables(List<Variable> conditioningVariables):void
+}
+
+Task <|-- DecisionMaking
+Task <|-- SensitivityAnalysis
+Analysis --|> Task
+Temporal -left-|> Task
+Propagation -right-|> Task
+
+@enduml

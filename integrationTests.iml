@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$/integrationTests" dumb="true">
+      <excludeFolder url="file://$MODULE_DIR$/integrationTests/src/main/resources/clone_of_probmodelxml_networks" />
+    </content>
+  </component>
+</module>

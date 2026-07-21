@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <CanNotWriteNetworkToFileException>
+        <title value="Cannot write network to file"/>
+        <message value="Cannot write network to file: %s"/>
+    </CanNotWriteNetworkToFileException>
+    <ConfigurationException>
+        <title value="Problems with the configuration file."/>
+        <message value="Can not read or write the configuration file: %s. "/>
+    </ConfigurationException>
+    <IllegalAccessException>
+        <title value="Can not access object."/>
+        <message value="Can not access object."/>
+    </IllegalAccessException>
+    <IllegalArgumentException>
+        <title value="Illegal argument."/>
+        <message value="Illegal argument."/>
+    </IllegalArgumentException>
+    <IncompatibleEvidenceException>
+        <title value="Incompatible evidence."/>
+        <message value="Incompatible evidence."/>
+    </IncompatibleEvidenceException>
+    <InstantiationException>
+        <title value="Can not instantiate object."/>
+        <message value="Can not instantiate object."/>
+    </InstantiationException>
+    <InvalidStateException>
+        <title value="Invalid state in evidence."/>
+        <message value="Variable %s can not have the value %s."/>
+    </InvalidStateException>
+    <InvalidStateNameDuplicatedException>
+        <title value="Invalid state name."/>
+        <message value="There is already a state with that name in the variable."/>
+    </InvalidStateNameDuplicatedException>
+    <InvalidStateNameEmptyException>
+        <title value="Invalid state name."/>
+        <message value="There should be no empty names."/>
+    </InvalidStateNameEmptyException>
+    <InvalidVariableNameExistingException>
+        <title value="Invalid variable name."/>
+        <message value="There is already a variable with that name in the net."/>
+    </InvalidVariableNameExistingException>
+    <InvalidVariableNameExistingTimeSliceException>
+        <title value="Invalid variable name."/>
+        <message value="There is already a variable with that name and in the same time slice in the net."/>
+    </InvalidVariableNameExistingTimeSliceException>
+    <InvocationTargetException>
+        <title value="Can not invocate method."/>
+        <message value="Can not invocate method."/>
+    </InvocationTargetException>
+    <NodeNotFoundException>
+        <title value="Node not found."/>
+        <message value="%s not found."/>
+    </NodeNotFoundException>
+    <NormalizeNullVectorException>
+        <title value="Normalization error in TablePotential."/>
+        <message value="All elements in the TablePotential: %s are equal to 0.0"/>
+    </NormalizeNullVectorException>
+    <NoSuchMethodException>
+        <title value="No such method."/>
+        <message value="No such method: %s."/>
+    </NoSuchMethodException>
+    <NotEvaluableNetworkException>
+        <title value="Not evaluable network"/>
+        <message value="The selected network is not evaluable"/>
+    </NotEvaluableNetworkException>
+    <NotRecognisedNetworkFileExtensionException>
+        <title value="File extension not recognized."/>
+        <message value="Unknown file extension: %s."/>
+    </NotRecognisedNetworkFileExtensionException>
+    <OutOfMemoryException>
+        <title value="Not enough memory."/>
+        <message value="Not enough memory."/>
+    </OutOfMemoryException>
+    <ParserException>
+        <title value="Error reading."/>
+        <message value="Can not read network %s."/>
+    </ParserException>
+    <PreferencesException>
+        <title value="Problems with preferences file."/>
+        <message value="Problems with preferences file: %s."/>
+    </PreferencesException>
+    <RedoException>
+        <title value="Can not redo action."/>
+        <message value="Can not redo action."/>
+    </RedoException>
+    <UndoException>
+        <title value="Can not undo action."/>
+        <message value="Undoable action."/>
+    </UndoException>
+    <WrongCriterionException>
+        <title value="Wrong criterion."/>
+        <message value="Wrong criterion: %s."/>
+    </WrongCriterionException>
+    <NonProjectablePotentialException>
+        <UniformNumeric>
+            <title value="Can not project numeric uniform potentials."/>
+            <message value="Numeric variable %s makes it impossible to project this uniform potential into a table."/>
+        </UniformNumeric>
+    </NonProjectablePotentialException>
+</properties>

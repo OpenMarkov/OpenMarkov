@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <NoUncertainParameter>
+        <title value="Unnamed uncertain parameters"/>
+        <message
+                value="No uncertain parameter has name. Note that the sensitivity analysis only recognizes named parameters."/>
+    </NoUncertainParameter>
+    <BelowTwoUncertainParameters>
+        <title value="Less than two named uncertain parameters"/>
+        <message
+                value="Less than two uncertain parameters have names. Note that the sensitivity analysis only recognizes named parameters"/>
+    </BelowTwoUncertainParameters>
+
+    <TrialException>
+        <title value="This is my title message for program: {program}"/>
+        <message value="This is the message, explaining there is a bug in {program} when using the net {netName}"/>
+    </TrialException>
+    <SubTrialException>
+        <title value="Error code: {errorCode}, this is my title message for program: {program}"/>
+        <message
+                value="This is the message, explaining there is a bug in {program} when using the net {netName}, \nError code:{errorCode}"/>
+    </SubTrialException>
+    <CharConversionException>
+        <title value="Character conversion error"/>
+        <message value="Could not convert character"/>
+    </CharConversionException>
+    <IOException>
+        <title value="IO Error"/>
+        <message value="Could not execute some IO operation"/>
+    </IOException>
+
+</properties>

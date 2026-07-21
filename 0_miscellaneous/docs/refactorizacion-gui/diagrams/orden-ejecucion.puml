@@ -1,0 +1,45 @@
+@startuml orden-ejecucion
+' ============================================================
+' Grafo de dependencias entre refactorizaciones
+' Flechas = "debería hacerse antes de"
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam dpi 150
+skinparam nodesep 60
+skinparam ranksep 50
+
+skinparam rectangle {
+  BackgroundColor<<low>> #D8FFD8
+  BorderColor<<low>> #44AA44
+  BackgroundColor<<med>> #FFFFD8
+  BorderColor<<med>> #AAAA44
+  BackgroundColor<<high>> #FFDDD8
+  BorderColor<<high>> #CC4444
+}
+
+rectangle "**R2**\nModos de nodo\n//Bajo riesgo//" <<low>> as R2
+rectangle "**R3**\nCasts TablePotential\n//Seguridad de tipos//" <<med>> as R3
+rectangle "**R5**\nEdiciones valor CPT\n//Duplicación//" <<med>> as R5
+rectangle "**R8**\nEditores temporales\n//Duplicación parcial//" <<low>> as R8
+rectangle "**R4**\nMainMenu\n//Repetición masiva//" <<med>> as R4
+rectangle "**R1**\nMainPanelListener\n//God Object//" <<high>> as R1
+rectangle "**R7**\nVisualNetwork\n//Acoplamiento MVC//" <<med>> as R7
+rectangle "**R6**\nValuesTable\n//Mayor riesgo//" <<high>> as R6
+
+R2 --> R3 : fase 1 → 2
+R3 --> R5 : tipos limpios
+R5 --> R8 : combinar
+R3 --> R6 : tipos limpios
+R4 --> R1 : menú estable
+R5 --> R6 : edits estables
+R7 --> R6 : view-model limpio
+
+note bottom of R2
+  **Orden recomendado:**
+  R2 → R3 → R5 → R8
+    → R4 → R1
+    → R7 → R6
+end note
+
+@enduml

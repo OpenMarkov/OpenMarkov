@@ -1,0 +1,57 @@
+@startuml fig10-seq-potenciales
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceGroupBorderColor #888888
+skinparam sequenceLifeLineBorderColor #555555
+
+participant "JVM" as JVM #DDDDFF
+participant "PotentialUtils\n(static init)" as PU #90EE90
+participant "PluginSearch" as PS #AAE0FF
+participant "PluginLoader" as PL #AAE0FF
+participant "ExtensionTree" as ET #AAE0FF
+participant "Classpath\n(JARs/dirs)" as CP #EEEEEE
+
+JVM -> PU : <primera referencia a PotentialUtils>
+activate PU
+
+PU -> PS : init()
+activate PS
+PS -> PL : pluginsStream(OPENMARKOV)
+activate PL
+PL -> CP : enumerar archivos .class
+CP --> PL : entradas del JAR / directorio
+PL -> PL : cargar clases en paralelo\n(ClassLoader)
+PL --> PS : Stream<Class>
+deactivate PL
+
+PS -> PS : .extending(Potential.class)
+PS -> ET : extensionTree()
+activate ET
+ET -> ET : construir árbol de herencia
+ET --> PS : ExtensionTree<Potential>
+deactivate ET
+
+PS -> ET : breathFirstLevelOrderQueue()
+ET --> PS : ArrayDeque (BFS)
+deactivate PS
+
+loop para cada clase en orden BFS
+    PU -> PU : getNames(class)\n— leer @PotentialType
+    alt class tiene @PotentialType
+        PU -> PU : POTENTIALS_BY_NAME.put(name, class)
+    end
+end
+
+PU --> JVM : inicialización completada
+deactivate PU
+
+...tiempo después...
+
+actor "Código externo" as EXT
+EXT -> PU : getClassByName("Table")
+PU --> EXT : TablePotential.class
+EXT -> PU : instanciateSafely(TablePotential.class, vars, role)
+PU -> PU : buscar constructor por reflexión\n(List<Var>,PotentialRole)
+PU --> EXT : new TablePotential(vars, role)
+@enduml

@@ -1,0 +1,25 @@
+/*
+ * Copyright (c) CISIAD, UNED, Spain,  2019. Licensed under the GPLv3 licence
+ * Unless required by applicable law or agreed to in writing,
+ * this code is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OF ANY KIND.
+ */
+
+package org.openmarkov.core.inference.tasks;
+
+import org.openmarkov.core.exception.*;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.potential.GTablePotential;
+
+import java.util.Collection;
+
+/**
+ * @author jperez-martin
+ */
+public interface CE_PSA extends Task {
+
+	Collection<GTablePotential> getCEPPotentials()
+            throws NonProjectablePotentialException, NotEvaluableNetworkException, IncompatibleEvidenceException, ConstraintViolatedException;
+
+	void setDecisionVariable(Variable decisionSelected);
+}

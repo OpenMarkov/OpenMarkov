@@ -1,0 +1,52 @@
+@startuml fig02-motor
+skinparam backgroundColor white
+skinparam shadowing false
+
+enum PluginClassCategory #C8F0FF {
+    OPENMARKOV
+    JAVA
+    EXTERNAL_DEPENDENCY
+}
+
+class PluginLoader #AAE0FF {
+    - {static} CLASS_LOADER : ClassLoader
+    - {static} OPEN_MARKOV_PATH_PREFIX : String
+    - {static} LOADED_CLASSES : HashMap<PluginClassCategory, List<Class>>
+    --
+    ~ {static} pluginsStream(category) : Stream<Class>
+    - {static} initializeCategory(category) <<synchronized>>
+    - {static} loadJarDependencies(category)
+    - {static} loadJavaClasses()
+    - {static} getClassesQualifiedNames(classpath) : List<String>
+}
+
+class "PluginSearch<T>" as PluginSearch #AAE0FF {
+    - classStream : Stream<Class<T>>
+    - currentClass : Class<T>
+    --
+    + {static} init() : PluginSearch<Object>
+    + {static} full() : PluginSearch<Object>
+    + extending(Class<E>) : PluginSearch<E>
+    + childrenOf(Class<E>) : PluginSearch<E>
+    + annotatedWith(Class<A>) : PluginSearch<T>
+    + filter(Predicate) : PluginSearch<T>
+    + stream() : Stream<Class<? extends T>>
+    + list() : List<Class<T>>
+    + extensionTree() : ExtensionTree<T>
+}
+
+class "ExtensionTree<T>" as ExtensionTree #AAE0FF {
+    - parent : ExtensionTree<?>
+    - currentClass : Class<T>
+    - subClasses : TreeMap<Class, ExtensionTree>
+    --
+    + {static} start(rootClass, subClasses) : ExtensionTree<T>
+    + breathFirstLevelOrderQueue() : ArrayDeque
+    + getCurrentClass() : Class<T>
+    + getSubClasses() : TreeMap
+}
+
+PluginSearch --> PluginLoader : usa (init())
+PluginSearch --> ExtensionTree : crea (extensionTree())
+PluginLoader --> PluginClassCategory : usa
+@enduml

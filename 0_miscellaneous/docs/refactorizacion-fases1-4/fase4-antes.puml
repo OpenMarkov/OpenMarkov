@@ -1,0 +1,49 @@
+@startuml fase4-antes
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontSize 11
+
+title Fase 4 — Antes de la refactorización
+
+class ProbNet {
+    +copy() : ProbNet
+    #auxCopy(copyNet : ProbNet) : void
+    +deepCopy() : ProbNet
+    +getPotentials() : List<Potential>
+    +getAdditivePotentials() : List<Potential>
+    +getPotentialsByRole(role : PotentialRole) : List<Potential>
+}
+
+note right of ProbNet
+  copy() llama a auxCopy()\n
+  deepCopy() contiene 80 líneas\n
+  de lógica duplicada con auxCopy()\n
+  \n
+  Tres variantes de getPotentials()\n
+  comparten el mismo bucle interno
+end note
+
+class NodeTypeDepot {
+    +getPotentialsByRole(role : PotentialRole) : List<Potential>
+}
+
+note bottom of NodeTypeDepot
+  Llamado únicamente desde\n
+  ProbNet.getPotentialsByRole()
+end note
+
+class Node {
+    +setUniformPotential2Node(node : Node) : void
+}
+
+note right of Node
+  setUniformPotential2Node() contiene\n
+  35 líneas: construye la lista de\n
+  variables, determina el rol y crea\n
+  un UniformPotential manualmente
+end note
+
+ProbNet ..> NodeTypeDepot : usa
+
+@enduml

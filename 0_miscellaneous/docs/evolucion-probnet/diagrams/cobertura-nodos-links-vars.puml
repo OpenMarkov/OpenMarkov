@@ -1,0 +1,55 @@
+@startuml cobertura-nodos-links-vars
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam classFontSize 11
+skinparam nodesep 30
+
+skinparam class {
+  BackgroundColor<<tested>> #C8E6C9
+  BackgroundColor<<partial>> #FFF9C4
+  BackgroundColor<<untested>> #FFCDD2
+  BorderColor #333333
+}
+
+class "Gestion de nodos (64%)" as Nodes <<tested>> {
+  <color:green>[OK]</color> addNode(Variable, NodeType)
+  <color:green>[OK]</color> addNode(Node)
+  <color:green>[OK]</color> removeNode(Node)
+  <color:green>[OK]</color> getNode(String)
+  <color:green>[OK]</color> getNode(String, NodeType)
+  <color:green>[OK]</color> getNodes()
+  <color:green>[OK]</color> getNodes(NodeType)
+  <color:green>[OK]</color> getNodes(List<Variable>)
+  <color:green>[OK]</color> getNumNodes() / getNumNodes(NodeType)
+  ---
+  <color:red>[NO]</color> addNodeConsistently()
+  <color:red>[NO]</color> addShiftedNode()
+  <color:red>[NO]</color> moveNode()
+  <color:red>[NO]</color> getNode(Variable)
+  <color:red>[NO]</color> getNodes(CECriterion)
+}
+
+class "Gestion de links (67%)" as Links <<partial>> {
+  <color:green>[OK]</color> addLink(Var, Var, bool)
+  <color:green>[OK]</color> removeLink(Var, Var, bool)
+  ---
+  <color:red>[NO]</color> invertLink()
+  <color:red>[NO]</color> links no dirigidos
+}
+
+class "Variables (36%)" as Vars <<partial>> {
+  <color:green>[OK]</color> getVariables()
+  <color:green>[OK]</color> getVariables(NodeType)
+  <color:green>[OK]</color> getChanceAndDecisionVariables()
+  <color:green>[OK]</color> static getVariables(nodes)
+  ---
+  <color:red>[NO]</color> getVariable(String)
+  <color:red>[NO]</color> getVariable(baseName, timeSlice)
+  <color:red>[NO]</color> containsVariable() (2 sobrec.)
+  <color:red>[NO]</color> containsShiftedVariable()
+  <color:red>[NO]</color> getShiftedVariable()
+  <color:red>[NO]</color> updateVariable()
+  <color:red>[NO]</color> getVariablesNames()
+}
+
+@enduml

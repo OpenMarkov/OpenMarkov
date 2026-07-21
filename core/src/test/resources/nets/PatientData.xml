@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="iso-8859-9"?>
+<CATARATAS>
+    <NHC>1000006</NHC>
+    <PROCESO>2307039</PROCESO>
+    <TOMA>
+        <ID>21216841</ID>
+        <FECHATOMA>02/10/2009</FECHATOMA>
+        <HORATOMA>09:48:11</HORATOMA>
+        <INDICADORES>
+            <INDICADOR>
+                <NOMBRE>Ojo que se recomienda operar</NOMBRE>
+                <CODIGO>ojo_operar</CODIGO>
+                <VALOR>derecho</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Intervención quirúrgica previa de catarata (ojo contralateral)</NOMBRE>
+                <CODIGO>interv_previa</CODIGO>
+                <VALOR>0</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Agudeza visual (corregida) ojo operar</NOMBRE>
+                <CODIGO>av_pre</CODIGO>
+                <VALOR>,6</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Agudeza visual esperada post-intervención (ojo operar)</NOMBRE>
+                <CODIGO>av_post_esper</CODIGO>
+                <VALOR>&lt;=0.15</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Comentarios datos generales</NOMBRE>
+                <CODIGO>coment_gen_pre</CODIGO>
+                <VALOR>adsd</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Distrofia de Fuchs</NOMBRE>
+                <CODIGO>distrofia_fuchs</CODIGO>
+                <VALOR>ausente</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Presencia de Neuropatías</NOMBRE>
+                <CODIGO>neuropatias</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Retinopatía diabética</NOMBRE>
+                <CODIGO>retinopatia_diabetic</CODIGO>
+                <VALOR>ausente</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Cámara estrecha</NOMBRE>
+                <CODIGO>camara_estrecha</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Subluxación de cristalino</NOMBRE>
+                <CODIGO>sublux_cristalino</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Sinequias posteriores</NOMBRE>
+                <CODIGO>sinequias_post</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Pupila estrecha</NOMBRE>
+                <CODIGO>pupila_estrecha</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Pseudoexfolación</NOMBRE>
+                <CODIGO>pseudoexfoliacion</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Ojo vitrectomizado</NOMBRE>
+                <CODIGO>ojo_vitrectomizado</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Ojo hundido</NOMBRE>
+                <CODIGO>ojo_hundido</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Miopía magna</NOMBRE>
+                <CODIGO>miopia_magna</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Mala colaboración del paciente (prevista)</NOMBRE>
+                <CODIGO>mala_colaboracion</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Fibrosis de la cápsula anterior</NOMBRE>
+                <CODIGO>fibrosis_c_ant</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Otras</NOMBRE>
+                <CODIGO>otras_complejidad</CODIGO>
+                <VALOR>ffff</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Presencia de Retinopatía no diabética</NOMBRE>
+                <CODIGO>retinopatia_nd</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Presencia de Opacidades corneales</NOMBRE>
+                <CODIGO>opac_corneales</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Presencia de Maculopatías</NOMBRE>
+                <CODIGO>maculopatias</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Presencia de Ambliopía</NOMBRE>
+                <CODIGO>ambliopia</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Función global</NOMBRE>
+                <CODIGO>fv_global_pre</CODIGO>
+                <VALOR>limitación para la vida diaria</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Agudeza visual (corregida) contralateral</NOMBRE>
+                <CODIGO>av_contral</CODIGO>
+                <VALOR>,5</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Tipo de catarata ojo operar</NOMBRE>
+                <CODIGO>tipo_catarata</CODIGO>
+                <VALOR>brunescente</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Efectos del deslumbramiento</NOMBRE>
+                <CODIGO>fv_deslu_pre</CODIGO>
+                <VALOR>limitación para el ocio</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Tipo de catarata contralateral</NOMBRE>
+                <CODIGO>catarata_contral</CODIGO>
+                <VALOR>blanca</VALOR>
+            </INDICADOR>
+
+
+            <INDICADOR>
+                <NOMBRE>Deslumbramiento ("glare")</NOMBRE>
+                <CODIGO>deslu_global_pre</CODIGO>
+                <VALOR>ausente</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Otras</NOMBRE>
+                <CODIGO>otras_comorbilidad</CODIGO>
+                <VALOR>ddddd</VALOR>
+            </INDICADOR>
+            <INDICADOR>
+                <NOMBRE>Presencia de Laser Argon previo</NOMBRE>
+                <CODIGO>laser_argon</CODIGO>
+                <VALOR>1</VALOR>
+            </INDICADOR>
+        </INDICADORES>
+    </TOMA>
+</CATARATAS>

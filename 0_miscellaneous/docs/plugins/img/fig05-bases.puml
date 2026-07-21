@@ -1,0 +1,56 @@
+@startuml fig05-bases
+skinparam backgroundColor white
+skinparam shadowing false
+
+abstract class Potential #FFCF8B {
+    # variables : List<Variable>
+    # role : PotentialRole
+    # criterion : Criterion
+    # comment : String
+    + properties : Map<String, Object>
+    --
+    + {abstract} tableProject(evidence, opts, projected) : TablePotential
+    + {abstract} project(evidence) : Potential
+    + {abstract} copy() : Potential
+    + {abstract} isUncertain() : boolean
+    + {abstract} scalePotential(scale)
+    + {abstract} reorder(newOrder) : Potential
+    + {abstract} reorder(variable, newOrder) : Potential
+    + {static} validate(node, vars, role) : boolean
+}
+
+abstract class PNConstraint #FFCF8B {
+    --
+    + {abstract} checkProbNet(net, checker)
+    + isMetBy(net) : boolean
+    + toString() : String
+}
+
+abstract class NetworkType #FFCF8B {
+    # constraints : HashMap<Class, ConstraintBehavior>
+    --
+    + isApplicableConstraint(c) : boolean
+    # overrideConstraintBehavior(class, behavior)
+    + getOverwrittenConstraints() : HashMap
+}
+
+interface ProbNetReader #FFCF8B {
+    + loadProbNetInfo(name, stream) : ProbNetInfo
+    + loadProbNet(name, stream) : ProbNet
+}
+
+interface ProbNetWriter #FFCF8B {
+    + writeProbNet(name, net)
+    + writeProbNet(name, net, evidence)
+}
+
+enum PotentialRole #FFE0C0 {
+    CONDITIONAL_PROBABILITY
+    JOINT_PROBABILITY
+    POLICY
+    LINK_RESTRICTION
+    UNSPECIFIED
+}
+
+Potential --> PotentialRole : tiene
+@enduml

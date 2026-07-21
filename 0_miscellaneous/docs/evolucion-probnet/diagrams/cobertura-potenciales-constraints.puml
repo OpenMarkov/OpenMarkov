@@ -1,0 +1,58 @@
+@startuml cobertura-potenciales-constraints
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam classFontSize 11
+skinparam nodesep 30
+
+skinparam class {
+  BackgroundColor<<tested>> #C8E6C9
+  BackgroundColor<<partial>> #FFF9C4
+  BackgroundColor<<untested>> #FFCDD2
+  BorderColor #333333
+}
+
+class "Potenciales (56%)" as Pots <<partial>> {
+  <color:green>[OK]</color> addPotential(Potential)
+  <color:green>[OK]</color> removePotential(Potential)
+  <color:green>[OK]</color> removePotentials(Node)
+  <color:green>[OK]</color> getPotentials()
+  <color:green>[OK]</color> getPotentials(Variable)
+  <color:green>[OK]</color> getPotentialsByType(NodeType)
+  <color:green>[OK]</color> getUtilityPotentials(Variable)
+  <color:green>[OK]</color> getNumPotentials()
+  <color:green>[OK]</color> tableProjectPotentials(EvidenceCase)
+  ---
+  <color:red>[NO]</color> getPotentials(Predicate)
+  <color:red>[NO]</color> getPotentialsByRole(PotentialRole)
+  <color:red>[NO]</color> getAdditivePotentials()
+  <color:red>[NO]</color> getProbPotentials(Variable)
+  <color:red>[NO]</color> getSortedPotentials()
+  <color:red>[NO]</color> removePotentials(List)
+  <color:red>[NO]</color> getConstantPotentials()
+  <color:red>[NO]</color> addPotential(Potential, ProbNet)
+}
+
+class "Constraints (31%)" as Constr <<partial>> {
+  <color:green>[OK]</color> addConstraint(PNConstraint)
+  <color:green>[OK]</color> removeConstraint(PNConstraint)
+  <color:green>[OK]</color> getConstraints()
+  <color:green>[OK]</color> getAdditionalConstraints()
+  ---
+  <color:red>[NO]</color> checkConstraints()
+  <color:red>[NO]</color> checkConstraints(Iterable)
+  <color:red>[NO]</color> setNetworkType(NetworkType)
+  <color:red>[NO]</color> checkProbNet()
+  <color:red>[NO]</color> getUnsatisfiedConstraints()
+  <color:red>[NO]</color> hasConstraintOfClass()
+  <color:red>[NO]</color> getConstraintOfClass()
+  <color:red>[NO]</color> getConstraintsOfClass()
+  <color:red>[NO]</color> removeAllConstraints()
+}
+
+class "Copiar (100%)" as Copy <<tested>> {
+  <color:green>[OK]</color> copy()
+  <color:green>[OK]</color> deepCopy()
+  (30 tests en ProbNetCopyTest)
+}
+
+@enduml

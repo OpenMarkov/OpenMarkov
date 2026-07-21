@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <Edit>
+        <StringWithoutParameters value="This string has no parameters"/>
+        <StringWithParameters value="This string uses a parameter, which value currently is: {parameter}"/>
+    </Edit>
+    <AStringInTopLevel value="This string is in the top level"/>
+    <BUNDLEFILE>
+        <Text value="Default (english)"/>
+    </BUNDLEFILE>
+</properties>

@@ -1,0 +1,74 @@
+@startuml r7-before
+' ============================================================
+' R7 Before -- VisualNetwork coupled to MainGUI
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 30
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<model>> #D8FFD8
+  BorderColor<<model>> #44AA44
+  BackgroundColor<<ui>> #E8E8FF
+  BorderColor<<ui>> #6666AA
+  BackgroundColor<<bad>> #FFE0E0
+  BorderColor<<bad>> #CC4444
+}
+
+class VisualNetwork <<bad>> {
+  <color:#CC4444><b>View-model with upward coupling</b></color>
+  __
+  - probNet: ProbNet
+  - <color:#CC4444>mainGUI: MainGUI</color>
+  __
+  + afterEditExecutes(PNEdit)
+  + afterUndoingEdit(PNEdit)
+  + afterRedoingEdit(PNEdit)
+  - refreshUI()
+  ..
+  <color:#CC4444>mainGUI.mainPanel</color>
+  <color:#CC4444>  .getEditionToolBar()</color>
+  <color:#CC4444>  .getUndoButton().setEnabled()</color>
+  <color:#CC4444>  .getRedoButton().setEnabled()</color>
+}
+
+class MainGUI <<ui>> {
+  mainPanel: MainPanel
+}
+
+class MainPanel <<ui>> {
+  + getEditionToolBar()
+}
+
+class EditionToolBar <<ui>> {
+  + getUndoButton()
+  + getRedoButton()
+}
+
+class MainPanelMenuAssistant <<model>> {
+  <b>Already handles undo/redo</b>
+  __
+  + undoableEditHappened()
+  - updateUndoRedo(canUndo, canRedo)
+  ..
+  setOptionEnabled(UNDO, canUndo)
+  setOptionEnabled(REDO, canRedo)
+  <i>updates menus AND toolbars</i>
+}
+
+VisualNetwork -[#CC4444]-> MainGUI : <color:#CC4444>upward coupling</color>
+MainGUI --> MainPanel
+MainPanel --> EditionToolBar
+
+note bottom of VisualNetwork
+  View-model layer reaches up to
+  UI layer to toggle toolbar buttons.
+  This duplicates what
+  MainPanelMenuAssistant already does.
+end note
+
+@enduml

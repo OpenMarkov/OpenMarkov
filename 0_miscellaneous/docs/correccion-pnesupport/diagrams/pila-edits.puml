@@ -1,0 +1,106 @@
+@startuml pila-edits
+' ============================================================
+' Evolucion de la pila doneEdits durante la ejecucion
+' y lectura al cerrar el sub-historial
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam objectAttributeIconSize 0
+skinparam nodesep 30
+skinparam ranksep 20
+
+skinparam object {
+    BackgroundColor<<paso>> #E8E8FF
+    BorderColor<<paso>> #6666AA
+    BackgroundColor<<resultado>> #FFF3CD
+    BorderColor<<resultado>> #D4A017
+    BackgroundColor<<bug>> #FFDDD8
+    BorderColor<<bug>> #CC4444
+    BackgroundColor<<fix>> #E8FFE8
+    BorderColor<<fix>> #44AA44
+}
+
+title Evolución de la pila doneEdits y lectura al cerrar
+
+' --- Paso 1: ejecutar AddNodeEdit(A) ---
+object "Paso 1\nopenNewSubEditHistory()" as P0 <<paso>> {
+    doneEdits = []
+    ""(pila vacia)""
+}
+
+object "Paso 2\nAddNodeEdit(A).executeEdit()" as P1 <<paso>> {
+    doneEdits = [ <b>A</b> ]
+    ""addFirst(A)""
+}
+
+object "Paso 3\nAddNodeEdit(B).executeEdit()" as P2 <<paso>> {
+    doneEdits = [ <b>B</b>, A ]
+    ""addFirst(B)""
+}
+
+object "Paso 4\nAddLinkEdit(A->B).executeEdit()" as P3 <<paso>> {
+    doneEdits = [ <b>Link</b>, B, A ]
+    ""addFirst(Link)""
+}
+
+object "Paso 5\ncloseSubEditHistory()" as P4 <<resultado>> {
+    getDoneEdits()
+    devuelve: [ Link, B, A ]
+    ""(mas reciente primero)""
+}
+
+object "ANTES (bug)\nnew ListPNEdit([Link, B, A])" as BUG <<bug>> {
+    edits = [ Link, B, A ]
+    redo() ejecuta: Link, B, A
+    ""Link intenta conectar""
+    ""nodos que no existen -> NPE""
+}
+
+object "DESPUES (fix)\nCollections.reverse()\nnew ListPNEdit([A, B, Link])" as FIX <<fix>> {
+    edits = [ A, B, Link ]
+    redo() ejecuta: A, B, Link
+    ""Primero crea los nodos,""
+    ""luego conecta el arco""
+}
+
+P0 -down-> P1
+P1 -down-> P2
+P2 -down-> P3
+P3 -down-> P4
+P4 -down-> BUG : sin reverse
+P4 -down-> FIX : con reverse
+
+note right of P1
+  Cada executeEdit()
+  llama a addFirst()
+  en la pila doneEdits.
+
+  El edit mas reciente
+  queda siempre en
+  la posicion [0].
+end note
+
+note right of BUG #FFDDD8
+  <b>Bug 3</b>
+  CompoundPNEdit.redo()
+  itera en orden directo:
+  Link -> B -> A
+
+  El arco necesita que
+  A y B ya existan,
+  pero aun no se han
+  re-creado.
+end note
+
+note right of FIX #E8FFE8
+  <b>Correccion</b>
+  reverse() restaura el
+  orden original:
+  A -> B -> Link
+
+  undo() usa reversed():
+  Link -> B -> A
+  (correcto)
+end note
+
+@enduml

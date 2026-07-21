@@ -1,0 +1,81 @@
+@startuml fig06-potenciales
+skinparam backgroundColor white
+skinparam shadowing false
+
+annotation "@PotentialType" <<annotation>> #FFE066 {
+    + names() : String[]
+}
+
+class PotentialUtils #90EE90 {
+    + {static} POTENTIALS_BY_NAME : HashMap<String, Class>
+    --
+    + {static} getClassByName(name) : Class
+    + {static} instanciateSafely(...) : Potential
+    + {static} getFilteredPotentialClasses(node) : List<Class>
+}
+
+abstract class Potential #FFCF8B
+
+abstract class AbstractIndexedPotential #FFDF9F {
+    # dimensions : int[]
+    # offsets : int[]
+    # tableSize : int
+}
+
+class TablePotential #FFB347 {
+    + values : double[] <<volatile>>
+    --
+    + tableProject(...) : TablePotential
+    + {static} validate(...) : boolean
+}
+
+class UniformPotential #FFB347
+class DeltaPotential #FFB347 {
+    - state : State
+    - stateIndex : int
+    - numericValue : double
+}
+class ConditionalGaussianPotential #FFB347
+class FunctionPotential #FFB347
+class LinearCombinationPotential #FFB347
+
+' --- Jerarquía ICIPotential (debajo de DeltaPotential) ---
+abstract class ICIPotential #FFB347 {
+    # modelType : ICIModelType
+    # noisyParameters : double[][]
+    # leakyParameters : double[]
+}
+class "canonical/MaxPotential" as MaxPotential #FFA07A
+class "canonical/MinPotential" as MinPotential #FFA07A
+class "canonical/TuningPotential" as TuningPotential #FFA07A
+
+' --- Herencias principales ---
+Potential <|-- AbstractIndexedPotential
+AbstractIndexedPotential <|-- TablePotential
+Potential <|-- UniformPotential
+Potential <|-- DeltaPotential
+Potential <|-- ConditionalGaussianPotential
+Potential <|-- FunctionPotential
+Potential <|-- LinearCombinationPotential
+Potential <|-- ICIPotential
+ICIPotential <|-- MaxPotential
+ICIPotential <|-- MinPotential
+ICIPotential <|-- TuningPotential
+
+' --- Layout: ICIPotential debajo de DeltaPotential ---
+DeltaPotential -[hidden]d-> ICIPotential
+' Mantener los hijos de ICIPotential en columna
+MaxPotential -[hidden]d-> MinPotential
+MinPotential -[hidden]d-> TuningPotential
+
+' --- Anotaciones ---
+"@PotentialType" ..> TablePotential : «Table, ProbTable»
+"@PotentialType" ..> UniformPotential : «Uniform»
+"@PotentialType" ..> DeltaPotential : «Delta»
+"@PotentialType" ..> ICIPotential : «ICIModel»
+
+' --- Manager ---
+PotentialUtils ..> "@PotentialType" : busca con PluginSearch
+PotentialUtils --> Potential : gestiona
+
+@enduml

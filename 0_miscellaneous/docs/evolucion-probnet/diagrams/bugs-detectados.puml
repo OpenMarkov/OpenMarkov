@@ -1,0 +1,99 @@
+@startuml bugs-detectados
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam classFontSize 11
+skinparam nodesep 20
+skinparam ranksep 20
+
+skinparam class {
+  BackgroundColor<<bug>> #FFCDD2
+  BackgroundColor<<smell>> #FFF9C4
+  BackgroundColor<<risk>> #FFE0B2
+  BorderColor #333333
+}
+
+package "Bugs confirmados" <<Rectangle>> {
+  class "B1: getChanceAndDecisionVariables()" as B1 <<bug>> {
+    @ToCheck PROBABLE_BUG
+    --
+    Incluye SV_PRODUCT y SV_SUM
+    ademas de CHANCE y DECISION.
+  }
+
+  class "B2: moveNode() NPE" as B2 <<bug>> {
+    linea 1389
+    --
+    getNode(name) puede devolver null.
+    No hay null-check antes de usar node.
+  }
+
+  class "B3: modifyAgent(REMOVE)" as B3 <<bug>> {
+    agents = null
+    --
+    Si agents queda vacio se asigna null.
+    getAgents() devolvera null -> NPE.
+  }
+
+  class "B4: addShiftedNode()" as B4 <<bug>> {
+    no copia potenciales
+    --
+    Copia coordenadas y propiedades
+    pero no los potenciales del nodo.
+  }
+}
+
+package "Code smells" <<Rectangle>> {
+  class "S1: checkProbNet() duplicado" as S1 <<smell>> {
+    Misma logica que getUnsatisfied().
+    Deberia delegar.
+  }
+
+  class "S2: Bucles manuales" as S2 <<smell>> {
+    variablesCouldBeTemporal(), isMultiagent()
+    usan for+instanceof en vez de
+    hasConstraintOfClass().
+  }
+
+  class "S3: getProbPotentials/\ngetUtilityPotentials" as S3 <<smell>> {
+    Patron identico de iteracion
+    con diferente predicado.
+    Extraible a metodo comun.
+  }
+
+  class "S4: getNumCriteria()" as S4 <<smell>> {
+    Busqueda lineal O(n*m)
+    para detectar duplicados.
+    Deberia usar Set<String>.
+  }
+
+  class "S5: addNodeConsistently()" as S5 <<smell>> {
+    6 lineas de codigo muerto
+    (comentado). if-chain
+    en vez de switch.
+  }
+
+  class "S6: toString() linea 53" as S6 <<smell>> {
+    Antes de campos y constructores.
+    Rompe convencion Java.
+  }
+
+  class "S7: reader/writer en ProbNet" as S7 <<smell>> {
+    Acopla modelo a I/O.
+    Viola SRP.
+  }
+}
+
+package "Riesgos de tipo" <<Rectangle>> {
+  class "R1: constantPotentials" as R1 <<risk>> {
+    Set<TablePotential> deberia ser
+    Set<Potential> (TODO linea 1090).
+  }
+
+  class "R2: getNode(Variable)" as R2 <<risk>> {
+    Puede devolver null pero
+    no tiene @Nullable.
+    Inconsistente con getNode(String).
+  }
+}
+
+@enduml

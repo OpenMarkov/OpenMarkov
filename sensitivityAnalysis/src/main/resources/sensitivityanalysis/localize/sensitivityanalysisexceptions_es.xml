@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <NoUncertainParameter>
+        <title value="Parámetros de incertidumbre sin nombre"/>
+        <message
+                value="Ningún parámetro de incertidumbre tiene nombre. Note que el análisis de sensibilidad sólo reconoce parámetros de incertidumbre con nombre."/>
+    </NoUncertainParameter>
+    <BelowTwoUncertainParameters>
+        <title value="Menos de dos parámetros de incertidumbre con nombre"/>
+        <message
+                value="Menos de dos parámetros de incertidumbre tienen nombre. Note que este análisis de sensibilidad sólo reconoce aquellos parámetros de incertidumbre con nombre."/>
+    </BelowTwoUncertainParameters>
+</properties>

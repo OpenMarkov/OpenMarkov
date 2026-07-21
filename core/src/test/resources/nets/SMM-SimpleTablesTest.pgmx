@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.0.1">
+  <ProbNet type="SMM">
+    <Variables>
+      <Variable name="Age [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="498" y="295" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="12.0" belongsTo="left" />
+          <Threshold value="100.0" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="State [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="497" y="380" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Age [1]" timeSlice="1" type="numeric" role="chance">
+        <Coordinates x="742" y="293" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="12.0" belongsTo="left" />
+          <Threshold value="100.0" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="State [1]" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="741" y="379" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="545" y="131" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="CostTh" type="numeric" role="utility">
+        <Coordinates x="541" y="221" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="QoL [0]" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="456" y="477" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="CostTh" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="State [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [0]" timeSlice="0" />
+        <Variable name="State [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [0]" timeSlice="0" />
+        <Variable name="Age [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [0]" timeSlice="0" />
+        <Variable name="QoL [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [0]" timeSlice="0" />
+        <Variable name="State [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [1]" timeSlice="1" />
+        <Variable name="State [1]" timeSlice="1" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="State [0]" timeSlice="0" />
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age [1]" timeSlice="1" />
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="State [1]" timeSlice="1" />
+          <Variable name="Age [1]" timeSlice="1" />
+          <Variable name="State [0]" timeSlice="0" />
+          <Variable name="Therapy" />
+        </Variables>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="CostTh" />
+        <Variables>
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>0.0 10.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="QoL [0]" timeSlice="0" />
+        <Variables>
+          <Variable name="State [0]" timeSlice="0" />
+        </Variables>
+        <Values>10.0 20.0</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+</ProbModelXML>
+

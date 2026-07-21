@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <NetworkTypes>
+        <OOBN value="OOBN"/>
+        <MDP value="Markov Decision Process"/>
+        <MPAD value="MPAD"/>
+    </NetworkTypes>
+    <ConstraintDescriptions>
+        <AllChanceVariablesHaveChancePotentials value="All chance variables must have chance potentials"/>
+        <DistinctLinks value="Links must be distinct"/>
+        <DistinctVariableNames value="Variable names must be distinct"/>
+        <MaxNumParents value="Cannot have more than {maxNumParents}"/>
+        <ModelNetworkConstraint value="Tried to add, remove or invert the wrong link"/>
+        <NoAlwaysObservedDescendantOfDecision value="An always-observed variable cannot be a descendant of a decision node"/>
+        <NoBackwardLink value="Links must only be drawn to future slices or from nodes in slice 0 towards atemporal nodes"/>
+        <NoClosedPath value="Cannot have closed paths"/>
+        <NoCycle value="Cannot have cycles"/>
+        <NoEmptyName value="Name cannot be empty"/>
+        <NoLinkRestriction value="Cannot have links"/>
+        <NoLoops value="Cannot have loops"/>
+        <NoMixedParents value="Utility nodes cannot have mixed parents"/>
+        <NoMultipleLinks value="Cannot have multiple links"/>
+        <NoRevelationArc value="NoRevelationArc"/>
+        <NoSelfLoop value="Cannot loop self"/>
+        <NoSuperValueNode value="Cannot add super value"/>
+        <NoUtilityParent value="NoUtilityParent"/>
+        <OnlyAtemporalVariables value="Utility nodes can only have utility children"/>
+        <OnlyChanceNodes value="Only chance nodes are allowed"/>
+        <OnlyContinuousVariables value="OnlyContinuousVariables"/>
+        <OnlyDirectedLinks value="OnlyDirectedLinks"/>
+        <OnlyDiscreteVariables value="OnlyDiscreteVariables"/>
+        <OnlyFiniteStatesVariables value="OnlyFiniteStatesVariables"/>
+        <OnlyNumericVariables value="OnlyNumericVariables"/>
+        <OnlyOneAgent value="OnlyOneAgent"/>
+        <OnlyOneUtilityNode value="OnlyOneUtilityNode"/>
+        <OnlyTemporalVariables value="OnlyTemporalVariables"/>
+        <OnlyUndirectedLinks value="OnlyUndirectedLinks"/>
+        <OnlyUnlabeledLinks value="OnlyUnlabeledLinks"/>
+        <ProperUtilityPotentials value="ProperUtilityPotentials"/>
+        <UtilityNodes value="UtilityNodes"/>
+        <ValidCriterionName value="ValidCriterionName"/>
+        <ValidStateName value="ValidStateName"/>
+    </ConstraintDescriptions>
+</properties>

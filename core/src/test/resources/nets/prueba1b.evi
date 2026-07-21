@@ -1,0 +1,13 @@
+// Evidence case 
+//   Elvira format 
+
+evidence  NoName { 
+
+// Evidence Properties
+
+title = "Untitled";
+version = 1.0;
+
+catarata_contral = 2,
+tipo_catarata = 2,
+}

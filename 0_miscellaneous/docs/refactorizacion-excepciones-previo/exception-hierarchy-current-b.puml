@@ -1,0 +1,76 @@
+@startuml exception-hierarchy-current-b
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 10
+skinparam classAttributeIconSize 0
+skinparam padding 4
+skinparam nodesep 25
+skinparam ranksep 40
+skinparam shadowing false
+skinparam dpi 110
+skinparam wrapWidth 160
+
+skinparam class {
+    BackgroundColor White
+    BorderColor #666666
+    ArrowColor #555555
+    FontSize 10
+}
+skinparam package {
+    BackgroundColor White
+    BorderColor #AAAAAA
+    FontSize 10
+    FontStyle bold
+}
+skinparam note {
+    BackgroundColor #FFFBE6
+    BorderColor #CCAA00
+    FontSize 9
+}
+skinparam legend {
+    BackgroundColor #F8F8F8
+    BorderColor #AAAAAA
+    FontSize 9
+}
+
+top to bottom direction
+
+legend top right
+|= Color |= Significado |
+|<#FFCCCC>| Debería ser unchecked (TODO en el código) |
+|<#FFF2CC>| Namespace abstracto (sealed/abstract) |
+|<#EEEEEE>| Clase estándar de Java |
+|<#FFE4BB>| No analizada previamente en este informe |
+endlegend
+
+' ── Raíz Java ─────────────────────────────────────────
+class "Exception" as JEx #EEEEEE
+
+' ── Incorrectamente checked ───────────────────────────
+package "Incorrectamente checked\n(TODO documentado en el código fuente)" as PKG_BAD #FFF0F0 {
+    class "NonProjectablePotentialException\n//TODO: unchecked | 8 variantes//" as NPPE #FFCCCC
+    class "InvalidNetworkTypeException\n//TODO: unchecked | 2 variantes//" as INTE #FFCCCC
+    class "NotEvaluableNetworkException\n//TODO: unchecked//" as NENE #FFCCCC
+    class "UnexpectedInferenceException\n//TODO: unchecked//" as UIE #FFCCCC
+    class "CannotNormalizePotentialException\n//TODO: unchecked//" as CNPE #FFCCCC
+    class "PotentialOperationException\n//TODO: catches ignored → bugs//" as POE #FFCCCC
+    class "CostEffectivenessException\n//TODO: ¿ocurre realmente en GUI? | 4 var.//" as CEE #FFCCCC
+    class "InvalidArgumentException\n//TODO: → IllegalArgumentException (Java)//" as IAE #FFCCCC
+    class "NotSupportedOperationException\n//TODO: → UnsupportedOperationException (Java)//" as NSOE #FFCCCC
+    class "NotAllNodesHavePoliciesException\nThereIsNoPotentialsInNodeException\n//TODO: unchecked//" as OTHER #FFCCCC
+}
+PKG_BAD -up-|> JEx
+
+' ── GUI exceptions ────────────────────────────────────
+package "org.openmarkov.gui.exception  (27 clases)" as PKG_GUI #FFFFF4 {
+    class "ThereIsNoNextEvidenceCaseException\n//Siempre capturada → UnrecoverableException//" as TINNE #FFE4BB
+    class "ThereIsNoPreviousEvidenceCaseException\n//Mismo patrón que la anterior//" as TINPE #FFE4BB
+    class "NoSelectedNodeException\n//TODO: RuntimeException//" as NSN #FFCCCC
+    class "NotEnoughtMemoryException  //typo: Enought//" as NEM #FFCCCC
+    class "WrongClassException\nUnexpectedMenuActionException\n//TODO: unchecked//" as WCUMAE #FFCCCC
+    class "(+22 excepciones adicionales)" as GUIREST #FFFFFF
+}
+PKG_GUI -up-|> JEx
+
+@enduml

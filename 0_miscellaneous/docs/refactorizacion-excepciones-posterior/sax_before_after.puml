@@ -1,0 +1,40 @@
+@startuml sax_before_after
+skinparam backgroundColor white
+skinparam defaultFontName Sans
+skinparam defaultFontSize 11
+skinparam classBackgroundColor #F8F8F8
+skinparam classBorderColor #888888
+skinparam ArrowColor #555555
+
+package "ANTES: SAXException visible en la GUI" {
+  class "MainPanelListenerAssistant" as GUI1 {
+    +openNetwork() throws SAXException
+  }
+  class "ProbNetReader" as Reader1 {
+    +loadFromFile() throws SAXException
+  }
+  class "SAXParser (javax.xml)" as SAX1 {
+  }
+  GUI1 --> Reader1 : llama
+  Reader1 --> SAX1 : usa
+  GUI1 ..> SAX1 : conoce (fuga de abstraccion)
+}
+
+package "DESPUES: SAXException encapsulada en io" {
+  class "MainPanelListenerAssistant" as GUI2 {
+    +openNetwork()
+  }
+  class "ProbNetReader" as Reader2 {
+    +loadFromFile() throws SAXException
+  }
+  class "UnrecoverableException" as Unr2 {
+  }
+  class "SAXParser (javax.xml)" as SAX2 {
+  }
+  GUI2 --> Reader2 : llama
+  Reader2 --> SAX2 : usa
+  Reader2 ..> Unr2 : captura SAXException\ny envuelve
+  GUI2 ..> Unr2 : conoce (correcto)
+}
+
+@enduml

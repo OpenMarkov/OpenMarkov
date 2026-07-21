@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <GenericError>
+        <Text value="An error occurred. Check the Message Window for further details."/>
+    </GenericError>
+    <AddAgent>
+        <Title value="Add agent"/>
+        <Text value="Input name for new agent"/>
+    </AddAgent>
+    <AddCriterion>
+        <Title value="Add criterion"/>
+        <Text value="Input name for new criterion"/>
+    </AddCriterion>
+    <AddState>
+        <Text value="Input name for new state"/>
+        <DefaultValue value="New state"/>
+    </AddState>
+    <CheckMessageWindow>
+        <Text value="For more information, check the message window."/>
+    </CheckMessageWindow>
+    <ErrorSavingNetwork>
+        <Text value="Network could not be saved."/>
+    </ErrorSavingNetwork>
+    <ConstraintViolationException value="Constraint Violation Exception">
+        <OnlyDiscreteVariables value="Only discrete variables are valid. "/>
+        <NoCycles value="Cycles are not valid in Bayesian Networks."/>
+        <OnlyContinuousVariables value="Only continuous variables are valid."/>
+        <ValidName>
+            <Exists value="No valid name, the node exists in the network."/>
+        </ValidName>
+    </ConstraintViolationException>
+    <InvalidDataValue>
+        <Title value="Data error"/>
+        <Text value="Invalid data value"/>
+    </InvalidDataValue>
+    <MessageResourceNotExists>
+        <Text value="Missing image resource: ~"/>
+    </MessageResourceNotExists>
+    <WarningWindow>
+        <Title value="Warning"/>
+    </WarningWindow>
+    <NodePurposeEmpty>
+        <Text value="You must specify the purpose of the node"/>
+        <Title value="Empty node purpose"/>
+    </NodePurposeEmpty>
+    <BUNDLEFILE>
+        <Text value="Default (english)"/>
+    </BUNDLEFILE>
+    <LinkMakesCycle>
+        <Text value="The link ~ -&gt; ~ cannot be created because it would make a cycle in the network"/>
+    </LinkMakesCycle>
+    <SaveNetwork>
+        <Title value="Save network"/>
+    </SaveNetwork>
+    <SaveNetworkImage value="Save image of network"/>
+    <ExceptionInvalidState>
+        <Text value="Invalid State. "/>
+        <Title value="Error - Invalid State"/>
+    </ExceptionInvalidState>
+    <LoadEvidence>
+        <Error>
+            <UnknownVariable>
+                <Text value="Unknown variable."/>
+            </UnknownVariable>
+            <InvalidState>
+                <Text value="Invalid state."/>
+            </InvalidState>
+            <IncompatibleEvidence>
+                <Text value="Incompatible evidence."/>
+            </IncompatibleEvidence>
+            <Text value="Evidence can not be loaded."/>
+        </Error>
+        <Title value="Load evidence"/>
+    </LoadEvidence>
+    <LinkedNodesNotExist>
+        <Text value="Any of the nodes to link doesn't exist"/>
+    </LinkedNodesNotExist>
+    <ExceptionGeneric>
+        <Title value="Error"/>
+    </ExceptionGeneric>
+    <DuplicatedState>
+        <Title value="Duplicated state"/>
+        <Text value="Each state can only appears one time"/>
+    </DuplicatedState>
+    <ClipboardNotSet>
+        <Text value="This panel has not access to the clipboard"/>
+    </ClipboardNotSet>
+    <ExceptionIncompatibleEvidence>
+        <Text value="Incompatible Evidence. "/>
+        <Title value="Error - Incompatible Evidence"/>
+    </ExceptionIncompatibleEvidence>
+    <NoPropagationCanBeDoneMessage>
+        <Title value="Propagation cannot be done"/>
+    </NoPropagationCanBeDoneMessage>
+    <ErrorWindow>
+        <Title value="Error"/>
+    </ErrorWindow>
+    <NetworkCommentWindow>
+        <Title value="Network comment"/>
+    </NetworkCommentWindow>
+    <MissingStringResource>
+        <Text value="The string resource '~' doesn't exist"/>
+    </MissingStringResource>
+    <ExceptionNormalizeNullVector>
+        <Title value="Error - Normalize Null Vector"/>
+        <Text value="Normalize Null Vector. "/>
+    </ExceptionNormalizeNullVector>
+    <CursorResourceNotExists>
+        <Text value="Missing standard cursor: ~"/>
+    </CursorResourceNotExists>
+    <NetworkLoaded>
+        <Text value="Network loaded successfully"/>
+    </NetworkLoaded>
+    <SelectionVetoed>
+        <Text value="Internal frame selection vetoed"/>
+    </SelectionVetoed>
+    <NetworkNotSaved>
+        <Text value="The network &quot;~&quot; has been modified. Do you want to save the changes?"/>
+        <Title value="Save network"/>
+    </NetworkNotSaved>
+    <NotEnoughMemoryForExactInference>
+        <Title value="Not enough memory for exact inference"/>
+        <Text value="There is not enough memory available "/>
+        <!--for exact inference.&#xA; An approximate inference algorithm will be used instead.-->
+    </NotEnoughMemoryForExactInference>
+    <IntervalOverlap>
+        <Text value="Intervals may not overlap."/>
+    </IntervalOverlap>
+    <WrongJVMVersion>
+        <Text value="This application requires the version ~ of the Java Virtual Machine but your system has the version ~"/>
+    </WrongJVMVersion>
+    <NetworkSaved>
+        <Text value="Network saved successfully"/>
+    </NetworkSaved>
+    <ClipboardContentEmpty>
+        <Text value="You can't copy an empty object to clipboard"/>
+    </ClipboardContentEmpty>
+    <LinkNotAllowed>
+        <Text value="This link is not allowed"/>
+    </LinkNotAllowed>
+    <LinkNotReversible>
+        <Text>
+            <Parent value="The potential of the parent doesn't allow arc reversal"/>
+            <Child value="The potential of the child doesn't allow arc reversal"/>
+        </Text>
+    </LinkNotReversible>
+    <IconResourceNotExists>
+        <Text value="Missing icon resource: ~"/>
+    </IconResourceNotExists>
+    <LinkExists>
+        <Text value="The link ~ -&gt; ~ cannot be created because it already exists"/>
+    </LinkExists>
+    <ErrorLoadingNetwork>
+        <Text value="Network could not be loaded"/>
+    </ErrorLoadingNetwork>
+    <ErrorLoadingNetworkURL>
+        <Text value="Network from URL could not be loaded"/>
+    </ErrorLoadingNetworkURL>
+    <Edit>
+        <AddProbNodeEdit>
+            <Undo value="Undo add node"/>
+            <Redo value="Redo add node"/>
+        </AddProbNodeEdit>
+    </Edit>
+    <Action>
+        <AddNode value="add node"/>
+        <MoveNodes value="move"/>
+        <PasteObjects value="paste"/>
+        <RemoveObjects value="remove"/>
+        <NodeProperties value="node properties"/>
+        <CutObjects value="cut"/>
+        <NetworkProperties value="network properties"/>
+        <AddLink value="add link"/>
+    </Action>
+    <IncompatibleEvidenceException>
+        <Text value="The evidence introduced is incompatible with the network"/>
+    </IncompatibleEvidenceException>
+    <RadiusGreaterThanZero>
+        <Text value="The radius of the circle must be greater than 0."/>
+    </RadiusGreaterThanZero>
+    <CannotPasteAllNodes>
+        <Text value="Some nodes from the clipboard can't be pasted in this type of network"/>
+    </CannotPasteAllNodes>
+    <CanNotRecognisedFileExtension>
+        <Text value="File extension not recognised. Network not saved."/>
+    </CanNotRecognisedFileExtension>
+    <NodeTitleEmpty>
+        <Text value="You must specify the title of the node"/>
+        <Title value="Empty node title"/>
+    </NodeTitleEmpty>
+    <WrongNodeType>
+        <Text value="This type of node cannot be created in this type of network"/>
+    </WrongNodeType>
+    <EmptyStateList>
+        <Title value="Empty states list"/>
+        <Text value="You must specify at least one state"/>
+    </EmptyStateList>
+    <OverwriteNetwork>
+        <Title value="Confirmation"/>
+        <Text value="does exist. Do you want to overwrite it?"/>
+    </OverwriteNetwork>
+    <NetworkBackup>
+        <Text value="Backup has been done."/>
+    </NetworkBackup>
+    <RestorationVetoed>
+        <Text value="Internal frame restoration vetoed"/>
+    </RestorationVetoed>
+    <NodeNotCreated>
+        <Text value="The node ~ cannot be created"/>
+    </NodeNotCreated>
+    <NoPreviousEvidenceCaseMessage>
+        <Title value="Error - Impossible navigation among Evidence Cases"/>
+        <Text value="There is no previous Evidence Case."/>
+    </NoPreviousEvidenceCaseMessage>
+    <ExceptionNotEvaluableNetwork>
+        <Text value="Not Evaluable Network. "/>
+        <Title value="Error - Not Evaluable Network"/>
+    </ExceptionNotEvaluableNetwork>
+    <NodeNameEmpty>
+        <Title value="Empty node name"/>
+        <Text value="You must specify the name of the node"/>
+    </NodeNameEmpty>
+    <WrongVersionFormat>
+        <Text value="The version must be a decimal value"/>
+        <Title value="Wrong version format"/>
+    </WrongVersionFormat>
+    <DuplicatedNode>
+        <Text value="Already a node exists with this name"/>
+        <Title value="Duplicated node"/>
+    </DuplicatedNode>
+    <NoRowsSelected>
+        <Text value="You must select at least one row"/>
+    </NoRowsSelected>
+    <NetworkNameEmpty>
+        <Title value="Empty network name"/>
+        <Text value="You must specify the name of the network"/>
+    </NetworkNameEmpty>
+    <LinkNotExist>
+        <Text value="The link doesn't exist"/>
+    </LinkNotExist>
+    <IconificationVetoed>
+        <Text value="Internal frame iconification vetoed"/>
+    </IconificationVetoed>
+    <ErrorLoadingInference>
+        <Text value="This evidence can not be opened. Check message window."/>
+    </ErrorLoadingInference>
+    <EmptyState>
+        <Text value="You must specify the text of the state"/>
+        <Title value="Empty state"/>
+    </EmptyState>
+    <InternalFrame>
+        <Title value="Untitled"/>
+    </InternalFrame>
+    <NetworkBackupError>
+        <Text value="Backup creation error."/>
+    </NetworkBackupError>
+    <NodeStateEmpty>
+        <Title value="Empty state name"/>
+        <Text value="You must specify the state of the node"/>
+    </NodeStateEmpty>
+    <ExceptionNoFinding>
+        <Text value="Trying to remove a Finding that doesn't exist. "/>
+        <Title value="Error - No Finding"/>
+    </ExceptionNoFinding>
+    <NodeNotExist>
+        <Text value="The node doesn't exist"/>
+    </NodeNotExist>
+    <OpenNetwork>
+        <Title value="Open network"/>
+    </OpenNetwork>
+    <CannotUndo>
+        <Text value="The undo operation can't be performed"/>
+    </CannotUndo>
+    <LoadingNetwork>
+        <Text value="Loading network"/>
+    </LoadingNetwork>
+    <LoadingNetworkURL>
+        <Text value="Loading network from URL"/>
+    </LoadingNetworkURL>
+    <ExceptionNotEnoughMemory>
+        <Text value="The system has run out of memory. "/>
+        <Title value="Error - Not Enough Memory"/>
+    </ExceptionNotEnoughMemory>
+    <NoPropagationCanBeDoneMessage1>
+        <Text value="Propagation cannot be done by the moment."/>
+    </NoPropagationCanBeDoneMessage1>
+    <WrongZoomValue>
+        <Text value="You must write an integer value between 10 and 500"/>
+    </WrongZoomValue>
+    <CannotRedo>
+        <Text value="The redo operation can't be performed"/>
+    </CannotRedo>
+    <FileNotExists>
+        <Text value="doesn't exists"/>
+        <Title value="Error"/>
+    </FileNotExists>
+    <NodesNotUndoneRedone>
+        <Text value="In undo or redo, the type of some nodes that you want to add to the network is not compatible with the type of it"/>
+    </NodesNotUndoneRedone>
+    <IntervalInconsistent>
+        <Text value="Inconsistent interval. Review the introduced value."/>
+    </IntervalInconsistent>
+    <MessageWindow>
+        <Title value="OpenMarkov: Message window"/>
+    </MessageWindow>
+    <CursorStandardNotExists>
+        <Text value="Missing cursor resource: ~"/>
+    </CursorStandardNotExists>
+    <NoPropagationCanBeDoneMessage2>
+        <Text value="This Network is neither a BN nor an ID. Its constraints are"/>
+    </NoPropagationCanBeDoneMessage2>
+    <InverseLinkExists>
+        <Text value="The link ~ -&gt; ~ cannot be created because the inverse link already exists"/>
+    </InverseLinkExists>
+    <Generic value="I/O error         = I/O error"/>
+    <NoNextEvidenceCaseMessage>
+        <Title value="Error - Impossible navigation among Evidence Cases"/>
+        <Text value="There is no next Evidence Case. "/>
+    </NoNextEvidenceCaseMessage>
+    <WrongClipboardData>
+        <Text value="The data stored in the clipboard is not valid"/>
+    </WrongClipboardData>
+    <SavingNetwork>
+        <Text value="Saving network"/>
+    </SavingNetwork>
+    <IntervalEditError>
+        <Text value="Interval edition error"/>
+    </IntervalEditError>
+    <CostEffectiveness>
+        <VariableTooLow value="is lower than the minimum of the variable domain"/>
+        <VariableTooHigh value="is higher than the maximum of variable domain"/>
+        <ExceedsTimeHorizon value="exceeds the time horizon"/>
+        <Error value="Cost effectiveness analysis found an error"/>
+    </CostEffectiveness>
+    <NumberFormatException>
+        <Title value="Error"/>
+        <Text value="Invalid value."/>
+    </NumberFormatException>
+    <OverwriteFile>
+        <Title value="Overwrite confirmation"/>
+        <Text value="The select file does exist. Do you want to overwrite it?"/>
+    </OverwriteFile>
+    <!-- 28/11/2022 MID temporal evolution when there is more than one node without policy -->
+    <DecisionWithoutPolicyWarning>
+        <Text value="There are more than one decision node without associated policy"/>
+    </DecisionWithoutPolicyWarning>
+    <UnexpectedInferenceException>
+        <TemporalEvolution value="More than one conditioning variable"/>
+    </UnexpectedInferenceException>
+    <!-- 28/11/2022 Text for ProgressMonitor; Message is dependent on its use; To be used with MID and DES (TODO integrate the last ) -->
+    <ProgressMonitor>
+        <ProgressText value="Progress..."/>
+        <Message>
+            <TemporalEvolution value="Temporal evolution"/>
+        </Message>
+        <Note>
+            <TemporalEvolution value="Evaluating"/>
+        </Note>
+    </ProgressMonitor>
+</properties>

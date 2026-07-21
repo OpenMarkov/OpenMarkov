@@ -1,0 +1,450 @@
+@startuml ve-influence-diagrams
+
+' ══════════════════════════════════════════════════════════════════════
+' PARTE 1: Diagrama de clases — layout vertical (top-down)
+' ══════════════════════════════════════════════════════════════════════
+
+title Eliminación de Variables en Diagramas de Influencia — OpenMarkov
+
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam nodesep 30
+skinparam ranksep 30
+top to bottom direction
+
+' ══════════════════════════════════════════════════════════════════════
+' CAPA 1 (arriba): Core — interfaces y clases base
+' ══════════════════════════════════════════════════════════════════════
+
+package "org.openmarkov.core  —  Interfaces y modelo" as core #F5F5F5 {
+
+  together {
+    abstract class InferenceAlgorithm {
+      # probNet : ProbNet
+      # preResolutionEvidence : EvidenceCase
+      + {abstract} getPossibleNetworkTypes()
+      + {abstract} getAdditionalConstraints()
+    }
+
+    interface EliminationHeuristic {
+      + getVariableToDelete() : Variable
+    }
+
+    interface "<<interface>>\nEvaluation" as Evaluation {
+      + getProbability() : TablePotential
+      + getUtility() : TablePotential
+    }
+
+    interface "<<interface>>\nOptimalPolicies" as OptimalPolicies {
+      + getOptimalPolicies() : Map
+      + getOptimalPolicy(var) : Potential
+    }
+
+    interface "<<interface>>\nPropagation" as Propagation {
+      + getPosterior(var) : TablePotential
+    }
+  }
+
+  together {
+    class ProbNet {
+      + getProbPotentials(var)
+      + getUtilityPotentials(var)
+      + getAdditivePotentials()
+      + getChanceAndDecisionVariables()
+      + removePotential(p)
+      + addPotential(p)
+    }
+
+    enum NodeType {
+      CHANCE
+      DECISION
+      UTILITY
+    }
+  }
+}
+
+' ══════════════════════════════════════════════════════════════════════
+' CAPA 2: Core — operaciones y utilidades
+' ══════════════════════════════════════════════════════════════════════
+
+package "org.openmarkov.core  —  Operaciones" as coreops #F5F5F5 {
+
+  together {
+    class DiscretePotentialOperations <<utility>> {
+      + {static} multiply()
+      + {static} marginalize()
+      + {static} multiplyAndMarginalize()
+      + {static} divide()
+      + {static} sum()
+      + {static} sumByCriterion()
+      + {static} projectOutVariable()
+    }
+
+    class MaxOutVariable {
+      + getUtility() : TablePotential
+      + getPolicy() : TablePotential
+    }
+  }
+
+  together {
+    class TaskUtilities <<utility>> {
+      + {static} expandNetwork()
+      + {static} imposePolicies()
+      + {static} extendPreResolutionEvidence()
+      + {static} projectTablesAndBuildMarkovDecisionNetwork()
+      + {static} discretizeNonObservedNumericVariables()
+      + {static} absorbAllIntermediateNumericNodes()
+      + {static} scaleUtilitiesUnicriterion()
+    }
+
+    class BasicOperations <<utility>> {
+      + {static} projectPartialOrder()
+    }
+  }
+}
+
+' ══════════════════════════════════════════════════════════════════════
+' CAPA 3: Inference — tareas VE (clase abstracta + concretas)
+' ══════════════════════════════════════════════════════════════════════
+
+package "org.openmarkov.inference  —  Tareas VE" as vetasks #EEEEFF {
+
+  abstract class VariableElimination {
+    - heuristicFactory : HeuristicFactory
+    --
+    # generalPreprocessing()
+    # exactAlgorithmsPreprocessing()
+    # unicriterionPreprocess()
+    # bicriteriaPreprocess()
+    # heuristicFactory() : EliminationHeuristic
+  }
+
+  together {
+    class VEEvaluation {
+      - variableEliminationCore : VariableEliminationCore
+      --
+      - resolve()
+      + getProbability() : TablePotential
+      + getUtility() : TablePotential
+      + getOptimalPolicies() : Map
+      + getOptimalPolicy(var) : Potential
+    }
+
+    class VEPropagation {
+      - resolve()
+      + getPosterior(var) : TablePotential
+    }
+
+    class VEExpectedUtilityDecision {
+      + getExpectedUtilities() : Map
+    }
+  }
+}
+
+' ══════════════════════════════════════════════════════════════════════
+' CAPA 4: Inference — motor de eliminación
+' ══════════════════════════════════════════════════════════════════════
+
+package "org.openmarkov.inference  —  Motor VE" as veengine #EEEEFF {
+
+  class VariableEliminationCore {
+    - markovDecisionNetwork : ProbNet
+    - heuristic : EliminationHeuristic
+    - optimalPolicies : LinkedHashMap
+    - isUnicriterion : boolean
+    --
+    - performVariableElimination()
+    - eliminateVariable(var)
+    + getUtility() : Potential
+    + getProbability() : TablePotential
+    + getOptimalPolicies() : Map
+  }
+
+  together {
+    class ChanceVariableElimination {
+      - marginalProbability : TablePotential
+      - utilityPotentials : List<Potential>
+      --
+      + getMarginalProbability()
+      + getUtilityPotentials()
+    }
+
+    class DecisionVariableElimination {
+      - projectedProbability : TablePotential
+      - utility : Potential
+      - optimalPolicy : TablePotential
+      --
+      + getProjectedProbability()
+      + getUtility()
+      + getOptimalPolicy()
+    }
+  }
+
+  together {
+    class CEAlgebra <<utility>> {
+      + {static} ceMaximize()
+      + {static} multiplyAndMarginalize()
+    }
+
+    class VariableEliminationOperations <<utility>> {
+      + {static} orderPotentialsByPartialOrder()
+      + {static} containsInterventions()
+    }
+
+    class CreatePotentialUtility {
+      + {static} createCEPotential()
+    }
+  }
+}
+
+' ══════════════════════════════════════════════════════════════════════
+' CAPA 5: Heurísticas
+' ══════════════════════════════════════════════════════════════════════
+
+package "org.openmarkov.inference  —  Heurísticas" as heurpkg #EEEEFF {
+  together {
+    class SimpleElimination
+    class MinimalFillIn
+    class CanoMoralElimination
+    class WeightedMinFill
+  }
+}
+
+' ══════════════════════════════════════════════════════════════════════
+' RELACIONES
+' ══════════════════════════════════════════════════════════════════════
+
+' — Herencia —
+VariableElimination -up-|> InferenceAlgorithm
+
+VEEvaluation -up-|> VariableElimination
+VEPropagation -up-|> VariableElimination
+VEExpectedUtilityDecision -up-|> VariableElimination
+
+' — Implementación de interfaces —
+VEEvaluation .up.|> Evaluation
+VEEvaluation .up.|> OptimalPolicies
+VEPropagation .up.|> Propagation
+
+SimpleElimination .up.|> EliminationHeuristic
+MinimalFillIn .up.|> EliminationHeuristic
+CanoMoralElimination .up.|> EliminationHeuristic
+WeightedMinFill .up.|> EliminationHeuristic
+
+' — Composición y uso —
+VEEvaluation *-down-> VariableEliminationCore : crea y usa
+
+VariableEliminationCore -down-> ChanceVariableElimination : crea\n(si CHANCE)
+VariableEliminationCore -down-> DecisionVariableElimination : crea\n(si DECISION)
+VariableEliminationCore -up-> EliminationHeuristic : pide orden
+VariableEliminationCore --> ProbNet : opera sobre
+
+ChanceVariableElimination ..> DiscretePotentialOperations : usa
+ChanceVariableElimination ..> CEAlgebra : bicriterio
+
+DecisionVariableElimination ..> DiscretePotentialOperations : usa
+DecisionVariableElimination ..> MaxOutVariable : unicriterio
+DecisionVariableElimination ..> CEAlgebra : bicriterio
+
+VariableElimination ..> TaskUtilities : preprocesamiento
+VariableElimination ..> BasicOperations : orden parcial
+
+@enduml
+
+' ══════════════════════════════════════════════════════════════════════
+
+@startuml ve-influence-diagrams-activity
+
+title Flujo de ejecución: VE para Diagramas de Influencia
+
+skinparam activityFontSize 12
+skinparam shadowing false
+
+|VEEvaluation|
+
+start
+
+:Recibir ProbNet (ID) y evidencia;
+
+partition "Preprocesamiento General" {
+  if (¿Red temporal?) then (sí)
+    :Expandir red temporal;
+  else (no)
+  endif
+  :Imponer políticas de decisión;
+  :Extender evidencia pre-resolución;
+  if (¿Red temporal?) then (sí)
+    :Aplicar descuentos temporales;
+  else (no)
+  endif
+}
+
+partition "Preprocesamiento Exacto" {
+  :Escalar utilidades (unicriterio);
+  :Discretizar variables numéricas;
+  :Absorber nodos numéricos intermedios;
+}
+
+:Construir red de Markov-decisión
+(TaskUtilities.projectTablesAndBuild...);
+
+:Determinar variables a eliminar
+(chance + decisión);
+
+:Crear heurística de eliminación
+(proyectar orden parcial);
+
+|VariableEliminationCore|
+
+partition "Bucle de Eliminación" {
+  repeat
+    :Pedir siguiente variable X
+    a la heurística;
+
+    if (¿X es null?) then (sí)
+      :Fin del bucle;
+      detach
+    else (no)
+    endif
+
+    :Extraer potenciales de
+    probabilidad y utilidad
+    que dependen de X;
+
+    :Eliminar nodo X de la red;
+
+    if (¿Tipo de X?) then (CHANCE)
+
+      |ChanceVariableElimination|
+      :Multiplicar potenciales
+      de probabilidad → P_joint;
+      :Marginalizar sobre X
+      → P_marginal;
+      :Calcular condicional
+      P(X|resto) = P_joint / P_marginal;
+      :Para cada utilidad U_k:
+      U'_k = Σ_X P(X|resto) · U_k;
+      :Devolver P_marginal y {U'_k};
+
+    else (DECISION)
+
+      |DecisionVariableElimination|
+      :Sumar potenciales de utilidad
+      → U_total;
+      :Proyectar probabilidad
+      (eliminar X);
+      :Maximizar U_total sobre X
+      → U* = max_X U_total;
+      :Obtener política óptima
+      δ*(X) = argmax_X U_total;
+      :Guardar política en
+      optimalPolicies[X];
+
+    endif
+
+    |VariableEliminationCore|
+    :Añadir nuevos potenciales
+    a la red;
+
+  repeat while (quedan variables)
+}
+
+|VEEvaluation|
+
+:Obtener resultados finales;
+
+fork
+  :MEU (utilidad
+  esperada máxima);
+fork again
+  :P(E) (probabilidad
+  de la evidencia);
+fork again
+  :Políticas óptimas
+  {δ*(D_1), ..., δ*(D_k)};
+end fork
+
+stop
+
+@enduml
+
+' ══════════════════════════════════════════════════════════════════════
+
+@startuml ve-influence-diagrams-sequence
+
+title Secuencia de ejecución: VEEvaluation para un ID
+
+skinparam sequenceMessageAlign center
+skinparam shadowing false
+skinparam maxMessageSize 200
+
+actor Usuario
+participant "VEEvaluation" as VEE
+participant "TaskUtilities" as TU
+participant "BasicOperations" as BO
+participant "VECore\n(VariableEliminationCore)" as VEC
+participant "Heurística\n(EliminationHeuristic)" as H
+participant "ChanceVariable\nElimination" as CVE
+participant "DecisionVariable\nElimination" as DVE
+participant "DiscretePotential\nOperations" as DPO
+
+Usuario -> VEE : getUtility() / getOptimalPolicies()
+activate VEE
+
+VEE -> VEE : generalPreprocessing()
+VEE -> TU : imposePolicies(probNet)
+VEE -> TU : extendPreResolutionEvidence(probNet, evidence)
+VEE -> VEE : unicriterionPreprocess()
+VEE -> VEE : exactAlgorithmsPreprocessing()
+
+VEE -> TU : projectTablesAndBuild\nMarkovDecisionNetwork(probNet, evidence)
+activate TU
+return markovNet
+
+VEE -> BO : projectPartialOrder(probNet, ...)
+activate BO
+return projectedOrder
+
+VEE -> H ** : crear(markovNet, projectedOrder)
+
+VEE -> VEC ** : crear(markovNet, heuristic, unicriterio)
+activate VEC
+
+loop mientras heuristic.getVariableToDelete() ≠ null
+  VEC -> H : getVariableToDelete()
+  activate H
+  return variable X
+
+  alt X es CHANCE
+    VEC -> CVE ** : crear(X, probPotentials, utilPotentials)
+    activate CVE
+    CVE -> DPO : multiply(probPotentials)
+    CVE -> DPO : marginalize(joint, X)
+    CVE -> DPO : divide(joint, marginal)
+    CVE -> DPO : multiplyAndMarginalize(cond, U_k, X)
+    return marginalProb, utilPotentials
+
+  else X es DECISION
+    VEC -> DVE ** : crear(X, probPotentials, utilPotentials)
+    activate DVE
+    DVE -> DPO : sum(utilPotentials)
+    DVE -> DPO : multiply(probPotentials)
+    DVE -> DPO : projectOutVariable(X, joint)
+    DVE -> DPO : MaxOutVariable(X, prob, utility)
+    return projectedProb, maxUtility, policy
+    VEC -> VEC : optimalPolicies.put(X, policy)
+  end
+end
+
+return VECore inicializado
+
+VEE -> VEC : getUtility()
+VEE -> VEC : getProbability()
+VEE -> VEC : getOptimalPolicies()
+
+VEE --> Usuario : utility, probability,\noptimalPolicies
+deactivate VEE
+
+@enduml

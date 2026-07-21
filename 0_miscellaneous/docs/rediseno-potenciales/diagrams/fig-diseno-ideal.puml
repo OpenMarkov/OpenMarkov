@@ -1,0 +1,173 @@
+@startuml fig-diseno-ideal
+' ============================================================
+' Diseno ideal: Arquitectura de tres capas
+' Layout vertical forzado para legibilidad en A4
+' ============================================================
+
+left to right direction
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam nodesep 20
+skinparam ranksep 30
+skinparam dpi 150
+
+hide empty fields
+
+skinparam class {
+    BackgroundColor<<base>> #FFD580
+    BorderColor<<base>> #CC8800
+    BackgroundColor<<cap>> #70D7F0
+    BorderColor<<cap>> #2288AA
+    BackgroundColor<<table>> #BDD7FF
+    BorderColor<<table>> #4477BB
+    BackgroundColor<<generic>> #FFF3CD
+    BorderColor<<generic>> #CC9900
+    BackgroundColor<<other>> #E8E8E8
+    BorderColor<<other>> #888888
+    BackgroundColor<<ops>> #F0F0F0
+    BorderColor<<ops>> #999999
+    BackgroundColor<<meta>> #E0C8FF
+    BorderColor<<meta>> #7744BB
+    BackgroundColor<<sem>> #C8E8FF
+    BorderColor<<sem>> #4499CC
+}
+
+' ================================================================
+' CAPA 1: REPRESENTACION
+' ================================================================
+
+interface Potential <<base>> {
+    +getVariables() : List<Variable>
+    +getSemantics() : PotentialSemantics
+    +deepCopy(ProbNet) : Potential
+}
+
+note top of Potential
+  <b>Capa 1: Representacion</b>
+
+  <b>sealed interface</b> (Java 17+).
+  No declara tableProject()
+  ni reorder() como abstractos.
+  Cada tipo implementa solo las
+  interfaces de capacidad que
+  soporta (Projectable,
+  Reorderable, Scalable).
+end note
+
+class DiscreteTable <<table>> {
+    -values : double[]
+    -dimensions : int[]
+    -offsets : int[]
+    -semantics : PotentialSemantics
+}
+
+class "Uniform, Delta,\nICI, TreeADD,\nGaussian, GLM..." as OtherPotentials <<other>> {
+    Cada uno implementa
+    Projectable
+}
+
+Potential <|-- DiscreteTable
+Potential <|-- OtherPotentials
+
+' ================================================================
+' CAPA 2: PROYECCION
+' ================================================================
+
+class ProjectionContext <<cap>> {
+    -evidence : EvidenceCase
+    --
+    +project(Potential) : DiscreteTable
+}
+
+note top of ProjectionContext
+  <b>Capa 2: Proyeccion</b>
+
+  Convierte cualquier Potential
+  en DiscreteTable via la interfaz
+  Projectable. Tras esta fase,
+  la inferencia solo ve tablas.
+end note
+
+ProjectionContext .left.> Potential : proyecta
+
+' ================================================================
+' CAPA 3: COMPUTACION
+' ================================================================
+
+abstract class IndexedTable <<base>> {
+    #dimensions : int[]
+    #offsets : int[]
+    #tableSize : int
+}
+
+class "GenericTable<E>" as GenericTable <<generic>> {
+    -elementTable : List<E>
+}
+
+class TableOperations <<ops>> {
+    +{static} multiply(List<DiscreteTable>)
+    +{static} multiplyAndMarginalize(...)
+    +{static} normalize(DiscreteTable)
+    +{static} marginalize(...)
+    +{static} divide(...)
+}
+
+note top of TableOperations
+  <b>Capa 3: Computacion</b>
+
+  Solo DiscreteTable y GenericTable.
+  Sin downcasts. Tipos precisos.
+  Operaciones estaticas puras.
+end note
+
+DiscreteTable --|> IndexedTable
+IndexedTable <|-- GenericTable
+TableOperations .left.> DiscreteTable : opera sobre
+
+' ================================================================
+' SEMANTICA (sustituye PotentialRole enum)
+' ================================================================
+
+interface PotentialSemantics <<sem>> {
+    +initializeUniform(...)
+    +normalize(...)
+    +canInduceFindings() : boolean
+    +isAdditive() : boolean
+}
+
+note bottom of PotentialSemantics
+  Sustituye al enum <b>PotentialRole</b>.
+  Cada rol = objeto de comportamiento.
+  Sin sentencias <b>switch</b>.
+
+  Implementaciones:
+  - ConditionalProbability
+  - JointProbability
+  - UtilitySemantics
+  - PolicySemantics
+  - RestrictionSemantics
+end note
+
+DiscreteTable --> PotentialSemantics
+
+' ================================================================
+' METADATOS (composicion, no herencia)
+' ================================================================
+class InferenceAnnotation <<meta>> {
+    -table : DiscreteTable
+    -strategies : StrategyTree[]
+    -uncertainty : UncertainValue[]
+}
+
+note bottom of InferenceAnnotation
+  Metadatos del resultado de
+  inferencia, no de la tabla.
+  Se componen, no se heredan.
+  Rompe la dependencia ciclica.
+end note
+
+InferenceAnnotation --> DiscreteTable : contiene
+
+@enduml

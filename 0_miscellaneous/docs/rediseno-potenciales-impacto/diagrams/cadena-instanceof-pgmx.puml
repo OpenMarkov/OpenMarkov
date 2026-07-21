@@ -1,0 +1,66 @@
+@startuml cadena-instanceof-pgmx
+' ============================================================
+'  Cadena instanceof en PGMXWriter_0_2 (linea 833 - 860)
+'  Por cada nuevo subtipo de Potential, se anade un caso
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam dpi 150
+skinparam roundcorner 4
+skinparam ActivityBackgroundColor #FFEECC
+skinparam ActivityBorderColor #BB8800
+skinparam ActivityDiamondBackgroundColor #FFE0E0
+skinparam ActivityDiamondBorderColor #CC4444
+
+start
+:writePotential(potential);
+if (instanceof ExactDistrPotential\nL833) then (si)
+  :ExactDistrPotential -> table;
+  stop
+endif
+if (instanceof TablePotential\nL835) then (si)
+  :writeTablePotential();
+  stop
+endif
+if (instanceof TreeADDPotential\nL837) then (si)
+  :writeTreeADD();
+  stop
+endif
+if (instanceof ICIPotential\nL839) then (si)
+  :writeICIModel();
+  stop
+endif
+if (instanceof FunctionPotential\nL841) then (si)
+  :writeFunction();
+  stop
+endif
+if (instanceof GLMPotential\nL844) then (si)
+  if (instanceof WeibullHazardPotential\nL845) then (si)
+    if (instanceof ExponentialHazardPotential\nL846) then (si)
+      :writeExpHazard();
+      stop
+    else (no)
+      :writeWeibullHazard();
+      stop
+    endif
+  else (no)
+    :writeGLM();
+    stop
+  endif
+endif
+if (instanceof DeltaPotential\nL853) then (si)
+  :writeDelta();
+  stop
+endif
+if (instanceof BinomialPotential\nL855) then (si)
+  :writeBinomial();
+  stop
+endif
+if (instanceof AugmentedProbTablePotential\nL857) then (si)
+  :writeAugmented();
+  stop
+endif
+:fallback / log warning;
+stop
+
+@enduml

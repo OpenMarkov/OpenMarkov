@@ -1,0 +1,36 @@
+//	   Evidence case
+//	   Elvira format
+
+evidence NoName {
+
+//	   Evidence adittionalProperties
+
+title = "Untitled";
+version = 1.0;
+
+sublux_cristalino = 1,     // no
+catarata_contral = 2,     // blanca
+fv_global_pre = 2,     // sin-limit
+av_pre = 3,     // [0, 0.15]
+fibrosis_c_ant = 1,     // no
+deslu_global_pre = 2,     // ambos
+tipo_catarata = 3,     // moderada
+pupila_estrecha = 0,     // si
+fv_deslu_pre = 1,     // limit-ocio
+sinequias_post = 1,     // no
+mala_colaboracion = 0,     // si
+miopia_magna = 0,     // si
+ojo_vitrectomizado = 1,     // no
+neuropatias = 1,     // no
+maculopatias = 1,     // no
+pseudoexfoliacion = 1,     // no
+ojo_hundido = 0,     // si
+retinopatia_diabetic = 1,     // no proliferativa
+distrofia_fuchs = 1,     // moderada
+camara_estrecha = 1,     // no
+opac_corneales = 1,     // no
+av_contral = 1,     // (0.4, 0.7]
+retinopatia_nd = 1,     // no
+ambliopia = 1,     // no
+
+}

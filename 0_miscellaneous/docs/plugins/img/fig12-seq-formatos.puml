@@ -1,0 +1,50 @@
+@startuml fig12-seq-formatos
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam sequenceArrowThickness 1.5
+
+actor Usuario
+participant "FormatManager" as FM #90EE90
+participant "PluginSearch" as PS #AAE0FF
+participant "PGMXReader\n@FormatType(pgmx, 0.2)" as RD #FFD8B8
+
+Usuario -> FM : getInstance()
+activate FM
+
+note over FM : Primera llamada:\ndescubrir e instanciar\ntodos los readers/writers
+
+FM -> PS : findAllProbNetReaderPlugins()
+activate PS
+PS --> FM : Stream<Class<ProbNetReader>>
+deactivate PS
+
+loop para cada reader class
+    FM -> FM : newInstance()\n→ instanciar
+    FM -> FM : readerInstances.add(reader)
+end
+
+FM -> PS : findAllProbNetWriterPlugins()
+activate PS
+PS --> FM : Stream<Class<ProbNetWriter>>
+deactivate PS
+
+loop para cada writer class
+    FM -> FM : newInstance()\n→ instanciar
+    FM -> FM : writerInstances.add(writer)
+end
+
+FM --> Usuario : FormatManager instancia
+deactivate FM
+
+Usuario -> FM : getProbNetReader(url="red.pgmx")
+activate FM
+FM -> FM : extraer extensión → "pgmx"
+FM -> FM : leer versión del XML → "0.2"
+FM -> FM : buscar reader:\nextension="pgmx" && version.startsWith("0.2")
+FM --> RD : (match encontrado)
+FM --> Usuario : PGMXReader instancia
+deactivate FM
+
+Usuario -> RD : loadProbNet("red.pgmx", inputStream)
+RD --> Usuario : ProbNet
+@enduml

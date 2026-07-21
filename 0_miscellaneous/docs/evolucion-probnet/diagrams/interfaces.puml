@@ -1,0 +1,78 @@
+@startuml interfaces
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 40
+
+skinparam class {
+  BackgroundColor<<iface>>     #FFF3E0
+  BackgroundColor<<core>>      #E8F5E9
+  BackgroundColor<<algorithm>> #EDE7F6
+  BorderColor #444444
+}
+
+interface "GraphNetwork" as GN <<iface>> {
+  Acceso de solo lectura a la
+  topologia del grafo y a las
+  variables.
+  --
+  getNodes, getNode
+  getVariables, getVariable
+  getChildren, getParents
+  getLinks, existsPath
+  getNetworkType
+}
+
+interface "PotentialNetwork" as PN <<iface>> {
+  Extiende GraphNetwork con
+  acceso a potenciales.
+  --
+  getPotentials
+  getProbPotentials
+  getUtilityPotentials
+  getSortedPotentials
+  getConstantPotentials
+}
+
+class "ProbNet" as ProbNet <<core>> {
+  Red probabilistica completa
+  (mutable).
+  --
+  addNode, removeNode
+  addLink, removeLink
+  addPotential, removePotential
+  checkProbNet, doEdit, ...
+}
+
+class "InferenceAlgorithm\n(ejemplo)" as Algo <<algorithm>> {
+  Algoritmo de inferencia.
+  Solo necesita leer la red.
+  Acepta PotentialNetwork.
+}
+
+class "GraphConstraint\n(ejemplo)" as Constr <<algorithm>> {
+  Restriccion de topologia.
+  Solo necesita el grafo.
+  Acepta GraphNetwork.
+}
+
+GN <|-- PN
+PN <|.. ProbNet : implementa
+
+Algo ..> PN      : depende de >
+Constr ..> GN    : depende de >
+
+note bottom of GN
+  <b>Antes:</b> los algoritmos tenian que
+  aceptar <b>ProbNet</b> aunque solo
+  necesitaran el grafo o los
+  potenciales -> acoplamiento fuerte.
+
+  <b>Ahora:</b> cada algoritmo declara
+  exactamente lo que necesita.
+end note
+
+@enduml

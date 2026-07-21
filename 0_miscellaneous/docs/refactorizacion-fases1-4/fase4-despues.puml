@@ -1,0 +1,68 @@
+@startuml fase4-despues
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontSize 11
+
+title Fase 4 — Después de la refactorización
+
+class ProbNet {
+    +copy() : ProbNet
+    +deepCopy() : ProbNet
+    +getPotentials(predicate : Predicate<Potential>) : List<Potential>
+    +getPotentials() : List<Potential>
+    +getAdditivePotentials() : List<Potential>
+    +getPotentialsByRole(role : PotentialRole) : List<Potential>
+    ~clearConstraints() : void
+}
+
+note right of ProbNet
+  copy() → ProbNetCopier.shallowCopy(this)\n
+  deepCopy() → ProbNetCopier.deepCopy(this)\n
+  \n
+  Las tres variantes de getPotentials()\n
+  delegan en getPotentials(Predicate)\n
+  \n
+  clearConstraints() es package-private,\n
+  usada sólo por ProbNetCopier
+end note
+
+class ProbNetCopier <<(U,#AAAAAA) utility>> {
+    ~{static} shallowCopy(source : ProbNet) : ProbNet
+    ~{static} deepCopy(source : ProbNet) : ProbNet
+    -{static} copyLinks(source : ProbNet, dest : ProbNet, deep : boolean) : void
+}
+
+note bottom of ProbNetCopier
+  Clase package-private.\n
+  Centraliza las dos estrategias\n
+  de copia, eliminando la duplicación\n
+  entre auxCopy y deepCopy.
+end note
+
+class NodeTypeDepot {
+}
+
+note bottom of NodeTypeDepot
+  getPotentialsByRole() eliminado\n
+  (sin callers tras la refactorización)
+end note
+
+class Node {
+    +setUniformPotential2Node(node : Node) : void
+}
+
+note right of Node
+  Reducido a 2 líneas:\n
+  delega en PotentialOperations
+end note
+
+class PotentialOperations <<(U,#AAAAAA) utility>> {
+    +{static} getUniformPotential(net : ProbNet, var : Variable, type : NodeType) : Potential
+}
+
+ProbNet ..> ProbNetCopier : delega copia
+ProbNetCopier ..> ProbNet : clearConstraints()
+Node ..> PotentialOperations : getUniformPotential()
+
+@enduml

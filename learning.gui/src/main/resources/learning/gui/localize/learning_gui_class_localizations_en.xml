@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassLocalizations>
+    <Localization class="org.openmarkov.learning.exception.FormatNotSupportedException"
+                  value="Extension '{extension}' of your file is not supported. Allowed extensions are: {allowedNetFormats}."/>
+    <Localization class="org.openmarkov.learning.exception.LearningException$NoChosenVariables"
+                  value="There is no chosen variables. Please, choose variables."/>
+    <Localization class="org.openmarkov.learning.exception.LearningException$NoDatabasePresent"
+                  value="No dataset is present. Please, select a dataset."/>
+</ClassLocalizations>

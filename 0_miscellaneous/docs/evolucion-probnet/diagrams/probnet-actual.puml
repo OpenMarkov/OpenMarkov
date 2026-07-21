@@ -1,0 +1,120 @@
+@startuml probnet-actual
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 30
+
+skinparam class {
+  BackgroundColor<<core>> #E8F5E9
+  BackgroundColor<<constraint>> #E3F2FD
+  BackgroundColor<<potential>> #FFF3E0
+  BackgroundColor<<io>> #F3E5F5
+  BackgroundColor<<edit>> #FFEBEE
+  BorderColor #333333
+}
+
+class "ProbNet\n(1440 lineas)" as ProbNet <<core>> {
+  .. Campos (16) ..
+  # nodeDepot : NodeTypeDepot
+  - networkType : NetworkType
+  - constraints : TreeSet<PNConstraint>
+  - agents : List<StringWithProperties>
+  - decisionCriteria : List<Criterion>
+  - cycleLength : CycleLength
+  - pNESupport : PNESupport
+  - name, comment : String
+  - defaultStates : State[]
+  - inferenceOptions : InferenceOptions
+  - constantPotentials : Set<TablePotential>
+  - reader : ProbNetReader  <<SRP>>
+  - writer : ProbNetWriter  <<SRP>>
+  __
+  .. <color:green>Nodos (12)</color>  |  <color:green>Links (3)</color> ..
+  + addNode / removeNode / getNode
+  + getNodes / getNumNodes
+  + addNodeConsistently <<codigo muerto>>
+  + addShiftedNode <<TODO clone>>
+  + moveNode <<NPE potencial>>
+  + addLink / removeLink / invertLink
+  __
+  .. <color:green>Variables (11)</color> ..
+  + getVariable / containsVariable
+  + getShiftedVariable / getVariables
+  + getChanceAndDecisionVariables <<@ToCheck BUG>>
+  __
+  .. <color:orange>Potenciales (13)</color> ..
+  + addPotential / removePotential
+  + getPotentials (5 sobrecargas)
+  + <color:red>getProbPotentials</color> <<duplicado>>
+  + <color:red>getUtilityPotentials</color> <<duplicado>>
+  + tableProjectPotentials
+  __
+  .. <color:blue>Constraints (13)</color> ..
+  + add/remove/check/getConstraints
+  + <color:red>checkProbNet</color> <<duplicado>>
+  + getUnsatisfiedConstraints
+  __
+  .. <color:red>Clasificacion de red (6)</color> ..
+  + variablesCouldBeTemporal <<bucle manual>>
+  + isMultiagent <<bucle manual>>
+  + onlyTemporal / onlyChanceNodes
+  + thereAreTemporalNodes / getNumCriteria
+  __
+  .. <color:purple>Agentes (4)</color> ..
+  + modifyAgent <<switch largo, bug null>>
+  + getAgents / setAgents
+  __
+  .. Metadatos, I/O, otros (14) ..
+  + copy / deepCopy / toString
+  + buildMarkovDecisionNetwork
+  + get/set: Name, Comment, DefaultStates
+  + get/set: Reader, Writer
+}
+
+class "Graph<Node>" as Graph {
+  + addNode / removeNode
+  + addLink / removeLink
+  + getNodes / getLinks
+  + getParents / getChildren
+}
+
+class NodeTypeDepot {
+  + addNode / removeNode
+  + getNode (4 sobrecargas)
+  + getNodes / getNumNodes
+}
+
+class PNESupport <<edit>> {
+  + doEdit / undo / redo
+}
+
+class NetworkType <<constraint>>
+
+class PNConstraint <<constraint>>
+
+class Potential <<potential>>
+
+class ProbNetReader <<io>>
+
+class ProbNetWriter <<io>>
+
+Graph <|-- ProbNet
+
+ProbNet *-down- NodeTypeDepot
+ProbNet *-down- PNESupport
+ProbNet o-down- NetworkType
+ProbNet o-down- PNConstraint
+ProbNet o-down- Potential
+ProbNet o-down- ProbNetReader
+ProbNet o-down- ProbNetWriter
+
+note top of ProbNet
+  <b>1440 lineas, 80+ metodos publicos</b>
+  490 ficheros la referencian.
+  Clase mas critica de OpenMarkov.
+end note
+
+@enduml

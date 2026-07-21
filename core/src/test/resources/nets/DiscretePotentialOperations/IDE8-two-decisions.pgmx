@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="InfluenceDiagram">
+    <Comment showWhenOpeningNetwork="false"><![CDATA[<<Pulse dos veces para incluir/modificar comentario>>]]></Comment>
+    <Variables>
+      <Variable name="D" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="505" y="119" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="sí" />
+        </States>
+      </Variable>
+      <Variable name="D1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="766" y="219" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="sí" />
+        </States>
+      </Variable>
+      <Variable name="U" type="numeric" role="utility" isInput="false">
+        <Coordinates x="613" y="339" />
+        <Unit />
+        <Precision>0.01</Precision>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="D" />
+        <Variable name="U" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D" />
+        <Variable name="D1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D1" />
+        <Variable name="U" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="U" />
+        <Variables>
+          <Variable name="D" />
+          <Variable name="D1" />
+        </Variables>
+        <Values>2.0 3.0 3.0 1.0</Values>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties />
+  </ProbNet>
+</ProbModelXML>

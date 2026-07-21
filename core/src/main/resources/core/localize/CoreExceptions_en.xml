@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <GenericException>
+        <title value="Error"/>
+        <message value="An unexpected error occurred. Please check the log for more information."/>
+    </GenericException>
+
+    <InvalidNetworkTypeException>
+        <title value="Invalid Network Type"/>
+        <message
+                value="The network {probNet}, which is of type {oldNetworkType}, cannot be converted into         {newNetworkType} because it does not accept the constraint {newConstraint}"/>
+    </InvalidNetworkTypeException>
+
+    <UnlocalizedJavaException>
+        <title value="Internal error"/>
+        <message value="An internal error has happened:"/>
+    </UnlocalizedJavaException>
+</properties>

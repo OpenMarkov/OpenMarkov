@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.0.1">
+  <ProbNet type="SMM">
+    <Variables>
+      <Variable name="Age [0]" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="173" y="154" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="0.0" belongsTo="right" />
+          <Threshold value="100.0" belongsTo="left" />
+        </Thresholds>
+        <States>
+          <State name="Only one state" />
+        </States>
+      </Variable>
+      <Variable name="Age [1]" timeSlice="1" type="numeric" role="chance">
+        <Coordinates x="438" y="154" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <Thresholds>
+          <Threshold value="0.0" belongsTo="right" />
+          <Threshold value="100.0" belongsTo="left" />
+        </Thresholds>
+        <States>
+          <State name="Only one state" />
+        </States>
+      </Variable>
+      <Variable name="State [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="216" y="318" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="dead" />
+          <State name="ill" />
+          <State name="healthy" />
+        </States>
+      </Variable>
+      <Variable name="Symptom [0]" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="333" y="374" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="State [1]" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="479" y="318" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="dead" />
+          <State name="ill" />
+          <State name="healthy" />
+        </States>
+      </Variable>
+      <Variable name="Symptom [1]" timeSlice="1" type="numeric" role="chance">
+        <Coordinates x="833" y="374" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Age [2]" timeSlice="2" type="numeric" role="chance">
+        <Coordinates x="938" y="154" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="State [2]" timeSlice="2" type="numeric" role="chance">
+        <Coordinates x="979" y="318" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Symptom [2]" timeSlice="2" type="numeric" role="chance">
+        <Coordinates x="1333" y="374" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Age [3]" timeSlice="3" type="numeric" role="chance">
+        <Coordinates x="1438" y="154" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="State [3]" timeSlice="3" type="numeric" role="chance">
+        <Coordinates x="1479" y="318" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Symptom [3]" timeSlice="3" type="numeric" role="chance">
+        <Coordinates x="1833" y="374" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <Thresholds>
+          <Threshold value="-Infinity" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="283" y="28" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="yes" />
+          <State name="no" />
+        </States>
+      </Variable>
+      <Variable name="QoL [0]" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="202" y="468" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Cost symtom [0]" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="378" y="472" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Cost therapy" type="numeric" role="utility">
+        <Coordinates x="218" y="78" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="QoL [1]" timeSlice="1" type="numeric" role="utility">
+        <Coordinates x="702" y="468" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Cost symtom [1]" timeSlice="1" type="numeric" role="utility">
+        <Coordinates x="878" y="472" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="QoL [2]" timeSlice="2" type="numeric" role="utility">
+        <Coordinates x="1202" y="468" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Cost symtom [2]" timeSlice="2" type="numeric" role="utility">
+        <Coordinates x="1378" y="472" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="QoL [3]" timeSlice="3" type="numeric" role="utility">
+        <Coordinates x="1702" y="468" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+      <Variable name="Cost symtom [3]" timeSlice="3" type="numeric" role="utility">
+        <Coordinates x="1878" y="472" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="5.0" />
+        </AdditionalProperties>
+        <Precision>0.0</Precision>
+        <States>
+          <State name="0" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Age [0]" timeSlice="0" />
+        <Variable name="State [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [0]" timeSlice="0" />
+        <Variable name="Symptom [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [0]" timeSlice="0" />
+        <Variable name="Age [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [1]" timeSlice="1" />
+        <Variable name="State [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [1]" timeSlice="1" />
+        <Variable name="Symptom [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [0]" timeSlice="0" />
+        <Variable name="State [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [0]" timeSlice="0" />
+        <Variable name="Symptom [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [0]" timeSlice="0" />
+        <Variable name="QoL [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom [0]" timeSlice="0" />
+        <Variable name="Cost symtom [0]" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [1]" timeSlice="1" />
+        <Variable name="Symptom [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [1]" timeSlice="1" />
+        <Variable name="QoL [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [1]" timeSlice="1" />
+        <Variable name="State [2]" timeSlice="2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Cost therapy" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="State [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="State [2]" timeSlice="2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="State [3]" timeSlice="3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom [1]" timeSlice="1" />
+        <Variable name="Cost symtom [1]" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [2]" timeSlice="2" />
+        <Variable name="State [2]" timeSlice="2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [2]" timeSlice="2" />
+        <Variable name="Symptom [2]" timeSlice="2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [2]" timeSlice="2" />
+        <Variable name="Symptom [2]" timeSlice="2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [2]" timeSlice="2" />
+        <Variable name="QoL [2]" timeSlice="2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [2]" timeSlice="2" />
+        <Variable name="State [3]" timeSlice="3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom [2]" timeSlice="2" />
+        <Variable name="Cost symtom [2]" timeSlice="2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [3]" timeSlice="3" />
+        <Variable name="State [3]" timeSlice="3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age [3]" timeSlice="3" />
+        <Variable name="Symptom [3]" timeSlice="3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [3]" timeSlice="3" />
+        <Variable name="Symptom [3]" timeSlice="3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State [3]" timeSlice="3" />
+        <Variable name="QoL [3]" timeSlice="3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom [3]" timeSlice="3" />
+        <Variable name="Cost symtom [3]" timeSlice="3" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="CycleLengthShift" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age [1]" timeSlice="1" />
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="State [0]" timeSlice="0" />
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Age [0]" />
+        <Branches>
+          <Branch>
+            <Interval>
+              <Threshold value="0.0" belongsTo="right" />
+              <Threshold value="70.0" belongsTo="right" />
+            </Interval>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="State [0]" />
+              </Variables>
+              <Values>0.01 0.02 0.97</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Interval>
+              <Threshold value="70.0" belongsTo="right" />
+              <Threshold value="100.0" belongsTo="left" />
+            </Interval>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="State [0]" />
+              </Variables>
+              <Values>0.02 0.03 0.95</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptom [0]" timeSlice="0" />
+          <Variable name="Age [0]" timeSlice="0" />
+          <Variable name="State [0]" timeSlice="0" />
+        </Variables>
+        <TopVariable name="State [0]" />
+        <Branches>
+          <Branch>
+            <State name="healthy" />
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Symptom [0]" />
+              </Variables>
+              <Values>0.999 0.0010</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <State name="ill" />
+            <Potential type="Tree/ADD">
+              <TopVariable name="Age [0]" />
+              <Branches>
+                <Branch>
+                  <Interval>
+                    <Threshold value="0.0" belongsTo="right" />
+                    <Threshold value="80.0" belongsTo="right" />
+                  </Interval>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Symptom [0]" />
+                    </Variables>
+                    <Values>0.7 0.3</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <Interval>
+                    <Threshold value="80.0" belongsTo="right" />
+                    <Threshold value="100.0" belongsTo="left" />
+                  </Interval>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Symptom [0]" />
+                    </Variables>
+                    <Values>0.25 0.75</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <State name="dead" />
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Symptom [0]" />
+              </Variables>
+              <Values>1.0 0.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="State [1]" timeSlice="1" />
+          <Variable name="State [0]" timeSlice="0" />
+          <Variable name="Age [1]" timeSlice="1" />
+          <Variable name="Therapy" />
+        </Variables>
+        <TopVariable name="State [0]" />
+        <Branches>
+          <Branch>
+            <State name="dead" />
+            <Potential type="Table">
+              <Variables>
+                <Variable name="State [1]" />
+              </Variables>
+              <Values>1.0 0.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <State name="ill" />
+            <Potential type="Tree/ADD">
+              <TopVariable name="Therapy" />
+              <Branches>
+                <Branch>
+                  <State name="yes" />
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State [1]" />
+                    </Variables>
+                    <Values>0.02 0.18 0.8</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <State name="no" />
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State [1]" />
+                    </Variables>
+                    <Values>0.12 0.87 0.01</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <State name="healthy" />
+            <Potential type="Tree/ADD">
+              <TopVariable name="Age [1]" />
+              <Branches>
+                <Branch>
+                  <Interval>
+                    <Threshold value="0.0" belongsTo="right" />
+                    <Threshold value="70.0" belongsTo="right" />
+                  </Interval>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State [1]" />
+                    </Variables>
+                    <Values>0.01 0.02 0.97</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <Interval>
+                    <Threshold value="70.0" belongsTo="right" />
+                    <Threshold value="100.0" belongsTo="left" />
+                  </Interval>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State [1]" />
+                    </Variables>
+                    <Values>0.02 0.03 0.95</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="SameAsPrevious" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptom [1]" timeSlice="1" />
+          <Variable name="Age [1]" timeSlice="1" />
+          <Variable name="State [1]" timeSlice="1" />
+        </Variables>
+      </Potential>
+      <Potential type="CycleLengthShift" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age [1]" timeSlice="1" />
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="SameAsPrevious" role="conditionalProbability">
+        <Variables>
+          <Variable name="State [2]" timeSlice="2" />
+          <Variable name="State [1]" timeSlice="1" />
+          <Variable name="Age [2]" timeSlice="2" />
+          <Variable name="Therapy" />
+        </Variables>
+      </Potential>
+      <Potential type="SameAsPrevious" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptom [2]" timeSlice="2" />
+          <Variable name="Age [2]" timeSlice="2" />
+          <Variable name="State [2]" timeSlice="2" />
+        </Variables>
+      </Potential>
+      <Potential type="CycleLengthShift" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age [1]" timeSlice="1" />
+          <Variable name="Age [0]" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="SameAsPrevious" role="conditionalProbability">
+        <Variables>
+          <Variable name="State [3]" timeSlice="3" />
+          <Variable name="State [2]" timeSlice="2" />
+          <Variable name="Age [3]" timeSlice="3" />
+          <Variable name="Therapy" />
+        </Variables>
+      </Potential>
+      <Potential type="SameAsPrevious" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptom [3]" timeSlice="3" />
+          <Variable name="Age [3]" timeSlice="3" />
+          <Variable name="State [3]" timeSlice="3" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Therapy" />
+        </Variables>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="QoL [0]" timeSlice="0" />
+        <Variables>
+          <Variable name="State [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.0 0.64 0.98</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost symtom [0]" timeSlice="0" />
+        <Variables>
+          <Variable name="Symptom [0]" timeSlice="0" />
+        </Variables>
+        <Values>0.0 57.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost therapy" />
+        <Variables>
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>380.0 0.0</Values>
+      </Potential>
+      <Potential type="SameAsPrevious" role="utility">
+        <UtilityVariable name="QoL [1]" timeSlice="1" />
+        <Variables>
+          <Variable name="State [1]" timeSlice="1" />
+        </Variables>
+      </Potential>
+      <Potential type="SameAsPrevious" role="utility">
+        <UtilityVariable name="Cost symtom [1]" timeSlice="1" />
+        <Variables>
+          <Variable name="Symptom [1]" timeSlice="1" />
+        </Variables>
+      </Potential>
+      <Potential type="SameAsPrevious" role="utility">
+        <UtilityVariable name="QoL [2]" timeSlice="2" />
+        <Variables>
+          <Variable name="State [2]" timeSlice="2" />
+        </Variables>
+      </Potential>
+      <Potential type="SameAsPrevious" role="utility">
+        <UtilityVariable name="Cost symtom [2]" timeSlice="2" />
+        <Variables>
+          <Variable name="Symptom [2]" timeSlice="2" />
+        </Variables>
+      </Potential>
+      <Potential type="SameAsPrevious" role="utility">
+        <UtilityVariable name="QoL [3]" timeSlice="3" />
+        <Variables>
+          <Variable name="State [3]" timeSlice="3" />
+        </Variables>
+      </Potential>
+      <Potential type="SameAsPrevious" role="utility">
+        <UtilityVariable name="Cost symtom [3]" timeSlice="3" />
+        <Variables>
+          <Variable name="Symptom [3]" timeSlice="3" />
+        </Variables>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+</ProbModelXML>
+

@@ -1,0 +1,132 @@
+@startuml fig-op3-antes
+' ============================================================
+' Estado ANTES del Rediseno 3 (tras el Rediseno 1)
+' Colores:
+'   #FFD580 = clases abstractas base
+'   #BDD7FF = jerarquia TablePotential (correctas)
+'   #C8F0C8 = nuevas del Rediseno 1
+'   #FFCCCC = implementaciones problematicas (null / excepcion)
+'   #E8E8E8 = otras
+' ============================================================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 35
+skinparam dpi 150
+
+hide empty fields
+
+abstract class Potential #FFD580 {
+    #variables : List<Variable>
+    #role : PotentialRole
+    --
+    +{abstract} tableProject(...) : TablePotential
+    +{abstract} reorder(...) : Potential
+    +{abstract} deepCopy(ProbNet) : Potential
+    +getUncertainValues() : null
+    +hasInterventions() : false
+}
+
+note right of Potential #FFE0B2
+  Los metodos abstractos tableProject()
+  y reorder() obligan a toda subclase
+  a implementarlos, aunque no tengan
+  sentido semantico para ella.
+end note
+
+abstract class AbstractIndexedPotential #FFD580 {
+    #dimensions : int[]
+    #offsets : int[]
+    #tableSize : int
+    --
+    +getPosition(EvidenceCase) : int
+    +getConfiguration(int) : int[]
+}
+
+class TablePotential #BDD7FF {
+    +values : double[]
+    --
+    +tableProject(...)  [ok]
+    +reorder(...)       [ok]
+    +scale(double)
+    +getUncertainValues() : null
+    +hasInterventions() : false
+}
+
+class StrategicTablePotential #C8F0C8 {
+    +strategyTrees : StrategyTree[]
+    --
+    +hasInterventions() : true
+    +tableProject(...)  [ok]
+    +reorder(...)       [ok]
+}
+
+class UncertainTablePotential #C8F0C8 {
+    +uncertainValues : UncertainValue[]
+    --
+    +isUncertain() : true
+    +getUncertainValues() [ok]
+    +tableProject(...)     [ok]
+    +reorder(...)          [ok]
+}
+
+class "GTablePotential<E>" as GTablePotential #FFF3CD {
+    +elementTable : List<E>
+    --
+    (fase 5 pendiente:
+     cambiar la superclase a
+     AbstractIndexedPotential)
+}
+
+class UniformPotential #FFCCCC {
+    +tableProject(...) [ok]
+    +reorder(...) : null  [!]
+}
+
+class DeltaPotential #FFCCCC {
+    -state : State
+    --
+    +tableProject(...)  [ok]
+    +reorder(...) : null [!]
+    +scale(double)
+}
+
+abstract class ICIPotential #FFCCCC {
+    #noisyParameters : double[][]
+    #leakyParameters : double[]
+    --
+    +tableProject(...) : UnsupportedOp [!]
+    +reorder(...) : UnsupportedOp      [!]
+}
+
+class ConditionalGaussianPotential #E8E8E8 {
+    +tableProject(...)  [ok]
+    +reorder(...) : null [!]
+}
+
+Potential <|-- AbstractIndexedPotential
+AbstractIndexedPotential <|-- TablePotential
+TablePotential <|-- StrategicTablePotential
+TablePotential <|-- UncertainTablePotential
+TablePotential <|-- GTablePotential
+Potential <|-- UniformPotential
+Potential <|-- DeltaPotential
+Potential <|-- ICIPotential
+Potential <|-- ConditionalGaussianPotential
+
+legend right
+  |= Marcador |= Significado |
+  | [ok]  | Implementacion correcta |
+  | [!]   | Devuelve null o lanza excepcion |
+  |<back:#FFD580>  | Clase abstracta base |
+  |<back:#BDD7FF>  | Jerarquia TablePotential |
+  |<back:#C8F0C8>  | Nueva del Rediseno 1 |
+  |<back:#FFCCCC>  | Implementacion problematica |
+  |<back:#FFF3CD>  | Pendiente cambio de superclase (fase 5) |
+  |<back:#E8E8E8>  | Otros potenciales |
+endlegend
+
+@enduml

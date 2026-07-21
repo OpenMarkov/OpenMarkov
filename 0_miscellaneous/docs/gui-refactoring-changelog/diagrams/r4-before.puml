@@ -1,0 +1,72 @@
+@startuml r4-before
+' ============================================================
+' R4 Before -- MainMenu with 53 fields + 46 lazy getters
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 40
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<bad>> #FFE0E0
+  BorderColor<<bad>> #CC4444
+  BackgroundColor<<ok>> #FFF8E0
+  BorderColor<<ok>> #AA9944
+  BackgroundColor<<switch>> #FFD8D8
+  BorderColor<<switch>> #BB5555
+}
+
+class MainMenu <<bad>> {
+  <color:#CC4444><b>53 fields:</b></color>
+  - fileNewMenuItem: JMenuItem
+  - fileOpenMenuItem: JMenuItem
+  - fileSaveMenuItem: JMenuItem
+  - editCutMenuItem: JMenuItem
+  - editCopyMenuItem: JMenuItem
+  - editPasteMenuItem: JMenuItem
+  - ... <color:#CC4444>(47 more)</color>
+  __
+  <color:#CC4444><b>46 lazy getters:</b></color>
+  - getFileNewMenuItem(): JMenuItem
+  - getFileOpenMenuItem(): JMenuItem
+  - getFileSaveMenuItem(): JMenuItem
+  - getEditCutMenuItem(): JMenuItem
+  - ... <color:#CC4444>(42 more)</color>
+  __
+  + rechargeFileMenu()
+  + addPropagateNowItem()
+  + removePropagateNowItem()
+  + reInitialize()
+  __
+  <b>1,529 lines</b>
+}
+
+class MainPanelMenuAssistant <<ok>> {
+  __
+  + getJComponentActionCommand(\l    ActionCommands): JComponent
+  .. <color:#CC4444>43-case switch</color> ..
+}
+
+note right of MainMenu
+  Each getter follows the same pattern:
+  ──────────────────────────────────
+  private JMenuItem getXxx() {
+    if (xxxMenuItem == null) {
+      xxxMenuItem = new LocalizedMenuItem(
+        name, action);
+      xxxMenuItem.setIcon(...);
+      xxxMenuItem.setAccelerator(...);
+      xxxMenuItem.addActionListener(listener);
+    }
+    return xxxMenuItem;
+  }
+  ──────────────────────────────────
+  Repeated <b>46 times</b>.
+end note
+
+MainPanelMenuAssistant --> MainMenu : accesses items\nvia 43-case switch
+
+@enduml

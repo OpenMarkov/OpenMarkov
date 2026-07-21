@@ -1,0 +1,159 @@
+@startuml domain-model
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 40
+
+skinparam class {
+  BackgroundColor<<network>> #E8F5E9
+  BackgroundColor<<graph>> #F5F5F5
+  BackgroundColor<<domain>> #E3F2FD
+  BackgroundColor<<potential>> #FFF3E0
+  BackgroundColor<<evidence>> #F3E5F5
+  BorderColor #333333
+}
+
+together {
+  class "Graph<Node>" as Graph <<graph>> {
+    - nodes : List<Node>
+    - nodeLinks : Map<Node, List<Link<Node>>>
+    - nodeChildren : Map<Node, List<Node>>
+    - nodeParents : Map<Node, List<Node>>
+    + addNode() / removeNode()
+    + addLink() / removeLink()
+    + getChildren() / getParents()
+  }
+
+  class ProbNet <<network>> {
+    - networkType : NetworkType
+    - constraints : TreeSet<PNConstraint>
+    - decisionCriteria : List<Criterion>
+    - agents : List<StringWithProperties>
+    - defaultStates : State[]
+    - constantPotentials : Set<TablePotential>
+    + addNode(Variable, NodeType)
+    + addLink(Variable, Variable, boolean)
+    + getVariable(String)
+    + getPotentials()
+    + copy() / deepCopy()
+  }
+}
+
+class "Link<Node>" as Link <<graph>> {
+  - from : Node
+  - to : Node
+  - directed : boolean
+  - restrictionsPotential : TablePotential
+  - revealingStates : List<State>
+}
+
+class Node <<domain>> {
+  - nodeType : NodeType
+  - coordinateX, coordinateY : double
+  - purpose : String
+  - relevance : double
+  - policyType : PolicyType
+  - alwaysObserved : boolean
+  + getVariable() : Variable
+  + getPotentials() : List<Potential>
+  + getChildren() / getParents()
+}
+
+class NodeTypeDepot <<network>> {
+  - nodesHashMaps : Map<NodeType, NodesHashMap>
+  + getNode(String) / getNode(Variable)
+  + getNodes(NodeType)
+}
+
+class Variable <<domain>> {
+  - name : String
+  - baseName : String
+  - timeSlice : int
+  - variableType : VariableType
+  - precision : double
+  - unit : StringWithProperties
+  - agent : StringWithProperties
+  + isTemporal() : boolean
+  + getStateIndex(String) : int
+  + getNumStates() : int
+}
+
+class State <<domain>> {
+  - name : String
+  - additionalProperties : Map
+}
+
+class PartitionedInterval <<domain>> {
+  - limits : double[]
+  - belongsToLeftSide : boolean[]
+  + getMin() / getMax()
+  + indexOfSubinterval(double)
+}
+
+class Criterion <<domain>> {
+  - criterionName : String
+  - criterionUnit : String
+  - ceCriterion : CECriterion
+  - unicriterizationScale : double
+}
+
+class "Potential\n{abstract}" as Potential <<potential>> {
+  - variables : List<Variable>
+  - role : PotentialRole
+  - criterion : Criterion
+  + tableProject(EvidenceCase, ...)
+  + reorder(Variable, State[])
+  + copy() / deepCopy()
+}
+
+class EvidenceCase <<evidence>> {
+  - findings : Map<Variable, Finding>
+  + addFinding(Finding)
+  + getFinding(Variable)
+  + getFindings() : List<Finding>
+}
+
+class Finding <<evidence>> {
+  - stateIndex : int
+  - numericalValue : double
+  + getVariable() : Variable
+  + getState() : String
+}
+
+' === Inheritance ===
+Graph <|-- ProbNet
+
+' === Composition (filled diamond) ===
+ProbNet *-down- NodeTypeDepot : indexes >
+Node *-down- "1" Variable : owns >
+Node *-right- "0..*" Potential : contains >
+Variable *-down- "1..*" State : defines >
+Variable *-down- "0..1" PartitionedInterval : interval >
+EvidenceCase *-right- "0..*" Finding : groups >
+
+' === Association ===
+ProbNet o-down- "0..*" Criterion : criteria >
+Node -left- ProbNet : belongs to >
+Link -down- "2" Node : connects >
+Finding -down-> Variable : observes >
+Potential -down-> "0..*" Variable : depends on >
+Potential -right-> "0..1" Criterion : measures >
+Variable -right-> "0..1" Criterion : criterion >
+
+note as Legend
+  <b>Legend</b>
+  <color:green>Green</color>: network container
+  <color:blue>Blue</color>: domain model
+  <color:orange>Orange</color>: potentials
+  <color:purple>Purple</color>: evidence
+  Grey: graph infrastructure
+  --
+  <b>*---</b>  composition (dependent lifecycle)
+  <b>o---</b>  aggregation / association
+  <b>--->  </b>  reference
+end note
+
+@enduml

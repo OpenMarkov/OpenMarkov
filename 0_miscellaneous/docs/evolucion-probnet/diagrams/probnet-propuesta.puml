@@ -1,0 +1,98 @@
+@startuml probnet-propuesta
+skinparam classAttributeIconSize 0
+skinparam classFontSize 11
+skinparam defaultFontSize 10
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 30
+skinparam ranksep 30
+
+skinparam class {
+  BackgroundColor<<core>> #E8F5E9
+  BackgroundColor<<extracted>> #E3F2FD
+  BackgroundColor<<graph>> #F5F5F5
+  BorderColor #333333
+}
+
+class "ProbNet\n(~1100 lineas)" as ProbNet <<core>> {
+  .. Campos (14, sin reader/writer) ..
+  # nodeDepot : NodeTypeDepot
+  - networkType : NetworkType
+  - constraints : TreeSet<PNConstraint>
+  - agents : List<StringWithProperties>
+  - decisionCriteria : List<Criterion>
+  - cycleLength, pNESupport
+  - name, comment, defaultStates
+  - inferenceOptions, constantPotentials
+  __
+  .. Nodos, links, variables ..
+  + addNode / removeNode / getNode
+  + addLink / removeLink / invertLink
+  + getVariable / containsVariable
+  + getVariables / getVariablesNames
+  __
+  .. Potenciales (basico) ..
+  + addPotential / removePotential
+  + getPotentials / getNumPotentials
+  + getSortedPotentials
+  __
+  .. Constraints ..
+  + add/remove/check/getConstraints
+  + getUnsatisfiedConstraints
+  __
+  .. Metadatos, copia, tipo ..
+  + copy / deepCopy
+  + getNetworkType / setNetworkType
+  + get/set: Name, Comment, ...
+}
+
+class "Graph<Node>" as Graph <<graph>> {
+  + addNode / removeNode
+  + addLink / removeLink
+  + getNodes / getLinks
+}
+
+class NodeTypeDepot <<graph>> {
+  + addNode / removeNode
+  + getNode / getNodes
+}
+
+class ProbNetClassifier <<extracted>> {
+  - ProbNetClassifier()
+  __
+  + {static} variablesCouldBeTemporal(ProbNet)
+  + {static} isMultiagent(ProbNet)
+  + {static} onlyTemporal(ProbNet)
+  + {static} onlyChanceNodes(ProbNet)
+  + {static} thereAreTemporalNodes(ProbNet)
+  + {static} getNumCriteria(ProbNet)
+}
+
+class ProbNetAgentManager <<extracted>> {
+  - ProbNetAgentManager()
+  __
+  + {static} modifyAgent(ProbNet, ...)
+  + {static} getAgents(ProbNet)
+  + {static} setAgents(ProbNet, List)
+}
+
+class ProbNetPotentialQueries <<extracted>> {
+  - ProbNetPotentialQueries()
+  __
+  + {static} getProbPotentials(ProbNet, Variable)
+  + {static} getUtilityPotentials(ProbNet, Variable)
+  + {static} tableProjectPotentials(ProbNet, ...)
+  + {static} buildMarkovDecisionNetwork(ProbNet, ...)
+}
+
+Graph <|-- ProbNet
+ProbNet *-down- NodeTypeDepot
+
+note "  <b>~1100 lineas (-24%)</b>\n  API reducida.\n  Sin reader/writer.\n  Modelo de dominio puro." as N1
+ProbNet .. N1
+
+ProbNet <.left. ProbNetClassifier : consulta
+ProbNet <.right. ProbNetAgentManager : modifica
+ProbNet <.down. ProbNetPotentialQueries : consulta
+
+@enduml

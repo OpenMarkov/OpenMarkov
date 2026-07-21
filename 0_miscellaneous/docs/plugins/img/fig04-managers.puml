@@ -1,0 +1,91 @@
+@startuml fig04-managers
+skinparam backgroundColor white
+skinparam shadowing false
+
+left to right direction
+
+' ==============================
+' Columna 1: PluginSearch
+' ==============================
+class PluginSearch #AAE0FF {
+    + {static} init() : PluginSearch<Object>
+    + extending(Class<E>) : PluginSearch<E>
+    + childrenOf(Class<E>) : PluginSearch<E>
+    + annotatedWith(Class<A>) : PluginSearch<T>
+    + stream() : Stream<Class>
+    + extensionTree() : ExtensionTree
+}
+
+' ==============================
+' Columna 2: Managers (verticales)
+' ==============================
+package "Managers" #D0FFD8 {
+    class PotentialUtils #90EE90 {
+        + {static} POTENTIALS_BY_NAME : HashMap<String, Class>
+        --
+        + {static} getClassByName(name) : Class
+        + {static} instanciateSafely(...) : Potential
+        + {static} getFilteredPotentialClasses(node) : List
+    }
+    class ConstraintManager #90EE90 {
+        - {static} INSTANCE : ConstraintManager
+        - defaultConstraintBehaviors : HashMap
+        --
+        + {static} getUniqueInstance()
+        + buildConstraintList(type, optionals) : List
+        + getDefaultBehavior(class) : ConstraintBehavior
+    }
+    class NetworkTypeUtils #90EE90 {
+        + {static} NETWORK_TYPE_CLASSES : List
+        --
+        + {static} getInfo(clazz) : NetworkTypeInfo
+        + {static} safeInstanciate(clazz) : NetworkType
+        + {static} getNetworkClassByName(name) : Class
+    }
+    class FormatManager #90EE90 {
+        - {static} INSTANCE : FormatManager
+        - readerInstances : List<ProbNetReader>
+        - writerInstances : List<ProbNetWriter>
+        --
+        + {static} getInstance()
+        + getProbNetReader(url) : ProbNetReader
+        + getProbNetReaderInstanceFor(ext, ver) : ProbNetReader
+    }
+}
+
+' Forzar disposición vertical interna
+PotentialUtils   -[hidden]d-> ConstraintManager
+ConstraintManager -[hidden]d-> NetworkTypeUtils
+NetworkTypeUtils  -[hidden]d-> FormatManager
+
+' ==============================
+' Columna 3: Anotaciones
+' ==============================
+package "Anotaciones" #FFFACD {
+    annotation "@PotentialType"   #FFE066
+    annotation "@Constraint"      #FFE066
+    annotation "@NetworkTypeInfo" #FFE066
+    annotation "@FormatType"      #FFE066
+}
+"@PotentialType"   -[hidden]d-> "@Constraint"
+"@Constraint"      -[hidden]d-> "@NetworkTypeInfo"
+"@NetworkTypeInfo" -[hidden]d-> "@FormatType"
+
+' ======== Relaciones ========
+
+' Managers usan PluginSearch
+PotentialUtils    ..> PluginSearch : .extending(Potential)\n.extensionTree()
+ConstraintManager ..> PluginSearch : .annotatedWith(@Constraint)\n.childrenOf(PNConstraint)
+NetworkTypeUtils  ..> PluginSearch : .annotatedWith(@NetworkTypeInfo)\n.childrenOf(NetworkType)
+FormatManager     ..> PluginSearch : .annotatedWith(@FormatType)\n.extending(ProbNetReader/Writer)
+
+' Managers usan anotaciones
+PotentialUtils    ..> "@PotentialType"   : lee names[]
+ConstraintManager ..> "@Constraint"      : lee defaultBehavior
+NetworkTypeUtils  ..> "@NetworkTypeInfo" : lee name, visualName
+FormatManager     ..> "@FormatType"      : lee extension, version
+
+' Alinear PluginSearch con los managers
+PluginSearch -[hidden]r-> PotentialUtils
+
+@enduml

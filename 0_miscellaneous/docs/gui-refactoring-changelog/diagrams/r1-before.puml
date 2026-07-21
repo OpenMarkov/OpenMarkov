@@ -1,0 +1,60 @@
+@startuml r1-before
+' ============================================================
+' R1 Before -- Monolithic MainPanelListenerAssistant
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<bad>> #FFE0E0
+  BorderColor<<bad>> #CC4444
+  BackgroundColor<<ok>> #FFF8E0
+  BorderColor<<ok>> #AA9944
+}
+
+class MainPanelListenerAssistant <<bad>> {
+  <color:#CC4444><b>God Object: 1,534 lines</b></color>
+  __
+  <b>actionPerformed():</b>
+  .. <color:#CC4444>67 switch cases</color> ..
+  __
+  <b>File I/O (~400 lines):</b>
+  - openNetwork() (3 overloads)
+  - saveNetwork(), saveNetworkAs()
+  - closeNetwork(), closeApplication()
+  - loadEvidence(), saveEvidence()
+  - requestNetworkFileToOpen()
+  - createNewNetwork(), createNewFrame()
+  __
+  <b>Inference (~200 lines):</b>
+  - toggleWorkingMode()
+  - setWorkingMode()
+  - evidenceCasesNavigationOption()
+  - expandNetwork()
+  - showDecisionTree()
+  - showOptimalStrategy()
+  __
+  <b>Edit/View (~100 lines):</b>
+  - undo(), redo()
+  - activateEditionMode()
+  - setZoom(), activateByTitle()
+  - showAbout(), showShortcuts()
+  __
+  <b>Node/Link ops (~80 lines)</b>
+  <b>~100 lines commented-out code</b>
+}
+
+note right of MainPanelListenerAssistant
+  Single class handles:
+  - File I/O
+  - Inference mode
+  - Edit operations
+  - View operations
+  - Node/Link operations
+  - Dialog launchers
+  All in one 1,534-line file.
+end note
+
+@enduml

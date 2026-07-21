@@ -1,0 +1,98 @@
+@startuml exception-hierarchy-proposed-checked
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 10
+skinparam classAttributeIconSize 0
+skinparam padding 4
+skinparam nodesep 20
+skinparam ranksep 40
+skinparam shadowing false
+skinparam dpi 110
+skinparam wrapWidth 180
+
+skinparam class {
+    BackgroundColor White
+    BorderColor #666666
+    ArrowColor #555555
+    FontSize 10
+}
+skinparam package {
+    BackgroundColor White
+    BorderColor #AAAAAA
+    FontSize 10
+    FontStyle bold
+}
+skinparam note {
+    BackgroundColor #EEF4FF
+    BorderColor #6688BB
+    FontSize 9
+}
+skinparam legend {
+    BackgroundColor #F8F8F8
+    BorderColor #AAAAAA
+    FontSize 9
+}
+
+top to bottom direction
+
+legend top right
+|= Color |= Significado |
+|<#D5E8D4>| Checked — el caller tiene acción correctiva real |
+|<#EEEEEE>| Clase estándar de Java |
+endlegend
+
+' ── Raíz Java ─────────────────────────────────────────
+class "Exception\n//Java estándar//" as JEx #EEEEEE
+
+' ── Base checked ──────────────────────────────────────
+abstract "OpenMarkovException\n**[nueva — base checked]**" as OME #D5E8D4
+OME -up-|> JEx
+note right of OME
+  Unifica IOpenMarkovException e
+  IBundledOpenMarkovException en
+  una única clase base.
+  Toda subclase hereda automáticamente
+  soporte de mensajes localizados.
+end note
+
+' ── Subrama: errores del usuario ──────────────────────
+abstract "UserInputException\n**[nueva]**" as UIEx #D5E8D4
+UIEx -up-|> OME
+note right of UIEx
+  Agrupa errores originados en una acción del usuario.
+  La GUI puede capturar esta clase en un único punto
+  y mostrar un diálogo de corrección adecuado.
+end note
+
+abstract "ParserException\n//15 variantes: CannotOpenFile, BadlyStructuredFile, ...//\n//Conservada: el caller puede ofrecer otro fichero//" as PE #D5E8D4
+abstract "WriterException\n//6 variantes: CannotCreateFile, ...//\n//Conservada: el caller puede reintentar en otra ruta//" as WE #D5E8D4
+class "IncompatibleEvidenceException\n//Conservada: el usuario puede retirar evidencia conflictiva//" as IEE #D5E8D4
+class "EmptyDatabaseException\nNoReaderForFileException" as EDENFRF #D5E8D4
+
+PE -up-|> UIEx
+WE -up-|> UIEx
+IEE -up-|> UIEx
+EDENFRF -up-|> UIEx
+
+' ── Subrama: estructura de la red ─────────────────────
+abstract "NetworkStructureException\n**[nueva]**" as NSE #D5E8D4
+NSE -up-|> OME
+note right of NSE
+  Agrupa errores en la coherencia lógica de la red.
+  La GUI puede mostrar qué restricción se violó
+  y cómo corregirla.
+end note
+
+class "ConstraintViolatedException\n//42 variantes internas//\n//Promovida: ya no hereda de DoEditException//" as CVE #D5E8D4
+class "NotEvaluableNetworkException\n//Promovida a checked legítima://\n//la GUI puede informar qué falta en la red//" as NENE #D5E8D4
+CVE -up-|> NSE
+NENE -up-|> NSE
+
+' ── Subrama: aprendizaje ──────────────────────────────
+abstract "LearningException\n//2 variantes: NoDatabasePresent, NoChosenVariables//" as LE #D5E8D4
+LE -up-|> OME
+class "UnobservedVariablesException\nEmptyModelNetException" as UVEEMNE #D5E8D4
+UVEEMNE -up-|> LE
+
+@enduml

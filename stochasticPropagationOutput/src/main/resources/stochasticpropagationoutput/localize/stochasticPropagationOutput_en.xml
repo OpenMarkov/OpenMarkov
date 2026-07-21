@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <StochasticPropagationOutput value="Export stochastic propagation data">
+        <Window value="Stochastic propagation output"/>
+    </StochasticPropagationOutput>
+    <Dialog>
+        <Algorithms value="Stochastic algorithm"/>
+        <NSamples value="Nº of samples"/>
+        <PrintXlsx value="Export to a .xlsx file"/>
+    </Dialog>
+    <SaveDialog>
+        <Title value="Save samples"/>
+    </SaveDialog>
+    <Algorithms>
+        <LogicSampling value="Logic sampling"/>
+        <LikelihoodWeighting value="Likelihood weighting"/>
+        <Hugin value="Clustering"/>
+    </Algorithms>
+    <SheetNames>
+        <Samples value="Samples"/>
+        <GeneralStats value="General stats"/>
+    </SheetNames>
+    <ColumnTitles>
+        <SampleN value="Sample number"/>
+        <Weight value="Weight"/>
+        <Variable value="Variable"/>
+        <States value="States"/>
+    </ColumnTitles>
+    <RowTitles>
+        <Algorithm value="Algorithm"/>
+        <Runtime value="Computing time (ms)"/>
+        <RuntimePerSample value="Computing time per sample (ms)"/>
+        <TotalSamples value="Total of samples"/>
+        <ValidSamples value="Non-null samples"/>
+        <AccumulatedWeight value="Accumulated weight"/>
+        <ExactAlgorithmName value="Exact Algorithm"/>
+        <Ocurrences value="Ocurrences"/>
+        <Finding value="Finding"/>
+        <ApproximateProbability value="Approximate probability"/>
+        <ExactProbability value="Exact probability"/>
+    </RowTitles>
+    <NonSampled value="Non sampled"/>
+    <ConclusionTitle value="Samples saved"/>
+    <Conclusion value="A spreadsheet containing the samples has been stored at: "/>
+    <Warnings>
+        <OverwriteTitle value="Existing file"/>
+        <Overwrite value="That file already exists, overwrite?"/>
+    </Warnings>
+    <Exception>
+        <!-- StochasticPropagationOutputFrame class-->
+        <InvalidNetType>
+            <title value="Invalid net type"/>
+            <message value="Invalid net type. The algorithms only work for bayesian nets."/>
+        </InvalidNetType>
+        <EmptyNet>
+            <title value="Empty net"/>
+            <message value="It is impossible to obtain from a net without nodes."/>
+        </EmptyNet>
+        <NoNet>
+            <title value="No net found"/>
+            <message value="You must open a net to obtain data from it."/>
+        </NoNet>
+        <NoAlgorithm>
+            <title value="No algorithm"/>
+            <message value="The algorithm you have selected is not implemented."/>
+        </NoAlgorithm>
+        <InvalidNet>
+            <title value="Invalid net"/>
+            <message value="Stochastic propagation can't be applied to this net."/>
+        </InvalidNet>
+        <NodeWithoutPotential>
+            <title value="Node without potential"/>
+            <message value="The variable %s doesn't have an associated potential"/>
+        </NodeWithoutPotential>
+        <WrongSamples>
+            <title value="Wrong number of samples"/>
+            <message value="Only whole positive numbers have sense as a number of samples."/>
+        </WrongSamples>
+        <InvalidEvidence>
+            <title value="Invalid evidence"/>
+            <message
+                    value="Normalization can't be done. This might happen if every sample was weighted 0. Try increasing the number of samples or removing some findings."/>
+        </InvalidEvidence>
+        <PrePostEvidenceConflict>
+            <title value="Invalid evidence"/>
+            <message value="Evidence set in the edition mode clashes with evidence set in the inference mode"/>
+        </PrePostEvidenceConflict>
+        <!-- XlsxWriter class-->
+        <NoDatabase>
+            <title value="No dataset found"/>
+            <message value="There is no dataset of samples."/>
+        </NoDatabase>
+        <Output>
+            <title value="Output error"/>
+            <message value="Error exporting the results."/>
+        </Output>
+    </Exception>
+</properties>

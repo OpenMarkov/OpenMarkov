@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenMarkov formatVersion="1.0">
+    <ProbNet type="BayesianNetwork">
+        <Variables>
+            <Variable name="A" type="finiteStates" role="chance">
+                <Coordinates x="531" y="204"/>
+                <AdditionalProperties>
+                    <Property name="Relevance" value="7.0"/>
+                </AdditionalProperties>
+                <Precision>0.01</Precision>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="B" type="finiteStates" role="chance">
+                <Coordinates x="349" y="320"/>
+                <AdditionalProperties>
+                    <Property name="Relevance" value="7.0"/>
+                </AdditionalProperties>
+                <Precision>0.01</Precision>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+            <Variable name="C" type="finiteStates" role="chance">
+                <Coordinates x="596" y="416"/>
+                <AdditionalProperties>
+                    <Property name="Relevance" value="7.0"/>
+                </AdditionalProperties>
+                <Precision>0.01</Precision>
+                <States>
+                    <State name="absent"/>
+                    <State name="present"/>
+                </States>
+            </Variable>
+        </Variables>
+        <Links>
+            <Link var1="A" var2="B" directed="true"/>
+            <Link var1="A" var2="C" directed="true"/>
+            <Link var1="B" var2="C" directed="true"/>
+        </Links>
+        <Potentials>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="A"/>
+                </Variables>
+                <Values>0.3 0.7</Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="B"/>
+                    <Variable name="A"/>
+                </Variables>
+                <Values>0.0 1.0 1.0 0.0</Values>
+            </Potential>
+            <Potential type="Table" role="conditionalProbability">
+                <Variables>
+                    <Variable name="C"/>
+                    <Variable name="B"/>
+                    <Variable name="A"/>
+                </Variables>
+                <Values>0.2 0.8 0.6 0.4 0.5 0.5 0.8 0.2</Values>
+            </Potential>
+        </Potentials>
+    </ProbNet>
+</OpenMarkov>
+

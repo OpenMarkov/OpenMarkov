@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassLocalizations>
+    <Localization class="org.openmarkov.stochasticPropagationOutput.exception.EmptyCaseDatabaseException"
+                  value="There is no sample in dataset."/>
+</ClassLocalizations>

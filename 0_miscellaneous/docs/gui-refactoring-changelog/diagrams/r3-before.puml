@@ -1,0 +1,74 @@
+@startuml r3-before
+' ============================================================
+' R3 Before -- Link returns Potential, callers cast everywhere
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 50
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<core>> #E8E8FF
+  BorderColor<<core>> #6666AA
+  BackgroundColor<<gui>> #FFF8E0
+  BorderColor<<gui>> #AA9944
+  BackgroundColor<<problem>> #FFDDD8
+  BorderColor<<problem>> #CC4444
+}
+
+package "org.openmarkov.core" {
+  abstract class Potential <<core>> {
+    + getValues(): double[]
+    + copy(): Potential
+  }
+
+  class TablePotential <<core>> {
+    + getValues(): double[]
+    + copy(): Potential
+  }
+
+  class "Link<Node>" as Link <<core>> {
+    - restrictionsPotential: TablePotential
+    __
+    + getRestrictionsPotential(): <color:#CC4444><b>Potential</b></color>
+    + setRestrictionsPotential(<color:#CC4444><b>Potential</b></color>): void
+  }
+
+  Potential <|-- TablePotential
+}
+
+package "org.openmarkov.gui" {
+  class LinkRestrictionPotentialValueEdit <<problem>> {
+    <color:#CC4444>5 casts to (TablePotential)</color>
+  }
+
+  class LinkRestrictionPanel <<problem>> {
+    <color:#CC4444>4 casts to (TablePotential)</color>
+  }
+
+  class LinkRestrictionValuesTable <<problem>> {
+    <color:#CC4444>1 cast to (TablePotential)</color>
+  }
+
+  class RemoveLinkRestrictionEdit <<problem>> {
+    <color:#CC4444>fields typed as Potential</color>
+  }
+}
+
+Link ..> Potential : returns
+
+LinkRestrictionPotentialValueEdit ..> Link : getRestrictionsPotential()
+LinkRestrictionPanel ..> Link : getRestrictionsPotential()
+LinkRestrictionValuesTable ..> Link : getRestrictionsPotential()
+RemoveLinkRestrictionEdit ..> Link : getRestrictionsPotential()
+
+note bottom of Link
+  Field is already TablePotential,
+  but API returns Potential.
+  Every caller must cast.
+end note
+
+@enduml

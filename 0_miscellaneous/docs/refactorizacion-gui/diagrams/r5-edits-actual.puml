@@ -1,0 +1,111 @@
+@startuml r5-edits-actual
+' ============================================================
+' R5 — Jerarquía actual de ediciones de valor en CPT
+' Las cuatro clases en rojo comparten lógica clonar-modificar-restaurar
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 40
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<problem>> #FFDDD8
+  BorderColor<<problem>> #CC4444
+  BackgroundColor<<base>> #E8E8FF
+  BorderColor<<base>> #6666AA
+  BackgroundColor<<proposed>> #D8FFD8
+  BorderColor<<proposed>> #44AA44
+}
+
+abstract class PNEdit <<base>> {
+  # probNet: ProbNet
+  __
+  + executeEdit()
+  # {abstract} doEdit()
+  + undo()
+  + redo()
+}
+
+class TablePotentialValueEdit <<problem>> {
+  -- 327 líneas --
+  - potential: TablePotential
+  - row, col: int
+  - newValue: double
+  - savedValues: double[]
+  __
+  # doEdit()
+  .. clona tabla, modifica celda ..
+  + undo()
+  .. restaura tabla clonada ..
+}
+
+class ICITablePotentialValueEdit <<problem>> {
+  -- 429 líneas --
+  - iciPotential: ICIPotential
+  - row, col: int
+  - newValue: double
+  - savedNoisyValues: double[]
+  - savedLeakyValues: double[]
+  __
+  # doEdit()
+  .. clona tablas ICI, modifica celda ..
+  + undo()
+  .. restaura tablas clonadas ..
+}
+
+class AugmentedPotentialValueEdit <<problem>> {
+  -- 205 líneas --
+  - potential: AugmentedProbTable
+  - row, col: int
+  - newValue: double
+  - savedValues: double[]
+  __
+  # doEdit()
+  .. clona tabla, modifica celda ..
+  + undo()
+  .. restaura tabla clonada ..
+}
+
+class LinkRestrictionPotentialValueEdit <<problem>> {
+  -- 175 líneas --
+  - tablePotential: TablePotential
+  - row, col: int
+  - newValue: double
+  - lastTable: double[]
+  __
+  # doEdit()
+  .. clona tabla, modifica restricción ..
+  + undo()
+  .. restaura tabla clonada ..
+}
+
+class "AbstractTableValueEdit\n(propuesto)" as ATVE <<proposed>> {
+  # potential: TablePotential
+  # row, col: int
+  # newValue: double
+  # savedValues: double[]
+  __
+  # doEdit()
+  .. clona tabla, llama applyValue() ..
+  + undo()
+  .. restaura tabla clonada ..
+  # {abstract} applyValue()
+}
+
+PNEdit <|-- TablePotentialValueEdit
+PNEdit <|-- ICITablePotentialValueEdit
+PNEdit <|-- AugmentedPotentialValueEdit
+PNEdit <|-- LinkRestrictionPotentialValueEdit
+
+PNEdit <|-- ATVE : propuesto
+
+note right of ATVE
+  Template Method: las 4 clases
+  existentes heredarían de aquí
+  e implementarían applyValue()
+end note
+
+@enduml

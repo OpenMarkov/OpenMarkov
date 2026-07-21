@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="DAN">
+    <Comment showWhenOpeningNetwork="true"><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <font face="Arial">Ejercicio de RAD EQUIVALENTE al ejemplo de Figura 5-<span lang="ES-MX"><i>28. 
+    Prob&#233; con dos nodos de valor y me dio el error &quot;Incompatible evidence&quot;, 
+    luego un&#237; los dos nodos de valor con otro que los suma, pero dio el mismo 
+    error. Posiblemente porque no gener&#233; antes un &#225;rbol </i></span></font>
+
+    <p class="MsoNormal">
+      <span lang="ES-MX"><i><font face="Arial">. </font></i></span>
+    </p>
+  </body>
+</html>]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <AdditionalProperties />
+    <Variables>
+      <Variable name="¿Solicitar introducir?" type="finiteStates" role="decision">
+        <Coordinates x="191" y="57" />
+        <States>
+          <State name="No" />
+          <State name="Sí" />
+        </States>
+      </Variable>
+      <Variable name="¿Canal de Distribución?" type="finiteStates" role="decision">
+        <Coordinates x="466" y="56" />
+        <States>
+          <State name="Económico" />
+          <State name="Caro" />
+        </States>
+      </Variable>
+      <Variable name="Aprobación" type="finiteStates" role="chance">
+        <Coordinates x="337" y="181" />
+        <States>
+          <State name="No aprobado" />
+          <State name="Aprobado" />
+        </States>
+      </Variable>
+      <Variable name="Ventas" type="finiteStates" role="chance">
+        <Coordinates x="463" y="274" />
+        <States>
+          <State name="Bajo" />
+          <State name="Medio" />
+          <State name="Alto" />
+        </States>
+      </Variable>
+      <Variable name="Utilidades" type="numeric" role="utility">
+        <Coordinates x="598" y="153" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Costo de solicitar" type="numeric" role="utility">
+        <Coordinates x="138" y="265" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="¿Solicitar introducir?" />
+        <Variable name="Aprobación" />
+        <RevelationCondition>
+          <State name="Sí" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="¿Solicitar introducir?" />
+        <Variable name="Costo de solicitar" />
+      </Link>
+      <Link directed="true">
+        <Variable name="¿Canal de Distribución?" />
+        <Variable name="Ventas" />
+      </Link>
+      <Link directed="true">
+        <Variable name="¿Canal de Distribución?" />
+        <Variable name="Utilidades" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Aprobación" />
+        <Variable name="¿Canal de Distribución?" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Aprobación" />
+            <Variable name="¿Canal de Distribución?" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+      </Link>
+      <Link directed="true">
+        <Variable name="Ventas" />
+        <Variable name="Utilidades" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Aprobación" />
+          <Variable name="¿Solicitar introducir?" />
+        </Variables>
+        <Values>0.0 0.0 0.05 0.95</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Ventas" />
+          <Variable name="¿Canal de Distribución?" />
+        </Variables>
+        <Values>0.1 0.2 0.7 0.05 0.15 0.8</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <UtilityVariable name="Utilidades" />
+        <Variables>
+          <Variable name="¿Canal de Distribución?" />
+          <Variable name="Ventas" />
+        </Variables>
+        <Values>500.0 -900.0 1000.0 800.0 2000.0 3000.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <UtilityVariable name="Costo de solicitar" />
+        <Variables>
+          <Variable name="¿Solicitar introducir?" />
+        </Variables>
+        <Values>0.0 -100.0</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

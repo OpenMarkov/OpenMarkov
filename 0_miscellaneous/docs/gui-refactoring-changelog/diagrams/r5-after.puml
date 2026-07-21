@@ -1,0 +1,98 @@
+@startuml r5-after
+' ============================================================
+' R5 After -- Redistribution extracted to utility method
+' ============================================================
+
+skinparam defaultFontName Courier
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 50
+skinparam dpi 150
+
+skinparam class {
+  BackgroundColor<<base>> #E8E8FF
+  BorderColor<<base>> #6666AA
+  BackgroundColor<<fixed>> #D8FFD8
+  BorderColor<<fixed>> #44AA44
+  BackgroundColor<<ok>> #FFF8E0
+  BorderColor<<ok>> #AA9944
+  BackgroundColor<<utility>> #E0F0FF
+  BorderColor<<utility>> #4488CC
+}
+
+abstract class PNEdit <<base>> {
+  # probNet: ProbNet
+  __
+  + executeEdit()
+  # {abstract} doEdit()
+  + undo()
+}
+
+class PotentialChangeEdit <<base>> {
+  # oldPotential: Potential
+  # newPotential: Potential
+  __
+  # doEdit()
+}
+
+class PotentialsTablePanelOperations <<utility>> {
+  __
+  + {static} <color:#4488CC><b>redistributeProbabilities</b></color>(\l    values: double[],\l    editedPosition: int,\l    newValue: double,\l    priorityList: List<Integer>,\l    isEditable: IntPredicate): void
+}
+
+class TablePotentialValueEdit <<fixed>> {
+  - row, col: int
+  - newValue: Double
+  - priorityList: List<Integer>
+  __
+  //constructor://
+  .. calls redistributeProbabilities ..
+  .. <color:#44AA44>(1 line)</color> ..
+}
+
+class ICITablePotentialValueEdit <<fixed>> {
+  - row, col: int
+  - newValue: Double
+  - priorityList: List<Integer>
+  - leakyFlag: boolean
+  __
+  # doEdit():
+  .. selects leaky/noisy array ..
+  .. calls redistributeProbabilities ..
+  .. <color:#44AA44>(4 lines total)</color> ..
+}
+
+class AugmentedPotentialValueEdit <<ok>> {
+  - row, col: int
+  __
+  //constructor://
+  .. symbolic expressions ..
+  .. no redistribution ..
+}
+
+class LinkRestrictionPotentialValueEdit <<ok>> {
+  - row, col: int
+  - newValue: Integer
+  __
+  # doEdit():
+  .. binary 0/1 values ..
+  .. no redistribution ..
+}
+
+PNEdit <|-- PotentialChangeEdit
+PNEdit <|-- ICITablePotentialValueEdit
+PNEdit <|-- LinkRestrictionPotentialValueEdit
+PotentialChangeEdit <|-- TablePotentialValueEdit
+PotentialChangeEdit <|-- AugmentedPotentialValueEdit
+
+TablePotentialValueEdit ..> PotentialsTablePanelOperations : delegates
+ICITablePotentialValueEdit ..> PotentialsTablePanelOperations : delegates
+
+note bottom of PotentialsTablePanelOperations
+  Single source of truth.
+  IntPredicate allows filtering
+  non-editable positions.
+end note
+
+@enduml

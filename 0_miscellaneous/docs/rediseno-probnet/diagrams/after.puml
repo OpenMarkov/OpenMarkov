@@ -1,0 +1,141 @@
+@startuml after
+top to bottom direction
+skinparam classAttributeIconSize 0
+skinparam classFontSize 11
+skinparam defaultFontSize 10
+skinparam shadowing false
+skinparam linetype polyline
+skinparam nodesep 30
+skinparam ranksep 40
+
+skinparam class {
+  BackgroundColor<<core>>       #E8F5E9
+  BackgroundColor<<iface>>      #FFF3E0
+  BackgroundColor<<extracted>>  #E3F2FD
+  BackgroundColor<<value>>      #F9FBE7
+  BackgroundColor<<graph>>      #F5F5F5
+  BackgroundColor<<edit>>       #E8EAF6
+  BorderColor #444444
+}
+
+interface "GraphNetwork" as GN <<iface>> {
+  + getNodes / getNode
+  + getVariables / getVariable
+  + containsVariable
+  + getNonUtilityVariables
+  + getChildren / getParents
+  + getLinks / getLink
+  + existsPath
+  + getNetworkType
+}
+
+interface "PotentialNetwork" as PN <<iface>> {
+  + getPotentials (5 sobrecargas)
+  + getProbPotentials
+  + getUtilityPotentials
+  + getSortedPotentials
+  + getConstantPotentials
+}
+
+GN <|-- PN
+
+class "Graph<Node>" as Graph <<graph>> {
+  + addNode / removeNode
+  + addLink / removeLink
+  + getNodes / getLinks
+  + getParents / getChildren
+}
+
+class NodeTypeDepot <<graph>>
+
+class "ProbNet\n(1242 lineas)" as ProbNet <<core>> {
+  .. Composicion interna ..
+  - graph : Graph<Node>
+  - metadata : NetworkMetadata
+  # nodeDepot : NodeTypeDepot
+  - networkType : NetworkType
+  - constraints : TreeSet<PNConstraint>
+  - pNESupport : PNESupport
+  - constantPotentials : Set<TablePotential>
+  __
+  .. Gestion de nodos y links ..
+  + addNode / removeNode / getNode
+  + addLink / removeLink / invertLink
+  __
+  .. Variables y potenciales ..
+  + getVariable / getVariables
+  + addPotential / removePotential
+  + getPotentials / getSortedPotentials
+  __
+  .. Restricciones ..
+  + add/remove/get Constraints
+  + checkProbNet
+  __
+  .. Delegaciones ..
+  + copy / deepCopy
+  + variablesCouldBeTemporal / isMultiagent
+  + modifyAgent / getAgents / setAgents
+}
+
+PN <|.. ProbNet : implementa
+
+class "NetworkMetadata" as NM <<value>> {
+  - name : String
+  - comment : String
+  - defaultStates : State[]
+  - agents : List
+  - decisionCriteria : List
+  - cycleLength : CycleLength
+  - inferenceOptions : InferenceOptions
+  __
+  + get/set para cada campo
+}
+
+class "ProbNetClassifier" as PC <<extracted>> {
+  - ProbNetClassifier()
+  __
+  + {static} variablesCouldBeTemporal(net)
+  + {static} isMultiagent(net)
+  + {static} onlyTemporal(net)
+  + {static} onlyChanceNodes(net)
+  + {static} thereAreTemporalNodes(net)
+  + {static} getNumCriteria(net)
+}
+
+class "ProbNetAgentManager" as PA <<extracted>> {
+  - ProbNetAgentManager()
+  __
+  + {static} modifyAgent(net, ...)
+}
+
+class "ProbNetPotentialQueries" as PPQ <<extracted>> {
+  - ProbNetPotentialQueries()
+  __
+  + {static} getProbPotentials(net, var)
+  + {static} getUtilityPotentials(net, var)
+  + {static} tableProjectPotentials(net, ...)
+  + {static} buildMarkovDecisionNetwork(net)
+}
+
+class "ProbNetCopier" as PCC <<extracted>> {
+  - ProbNetCopier()
+  __
+  ~ {static} shallowCopy(net)
+  ~ {static} deepCopy(net)
+}
+
+class PNESupport <<edit>>
+
+' Graph arriba-izquierda, NodeTypeDepot abajo-izquierda de ProbNet
+Graph      -right-* ProbNet : < contiene
+NodeTypeDepot -right-* ProbNet
+
+ProbNet *-left- NM     : contiene
+ProbNet *-- PNESupport
+
+ProbNet ..> PC   : delega >
+ProbNet ..> PA   : delega >
+ProbNet ..> PPQ  : delega >
+ProbNet ..> PCC  : delega >
+
+@enduml

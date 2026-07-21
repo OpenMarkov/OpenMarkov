@@ -1,0 +1,60 @@
+@startuml nonprojectable_hierarchy
+left to right direction
+skinparam backgroundColor white
+skinparam defaultFontName Sans
+skinparam defaultFontSize 10
+skinparam classBackgroundColor #F0F4FF
+skinparam classBorderColor #5555AA
+skinparam ArrowColor #5555AA
+skinparam classFontStyle bold
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 50
+
+abstract class "NonProjectablePotentialException" as Root {
+  {abstract} sealed
+}
+
+note bottom of Root
+  extends
+  OpenMarkovRuntimeException
+  (ver figura 3)
+end note
+
+class "SuperValueMustBeSumOrProduct" as C1 {
+  tablePotential : TablePotential
+}
+class "PotentialCannotBeConvertedToATable" as C2 {
+  potential : Potential
+}
+class "PotentialCannotBeConvertedToATableDueToVariable" as C3 {
+  potential : Potential
+  variable : Variable
+}
+class "MissingVariableInEvidence" as C4 {
+  variable : Variable
+}
+class "MissingEvidenceInVariable" as C5 {
+  variable : Variable
+}
+class "TopVariableNotInDomain" as C6 {
+  variable : Variable
+  domain : List<Variable>
+}
+class "CannotEvaluate" as C7 {
+  node : Node
+}
+class "CannotResolveVariable" as C8 {
+  variable : Variable
+}
+
+Root <|-- C1
+Root <|-- C2
+Root <|-- C3
+Root <|-- C4
+Root <|-- C5
+Root <|-- C6
+Root <|-- C7
+Root <|-- C8
+
+@enduml

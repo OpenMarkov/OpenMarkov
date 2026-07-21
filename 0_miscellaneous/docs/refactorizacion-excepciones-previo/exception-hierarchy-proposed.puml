@@ -1,0 +1,158 @@
+@startuml exception-hierarchy-proposed
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName "Liberation Sans"
+skinparam defaultFontSize 10
+skinparam classAttributeIconSize 0
+skinparam padding 4
+skinparam nodesep 20
+skinparam ranksep 40
+skinparam shadowing false
+skinparam dpi 110
+skinparam wrapWidth 170
+
+skinparam class {
+    BackgroundColor White
+    BorderColor #666666
+    ArrowColor #555555
+    FontSize 10
+}
+
+skinparam package {
+    BackgroundColor White
+    BorderColor #AAAAAA
+    FontSize 10
+    FontStyle bold
+}
+
+skinparam note {
+    BackgroundColor #EEF4FF
+    BorderColor #6688BB
+    FontSize 9
+}
+
+skinparam legend {
+    BackgroundColor #F8F8F8
+    BorderColor #AAAAAA
+    FontSize 9
+}
+
+top to bottom direction
+
+legend top right
+|= Color |= Significado |
+|<#FFCCCC>| Eliminada o sustituida |
+|<#D5E8D4>| Checked — el caller tiene acción correctiva real |
+|<#BBDDFF>| Unchecked nueva — reemplaza excepciones erróneas |
+|<#EEEEEE>| Clase estándar de Java (reutilizada directamente) |
+endlegend
+
+' ════════════════════════════════════════
+'  RAÍCES JAVA
+' ════════════════════════════════════════
+class "Exception\n//Java estándar//" as JEx #EEEEEE
+class "RuntimeException\n//Java estándar//" as JRT #EEEEEE
+class "IllegalArgumentException\n//Java estándar//" as JIAE #EEEEEE
+class "UnsupportedOperationException\n//Java estándar//" as JUOE #EEEEEE
+JRT -up-|> JEx
+JIAE -up-|> JRT
+JUOE -up-|> JRT
+
+' ════════════════════════════════════════
+'  BASE CHECKED — jerarquía izquierda
+' ════════════════════════════════════════
+abstract "OpenMarkovException\n**[nueva — base checked]**" as OME #D5E8D4
+OME -up-|> JEx
+
+note right of OME
+  Unifica IOpenMarkovException e
+  IBundledOpenMarkovException.
+  Toda subclase hereda automáticamente
+  soporte de mensajes localizados.
+end note
+
+' Subrama: errores del usuario
+abstract "UserInputException\n**[nueva]**" as UIEx #D5E8D4
+UIEx -up-|> OME
+
+note right of UIEx
+  Agrupa errores originados en una acción del usuario.
+  La GUI captura esta clase en un único punto
+  y muestra un diálogo de corrección adecuado.
+end note
+
+abstract "ParserException\n//15 variantes: CannotOpenFile, BadlyStructuredFile, ...//\n//Conservada: el caller puede ofrecer otro fichero//" as PE #D5E8D4
+abstract "WriterException\n//6 variantes: CannotCreateFile, ...//\n//Conservada: el caller puede reintentar en otra ruta//" as WE #D5E8D4
+class "IncompatibleEvidenceException\n//Conservada: el usuario puede retirar evidencia conflictiva//" as IEE #D5E8D4
+class "EmptyDatabaseException\nNoReaderForFileException" as EDENFRF #D5E8D4
+
+PE -up-|> UIEx
+WE -up-|> UIEx
+IEE -up-|> UIEx
+EDENFRF -up-|> UIEx
+
+' Subrama: estructura de la red
+abstract "NetworkStructureException\n**[nueva]**" as NSE #D5E8D4
+NSE -up-|> OME
+
+note right of NSE
+  Agrupa errores en la coherencia lógica de la red.
+  La GUI puede mostrar qué restricción se violó
+  y cómo corregirla.
+end note
+
+class "ConstraintViolatedException\n//42 variantes internas//\n//Promovida: ya no hereda de DoEditException//" as CVE #D5E8D4
+class "NotEvaluableNetworkException\n//Promovida a checked legítima://\n//la GUI puede informar qué falta en la red//" as NENE #D5E8D4
+
+CVE -up-|> NSE
+NENE -up-|> NSE
+
+' Subrama: aprendizaje
+abstract "LearningException\n//2 variantes: NoDatabasePresent, NoChosenVariables//" as LE #D5E8D4
+LE -up-|> OME
+class "UnobservedVariablesException\nEmptyModelNetException" as UVEEMNE #D5E8D4
+UVEEMNE -up-|> LE
+
+' ════════════════════════════════════════
+'  BASE UNCHECKED — jerarquía derecha
+' ════════════════════════════════════════
+abstract "OpenMarkovRuntimeException\n**[nueva — base unchecked]**" as OMRE #BBDDFF
+OMRE -up-|> JRT
+
+note right of OMRE
+  Para errores que indican un fallo de programación
+  o estado interno imposible. No se capturan
+  en código de negocio normal; solo en la capa
+  más externa del programa.
+end note
+
+class "InternalConsistencyException\n**[reemplaza UnreacheableException]**\n//Estado que el diseño garantizaba inalcanzable.//\n//Equivalente a un assert con traza completa.//" as ICE #BBDDFF
+class "PotentialComputationException\n**[reemplaza NonProjectablePotentialException]**\n//Fallo al calcular una tabla de probabilidad.//\n//Nombre comprensible sin vocabulario matemático.//" as PCE #BBDDFF
+class "PluginConfigurationException\n**[nueva — reemplaza catch→null de FormatManager]**\n//Plugin no instanciable: falla rápido y visible,//\n//con nombre del plugin y causa en la traza.//" as PLCE #BBDDFF
+class "UIActionException\n**[nueva — propuesta informe general]**\n//Simplifica los 20+ bloques catch idénticos//\n//de MainPanelListenerAssistant.//" as UAE #BBDDFF
+
+ICE -up-|> OMRE
+PCE -up-|> OMRE
+PLCE -up-|> OMRE
+UAE -up-|> OMRE
+
+' ════════════════════════════════════════
+'  ELIMINADAS / SUSTITUIDAS
+' ════════════════════════════════════════
+package "Eliminadas / sustituidas" as PKG_ELIM #FFF4F4 {
+    class "<s>DoEditException</s>\n//→ CVE hereda de NSE directamente//" as DEE #FFCCCC
+    class "<s>UnreacheableException</s>\n//→ InternalConsistencyException//" as URE #FFCCCC
+    class "<s>UnrecoverableException</s>\n//→ UIActionException//" as UREC #FFCCCC
+    class "<s>InvalidArgumentException</s>\n//→ IllegalArgumentException//" as IAE #FFCCCC
+    class "<s>NotSupportedOperationException</s>\n//→ UnsupportedOperationException//" as NSOE #FFCCCC
+    class "<s>NonProjectablePotentialException</s>\n<s>CannotNormalizePotentialException</s>\n<s>InvalidNetworkTypeException</s>\n//→ PotentialComputationException//" as NPPE #FFCCCC
+}
+
+DEE   ..> CVE   : CVE hereda directamente\nde NetworkStructureException
+URE   ..> ICE   : sustituida por
+UREC  ..> UAE   : sustituida por
+IAE   ..> JIAE  : sustituida por
+NSOE  ..> JUOE  : sustituida por
+NPPE  ..> PCE   : sustituidas por
+
+@enduml

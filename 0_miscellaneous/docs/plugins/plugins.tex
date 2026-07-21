@@ -1,0 +1,971 @@
+% ============================================================
+%  Sistema de Plugins de OpenMarkov Core
+%  Documento técnico
+%
+%  Compilar:
+%    make              (genera PNGs con PlantUML y compila el PDF)
+%  o manualmente:
+%    pdflatex -interaction=nonstopmode plugins.tex   (dos pasadas)
+% ============================================================
+\documentclass[12pt,a4paper,spanish]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage{lmodern}
+
+% ---- Colores ----
+\definecolor{azulOM}{RGB}{30,90,160}
+\definecolor{verdeManager}{RGB}{40,140,80}
+\definecolor{grisFondo}{RGB}{245,245,245}
+
+% ---- Hiperenlaces ----
+\hypersetup{
+    colorlinks=true,
+    linkcolor=azulOM,
+    urlcolor=azulOM,
+    citecolor=azulOM,
+    pdftitle={Sistema de Plugins de OpenMarkov Core},
+    pdfauthor={OpenMarkov},
+    pdfsubject={Arquitectura de extensibilidad}
+}
+
+% ---- Código fuente ----
+\renewcommand{\lstlistingname}{Listado}
+
+\lstdefinelanguage{JavaPlugin}{
+    language=Java,
+    morekeywords={@PotentialType,@FormatType,@Constraint,@NetworkTypeInfo,
+                  @ImplementationRequirements,@RequiredConstructor,@RequiredMethod,
+                  @AutoService,@Retention,@Target,RUNTIME,TYPE,
+                  ConstraintBehavior,PotentialRole,PluginSearch,PluginLoader,
+                  ExtensionTree,PotentialUtils,FormatManager,ConstraintManager,
+                  NetworkTypeUtils,PNConstraint,NetworkType,Potential,
+                  ProbNetReader,ProbNetWriter,InferenceAlgorithm,
+                  PluginClassCategory,YES,NO,OPTIONAL,SelfClass},
+    keywordstyle=\color{azulOM}\bfseries,
+    commentstyle=\color{gray!70!black}\itshape,
+    stringstyle=\color{verdeManager},
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{grisFondo},
+    frame=single,
+    rulecolor=\color{gray!40},
+    breaklines=true,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=8pt,
+    tabsize=4,
+    showstringspaces=false,
+    captionpos=b
+}
+
+% ---- Cabecera y pie ----
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{azulOM}{\textbf{OpenMarkov Core}}}
+\fancyhead[R]{\small Sistema de Plugins}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---- Secciones ----
+\titleformat{\section}{\large\bfseries\color{azulOM}}{§\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{azulOM!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{gray!60!black}}{\thesubsubsection}{1em}{}
+
+% ---- Macro para figuras UML ----
+\newcommand{\umlFig}[3]{%
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=#2\textwidth]{#1.png}
+    \caption{#3}
+  \end{figure}%
+}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge\bfseries\color{azulOM} Sistema de Plugins\\[0.5em]
+     \large\color{gray!80!black} \texttt{org.openmarkov.core}}\\[2cm]
+    {\large Documentación técnica de la arquitectura de extensibilidad}\\[0.5em]
+    {\normalsize Descubrimiento automático · Anotaciones · Managers · Contratos}\\[3cm]
+    \rule{0.6\textwidth}{1pt}\\[1em]
+    {\normalsize Módulo: \texttt{org.openmarkov.core}}\\
+    {\normalsize Fecha: \today}
+    \vfill
+    \begin{center}
+    \small\textit{Los diagramas UML se generan a partir de los archivos}\\
+    \texttt{img/*.puml} \textit{mediante PlantUML (véase el Makefile adjunto).}
+    \end{center}
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+% ============================================================
+\section{Introducción}
+% ============================================================
+
+En el contexto de OpenMarkov, un \textbf{plugin} es una clase Java que extiende o
+implementa un tipo base previamente definido en el núcleo del sistema (por ejemplo,
+un tipo de potencial, una restricción estructural o un formato de archivo), y que
+el sistema descubre y registra \emph{automáticamente al arrancar}, sin que sea
+necesario modificar ningún código existente. El desarrollador simplemente anota la
+nueva clase con la anotación apropiada, la coloca en el classpath y el sistema la
+incorpora como si siempre hubiera estado ahí.
+
+Este mecanismo está diseñado para soportar la extensibilidad a largo plazo: nuevos
+módulos de OpenMarkov pueden añadir tipos de red, algoritmos de inferencia o
+formatos de archivo sin crear dependencias circulares ni modificar el núcleo.
+
+\subsection{Cuatro pilares del sistema}
+\label{sec:pilares}
+
+El sistema de plugins se sustenta en cuatro mecanismos que trabajan de forma
+coordinada. En conjunto, proporcionan un ciclo completo de extensión: el
+desarrollador anota → el motor descubre → el manager registra → el dominio usa.
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{Anotaciones de descubrimiento} (\S\ref{sec:anotaciones}): marcan
+          las clases como puntos de extensión y les asignan metadatos (nombre,
+          comportamiento por defecto, versión, etc.). Son el contrato visible que
+          el desarrollador de un plugin debe cumplir.
+    \item \textbf{Motor de búsqueda de plugins} (\S\ref{sec:motor}): escanea el
+          classpath al arrancar y construye un catálogo de todas las clases que
+          cumplen los criterios de cada categoría. Opera de forma transparente,
+          sin que el código de dominio tenga que invocarlo explícitamente.
+    \item \textbf{Managers} (\S\ref{sec:managers}): singletons que consumen el
+          catálogo construido por el motor y exponen al resto del sistema una API
+          de alto nivel para obtener instancias de plugins por nombre, filtrarlos
+          por compatibilidad o listar todos los disponibles.
+    \item \textbf{Contrato de implementación} (\S\ref{sec:contrato}): la anotación
+          \texttt{@ImplementationRequirements} documenta qué constructores y métodos
+          deben existir en cada tipo de plugin. Los tests de integración verifican
+          que ningún plugin rompa el contrato.
+\end{enumerate}
+
+\subsection{Cuatro categorías de plugin}
+\label{sec:categorias}
+
+Actualmente el núcleo de OpenMarkov define cuatro categorías de plugin, cada una
+asociada a una anotación de descubrimiento y un manager específico. La tabla
+siguiente resume su propósito y sus relaciones principales.
+
+\medskip
+\begin{tabularx}{\textwidth}{llXl}
+\toprule
+\textbf{Categoría} & \textbf{Anotación} & \textbf{Propósito} & \textbf{Manager} \\
+\midrule
+Potencial        & \texttt{@PotentialType}    & Distribuciones de probabilidad / utilidad & \texttt{PotentialUtils} \\
+Restricción      & \texttt{@Constraint}        & Reglas estructurales de una red           & \texttt{ConstraintManager} \\
+Tipo de red      & \texttt{@NetworkTypeInfo}   & Define el tipo de modelo probabilístico   & \texttt{NetworkTypeUtils} \\
+Formato de arch. & \texttt{@FormatType}        & Lectura/escritura de redes en disco       & \texttt{FormatManager} \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Vista de alto nivel}
+\label{sec:vista-general}
+% ============================================================
+
+La figura~\ref{fig:general} muestra los cuatro grupos de actores del sistema y sus
+relaciones principales: las anotaciones marcan los plugins, las clases base los
+definen estructuralmente, los managers los registran y el motor de búsqueda
+proporciona la infraestructura de descubrimiento. Los paquetes están ordenados
+de izquierda a derecha según su papel en el ciclo de descubrimiento: las
+anotaciones son el punto de entrada del desarrollador; las clases base definen
+los contratos; los managers son los intermediarios que el dominio usa; y el motor
+es el mecanismo interno que hace posible todo lo anterior.
+
+\textbf{Leyenda de colores:}
+\begin{itemize}
+    \item \colorbox{yellow!40}{\strut Amarillo} — Anotaciones de descubrimiento
+    \item \colorbox{orange!25}{\strut Naranja} — Clases base de los puntos de extensión
+    \item \colorbox{green!30}{\strut Verde} — Managers (singletons de acceso)
+    \item \colorbox{cyan!30}{\strut Cian} — Motor de búsqueda (\texttt{org.openmarkov.plugin})
+    \item \colorbox{blue!15}{\strut Azul claro} — Implementaciones concretas de tipos de red
+    \item \colorbox{red!12}{\strut Rosa} — Implementaciones concretas de formatos
+    \item \colorbox{yellow!15}{\strut Crema} — Implementaciones concretas de potenciales/restricciones
+\end{itemize}
+
+\umlFig{img/fig01-general}{0.98}{Vista general del sistema de plugins. De izquierda a
+  derecha: anotaciones de descubrimiento, clases base, managers y motor de búsqueda.}
+\label{fig:general}
+
+% ============================================================
+\section{Motor de búsqueda de plugins}
+\label{sec:motor}
+% ============================================================
+
+El paquete \texttt{org.openmarkov.plugin} proporciona la infraestructura de
+descubrimiento. Es independiente del dominio y reutilizable en cualquier módulo
+de OpenMarkov. Contiene tres clases principales y un enum.
+
+\umlFig{img/fig02-motor}{0.92}{Motor de búsqueda: \texttt{PluginSearch}, \texttt{PluginLoader} y \texttt{ExtensionTree}}
+
+\subsection{PluginClassCategory}
+
+Enumera las fuentes de clases que el motor sabe escanear:
+
+\begin{description}[leftmargin=2em]
+    \item[\texttt{OPENMARKOV}] Clases cuyo nombre de paquete comienza por
+          \texttt{org.openmarkov}. Es la categoría usada por todos los managers
+          del núcleo. El escaneo se realiza mediante \textbf{ClassGraph} sobre el
+          classpath completo.
+    \item[\texttt{JAVA}] Clases del JDK, accedidas mediante el sistema de
+          archivos virtual \texttt{jrt:/}.
+    \item[\texttt{EXTERNAL\_DEPENDENCY}] Resto de clases del classpath (librerías
+          de terceros, no OpenMarkov).
+\end{description}
+
+\subsection{PluginLoader}
+
+Implementación interna (visibilidad de paquete). Responsabilidades:
+\begin{enumerate}
+    \item \textbf{Enumeración}: usa ClassGraph para obtener las rutas de todos los
+          JARs y directorios del classpath y extrae los nombres de clase de cada
+          archivo \texttt{.class}.
+    \item \textbf{Carga en paralelo}: carga cada clase con
+          \texttt{ClassLoader.getSystemClassLoader()} usando un stream paralelo.
+    \item \textbf{Caché}: el resultado se guarda en \texttt{LOADED\_CLASSES}
+          (un \texttt{HashMap} estático). Las categorías se inicializan de forma
+          diferida y sincronizada: si dos threads solicitan la misma categoría
+          simultáneamente, solo uno realiza el escaneo.
+\end{enumerate}
+
+\subsection{PluginSearch}
+
+API fluida e inmutable construida sobre \texttt{Stream<Class<T>>}. Cada método
+devuelve una nueva instancia de \texttt{PluginSearch}, permitiendo encadenar
+operaciones sin efectos secundarios.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Método} & \textbf{Descripción} \\
+\midrule
+\texttt{init()} & Punto de entrada; obtiene el stream de \texttt{OPENMARKOV} \\
+\texttt{full()} & Combina todas las categorías \\
+\texttt{extending(Class<E>)} & Filtra subclases/implementaciones de \texttt{E} \\
+\texttt{childrenOf(Class<E>)} & Como \texttt{extending} pero excluye la clase raíz \\
+\texttt{annotatedWith(Class<A>)} & Filtra clases con la anotación \texttt{A} \\
+\texttt{filter(Predicate)} & Filtro genérico \\
+\texttt{stream()} & Operación terminal: devuelve el stream resultante \\
+\texttt{list()} & Operación terminal: recoge en \texttt{List} \\
+\texttt{extensionTree()} & Operación terminal: construye un \texttt{ExtensionTree} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{lstlisting}[language=JavaPlugin,
+    caption={Ejemplo de PluginSearch encadenado para buscar restricciones}]
+Stream<Class<? extends PNConstraint>> restricciones =
+    PluginSearch.init()
+        .annotatedWith(Constraint.class)
+        .childrenOf(PNConstraint.class)
+        .stream();
+\end{lstlisting}
+
+\subsection{ExtensionTree}
+
+Estructura de árbol que refleja la jerarquía de herencia. Se construye a partir
+de una clase raíz y un \texttt{Stream} de sus subclases. El método
+\texttt{breathFirstLevelOrderQueue()} recorre el árbol en \textbf{anchura (BFS)},
+garantizando que las clases más cercanas a la raíz se procesen antes que las
+hojas. Esto es crucial para \texttt{PotentialUtils}: cuando una clase abstracta
+lleva \texttt{@PotentialType} y varias clases hoja la heredan, la clase más
+cercana a la raíz prevalece en el mapa de nombres.
+
+% ============================================================
+\section{Anotaciones de descubrimiento y de contrato}
+\label{sec:anotaciones}
+% ============================================================
+
+Las anotaciones del sistema se dividen en dos grupos: las de \emph{descubrimiento}
+(que marcan plugins) y las de \emph{contrato} (que documentan requisitos de
+implementación).
+
+Todas las anotaciones de descubrimiento comparten dos meta-anotaciones de Java:
+
+\begin{itemize}
+    \item \texttt{@Retention(RetentionPolicy.RUNTIME)}: indica que la anotación
+          debe estar disponible en tiempo de ejecución (y no solo en tiempo de
+          compilación). Esto permite que \texttt{PluginSearch} la lea mediante
+          reflexión durante el escaneo del classpath.
+    \item \texttt{@Target(ElementType.TYPE)}: indica que la anotación solo puede
+          aplicarse a declaraciones de tipo (clases, interfaces, enumeraciones y
+          anotaciones). No puede aplicarse a métodos, campos ni parámetros.
+\end{itemize}
+
+\umlFig{img/fig03-anotaciones}{0.90}{Todas las anotaciones del sistema de plugins}
+
+\subsection{Anotaciones de descubrimiento}
+
+\subsubsection{\texttt{@PotentialType}}
+
+Marca las subclases de \texttt{Potential} que deben ser descubiertas. El atributo
+\texttt{names} acepta un array para permitir múltiples aliases del mismo tipo,
+útil para mantener compatibilidad con nombres históricos de archivos XML:
+
+\begin{lstlisting}[language=JavaPlugin, caption={Uso de @PotentialType}]
+@PotentialType(names = {"Table", "ProbTable"})
+public class TablePotential extends AbstractIndexedPotential { ... }
+
+@PotentialType(names = "Uniform")
+public class UniformPotential extends Potential { ... }
+
+@PotentialType(names = "ICIModel")  // heredada por MaxPotential y MinPotential
+public abstract class ICIPotential extends Potential { ... }
+\end{lstlisting}
+
+\subsubsection{\texttt{@Constraint}}
+
+Marca las subclases de \texttt{PNConstraint}. El atributo \texttt{defaultBehavior}
+determina el comportamiento global de la restricción antes de que los tipos de
+red lo sobrescriban:
+
+\begin{description}[leftmargin=2em]
+    \item[\texttt{YES}] Activa en todos los tipos de red por defecto.
+    \item[\texttt{NO}] Inactiva por defecto; un tipo de red puede activarla.
+    \item[\texttt{OPTIONAL}] Inactiva por defecto, pero puede activarla el usuario.
+\end{description}
+
+\subsubsection{\texttt{@NetworkTypeInfo}}
+
+Proporciona el nombre técnico (usado en ficheros XML), el nombre visual (mostrado
+en la GUI) y nombres alternativos para compatibilidad con versiones anteriores.
+
+\subsubsection{\texttt{@FormatType}}
+
+Incluye la extensión de archivo y la versión del formato para la resolución
+automática del lector/escritor. Permite registrar múltiples versiones del mismo
+formato (por ejemplo, \texttt{pgmx~0.1} y \texttt{pgmx~0.2}).
+
+\subsection{Anotaciones de contrato}
+\label{sec:contrato}
+
+\subsubsection{\texttt{@ImplementationRequirements}}
+
+Documenta qué constructores y métodos deben existir en \emph{todas} las subclases
+concretas. \textbf{No impone restricciones en tiempo de ejecución}: la verificación
+se realiza en los tests de integración.
+
+\begin{lstlisting}[language=JavaPlugin,
+    caption={@ImplementationRequirements en Potential}]
+@ImplementationRequirements(
+    requiresOneOfTheseConstructors = {
+        @RequiredConstructor({List.class, CycleLength.class}),   // DBN
+        @RequiredConstructor({List.class, PotentialRole.class}), // estándar
+        @RequiredConstructor(List.class),                        // mínimo
+        @RequiredConstructor(SelfClass.class)                    // copy ctor
+    },
+    requiresMethods = @RequiredMethod(
+        methodKind = RequiredMethod.MethodKind.Static,
+        methodName = "validate",
+        returnType = Boolean.class,
+        parameters = {Node.class, List.class, PotentialRole.class}
+    )
+)
+public abstract class Potential implements Localizable { ... }
+\end{lstlisting}
+
+La clase marcador \texttt{SelfClass} representa «el tipo de la propia subclase»,
+exigiendo un constructor copia de la forma \texttt{SubTipo(SubTipo other)}.
+
+Para \texttt{PNConstraint} el requisito es más sencillo: solo exige un constructor
+sin argumentos, necesario para que \texttt{ConstraintManager} las instancie por
+reflexión:
+
+\begin{lstlisting}[language=JavaPlugin,
+    caption={@ImplementationRequirements en PNConstraint}]
+@ImplementationRequirements(
+    requiresOneOfTheseConstructors = @RequiredConstructor({}) // sin args
+)
+public abstract class PNConstraint { ... }
+\end{lstlisting}
+
+% ============================================================
+\section{Managers}
+\label{sec:managers}
+% ============================================================
+
+Un \textbf{manager} es un singleton que actúa como punto de acceso centralizado
+a una categoría de plugins. Sus responsabilidades son tres: (1)~descubrir todas
+las clases de plugins disponibles al arrancar, usando \texttt{PluginSearch};
+(2)~mantener un registro interno (mapa de nombres a clases o lista de instancias)
+para que las búsquedas posteriores sean eficientes; y (3)~exponer una API de alto
+nivel que el código de dominio puede usar sin conocer los detalles del sistema de
+reflexión subyacente.
+
+Todos los managers se inicializan de forma diferida la primera vez que se accede
+a ellos, y el resultado del descubrimiento se cachea de forma permanente durante
+la vida de la JVM.
+
+\umlFig{img/fig04-managers}{0.98}{Los cuatro managers (columna central) y sus relaciones
+  con el motor de búsqueda (izquierda) y las anotaciones que leen (derecha).}
+
+\subsection{PotentialUtils}
+\label{sec:potentialutils}
+
+\texttt{PotentialUtils} es el manager de potenciales. Su responsabilidad es
+mantener el catálogo completo de tipos de potencial disponibles, permitir su
+búsqueda por nombre, instanciarlos de forma segura mediante reflexión, y
+determinar qué tipos son compatibles con un nodo concreto. Es la clase que
+permite que el sistema (y la GUI) traten los potenciales como entidades
+intercambiables sin conocer sus clases concretas.
+
+El mapa \texttt{POTENTIALS\_BY\_NAME} se construye en el inicializador estático
+recorriendo el árbol de extensión de \texttt{Potential} en amplitud (BFS).
+Esto garantiza que, si hay un conflicto de nombre entre clase padre e hija, la
+más cercana a la raíz prevalece.
+
+El método \texttt{instanciateSafely} prueba constructores en este orden:
+\begin{enumerate}
+    \item \texttt{(List<Variable>, CycleLength)} — para redes dinámicas (DBN).
+    \item \texttt{(List<Variable>, PotentialRole)} — constructor estándar.
+    \item \texttt{(List<Variable>)} — constructor mínimo.
+\end{enumerate}
+
+El método \texttt{getFilteredPotentialClasses(Node)} usa reflexión para invocar
+el método estático \texttt{validate(Node, List<Variable>, PotentialRole)} de cada
+potencial y devuelve solo los compatibles con el nodo dado.
+
+\subsection{ConstraintManager}
+\label{sec:constraintmanager}
+
+\texttt{ConstraintManager} es el manager de restricciones. Su responsabilidad es
+conocer el conjunto completo de restricciones disponibles en el sistema y, para
+cada tipo de red concreto, construir la lista activa de restricciones que deben
+verificarse. Actúa como mediador entre el comportamiento global por defecto de
+cada restricción y las personalizaciones que cada tipo de red puede introducir.
+
+La lógica de \texttt{buildConstraintList} opera en dos fases:
+\begin{enumerate}
+    \item Recoge todas las restricciones con \texttt{defaultBehavior == YES}
+          (y también las \texttt{OPTIONAL} si el parámetro \texttt{includeOptionals}
+          es \texttt{true}).
+    \item Aplica las \emph{sobrescrituras} del tipo de red concreto
+          (\texttt{NetworkType.getOverwrittenConstraints()}): si una restricción
+          está marcada \texttt{YES} en el tipo, se añade; si está marcada
+          \texttt{NO}, se elimina de la lista.
+\end{enumerate}
+
+\begin{lstlisting}[language=JavaPlugin,
+    caption={Lógica simplificada de ConstraintManager.buildConstraintList}]
+public List<PNConstraint> buildConstraintList(NetworkType type, boolean optionals) {
+    List<PNConstraint> result = new ArrayList<>();
+    // Fase 1: comportamientos por defecto globales
+    for (var entry : defaultConstraintBehaviors.entrySet()) {
+        if (entry.getValue() == YES || (optionals && entry.getValue() == OPTIONAL))
+            result.add(instantiate(entry.getKey()));
+    }
+    // Fase 2: sobrescrituras del tipo de red
+    for (var entry : type.getOverwrittenConstraints().entrySet()) {
+        if (entry.getValue() == YES)
+            result.add(instantiate(entry.getKey()));
+        else if (entry.getValue() == NO)
+            result.removeIf(c -> c.getClass() == entry.getKey());
+    }
+    return result;
+}
+\end{lstlisting}
+
+\subsection{NetworkTypeUtils}
+\label{sec:networktypeutils}
+
+\texttt{NetworkTypeUtils} es el manager de tipos de red. Su responsabilidad es
+mantener el catálogo de todos los tipos de red disponibles en el sistema y
+proporcionar acceso a ellos por nombre. Es el componente que permite a los parsers
+de archivos y al código de dominio obtener la instancia singleton correcta de un
+tipo de red a partir de su nombre textual (por ejemplo, al cargar un archivo XML
+que declara \texttt{type="BayesianNetwork"}).
+
+Todos los tipos de red son singletons. \texttt{NetworkTypeUtils.safeInstanciate}
+los obtiene llamando al método estático \texttt{getUniqueInstance()} por reflexión,
+evitando la instanciación duplicada.
+
+La búsqueda por nombre prueba primero el atributo \texttt{name} de la anotación
+y, si no hay coincidencia, prueba los \texttt{alternativeNames}. Esto garantiza
+compatibilidad con archivos guardados con versiones anteriores de OpenMarkov.
+
+\subsection{FormatManager}
+\label{sec:formatmanager}
+
+\texttt{FormatManager} es el manager de formatos de archivo. Su responsabilidad
+es descubrir todos los lectores (\texttt{ProbNetReader}) y escritores
+(\texttt{ProbNetWriter}) disponibles, instanciarlos al arrancar y proporcionar el
+reader o writer correcto para cualquier archivo que se quiera abrir o guardar.
+
+A diferencia de los otros managers, \texttt{FormatManager} \textbf{instancia
+inmediatamente} todos los plugins descubiertos en su constructor privado. El motivo
+es que la operación de abrir un archivo debe ser lo más rápida posible; pagar el
+coste de instanciación al arranque es preferible a pagarlo en cada apertura.
+
+La resolución del reader para un archivo concreto combina extensión y versión:
+\begin{enumerate}
+    \item Extrae la extensión del nombre de archivo.
+    \item Para formatos distintos de \texttt{.elv}, lee la versión del propio
+          contenido XML del archivo.
+    \item Busca el reader cuya anotación \texttt{@FormatType} coincide con ambos
+          valores (usando \texttt{startsWith} para la versión).
+\end{enumerate}
+
+% ============================================================
+\section{Subsistemas de plugins}
+\label{sec:subsistemas}
+% ============================================================
+
+En esta sección se documenta cada categoría de plugin en detalle: las clases base
+que definen su contrato, las implementaciones concretas más relevantes y el
+comportamiento específico de su sistema de descubrimiento. Las cinco subsecciones
+siguientes corresponden a las cuatro categorías de plugin más las clases base que
+las sustentan.
+
+% ----------------------------------------------------------
+\subsection{Clases base de los puntos de extensión}
+\label{sec:bases}
+% ----------------------------------------------------------
+
+Las clases base definen el contrato que todo plugin debe cumplir: qué métodos
+deben implementarse, qué constructor se exige y qué comportamiento estático
+se espera. Son las únicas clases del núcleo que conocen los tipos de plugin de
+forma abstracta; el resto del sistema opera siempre a través de los managers,
+nunca directamente sobre las implementaciones concretas.
+
+\umlFig{img/fig05-bases}{0.85}{Jerarquía de las clases base que actúan como puntos de extensión}
+
+La tabla siguiente resume las obligaciones de cada clase base:
+
+\medskip
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Clase base} & \textbf{Contrato para subclases} \\
+\midrule
+\texttt{Potential}      & 7 métodos abstractos + \texttt{static validate()} \\
+\texttt{PNConstraint}   & \texttt{checkProbNet()} + constructor sin args \\
+\texttt{NetworkType}    & \texttt{static getUniqueInstance()} + \texttt{@NetworkTypeInfo} \\
+\texttt{ProbNetReader}  & \texttt{loadProbNetInfo()} + \texttt{loadProbNet()} + ctor sin args \\
+\texttt{ProbNetWriter}  & \texttt{writeProbNet()} (2 sobrecargas) + ctor sin args \\
+\bottomrule
+\end{tabularx}
+
+% ----------------------------------------------------------
+\subsection{Subsistema de Potenciales}
+\label{sec:potenciales}
+% ----------------------------------------------------------
+
+Los potenciales son el tipo de plugin más rico del sistema. Representan cualquier
+función matemática que mapea configuraciones de variables a valores numéricos:
+tablas de probabilidad condicional (CPTs), distribuciones paramétricas, formas
+canónicas como noisy-OR, árboles de decisión, etc. La gran variedad de tipos
+disponibles y la necesidad de filtrarlos por compatibilidad con el nodo hace
+de \texttt{PotentialUtils} el manager más complejo del sistema.
+
+\umlFig{img/fig06-potenciales}{0.88}{Subsistema de Potenciales: anotación, manager y jerarquía de implementaciones}
+
+\subsubsection{Descubrimiento y herencia de la anotación}
+
+El inicializador estático de \texttt{PotentialUtils} usa
+\texttt{.extending(Potential.class)} en lugar de
+\texttt{.annotatedWith(@PotentialType)}. Este detalle es deliberado: permite que
+una clase abstracta intermedia (como \texttt{ICIPotential}) lleve la anotación
+\texttt{@PotentialType(names = "ICIModel")} y sus hijos concretos
+(\texttt{MaxPotential}, \texttt{MinPotential}) la \emph{hereden} sin necesidad de
+repetirla.
+
+\begin{lstlisting}[language=JavaPlugin,
+    caption={Descubrimiento de potenciales en el inicializador estático de PotentialUtils}]
+static {
+    var byLevel = PluginSearch.init()
+        .extending(Potential.class)   // hereda la anotación de clases padre
+        .extensionTree()
+        .breathFirstLevelOrderQueue()
+        .stream()
+        .map(ExtensionTree::getCurrentClass)
+        .toList();
+
+    byLevel.forEach(cls ->
+        PotentialUtils.getNames(cls).forEach(name ->
+            potentialsByName.put(name, cls)));   // registra todos los aliases
+    POTENTIALS_BY_NAME = potentialsByName;
+}
+\end{lstlisting}
+
+\subsubsection{Filtrado por compatibilidad}
+
+Cuando la GUI necesita saber qué potenciales son válidos para un nodo concreto,
+invoca \texttt{getFilteredPotentialClasses(node)}. Este método llama por reflexión
+al método estático \texttt{validate(Node, List<Variable>, PotentialRole)} de cada
+potencial. La implementación por defecto en \texttt{Potential} devuelve
+\texttt{true}; las subclases la sobrescriben. Por ejemplo,
+\texttt{TablePotential.validate} rechaza variables de tipo \texttt{NUMERIC}.
+
+\subsubsection{Indexación interna de TablePotential}
+
+\texttt{TablePotential} almacena la tabla en un array plano \texttt{double[] values}.
+La posición de una configuración $(x_0, x_1, \ldots)$ es:
+\[
+\mathrm{pos} = x_0 \cdot \mathrm{offsets}[0] + x_1 \cdot \mathrm{offsets}[1] + \cdots
+\]
+donde \texttt{offsets[0]=1} y \texttt{offsets[i] = dimensions[i-1] * offsets[i-1]}.
+Esta indexación lexicográfica permite un acceso eficiente por indexación directa.
+
+% ----------------------------------------------------------
+\subsection{Subsistema de Restricciones}
+\label{sec:restricciones}
+% ----------------------------------------------------------
+
+Las restricciones son reglas estructurales que una red debe cumplir en todo
+momento. Se verifican antes de ejecutar cada edición (\S\texttt{PNEdit}) para
+garantizar que ninguna operación deja la red en un estado inválido. Son instancias
+sin estado (o con estado mínimo inmutable) que el sistema puede crear, aplicar y
+descartar sin efectos secundarios. El método \texttt{checkProbNet} añade
+excepciones al \texttt{ConstraintChecker} en lugar de lanzarlas directamente,
+lo que permite acumular varias violaciones y reportarlas juntas en un único error.
+
+\umlFig{img/fig07-restricciones}{0.92}{Subsistema de Restricciones: anotación, manager e implementaciones en dos columnas}
+
+\subsubsection{Interacción con el sistema de ediciones}
+
+\texttt{PNConstraint} implementa \texttt{PNEditListener}. Antes de ejecutar una
+edición, esta llama a \texttt{checkConstraintsWillBeMet(checker)}, que añade al
+\texttt{ConstraintChecker} solo las violaciones relevantes a la operación que va
+a realizar, sin tener que reverificar toda la red desde cero.
+
+% ----------------------------------------------------------
+\subsection{Subsistema de Tipos de Red}
+\label{sec:tiposred}
+% ----------------------------------------------------------
+
+Los tipos de red son el mecanismo por el cual OpenMarkov soporta distintos
+formalismos probabilísticos (redes bayesianas, diagramas de influencia, MDPs,
+etc.) con un único núcleo común. Cada tipo de red personaliza el conjunto de
+restricciones activas, determinando qué operaciones son válidas sobre ella. Son
+singletons inmutables porque su función es puramente declarativa: no almacenan
+datos de la red, solo sus reglas de validez.
+
+\umlFig{img/fig08-tiposred}{0.90}{Subsistema de Tipos de Red: anotación, manager e implementaciones}
+
+\begin{lstlisting}[language=JavaPlugin,
+    caption={Estructura típica de un tipo de red (BayesianNetworkType)}]
+@NetworkTypeInfo(name = "BayesianNetwork", visualName = "Bayesian Network")
+public final class BayesianNetworkType extends NetworkType {
+    private static final BayesianNetworkType INSTANCE = new BayesianNetworkType();
+
+    private BayesianNetworkType() {
+        super();
+        // Activa una restricción que por defecto global es NO
+        overrideConstraintBehavior(OnlyChanceNodes.class, ConstraintBehavior.YES);
+    }
+
+    public static synchronized BayesianNetworkType getUniqueInstance() {
+        return INSTANCE;
+    }
+}
+\end{lstlisting}
+
+% ----------------------------------------------------------
+\subsection{Subsistema de Formatos de Archivo}
+\label{sec:formatos}
+% ----------------------------------------------------------
+
+Los plugins de formato son la puerta de entrada y salida del sistema: permiten
+leer redes probabilísticas desde archivos en disco y guardarlas de vuelta. Están
+diseñados para que añadir soporte a un nuevo formato (o una nueva versión de uno
+existente) no requiera modificar ningún código del núcleo; basta con añadir
+una nueva clase anotada con \texttt{@FormatType}.
+
+A diferencia de los otros subsistemas, los plugins de formato se instancian de
+forma \emph{inmediata} al arrancar: el \texttt{FormatManager} crea una instancia
+de cada reader y cada writer en su constructor privado. Esto garantiza que
+cualquier error de configuración (clase no encontrada, constructor ausente) se
+detecte durante el arranque y no al intentar abrir un archivo.
+
+Un mismo módulo puede registrar tanto un reader como un writer para el mismo
+formato (extensión y versión) anotando clases separadas. El
+\texttt{FormatManager} los mantiene en listas distintas y los resuelve
+independientemente.
+
+\umlFig{img/fig09-formatos}{0.88}{Subsistema de Formatos de Archivo: anotación, manager, interfaces y ejemplos de implementación}
+
+La resolución del reader para un archivo concreto combina tres datos: extensión
+del archivo, versión leída del contenido XML y la lista de readers disponibles.
+El método \texttt{getProbNetReaderInstanceFor(ext, version)} busca el primero
+cuya anotación \texttt{@FormatType} coincida con ambos valores, usando
+\texttt{startsWith} para la versión (por ejemplo, \texttt{"0"} coincide con
+\texttt{"0.2"}).
+
+% ============================================================
+\section{Flujos de descubrimiento: diagramas de secuencia}
+\label{sec:secuencia}
+% ============================================================
+
+Los diagramas de secuencia siguientes muestran el flujo completo de descubrimiento
+para tres categorías de plugins: potenciales (el más complejo, con árbol de herencia
+y mapa de nombres), restricciones (con la doble fase de comportamientos globales y
+sobrescrituras por tipo de red) y formatos (con instanciación inmediata al arranque).
+En los tres casos, el flujo sigue el mismo patrón general: la primera referencia al
+manager dispara el descubrimiento vía \texttt{PluginSearch} y \texttt{PluginLoader};
+el resultado se cachea; las llamadas posteriores son simples consultas al caché.
+
+\subsection{Descubrimiento de potenciales}
+
+El diagrama de la figura~\ref{fig:seq-potenciales} muestra el flujo completo desde
+que la JVM referencia por primera vez a \texttt{PotentialUtils} (disparando el
+inicializador estático) hasta que el código externo obtiene una instancia de
+potencial. Hay dos fases bien diferenciadas: la \emph{fase de construcción del
+catálogo} (carga del classpath, filtrado, BFS del árbol de herencia y registro
+en el mapa) y la \emph{fase de uso} (búsqueda en el mapa e instanciación por
+reflexión). La fase de uso es $O(1)$ gracias al mapa preconstruido.
+
+Un punto clave del flujo es que \texttt{PluginSearch} usa
+\texttt{.extending(Potential.class)} y no \texttt{.annotatedWith(@PotentialType)},
+lo que garantiza que las clases que heredan la anotación de una clase padre sean
+también descubiertas.
+
+\umlFig{img/fig10-seq-potenciales}{0.95}{Secuencia de descubrimiento e instanciación de potenciales}
+\label{fig:seq-potenciales}
+
+\subsection{Construcción de la lista de restricciones}
+
+El diagrama de la figura~\ref{fig:seq-restricciones} muestra cómo la construcción
+de un \texttt{ProbNet} con tipo \texttt{BayesianNetworkType} resulta en una lista
+de restricciones activas. El flujo tiene dos momentos temporalmente separados: el
+\emph{arranque de la JVM}, en el que \texttt{ConstraintManager} se inicializa y
+descubre todas las restricciones disponibles; y la \emph{creación de una red}
+concreta, en la que \texttt{buildConstraintList} aplica los comportamientos por
+defecto y luego las sobrescrituras del tipo de red.
+
+El efecto de la doble fase se ve claramente con \texttt{OnlyChanceNodes}: su
+\texttt{defaultBehavior} global es \texttt{NO}, por lo que no entra en la lista
+inicial; pero \texttt{BayesianNetworkType} la sobrescribe con \texttt{YES}, de
+modo que se añade en la segunda fase.
+
+\umlFig{img/fig11-seq-restricciones}{0.93}{Secuencia de construcción de la lista de restricciones para una red bayesiana}
+\label{fig:seq-restricciones}
+
+\subsection{Resolución de formato al abrir un archivo}
+
+El diagrama de la figura~\ref{fig:seq-formatos} ilustra el flujo del
+\texttt{FormatManager}. A diferencia de los otros dos, aquí el arranque es más
+costoso: el manager instancia inmediatamente \emph{todos} los readers y writers
+disponibles. La recompensa llega en el momento de abrir un archivo: la resolución
+del reader es una simple búsqueda sobre una lista de instancias ya creadas,
+sin reflexión ni instanciación en ese momento.
+
+El diagrama también muestra la lectura de la versión del XML como paso intermedio
+entre la extracción de la extensión y la búsqueda del reader. Este paso es
+necesario porque el mismo formato puede tener múltiples versiones con parsers
+distintos (por ejemplo, \texttt{pgmx~0.1} y \texttt{pgmx~0.2}).
+
+\umlFig{img/fig12-seq-formatos}{0.95}{Secuencia de resolución y uso del lector de formato}
+\label{fig:seq-formatos}
+
+% ============================================================
+\section{Cómo añadir un nuevo plugin}
+\label{sec:extension}
+% ============================================================
+
+El sistema está diseñado para que añadir un nuevo plugin requiera únicamente:
+\begin{enumerate}
+    \item Crear la clase en cualquier módulo cuyo JAR esté en el classpath.
+    \item Anotar con la anotación apropiada.
+    \item Cumplir el contrato de \texttt{@ImplementationRequirements}.
+\end{enumerate}
+No es necesario modificar ninguna clase existente del núcleo.
+
+\subsection{Nuevo Potencial}
+
+\begin{lstlisting}[language=JavaPlugin, caption={Implementación de un nuevo potencial}]
+@PotentialType(names = {"MiPotencial", "MyPotential"})
+public class MiPotencial extends Potential {
+
+    // Constructor estándar (requerido por @ImplementationRequirements)
+    public MiPotencial(List<Variable> variables, PotentialRole role) {
+        super(variables, role);
+    }
+
+    // Constructor copia (requerido: SelfClass en @ImplementationRequirements)
+    public MiPotencial(MiPotencial other) { super(other); }
+
+    // Filtro de compatibilidad (requerido: @RequiredMethod validate)
+    public static boolean validate(Node node, List<Variable> variables,
+                                   PotentialRole role) {
+        return variables.stream()
+            .allMatch(v -> v.getVariableType() == VariableType.FINITE_STATES);
+    }
+
+    @Override
+    public TablePotential tableProject(EvidenceCase evidence,
+                                       InferenceOptions options,
+                                       List<TablePotential> projected) { ... }
+    @Override public Potential project(EvidenceCase evidence) { ... }
+    @Override public Potential copy()  { return new MiPotencial(this); }
+    @Override public boolean isUncertain() { return false; }
+    @Override public void scalePotential(double scale) { ... }
+    @Override public Potential reorder(List<Variable> newOrder) { ... }
+    @Override public Potential reorder(Variable v, State[] newOrder) { ... }
+}
+// Acceso: PotentialUtils.getClassByName("MiPotencial")
+\end{lstlisting}
+
+\subsection{Nueva Restricción}
+
+\begin{lstlisting}[language=JavaPlugin, caption={Implementación de una nueva restricción}]
+@Constraint(name = "MiRestriccion", defaultBehavior = ConstraintBehavior.YES)
+public class MiRestriccion extends PNConstraint {
+
+    // Constructor sin argumentos (requerido por @ImplementationRequirements)
+    public MiRestriccion() { super(); }
+
+    @Override
+    public void checkProbNet(ProbNet probNet, ConstraintChecker checker) {
+        for (Node node : probNet.getNodes()) {
+            if (condicionDeViolacion(node))
+                checker.addException(new ConstraintViolatedException.MiError(this, node));
+        }
+    }
+}
+// Un tipo de red puede desactivarla con:
+//   overrideConstraintBehavior(MiRestriccion.class, ConstraintBehavior.NO);
+\end{lstlisting}
+
+\subsection{Nuevo Tipo de Red}
+
+\begin{lstlisting}[language=JavaPlugin, caption={Implementación de un nuevo tipo de red}]
+@NetworkTypeInfo(
+    name        = "MiRed",
+    visualName  = "Mi Tipo de Red",
+    alternativeNames = {"MyNet"}
+)
+public final class MiRedType extends NetworkType {
+
+    private static final MiRedType INSTANCE = new MiRedType();
+
+    private MiRedType() {
+        super();
+        overrideConstraintBehavior(OnlyChanceNodes.class, ConstraintBehavior.YES);
+        overrideConstraintBehavior(NoBackwardLink.class, ConstraintBehavior.NO);
+    }
+
+    // Obligatorio: NetworkTypeUtils lo invoca por reflexión
+    public static synchronized MiRedType getUniqueInstance() { return INSTANCE; }
+}
+\end{lstlisting}
+
+\subsection{Nuevo Formato de Archivo}
+
+\begin{lstlisting}[language=JavaPlugin, caption={Implementación de un nuevo formato de archivo}]
+@FormatType(
+    name        = "MiFormatoReader",
+    version     = "1.0",
+    extension   = "mif",
+    description = "MiFormato.description"   // clave i18n para la GUI
+)
+public class MiFormatoReader implements ProbNetReader {
+
+    public MiFormatoReader() { }    // constructor sin args obligatorio
+
+    @Override
+    public ProbNetInfo loadProbNetInfo(String netName, InputStream file)
+            throws IOException, ParserException {
+        return new ProbNetInfo(...);    // metadatos ligeros
+    }
+
+    @Override
+    public ProbNet loadProbNet(String netName, InputStream file)
+            throws IOException, ParserException {
+        ProbNet net = new ProbNet(MiRedType.getUniqueInstance());
+        // parseo completo...
+        return net;
+    }
+}
+// Acceso: FormatManager.getInstance().getProbNetReader(urlArchivoMif)
+\end{lstlisting}
+
+% ============================================================
+\section{Mapa completo del sistema}
+\label{sec:mapa}
+% ============================================================
+
+La figura~\ref{fig:mapa} muestra cómo todos los componentes se ensamblan en
+una vista única. El diagrama está organizado en dos franjas horizontales: en la
+superior aparecen el motor de búsqueda, los managers y el código de dominio
+(de izquierda a derecha según su papel en el flujo de descubrimiento); en la
+inferior aparece el contenido del classpath con todos los tipos de plugins,
+dispuestos horizontalmente para mostrar que son entidades independientes que
+conviven en el mismo espacio de clases.
+
+Las flechas del motor al classpath reflejan la carga por \texttt{PluginLoader};
+las flechas de los managers al motor reflejan las búsquedas por \texttt{PluginSearch};
+y las flechas del dominio a los managers reflejan el uso en tiempo de ejecución
+(crear redes, validar ediciones, instanciar potenciales).
+
+\umlFig{img/fig13-mapa}{0.95}{Mapa completo del sistema de plugins}
+\label{fig:mapa}
+
+% ============================================================
+\section{Consideraciones de rendimiento y ciclo de vida}
+\label{sec:rendimiento}
+% ============================================================
+
+\subsection{Coste de inicialización}
+
+El escaneo del classpath por \texttt{PluginLoader} es la operación más costosa.
+Para mitigarlo:
+\begin{itemize}
+    \item El escaneo se realiza \textbf{una sola vez} por categoría y el resultado
+          se cachea en \texttt{LOADED\_CLASSES} (mapa estático final).
+    \item La carga de clases individuales se hace \textbf{en paralelo} (stream
+          paralelo).
+    \item Los mapas de nombres se construyen una sola vez en inicializadores
+          estáticos.
+    \item \texttt{FormatManager} paga el coste de instanciación al arranque para
+          que las aperturas de archivo posteriores sean inmediatas.
+\end{itemize}
+
+\subsection{Thread safety}
+
+\begin{itemize}
+    \item \texttt{PluginLoader.initializeCategory} está sincronizado.
+    \item \texttt{ConstraintManager} y \texttt{FormatManager} son singletons con
+          campo \texttt{static final} (garantía de la JVM).
+    \item Los tipos de red tienen \texttt{getUniqueInstance()} sincronizado.
+\end{itemize}
+
+\subsection{Extensibilidad en tiempo de ejecución}
+
+El sistema \emph{no} soporta recarga dinámica de plugins en caliente. Para añadir
+un plugin es necesario reiniciar la JVM con el nuevo JAR en el classpath.
+
+\subsection{Resumen comparativo}
+
+\bigskip
+\begin{tabularx}{\textwidth}{lXlll}
+\toprule
+\textbf{Manager} & \textbf{Búsqueda PluginSearch} & \textbf{Init} & \textbf{Instanciación} & \textbf{Caché} \\
+\midrule
+\texttt{PotentialUtils}    & \texttt{.extending(Potential)}             & static init & Diferida por nombre & \texttt{HashMap} \\
+\texttt{ConstraintManager} & \texttt{.annotatedWith(@Constraint)}\newline\texttt{.childrenOf(PNConstraint)} & ctor privado & Al construir lista & \texttt{HashMap} \\
+\texttt{NetworkTypeUtils}  & \texttt{.annotatedWith(@NetworkTypeInfo)}\newline\texttt{.childrenOf(NetworkType)} & static init & \texttt{getUniqueInstance()} & \texttt{List} \\
+\texttt{FormatManager}     & \texttt{.annotatedWith(@FormatType)}\newline\texttt{.extending(Reader/Writer)} & ctor privado & Inmediata & \texttt{List} \\
+\bottomrule
+\end{tabularx}
+
+\end{document}

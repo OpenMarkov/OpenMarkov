@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <StochasticPropagationOutput value="Exportar datos de propagación estocástica">
+        <Window value="Exportar propagación estocástica"/>
+    </StochasticPropagationOutput>
+    <Dialog>
+        <Algorithms value="Algoritmo estocástico"/>
+        <NSamples value="Nº de muestras"/>
+        <PrintXlsx value="Exportar a un archivo .xlsx"/>
+    </Dialog>
+    <SaveDialog>
+        <Title value="Guardar muestras"/>
+    </SaveDialog>
+    <Algorithms>
+        <LogicSampling value="Muestreo lógico"/>
+        <LikelihoodWeighting value="Ponderación por verosimilitud"/>
+        <Hugin value="Agrupamiento"/>
+    </Algorithms>
+    <SheetNames>
+        <Samples value="Muestras"/>
+        <GeneralStats value="Datos generales"/>
+    </SheetNames>
+    <ColumnTitles>
+        <SampleN value="Número de muestra"/>
+        <Weight value="Peso"/>
+        <Variable value="Variable"/>
+        <States value="Estados"/>
+    </ColumnTitles>
+    <RowTitles>
+        <Algorithm value="Algoritmo"/>
+        <Runtime value="Tiempo de ejecución (ms)"/>
+        <RuntimePerSample value="Tiempo de ejecución por muestra (ms)"/>
+        <TotalSamples value="Total de muestras"/>
+        <ValidSamples value="Muestras no nulas"/>
+        <AccumulatedWeight value="Peso acumulado"/>
+        <ExactAlgorithmName value="Algoritmo exacto"/>
+        <Ocurrences value="Ocurrencias"/>
+        <Finding value="Hallazgo"/>
+        <ApproximateProbability value="Probabilidad acumulada"/>
+        <ExactProbability value="Probabilidad exacta"/>
+    </RowTitles>
+    <NonSampled value="No muestreado"/>
+    <ConclusionTitle value="Muestras guardados"/>
+    <Conclusion value="Se ha guardado una hoja de cálculo con las muestras en: "/>
+    <Warnings>
+        <OverwriteTitle value="Archivo ya existente"/>
+        <Overwrite value="El archivo ya existe, ¿desea sobreescribirlo?"/>
+    </Warnings>
+    <Exception>
+        <!-- StochasticPropagationOutputFrame class-->
+        <InvalidNetType>
+            <title value="Tipo de red no válido"/>
+            <message value="Los algoritmos solo funcionan con redes bayesianas."/>
+        </InvalidNetType>
+        <EmptyNet>
+            <title value="Red vacía"/>
+            <message value="Es imposible obtener datos de una red sin nodos"/>
+        </EmptyNet>
+        <NoNet>
+            <title value="No se encuentra la red"/>
+            <message value="Debes abrir una red para obtener datos de ella."/>
+        </NoNet>
+        <NoAlgorithm>
+            <title value="No existe algoritmo"/>
+            <message value="El algoritmo seleccionado no está implementado."/>
+        </NoAlgorithm>
+        <InvalidNet>
+            <title value="Red no válida"/>
+            <message value="A esta red no se le puede aplicar propagación estocástica."/>
+        </InvalidNet>
+        <NodeWithoutPotential>
+            <title value="Nodo sin potencial"/>
+            <message value="La variable %s no tiene potencial asociado"/>
+        </NodeWithoutPotential>
+        <WrongSamples>
+            <title value="Número erróneo de muestras"/>
+            <message value="Solo se admite un número entero y positivo de muestras."/>
+        </WrongSamples>
+        <InvalidEvidence>
+            <title value="Evidencia no válida"/>
+            <message
+                    value="No se puede normalizar. Esto puede ocurrir si todas las muestras han sido ponderadas 0.              Prueba a aumentar el número de muestras o a eliminar hallazgos de la evidencia."/>
+        </InvalidEvidence>
+        <PrePostEvidenceConflict>
+            <title value="Evidencia no válida"/>
+            <message
+                    value="Los hallazgos añadidos en el modo edición entran en conflicto con los hallazgos añadidos en             el modo inferencia."/>
+        </PrePostEvidenceConflict>
+        <!-- XlsxWriter class-->
+        <NoDatabase>
+            <title value="No hay base de datos"/>
+            <message value="No existe base de datos de muestras."/>
+        </NoDatabase>
+        <Output>
+            <title value="Error de salida"/>
+            <message value="Error escribiendo el archivo."/>
+        </Output>
+    </Exception>
+</properties>
