@@ -12,7 +12,10 @@ import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 import org.openmarkov.gui.menutoolbar.common.ZoomMenuToolBar;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JToggleButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -110,7 +113,6 @@ public class StandardToolBar extends ToolBarBasic implements ZoomMenuToolBar, Mo
         add(getDecisionTreeButton());
         add(getSensAnalysisButton());
         add(getCostEffectivenessButton());
-        add(getMonteCarloSimulationButton());
         add(Box.createHorizontalGlue());
     }
     
@@ -304,29 +306,10 @@ public class StandardToolBar extends ToolBarBasic implements ZoomMenuToolBar, Mo
             costEffectivenessButton.addActionListener(listener);
             costEffectivenessButton.addMouseMotionListener(this);
         }
-        //costEffectivenessButton.setEnabled(false);
         return costEffectivenessButton;
     }
     
     // 21/08/2019
-    /**
-     * This method initialises simulateDESNetBUtton.
-     *
-     * @return a
-     */
-    private JToggleButton getMonteCarloSimulationButton() {
-        if (monteCarloSimulationButton == null) {
-            monteCarloSimulationButton = new JToggleButton();
-            monteCarloSimulationButton.setIcon(IconBind.SIMULATION_ENABLED.icon());
-            monteCarloSimulationButton.setFocusable(false);
-            monteCarloSimulationButton.setActionCommand(ActionCommands.MC_SIMULATE_NETWORK.getCommandName());
-            monteCarloSimulationButton.setToolTipText(
-                    stringDatabase.getString(ActionCommands.MC_SIMULATE_NETWORK + STRING_TOOLTIP_SUFFIX));
-            monteCarloSimulationButton.addActionListener(listener);
-            monteCarloSimulationButton.addMouseMotionListener(this);
-        }
-        return monteCarloSimulationButton;
-    }
     
     /**
      * This method initialises costEffectivenessButton.
@@ -360,13 +343,6 @@ public class StandardToolBar extends ToolBarBasic implements ZoomMenuToolBar, Mo
     }
     
     // 2019/09/09
-    /**
-     * Select/unselect MonteCarloButon
-     * @param select - true if moteCarloButton will be selected0
-     */
-    public void selectMonteCarloButton(boolean select) {
-        monteCarloSimulationButton.setSelected(false);
-    }
     
     /**
      * Returns the component that corresponds to an action command.

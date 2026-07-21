@@ -353,4 +353,10 @@ public abstract class AbstractIndexedPotential extends Potential {
     public int getTableSize() {
         return tableSize;
     }
+    
+    public int setTableSize(int tableSize) {
+        this.tableSize = tableSize;
+        return tableSize;
+    }
+    
 }

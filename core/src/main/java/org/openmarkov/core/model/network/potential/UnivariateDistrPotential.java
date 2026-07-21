@@ -9,6 +9,7 @@ package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -37,7 +38,8 @@ import java.util.stream.Collectors;
  * class, and its parameters are stored in an {@link AugmentedProbTable}. Used for numeric
  * conditioned variables.
  */
-@PotentialType(names = "UnivariateDistr") public class UnivariateDistrPotential extends Potential {
+@PotentialType(names = "UnivariateDistr")
+public class UnivariateDistrPotential extends TableWithEvents implements DESSimulablePotential {
     
     public static final String PSEUDO_VARIABLE = "pseudoVariableDistributionName";
     private static final VariableExpression INITIALIZATION_VALUE = new VariableExpression(Collections.emptyList(), "1");
@@ -448,6 +450,11 @@ import java.util.stream.Collectors;
         AugmentedProbTable reorderedTable = distributionTable.reorder(variable, newOrder);
         copy.setDistributionTable(reorderedTable);
         return copy;
+    }
+    
+    @Override
+    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws OpenMarkovException {
+        return distributionTable.sampleConditionedVariable(randomNumbers, convert(parents));
     }
     
 }

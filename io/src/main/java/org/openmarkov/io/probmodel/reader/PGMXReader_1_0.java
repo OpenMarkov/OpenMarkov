@@ -7,37 +7,47 @@
 
 package org.openmarkov.io.probmodel.reader;
 
+import org.jdom2.Element;
+import org.openmarkov.core.expression.VariableExpression;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionManager;
+import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
+import org.openmarkov.core.model.network.potential.AugmentedProbTable;
+import org.openmarkov.core.model.network.potential.AugmentedProbTablePotential;
+import org.openmarkov.core.model.network.potential.DistributionTablePotential;
+import org.openmarkov.core.model.network.potential.ExternalPotential;
+import org.openmarkov.core.model.network.potential.FunctionPotential;
+import org.openmarkov.core.model.network.potential.IncrementPotential;
+import org.openmarkov.core.model.network.potential.IndicatorPotential;
+import org.openmarkov.core.model.network.potential.PiecewiseExponentialPotential;
+import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.PotentialRole;
+import org.openmarkov.core.model.network.potential.TransitionTablePotential;
+import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
+import org.openmarkov.core.model.network.potential.treeadd.TreeWithEventsPotential;
+import org.openmarkov.core.model.network.potential.treeadd.TreeWithExcludedEventsPotential;
+import org.openmarkov.core.model.network.type.DESNetworkType;
+import org.openmarkov.io.probmodel.exception.PGMXParserException;
+import org.openmarkov.io.probmodel.strings.XMLAttributes;
+import org.openmarkov.io.probmodel.strings.XMLTags;
+
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
-import org.jdom2.Element;
-import org.openmarkov.core.expression.VariableExpression;
-import org.openmarkov.core.model.network.Node;
-import org.openmarkov.core.model.network.NodeType;
-import org.openmarkov.core.model.network.VariableType;
-import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
-import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
-import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
-import org.openmarkov.core.model.network.potential.treeadd.TreeWithEventsPotential;
-import org.openmarkov.core.model.network.potential.treeadd.TreeWithExcludedEventsPotential;
-import org.openmarkov.io.probmodel.exception.PGMXParserException;
-import org.openmarkov.core.io.format.annotation.FormatType;
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.potential.*;
-
-import java.util.Map;
-
-import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionManager;
-import org.openmarkov.io.probmodel.strings.XMLAttributes;
-import org.openmarkov.io.probmodel.strings.XMLTags;
 
 /**
  * Reader for the PGMX format version 1.0. Extends {@link PGMXReader_0_2} and
@@ -130,6 +140,13 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
             xmlRootTable = xmlPotential.getChild(XMLTags.VALUES.toString());
         }
         double[] table = parseDoubles(xmlRootTable.getTextNormalize());
+        if (probNet.getNetworkType() instanceof DESNetworkType) {
+            if (Objects.requireNonNull(probNet.getNode(variables.getFirst())).getNodeType() == NodeType.CHANCE) {
+                return PGMXPotentialParsers.getTablePotential(xmlPotential, probNet, xmlRole, variables);
+            }
+            return PGMXPotentialParsers.getExactDistrPotential(xmlPotential, probNet, xmlRole, variables);
+        }
+        
         
         UnivariateDistrPotential potential;
         if (parametrization != null) {

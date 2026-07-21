@@ -25,6 +25,8 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.type.DESNetworkType;
+import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.gui.action.RemoveLinkRestrictionEdit;
 import org.openmarkov.gui.configuration.LastOpenFiles;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
@@ -297,6 +299,11 @@ public class MainPanelListenerAssistant extends WindowAdapter
                                             .getProbNet(), newVariable, selectedNode.getNodeType(), position).executeEdit();
             });
             case ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC -> {
+                NetworkType networkType = getCurrentNetworkEditorPanel().getProbNet().getNetworkType();
+                if (networkType instanceof DESNetworkType) {
+                    monteCarloSimulation();
+                    break;
+                }
                 try {
                     Method ceMethod = Class.forName("org.openmarkov.costEffectiveness.CostEffectivenessPlugin")
                                            .getDeclaredMethod("onClick");
@@ -418,7 +425,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
      */
     protected void monteCarloSimulation() {
         boolean performInference = true;
-        mainPanel.selecMonteCarloButton(false);
+        //mainPanel.selecMonteCarloButton(false);
         
         InferenceOptionsDialog dialog = new InferenceOptionsDialog(getCurrentNetworkEditorPanel().getProbNet(), SwingUtilities.getWindowAncestor(mainPanel), MulticriteriaOptions.Type.COST_EFFECTIVENESS);
         ProbNet probNet = getCurrentNetworkEditorPanel().getProbNet();

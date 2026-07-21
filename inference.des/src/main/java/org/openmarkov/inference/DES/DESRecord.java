@@ -1,6 +1,10 @@
 package org.openmarkov.inference.DES;
 
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.Configuration;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.DESSimulablePotential;
 
 import java.util.ArrayList;
@@ -101,8 +105,8 @@ public class DESRecord {
     //13/03/2023 end
 
         recordPotential = (DESSimulablePotential) recordNode.getPotentials().getFirst();
-
-        decisionParent = (getParentsByType(NodeType.DECISION).size() > 0);
+        
+        decisionParent = (!getParentsByType(NodeType.DECISION).isEmpty());
         eventParents = getParentsByType(NodeType.EVENT);
         chanceParents = getParentsByType(NodeType.CHANCE);
         chanceParentsVariables = new ArrayList<>();
