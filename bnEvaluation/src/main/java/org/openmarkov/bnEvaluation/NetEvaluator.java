@@ -23,7 +23,6 @@ import org.openmarkov.learning.metric.Metric;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 /**
  * Computes goodness-of-fit measures of a {@link ProbNet} on a {@link CaseDatabase}.
@@ -136,14 +135,42 @@ public class NetEvaluator {
     // Score-based measures
     // -------------------------------------------------------------------------
 
-    /** Sum of log P(case) over the dataset. */
+    /**
+     * Log-probability floor for an "impossible" case — one the network assigns probability 0.
+     * Such a case would contribute {@code log(0) = -infinity}, collapsing the whole log-likelihood
+     * to -infinity and making it useless for ranking networks. Instead every impossible case
+     * contributes this fixed, finite penalty: the log of the smallest positive probability a
+     * {@code double} can represent, about -708.4.
+     */
+    private static final double MIN_LOG_PROBABILITY = Math.log(Double.MIN_NORMAL);
+
+    /**
+     * Log-likelihood of the dataset under the network: the sum of {@code log P(case)} over the N
+     * cases, where a case with zero probability is floored to {@link #MIN_LOG_PROBABILITY} rather
+     * than excluded.
+     *
+     * <p>Flooring (not excluding) is what keeps this measure usable when an automated procedure
+     * compares networks: every network is scored over the same N cases, so the values are
+     * comparable, and a network that deems an observed case impossible is <em>penalised</em> by a
+     * large fixed amount per case instead of being rewarded by dropping that case from its sum.
+     * The penalty accumulates linearly with the number of impossible cases, and cannot overflow:
+     * with |term| &le; {@code -MIN_LOG_PROBABILITY} (~708) and at most ~2.1e9 cases, |sum| stays
+     * below ~1.5e12, far from the {@code double} limit (~1.8e308).
+     */
     private double calculateLogLikelihood()
             throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException,
             NotEvaluableNetworkException.NotApplicableNetwork {
         double[] prob = caseProbabilities();
-        return IntStream.range(0, caseDatabase.getNumCases())
-                .mapToDouble(i -> Math.log(prob[i]))
-                .sum();
+        double logLikelihood = 0.0;   // sum of the finite log-probability terms
+        long impossibleCases = 0;     // 'long' so the count itself can never overflow
+        for (int i = 0; i < caseDatabase.getNumCases(); i++) {
+            if (prob[i] > 0.0) {
+                logLikelihood += Math.log(prob[i]);
+            } else {
+                impossibleCases++;
+            }
+        }
+        return logLikelihood + impossibleCases * MIN_LOG_PROBABILITY;
     }
 
     /** Score from the {@link Metric} associated with the given {@link MeasureType}. */
