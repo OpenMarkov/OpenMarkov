@@ -170,7 +170,29 @@ public class MeasuresPanel extends JPanel {
     }
     
     /**
+     * Returns a user-facing error message if the current selection cannot be evaluated against
+     * {@code netdatabase}, or {@code null} if it is valid. When the predictive-capacity (confusion
+     * matrix) measure is selected it needs a classification variable that exists in the database;
+     * the combo box may be empty (see {@link #changeVariables}), in which case there is nothing to
+     * select and evaluating would fail later with a null reference.
+     *
+     * @param netdatabase the database whose variables back the classification combo box
+     * @return an error message to show the user, or {@code null} if the selection is valid
+     */
+    public String validateSelection(CaseDatabase netdatabase) {
+        if (CMMeasuresCheck.isSelected()) {
+            Object selected = existingVariablesComboBox.getSelectedItem();
+            if (selected == null || netdatabase.getVariable(selected.toString()) == null) {
+                return "Select a classification variable for the predictive-capacity measure.";
+            }
+        }
+        return null;
+    }
+
+    /**
      * Builds a {@link MeasuresSet} based on the currently selected checkboxes and options.
+     * Call {@link #validateSelection(CaseDatabase)} first: this method assumes the selection is
+     * valid (e.g. a classification variable is selected when the predictive-capacity measure is on).
      *
      * @param title       descriptive title for the evaluation
      * @param coherence   the coherence level between network and database

@@ -441,6 +441,12 @@ public final class BNEvaluationDialog extends OkCancelDialog {
                                           "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+        String measuresError = this.measuresPanel.validateSelection(this.netdatabase);
+        if (measuresError != null) {
+            JOptionPane.showMessageDialog(this, measuresError,
+                                          "Invalid selection", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         String title = "Evaluation of the " + this.probNet.getName() + " network";
         MeasuresSet measuresSet = this.measuresPanel.measuresSet(title, this.coherence, this.netdatabase);
         NetEvaluator evaluator = new NetEvaluator(this.probNet, this.netdatabase, measuresSet);

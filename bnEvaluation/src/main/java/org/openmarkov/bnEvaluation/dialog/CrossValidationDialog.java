@@ -466,6 +466,19 @@ public final class CrossValidationDialog extends OkCancelDialog {
                 optionsGUI.getDescription() + ".\n";
         double fraccion;
         CaseDatabase database = this.dbOpenerPanel.getDatabase();
+        // Guard the combo-box selections before doing any work; returning false keeps the dialog open.
+        if (discriminativeAlgorithmButton.isSelected() && variableCombobox.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Select a class variable for the discriminative algorithm.",
+                    "Invalid selection", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        String measuresError = this.getMeasuresPanel().validateSelection(database);
+        if (measuresError != null) {
+            JOptionPane.showMessageDialog(this, measuresError,
+                    "Invalid selection", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         if (crossValidationRadioButton.isSelected()) {
             title = title + "Cross validation with k=" + kFolderTextField.getValue() + " folders.\n";
             fraccion = (Double.valueOf(kFolderTextField.getCurrentValue()) - 1.0) / Double.valueOf(kFolderTextField.getCurrentValue());
