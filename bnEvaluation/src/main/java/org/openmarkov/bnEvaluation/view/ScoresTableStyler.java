@@ -10,6 +10,7 @@ package org.openmarkov.bnEvaluation.view;
 import javax.swing.BorderFactory;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
@@ -29,12 +30,13 @@ import java.util.function.Function;
  * rows; data rows get alternating background, an indented label column and a
  * right-aligned numeric value column. Tooltips on label cells are produced by
  * a caller-supplied function.</p>
+ *
+ * <p>All colours are derived at render time from the table's own background and
+ * foreground, which the look-and-feel (FlatLaf) sets according to the active
+ * light or dark theme. The styler therefore stays legible under both themes and
+ * follows a runtime theme switch, instead of hard-coding light tones.</p>
  */
 public final class ScoresTableStyler {
-
-    private static final Color SECTION_HEADER_BG = new Color(0xEC, 0xEF, 0xF4);
-    private static final Color SECTION_SEPARATOR = new Color(0xCF, 0xD8, 0xDC);
-    private static final Color ROW_ALT_BG        = new Color(0xF7, 0xF8, 0xFA);
 
     private ScoresTableStyler() {
         // utility
@@ -73,10 +75,37 @@ public final class ScoresTableStyler {
         style(table, label -> null);
     }
 
+    /**
+     * Blends {@code base} a fraction of the way towards {@code toward}. Because {@code toward} is
+     * the table's foreground (text) colour, a small positive fraction darkens a light theme and
+     * lightens a dark one, giving a subtle, always-legible shade in both.
+     *
+     * @param base     the colour to shade (the table background)
+     * @param toward   the colour to shade towards (the table foreground)
+     * @param fraction how far to move, in {@code [0, 1]}
+     * @return the blended colour
+     */
+    private static Color blend(Color base, Color toward, double fraction) {
+        return new Color(
+                channel(base.getRed(), toward.getRed(), fraction),
+                channel(base.getGreen(), toward.getGreen(), fraction),
+                channel(base.getBlue(), toward.getBlue(), fraction));
+    }
+
+    private static int channel(int from, int to, double fraction) {
+        int value = (int) Math.round(from + (to - from) * fraction);
+        return Math.max(0, Math.min(255, value));
+    }
+
+    /** The theme's alternating-row colour if the look-and-feel defines one, otherwise a subtle shade. */
+    private static Color alternateRowColor(Color base, Color text) {
+        Color themed = UIManager.getColor("Table.alternateRowColor");
+        return (themed != null) ? themed : blend(base, text, 0.05);
+    }
+
     private static final class ScoresCellRenderer extends DefaultTableCellRenderer {
-        private static final Border SECTION_BORDER = BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(1, 0, 1, 0, SECTION_SEPARATOR),
-                BorderFactory.createEmptyBorder(4, 12, 4, 12));
+        /** Colourless paddings; they carry insets only, so they are theme-independent. */
+        private static final Border SECTION_PADDING = BorderFactory.createEmptyBorder(4, 12, 4, 12);
         private static final Border LABEL_BORDER = BorderFactory.createEmptyBorder(2, 28, 2, 8);
         private static final Border VALUE_BORDER = BorderFactory.createEmptyBorder(2, 12, 2, 16);
 
@@ -91,17 +120,21 @@ public final class ScoresTableStyler {
                 boolean isSelected, boolean hasFocus, int row, int col) {
             // Always render unselected to keep the read-only look.
             super.getTableCellRendererComponent(t, value, false, false, row, col);
+            Color base = t.getBackground();
+            Color text = t.getForeground();
             boolean section = isSectionRow(t, row);
-            Font base = t.getFont();
+            Font font = t.getFont();
             if (section) {
-                setFont(base.deriveFont(Font.BOLD));
-                setBackground(SECTION_HEADER_BG);
-                setBorder(SECTION_BORDER);
+                setFont(font.deriveFont(Font.BOLD));
+                setBackground(blend(base, text, 0.10));
+                setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createMatteBorder(1, 0, 1, 0, blend(base, text, 0.22)),
+                        SECTION_PADDING));
                 setHorizontalAlignment(SwingConstants.LEFT);
                 setToolTipText(null);
             } else {
-                setFont(base.deriveFont(Font.PLAIN));
-                setBackground((row % 2 == 0) ? t.getBackground() : ROW_ALT_BG);
+                setFont(font.deriveFont(Font.PLAIN));
+                setBackground((row % 2 == 0) ? base : alternateRowColor(base, text));
                 if (col == 1) {
                     setHorizontalAlignment(SwingConstants.RIGHT);
                     setBorder(VALUE_BORDER);
