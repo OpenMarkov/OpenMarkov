@@ -230,16 +230,6 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
      * an Excel file or by copying to the clipboard.
      */
     private void exportButtonActionPerformed() throws IOException {
-        // Name for the spreadsheet created.
-        Workbook workbook = switch (resultKind) {
-            case Measures -> new ExcelExporter(measures).export();
-            case SplitSet -> {
-                //splitSet.toExcel()
-                Workbook resWorkbook = new XSSFWorkbook();
-                JTableGeneration.saveTableToSheet(splitSet.toTable(), resWorkbook.createSheet("Dataset Split info"));
-                yield resWorkbook;
-            }
-        };
         
         OverwriteAwareFileChooser omFileChooser = new OverwriteAwareFileChooser();
         omFileChooser.setCurrentDirectory(UserPreferences.LATEST_OPEN_DIRECTORY.get());
@@ -258,10 +248,26 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         if (!fileName.endsWith(".xlsx")) {
             fileName += ".xlsx";
         }
-        FileOutputStream outputStream = new FileOutputStream(fileName);
-        workbook.write(outputStream);
-        workbook.close();
+        // Build the workbook only after the destination is confirmed; the workbook and the
+        // output stream are always closed, even if writing fails.
+        try (Workbook workbook = buildWorkbook();
+             FileOutputStream outputStream = new FileOutputStream(fileName)) {
+            workbook.write(outputStream);
+        }
         dispose(); // Closes the dialog
+    }
+
+    /** Builds the Excel workbook with the results, according to the kind of result shown. */
+    private Workbook buildWorkbook() {
+        return switch (resultKind) {
+            case Measures -> new ExcelExporter(measures).export();
+            case SplitSet -> {
+                Workbook resWorkbook = new XSSFWorkbook();
+                JTableGeneration.saveTableToSheet(splitSet.toTable(),
+                                                  resWorkbook.createSheet("Dataset Split info"));
+                yield resWorkbook;
+            }
+        };
     }
     
     /**
