@@ -10,6 +10,7 @@ package org.openmarkov.bnEvaluation.dialog;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.bnEvaluation.Coherence;
 import org.openmarkov.bnEvaluation.NetEvaluator;
+import org.openmarkov.bnEvaluation.NetworkDatabaseCoherence;
 import org.openmarkov.bnEvaluation.component.DBOpenerPanel;
 import org.openmarkov.bnEvaluation.component.MeasuresPanel;
 import org.openmarkov.bnEvaluation.exceptions.NetworkIsNotEvaluable;
@@ -25,7 +26,6 @@ import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
@@ -53,7 +53,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -328,107 +327,39 @@ public final class BNEvaluationDialog extends OkCancelDialog {
     }
     
     /**
-     * This method checks the coherence between the network variables and
-     * database:
-     * select the database variables included in probNet and check that
-     * all the states (in this variables) are contained in probNet-variable states
-     * Look out!! A new translated database is created (netcasedatabase)
+     * Analyses the coherence between the network and the loaded database (delegating the pure
+     * analysis to {@link NetworkDatabaseCoherence}), reports the outcome to the user, refreshes the
+     * classification combo box and, when at least two variables match, stores the translated
+     * database used for evaluation.
      *
-     * @return Coherence between the variables
+     * @return the coherence level between the network and the database
      */
     private Coherence isConsistentProbNetCase() {
-        // when the coherence is weak; varNotIncluded contains the list of variables not included
-        // number of probNet variables not included in database
-        
-        // variables from the probNet
-        List<Variable> netVariables = this.probNet.getVariables();
-        // variablesCount is the number of database-variables included in probNet
-        // caseVariables: probNet-variables corresponding to the database-variables
-        // included in probNet
-        ArrayList<int[]> casesArray = new ArrayList<>();
-        ArrayList<Variable> caseVariables = new ArrayList<>();
-        ArrayList<String> existingVariables = new ArrayList<>();
-        int variablesCount = 0;
-        List<Variable> notIncludedVariables = new ArrayList<>();
-        CaseDatabase database = this.dbOpenerPanel.getDatabase();
-        for (Variable netVariable : netVariables) {
-            // search for the network variable in the database variables
-            Variable caseVariable = database.getVariable(netVariable.getName());
-            if (caseVariable == null) {
-                notIncludedVariables.add(netVariable);
-                continue;
-            }
-            int[] casesCaseVariable = database.getCases(caseVariable);
-            if (this.containsStates(netVariable, caseVariable, casesCaseVariable)) {
-                variablesCount = variablesCount + 1;
-                caseVariables.add(netVariable);
-                casesArray.add(casesCaseVariable);
-                existingVariables.add(netVariable.getName());
-            } else {
-                this.measuresPanel.changeVariables(Collections.emptyList());
+        NetworkDatabaseCoherence.Result result =
+                NetworkDatabaseCoherence.analyze(this.probNet, this.dbOpenerPanel.getDatabase());
+        if (!result.variablesWithIncompatibleStates().isEmpty()) {
+            this.measuresPanel.changeVariables(Collections.emptyList());
+            for (Variable incompatible : result.variablesWithIncompatibleStates()) {
                 JOptionPane.showMessageDialog(this,
-                                              "Dataset variable: " + caseVariable.getName() +
+                                              "Dataset variable: " + incompatible.getName() +
                                                       " contains no-defined states in the network variable",
                                               "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-        this.measuresPanel.changeVariables(existingVariables);
-        if (!notIncludedVariables.isEmpty()) {
+        this.measuresPanel.changeVariables(
+                result.level() == Coherence.ZERO ? Collections.emptyList() : result.matchedVariableNames());
+        if (!result.variablesNotInDatabase().isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                                          "Network variable/s: " + notIncludedVariables.stream()
-                                                                                       .map(Variable::getName)
-                                                                                       .collect(Collectors.joining(", ")) +
+                                          "Network variable/s: " + result.variablesNotInDatabase().stream()
+                                                                         .map(Variable::getName)
+                                                                         .collect(Collectors.joining(", ")) +
                                                   " are not included in dataset",
                                           "Information", JOptionPane.INFORMATION_MESSAGE);
         }
-        if (variablesCount > 1) {
-            // coherence strong or weak
-            int[][] cases = new int[database.getNumCases()][variablesCount];
-            for (int v = 0; v < variablesCount; v++) {
-                int[] casesV = casesArray.get(v);
-                for (int i = 0; i < database.getNumCases(); i++) {
-                    cases[i][v] = casesV[i];
-                }
-            }
-            this.netdatabase = new CaseDatabase(caseVariables, cases);
-            if (variablesCount == netVariables.size()) {
-                return Coherence.STRONG;
-            }
-            return Coherence.WEAK;
+        if (result.netDatabase() != null) {
+            this.netdatabase = result.netDatabase();
         }
-        this.measuresPanel.changeVariables(Collections.emptyList());
-        return Coherence.ZERO;
-    }
-    
-    /**
-     * This method check that the varContainer (probNet variable) contains all the
-     * varIncluded (caseDatabase variable) states and performs the corresponding
-     * translation to cases[] changing the StateIndex to the StateIndex in the
-     * probnet-variable
-     *
-     * @param varContainer (probNet variable)
-     * @param varIncluded  (caseDatabase variable)
-     *
-     * @return true when all the states of varIncluded are in varContainer,
-     * false in other case
-     */
-    private boolean containsStates(Variable varContainer, Variable varIncluded, int[] cases) {
-        State[] includedStates = varIncluded.getStates();
-        // indexStateInNet[i] index of State i in the probNet-variable
-        int[] indexStateInNet = new int[includedStates.length];
-        for (int i = 0; i < includedStates.length; i++) {
-            State state = varContainer.getState(includedStates[i].getName());
-            //This case does not happen, but just in case
-            if (state == null) {
-                return false;
-            }
-            indexStateInNet[i] = varContainer.getStateIndex(state);
-        }
-        //traslate the cases
-        for (int i = 0; i < cases.length; i++) {
-            cases[i] = indexStateInNet[cases[i]];
-        }
-        return true;
+        return result.level();
     }
     
     @Override
