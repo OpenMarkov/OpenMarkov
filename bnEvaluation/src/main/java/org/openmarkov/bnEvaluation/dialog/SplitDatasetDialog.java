@@ -219,8 +219,8 @@ public final class SplitDatasetDialog extends OkCancelDialog {
             lastCasesButton.setEnabled(true);
             getOKButton().setEnabled(true);
         } else {
-            JOptionPane.showMessageDialog(null,
-                                          "There are not cases in file",
+            JOptionPane.showMessageDialog(this,
+                                          "There are no cases in file",
                                           "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -306,7 +306,7 @@ public final class SplitDatasetDialog extends OkCancelDialog {
         caseDbManager.getWriter(FilenameUtils.getExtension(trainFile.getName()))
                      .save(trainFile, sets.getTrainDatabase());
         
-        JOptionPane.showMessageDialog(null,
+        JOptionPane.showMessageDialog(this,
                                       "The train and test datasets have been saved.",
                                       "Information", JOptionPane.INFORMATION_MESSAGE);
         new ResultsDialog(owner, sets).setVisible(true);

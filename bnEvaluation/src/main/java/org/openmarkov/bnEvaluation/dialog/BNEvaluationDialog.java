@@ -295,14 +295,14 @@ public final class BNEvaluationDialog extends OkCancelDialog {
             switch (this.coherence) {
                 case STRONG -> this.measuresPanel.setEnabled(true);
                 case WEAK -> {
-                    JOptionPane.showMessageDialog(null,
-                                                  "Week coherence between network and dataset variables",
+                    JOptionPane.showMessageDialog(this,
+                                                  "Weak coherence between network and dataset variables",
                                                   "Warning", JOptionPane.WARNING_MESSAGE);
                     this.measuresPanel.setEnabled(true);
                 }
                 case ZERO -> {
-                    JOptionPane.showMessageDialog(null,
-                                                  "There are not enougth variables in database",
+                    JOptionPane.showMessageDialog(this,
+                                                  "There are not enough variables in database",
                                                   "Warning", JOptionPane.WARNING_MESSAGE);
                     switch (trigger) {
                         case FromSettingProbNet -> {
@@ -366,7 +366,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
                 existingVariables.add(netVariable.getName());
             } else {
                 this.measuresPanel.changeVariables(Collections.emptyList());
-                JOptionPane.showMessageDialog(null,
+                JOptionPane.showMessageDialog(this,
                                               "Dataset variable: " + caseVariable.getName() +
                                                       " contains no-defined states in the network variable",
                                               "Error", JOptionPane.ERROR_MESSAGE);
@@ -374,7 +374,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         }
         this.measuresPanel.changeVariables(existingVariables);
         if (!notIncludedVariables.isEmpty()) {
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                                           "Network variable/s: " + notIncludedVariables.stream()
                                                                                        .map(Variable::getName)
                                                                                        .collect(Collectors.joining(", ")) +
@@ -382,7 +382,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
                                           "Information", JOptionPane.INFORMATION_MESSAGE);
         }
         if (variablesCount > 1) {
-            // coherence strong or week
+            // coherence strong or weak
             int[][] cases = new int[database.getNumCases()][variablesCount];
             for (int v = 0; v < variablesCount; v++) {
                 int[] casesV = casesArray.get(v);
@@ -436,8 +436,8 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         boolean aMeasureIsSeleteced = this.measuresPanel.allMeasureRelatedCheckboxes()
                                                          .anyMatch(AbstractButton::isSelected);
         if (!aMeasureIsSeleteced) {
-            JOptionPane.showMessageDialog(null,
-                                          "There arent measures selected",
+            JOptionPane.showMessageDialog(this,
+                                          "There are no measures selected",
                                           "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }

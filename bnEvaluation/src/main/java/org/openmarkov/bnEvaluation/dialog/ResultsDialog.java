@@ -239,7 +239,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
             case SplitSet -> "SplitSet";
         };
         omFileChooser.setSelectedFile(new File(FilenameUtils.removeExtension(nameDefect + ".xlsx")));
-        omFileChooser.setDialogTitle("SaveDialog.Title");
+        omFileChooser.setDialogTitle("Save results");
         int optionChosen = omFileChooser.showSaveDialog(this);
         if (optionChosen != JFileChooser.APPROVE_OPTION) {
             return;

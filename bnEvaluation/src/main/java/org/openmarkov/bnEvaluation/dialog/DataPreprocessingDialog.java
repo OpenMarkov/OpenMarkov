@@ -543,8 +543,8 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
                      .save(preprocessedDBFile, getPreprocessDataBase());
         
         // save the the preprocesed datapath
-        JOptionPane.showMessageDialog(null,
-                                      "The preprocessed dataset have been saved.",
+        JOptionPane.showMessageDialog(this,
+                                      "The preprocessed dataset has been saved.",
                                       "Information", JOptionPane.INFORMATION_MESSAGE);
     }
     
