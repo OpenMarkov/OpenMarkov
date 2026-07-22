@@ -14,7 +14,6 @@ import org.openmarkov.bnEvaluation.SplitSetManager;
 import org.openmarkov.bnEvaluation.component.DBOpenerPanel;
 import org.openmarkov.bnEvaluation.component.MeasuresPanel;
 import org.openmarkov.bnEvaluation.measures.MeasuresSet;
-import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Variable;
@@ -430,11 +429,9 @@ public final class CrossValidationDialog extends OkCancelDialog {
     protected boolean doOkClickBeforeHide() throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
         Class<? extends LearningAlgorithm> algorithmType = (Class<? extends LearningAlgorithm>) algorithmComboBox.getSelectedItem();
         String algorithmName = (String) LearningAlgorithmManager.info( algorithmType).name();
-        // options
-        @ToCheck(reasonKind = ToCheck.ReasonKind.PROBABLE_BUG, reasonDescription = "This options variable was used to" +
-                " be taken out from optionsGUI, and that method has been removed")
-        ArrayList<Object> options = new ArrayList<>();
-        //ArrayList<Object> options = optionsGUI.getOptions();
+        // Build the configured algorithm from the user's options dialog (null -> default parameters).
+        LearningEvaluator.LearningAlgorithmFactory algorithmFactory =
+                (optionsGUI != null) ? optionsGUI::getInstance : null;
         String title = "Evaluation of the " + algorithmName + " algorithm. Options: " +
                 optionsGUI.getDescription() + ".\n";
         double fraccion;
@@ -460,7 +457,7 @@ public final class CrossValidationDialog extends OkCancelDialog {
             sets = splitSetManager.multipleSamples(numberSamplesTextField.getCurrentValue(),
                                                    sampleSizeTextField.getCurrentValue());
         }
-        LearningEvaluator evaluator = new LearningEvaluator(algorithmType, options,
+        LearningEvaluator evaluator = new LearningEvaluator(algorithmType, algorithmFactory,
                                                             sets, measuresSet);
         if (discriminativeAlgorithmButton.isSelected()) {
             evaluator.setVariable(((Variable)variableCombobox.getSelectedItem()).getName());
