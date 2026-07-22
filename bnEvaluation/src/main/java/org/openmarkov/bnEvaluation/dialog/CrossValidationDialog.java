@@ -8,9 +8,8 @@
 package org.openmarkov.bnEvaluation.dialog;
 
 import org.openmarkov.bnEvaluation.Coherence;
+import org.openmarkov.bnEvaluation.CrossValidationController;
 import org.openmarkov.bnEvaluation.LearningEvaluator;
-import org.openmarkov.bnEvaluation.SplitSet;
-import org.openmarkov.bnEvaluation.SplitSetManager;
 import org.openmarkov.bnEvaluation.component.DBOpenerPanel;
 import org.openmarkov.bnEvaluation.component.MeasuresPanel;
 import org.openmarkov.bnEvaluation.measures.MeasuresSet;
@@ -497,22 +496,16 @@ public final class CrossValidationDialog extends OkCancelDialog {
             title = title + "\nRandom seed: " + seed + ".";
         }
         MeasuresSet measuresSet = this.getMeasuresPanel().measuresSet(title, Coherence.WEAK, database);
-        SplitSetManager splitSetManager = reproducible
-                ? new SplitSetManager(database, seed)
-                : new SplitSetManager(database);
-        SplitSet[] sets;
-        if (crossValidationRadioButton.isSelected()) {
-            sets = splitSetManager.crossValidation(kFolderTextField.getCurrentValue());
-        } else {
-            sets = splitSetManager.multipleSamples(numberSamplesTextField.getCurrentValue(),
-                                                   sampleSizeTextField.getCurrentValue());
-        }
-        LearningEvaluator evaluator = new LearningEvaluator(algorithmType, algorithmFactory,
-                                                            sets, measuresSet);
-        if (discriminativeAlgorithmButton.isSelected()) {
-            evaluator.setVariable(((Variable)variableCombobox.getSelectedItem()).getName());
-        }
-        ResultsDialog resultsDialog = new ResultsDialog(owner, evaluator.runEvaluator());
+        CrossValidationController.SplitMode splitMode = crossValidationRadioButton.isSelected()
+                ? CrossValidationController.SplitMode.CROSS_VALIDATION
+                : CrossValidationController.SplitMode.MULTIPLE_SAMPLES;
+        String classVariableName = discriminativeAlgorithmButton.isSelected()
+                ? ((Variable) variableCombobox.getSelectedItem()).getName() : null;
+        CrossValidationController.Request request = new CrossValidationController.Request(
+                database, algorithmType, algorithmFactory, splitMode,
+                kFolderTextField.getCurrentValue(), numberSamplesTextField.getCurrentValue(),
+                sampleSizeTextField.getCurrentValue(), reproducible, seed, measuresSet, classVariableName);
+        ResultsDialog resultsDialog = new ResultsDialog(owner, CrossValidationController.run(request));
         this.setVisible(false);
         resultsDialog.setVisible(true);
         return true;
