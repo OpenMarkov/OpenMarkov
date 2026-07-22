@@ -14,7 +14,11 @@ import org.openmarkov.bnEvaluation.SplitSet;
 import org.openmarkov.bnEvaluation.export.ExcelExporter;
 import org.openmarkov.bnEvaluation.measures.MeasureMatrix;
 import org.openmarkov.bnEvaluation.measures.MeasuresSet;
+import org.openmarkov.bnEvaluation.view.ConfusionMatrixTableModel;
+import org.openmarkov.bnEvaluation.view.IndicatorsTableModel;
+import org.openmarkov.bnEvaluation.view.IndividualProbabilityTableModel;
 import org.openmarkov.bnEvaluation.view.OverwriteAwareFileChooser;
+import org.openmarkov.bnEvaluation.view.ScoresTableModel;
 import org.openmarkov.bnEvaluation.view.ScoresTableStyler;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.configuration.UserPreferences;
@@ -193,13 +197,14 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
             JPanel tabMatrix = new JPanel();
             tabMatrix.setLayout(new BoxLayout(tabMatrix, BoxLayout.PAGE_AXIS));
             tabbedPane.addTab("Confusion matrix", tabMatrix);
-            JTable jTablaMatrix = measureMatrix.matrixToTable();
+            JTable jTablaMatrix = new JTable(new ConfusionMatrixTableModel(measureMatrix));
             tabMatrix.add(fittingScrollPane(jTablaMatrix));
 
             JPanel tabIndicators = new JPanel();
             tabIndicators.setLayout(new BoxLayout(tabIndicators, BoxLayout.PAGE_AXIS));
             tabbedPane.addTab("Indicators", tabIndicators);
-            JTable jTableIndicators = measureMatrix.indicatorsToTable();
+            JTable jTableIndicators = new JTable(new IndicatorsTableModel(
+                    measureMatrix.getIndicators(), measureMatrix.getVarName(), measureMatrix.getStatesNames()));
             addIndicatorHeaderTooltips(jTableIndicators);
             tabIndicators.add(fittingScrollPane(jTableIndicators));
         }
@@ -209,7 +214,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
             tabScores.setLayout(new BoxLayout(tabScores, BoxLayout.PAGE_AXIS));
             tabScores.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
             tabbedPane.addTab("Scores", tabScores);
-            JTable jTableScores = measures.scoresToTable();
+            JTable jTableScores = new JTable(new ScoresTableModel(measures.buildScoresRows()));
             ScoresTableStyler.style(jTableScores, ResultsDialog::scoreRowTooltip);
             tabScores.add(fittingScrollPane(jTableScores));
         }
@@ -218,7 +223,8 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
                 JPanel tabIndvProb = new JPanel();
                 tabIndvProb.setLayout(new BoxLayout(tabIndvProb, BoxLayout.PAGE_AXIS));
                 tabbedPane.addTab("Probabilities", tabIndvProb);
-                JTable jTableIndivProb = measureMatrix.probToTable();
+                JTable jTableIndivProb = new JTable(new IndividualProbabilityTableModel(
+                        measureMatrix.getIndividualProb(), measureMatrix.getStatesNames(), measureMatrix.getVarName()));
                 tabIndvProb.add(fittingScrollPane(jTableIndivProb));
             }
         }

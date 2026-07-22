@@ -6,8 +6,6 @@
  */
 package org.openmarkov.bnEvaluation.measures;
 
-import javax.swing.*;
-
 /**
  * This class calculates and stores the indicators obtained from
  * the confusion matrix.
@@ -17,9 +15,7 @@ import javax.swing.*;
  */
 
 public class MeasureMatrixIndicators {
-    
-    private static final String NUM_FORMAT = "%.3f";
-    
+
     /**
      * confusion matrix indicators
      */
@@ -85,35 +81,6 @@ public class MeasureMatrixIndicators {
         this.precision[this.numStates] = precisionAcum / numCases;
         this.fMeasure[this.numStates] = fMeasureAcum / numCases;
         this.accuracy = accuracy / numCases;
-    }
-    
-    /**
-     * This method returns a JTable with the indicators
-     *
-     * @return JTable
-     */
-    public JTable toTable(String varName, String[] statesNames) {
-        // there are numStates+1 rows and 5 columns (indicators)
-        String[][] indicatorsTable = new String[this.numStates + 2][6];
-        for (int i = 0; i < this.numStates; i++) {
-            indicatorsTable[i][0] = varName + " (" + statesNames[i] + ")";
-            indicatorsTable[i][1] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.tp[i]);
-            indicatorsTable[i][2] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.fp[i]);
-            indicatorsTable[i][3] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.precision[i]);
-            indicatorsTable[i][4] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.tp[i]);
-            indicatorsTable[i][5] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.fMeasure[i]);
-        }
-        indicatorsTable[this.numStates][0] = varName + " mean";
-        indicatorsTable[this.numStates][1] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.tp[this.numStates]);
-        indicatorsTable[this.numStates][2] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.fp[this.numStates]);
-        indicatorsTable[this.numStates][3] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.precision[this.numStates]);
-        indicatorsTable[this.numStates][4] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.tp[this.numStates]);
-        indicatorsTable[this.numStates][5] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.fMeasure[this.numStates]);
-        // accuracity
-        indicatorsTable[this.numStates + 1][0] = "Accuracy";
-        indicatorsTable[this.numStates + 1][1] = String.format(MeasureMatrixIndicators.NUM_FORMAT, this.accuracy);
-        JTable tabla = new JTable(indicatorsTable, new String[]{"State", "TP rate", "FP rate", "Precision", "Recall", "F Measure"});
-        return tabla;
     }
     
     // Read-only accessors for the export module.

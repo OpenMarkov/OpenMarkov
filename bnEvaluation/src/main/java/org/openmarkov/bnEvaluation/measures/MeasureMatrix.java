@@ -9,10 +9,6 @@ package org.openmarkov.bnEvaluation.measures;
 
 import org.openmarkov.core.model.database.CaseDatabase;
 
-import javax.swing.*;
-import java.text.NumberFormat;
-import java.util.Locale;
-
 /**
  * This class represents a confusion matrix measure.
  * Extends the abstract class Measure
@@ -129,57 +125,6 @@ public class MeasureMatrix extends Measure {
             }
         }
         super.setNumCases(super.getNumCases() + measure.getNumCases());
-    }
-    
-    /**
-     * This method return a JTable with the confusion matrix
-     *
-     * @return JTable
-     */
-    public JTable matrixToTable() {
-        
-        NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
-        String[][] matrixTable = new String[numStates + 1][numStates + 2];
-        String[] statesTable = new String[numStates + 2];
-        statesTable[0] = "TRUE / PREDICTED->";
-        statesTable[numStates + 1] = "Total";
-        matrixTable[numStates][0] = "Total";
-        int sum = 0;
-        for (int i = 0; i < numStates; i++) {
-            statesTable[i + 1] = varName + "(" + statesNames[i] + ")";
-            matrixTable[i][0] = varName + "(" + statesNames[i] + ")";
-            int rowTotal = 0;
-            int colTotal = 0;
-            for (int j = 1; j < (numStates + 1); j++) {
-                matrixTable[i][j] = format.format(matrix[i][j - 1]);
-                rowTotal = rowTotal + matrix[i][j - 1];
-                colTotal = colTotal + matrix[j - 1][i];
-            }
-            matrixTable[i][numStates + 1] = format.format(rowTotal);
-            matrixTable[numStates][i + 1] = format.format(colTotal);
-            sum = sum + rowTotal;
-        }
-        matrixTable[numStates][numStates + 1] = format.format(sum);
-        return new JTable(matrixTable, statesTable);
-    }
-    
-    /**
-     * This method return a JTable with the indicators
-     *
-     * @return JTable
-     */
-    public JTable indicatorsToTable() {
-        return indicators.toTable(varName, statesNames);
-    }
-    
-    /**
-     * This method return a JTable with the individual probabilities
-     *
-     * @return JTable
-     */
-    
-    public JTable probToTable() {
-        return individualProb.probToTable(statesNames, varName);
     }
     
     /** Indicators (TP/FP/precision/F-measure/accuracy) computed from the matrix. */

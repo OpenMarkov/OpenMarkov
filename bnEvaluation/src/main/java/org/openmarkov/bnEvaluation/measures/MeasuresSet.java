@@ -7,7 +7,6 @@
 
 package org.openmarkov.bnEvaluation.measures;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -187,27 +186,6 @@ public class MeasuresSet {
         return rows;
     }
 
-    /**
-     * Builds a {@link JTable} backed by the structured rows from
-     * {@link #buildScoresRows()}. Section rows have an empty value column,
-     * which the dialog renderer interprets as a heading.
-     */
-    public JTable scoresToTable() {
-        List<ScoresRow> rows = buildScoresRows();
-        String[][] data = new String[rows.size()][2];
-        for (int i = 0; i < rows.size(); i++) {
-            ScoresRow row = rows.get(i);
-            if (row instanceof ScoresRow.Section section) {
-                data[i][0] = section.title();
-                data[i][1] = "";
-            } else if (row instanceof ScoresRow.Data dataRow) {
-                data[i][0] = dataRow.label();
-                data[i][1] = String.format("%.3f", dataRow.value());
-            }
-        }
-        return new JTable(data, new String[]{"", ""});
-    }
-    
     // Read-only accessors for the export module.
 
     /** Number of evaluation iterations accumulated in this set (≥ 1). */
