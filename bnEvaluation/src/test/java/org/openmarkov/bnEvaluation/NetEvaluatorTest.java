@@ -155,4 +155,79 @@ class NetEvaluatorTest {
         // two extra impossible cases -> two extra floor penalties
         assertThat(llOneImpossible - llThreeImpossible).isCloseTo(-2 * LOG_PROB_FLOOR, within(1e-6));
     }
+
+    // -------------------------------------------------------------------------
+    // State correspondence by name (P8)
+    // -------------------------------------------------------------------------
+
+    /** A single-node Bayesian network over {@code variable} with the given prior. */
+    private static ProbNet priorNet(Variable variable, double... prior) {
+        ProbNet net = new ProbNet(BayesianNetworkType.getUniqueInstance());
+        Node node = net.addNode(variable, NodeType.CHANCE);
+        node.setPotentials(List.of(
+                new TablePotential(List.of(variable), PotentialRole.CONDITIONAL_PROBABILITY, prior)));
+        return net;
+    }
+
+    /**
+     * P8: when the case database and the network list the same states in a different order, the
+     * observed state must be identified by NAME, not by position. Here the database records index
+     * 0 = "no" while the network lists "yes" first; a position-based lookup would score it as "yes".
+     */
+    @Test
+    void evidenceUsesStateNamesNotPositionsWhenOrderingsDiffer() throws Exception {
+        ProbNet net = priorNet(new Variable("A", "yes", "no"), 0.9, 0.1);   // P(yes)=0.9, P(no)=0.1
+        Variable dbA = new Variable("A", "no", "yes");                      // opposite order
+        CaseDatabase db = new CaseDatabase(List.of(dbA), new int[][] { { 0 } });   // index 0 => "no"
+
+        MeasuresSet measures = new MeasuresSet("test");
+        measures.addMeasureValue(new MeasureValue(MeasureType.LOGLIKELIHOOD));
+        new NetEvaluator(net, db, measures).runEvaluator();
+
+        // Observed state is "no" (P=0.1); the old position-based lookup would use "yes" (P=0.9).
+        assertThat(measures.getMeasures().get(0).getValue()).isCloseTo(Math.log(0.1), within(1e-9));
+    }
+
+    /**
+     * P8: the confusion matrix must align predicted and true states by name too. With no evidence
+     * variables the posterior equals the prior, so the predicted class is the most probable state;
+     * both axes must be expressed in the case-database ordering used for the labels.
+     */
+    @Test
+    void confusionMatrixAlignsStatesByNameWhenOrderingsDiffer() throws Exception {
+        ProbNet net = priorNet(new Variable("C", "yes", "no"), 0.9, 0.1);  // most probable: "yes"
+        Variable dbC = new Variable("C", "no", "yes");                     // db order: index 1 => "yes"
+        CaseDatabase db = new CaseDatabase(List.of(dbC), new int[][] { { 1 } });   // true state: "yes"
+
+        MeasuresSet measures = new MeasuresSet("test");
+        // Axis labels follow the database ordering: index 0 = "no", index 1 = "yes".
+        measures.addMeasureMatrix(new MeasureMatrix(MeasureType.CONFUSIONMATRIX, new String[] { "no", "yes" }, "C"));
+        new NetEvaluator(net, db, measures).runEvaluator();
+
+        int[][] matrix = measures.getMeasureMatrix().getMatrix();
+        // Predicted "yes" (db index 1) and true "yes" (db index 1): the single case lands on [1][1].
+        assertThat(matrix[1][1]).isEqualTo(1);
+        assertThat(matrix[0][0]).isZero();
+        assertThat(matrix[0][1]).isZero();
+        assertThat(matrix[1][0]).isZero();
+    }
+
+    /**
+     * P8: if the database and the network disagree on the SET of states of a shared variable, the
+     * evaluator must fail up front with a clear message rather than silently mistranslating.
+     */
+    @Test
+    void mismatchedStateSetsThrowClearError() {
+        ProbNet net = priorNet(new Variable("A", "yes", "no"), 0.5, 0.5);
+        Variable dbA = new Variable("A", "yes", "maybe");   // "maybe" is not a state of the network variable
+        CaseDatabase db = new CaseDatabase(List.of(dbA), new int[][] { { 0 } });
+
+        MeasuresSet measures = new MeasuresSet("test");
+        measures.addMeasureValue(new MeasureValue(MeasureType.LOGLIKELIHOOD));
+
+        NetEvaluator evaluator = new NetEvaluator(net, db, measures);
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, evaluator::runEvaluator);
+        assertTrue(ex.getMessage().contains("maybe"),
+                "message should name the offending state: " + ex.getMessage());
+    }
 }

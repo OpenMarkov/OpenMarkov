@@ -57,6 +57,7 @@ public class NetEvaluator {
     public MeasuresSet runEvaluator() throws IncompatibleEvidenceException, ConstraintViolatedException,
             NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork,
             CannotNormalizePotentialException {
+        verifyStateCorrespondence();
         MeasureMatrix measureMatrix = measuresSet.getMeasureMatrix();
         if (measureMatrix != null) {
             populateConfusionMatrix(measureMatrix);
@@ -72,6 +73,43 @@ public class NetEvaluator {
             }
         }
         return measuresSet;
+    }
+
+    // -------------------------------------------------------------------------
+    // State correspondence between the case database and the network
+    // -------------------------------------------------------------------------
+
+    /**
+     * Verifies that every case-database variable that also exists in the network shares the same
+     * set of state names. Evidence and the confusion matrix translate between the two
+     * <em>by state name</em> (see {@link #buildEvidenceCase} and {@link #posteriorsForClassVariable}),
+     * because the two variables may order their states differently; if their state <em>sets</em>
+     * differed, that translation would be impossible and the results would be corrupted silently.
+     * A case-database variable absent from the network is not flagged here — that is reported where
+     * the variable is actually used.
+     *
+     * @throws IllegalArgumentException naming the first variable whose state sets do not match
+     */
+    private void verifyStateCorrespondence() {
+        for (Variable caseVar : caseDatabase.getVariables()) {
+            Variable netVar = probNet.getVariable(caseVar.getName());
+            if (netVar == null) {
+                continue;
+            }
+            for (State caseState : caseVar.getStates()) {
+                if (!netVar.containsState(caseState.getName())) {
+                    throw new IllegalArgumentException(
+                            "Variable '" + caseVar.getName() + "': state '" + caseState.getName()
+                                    + "' exists in the case database but not in the network.");
+                }
+            }
+            if (caseVar.getNumStates() != netVar.getNumStates()) {
+                throw new IllegalArgumentException(
+                        "Variable '" + caseVar.getName() + "' has " + caseVar.getNumStates()
+                                + " states in the case database but " + netVar.getNumStates()
+                                + " in the network.");
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -197,14 +235,28 @@ public class NetEvaluator {
             throw new IllegalArgumentException(
                     "Class variable '" + classVarName + "' is not present in the case database");
         }
+        Variable netClassVar = probNet.getVariable(classVarName);
+        if (netClassVar == null) {
+            throw new IllegalArgumentException(
+                    "Class variable '" + classVarName + "' is not present in the network");
+        }
         int numCases = caseDatabase.getNumCases();
         int numStates = classVar.getNumStates();
+        // The posterior comes out in the NETWORK variable's state ordering; map each network state
+        // index to the case-database index of the same name so the result lines up with realStates
+        // and the confusion-matrix axes (both in case-database ordering).
+        int[] netToDbState = new int[netClassVar.getNumStates()];
+        for (int netIdx = 0; netIdx < netToDbState.length; netIdx++) {
+            netToDbState[netIdx] = classVar.getStateIndex(netClassVar.getStateName(netIdx));
+        }
         double[][] posteriors = new double[numCases][numStates];
         Predicate<Variable> includeAsEvidence = v -> !v.getName().equals(classVarName);
         for (int i = 0; i < numCases; i++) {
             EvidenceCase evidence = buildEvidenceCase(i, includeAsEvidence);
-            double[] caseProb = posteriorOfClassVariable(evidence, classVar);
-            System.arraycopy(caseProb, 0, posteriors[i], 0, numStates);
+            double[] caseProb = posteriorOfClassVariable(evidence, netClassVar);
+            for (int netIdx = 0; netIdx < caseProb.length; netIdx++) {
+                posteriors[i][netToDbState[netIdx]] = caseProb[netIdx];
+            }
         }
         return posteriors;
     }
@@ -243,21 +295,33 @@ public class NetEvaluator {
                 throw new IllegalArgumentException(
                         "Case-database variable '" + caseVar.getName() + "' is not present in the network");
             }
-            State state = variable.getState(variable.getStateName(cases[caseIndex][j]));
+            // Translate by NAME: the stored index refers to the case-database variable's own state
+            // ordering, which may differ from the network variable's ordering.
+            String stateName = caseVar.getStateName(cases[caseIndex][j]);
+            State state = variable.getState(stateName);
+            if (state == null) {
+                throw new IllegalArgumentException(
+                        "Variable '" + caseVar.getName() + "': state '" + stateName
+                                + "' is not present in the network.");
+            }
             findings.add(new Finding(variable, state));
         }
         return new EvidenceCase(findings);
     }
 
-    /** Posterior over {@code classVar} given {@code evidence}, via VE. */
-    private double[] posteriorOfClassVariable(EvidenceCase evidence, Variable classVar)
+    /**
+     * Posterior over the class variable given {@code evidence}, via VE. Takes the <em>network</em>
+     * variable (not the case-database one) so the posterior map lookup — keyed by identity — hits,
+     * and returns the values in the network variable's own state ordering.
+     */
+    private double[] posteriorOfClassVariable(EvidenceCase evidence, Variable netClassVar)
             throws IncompatibleEvidenceException, ConstraintViolatedException,
             NotEvaluableNetworkException.NotApplicableNetwork, NonProjectablePotentialException,
             CannotNormalizePotentialException {
         Propagation propagation = new VEPropagation(probNet);
-        propagation.setVariablesOfInterest(List.of(classVar));
+        propagation.setVariablesOfInterest(List.of(netClassVar));
         propagation.setPreResolutionEvidence(evidence);
-        TablePotential posterior = propagation.getPosteriorValues().get(classVar);
+        TablePotential posterior = propagation.getPosteriorValues().get(netClassVar);
         return posterior.getValues();
     }
 
