@@ -67,6 +67,8 @@ public final class CrossValidationDialog extends OkCancelDialog {
     private NumericSpinner<Integer> kFolderTextField;
     private NumericSpinner<Integer> numberSamplesTextField;
     private NumericSpinner<Integer> sampleSizeTextField;
+    private JCheckBox reproducibleCheckBox;
+    private NumericSpinner<Long> seedTextField;
     
     private MeasuresPanel measuresPanel;
     
@@ -232,20 +234,30 @@ public final class CrossValidationDialog extends OkCancelDialog {
         JLabel kFolderLabel = new JLabel("Folds");
         JLabel numberSamplesLabel = new JLabel("Number of samples");
         JLabel sampleSizeLabel = new JLabel("Sample size");
+        JLabel seedLabel = new JLabel("Seed");
         kFolderTextField = new NumericSpinner<>(Integer.class);
         kFolderTextField.setMinimum(2);
-        
+
         numberSamplesTextField = new NumericSpinner<>(Integer.class);
         numberSamplesTextField.setMinimum(1);
         numberSamplesTextField.setMaximum(100);
         numberSamplesTextField.setValue(10);
-        
+
         sampleSizeTextField = new NumericSpinner<>(Integer.class);
         sampleSizeTextField.setMinimum(1);
-        
+
+        // A fixed seed makes the data split (and thus the whole evaluation) reproducible.
+        reproducibleCheckBox = new JCheckBox("Reproducible");
+        reproducibleCheckBox.setToolTipText(
+                "Use a fixed random seed so the data split can be reproduced exactly");
+        reproducibleCheckBox.addActionListener(e -> this.updateSeedFieldEnabled());
+        seedTextField = new NumericSpinner<>(Long.class);
+
         // default properties
         crossValidationRadioButton.setSelected(true);
         kFolderTextField.setValue(10);
+        reproducibleCheckBox.setSelected(true);
+        seedTextField.setValue(0L);
         
         //layout panel
         GroupLayout layout = new GroupLayout(optionsPanel);
@@ -255,16 +267,19 @@ public final class CrossValidationDialog extends OkCancelDialog {
                                         .addContainerGap()
                                         .addGroup(layout.createParallelGroup()
                                                         .addComponent(crossValidationRadioButton)
-                                                        .addComponent(multipleSamplesRadioButton))
+                                                        .addComponent(multipleSamplesRadioButton)
+                                                        .addComponent(reproducibleCheckBox))
                                         .addGroup(layout.createParallelGroup()
                                                         .addComponent(kFolderLabel)
                                                         .addComponent(numberSamplesLabel)
-                                                        .addComponent(sampleSizeLabel))
+                                                        .addComponent(sampleSizeLabel)
+                                                        .addComponent(seedLabel))
                                         .addGap(20)
                                         .addGroup(layout.createParallelGroup()
                                                         .addComponent(kFolderTextField)
                                                         .addComponent(numberSamplesTextField)
-                                                        .addComponent(sampleSizeTextField))
+                                                        .addComponent(sampleSizeTextField)
+                                                        .addComponent(seedTextField))
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED,
                                                          GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addContainerGap());
@@ -284,6 +299,11 @@ public final class CrossValidationDialog extends OkCancelDialog {
                                       .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                       .addComponent(sampleSizeLabel)
                                                       .addComponent(sampleSizeTextField))
+                                      .addGap(5)
+                                      .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                      .addComponent(reproducibleCheckBox)
+                                                      .addComponent(seedLabel)
+                                                      .addComponent(seedTextField))
                                       .addContainerGap());
         return optionsPanel;
     }
@@ -320,6 +340,8 @@ public final class CrossValidationDialog extends OkCancelDialog {
         kFolderTextField.setEnabled(enabled);
         numberSamplesTextField.setEnabled(enabled);
         sampleSizeTextField.setEnabled(enabled);
+        reproducibleCheckBox.setEnabled(enabled);
+        this.updateSeedFieldEnabled();
         this.measuresPanel.setEnabled(enabled);
         if (enabled) {
             List<Variable> variables = database.getVariables();
@@ -389,6 +411,14 @@ public final class CrossValidationDialog extends OkCancelDialog {
         numberSamplesTextField.setEnabled(!crossValidationRadioButton.isSelected());
         sampleSizeTextField.setEnabled(!crossValidationRadioButton.isSelected());
     }
+
+    /**
+     * The seed field is only meaningful when the user asks for a reproducible split,
+     * and only once a database has been loaded (which is what enables the checkbox).
+     */
+    private void updateSeedFieldEnabled() {
+        seedTextField.setEnabled(reproducibleCheckBox.isEnabled() && reproducibleCheckBox.isSelected());
+    }
     
     /**
      * This method is the listener of algorithmComboBox( for select the learning Algorithm)
@@ -448,8 +478,15 @@ public final class CrossValidationDialog extends OkCancelDialog {
         int numCasesRed = (int) (database.getNumCases() * fraccion);
         title = title + "In each iteration, the network is learned with " + numCasesRed +
                 " cases.";
+        boolean reproducible = reproducibleCheckBox.isSelected();
+        long seed = seedTextField.getCurrentValue();
+        if (reproducible) {
+            title = title + "\nRandom seed: " + seed + ".";
+        }
         MeasuresSet measuresSet = this.getMeasuresPanel().measuresSet(title, Coherence.WEAK, database);
-        SplitSetManager splitSetManager = new SplitSetManager(database);
+        SplitSetManager splitSetManager = reproducible
+                ? new SplitSetManager(database, seed)
+                : new SplitSetManager(database);
         SplitSet[] sets;
         if (crossValidationRadioButton.isSelected()) {
             sets = splitSetManager.crossValidation(kFolderTextField.getCurrentValue());
