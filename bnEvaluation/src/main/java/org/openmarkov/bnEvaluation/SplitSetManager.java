@@ -99,7 +99,10 @@ public class SplitSetManager {
      * randomly ordered
      */
     private int[] getSample(int n, int m) {
-        if (n > m) return null;
+        if (n < 0 || n > m) {
+            throw new IllegalArgumentException(
+                    "Cannot draw a sample of size " + n + " from a population of size " + m + ".");
+        }
         // array to save the sample
         int[] sample = new int[n];
         // the first m numbers are entered into the population
@@ -126,7 +129,10 @@ public class SplitSetManager {
      * @return []int : vector of size m whit 0 or 1
      */
     private int[] getSplitSample(int n, int m) {
-        if (n > m) return null;
+        if (n < 0 || n > m) {
+            throw new IllegalArgumentException(
+                    "Cannot draw a sample of size " + n + " from a population of size " + m + ".");
+        }
         // array to save the sample. inicialize to 0
         int[] sample = new int[m];
         for (int i = 0; i < m; i++) {
@@ -221,6 +227,11 @@ public class SplitSetManager {
      * @return array with K pairs of test-set and train-set
      */
     public SplitSet[] crossValidation(int K) {
+        if (K < 2 || K > numCases) {
+            throw new IllegalArgumentException(
+                    "The number of folds (K=" + K + ") must be between 2 and the number of cases ("
+                            + numCases + "), so that every fold has both test and training cases.");
+        }
         SplitSet[] sets = new SplitSet[K];
         List<Variable> listaVariables = caseDatabase.getVariables();
         int numVariables = listaVariables.size();
@@ -284,6 +295,14 @@ public class SplitSetManager {
      * @return array with n pairs of test-set and train-set
      */
     public SplitSet[] multipleSamples(int n, int m) {
+        if (n < 1) {
+            throw new IllegalArgumentException("The number of samples (" + n + ") must be at least 1.");
+        }
+        if (m < 1 || m > numCases) {
+            throw new IllegalArgumentException(
+                    "The sample size (" + m + ") must be between 1 and the number of cases ("
+                            + numCases + ").");
+        }
         SplitSet[] sets = new SplitSet[n];
         List<Variable> listaVariables = caseDatabase.getVariables();
         int numVariables = listaVariables.size();

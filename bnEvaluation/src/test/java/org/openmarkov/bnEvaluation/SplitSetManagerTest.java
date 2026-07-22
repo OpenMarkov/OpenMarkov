@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SplitSetManagerTest {
@@ -105,6 +106,36 @@ class SplitSetManagerTest {
                 new SplitSetManager(database, 42L).crossValidation(4));
         assertSameSplits(new SplitSetManager(database, 7L).multipleSamples(3, 4),
                 new SplitSetManager(database, 7L).multipleSamples(3, 4));
+    }
+
+    /**
+     * P5: crossValidation must reject a number of folds outside [2, numCases] with a clear
+     * exception instead of silently producing folds with an empty training or test set.
+     */
+    @Test
+    void crossValidationRejectsOutOfRangeFolds() {
+        CaseDatabase database = db(5);
+        assertThrows(IllegalArgumentException.class,
+                () -> new SplitSetManager(database).crossValidation(1));   // K=1 leaves an empty training set
+        assertThrows(IllegalArgumentException.class,
+                () -> new SplitSetManager(database).crossValidation(6));   // more folds than cases
+        // Boundary values are valid.
+        assertDoesNotThrow(() -> new SplitSetManager(database).crossValidation(2));
+        assertDoesNotThrow(() -> new SplitSetManager(database).crossValidation(5));
+    }
+
+    /**
+     * P5: multipleSamples must reject a sample larger than the population (which used to make the
+     * internal sampling return null and fail confusingly later) and a non-positive sample count.
+     */
+    @Test
+    void multipleSamplesRejectsInvalidArguments() {
+        CaseDatabase database = db(5);
+        assertThrows(IllegalArgumentException.class,
+                () -> new SplitSetManager(database).multipleSamples(3, 6));  // sample bigger than population
+        assertThrows(IllegalArgumentException.class,
+                () -> new SplitSetManager(database).multipleSamples(0, 3));  // no samples requested
+        assertDoesNotThrow(() -> new SplitSetManager(database).multipleSamples(3, 5));
     }
 
     private static void assertSameSplits(SplitSet[] a, SplitSet[] b) {
