@@ -7,6 +7,12 @@
 
 package org.openmarkov.gui.configuration;
 
+import com.sun.jna.Native;
+import com.sun.jna.WString;
+import com.sun.jna.platform.win32.ShellAPI;
+
+import java.io.File;
+
 /**
  * Utility class to store the last open files
  *
@@ -45,19 +51,36 @@ public class LastOpenFiles {
 		UserPreferences.LAST_OPEN_NETWORKS_FILES.use(latestOpenFiles -> {
 			int index = getIndexForFilename(fileName);
 			if (index == -1) {
-				latestOpenFiles.add(0, fileName);
+                latestOpenFiles.addFirst(fileName);
 				while (latestOpenFiles.size() > MAX_LAST_OPEN_FILES) {
 					latestOpenFiles.removeLast();
 				}
 			} else {
 				latestOpenFiles.remove(index);
-				latestOpenFiles.add(0, fileName);
+                latestOpenFiles.addFirst(fileName);
 			}
-			
 		});
+        
+        if (UserPreferences.UPDATE_RECENTS_ON_OPEN_NETWORK.get()) {
+            switch (OperatingSystem.CURRENT_OS) {
+                case WINDOWS -> {
+                    WString unicodeStringPath = new WString(new File(fileName).getPath());
+                    // 3 is for null-terminated Unicode string
+                    Shell32.INSTANCE.SHAddToRecentDocs(3, unicodeStringPath);
+                }
+                case LINUX, OTHER -> {
+                }
+            }
+        }
+    }
+    
+    private interface Shell32 extends ShellAPI {
+        Shell32 INSTANCE = Native.load("shell32", Shell32.class);
+        
+        void SHAddToRecentDocs(int flags, WString file);
 	}
-
-	/**
+    
+    /**
 	 * retrieves the position of a specific file in the list of last open files
 	 *
 	 * @param fileName - name of the file to find the position

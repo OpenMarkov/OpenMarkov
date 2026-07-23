@@ -9,8 +9,20 @@ package org.openmarkov.gui.dialog.common;
 
 import org.openmarkov.core.action.core.UncertainValuesEdit;
 import org.openmarkov.core.action.core.UncertainValuesRemoveEdit;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.PolicyType;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.Util;
+import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -26,9 +38,11 @@ import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 import org.openmarkov.gui.menutoolbar.menu.UncertaintyContextualMenu;
 import org.openmarkov.gui.util.GUIUtils;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -170,7 +184,6 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
         modifiable = true;
         
         // Previous--&gt;Ok
-        setTableSpecificListeners();
         
         setData();
         
@@ -180,6 +193,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
         // Then add the element to the Layout.
         add(getValuesTable(), BorderLayout.CENTER);
         add(new JButton(), BorderLayout.NORTH);
+        setTableSpecificListeners();
         
         repaint();
     }
@@ -902,34 +916,36 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      * when the user do right click on the table.
      */
     protected void setTableSpecificListeners() {
-        valuesTable.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {
-                int row = valuesTable.rowAtPoint(e.getPoint(), e.getSource());
-                int col = valuesTable.columnAtPoint(e.getPoint(), e.getSource());
-                selectedColumn = col;
-                if (SwingUtilities.isLeftMouseButton(e)) {
-                    valuesTable
-                            .editCellAt(valuesTable.rowAtPoint(e.getPoint(), e.getSource()), valuesTable.columnAtPoint(e.getPoint(), e.getSource()),
-                                        e);
-                }
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    if ((row > -1) && (col > 0) && !isReadOnly()) {
-                        if (getUncertaintyContextualMenu() != null) {
-                            try {
-                                updateContextualMenuOptions();
-                            } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther |
-                                     ThereIsNoPotentialsInNodeException ex) {
-                                throw new UnrecoverableException(ex);
-                            } finally {
-                                getUncertaintyContextualMenu().show(valuesTable, e.getX(), e.getY());
+        valuesTable.onScrollableTable(omjTable -> {
+            omjTable.addMouseListener(new MouseAdapter() {
+                @Override public void mouseClicked(MouseEvent e) {
+                    int row = valuesTable.rowAtPoint(e.getPoint(), e.getSource());
+                    int col = valuesTable.columnAtPoint(e.getPoint(), e.getSource());
+                    selectedColumn = col;
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        valuesTable
+                                .editCellAt(valuesTable.rowAtPoint(e.getPoint(), e.getSource()), valuesTable.columnAtPoint(e.getPoint(), e.getSource()),
+                                            e);
+                    }
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                        if ((row > -1) && (col > 0) && !isReadOnly()) {
+                            if (getUncertaintyContextualMenu() != null) {
+                                try {
+                                    updateContextualMenuOptions();
+                                } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther |
+                                         ThereIsNoPotentialsInNodeException ex) {
+                                    throw new UnrecoverableException(ex);
+                                } finally {
+                                    getUncertaintyContextualMenu().show(valuesTable, e.getX(), e.getY());
+                                }
                             }
                         }
                     }
                 }
-            }
-            
+                
+            });
+            omjTable.addMouseListener(new DoubleClickListener());
         });
-        valuesTable.addMouseListener(new DoubleClickListener());
     }
     
     public void setPotential(Potential potential) {

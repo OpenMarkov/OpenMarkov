@@ -9,6 +9,8 @@ import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.component.NumericSpinner;
 import org.openmarkov.gui.configuration.GUIColors;
+import org.openmarkov.gui.configuration.OperatingSystem;
+import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.Theme;
 import org.openmarkov.gui.configuration.UserPreference;
 import org.openmarkov.gui.configuration.UserPreferences;
@@ -149,20 +151,6 @@ public final class SettingsDialog extends JDialog {
     }
     
     private static void generateUIVisualSection(SimplifiedGridBagConstraint gridbag) {
-        //Restore dimensions
-        {
-            var restoreDimensionsCheckBox = new JCheckBox();
-            var restoreDimensionsLabel = new JLabel("Restore last window dimensions  ");
-            var helpToolTip = GUIUtils.generateTooltipElement("<html>When closing the app, the location and size of OpenMarkov's<br>window will be saved and restored in your next session</html>");
-            restoreDimensionsCheckBox.setSelected(UserPreferences.RESTORE_LATEST_MAIN_GUI_DIMENSIONS.get());
-            restoreDimensionsCheckBox.addItemListener(e -> UserPreferences.RESTORE_LATEST_MAIN_GUI_DIMENSIONS.set(restoreDimensionsCheckBox.isSelected()));
-            
-            gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, restoreDimensionsLabel, helpToolTip))
-                   .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
-                   .add(restoreDimensionsCheckBox);
-        }
-        
         //UI Scale
         {
             var uiScaleSpinner = new NumericSpinner<>(Double.class);
@@ -224,9 +212,64 @@ public final class SettingsDialog extends JDialog {
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(themeSpinner);
         }
+        
+        //Start-up actions
+        {
+            var restoreDimensionsLabel = new JLabel("Start up actions  ");
+            var helpToolTip = GUIUtils.generateTooltipElement("Causes OpenMarkov to take certain behavior when starting the app.");
+            
+            var optionsPanel = new JPanel();
+            optionsPanel.setLayout(new GridBagLayout());
+            var optionsLayout = new SimplifiedGridBagConstraint(optionsPanel, new GridBagConstraints(), 1);
+            
+            for (StartupAction startupAction : StartupAction.values()) {
+                var startUpActionCheckBox = new JCheckBox();
+                startUpActionCheckBox.setText(startupAction.checkBoxText());
+                var startUpActionHelpToolTip = GUIUtils.generateTooltipElement(startupAction.toolTipText());
+                startUpActionCheckBox.setSelected(UserPreferences.STARTUP_ACTIONS.get().contains(startupAction));
+                startUpActionCheckBox.addItemListener(e -> UserPreferences.STARTUP_ACTIONS.use(startupActions -> {
+                    if (startUpActionCheckBox.isSelected()) {
+                        startupActions.add(startupAction);
+                    } else {
+                        startupActions.remove(startupAction);
+                    }
+                }));
+                optionsLayout.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
+                             .add(GUIUtils.joinComponents(FlowLayout.LEADING, startUpActionCheckBox, startUpActionHelpToolTip));
+            }
+            
+            
+            gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
+                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, restoreDimensionsLabel, helpToolTip))
+                   .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
+                   .add(optionsPanel);
+        }
     }
     
     private static void generateNetworkVisualSection(SimplifiedGridBagConstraint gridbag) {
+        //Add to recents
+        {
+            var addToRecentsCheckBox = new JCheckBox();
+            var addToRecentsLabel = new JLabel("Add network to recent files when opened  ");
+            var helpToolTip = GUIUtils.generateTooltipElement("""
+                                                                      <html>
+                                                                      When opening a network, it is added to the Recent files list of the OS.<br>
+                                                                      This is currently limited to Windows systems.
+                                                                      </html>
+                                                                      """);
+            if (OperatingSystem.CURRENT_OS != OperatingSystem.WINDOWS) {
+                addToRecentsCheckBox.setEnabled(false);
+                addToRecentsCheckBox.setToolTipText("This option is only available on Windows systems.");
+            }
+            addToRecentsCheckBox.setSelected(UserPreferences.UPDATE_RECENTS_ON_OPEN_NETWORK.get());
+            addToRecentsCheckBox.addItemListener(e -> UserPreferences.UPDATE_RECENTS_ON_OPEN_NETWORK.set(addToRecentsCheckBox.isSelected()));
+            
+            gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
+                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, addToRecentsLabel, helpToolTip))
+                   .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
+                   .add(addToRecentsCheckBox);
+        }
+        
         //Custom domain
         {
             var customDomainArea = new JTextArea(4, 30);

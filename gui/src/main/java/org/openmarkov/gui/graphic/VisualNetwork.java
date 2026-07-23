@@ -10,10 +10,10 @@ package org.openmarkov.gui.graphic;
 import io.github.jorgericovivas.rust_essentials.tuples.Tuple2Record;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
 import org.openmarkov.core.action.base.PNESupport;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.PNEditListener;
+import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
 import org.openmarkov.core.action.base.linkEdits.MultiAddLinkEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnrecoverableException;
@@ -30,10 +30,14 @@ import org.openmarkov.gui.window.edition.EditorPanelClipboardAssistant;
 import org.openmarkov.gui.window.edition.SelectedContent;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -649,15 +653,16 @@ public class VisualNetwork implements PNEditListener {
      * the ones that are outside.
      *
      * @param selection object that manages the selection.
+     * @param g
      */
-    private void selectElementsInsideSelection(SelectionRectangle selection) {
+    private void selectElementsInsideSelection(SelectionRectangle selection, Graphics2D g) {
         
         setSelectedAllNodes(false);
         setSelectedAllLinks(false);
         // Select nodes
         ArrayList<VisualNode> selectedVisualNodes = new ArrayList<VisualNode>();
         for (VisualNode node : this.visualNodes) {
-            if (selection.containsNode(node)) {
+            if (selection.containsNode(node, g)) {
                 setSelectionOfElement(node, true);
                 selectedVisualNodes.add(node);
             }
@@ -1089,9 +1094,9 @@ public class VisualNetwork implements PNEditListener {
         this.selection.clearSelectionSquare();
     }
     
-    public void updateSelectionRectangle(double diffX, double diffY) {
+    public void updateSelectionRectangle(double diffX, double diffY, Graphics2D g) {
         this.selection.setSize(this.selection.getWidth() + diffX, this.selection.getHeight() + diffY);
-        selectElementsInsideSelection(this.selection);
+        selectElementsInsideSelection(this.selection, g);
     }
     
     /**

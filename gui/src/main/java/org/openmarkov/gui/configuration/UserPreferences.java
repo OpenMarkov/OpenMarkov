@@ -14,6 +14,7 @@ import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -49,11 +50,25 @@ public final class UserPreferences {
             });
     
     
-    public static final UserPreference<Boolean> RESTORE_LATEST_MAIN_GUI_DIMENSIONS = UserPreference
-            .of("user_interface/restore_latest_main_gui_dimensions",
+    public static final UserPreference<Boolean> UPDATE_RECENTS_ON_OPEN_NETWORK = UserPreference
+            .of("directories/update_recents_on_open_network",
                 () -> true, new UserPreference.BackupInfo(true,
-                                                          "Restore window on startup",
-                                                          "When opening OpenMarkov, the window will have the same dimensions as when last closed",
+                                                          "Add opened network to recent files",
+                                                          "When opening a network, it is added to the list of recent files of the OS (This is currently limited to Windows systems)",
+                                                          () -> {
+                                                          }),
+                new TypeToken<>() {
+                });
+    
+    public static final UserPreference<ArrayList<String>> LAST_SESSION_NETWORK_FILES = UserPreference
+            .of("directories/last_open_networks_files", ArrayList::new, null, new TypeToken<>() {
+            });
+    
+    public static final UserPreference<EnumSet<StartupAction>> STARTUP_ACTIONS = UserPreference
+            .of("user_interface/startup_actions",
+                () -> EnumSet.of(StartupAction.RESTORE_LAST_SESSION, StartupAction.RESTORE_LAST_GUI_DIMENSIONS), new UserPreference.BackupInfo(true,
+                                                                                                                                               "Startup actions",
+                                                                                                                                               "When opening OpenMarkov, certain actions take place",
                                                           () -> {
                                                           }),
                 new TypeToken<>() {

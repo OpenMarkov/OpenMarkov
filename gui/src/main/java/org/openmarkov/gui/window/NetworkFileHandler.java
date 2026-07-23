@@ -8,6 +8,7 @@
 package org.openmarkov.gui.window;
 
 import org.apache.commons.io.FilenameUtils;
+import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.CannotNormalizePotentialException;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.EmptyDatabaseException;
@@ -33,6 +34,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.gui.configuration.LastOpenFiles;
+import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.common.CommentHTMLScrollPane;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
@@ -68,7 +70,7 @@ import java.util.List;
  *
  * @author Manuel Arias
  */
-class NetworkFileHandler {
+public class NetworkFileHandler {
     
     private final MainPanel mainPanel;
     private final List<NetworkEditorPanel> networkPanels;
@@ -82,7 +84,7 @@ class NetworkFileHandler {
     
     // ── Network creation ──────────────────────────────────────────
     
-    void createNewNetwork() {
+    public void createNewNetwork() {
         ProbNet newNetwork = new ProbNet();
         newNetwork.setName("New network");
         NetworkPropertiesDialog dialogProperties = new NetworkPropertiesDialog(GUIUtils.getOwner(mainPanel), newNetwork, false);
@@ -116,20 +118,22 @@ class NetworkFileHandler {
         mainPanel.getMainPanelMenuAssistant().updateOptionsNewNetworkOpen();
         mainPanel.getMainPanelMenuAssistant().updateOptionsNetworkDependent(networkPanel);
         mainPanel.getInferenceToolBar().setCurrentEvidenceCaseName(networkPanel.getCurrentCase());
+        networkPanel.requestFocusInWindow();
         return networkPanel;
     }
     
     // ── Open ──────────────────────────────────────────────────────
     
     void openNetwork() throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
-        openNetwork("");
+        openNetwork((String) null);
     }
     
-    void openNetwork(String fileName) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
-        if (fileName.isEmpty()) {
+    void openNetwork(@Nullable String fileName) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
+        if (fileName == null || fileName.isBlank()) {
             fileName = requestNetworkFileToOpen();
         }
         if (fileName == null) return;
+        fileName = new File(fileName).getAbsolutePath();
         System.out.println(stringDatabase.getString("LoadingNetwork.Text") + " " + fileName);
         ProbNetInfo probNetInfo = NetsIO.openNetworkFile(fileName);
         ProbNet netReadFromFile = probNetInfo.probNet();
@@ -373,7 +377,13 @@ class NetworkFileHandler {
     }
     
     void closeApplication() throws WriterException {
+        var editors = this.mainPanel.getNetworkEditors();
         if (this.mainPanel.closeAllTabs()) {
+            if (UserPreferences.STARTUP_ACTIONS.get().contains(StartupAction.RESTORE_LAST_SESSION)) {
+                UserPreferences.LAST_SESSION_NETWORK_FILES.set(new ArrayList<>(editors.stream()
+                                                                                      .map(NetworkEditorPanel::getNetworkFile)
+                                                                                      .toList()));
+            }
             System.exit(0);
         }
     }

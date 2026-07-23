@@ -10,7 +10,12 @@ package org.openmarkov.gui.menutoolbar.toolbar;
 import org.openmarkov.gui.loader.element.IconBind;
 import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JToggleButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -103,6 +108,7 @@ public class EditionToolBar extends ToolBarBasic implements MouseMotionListener 
         addSeparator();
         add(getUndoButton());
         add(getRedoButton());
+        /*
         addSeparator();
         add(getObjectSelectionButton());
         add(getChanceCreationButton());
@@ -110,6 +116,7 @@ public class EditionToolBar extends ToolBarBasic implements MouseMotionListener 
         add(getUtilityCreationButton());
         add(getEventCreationButton());
         add(getLinkCreationButton());
+        */
         add(Box.createHorizontalGlue());
     }
     

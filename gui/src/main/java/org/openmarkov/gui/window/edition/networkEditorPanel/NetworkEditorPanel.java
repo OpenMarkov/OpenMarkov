@@ -9,30 +9,54 @@ package org.openmarkov.gui.window.edition.networkEditorPanel;/*
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.PNEditListener;
-import org.openmarkov.core.action.core.*;
-import org.openmarkov.core.exception.*;
-
+import org.openmarkov.core.action.core.AbsorbNodeEdit;
+import org.openmarkov.core.action.core.AbsorbParentsEdit;
+import org.openmarkov.core.action.core.RemovePolicyEdit;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.inference.tasks.OptimalPolicies;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
-import org.openmarkov.core.model.network.*;
-import org.openmarkov.core.model.network.potential.*;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.Point2D;
+import org.openmarkov.core.model.network.PolicyType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.gui.action.AutoArrangeEdit;
 import org.openmarkov.gui.action.PasteEdit;
-import org.openmarkov.gui.layout.bayesian.StressLayout;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.inference.temporalevolution.TemporalEvolutionDialog;
 import org.openmarkov.gui.dialog.network.NetworkPropertiesDialog;
-import org.openmarkov.gui.dialog.node.*;
-import org.openmarkov.gui.exception.*;
-import org.openmarkov.gui.graphic.*;
+import org.openmarkov.gui.dialog.node.ImposePolicyDialog;
+import org.openmarkov.gui.dialog.node.NodePropertiesDialog;
+import org.openmarkov.gui.dialog.node.PotentialEditDialog;
+import org.openmarkov.gui.exception.NoSelectedNodeException;
+import org.openmarkov.gui.exception.NotEnoughMemoryException;
+import org.openmarkov.gui.exception.PreResolutionNodeInInferenceException;
+import org.openmarkov.gui.graphic.FSVariableBox;
+import org.openmarkov.gui.graphic.InnerBox;
+import org.openmarkov.gui.graphic.NumericVariableBox;
+import org.openmarkov.gui.graphic.VisualLink;
+import org.openmarkov.gui.graphic.VisualNetwork;
+import org.openmarkov.gui.graphic.VisualNode;
+import org.openmarkov.gui.graphic.VisualState;
+import org.openmarkov.gui.layout.bayesian.StressLayout;
 import org.openmarkov.gui.menutoolbar.menu.ContextualMenuFactory;
 import org.openmarkov.gui.util.GUIUtils;
+import org.openmarkov.gui.window.EditorPanel;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.gui.window.MainPanelMenuAssistant;
-import org.openmarkov.gui.window.EditorPanel;
 import org.openmarkov.gui.window.decisiontree.DecisionTreeEditor;
 import org.openmarkov.gui.window.edition.EditorPanelClipboardAssistant;
 import org.openmarkov.gui.window.edition.ZoomManager;
@@ -40,8 +64,10 @@ import org.openmarkov.gui.window.edition.mode.EditionMode;
 import org.openmarkov.gui.window.edition.mode.EditionModeManager;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEExpectedUtilityDecision;
+import org.openmarkov.java.initialization.Lazy;
 import org.openmarkov.java.swing.PointUtils;
 
+import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolTip;
@@ -50,7 +76,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.Serial;
@@ -136,6 +168,56 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     
     private final EditionModeManager editionModeManager;
     
+    private static final Lazy<JDialog> HELP_DIALOG = GUIUtils
+            .generateHelpDialog("Help - Use of the Network editor",
+                                """
+                                        <html lang="en">
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    Input
+                                                </th>
+                                                <th>
+                                                    Action
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Double-click on empty space
+                                                </td>
+                                                <td>
+                                                    Creates a new node and opens its properties.<br>
+                                                    <br>
+                                                    Note: cancelling the properties will erase the node.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Right click
+                                                </td>
+                                                <td>
+                                                    Opens a contextual menu for the selected element.<br>
+                                                    <br>
+                                                    Right-clicking on an empty spaces shows a contextual<br>
+                                                    menu for the network itself.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Hold Ctrl + Shift
+                                                </td>
+                                                <td>
+                                                    When at least one node is selected, it shows an arrow<br>
+                                                    with which you can select another node to create a link.<br>
+                                                    <br>
+                                                    If the "Alt" key is pressed, the direction of the arrow<br>
+                                                    will change the direction.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        </html>
+                                        """);
+    
     /**
      * Constructor that creates the instance.
      *
@@ -165,6 +247,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.scrollPanel.setViewportView(this);
         this.scrollPanel.getVerticalScrollBar().setUnitIncrement(25);
         decisionTreeEditors = new ArrayList<>();
+        GUIUtils.addHelp(this, NetworkEditorPanel.HELP_DIALOG);
     }
     
     
@@ -273,11 +356,11 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         if (positions.isEmpty()) return;
         var minX = positions.values().stream().mapToDouble(Point2D.Double::getX).min().getAsDouble();
         var minY = positions.values().stream().mapToDouble(Point2D.Double::getY).min().getAsDouble();
-        if(minX<0){
-            positions.values().forEach(position -> position.setX(position.getX()-minX));
+        if (minX < 0) {
+            positions.values().forEach(position -> position.setX(position.getX() - minX));
         }
-        if(minY<0){
-            positions.values().forEach(position -> position.setY(position.getY()-minY));
+        if (minY < 0) {
+            positions.values().forEach(position -> position.setY(position.getY() - minY));
         }
         try {
             new AutoArrangeEdit(probNet, positions).executeEdit();
@@ -452,7 +535,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * This method imposes a policy in a decision node.
      */
     public void imposePolicyInNode() {
-        VisualNode visualNode =  this.visualNetwork.getLastSelectedNode();
+        VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
         NetworkEditorPanel.requestImposePolicyValues(GUIUtils.getOwner(this), visualNode.getNode());
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
@@ -462,7 +545,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * This method edits an imposed policy of a decision node.
      */
     public void editNodePolicy() {
-        VisualNode visualNode =  this.visualNetwork.getLastSelectedNode();
+        VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
         NetworkEditorPanel.requestImposePolicyValues(GUIUtils.getOwner(this), visualNode.getNode());
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
@@ -877,7 +960,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     @Override
     public JToolTip createToolTip() {
         JToolTip customTip = new JToolTip();
-        if(this.getToolTipText()==null || this.getToolTipText().isBlank()){
+        if (this.getToolTipText() == null || this.getToolTipText().isBlank()) {
             return customTip;
         }
         customTip.addAncestorListener(new AncestorListener() {
@@ -914,11 +997,11 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         customTip.setLayout(new BorderLayout());
         customTip.add(scrollPane, BorderLayout.CENTER);
         customTip.setPreferredSize(new Dimension(
-                (int) Math.min(500, htmlPane.getPreferredSize().getWidth()+22),
-                (int) Math.min(250, htmlPane.getPreferredSize().getHeight()+12)
+                (int) Math.min(500, htmlPane.getPreferredSize().getWidth() + 22),
+                (int) Math.min(250, htmlPane.getPreferredSize().getHeight() + 12)
         ));
         return customTip;
-
+        
     }
     
     @Override public Point getToolTipLocation(MouseEvent event) {

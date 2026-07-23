@@ -7,7 +7,6 @@
     <packaging>pom</packaging>
     <name>openmarkov</name>
     <description>Open source project for probabilistic graphical models.</description>
-
     <modules>
         <!--<module>annotationProcessing</module>-->
         <module>core</module>
@@ -28,7 +27,6 @@
         <module>stochasticPropagationOutput</module>
         <module>full</module>
     </modules>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--<additionalparam>-Xdoclint:none</additionalparam>-->
@@ -36,7 +34,6 @@
         <maven.compiler.target>25</maven.compiler.target>
         <maven.compiler.source>25</maven.compiler.source>
     </properties>
-
     <build>
         <pluginManagement>
             <plugins>
@@ -186,7 +183,6 @@
                         </execution>
                     </executions>
                 </plugin>
-
             </plugins>
         </pluginManagement>
         <plugins>
@@ -321,8 +317,6 @@
             <version>3.17.1</version>
             <scope>test</scope>
         </dependency>
-
-
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -377,6 +371,16 @@
             <groupId>org.openani.jsystemthemedetector</groupId>
             <artifactId>jSystemThemeDetector</artifactId>
             <version>3.8</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna-platform</artifactId>
+            <version>5.14.0</version>
         </dependency>
     </dependencies>
     <dependencyManagement>

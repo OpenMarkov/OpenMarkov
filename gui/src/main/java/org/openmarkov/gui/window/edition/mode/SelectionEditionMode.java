@@ -18,8 +18,8 @@ import org.openmarkov.gui.graphic.VisualNetwork;
 import org.openmarkov.gui.graphic.VisualNode;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.SwingUtilities;
+import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -65,7 +65,7 @@ public class SelectionEditionMode extends EditionMode {
                                      Graphics2D g) {
         this.lastMousePos = position;
         if (this.selectionState == SelectionState.SELECTING) {
-            this.visualNetwork.updateSelectionRectangle(diffX, diffY);
+            this.visualNetwork.updateSelectionRectangle(diffX, diffY, g);
         } else if (this.selectionState == SelectionState.CREATING_LINK) {
             this.visualNetwork.updateLinkCreation(position, g);
             this.networkEditorPanel.repaint();

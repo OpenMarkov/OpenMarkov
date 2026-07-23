@@ -89,6 +89,10 @@ public class MainPanelListenerAssistant extends WindowAdapter
         this.editAndViewHandler = new EditAndViewHandler(mainPanel);
     }
     
+    public NetworkFileHandler getFileHandler() {
+        return this.fileHandler;
+    }
+    
     // ── Event dispatch ────────────────────────────────────────────
     
     @Override public void windowClosing(WindowEvent e) {

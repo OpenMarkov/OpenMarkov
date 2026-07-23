@@ -251,12 +251,12 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         editMenu.add(items.get(ActionCommands.SELECT_ALL));
         editMenu.addSeparator();
         editMenu.add(items.get(ActionCommands.AUTO_ARRANGE));
-        editMenu.addSeparator();
-        editMenu.add(items.get(ActionCommands.OBJECT_SELECTION));
-        editMenu.add(items.get(ActionCommands.CHANCE_CREATION));
-        editMenu.add(items.get(ActionCommands.DECISION_CREATION));
-        editMenu.add(items.get(ActionCommands.UTILITY_CREATION));
-        editMenu.add(items.get(ActionCommands.LINK_CREATION));
+//        editMenu.addSeparator();
+//        editMenu.add(items.get(ActionCommands.OBJECT_SELECTION));
+//        editMenu.add(items.get(ActionCommands.CHANCE_CREATION));
+//        editMenu.add(items.get(ActionCommands.DECISION_CREATION));
+//        editMenu.add(items.get(ActionCommands.UTILITY_CREATION));
+//        editMenu.add(items.get(ActionCommands.LINK_CREATION));
         editMenu.addSeparator();
         editMenu.add(items.get(ActionCommands.NODE_PROPERTIES));
         editMenu.add(items.get(ActionCommands.EDIT_POTENTIAL));

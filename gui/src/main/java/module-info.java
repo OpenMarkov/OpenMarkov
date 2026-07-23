@@ -29,6 +29,8 @@ open module org.openmarkov.gui {
     requires com.jthemedetector;
     requires rust.essentials;
     requires swingx;
+    requires com.sun.jna;
+    requires com.sun.jna.platform;
     
     exports org.openmarkov.gui.action;
     exports org.openmarkov.gui.layout.bayesian;

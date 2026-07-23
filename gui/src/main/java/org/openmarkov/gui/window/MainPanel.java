@@ -115,6 +115,14 @@ public class MainPanel extends JPanel {
         return this.networksTabPanel;
     }
     
+    public List<NetworkEditorPanel> getNetworkEditors() {
+        return IntStream.range(0, this.networksTabPanel.getTabCount())
+                        .mapToObj(this.networksTabPanel::getComponentAt)
+                        .filter(NetworkEditorPanel.class::isInstance)
+                        .map(NetworkEditorPanel.class::cast)
+                        .toList();
+    }
+    
     
     /**
      * Networks tabs come from here.
@@ -493,7 +501,7 @@ public class MainPanel extends JPanel {
         }
     }
     
-    public void forceClose(NetworkEditorPanel networkPanel){
+    public void forceClose(NetworkEditorPanel networkPanel) {
         this.networksTabPanel.remove(networkPanel);
     }
     
