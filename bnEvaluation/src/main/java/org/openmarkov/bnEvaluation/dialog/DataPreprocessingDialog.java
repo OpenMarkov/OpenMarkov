@@ -10,7 +10,6 @@ package org.openmarkov.bnEvaluation.dialog;
 import org.apache.commons.io.FilenameUtils;
 import org.openmarkov.bnEvaluation.DataPreprocessor;
 import org.openmarkov.bnEvaluation.component.DBOpenerPanel;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
 import org.openmarkov.core.io.exception.NoReaderForExtension;
@@ -379,7 +378,11 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
             try {
                 savePreprocessSetButtonActionPerformed();
             } catch (IOException | NoReaderForExtension ex) {
-                throw new UnrecoverableException(ex);
+                // A write failure or an unsupported extension are expectable user errors; report them
+                // and keep the dialog open instead of aborting the application.
+                JOptionPane.showMessageDialog(this,
+                        "The dataset could not be saved: " + ex.getMessage(),
+                        "Save error", JOptionPane.ERROR_MESSAGE);
             }
         });
         

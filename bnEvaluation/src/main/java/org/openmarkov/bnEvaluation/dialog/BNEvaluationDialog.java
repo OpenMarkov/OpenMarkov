@@ -18,7 +18,6 @@ import org.openmarkov.bnEvaluation.measures.MeasuresSet;
 import org.openmarkov.bnEvaluation.view.BackgroundEvaluation;
 import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
 import org.openmarkov.core.exception.ProbNetParserException;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
@@ -171,7 +170,11 @@ public final class BNEvaluationDialog extends OkCancelDialog {
                 this.loadModelNetButtonActionPerformed();
             } catch (NoReaderForFileException | ProbNetParserException | IOException | CorruptNetworkFile |
                      NetworkIsNotEvaluable ex) {
-                throw new UnrecoverableException(ex);
+                // A bad file, an unsupported format or a non-evaluable network are expectable user
+                // errors; report them and keep the dialog open instead of aborting the application.
+                JOptionPane.showMessageDialog(this,
+                        "The network could not be loaded: " + ex.getMessage(),
+                        "Network error", JOptionPane.ERROR_MESSAGE);
             }
         });
         

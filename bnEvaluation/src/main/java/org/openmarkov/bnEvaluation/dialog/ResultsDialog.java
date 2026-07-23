@@ -20,7 +20,6 @@ import org.openmarkov.bnEvaluation.view.IndividualProbabilityTableModel;
 import org.openmarkov.bnEvaluation.view.OverwriteAwareFileChooser;
 import org.openmarkov.bnEvaluation.view.ScoresTableModel;
 import org.openmarkov.bnEvaluation.view.ScoresTableStyler;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.common.BottomPanelButtonDialog;
 import org.openmarkov.gui.dialog.common.DialogBase;
@@ -28,6 +27,7 @@ import org.openmarkov.gui.util.JTableGeneration;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -103,7 +103,11 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
             try {
                 exportButtonActionPerformed();
             } catch (IOException ex) {
-                throw new UnrecoverableException(ex);
+                // An I/O failure while exporting is expectable (e.g. the file is open or read-only);
+                // report it and keep the dialog open instead of aborting the application.
+                JOptionPane.showMessageDialog(this,
+                        "The results could not be exported: " + ex.getMessage(),
+                        "Export error", JOptionPane.ERROR_MESSAGE);
             }
         });
         addButtonToButtonsPanel(exportButton);
