@@ -44,13 +44,11 @@ public class DBOpenerPanel extends JPanel {
         this.setPreferredSize(new Dimension(700, 60));
         
         // create components
-        JLabel caseFileLabel = new JLabel();
         caseFileTextPane = new JTextPane();
         JScrollPane jScrollCaseFileTextPane = new JScrollPane();
         JButton loadCaseFileButton = new JButton();
-        
+
         // component properties
-        caseFileLabel.setText("Dataset");
         caseFileTextPane.setEditable(false);
         caseFileTextPane.setEnabled(false);
         jScrollCaseFileTextPane.setViewportView(caseFileTextPane);
@@ -64,11 +62,11 @@ public class DBOpenerPanel extends JPanel {
                                         .addGap(10)
                                         .addComponent(jScrollCaseFileTextPane)
                                         .addGap(10)
-                                        .addComponent(loadCaseFileButton, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(loadCaseFileButton)
                                         .addGap(10));
         layout.setVerticalGroup(layout.createParallelGroup()
                                       .addGap(5)
-                                      .addComponent(jScrollCaseFileTextPane, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+                                      .addComponent(jScrollCaseFileTextPane, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
                                       .addGap(5)
                                       .addComponent(loadCaseFileButton)
                                       .addGap(5));
