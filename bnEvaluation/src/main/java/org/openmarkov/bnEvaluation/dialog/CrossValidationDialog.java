@@ -13,7 +13,7 @@ import org.openmarkov.bnEvaluation.LearningEvaluator;
 import org.openmarkov.bnEvaluation.component.DBOpenerPanel;
 import org.openmarkov.bnEvaluation.component.MeasuresPanel;
 import org.openmarkov.bnEvaluation.measures.MeasuresSet;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.bnEvaluation.view.BackgroundEvaluation;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
@@ -455,7 +455,7 @@ public final class CrossValidationDialog extends OkCancelDialog {
     }
     
     @Override
-    protected boolean doOkClickBeforeHide() throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
+    protected boolean doOkClickBeforeHide() {
         Class<? extends LearningAlgorithm> algorithmType = (Class<? extends LearningAlgorithm>) algorithmComboBox.getSelectedItem();
         String algorithmName = (String) LearningAlgorithmManager.info( algorithmType).name();
         // Build the configured algorithm from the user's options dialog (null -> default parameters).
@@ -505,10 +505,14 @@ public final class CrossValidationDialog extends OkCancelDialog {
                 database, algorithmType, algorithmFactory, splitMode,
                 kFolderTextField.getCurrentValue(), numberSamplesTextField.getCurrentValue(),
                 sampleSizeTextField.getCurrentValue(), reproducible, seed, measuresSet, classVariableName);
-        ResultsDialog resultsDialog = new ResultsDialog(owner, CrossValidationController.run(request));
-        this.setVisible(false);
-        resultsDialog.setVisible(true);
-        return true;
+        // Run off the event-dispatch thread so the interface stays responsive (progress bar + cancel).
+        BackgroundEvaluation.run(owner, "Cross validation",
+                progress -> CrossValidationController.run(request, progress::report),
+                measures -> {
+                    this.setVisible(false);
+                    new ResultsDialog(owner, measures).setVisible(true);
+                });
+        return false;
     }
     
 }

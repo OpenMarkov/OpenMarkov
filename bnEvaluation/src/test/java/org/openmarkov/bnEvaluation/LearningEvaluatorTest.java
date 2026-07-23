@@ -143,7 +143,7 @@ class LearningEvaluatorTest {
         LearningEvaluator evaluator =
                 new LearningEvaluator(RecordingAlgorithm.class, null, sets, logLikelihoodTemplate());
 
-        MeasuresSet result = assertDoesNotThrow(evaluator::runEvaluator);
+        MeasuresSet result = assertDoesNotThrow(() -> evaluator.runEvaluator());
         assertThat(result).isNotNull();
         assertThat(result.getNumIterations()).isEqualTo(2);
     }

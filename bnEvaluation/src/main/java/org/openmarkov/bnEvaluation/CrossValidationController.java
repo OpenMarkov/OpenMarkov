@@ -76,6 +76,21 @@ public final class CrossValidationController {
     public static MeasuresSet run(Request request) throws IncompatibleEvidenceException,
             ConstraintViolatedException, NonProjectablePotentialException,
             NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
+        return run(request, LearningEvaluator.ProgressListener.NONE);
+    }
+
+    /**
+     * Runs the evaluation described by {@code request}, reporting progress per iteration so a caller
+     * can drive a progress bar off the event-dispatch thread (phase F4).
+     *
+     * @param request          the evaluation parameters
+     * @param progressListener notified with (completed, total) iterations
+     * @return the measures accumulated over all iterations
+     */
+    public static MeasuresSet run(Request request, LearningEvaluator.ProgressListener progressListener)
+            throws IncompatibleEvidenceException, ConstraintViolatedException,
+            NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork,
+            CannotNormalizePotentialException {
         SplitSetManager splitSetManager = request.reproducible()
                 ? new SplitSetManager(request.database(), request.seed())
                 : new SplitSetManager(request.database());
@@ -88,6 +103,6 @@ public final class CrossValidationController {
         if (request.classVariableName() != null) {
             evaluator.setVariable(request.classVariableName());
         }
-        return evaluator.runEvaluator();
+        return evaluator.runEvaluator(progressListener);
     }
 }

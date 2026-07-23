@@ -16,6 +16,8 @@ import org.openmarkov.learning.core.algorithm.LearningAlgorithm;
 import org.openmarkov.learning.core.exception.EmptyModelNetException;
 import org.openmarkov.learning.core.exception.UnobservedVariablesException;
 
+import java.util.concurrent.CancellationException;
+
 /**
  * Evaluates a learning algorithm by cross-validation: for every train/test split it learns a
  * network from the training set, evaluates it against the test set with {@link NetEvaluator},
@@ -24,6 +26,22 @@ import org.openmarkov.learning.core.exception.UnobservedVariablesException;
  * @author evillar
  */
 public class LearningEvaluator {
+
+    /**
+     * Receives the evaluation progress after each iteration, so a caller (the cross-validation
+     * dialog, phase F4) can drive a progress bar while the work runs off the event-dispatch thread.
+     */
+    @FunctionalInterface
+    public interface ProgressListener {
+        /** A listener that does nothing, for callers that do not track progress. */
+        ProgressListener NONE = (completedIterations, totalIterations) -> { };
+
+        /**
+         * @param completedIterations iterations finished so far (0 before the first)
+         * @param totalIterations     total number of iterations
+         */
+        void onProgress(int completedIterations, int totalIterations);
+    }
 
     /**
      * Builds the (configured) learning algorithm for one fold, given the initial network skeleton
@@ -81,10 +99,27 @@ public class LearningEvaluator {
      * @return the averaged measures across all iterations
      */
     public MeasuresSet runEvaluator() throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
+        return runEvaluator(ProgressListener.NONE);
+    }
+
+    /**
+     * Runs the full evaluation loop reporting progress after each iteration. When run off the
+     * event-dispatch thread and cancelled (its thread interrupted), it stops at the next iteration
+     * boundary by throwing {@link CancellationException}.
+     *
+     * @param progressListener notified with (completed, total) before the first iteration and after
+     *                         each one
+     * @return the averaged measures across all iterations
+     */
+    public MeasuresSet runEvaluator(ProgressListener progressListener) throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
         // measuresSetMean has numIterations=0
         MeasuresSet measuresSetMean = new MeasuresSet(measureSetToCalculate);
+        progressListener.onProgress(0, numIterations);
         // loop in k
         for (int i = 0; i < numIterations; i++) {
+            if (Thread.currentThread().isInterrupted()) {
+                throw new CancellationException();
+            }
             CaseDatabase trainDatabase = sets[i].getTrainDatabase();
             CaseDatabase testDatabase = sets[i].getTestDatabase();
             ProbNet trainNet = learnTrainNet(trainDatabase);
@@ -94,6 +129,7 @@ public class LearningEvaluator {
             NetEvaluator netEvaluator = new NetEvaluator(trainNet, testDatabase, measuresSet[i]);
             netEvaluator.runEvaluator();
             measuresSetMean.accumulateMeasureSet(measuresSet[i]);
+            progressListener.onProgress(i + 1, numIterations);
         }
         measuresSetMean.setAveraged();
         return measuresSetMean;
