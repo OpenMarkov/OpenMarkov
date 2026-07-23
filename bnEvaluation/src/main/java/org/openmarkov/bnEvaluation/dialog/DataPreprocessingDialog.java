@@ -27,7 +27,6 @@ import org.openmarkov.learning.core.preprocess.Outliers;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -74,7 +73,6 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
      */
     private JButton resetButton;
     private JButton savePreprocessSetButton;
-    private JButton cancelButton;
     private final DBWriterOMFileChooser saveWritter;
     
     public DataPreprocessingDialog(Frame owner) {
@@ -92,17 +90,13 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         this.dbOpenerPanel = new DBOpenerPanel(this);
         mainPanel.add(this.dbOpenerPanel);
         this.dbOpenerPanel.onOpen((databaseFile, database) -> {
-            database.getNumCases();
             // preprocessing variables
             isNumeric = new boolean[database.getVariables().size()];
             updateVariableSelectionPanel();
             resetButton.setEnabled(true);
             savePreprocessSetButton.setEnabled(true);
         });
-        // tabbedPane whit the processing variables and the splitst
-        JTabbedPane tabbedPane = new JTabbedPane();
-        mainPanel.add(tabbedPane);
-        
+
         JPanel variablesPanel = new JPanel();
         this.dbOpenerPanel.setPreferredSize(new Dimension(750, 500));
         
@@ -386,8 +380,6 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
             }
         });
         
-        //tabbedPane.addTab("Preprocess variables", variablesPanel);
-
         JPanel classVariablePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 2));
         classVariablePanel.add(new JLabel("Class variable (for MDLP / ChiMerge):"));
         classVariablePanel.add(classVariableComboBox);
@@ -403,7 +395,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
 
         mainPanel.add(variablesPanel);
         
-        cancelButton = DialogBase.generateGenericCancelButton();
+        JButton cancelButton = DialogBase.generateGenericCancelButton();
         cancelButton.setText("Close");
         this.add(mainPanel);
         
@@ -481,18 +473,6 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
             }
         }
     }//GEN-LAST:event_numIntervalsCheckBoxActionPerformed
-    
-    /**
-     * Listener for que numIntervalsSpinner
-     */
-    private void numIntervalsSpinnerStateChanged(
-            ChangeEvent evt) {//GEN-FIRST:event_numIntervalsSpinnerStateChanged
-        Integer selected = (Integer) numIntervalsSpinner.getValue();
-        
-        for (Component component : numIntervalsPanel.getComponents()) {
-            ((JSpinner) component).setValue(selected);
-        }
-    }//GEN-LAST:event_numIntervalsSpinnerStateChanged
     
     /**
      * Listener for que allVariablesRadioButton
@@ -597,7 +577,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
             preprocessOptions.addItem("Impute missing values with the mean (numeric variables)");
             preprocessOptions.addItem("Impute missing values with the median (numeric variables)");
             preprocessOptions.addItem("Impute missing values with k-Nearest Neighbours (k=5)");
-            preprocessOptions.setSelectedItem(0);
+            preprocessOptions.setSelectedIndex(0);
             preprocessOptions.setPreferredSize(new Dimension(225, 18));
             JCheckBox varSelect = new JCheckBox(variable.getName());
             varSelect.setPreferredSize(new Dimension(175, 18));
@@ -740,28 +720,5 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         }
         return true;
     }
-    
-    /**
-     * Gets the Panel with the buttons OK and Cancel
-     *
-     * @return: JPanel
-     */
-    private JPanel getOkCancelPanel() {
-        JPanel okCancelPanel = new JPanel();
-        
-        cancelButton = new JButton();
-        
-        
-        // add components to okCancelPanel with a GroupLayout
-        GroupLayout layout = new GroupLayout(okCancelPanel);
-        okCancelPanel.setLayout(layout);
-        layout.setHorizontalGroup(layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addComponent(cancelButton, 90, 90, 90)
-                                        .addContainerGap());
-        layout.setVerticalGroup(layout.createParallelGroup()
-                                      .addComponent(cancelButton));
-        return okCancelPanel;
-    }
-    
+
 }
