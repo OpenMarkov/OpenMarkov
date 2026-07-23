@@ -189,6 +189,22 @@
 
             </plugins>
         </pluginManagement>
+        <plugins>
+            <!--
+                Activates the "git-hooks-configuration" execution declared above in
+                <pluginManagement>. An execution sitting only in <pluginManagement> is just a
+                template: it never runs unless the plugin is also listed here, in the active
+                <plugins> section. Without this, "git config core.hooksPath .githooks" never
+                runs and the pre-commit hook is never wired up.
+                <inherited>false</inherited> keeps it running once, for the aggregator build,
+                instead of repeating in every child module.
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <inherited>false</inherited>
+            </plugin>
+        </plugins>
     </build>
     <dependencies>
         <!--
