@@ -19,6 +19,7 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 
 import java.util.List;
+import java.util.concurrent.CancellationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
@@ -210,6 +211,26 @@ class NetEvaluatorTest {
         assertThat(matrix[0][0]).isZero();
         assertThat(matrix[0][1]).isZero();
         assertThat(matrix[1][0]).isZero();
+    }
+
+    /**
+     * F4: when run off the event-dispatch thread and cancelled (its thread interrupted), the
+     * evaluator stops promptly by throwing {@link CancellationException} instead of finishing.
+     */
+    @Test
+    void anInterruptedThreadCancelsTheEvaluation() {
+        ProbNet net = singleVariableNet(0.5, 0.5);
+        CaseDatabase db = singleVariableDatabase(1, 1);
+        MeasuresSet measures = new MeasuresSet("test");
+        measures.addMeasureValue(new MeasureValue(MeasureType.LOGLIKELIHOOD));
+        NetEvaluator evaluator = new NetEvaluator(net, db, measures);
+
+        Thread.currentThread().interrupt();
+        try {
+            assertThrows(CancellationException.class, evaluator::runEvaluator);
+        } finally {
+            Thread.interrupted();   // clear the flag so it does not leak to other tests
+        }
     }
 
     /**

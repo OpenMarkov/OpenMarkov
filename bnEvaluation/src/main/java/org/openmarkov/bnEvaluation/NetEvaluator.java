@@ -22,6 +22,7 @@ import org.openmarkov.learning.metric.Metric;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CancellationException;
 import java.util.function.Predicate;
 
 /**
@@ -252,6 +253,9 @@ public class NetEvaluator {
         double[][] posteriors = new double[numCases][numStates];
         Predicate<Variable> includeAsEvidence = v -> !v.getName().equals(classVarName);
         for (int i = 0; i < numCases; i++) {
+            if (Thread.currentThread().isInterrupted()) {
+                throw new CancellationException();   // cancelled while running off the event-dispatch thread
+            }
             EvidenceCase evidence = buildEvidenceCase(i, includeAsEvidence);
             double[] caseProb = posteriorOfClassVariable(evidence, netClassVar);
             for (int netIdx = 0; netIdx < caseProb.length; netIdx++) {
@@ -271,6 +275,9 @@ public class NetEvaluator {
         int numCases = caseDatabase.getNumCases();
         double[] probs = new double[numCases];
         for (int i = 0; i < numCases; i++) {
+            if (Thread.currentThread().isInterrupted()) {
+                throw new CancellationException();   // cancelled while running off the event-dispatch thread
+            }
             EvidenceCase evidence = buildEvidenceCase(i, v -> true);
             probs[i] = doEvaluation(evidence).getValues()[0];
         }

@@ -15,12 +15,8 @@ import org.openmarkov.bnEvaluation.component.DBOpenerPanel;
 import org.openmarkov.bnEvaluation.component.MeasuresPanel;
 import org.openmarkov.bnEvaluation.exceptions.NetworkIsNotEvaluable;
 import org.openmarkov.bnEvaluation.measures.MeasuresSet;
+import org.openmarkov.bnEvaluation.view.BackgroundEvaluation;
 import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
-import org.openmarkov.core.exception.CannotNormalizePotentialException;
-import org.openmarkov.core.exception.ConstraintViolatedException;
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
@@ -363,7 +359,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
     }
     
     @Override
-    protected boolean doOkClickBeforeHide() throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
+    protected boolean doOkClickBeforeHide() {
         boolean aMeasureIsSeleteced = this.measuresPanel.allMeasureRelatedCheckboxes()
                                                          .anyMatch(AbstractButton::isSelected);
         if (!aMeasureIsSeleteced) {
@@ -381,9 +377,13 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         String title = "Evaluation of the " + this.probNet.getName() + " network";
         MeasuresSet measuresSet = this.measuresPanel.measuresSet(title, this.coherence, this.netdatabase);
         NetEvaluator evaluator = new NetEvaluator(this.probNet, this.netdatabase, measuresSet);
-        ResultsDialog resultsDialog = new ResultsDialog(this.owner, evaluator.runEvaluator());
-        this.setVisible(false);
-        resultsDialog.setVisible(true);
-        return true;
+        // Run off the event-dispatch thread so the window stays responsive (indeterminate progress + cancel).
+        BackgroundEvaluation.run(this.owner, "Evaluation",
+                progress -> evaluator.runEvaluator(),
+                measures -> {
+                    this.setVisible(false);
+                    new ResultsDialog(this.owner, measures).setVisible(true);
+                });
+        return false;
     }
 }

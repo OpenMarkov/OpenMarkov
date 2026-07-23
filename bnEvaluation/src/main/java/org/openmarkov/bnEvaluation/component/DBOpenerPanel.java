@@ -2,19 +2,14 @@ package org.openmarkov.bnEvaluation.component;
 
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.exception.EmptyDatabaseException;
-import org.openmarkov.core.exception.ParsingSourceException;
-import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.bnEvaluation.view.BackgroundEvaluation;
 import org.openmarkov.core.model.database.CaseDatabase;
-import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
-import org.openmarkov.core.io.exception.NoWriterForExtensionException;
 import org.openmarkov.gui.dialog.io.DBReaderOMFileChooser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -60,13 +55,7 @@ public class DBOpenerPanel extends JPanel {
         caseFileTextPane.setEnabled(false);
         jScrollCaseFileTextPane.setViewportView(caseFileTextPane);
         loadCaseFileButton.setText("Open");
-        loadCaseFileButton.addActionListener(e -> {
-            try {
-                open();
-            } catch (NoWriterForExtensionException | ParsingSourceException | IOException | EmptyDatabaseException ex) {
-                throw new UnrecoverableException(ex);
-            }
-        });
+        loadCaseFileButton.addActionListener(e -> open());
         
         // add components to caseDatabasePanel with a GroupLayout
         GroupLayout layout = new GroupLayout(this);
@@ -86,18 +75,23 @@ public class DBOpenerPanel extends JPanel {
     }
     
     
-    private boolean open() throws NoWriterForExtensionException, ParsingSourceException, IOException, EmptyDatabaseException {
+    private void open() {
         this.databaseFileChooser.setDialogTitle("Open dataset");
         if (this.databaseFileChooser.showOpenDialog(this.parent) != JFileChooser.APPROVE_OPTION) {
-            return false;
+            return;
         }
-        CaseDatabaseReader reader = this.caseDbManager.getReader(FilenameUtils.getExtension(this.databaseFileChooser.getSelectedFile()
-                                                                                                                    .getName()));
-        this.database = reader.load(this.databaseFileChooser.getSelectedFile());
-        this.databaseFile = this.databaseFileChooser.getSelectedFile();
-        caseFileTextPane.setText(this.databaseFile.getName());
-        onOpen.forEach(db -> db.onOpen(this.databaseFile, this.database));
-        return true;
+        File file = this.databaseFileChooser.getSelectedFile();
+        Window window = SwingUtilities.getWindowAncestor(this);
+        // Load off the event-dispatch thread so the window stays responsive; a read error becomes a
+        // message instead of crashing the application.
+        BackgroundEvaluation.run(window, "Loading dataset",
+                progress -> this.caseDbManager.getReader(FilenameUtils.getExtension(file.getName())).load(file),
+                loadedDatabase -> {
+                    this.database = loadedDatabase;
+                    this.databaseFile = file;
+                    this.caseFileTextPane.setText(file.getName());
+                    this.onOpen.forEach(callback -> callback.onOpen(this.databaseFile, this.database));
+                });
     }
     
     /**
