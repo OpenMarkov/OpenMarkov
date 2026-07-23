@@ -10,17 +10,28 @@ package org.openmarkov.gui.util;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.gui.dialog.common.DialogBase;
+import org.openmarkov.java.initialization.Lazy;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Window;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 
 /**
@@ -144,5 +155,53 @@ public final class GUIUtils {
         restoreDimensionsVisualTooltip.setFont(defaultFont.deriveFont(Font.PLAIN, 20));
         restoreDimensionsVisualTooltip.setToolTipText(toolTipText);
         return restoreDimensionsVisualTooltip;
+    }
+    
+    public static void addHelp(Component component, Lazy<JDialog> helpDialog) {
+        component.addKeyListener(new KeyListener() {
+            @Override public void keyTyped(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_F1) {
+                    e.consume();
+                    helpDialog.get().setVisible(true);
+                }
+            }
+            
+            @Override public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_F1) {
+                    e.consume();
+                    helpDialog.get().setVisible(true);
+                }
+            }
+            
+            @Override public void keyReleased(KeyEvent e) {
+            
+            }
+        });
+    }
+    
+    public static @NotNull Lazy<JDialog> generateHelpDialog(String helpTitle, String help) {
+        return Lazy.of(() -> {
+            var helpDialog = new DialogBase();
+            JButton exitHelpButton = new JButton("Exit help");
+            helpDialog.setCancelButton(exitHelpButton);
+            helpDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            helpDialog.setTitle(helpTitle);
+            helpDialog.setLayout(new BorderLayout());
+            helpDialog.setModal(false);
+            exitHelpButton.addActionListener(e -> helpDialog.dispose());
+            JTextPane content = new JTextPane();
+            content.setContentType("text/html");
+            content.setEditable(false);
+            content.setText(help);
+            helpDialog.add(new JScrollPane(content), BorderLayout.CENTER);
+            helpDialog.setMinimumSize(new Dimension(400, 300));
+            helpDialog.pack();
+            helpDialog.setMaximumSize(new Dimension(600, 800));
+            SwingUtilities.invokeLater(() -> {
+                helpDialog.setMinimumSize(new Dimension(0, 0));
+                helpDialog.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+            });
+            return helpDialog;
+        });
     }
 }

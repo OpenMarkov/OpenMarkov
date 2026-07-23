@@ -10,6 +10,7 @@ package org.openmarkov.gui.window;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.gui.component.FrameMirror;
+import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.common.WindowDimensions;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
@@ -63,7 +64,8 @@ public class MainGUI extends JFrame {
         setName("MainGUI");
         setMinimumSize(new Dimension(700, 250));
         this.frameMirror = new FrameMirror(this);
-        if (UserPreferences.RESTORE_LATEST_MAIN_GUI_DIMENSIONS.get() && UserPreferences.LATEST_MAIN_GUI_DIMENSIONS.isSet()) {
+        if (UserPreferences.STARTUP_ACTIONS.get()
+                                           .contains(StartupAction.RESTORE_LAST_GUI_DIMENSIONS) && UserPreferences.LATEST_MAIN_GUI_DIMENSIONS.isSet()) {
             UserPreferences.LATEST_MAIN_GUI_DIMENSIONS.get().set(this);
         }
         addComponentListener(new ComponentListener() {

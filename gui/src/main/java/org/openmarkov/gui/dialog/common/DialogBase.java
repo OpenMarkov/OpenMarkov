@@ -12,8 +12,12 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.loader.element.IconBind;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
+import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -33,50 +37,59 @@ public class DialogBase extends JDialog {
     private static final long serialVersionUID = 6121463474893584183L;
     
     private JButton jButtonCancel = null;
-
-	/**
-	 * Constructor that invokes its superclass constructor and registers a
-	 * listener that executes the 'click' of the cancel button when the key ESC
-	 * is pressed.
-	 *
-	 * @param owner window that owns the dialog box.
-	 */
-	public DialogBase(Window owner) {
-		super(owner);
+    
+    /**
+     * Constructor that invokes its superclass constructor and registers a
+     * listener that executes the 'click' of the cancel button when the key ESC
+     * is pressed.
+     *
+     * @param owner window that owns the dialog box.
+     */
+    public DialogBase(Window owner) {
+        super(owner);
+        init();
+    }
+    
+    public DialogBase() {
+        super();
+        init();
+    }
+    
+    private void init() {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		setName("DialogBase");
-		addWindowListener(new WindowAdapter() {
-			@Override public void windowClosing(WindowEvent e) {
+        setName("DialogBase");
+        addWindowListener(new WindowAdapter() {
+            @Override public void windowClosing(WindowEvent e) {
                 if (DialogBase.this.jButtonCancel != null) {
                     DialogBase.this.jButtonCancel.doClick();
-				}
-			}
-		});
+                }
+            }
+        });
         ActionListener listener = evt -> {
             if (this.jButtonCancel != null) {
                 this.jButtonCancel.doClick();
             }
         };
-		getRootPane().registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-				JComponent.WHEN_IN_FOCUSED_WINDOW);
-	}
-
-	/**
-	 * Sets the button whose 'click' will be called when the key ENTER is
-	 * pressed.
-	 *
-	 * @param defaultButton button invoked when the key ENTER is pressed.
-	 */
-	public void setDefaultButton(JButton defaultButton) {
-		getRootPane().setDefaultButton(defaultButton);
-	}
-
-	/**
-	 * Sets the button whose 'click' will be called when the key ESC is pressed.
-	 *
-	 * @param button button invoked when the key ESC is pressed.
-	 */
-	public void setCancelButton(JButton button) {
+        getRootPane().registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                                             JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+    
+    /**
+     * Sets the button whose 'click' will be called when the key ENTER is
+     * pressed.
+     *
+     * @param defaultButton button invoked when the key ENTER is pressed.
+     */
+    public void setDefaultButton(JButton defaultButton) {
+        getRootPane().setDefaultButton(defaultButton);
+    }
+    
+    /**
+     * Sets the button whose 'click' will be called when the key ESC is pressed.
+     *
+     * @param button button invoked when the key ESC is pressed.
+     */
+    public void setCancelButton(JButton button) {
         this.jButtonCancel = button;
     }
     
@@ -110,5 +123,5 @@ public class DialogBase extends JDialog {
             }
         });
         return jButtonCancel;
-	}
+    }
 }

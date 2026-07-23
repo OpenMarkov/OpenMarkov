@@ -3,7 +3,16 @@ package org.openmarkov.gui.window.edition.networkEditorPanel;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.core.AddNodeEdit;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.NotSupportedOperationException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.exception.PreResolutionNodeInInferenceException;
@@ -15,11 +24,18 @@ import org.openmarkov.gui.graphic.VisualState;
 import org.openmarkov.gui.menutoolbar.menu.ContextualMenu;
 import org.openmarkov.gui.menutoolbar.menu.ContextualMenuFactory;
 import org.openmarkov.gui.util.GUIUtils;
+import org.openmarkov.gui.window.edition.mode.NodeEditionMode;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.lang.reflect.Field;
+import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import java.awt.Graphics2D;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -112,86 +128,100 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
         }
         this.networkEditorPanel.getEditionMode().tryCancelCurrentAction(e, this.cursorPosition, g);
         
-        if (this.networkEditorPanel.getNetworkEditorPanel()
-                                   .getWorkingMode() == NetworkEditorPanel.WorkingMode.EDITION) {
-            // If we are in Edition Mode a double click must open
-            // the corresponding properties dialog (for node, link
-            // or network)
-            node = this.networkEditorPanel.getVisualNetwork().whatNodeInPosition(this.cursorPosition, g);
-            if (node != null) {
-                try {
-                    boolean userAcceptedChanges = this.networkEditorPanel.changeNodeProperties(node, this.lastLeftClickProducedANode);
-                    if (!userAcceptedChanges && this.lastLeftClickProducedANode) {
-                        ArrayList<PNEdit> undone;
-                        do {
-                            undone = this.networkEditorPanel.getNetworkEditorPanel()
-                                                            .getProbNet()
-                                                            .getPNESupport()
-                                                            .undo();
-                        } while (undone != null && undone.stream().noneMatch(AddNodeEdit.class::isInstance));
-                        this.networkEditorPanel.getNetworkEditorPanel()
-                                               .getProbNet()
-                                               .getPNESupport()
-                                               .removeUndoneEdits();
-                    }
-                } catch (NotEvaluableNetworkException | NonProjectablePotentialException | NotEnoughMemoryException |
-                         IncompatibleEvidenceException | ConstraintViolatedException | NotSupportedOperationException |
-                         CannotNormalizePotentialException ex) {
-                    this.networkEditorPanel.repaint();
-                    throw new UnrecoverableException(ex);
-                }
-            } else {
+        
+        switch (this.networkEditorPanel.getNetworkEditorPanel().getWorkingMode()) {
+            case EDITION -> {
+                // If we are in Edition Mode a double click might open the corresponding properties dialog (for node or link)
+                
                 VisualLink link = this.networkEditorPanel.getVisualNetwork().whatLinkInPosition(this.cursorPosition, g);
                 if (link != null) {
                     this.networkEditorPanel.changeLinkProperties(link);
                 } else {
-                    this.networkEditorPanel.changeNetworkProperties();
+                    node = this.networkEditorPanel.getVisualNetwork().whatNodeInPosition(this.cursorPosition, g);
+                    if (node == null) {
+                        try {
+                            NodeEditionMode.createNode(this.networkEditorPanel.getProbNet(), NodeType.CHANCE, this.cursorPosition, networkEditorPanel);
+                            node = this.networkEditorPanel.getVisualNetwork()
+                                                          .whatNodeInPosition(this.cursorPosition, g);
+                            this.lastLeftClickProducedANode = true;
+                        } catch (DoEditException ex) {
+                            throw new UnreachableException(ex);
+                        }
+                    }
+                    try {
+                        boolean userAcceptedChanges = this.networkEditorPanel.changeNodeProperties(node, this.lastLeftClickProducedANode);
+                        if (!userAcceptedChanges && this.lastLeftClickProducedANode) {
+                            ArrayList<PNEdit> undone;
+                            do {
+                                undone = this.networkEditorPanel.getNetworkEditorPanel()
+                                                                .getProbNet()
+                                                                .getPNESupport()
+                                                                .undo();
+                            } while (undone != null && undone.stream().noneMatch(AddNodeEdit.class::isInstance));
+                            this.networkEditorPanel.getNetworkEditorPanel()
+                                                   .getProbNet()
+                                                   .getPNESupport()
+                                                   .removeUndoneEdits();
+                        }
+                    } catch (NotEvaluableNetworkException | NonProjectablePotentialException |
+                             NotEnoughMemoryException |
+                             IncompatibleEvidenceException | ConstraintViolatedException |
+                             NotSupportedOperationException |
+                             CannotNormalizePotentialException ex) {
+                        this.networkEditorPanel.repaint();
+                        throw new UnrecoverableException(ex);
+                    }
                 }
+                this.networkEditorPanel.repaint();
             }
-            this.networkEditorPanel.repaint();
-            return;
-        }
-        
-        VisualState visualState = this.networkEditorPanel.getVisualNetwork().whatStateInPosition(this.cursorPosition, g);
-        if (visualState == null) {
-            if ((this.networkEditorPanel.getVisualNetwork().whatNodeInPosition(this.cursorPosition, g) != null) && (
-                    this.networkEditorPanel.getVisualNetwork().whatInnerBoxInPosition(this.cursorPosition, g) == null
-            )) {
-                try {
-                    this.networkEditorPanel.changeNodeProperties();
-                } catch (NotEvaluableNetworkException | NonProjectablePotentialException | NotEnoughMemoryException |
-                         IncompatibleEvidenceException | ConstraintViolatedException | NotSupportedOperationException |
-                         CannotNormalizePotentialException ex) {
-                    throw new UnrecoverableException(ex);
-                } finally {
+            case INFERENCE -> {
+                VisualState visualState = this.networkEditorPanel.getVisualNetwork()
+                                                                 .whatStateInPosition(this.cursorPosition, g);
+                if (visualState == null) {
+                    if ((this.networkEditorPanel.getVisualNetwork()
+                                                .whatNodeInPosition(this.cursorPosition, g) != null) && (
+                            this.networkEditorPanel.getVisualNetwork()
+                                                   .whatInnerBoxInPosition(this.cursorPosition, g) == null
+                    )) {
+                        try {
+                            this.networkEditorPanel.changeNodeProperties();
+                        } catch (NotEvaluableNetworkException | NonProjectablePotentialException |
+                                 NotEnoughMemoryException |
+                                 IncompatibleEvidenceException | ConstraintViolatedException |
+                                 NotSupportedOperationException |
+                                 CannotNormalizePotentialException ex) {
+                            throw new UnrecoverableException(ex);
+                        } finally {
+                            this.networkEditorPanel.repaint();
+                        }
+                    }
                     this.networkEditorPanel.repaint();
+                    return;
                 }
+                
+                // If we are in Inference Mode a double click inside a
+                // visual state of a node without pre-resolution finding
+                // must introduce evidence in that node.
+                // If the double click is inside a node but outside its
+                // inner box (in its 'expanded external shape'), its
+                // properties dialog should be open
+                
+                VisualNode visualNode = this.networkEditorPanel.getVisualNetwork()
+                                                               .whatNodeInPosition(this.cursorPosition, g);
+                if (visualNode.isPreResolutionFinding()) {
+                    throw new UnrecoverableException(new PreResolutionNodeInInferenceException(visualNode));
+                }
+                try {
+                    this.networkEditorPanel.getEvidenceManager().toggleFinding(visualNode, visualState);
+                } catch (IncompatibleEvidenceException | NotEvaluableNetworkException |
+                         NonProjectablePotentialException |
+                         NotEnoughMemoryException | DoEditException | CannotNormalizePotentialException |
+                         ConstraintViolatedException ex) {
+                    throw new UnreachableException(ex);
+                }
+                
             }
-            this.networkEditorPanel.repaint();
-            return;
         }
-        
-        // If we are in Inference Mode a double click inside a
-        // visual state of a node without pre-resolution finding
-        // must introduce evidence in that node.
-        // If the double click is inside a node but outside its
-        // inner box (in its 'expanded external shape'), its
-        // properties dialog should be open
-        
-        VisualNode visualNode = this.networkEditorPanel.getVisualNetwork().whatNodeInPosition(this.cursorPosition, g);
-        if (visualNode.isPreResolutionFinding()) {
-            throw new UnrecoverableException(new PreResolutionNodeInInferenceException(visualNode));
-        }
-        
-        try {
-            this.networkEditorPanel.getEvidenceManager().toggleFinding(visualNode, visualState);
-        } catch (IncompatibleEvidenceException | NotEvaluableNetworkException | NonProjectablePotentialException |
-                 NotEnoughMemoryException | DoEditException | CannotNormalizePotentialException |
-                 ConstraintViolatedException ex) {
-            throw new UnreachableException(ex);
-        }
-        
-        
     }
     
     /**

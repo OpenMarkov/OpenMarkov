@@ -7,11 +7,11 @@
 
 package org.openmarkov.gui.graphic;
 
-import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.gui.configuration.GUIColors;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -169,15 +169,13 @@ public class SelectionRectangle {
 	 * rectangle selection.
 	 *
 	 * @param visualNode node to be tested.
+     * @param g
+     *
 	 * @return true if the center of the node is contained into the rectangle;
 	 * otherwise, false.
 	 */
-	public boolean containsNode(VisualNode visualNode) {
-
-		Node node = visualNode.getNode();
-
-		return rectangleSelection.contains(node.getCoordinateX(), node.getCoordinateY());
-
+    public boolean containsNode(VisualNode visualNode, Graphics2D g) {
+        return rectangleSelection.contains(visualNode.getShape(g).getBounds2D());
 	}
 
 	/**

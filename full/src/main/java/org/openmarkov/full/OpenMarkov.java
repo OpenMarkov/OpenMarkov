@@ -17,6 +17,7 @@ import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.gui.configuration.JavaSerializationUtils;
+import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.Theme;
 import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.OMExceptionHandler;
@@ -58,6 +59,8 @@ public class OpenMarkov {
     
     private static final String JUNIQUE_ID = "org.openmarkov.OpenMarkov";
     
+    private static boolean STARTED_AS_MAIN_INSTANCE = true;
+    
     /**
      * OpenMarkov main class
      *
@@ -82,10 +85,12 @@ public class OpenMarkov {
         };
         
         boolean canBeStandAloneInstance = OpenMarkov.readArguments(baseArgs).isEmpty();
+        STARTED_AS_MAIN_INSTANCE = true;
         
         try {
             JUnique.acquireLock(OpenMarkov.JUNIQUE_ID, instanceMessageHandler);
         } catch (AlreadyLockedException e) {
+            STARTED_AS_MAIN_INSTANCE = false;
             if (!canBeStandAloneInstance) {
                 throw e;
             }
@@ -115,13 +120,25 @@ public class OpenMarkov {
                  UnsupportedLookAndFeelException e) {
             throw new UnreachableException(e);
         }
-        OpenMarkovLogger.LOGGER.debug("Splash start");
         
         SplashScreenLoader.asyncLoadWithSplash(() -> {
             MainGUI.INSTANCE.setVisible(true);
+            if (OpenMarkov.STARTED_AS_MAIN_INSTANCE &&
+                    UserPreferences.STARTUP_ACTIONS.get().contains(StartupAction.RESTORE_LAST_SESSION)) {
+                for (var lastSessionFile : UserPreferences.LAST_SESSION_NETWORK_FILES.get()) {
+                    try {
+                        MainGUI.INSTANCE.openNetwork(lastSessionFile);
+                    } catch (ProbNetParserException | IOException | NoReaderForFileException | CorruptNetworkFile e) {
+                        Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                    }
+                }
+            }
             OpenMarkov.executeArguments(OpenMarkov.readArguments(baseArgs));
+            if (MainGUI.INSTANCE.mainPanel.getNetworksTabPanel().getTabCount() == 0 &&
+                    UserPreferences.STARTUP_ACTIONS.get().contains(StartupAction.SHOW_CREATE_NEW_NETWORK)) {
+                MainGUI.INSTANCE.mainPanel.getMainPanelListenerAssistant().getFileHandler().createNewNetwork();
+            }
             appLoaded.set(true);
-            OpenMarkovLogger.LOGGER.debug("Loaded");
         });
         
 
