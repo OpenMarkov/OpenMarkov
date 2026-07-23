@@ -391,6 +391,11 @@ public class Graph<T> {
         if (node1 == node2) {
             return true;
         }
+        // Honour the documented contract: a node that does not belong to this graph yields false
+        // (rather than an ArrayIndexOutOfBoundsException from nodes.indexOf(...) == -1 below).
+        if (nodes.indexOf(node1) < 0 || nodes.indexOf(node2) < 0) {
+            return false;
+        }
         HashMap<T, Collection<T>> parentsToIgnoredChildren = new HashMap<>();
         for (var linkToIgnore : linksToIgnore) {
             if (!parentsToIgnoredChildren.containsKey(linkToIgnore.getFrom())) {
@@ -497,8 +502,12 @@ public class Graph<T> {
      */
     private void removeImplicitLink(T node1, T node2, boolean directed) {
         if (directed) {
-            nodeChildren.get(node1).remove(node2);
-            nodeParents.get(node2).remove(node1);
+            List<T> children = nodeChildren.get(node1);
+            if (children != null)
+                children.remove(node2);
+            List<T> parents = nodeParents.get(node2);
+            if (parents != null)
+                parents.remove(node1);
         } else {
             List<T> siblings = nodeSiblings.get(node1);
             if (siblings != null)

@@ -71,6 +71,12 @@ public class LinkTest {
         
     }
     
+    @Test public void tryResetRestrictionsPotentialIsANoOpWhenThereIsNoRestriction() {
+        // B4: a link with no restriction potential (the default) must not throw.
+        Link<Node> linkWithoutRestrictions = new Link<>(nodeA, nodeB, true);
+        Assertions.assertDoesNotThrow(linkWithoutRestrictions::tryResetRestrictionsPotential);
+    }
+
     @Test public void testRevelationArc() {
         Assertions.assertFalse(link.hasRevealingConditions());
         link.addRevealingState(stateA[0]);

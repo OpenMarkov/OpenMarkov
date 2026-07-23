@@ -215,6 +215,9 @@ public class Link<T> implements ClassLocalizable {
      *
      */
     public void tryResetRestrictionsPotential() {
+        if (restrictionsPotential == null) {
+            return;   // nothing to reset; consistent with setCompatibilityValue/areCompatible
+        }
         double[] restrictions = this.restrictionsPotential.getValues();
         for (double restriction : restrictions) {
             if (restriction == 0) {

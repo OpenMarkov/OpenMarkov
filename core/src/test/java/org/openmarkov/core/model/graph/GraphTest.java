@@ -189,6 +189,22 @@ public class GraphTest {
         assertTrue(graph.existsPath(nodeD, nodeA, false, Collections.emptyList()));
     }
     
+    @Test public void removingANonexistentDirectedLinkIsANoOpNotAnException() {
+        // B1: node C has no children, so removing a directed link from it must be a no-op, not a NPE.
+        int linksBefore = countLinks(graph);
+        assertDoesNotThrow(() -> graph.removeLink(nodeC, nodeD, true));
+        assertEquals(linksBefore, countLinks(graph)); // the graph is unchanged
+        assertTrue(graph.getChildren(nodeB).contains(nodeC)); // the existing links still hold
+    }
+
+    @Test public void existsPathReturnsFalseForANodeNotInTheGraph() {
+        // B2: "Z" does not belong to the graph; the contract says false, not an AIOOBE.
+        String foreign = "Z";
+        assertFalse(graph.existsPath(foreign, nodeA, true, Collections.emptyList()));
+        assertFalse(graph.existsPath(nodeA, foreign, true, Collections.emptyList()));
+        assertFalse(graph.existsPath(foreign, nodeA, false, Collections.emptyList()));
+    }
+
     @Test public void testMarry() {
         // Marry 2 nodes
         List<String> nodesToMarry = new ArrayList<>();
