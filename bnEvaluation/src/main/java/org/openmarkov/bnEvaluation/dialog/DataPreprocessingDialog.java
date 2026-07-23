@@ -8,6 +8,7 @@
 package org.openmarkov.bnEvaluation.dialog;
 
 import org.apache.commons.io.FilenameUtils;
+import org.openmarkov.bnEvaluation.DataPreprocessor;
 import org.openmarkov.bnEvaluation.component.DBOpenerPanel;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.database.CaseDatabase;
@@ -22,7 +23,6 @@ import org.openmarkov.gui.dialog.common.DialogBase;
 import org.openmarkov.gui.dialog.io.DBWriterOMFileChooser;
 import org.openmarkov.learning.core.preprocess.Discretization;
 import org.openmarkov.learning.core.preprocess.FeatureSelection;
-import org.openmarkov.learning.core.preprocess.FilterDatabase;
 import org.openmarkov.learning.core.preprocess.MissingValues;
 import org.openmarkov.learning.core.preprocess.Outliers;
 
@@ -711,53 +711,28 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
     }
     
     private CaseDatabase getPreprocessDataBase() {
-        Map<String, Discretization.Option> discretizeOpts = getSelectedDiscretizeOptions();
-        Variable classVariable = getSelectedClassVariable();
-        CaseDatabase preprocessedDatabase = FilterDatabase.filter(this.dbOpenerPanel.getDatabase(), getSelectedVariables());
-        preprocessedDatabase = Outliers.process(preprocessedDatabase, getSelectedOutliersOptions(preprocessedDatabase));
-        preprocessedDatabase = MissingValues.process(preprocessedDatabase, getSelectedMissingValuesOptions());
-        preprocessedDatabase = Discretization.process(preprocessedDatabase, discretizeOpts,
-                getSelectedNumIntervals(), null, classVariable);
-        FeatureSelection.Method fsMethod = (FeatureSelection.Method) featureSelectionComboBox.getSelectedItem();
-        if (fsMethod != null && fsMethod != FeatureSelection.Method.NONE) {
-            Variable fsClass = (classVariable != null)
-                    ? preprocessedDatabase.getVariable(classVariable.getName())
-                    : null;
-            int topK = (Integer) featureSelectionTopKSpinner.getValue();
-            preprocessedDatabase = FeatureSelection.select(preprocessedDatabase, fsClass, fsMethod, topK);
-        }
-        return preprocessedDatabase;
+        return DataPreprocessor.process(buildPreprocessRequest());
     }
 
-    private Map<String, Outliers.Option> getSelectedOutliersOptions(CaseDatabase database) {
-        Outliers.Option selected = (Outliers.Option) outliersComboBox.getSelectedItem();
-        if (selected == null) selected = Outliers.Option.NONE;
-        Map<String, Outliers.Option> map = new HashMap<>();
-        for (Variable v : database.getVariables()) {
-            map.put(v.getName(), selected);
-        }
-        return map;
+    /**
+     * Reads the current state of the preprocessing controls into a {@link DataPreprocessor.Request},
+     * the sole point where this view talks to the pure preprocessing service.
+     */
+    private DataPreprocessor.Request buildPreprocessRequest() {
+        Outliers.Option outliers = (Outliers.Option) outliersComboBox.getSelectedItem();
+        if (outliers == null) outliers = Outliers.Option.NONE;
+        FeatureSelection.Method fsMethod = (FeatureSelection.Method) featureSelectionComboBox.getSelectedItem();
+        if (fsMethod == null) fsMethod = FeatureSelection.Method.NONE;
+        int topK = (Integer) featureSelectionTopKSpinner.getValue();
+        return new DataPreprocessor.Request(this.dbOpenerPanel.getDatabase(), getSelectedVariables(),
+                getSelectedMissingValuesOptions(), outliers, getSelectedDiscretizeOptions(),
+                getSelectedNumIntervals(), getSelectedClassVariable(), fsMethod, topK);
     }
 
     private boolean validateBeforeSave() {
-        Map<String, Discretization.Option> opts = getSelectedDiscretizeOptions();
-        boolean supervisedUsed = opts.values().stream().anyMatch(
-                o -> o == Discretization.Option.MDLP || o == Discretization.Option.CHIMERGE);
-        FeatureSelection.Method fsMethod = (FeatureSelection.Method) featureSelectionComboBox.getSelectedItem();
-        boolean fsUsed = fsMethod != null && fsMethod != FeatureSelection.Method.NONE;
-        if (!supervisedUsed && !fsUsed) return true;
-        Variable classVar = getSelectedClassVariable();
-        if (classVar == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Supervised discretization (MDLP / ChiMerge) and feature selection require selecting a class variable.",
-                    "Class variable required", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        Discretization.Option classVarOpt = opts.get(classVar.getName());
-        if (classVarOpt == Discretization.Option.MDLP || classVarOpt == Discretization.Option.CHIMERGE) {
-            JOptionPane.showMessageDialog(this,
-                    "The class variable cannot itself be discretized with a supervised method.",
-                    "Invalid class variable", JOptionPane.WARNING_MESSAGE);
+        DataPreprocessor.ValidationError error = DataPreprocessor.validate(buildPreprocessRequest());
+        if (error != null) {
+            JOptionPane.showMessageDialog(this, error.message(), error.title(), JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
