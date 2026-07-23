@@ -25,6 +25,11 @@ import java.util.Set;
 
 /**
  * This class implements explicit links.
+ * <p>
+ * Equality is deliberately by <em>identity</em> (neither {@code equals} nor {@code hashCode} is
+ * overridden): the graph stores the <em>same</em> {@link Link} object in the link lists of both
+ * endpoints, and {@code Graph.removeLink(Link)} relies on identity to remove exactly that shared
+ * object. Redefining {@code equals} by value would break this scheme.
  *
  * @author manuel
  * @author fjdiez

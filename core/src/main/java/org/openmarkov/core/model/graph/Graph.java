@@ -174,7 +174,8 @@ public class Graph<T> {
      * @param directed {@code boolean}
      *                 {@code graph}
      *
-     * @return Link
+     * @return the explicit {@link Link} when the graph is in explicit mode, or {@code null} in
+     * implicit mode (there is no {@code Link} object to return then)
      */
     public Link<T> addLink(T node1, T node2, boolean directed) {
         Link<T> newLink = null;
@@ -221,6 +222,10 @@ public class Graph<T> {
     }
     
     /**
+     * Returns the explicit link between {@code node1} and {@code node2}. <strong>Side effect:</strong>
+     * this "getter" forces the graph into explicit mode (materialises every {@link Link} object and
+     * sets {@code explicitLinks = true}), which changes how {@code addLink} behaves afterwards.
+     *
      * @param node1    {@code Node}
      * @param node2    {@code Node}
      * @param directed {@code boolean}
@@ -233,13 +238,12 @@ public class Graph<T> {
         List<Link<T>> linksNode = nodeLinks.get(node1);
         if (linksNode != null) {
             for (Link<T> link : linksNode) {
-                if (directed && link.isDirected() &&
-                        // 06/01/2020 - when directed links
-                        // the previous code, took ALL the links of node1 (incoming or outgoing  ) and afterwards looks for links ending in node2.
-                        // This does not work when self-loops, because it may take any link ending in node2. Therefore another check for Node1 has been added
-                        link.getFrom().equals(node1) &&
-                        link.getTo().equals(node2) || !directed && !link.isDirected()
-                        && link.contains(node2)) {
+                // Two disjuncts, parenthesised for clarity: a matching directed link, or a matching
+                // undirected one. For directed links getFrom()==node1 is also checked (added
+                // 06/01/2020) so a self-loop does not match any link merely ending in node2.
+                if ((directed && link.isDirected()
+                        && link.getFrom().equals(node1) && link.getTo().equals(node2))
+                        || (!directed && !link.isDirected() && link.contains(node2))) {
                     return link;
                 }
             }
@@ -533,9 +537,7 @@ public class Graph<T> {
             nodeLinks.put(node, new LinkedList<>());
         }
     }
-    
-    //private addLink(Map<T,List<T>> link)
-    
+
     /**
      * @return A {@code String} with:
      * <ol>
