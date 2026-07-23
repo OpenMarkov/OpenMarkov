@@ -13,7 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.model.network.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -71,6 +73,15 @@ public class LinkTest {
         
     }
     
+    @Test public void setRevealingStatesStoresADefensiveCopy() {
+        // S4: mutating the caller's list after setting it must not leak into the link.
+        List<State> states = new ArrayList<>();
+        states.add(stateA[0]);
+        link.setRevealingStates(states);
+        states.add(stateA[1]); // mutate the caller's list afterwards
+        Assertions.assertEquals(1, link.getRevealingStates().size());
+    }
+
     @Test public void tryResetRestrictionsPotentialIsANoOpWhenThereIsNoRestriction() {
         // B4: a link with no restriction potential (the default) must not throw.
         Link<Node> linkWithoutRestrictions = new Link<>(nodeA, nodeB, true);

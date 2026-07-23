@@ -317,31 +317,42 @@ public class Link<T> implements ClassLocalizable {
     }
     
     /**
+     * Returns the link's <em>live</em> list of revealing states (not a copy): some callers, such as
+     * {@code RevelationIntervalEdit}, edit the revealing conditions in place through it.
+     *
      * @return the revealingStates
      */
     public List<State> getRevealingStates() {
         return revealingStates;
     }
-    
+
     /**
+     * Stores a defensive copy, so the link neither shares nor is later mutated through the caller's
+     * list (S4).
+     *
      * @param revealingStates the revealingStates to set
      */
     public void setRevealingStates(List<State> revealingStates) {
-        this.revealingStates = revealingStates;
+        this.revealingStates = new ArrayList<>(revealingStates);
     }
-    
+
     /**
+     * Returns the link's <em>live</em> list of revealing intervals (not a copy): some callers, such
+     * as {@code RevelationIntervalEdit}, edit them in place through it.
+     *
      * @return the revealingIntervals
      */
     public List<PartitionedInterval> getRevealingIntervals() {
         return revealingIntervals;
     }
-    
+
     /**
+     * Stores a defensive copy, so the link does not share the caller's list (S4).
+     *
      * @param revealingIntervals the revealingIntervals to set
      */
     public void setRevealingIntervals(List<PartitionedInterval> revealingIntervals) {
-        this.revealingIntervals = revealingIntervals;
+        this.revealingIntervals = new ArrayList<>(revealingIntervals);
     }
     
     /*****
