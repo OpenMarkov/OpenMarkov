@@ -205,6 +205,12 @@ public class GraphTest {
         assertFalse(graph.existsPath(foreign, nodeA, false, Collections.emptyList()));
     }
 
+    @Test public void anUndirectedSelfLoopAddsTheSiblingOnlyOnce() {
+        // B5: node1 == node2 must not add the sibling twice.
+        graph.addLink(nodeA, nodeA, false);
+        assertEquals(1, graph.getNumSiblings(nodeA));
+    }
+
     @Test public void testMarry() {
         // Marry 2 nodes
         List<String> nodesToMarry = new ArrayList<>();

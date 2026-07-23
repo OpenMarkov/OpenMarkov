@@ -458,6 +458,11 @@ public class Graph<T> {
     public void removeNode(T node) {
         removeLinks(node);
         nodes.remove(node);
+        // B6: drop the removed node's own keys so the maps keep no stale (empty) entries.
+        nodeLinks.remove(node);
+        nodeChildren.remove(node);
+        nodeParents.remove(node);
+        nodeSiblings.remove(node);
     }
     
     /**
@@ -487,7 +492,8 @@ public class Graph<T> {
                 if (!nodeSiblings.containsKey(node2))
                     nodeSiblings.put(node2, new LinkedList<>());
                 nodeSiblings.get(node1).add(node2);
-                nodeSiblings.get(node2).add(node1);
+                if (!node1.equals(node2))   // B5: an undirected self-loop must add the sibling only once
+                    nodeSiblings.get(node2).add(node1);
             }
         }
     }
