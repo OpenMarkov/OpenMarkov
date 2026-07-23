@@ -121,7 +121,12 @@ public class TruncatedNormalFunction extends NormalFunctionDES {
         double probability = probabilityAtLowerBound + y * retainedMass;
         // Only bites when a bound is infinite, where the inverse CDF would diverge
         probability = Math.min(Math.max(probability, PROBABILITY_MARGIN), 1.0 - PROBABILITY_MARGIN);
-        return getMu() + sigma * standard.getInverseCumulativeDistributionFunction(probability);
+        double value = getMu() + sigma * standard.getInverseCumulativeDistributionFunction(probability);
+        // The boundary probability (erfc-based CDF) and the inverse CDF (Odeh-Evans rational
+        // approximation) are not exact numerical inverses, so a sample drawn at the very edge can
+        // land a few ulps outside the interval. Clamp to keep the documented invariant that a
+        // sample always lands inside [lowerBound, upperBound].
+        return Math.min(Math.max(value, lowerBound), upperBound);
     }
 
     /**
