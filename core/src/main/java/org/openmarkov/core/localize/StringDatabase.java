@@ -10,6 +10,7 @@ package org.openmarkov.core.localize;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.localize.spi.LocalizeResourcesProvider;
+import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.java.initialization.Lazy;
 import org.openmarkov.plugin.PluginSearch;
 
@@ -22,6 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -37,15 +39,15 @@ public class StringDatabase {
      */
     private static final String DEFAULT_LANGUAGE = "en";
 
-	/*
-	private static final String DEFAULT_LANGUAGE = OpenMarkovPreferences
-			.get(OpenMarkovPreferences.PREFERENCE_LANGUAGE, OpenMarkovPreferences.OPENMARKOV_LANGUAGES,
-					System.getProperty("user.language"));
-					
-	OpenMarkovPreferences.set(OpenMarkovPreferences.PREFERENCE_LANGUAGE, newLanguage,
-		OpenMarkovPreferences.OPENMARKOV_LANGUAGES);
-
-	 */
+    /**
+     * The languages this database serves.
+     * <p>
+     * Only English: the team decided that the whole application is in English. The Spanish files are
+     * kept in the repository in case that decision is ever revisited — adding {@code "es"} here is
+     * what would bring them back, since the rest of the machinery (locale, bundles, caches and the
+     * change event) does honour whatever this set allows.
+     */
+    private static final Set<String> SUPPORTED_LANGUAGES = Set.of(StringDatabase.DEFAULT_LANGUAGE);
     /**
      * Unique instance of this class.
      */
@@ -126,23 +128,34 @@ public class StringDatabase {
     }
     
     /**
-     * Sets the language to a new one.
+     * Sets the language to a new one, if it is one of the languages this database serves.
+     * <p>
+     * A language that is not served is <strong>refused</strong>: a warning is logged, the language in
+     * force does not change and no {@link LocaleChangeEvent} is fired. That last part is the point —
+     * this method used to overwrite the language with {@code "en"} whatever it was asked for, and then
+     * announce the <em>requested</em> language to its listeners, leaving them believing in a change
+     * that had not happened.
      *
      * @param newLanguage new language.
+     *
+     * @see #SUPPORTED_LANGUAGES
      */
     public void setLanguage(String newLanguage) {
-        if (!newLanguage.equals(language)) {
-            language = "en";
-            setLocale(getLocaleByLanguage(language));
-            /* Set format locale to english (to format decimal point)*/
-            Locale.setDefault(Locale.Category.FORMAT, Locale.ENGLISH);
-            resetBundles();
-            fireLocaleChangeEvent(new LocaleChangeEvent(this, newLanguage));
-			/*
-			OpenMarkovPreferences.set(OpenMarkovPreferences.PREFERENCE_LANGUAGE, newLanguage,
-					OpenMarkovPreferences.OPENMARKOV_LANGUAGES);
-			*/
+        if (newLanguage == null || newLanguage.equals(language)) {
+            return;
         }
+        if (!StringDatabase.SUPPORTED_LANGUAGES.contains(newLanguage)) {
+            OpenMarkovLogger.LOGGER.warn("Ignoring the request to use the language '" + newLanguage
+                                                 + "': OpenMarkov serves " + StringDatabase.SUPPORTED_LANGUAGES
+                                                 + " only, so the language stays '" + language + "'.");
+            return;
+        }
+        language = newLanguage;
+        setLocale(StringDatabase.getLocaleByLanguage(newLanguage));
+        /* Set format locale to english (to format decimal point)*/
+        Locale.setDefault(Locale.Category.FORMAT, Locale.ENGLISH);
+        resetBundles();
+        fireLocaleChangeEvent(new LocaleChangeEvent(this, newLanguage));
     }
     
     /**
@@ -218,10 +231,18 @@ public class StringDatabase {
     }
     
     /**
-     * reset the StringResource to null
+     * Drops everything that was computed for the language in force, so that it is computed again for
+     * the new one.
+     * <p>
+     * There are two caches in a row, and only the first one used to be dropped: {@code bundles} holds
+     * the bundles read from the XML files, and {@code keysToValues} the flat key → text map built out
+     * of them, which is what {@link #getNullableString} actually reads. Leaving the second one
+     * standing meant the served texts stayed in the first language for ever, even once the bundles
+     * had been reloaded in another one.
      */
     private void resetBundles() {
         this.bundles = null;
+        this.keysToValues.reset();
     }
     
     public String getString(String key) {
@@ -252,20 +273,18 @@ public class StringDatabase {
             }
             final String diacritic = "~";
             int index = 0;
-            int i = 0;
-            boolean flag = true;
-            while (flag && (i < strings.length)) {
-                if ((index = result.indexOf(diacritic, index)) >= 0) {
-                    String parameter = strings[i++];
-                    if (parameter == null) {
-                        parameter = "";
-                    }
-                    result = result.substring(0, index) + result.substring(index)
-                                                                .replaceFirst(diacritic, parameter);
-                    index += parameter.length();
-                } else {
-                    flag = false;
+            for (String string : strings) {
+                index = result.indexOf(diacritic, index);
+                if (index < 0) {
+                    break;
                 }
+                String parameter = string == null ? "" : string;
+                // Plain concatenation, not replaceFirst: that method reads its second argument as a
+                // regular-expression replacement, where $ and \ mean something. A parameter carrying
+                // one — the name of a network, a file path — either came out corrupted or threw
+                // IllegalArgumentException ("Illegal group reference"). See B4 of the report.
+                result = result.substring(0, index) + parameter + result.substring(index + diacritic.length());
+                index += parameter.length();
             }
             return result;
         } catch (MissingResourceException e1) {

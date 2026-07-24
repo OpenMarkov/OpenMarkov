@@ -53,6 +53,34 @@ public class StringDatabaseTests {
 	}
 
 	/**
+	 * B4: the parameters of a formatted message are user data — the name of a network, a file path —
+	 * and used to be inserted as a regular-expression replacement, where {@code $} and {@code \} mean
+	 * something. A name carrying one either came out corrupted or threw IllegalArgumentException.
+	 */
+	@Tag(TestSpeed.MEDIUM)
+	@Test public final void aParameterWithADollarSignIsInsertedAsItIs() {
+		String formatted = stringDatabase.getFormattedString("MessageResourceNotExists.Text", "cost$file");
+
+		assertEquals("Missing image resource: cost$file", formatted);
+	}
+
+	/** B4: the same for a backslash, which introduces an escape in a replacement string. */
+	@Tag(TestSpeed.MEDIUM)
+	@Test public final void aParameterWithABackslashIsInsertedAsItIs() {
+		String formatted = stringDatabase.getFormattedString("MessageResourceNotExists.Text", "C:\\nets\\a.pgmx");
+
+		assertEquals("Missing image resource: C:\\nets\\a.pgmx", formatted);
+	}
+
+	/** Several placeholders are filled in order, and a null parameter empties its own. */
+	@Tag(TestSpeed.MEDIUM)
+	@Test public final void everyPlaceholderTakesItsOwnParameter() {
+		String formatted = stringDatabase.getFormattedString("LinkMakesCycle.Text", "A", "B");
+
+		assertEquals("The link A -> B cannot be created because it would make a cycle in the network", formatted);
+	}
+
+	/**
 	 * This method gets a string identified by its key from the buttons resorce
 	 * bundle.
 	 *
