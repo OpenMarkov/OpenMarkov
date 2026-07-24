@@ -286,7 +286,7 @@ public class LearningManager {
                         && modelNetVariable.getVariableType() != VariableType.DISCRETIZED) {
                     updateCases(variableIndex, caseDatabaseVariable, modelNetVariable);
                 }
-                database.getVariables().set(variableIndex, modelNetVariable);
+                database.setVariable(variableIndex, modelNetVariable);
             }
         }
     }
@@ -303,11 +303,11 @@ public class LearningManager {
         
         State state;
         
-        for (int j = 0; j < caseDatabase.getCases().length; j++) {
-            state = originalVariable.getStates()[caseDatabase.getCases()[j][variableIndex]];
+        for (int j = 0; j < caseDatabase.getNumCases(); j++) {
+            state = originalVariable.getStates()[caseDatabase.getState(j, variableIndex)];
             int stateIndex = modelNetVariable.getStateIndex(state.getName());
             if (stateIndex == -1) continue;
-            caseDatabase.getCases()[j][variableIndex] = stateIndex;
+            caseDatabase.setState(j, variableIndex, stateIndex);
         }
     }
     
