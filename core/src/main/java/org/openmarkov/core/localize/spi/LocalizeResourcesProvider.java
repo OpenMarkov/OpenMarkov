@@ -20,11 +20,13 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -133,10 +135,14 @@ public interface LocalizeResourcesProvider extends ResourceBundleProvider {
      * source.
      */
     private static void addBundlesOfJar(@NotNull URL bundleFile, @NotNull Consumer<? super BundleSource> addBundleSource) {
-        String fileName = bundleFile.toString().substring("jar:file:".length()).replaceAll("%20", " ");
-        int entrySeparatorIndex = fileName.indexOf('!');
-        try (JarFile jarFile = new JarFile(fileName.substring(0, entrySeparatorIndex))) {
-            String askedEntries = fileName.substring(entrySeparatorIndex + 2);
+        // The URL of the jar is percent-encoded: an installation path with an accent arrives as
+        // Espa%C3%B1ol. Undoing only %20, as this did, left every other character escaped and the jar
+        // could not be opened, so all the texts of that jar went missing. Going through the URI does
+        // the whole job — and, unlike URLDecoder, it does not turn a + in the path into a space.
+        String decodedPath = URI.create(bundleFile.toString().substring("jar:".length())).getPath();
+        int entrySeparatorIndex = decodedPath.indexOf('!');
+        try (JarFile jarFile = new JarFile(new File(decodedPath.substring(0, entrySeparatorIndex)))) {
+            String askedEntries = decodedPath.substring(entrySeparatorIndex + 2);
             Collections.list(jarFile.entries()).stream()
                        .filter(entry -> !entry.isDirectory())
                        .filter(entry -> entry.getName().startsWith(askedEntries))
@@ -153,7 +159,8 @@ public interface LocalizeResourcesProvider extends ResourceBundleProvider {
      * @param inputStream the input stream containing the XML fill.
      * @return a {@link StringBundle} containing the extracted localizations.
      */
-    private static @Nullable RawStringBundle classLocalizationsFileToBundle(@NotNull InputStream inputStream) {
+    private static @Nullable RawStringBundle classLocalizationsFileToBundle(@NotNull InputStream inputStream,
+                                                                            @NotNull String fileName) {
         try {
             SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
             var keysAndLocalizations = new HashMap<String, String>();
@@ -186,6 +193,8 @@ public interface LocalizeResourcesProvider extends ResourceBundleProvider {
             });
             return new RawStringBundle(keysAndLocalizations);
         } catch (ParserConfigurationException | SAXException | IOException e) {
+            OpenMarkovLogger.LOGGER.warn("Class localizations file " + fileName
+                                                 + " could not be parsed, so its texts will be missing.", e);
             return null;
         }
         
@@ -216,6 +225,8 @@ public interface LocalizeResourcesProvider extends ResourceBundleProvider {
             });
             return firstElement[0];
         } catch (SAXException | ParserConfigurationException e) {
+            OpenMarkovLogger.LOGGER.debug("The first element of a localization file could not be read;"
+                                                  + " it will be treated as a plain XML bundle.", e);
             return null;
         }
     }
@@ -261,8 +272,8 @@ public interface LocalizeResourcesProvider extends ResourceBundleProvider {
         URL localizationResourcesURL = this.getClass().getResource(this.getRootOfResources() + "/localize");
         String localizationSuffix = "_" + locale.getLanguage() + ".xml";
         if (localizationResourcesURL == null) {
-            System.err.println("There is no localize folder in the directory " + this.getRootOfResources() +
-                                       " of module " + this.getClass().getModule().getName());
+            OpenMarkovLogger.LOGGER.warn("There is no localize folder in the directory " + this.getRootOfResources()
+                                                 + " of module " + this.getClass().getModule().getName());
             return Map.of();
         }
         boolean isJarFile = localizationResourcesURL.toString()
@@ -272,20 +283,35 @@ public interface LocalizeResourcesProvider extends ResourceBundleProvider {
         Consumer<BundleSource> addBundleSource = source -> {
             if (!source.fileName().endsWith(localizationSuffix))
                 return;
+            // The file is read once, into memory, and the stream is closed. It used to be opened two
+            // or three times per bundle — once to look at the first tag, once to parse it — and none
+            // of those streams was ever closed (B3).
+            byte[] content;
+            try (InputStream inputStream = source.inputStream()) {
+                content = inputStream.readAllBytes();
+            } catch (IOException ioException) {
+                OpenMarkovLogger.LOGGER.warn("Localization file " + source.fileName()
+                                                     + " could not be read, so its texts will be missing.", ioException);
+                return;
+            }
             try {
-                String firstElementTagName = LocalizeResourcesProvider.getFirstElementTagName(source.inputStream());
+                String firstElementTagName = LocalizeResourcesProvider.getFirstElementTagName(
+                        new ByteArrayInputStream(content));
                 String baseName = source.fileName()
                                         .substring(0, source.fileName().length() - localizationSuffix.length());
                 StringBundle stringBundle;
                 if ("ClassLocalizations".equalsIgnoreCase(firstElementTagName)) {
-                    stringBundle = LocalizeResourcesProvider.classLocalizationsFileToBundle(source.inputStream());
+                    stringBundle = LocalizeResourcesProvider.classLocalizationsFileToBundle(
+                            new ByteArrayInputStream(content), source.fileName());
                 } else {
-                    stringBundle = new XMLStringBundle(new XMLResourceBundle(source.inputStream()));
+                    stringBundle = new XMLStringBundle(new XMLResourceBundle(new ByteArrayInputStream(content)));
                 }
                 if (stringBundle != null) {
                     bundles.put(baseName, stringBundle);
                 }
-            } catch (IOException ignored) {
+            } catch (IOException ioException) {
+                OpenMarkovLogger.LOGGER.warn("Localization file " + source.fileName()
+                                                     + " could not be parsed, so its texts will be missing.", ioException);
             }
         };
         if (isJarFile) {

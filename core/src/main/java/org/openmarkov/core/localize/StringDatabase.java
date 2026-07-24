@@ -191,6 +191,9 @@ public class StringDatabase {
                                    return c.getDeclaredConstructor().newInstance();
                                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                                         NoSuchMethodException e) {
+                                   OpenMarkovLogger.LOGGER.warn("The localization provider " + c.getName()
+                                                                        + " could not be instantiated, so the texts of"
+                                                                        + " its module will be missing.", e);
                                    return null;
                                }
                            })
