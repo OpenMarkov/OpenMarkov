@@ -21,7 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -203,10 +202,6 @@ public class StringDatabase {
     public Map<String, StringBundle> getAllBundles() {
         if (bundles == null) {
             bundles = calculateAllBundles();
-            if (bundles.isEmpty() && !language.equals("en")) {
-                setLanguage("en");
-                bundles = calculateAllBundles();
-            }
         }
         return bundles;
     }
@@ -269,30 +264,26 @@ public class StringDatabase {
      * exist, then a special string is returned.
      */
     public String getFormattedString(String key, String... strings) {
-        try {
-            String result = getString(key);
-            if (strings == null) {
-                return result;
-            }
-            final String diacritic = "~";
-            int index = 0;
-            for (String string : strings) {
-                index = result.indexOf(diacritic, index);
-                if (index < 0) {
-                    break;
-                }
-                String parameter = string == null ? "" : string;
-                // Plain concatenation, not replaceFirst: that method reads its second argument as a
-                // regular-expression replacement, where $ and \ mean something. A parameter carrying
-                // one — the name of a network, a file path — either came out corrupted or threw
-                // IllegalArgumentException ("Illegal group reference"). See B4 of the report.
-                result = result.substring(0, index) + parameter + result.substring(index + diacritic.length());
-                index += parameter.length();
-            }
+        String result = getString(key);
+        if (strings == null) {
             return result;
-        } catch (MissingResourceException e1) {
-            return StringDatabase.surrondAsUnknown(key);
         }
+        final String diacritic = "~";
+        int index = 0;
+        for (String string : strings) {
+            index = result.indexOf(diacritic, index);
+            if (index < 0) {
+                break;
+            }
+            String parameter = string == null ? "" : string;
+            // Plain concatenation, not replaceFirst: that method reads its second argument as a
+            // regular-expression replacement, where $ and \ mean something. A parameter carrying one
+            // — the name of a network, a file path — either came out corrupted or threw
+            // IllegalArgumentException ("Illegal group reference"). See B4 of the report.
+            result = result.substring(0, index) + parameter + result.substring(index + diacritic.length());
+            index += parameter.length();
+        }
+        return result;
     }
     
 }

@@ -16,6 +16,7 @@ import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.testTags.TestSpeed;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.MissingResourceException;
@@ -49,7 +50,12 @@ public class StringDatabaseTests {
 	 *                                  string resource.
 	 */
 	private void getCorrectString(StringDatabase stringDatabase, String key) throws MissingResourceException {
-		assertNotNull(stringDatabase.getString(key));
+		String value = stringDatabase.getString(key);
+		assertNotNull(value);
+		// getString never returns null: a key with no text comes back as ">>> the.key <<<". So the
+		// null check alone passed for every key, present or missing, and none of these assertions
+		// was checking anything (P6 of the report).
+		assertFalse(value.startsWith(">>>"), "The key " + key + " has no text in the bundles: " + value);
 	}
 
 	/**
@@ -98,8 +104,8 @@ public class StringDatabaseTests {
 	}
 
 	/**
-	 * This method tests the method getBundleButtons and setLanguage loading
-	 * various strings in English and Spanish.
+	 * This method tests the method getBundleButtons, and that asking for a language that is not
+	 * served leaves every text in place.
 	 *
 	 * @throws MissingResourceException if any of the strings doesn't exist.
 	 */
@@ -128,18 +134,18 @@ public class StringDatabaseTests {
 	 * @throws MissingResourceException if any string doesn't exist.
 	 */
 	private void getStringDialogs() throws MissingResourceException {
-        getCorrectString(stringDatabase, "Author.Text");
-		getCorrectString(stringDatabase, "ChainGraph.Text.Mnemonic");
-        getCorrectString(stringDatabase, "Continuous.Text");
-        getCorrectString(stringDatabase, "Defaults.Title");
-        getCorrectString(stringDatabase, "Information.Title");
-        getCorrectString(stringDatabase, "NetworkProperties.Title");
-		getCorrectString(stringDatabase, "Values.Text.Mnemonic");
+        getCorrectString(stringDatabase, "AboutBox.Authors.Text");
+		getCorrectString(stringDatabase, "AddState.Title");
+        getCorrectString(stringDatabase, "AddState.Message");
+        getCorrectString(stringDatabase, "NetworkVariablesPanel.jLabelDefaultStates.Text");
+        getCorrectString(stringDatabase, "NetworkPropertiesDialog.Advanced");
+        getCorrectString(stringDatabase, "TemporalEvolutionResultDialog.Title");
+		getCorrectString(stringDatabase, "TemporalEvolutionResultDialog.States");
 	}
 
 	/**
-	 * This method tests the method getBundleDialogs and setLanguage loading
-	 * various strings in English and Spanish.
+	 * This method tests the method getBundleDialogs, and that asking for a language that is not
+	 * served leaves every text in place.
 	 *
 	 * @throws MissingResourceException if any of the strings doesn't exist.
 	 */
@@ -172,7 +178,7 @@ public class StringDatabaseTests {
 	 */
 	private void getStringMenus() throws MissingResourceException {
         
-        getCorrectString(stringDatabase, "Edit.ChanceCreation");
+        getCorrectString(stringDatabase, "Edit.EditClass");
         getCorrectString(stringDatabase, "Edit.Copy");
 		getCorrectString(stringDatabase, "Edit.NodeProperties.Mnemonic");
 		getCorrectString(stringDatabase, "Edit.Paste.Mnemonic");
@@ -182,8 +188,8 @@ public class StringDatabaseTests {
 	}
 
 	/**
-	 * This method tests the method getBundleMenus and setLanguage loading
-	 * various strings in English and Spanish.
+	 * This method tests the method getBundleMenus, and that asking for a language that is not
+	 * served leaves every text in place.
 	 *
 	 * @throws MissingResourceException if any of the strings doesn't exist.
 	 */
@@ -224,8 +230,8 @@ public class StringDatabaseTests {
 	}
 
 	/**
-	 * This method tests the method getBundleMessages and setLanguage loading
-	 * various strings in English and Spanish.
+	 * This method tests the method getBundleMessages, and that asking for a language that is not
+	 * served leaves every text in place.
 	 *
 	 * @throws MissingResourceException if any of the strings doesn't exist.
 	 */
@@ -254,18 +260,18 @@ public class StringDatabaseTests {
 	 */
 	private void getStringSelectables() throws MissingResourceException {
         
-        getCorrectString(stringDatabase, "absent.Text");
-        getCorrectString(stringDatabase, "high.Text");
-        getCorrectString(stringDatabase, "mild.Text");
-        getCorrectString(stringDatabase, "other.Text");
-        getCorrectString(stringDatabase, "present.Text");
-        getCorrectString(stringDatabase, "sign.Text");
-        getCorrectString(stringDatabase, "yes.Text");
+        getCorrectString(stringDatabase, "defaultStates.absent.Text");
+        getCorrectString(stringDatabase, "defaultStates.high.Text");
+        getCorrectString(stringDatabase, "defaultStates.mild.Text");
+        getCorrectString(stringDatabase, "purpose.other.Text");
+        getCorrectString(stringDatabase, "defaultStates.present.Text");
+        getCorrectString(stringDatabase, "purpose.sign.Text");
+        getCorrectString(stringDatabase, "defaultStates.yes.Text");
 	}
 
 	/**
-	 * This method tests the method getBundleSelectables and setLanguage loading
-	 * various strings in English and Spanish.
+	 * This method tests the method getBundleSelectables, and that asking for a language that is not
+	 * served leaves every text in place.
 	 *
 	 * @throws MissingResourceException if any of the strings doesn't exist.
 	 */
@@ -295,18 +301,18 @@ public class StringDatabaseTests {
 	 */
 	private void getStringToolBars() throws MissingResourceException {
         
-        getCorrectString(stringDatabase, "ChanceCreation.ToolTip");
+        getCorrectString(stringDatabase, "Edit.Mode.Chance.ToolTip");
         getCorrectString(stringDatabase, "ClipboardCut.ToolTip");
-        getCorrectString(stringDatabase, "DecisionCreation.ToolTip");
+        getCorrectString(stringDatabase, "Edit.Mode.Decision.ToolTip");
         getCorrectString(stringDatabase, "NewNetwork.ToolTip");
-        getCorrectString(stringDatabase, "ObjectSelection.ToolTip");
+        getCorrectString(stringDatabase, "Edit.Mode.Selection.ToolTip");
         getCorrectString(stringDatabase, "Redo.ToolTip");
-        getCorrectString(stringDatabase, "UtilityCreation.ToolTip");
+        getCorrectString(stringDatabase, "Edit.Mode.Utility.ToolTip");
 	}
 
 	/**
-	 * This method tests the method getBundleToolBars and setLanguage loading
-	 * various strings in English and Spanish.
+	 * This method tests the method getBundleToolBars, and that asking for a language that is not
+	 * served leaves every text in place.
 	 *
 	 * @throws MissingResourceException if any of the strings doesn't exist.
 	 */
