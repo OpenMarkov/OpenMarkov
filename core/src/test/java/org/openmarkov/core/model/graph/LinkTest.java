@@ -74,6 +74,21 @@ public class LinkTest {
         
     }
     
+    @Test public void containsRecognisesAnEndByEqualityNotByIdentity() {
+        // A node equal to one of the ends must be recognised, as everywhere else in Graph: comparing
+        // by identity made getLink(node1, node2, false) miss undirected links.
+        Link<String> stringLink = new Link<>(copyOf("A"), copyOf("B"), false);
+
+        Assertions.assertTrue(stringLink.contains(copyOf("A")));
+        Assertions.assertTrue(stringLink.contains(copyOf("B")));
+        Assertions.assertFalse(stringLink.contains(copyOf("C")));
+    }
+
+    /** A string equal to {@code text} but held in a different object. */
+    private static String copyOf(String text) {
+        return new StringBuilder(text).toString();
+    }
+
     @Test public void aCompatibilityValueThatIsNotExactlyOneStillMeansCompatible() {
         // S7: restrictions can also be read from a file, so a value must not be compared with == 1.
         Arrays.fill(link.getRestrictionsPotential().getValues(), 1 - 1e-12);

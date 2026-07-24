@@ -125,10 +125,14 @@ public class Link<T> implements ClassLocalizable {
     /**
      * @param node {@code Node}.
      *
-     * @return {@code true} if the link contains {@code node}.
+     * @return {@code true} if {@code node} is one of the two ends of the link. Ends are compared by
+     * equality, as {@link Graph} does everywhere else — its maps and lists of neighbours, and the
+     * directed branch of {@code Graph.getLink}, all work by {@code equals}. (Comparing by identity
+     * here used to make {@code Graph.getLink(node1, node2, false)} miss an undirected link whenever
+     * the caller passed an equal but distinct node object.)
      */
     public boolean contains(T node) {
-        return ((from == node) || (to == node));
+        return from.equals(node) || to.equals(node);
     }
     
     /**
