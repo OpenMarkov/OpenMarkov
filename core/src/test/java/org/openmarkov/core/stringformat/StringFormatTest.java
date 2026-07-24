@@ -9,6 +9,7 @@ import org.openmarkov.core.testTags.TestConfig;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -91,6 +92,44 @@ class StringFormatTest {
         values.put("names", new String[][] { { "a", null }, { "b" } });
 
         Assertions.assertEquals("The [a, null, b] nodes", StringFormat.apply("The {names} nodes", values));
+    }
+
+    @Test final void aCollectionIsRenderedAsAnInlineList() {
+        Map<String, Object> values = Map.of("names", List.of("a", "b", "c"));
+
+        Assertions.assertEquals("The [a, b, c] nodes", StringFormat.apply("The {names} nodes", values));
+    }
+
+    @Test final void aMapIsRenderedAsAnInlineListOfPairs() {
+        Map<String, Object> counts = new LinkedHashMap<>();
+        counts.put("a", 1);
+        counts.put("b", 2);
+
+        Assertions.assertEquals("The [a: 1, b: 2] counts",
+                                StringFormat.apply("The {counts} counts", Map.of("counts", counts)));
+    }
+
+    @Test final void anArgumentThatWasNotGivenIsMarkedAsUnknown() {
+        Assertions.assertEquals("The >>> NetName <<< net", StringFormat.apply("The {NetName} net", Map.of()));
+    }
+
+    @Test final void anArgumentThatIsNullSaysSo() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("NetName", null);
+
+        Assertions.assertEquals("The >>> NetName is null <<< net", StringFormat.apply("The {NetName} net", values));
+    }
+
+    @Test final void aMethodThatCannotBeResolvedIsReported() {
+        Map<String, Object> values = Map.of("probNetWrapper", new ProbNetWrapper("MyNet"));
+
+        Assertions.assertEquals(">>> Cannot resolve probNetWrapper.noSuchThing <<<",
+                                StringFormat.apply("{probNetWrapper.noSuchThing}", values));
+    }
+
+    /** A format that cannot be applied to the argument must not abort the message: it falls back to its text. */
+    @Test final void aFormatThatDoesNotFitTheArgumentFallsBackToItsText() {
+        Assertions.assertEquals("abc", StringFormat.apply("{x, number}", Map.of("x", "abc")));
     }
 
     static class ProbNetWrapper{
