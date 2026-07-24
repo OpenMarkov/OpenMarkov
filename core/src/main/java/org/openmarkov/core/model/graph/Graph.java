@@ -84,6 +84,14 @@ public class Graph<T> {
         return getNumParents(node) + getNumChildren(node) + getNumSiblings(node);
     }
     
+    /**
+     * @param node the node whose neighbours are wanted
+     *
+     * @return the children, the parents and the siblings of {@code node}, in that order. A node
+     * joined to {@code node} by more than one link — for instance a 2-cycle, {@code node --> other}
+     * plus {@code other --> node} — appears once per link, so that the size of this list always
+     * matches {@link #getNumNeighbors}.
+     */
     public List<T> getNeighbors(T node) {
         List<T> neighbors = new ArrayList<>();
         if (nodeChildren.containsKey(node))
@@ -314,27 +322,31 @@ public class Graph<T> {
             }
         }
         
+        // Every neighbour list is traversed through a copy. With a self-loop the node is its own
+        // neighbour, so the loop body would otherwise remove an element from the very list being
+        // iterated, cutting the traversal short and leaving the remaining neighbours pointing at a
+        // node that no longer has any link to them.
         List<T> children = nodeChildren.get(node);
         if (children != null) {
-            for (T child : children)
+            for (T child : new ArrayList<>(children))
                 nodeParents.get(child).remove(node);
             children.clear();
         }
-        
+
         List<T> parents = nodeParents.get(node);
         if (parents != null) {
-            for (T parent : getParents(node))
+            for (T parent : new ArrayList<>(parents))
                 nodeChildren.get(parent).remove(node);
             parents.clear();
         }
-        
+
         List<T> siblings = nodeSiblings.get(node);
         if (siblings != null) {
-            for (T sibling : siblings)
+            for (T sibling : new ArrayList<>(siblings))
                 nodeSiblings.get(sibling).remove(node);
             siblings.clear();
         }
-        
+
     }
     
     /**
@@ -400,12 +412,17 @@ public class Graph<T> {
         if (nodes.indexOf(node1) < 0 || nodes.indexOf(node2) < 0) {
             return false;
         }
-        HashMap<T, Collection<T>> parentsToIgnoredChildren = new HashMap<>();
+        // The links to ignore, indexed by the node the search is standing on. In a directed search
+        // only from --> to can ever be traversed, but in an undirected one the link must be blocked
+        // in both senses; otherwise it would still be walked backwards, from "to" to "from".
+        Map<T, Collection<T>> ignoredNeighbors = new HashMap<>();
         for (var linkToIgnore : linksToIgnore) {
-            if (!parentsToIgnoredChildren.containsKey(linkToIgnore.getFrom())) {
-                parentsToIgnoredChildren.put(linkToIgnore.getFrom(), new HashSet<>());
+            ignoredNeighbors.computeIfAbsent(linkToIgnore.getFrom(), node -> new HashSet<>())
+                            .add(linkToIgnore.getTo());
+            if (!directed) {
+                ignoredNeighbors.computeIfAbsent(linkToIgnore.getTo(), node -> new HashSet<>())
+                                .add(linkToIgnore.getFrom());
             }
-            parentsToIgnoredChildren.get(linkToIgnore.getFrom()).add(linkToIgnore.getTo());
         }
         
         int numNodes = nodes.size();
@@ -419,7 +436,7 @@ public class Graph<T> {
         while (!nodesToExpand.isEmpty()) {
             T expandingNode = nodesToExpand.pop(); // the top of the stack
             ArrayList<T> neighbors = new ArrayList<>((directed) ? getChildren(expandingNode) : getNeighbors(expandingNode));
-            var nodeLinksToIgnore = parentsToIgnoredChildren.get(expandingNode);
+            var nodeLinksToIgnore = ignoredNeighbors.get(expandingNode);
             if (nodeLinksToIgnore != null) {
                 neighbors.removeIf(nodeLinksToIgnore::contains);
             }
@@ -437,10 +454,15 @@ public class Graph<T> {
     }
     
     /**
-     * Adds an undirected link between each pair of nodes in
-     * {@code nodeList} if it did not exist. All nodes in {@code nodeList} belongs to {@code this}.
+     * Adds an undirected link between each pair of nodes in {@code nodeList} that were not siblings
+     * yet. All nodes in {@code nodeList} belong to {@code this} graph.
+     * <p>
+     * Only <em>undirected</em> links are taken into account: a pair already joined by a directed
+     * link gets an undirected one as well, so the two end up joined twice. Every caller either
+     * works on an undirected (Markov) network or removes all the links beforehand, so this cannot
+     * happen today; it is documented because a mixed graph would make it possible.
      *
-     * @param nodeList {@code ArrayList} of {@code ? extends Node}.
+     * @param nodeList {@code Collection} of nodes of this graph.
      */
     public void marry(Collection<T> nodeList) {
         int size = nodeList.size();

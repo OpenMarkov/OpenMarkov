@@ -72,7 +72,17 @@ public class Link<T> implements ClassLocalizable {
      * List of revealing values of type interval
      */
     private List<PartitionedInterval> revealingIntervals;
-    
+
+    /**
+     * Midpoint used to read a compatibility value. The restrictions potential holds, by
+     * construction, exactly 0 (incompatible) or 1 (compatible) — see
+     * {@link #initializesRestrictionsPotential()} and {@link #setCompatibilityValue}. Restrictions
+     * can also be read from a file, though, so the values are compared against this midpoint rather
+     * than tested for equality with 1: a value that is not exactly 0 or 1 is read as the nearer of
+     * the two instead of silently counting as a restriction.
+     */
+    private static final double COMPATIBILITY_MIDPOINT = 0.5;
+
     // Constructors
     
     /**
@@ -152,9 +162,9 @@ public class Link<T> implements ClassLocalizable {
                 boolean valueRestrictsVariable = true;
                 int i = index;
                 while (i < valuesSize && valueRestrictsVariable) {
-                    if (restrictionsPotential.getValues()[i] == 1) {
+                    if (isCompatible(restrictionsPotential.getValues()[i])) {
                         valueRestrictsVariable = false;
-                        
+
                     }
                     i += numStates;
                 }
@@ -187,7 +197,7 @@ public class Link<T> implements ClassLocalizable {
                 boolean totalRestriction = true;
                 int i = index;
                 while (i < valuesSize && totalRestriction) {
-                    totalRestriction = (restrictionsPotential.getValues()[i] != 1);
+                    totalRestriction = !isCompatible(restrictionsPotential.getValues()[i]);
                     i += numStates;
                 }
                 
@@ -201,6 +211,15 @@ public class Link<T> implements ClassLocalizable {
         
     }
     
+    /**
+     * @param compatibilityValue a value of the restrictions potential
+     *
+     * @return {@code true} if the value means "compatible" — see {@link #COMPATIBILITY_MIDPOINT}
+     */
+    private static boolean isCompatible(double compatibilityValue) {
+        return compatibilityValue >= COMPATIBILITY_MIDPOINT;
+    }
+
     /**
      * Initializes a TablePotential for the variable associated to node1 and
      * node2, whose values are all 1.
@@ -272,9 +291,9 @@ public class Link<T> implements ClassLocalizable {
         indexes[0] = restrictionsPotential.getVariable(0).getStateIndex(state1);
         indexes[1] = restrictionsPotential.getVariable(1).getStateIndex(state2);
         List<Variable> variables = restrictionsPotential.getVariables();
-        
-        return (int) restrictionsPotential.getValue(variables, indexes);
-        
+
+        return isCompatible(restrictionsPotential.getValue(variables, indexes)) ? 1 : 0;
+
     }
     
     /****

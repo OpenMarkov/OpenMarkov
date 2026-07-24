@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.model.network.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -73,6 +74,15 @@ public class LinkTest {
         
     }
     
+    @Test public void aCompatibilityValueThatIsNotExactlyOneStillMeansCompatible() {
+        // S7: restrictions can also be read from a file, so a value must not be compared with == 1.
+        Arrays.fill(link.getRestrictionsPotential().getValues(), 1 - 1e-12);
+
+        Assertions.assertEquals(1, link.areCompatible(stateA[0], stateB[0]));
+        Assertions.assertFalse(link.hasTotalRestriction());
+        Assertions.assertTrue(link.getStatesRestrictTotally().isEmpty());
+    }
+
     @Test public void setRevealingStatesStoresADefensiveCopy() {
         // S4: mutating the caller's list after setting it must not leak into the link.
         List<State> states = new ArrayList<>();

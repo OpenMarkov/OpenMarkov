@@ -205,6 +205,27 @@ public class GraphTest {
         assertFalse(graph.existsPath(foreign, nodeA, false, Collections.emptyList()));
     }
 
+    @Test public void anIgnoredLinkIsBlockedInBothSensesInAnUndirectedSearch() {
+        // S9: the path C -- B -- A exists, but it goes through the link A --> B; ignoring that link
+        // must also block walking it backwards, from B to A.
+        Link<String> linkAB = graph.getLink(nodeA, nodeB, true);
+        assertTrue(graph.existsPath(nodeC, nodeA, false, Collections.emptyList()));
+        assertFalse(graph.existsPath(nodeC, nodeA, false, Collections.singletonList(linkAB)));
+    }
+
+    @Test public void removingANodeWithAnUndirectedSelfLoopCleansItsOtherSiblings() {
+        // S9: a self-loop makes the node its own sibling, so removing it used to modify the very
+        // list being traversed, cutting the traversal short and leaving C pointing at a node that
+        // no longer exists.
+        graph.addLink(nodeA, nodeA, false); // the self-loop heads the sibling list of A
+        graph.addLink(nodeA, nodeC, false);
+
+        graph.removeNode(nodeA);
+
+        assertFalse(graph.getSiblings(nodeC).contains(nodeA));
+        assertEquals(0, graph.getNumSiblings(nodeC));
+    }
+
     @Test public void anUndirectedSelfLoopAddsTheSiblingOnlyOnce() {
         // B5: node1 == node2 must not add the sibling twice.
         graph.addLink(nodeA, nodeA, false);
