@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -79,16 +80,17 @@ public final class LocalizationFormatter {
         if (format == null || format.isBlank()) {
             return LocalizationFormatter.DEFAULT;
         }
-        format = format.toLowerCase();
-        String finalFormat = format;
+        // Locale.ROOT, not the default locale: the style comes from a resource bundle and is matched
+        // against the names of these enums, so the conversion must not depend on where the program
+        // runs. With a Turkish locale, "INLINE".toLowerCase() gives "ınlıne" (dotless i) and the
+        // style would stop being recognised.
+        String finalFormat = format.toLowerCase(Locale.ROOT);
         var desiredLength = Arrays.stream(LocalizationFormatterLength.values())
-                                  .filter(length -> finalFormat.contains(length.toString().toLowerCase()))
+                                  .filter(length -> finalFormat.contains(length.toString().toLowerCase(Locale.ROOT)))
                                   .findFirst()
                                   .orElse(LocalizationFormatter.DEFAULT.desiredLength);
         var listFormat = Arrays.stream(ListFormat.values())
-                               .filter(listF -> {
-                                   return finalFormat.contains(listF.toString().toLowerCase());
-                               })
+                               .filter(listF -> finalFormat.contains(listF.toString().toLowerCase(Locale.ROOT)))
                                .findFirst()
                                .orElse(LocalizationFormatter.DEFAULT.listSeparator);
         return new LocalizationFormatter(desiredLength, listFormat);

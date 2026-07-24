@@ -38,7 +38,14 @@ import java.util.stream.Stream;
  * }</pre>
  * <p><br>
  * ... the output will print:
- * <pre>{@code The MyNet net created at 03/06/2023 is not a Bayesian network, and this functionality is only available for Bayesian}</pre>
+ * <pre>{@code The MyNet net created at 3/6/23 is not a Bayesian network, and this functionality is only available for Bayesian}</pre>
+ * <p>
+ * <strong>The result depends on the locale of the process.</strong> Any format other than {@code om}
+ * is delegated to {@link MessageFormat}, which uses {@code Locale.getDefault()}: a date or a number
+ * comes out written differently depending on where the program runs (that is why the date above is
+ * shown as {@code 3/6/23} and not as {@code 03/06/2023}, and why the tests fix the locale). That is
+ * the wanted behaviour for text shown to the user; for output that must be stable — a log, a file —
+ * the value should be formatted by the caller.
  *
  * @author jrico
  */
@@ -50,7 +57,7 @@ public class StringFormat {
             \s*
             (?<functionOrAttributeMark>\.|\#)
             \s*
-            (?<functionOrAttribute>\w+?)
+            (?<functionOrAttribute>\w+)
             \s*
      */
     private static final Pattern FUNCTION_AND_ATTRIBUTES_REGEX = Pattern.compile("(?x)\\s*(?<functionOrAttributeMark>[.\\#])\\s*(?<functionOrAttribute>\\w+)\\s*");
@@ -176,14 +183,6 @@ public class StringFormat {
                     }
                     argument = StringFormat.resolveArrayAsList(argument);
                     boolean isOpenMarkovFormat = "om".equalsIgnoreCase(formatting.format) || "openmarkov".equalsIgnoreCase(formatting.format);
-                    /*
-                    if (argument instanceof Localizable localizable) {
-                        String localizationFormat = formatting.style == null || !isOpenMarkovFormat ? null : formatting.style;
-                        LocalizationFormatter localizationFormatter = LocalizationFormatter.of(localizationFormat);
-                        String localized = localizable.localize(localizationFormatter);
-                        return Matcher.quoteReplacement(localized);
-                    }
-                    */
                     var originalArgumentClass = argument.getClass();
                     if (StringFormat.LOCALIZERS.stream()
                                                .anyMatch(localizer -> localizer.cls.isAssignableFrom(originalArgumentClass))) {
@@ -287,7 +286,18 @@ public class StringFormat {
     }
     
     /**
-     * TODO: Document.
+     * Applies a pattern taking the arguments from a single object: every field of {@code argument} —
+     * its own and those of its superclasses — becomes an argument under its own name, and the object
+     * itself is available as {@code this}.
+     * <p>
+     * So, for a node whose class has a field {@code name}, the pattern {@code "The {name} node"} needs
+     * no map: {@code applyOnObject("The {name} node", node)}. It is what {@code Localizable} uses to
+     * build the message of an object out of its own state.
+     *
+     * @param pattern  the pattern, in the syntax of {@link StringFormat}
+     * @param argument the object whose fields fill the placeholders
+     *
+     * @return the pattern with its placeholders resolved against the fields of {@code argument}
      */
     public static String applyOnObject(CharSequence pattern, Object argument) {
         HashMap<String, Object> fields = StringFormat.extractFieldsToMap(argument);
