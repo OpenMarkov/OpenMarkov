@@ -77,14 +77,24 @@ public class StringFormat {
         Pattern is:
         (?x)
         \{
-            (\s*(?<name>\w+?)\s*)
-            (?<functionAndAttributes>(?x)FUNCTION_AND_ATTRIBUTES_REGEX)*
-            (,\s*(?<format>\w+?)\s*)?
-            (,\s*(?<style>\w+?)\s*)?
-            (?<unused>,\w*?)?
+            \s*(?<name>\w+?)\s*
+            (?<functionAndAttributes>(?:FUNCTION_AND_ATTRIBUTES_REGEX)*)
+            (?:,\s*(?<format>\w+?)\s*)?
+            (?:,\s*(?<style>\w+?)\s*)?
+            (?:,\w*?)?               <- anything else after the style, accepted and ignored
         }
+
+        Every group that is not read has been made non-capturing, and the ones that are read are read
+        by name; so the pattern can be edited without silently breaking anything.
      */
-    private static final Pattern NAMED_PARAMETER_REGEX = Pattern.compile("(?x)\\{(\\s*(?<name>\\w+?)\\s*)(?x)(?<functionAndAttributes>(" + StringFormat.FUNCTION_AND_ATTRIBUTES_REGEX.pattern() + ")*)?(,\\s*(?<format>\\w+?)\\s*)?(,\\s*(?<style>\\w+?)\\s*)?(?<unused>,\\w*?)?}");
+    private static final Pattern NAMED_PARAMETER_REGEX = Pattern.compile(
+            "(?x)\\{"
+                    + "\\s*(?<name>\\w+?)\\s*"
+                    + "(?<functionAndAttributes>(?:" + StringFormat.FUNCTION_AND_ATTRIBUTES_REGEX.pattern() + ")*)"
+                    + "(?:,\\s*(?<format>\\w+?)\\s*)?"
+                    + "(?:,\\s*(?<style>\\w+?)\\s*)?"
+                    + "(?:,\\w*?)?"
+                    + "}");
     
     
     /**
@@ -251,35 +261,34 @@ public class StringFormat {
     }
     
     private static final List<Localizer> LOCALIZERS = List.of(
-            new Localizer<>(Localizable.class, (localizable, form)
-                    -> localizable.localize(form)),
-            new Localizer<>(Collection.class, (obj, form) -> {
-                Stream<Object> stream = (Stream<Object>) obj.stream();
-                return form.listSeparator.globalPrefix() +
-                        stream.map(indObj ->
-                                           form.listSeparator.itemPrefix() +
-                                                   StringFormat.internalLocalize(indObj, form)
-                                                   + form.listSeparator.itemSuffix()
-                              
-                              )
-                              .collect(Collectors.joining(form.listSeparator.separator()))
-                        + form.listSeparator.globalSuffix();
-            }),
-            new Localizer<>(Map.class, (obj, form) -> {
-                var stream = (Stream<Map.Entry<Object, Object>>) obj.entrySet().stream();
-                return form.listSeparator.globalPrefix() +
-                        stream.map(entry ->
-                                           form.listSeparator.itemPrefix()
-                                                   + StringFormat.internalLocalize(entry.getKey(), form)
-                                                   + form.listSeparator.itemSuffix()
-                                                   + ": "
-                                                   + StringFormat.internalLocalize(entry.getValue(), form))
-                              .collect(Collectors.joining(form.listSeparator.separator()))
-                        + form.listSeparator.globalSuffix();
-            })
-    
-    
-    );
+            new Localizer<>(Localizable.class, (localizable, form) -> localizable.localize(form)),
+            new Localizer<>(Collection.class, StringFormat::localizeCollection),
+            new Localizer<>(Map.class, StringFormat::localizeMap));
+
+    /** Writes a collection as a list, in the shape the formatter asks for. */
+    private static String localizeCollection(Collection<?> collection, LocalizationFormatter form) {
+        return collection.stream()
+                         .map(item -> form.listSeparator.itemPrefix()
+                                 + StringFormat.internalLocalize(item, form)
+                                 + form.listSeparator.itemSuffix())
+                         .collect(Collectors.joining(form.listSeparator.separator(),
+                                                     form.listSeparator.globalPrefix(),
+                                                     form.listSeparator.globalSuffix()));
+    }
+
+    /** Writes a map as a list of {@code key: value} pairs, in the shape the formatter asks for. */
+    private static String localizeMap(Map<?, ?> map, LocalizationFormatter form) {
+        return map.entrySet()
+                  .stream()
+                  .map(entry -> form.listSeparator.itemPrefix()
+                          + StringFormat.internalLocalize(entry.getKey(), form)
+                          + form.listSeparator.itemSuffix()
+                          + ": "
+                          + StringFormat.internalLocalize(entry.getValue(), form))
+                  .collect(Collectors.joining(form.listSeparator.separator(),
+                                              form.listSeparator.globalPrefix(),
+                                              form.listSeparator.globalSuffix()));
+    }
     
     private static String internalLocalize(@Nullable Object obj, LocalizationFormatter formatter) {
         if (obj == null) {

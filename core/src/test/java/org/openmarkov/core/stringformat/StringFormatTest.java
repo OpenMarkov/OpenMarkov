@@ -132,6 +132,43 @@ class StringFormatTest {
         Assertions.assertEquals("abc", StringFormat.apply("{x, number}", Map.of("x", "abc")));
     }
 
+    /**
+     * Pins down what the pattern recognises, part by part: the simplification of P8 must not change
+     * where each piece of a placeholder ends up.
+     */
+    @Test final void aWholePlaceholderIsParsedIntoItsFourParts() {
+        List<StringFormat.Formatting> formattings =
+                StringFormat.getAllFormattings("{ holder.getNet#name , om , short }").toList();
+
+        Assertions.assertEquals(1, formattings.size());
+        StringFormat.Formatting formatting = formattings.getFirst();
+        Assertions.assertEquals("holder", formatting.field());
+        Assertions.assertEquals("om", formatting.format());
+        Assertions.assertEquals("short", formatting.style());
+        Assertions.assertEquals(
+                List.of(new StringFormat.PseudoCode(StringFormat.PseudoCode.Marker.METHOD, "getNet"),
+                        new StringFormat.PseudoCode(StringFormat.PseudoCode.Marker.FIELD, "name")),
+                formatting.pseudocode());
+    }
+
+    /** A placeholder with nothing but its name keeps format and style empty. */
+    @Test final void aBarePlaceholderHasNeitherFormatNorStyle() {
+        StringFormat.Formatting formatting = StringFormat.getAllFormattings("{NetName}").toList().getFirst();
+
+        Assertions.assertEquals("NetName", formatting.field());
+        Assertions.assertNull(formatting.format());
+        Assertions.assertNull(formatting.style());
+        Assertions.assertEquals(List.of(), formatting.pseudocode());
+    }
+
+    /** The detail style writes one item per line: it had never been exercised. */
+    @Test final void theDetailStyleWritesOneItemPerLine() {
+        Map<String, Object> values = Map.of("names", List.of("a", "b"));
+
+        Assertions.assertEquals("- a" + System.lineSeparator() + "- b",
+                                StringFormat.apply("{names, om, detail}", values));
+    }
+
     static class ProbNetWrapper{
         final ProbNet net;
         

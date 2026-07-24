@@ -41,11 +41,11 @@ class XMLConstantsParser {
     private static final Pattern NAMED_PARAMETER_REGEX = Pattern.compile("(?x)" +
                                                                                  "\\{" +
                                                                                  "\\s*(?<name>\\w+?)\\s*" +
-                                                                                 "(?<functionAndAttributes>("
-                                                                                 + XMLConstantsParser.FUNCTION_AND_ATTRIBUTES_REGEX.pattern() + ")*)?" +
-                                                                                 "(,\\s*(?<format>\\w+?)\\s*)?" +
-                                                                                 "(,\\s*(?<style>\\w+?)\\s*)?" +
-                                                                                 "(?<unused>,\\w*?)?" +
+                                                                                 "(?<functionAndAttributes>(?:"
+                                                                                 + XMLConstantsParser.FUNCTION_AND_ATTRIBUTES_REGEX.pattern() + ")*)" +
+                                                                                 "(?:,\\s*(?<format>\\w+?)\\s*)?" +
+                                                                                 "(?:,\\s*(?<style>\\w+?)\\s*)?" +
+                                                                                 "(?:,\\w*?)?" +
                                                                                  "}");
     
     /**

@@ -20,9 +20,17 @@ public final class LocalizationFormatter {
     public final @NotNull LocalizationFormatterLength desiredLength;
     public final @NotNull ListFormat listSeparator;
     
+    /**
+     * How a collection or a map is written out.
+     * <p>
+     * {@link #INLINE}, the default, writes it on one line between brackets: {@code [a, b, c]}.
+     * {@link #DETAIL} writes one item per line, each preceded by a dash. No bundle asks for
+     * {@code detail} today, but any of them can: it is enough to write the style, as in
+     * {@code {nodes, om, detail}}.
+     */
     public enum ListFormat {
         INLINE, DETAIL;
-        
+
         public @NotNull String globalPrefix() {
             return switch (this) {
                 case INLINE -> "[";
@@ -44,6 +52,11 @@ public final class LocalizationFormatter {
             };
         }
         
+        /**
+         * @return what closes each item. Empty for both shapes today; it exists so that the item is
+         * wrapped symmetrically —{@link #itemPrefix()} … {@code itemSuffix()}— and a shape that needs
+         * to close its items can be added without touching the code that writes the lists.
+         */
         public @NotNull String itemSuffix() {
             return "";
         }
@@ -98,6 +111,12 @@ public final class LocalizationFormatter {
     
     /**
      * Represents multiples levels of formatting detail.
+     * <p>
+     * Careful: the length does <strong>not</strong> shorten anything inside
+     * {@link StringFormat#apply(CharSequence, Map)} — {@code {nodes, om, short}} writes the same list
+     * as {@code {nodes, om}}. It is read further up, by {@code Localizable.findLocalizedString}, to
+     * choose <em>which</em> entry of the bundle is used; the shortening, if any, is the one the author
+     * of the bundle wrote in that entry.
      */
     public enum LocalizationFormatterLength {
         UNSPECIFIED, SHORT, MEDIUM, LONG, VERBOSE
