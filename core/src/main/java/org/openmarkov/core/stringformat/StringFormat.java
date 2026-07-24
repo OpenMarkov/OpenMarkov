@@ -79,7 +79,7 @@ public class StringFormat {
         return StringFormat.NAMED_PARAMETER_REGEX
                 .matcher(pattern)
                 .results()
-                .map(match -> match.group(1))
+                .map(match -> match.group("name"))
                 .filter(alreadyFoundParameters::add)
                 .toList();
     }
@@ -117,16 +117,20 @@ public class StringFormat {
      * @return a formatting from a {@link MatchResult} taken from {@link StringFormat#NAMED_PARAMETER_REGEX}.
      */
     private static Formatting extractFormatting(MatchResult matchResult) {
-        var argName = matchResult.group(1);
-        var functionAndAttributesAsked = matchResult.group(3);
-        var format = matchResult.group(8);
-        var style = matchResult.group(10);
+        // Groups are read by name, never by number: the numbering depends on how the embedded
+        // FUNCTION_AND_ATTRIBUTES_REGEX is parenthesised, so any change to either pattern silently
+        // shifted it. Reading "name" also drops the spaces around it, which the group that wrapped
+        // it kept — see B1 of the report.
+        var argName = matchResult.group("name");
+        var functionAndAttributesAsked = matchResult.group("functionAndAttributes");
+        var format = matchResult.group("format");
+        var style = matchResult.group("style");
         var pseudocode = StringFormat.FUNCTION_AND_ATTRIBUTES_REGEX
-                .matcher(functionAndAttributesAsked)
+                .matcher(functionAndAttributesAsked == null ? "" : functionAndAttributesAsked)
                 .results()
                 .map(functionAndAttributesMatchResult -> {
-                    var functionOrAttributeMark = functionAndAttributesMatchResult.group(1);
-                    var methodOrAttributeName = functionAndAttributesMatchResult.group(2);
+                    var functionOrAttributeMark = functionAndAttributesMatchResult.group("functionOrAttributeMark");
+                    var methodOrAttributeName = functionAndAttributesMatchResult.group("functionOrAttribute");
                     var marker = "#".equals(functionOrAttributeMark) ? PseudoCode.Marker.FIELD : PseudoCode.Marker.METHOD;
                     return new PseudoCode(marker, methodOrAttributeName);
                 })
@@ -212,6 +216,13 @@ public class StringFormat {
                 });
     }
     
+    /**
+     * Turns an array into a list, flattening the arrays nested in it. Anything that is not an array is
+     * returned unchanged.
+     * <p>
+     * A {@code null} element is kept as such — it is not an array, and checking whether it was one is
+     * what used to throw {@link NullPointerException} here (B2); {@link #internalLocalize} renders it.
+     */
     private static Object resolveArrayAsList(Object object) {
         if (!object.getClass().isArray()) {
             return object;
@@ -219,8 +230,8 @@ public class StringFormat {
         List<Object> list = new ArrayList<>();
         for (int i = 0; i < Array.getLength(object); i++) {
             Object item = Array.get(object, i);
-            if (item.getClass().isArray()) {
-                Collection resolvedItem = (List) resolveArrayAsList(item);
+            if (item != null && item.getClass().isArray()) {
+                @SuppressWarnings("unchecked") List<Object> resolvedItem = (List<Object>) StringFormat.resolveArrayAsList(item);
                 list.addAll(resolvedItem);
             } else {
                 list.add(item);
@@ -260,7 +271,10 @@ public class StringFormat {
     
     );
     
-    private static String internalLocalize(Object obj, LocalizationFormatter formatter) {
+    private static String internalLocalize(@Nullable Object obj, LocalizationFormatter formatter) {
+        if (obj == null) {
+            return String.valueOf((Object) null);   // an element of a list or a map may be null (B2)
+        }
         return StringFormat.LOCALIZERS.stream()
                                       .filter(localizer -> localizer.cls.isAssignableFrom(obj.getClass()))
                                       .map(localizer -> (String) localizer.localize.apply(obj, formatter))

@@ -9,6 +9,7 @@ import org.openmarkov.core.testTags.TestConfig;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -41,6 +42,43 @@ class StringFormatTest {
         Assertions.assertEquals(StringFormatTest.EXPECTED, formatedMessage);
     }
     
+    /**
+     * B1: the pattern tolerates spaces around the name of the placeholder on purpose, so a name with
+     * them must resolve exactly like one without.
+     */
+    @Test final void aNameSurroundedBySpacesResolvesLikeOneWithout() {
+        Map<String, Object> values = Map.of("NetName", "MyNet");
+
+        Assertions.assertEquals("The MyNet net", StringFormat.apply("The { NetName } net", values));
+        Assertions.assertEquals(StringFormat.apply("The {NetName} net", values),
+                                StringFormat.apply("The {  NetName  } net", values));
+    }
+
+    /**
+     * B1: the names extracted from a pattern must be the keys the arguments are looked up by, without
+     * the surrounding spaces.
+     */
+    @Test final void extractedParameterNamesCarryNoSpaces() {
+        Assertions.assertEquals(List.of("NetName", "Other"),
+                                StringFormat.extractParameterNames("The { NetName } and the {Other}"));
+    }
+
+    /** B2: an array holding a null element must be rendered, not throw. */
+    @Test final void anArrayWithANullElementIsRendered() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("names", new String[] { "a", null, "b" });
+
+        Assertions.assertEquals("The [a, null, b] nodes", StringFormat.apply("The {names} nodes", values));
+    }
+
+    /** B2: the same, for an array nested in another one. */
+    @Test final void aNestedArrayWithANullElementIsRendered() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("names", new String[][] { { "a", null }, { "b" } });
+
+        Assertions.assertEquals("The [a, null, b] nodes", StringFormat.apply("The {names} nodes", values));
+    }
+
     static class ProbNetWrapper{
         final ProbNet net;
         
