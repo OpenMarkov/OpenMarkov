@@ -130,43 +130,26 @@ final class ProbNetCopier {
      * intervals are deep-copied; otherwise the same object references are shared.
      */
     private static void copyLinks(ProbNet source, ProbNet dest, boolean deep) {
-        if (source.hasExplicitLinks()) {
-            dest.makeLinksExplicit(false);
-            for (Link<Node> link : source.getLinks()) {
-                Node destFrom = Objects.requireNonNull(dest.getNode(link.getFrom().getVariable().getName()),
-                        "Node not found in dest: " + link.getFrom().getVariable().getName());
-                Node destTo = Objects.requireNonNull(dest.getNode(link.getTo().getVariable().getName()),
-                        "Node not found in dest: " + link.getTo().getVariable().getName());
-                Link<Node> destLink = dest.addLink(destFrom, destTo, link.isDirected());
-                if (deep) {
-                    if (link.getRestrictionsPotential() != null) {
-                        destLink.setRestrictionsPotential((TablePotential) link.getRestrictionsPotential().deepCopy(dest));
-                    }
-                    List<PartitionedInterval> newIntervals = new ArrayList<>();
-                    for (PartitionedInterval interval : link.getRevealingIntervals()) {
-                        newIntervals.add(new PartitionedInterval(interval.limits, interval.belongsToLeftSide));
-                    }
-                    destLink.setRevealingIntervals(newIntervals);
-                    destLink.setRevealingStates(new ArrayList<>(link.getRevealingStates()));
-                } else {
-                    destLink.setRestrictionsPotential(link.getRestrictionsPotential());
-                    destLink.setRevealingIntervals(link.getRevealingIntervals());
-                    destLink.setRevealingStates(link.getRevealingStates());
+        for (Link<Node> link : source.getLinks()) {
+            Node destFrom = Objects.requireNonNull(dest.getNode(link.getFrom().getVariable().getName()),
+                    "Node not found in dest: " + link.getFrom().getVariable().getName());
+            Node destTo = Objects.requireNonNull(dest.getNode(link.getTo().getVariable().getName()),
+                    "Node not found in dest: " + link.getTo().getVariable().getName());
+            Link<Node> destLink = dest.addLink(destFrom, destTo, link.isDirected());
+            if (deep) {
+                if (link.getRestrictionsPotential() != null) {
+                    destLink.setRestrictionsPotential((TablePotential) link.getRestrictionsPotential().deepCopy(dest));
                 }
-            }
-        } else {
-            for (Node node : source.getNodes()) {
-                Node destNode = dest.getNode(node.getVariable().getName());
-                for (Node sibling : source.getSiblings(node)) {
-                    Node destSibling = dest.getNode(sibling.getVariable().getName());
-                    if (!dest.isSibling(destNode, destSibling)) {
-                        dest.addLink(destNode, destSibling, false);
-                    }
+                List<PartitionedInterval> newIntervals = new ArrayList<>();
+                for (PartitionedInterval interval : link.getRevealingIntervals()) {
+                    newIntervals.add(new PartitionedInterval(interval.limits, interval.belongsToLeftSide));
                 }
-                for (Node child : source.getChildren(node)) {
-                    Node destChild = dest.getNode(child.getVariable().getName());
-                    dest.addLink(destNode, destChild, true);
-                }
+                destLink.setRevealingIntervals(newIntervals);
+                destLink.setRevealingStates(new ArrayList<>(link.getRevealingStates()));
+            } else {
+                destLink.setRestrictionsPotential(link.getRestrictionsPotential());
+                destLink.setRevealingIntervals(link.getRevealingIntervals());
+                destLink.setRevealingStates(link.getRevealingStates());
             }
         }
     }

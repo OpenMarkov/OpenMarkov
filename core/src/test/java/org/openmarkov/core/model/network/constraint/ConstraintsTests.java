@@ -102,7 +102,6 @@ public class ConstraintsTests {
         //			utilityPotential.setUtilityVariable(vU);
         influenceDiagram.addPotential(utilityPotential);
         influenceDiagram.addLink(vA, vD, true);
-        influenceDiagram.makeLinksExplicit(true);
         return influenceDiagram;
     }
     
@@ -157,7 +156,6 @@ public class ConstraintsTests {
         //			utilityPotential.setUtilityVariable(vU);
         influenceDiagram.addPotential(utilityPotential);
         influenceDiagram.addLink(vA, vD, true);
-        influenceDiagram.makeLinksExplicit(true);
         return influenceDiagram;
         
     }
@@ -183,7 +181,6 @@ public class ConstraintsTests {
         //			utilityPotential.setUtilityVariable(vU);
         influenceDiagram.addPotential(utilityPotential);
         influenceDiagram.addLink(vA, vD, true);
-        influenceDiagram.makeLinksExplicit(true);
         return influenceDiagram;
         
     }

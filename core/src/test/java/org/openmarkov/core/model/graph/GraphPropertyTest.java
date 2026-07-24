@@ -61,29 +61,10 @@ class GraphPropertyTest {
     void theTwoRepresentationsAgreeOnTheNumberOfLinks(@ForAll("linkRecipes") List<Edge> recipe) {
         List<Edge> links = distinctEdges(recipe);
 
-        Graph<String> implicitGraph = buildGraph(links, false);
-        assertThat(countImplicitLinks(implicitGraph)).isEqualTo(links.size());
+        Graph<String> graph = buildGraph(links);
 
-        Graph<String> explicitGraph = buildGraph(links, true);
-        assertThat(explicitGraph.getLinks()).hasSize(links.size());
-        assertThat(countImplicitLinks(explicitGraph)).isEqualTo(links.size());
-    }
-
-    /**
-     * Materialising the explicit links is a change of representation, not of contents: neither the
-     * number of links nor the neighbourhood of any node may change.
-     */
-    @Property
-    void makingTheLinksExplicitChangesNeitherTheCountNorTheTopology(@ForAll("linkRecipes") List<Edge> recipe) {
-        Graph<String> graph = buildGraph(distinctEdges(recipe), false);
-        int numLinksBefore = countImplicitLinks(graph);
-        Map<String, List<String>> neighborhoodBefore = neighborhood(graph);
-
-        graph.makeLinksExplicit(false);
-
-        assertThat(countImplicitLinks(graph)).isEqualTo(numLinksBefore);
-        assertThat(graph.getLinks()).hasSize(numLinksBefore);
-        assertThat(neighborhood(graph)).isEqualTo(neighborhoodBefore);
+        assertThat(countImplicitLinks(graph)).isEqualTo(links.size());
+        assertThat(graph.getLinks()).hasSize(links.size());
     }
 
     /**
@@ -92,8 +73,7 @@ class GraphPropertyTest {
      */
     @Property
     void theExplicitLinksReproduceTheImplicitRepresentation(@ForAll("linkRecipes") List<Edge> recipe) {
-        Graph<String> graph = buildGraph(distinctEdges(recipe), false);
-        graph.makeLinksExplicit(false);
+        Graph<String> graph = buildGraph(distinctEdges(recipe));
 
         Graph<String> rebuilt = new Graph<>();
         for (String node : graph.getNodes()) {
@@ -107,18 +87,17 @@ class GraphPropertyTest {
     }
 
     /**
-     * Adding a link that did not exist and removing it again must leave the graph exactly as it was,
-     * in either mode. (Adding one that <em>did</em> exist is left out: an explicit graph is allowed
-     * to hold duplicate links on purpose — that is what the {@code DistinctLinks} constraint is
-     * there to forbid, when a model wants it forbidden.)
+     * Adding a link that did not exist and removing it again must leave the graph exactly as it was.
+     * (Adding one that <em>did</em> exist is left out: a graph is allowed to hold duplicate links on
+     * purpose — that is what the {@code DistinctLinks} constraint is there to forbid, when a model
+     * wants it forbidden.)
      */
     @Property
     void addingAndThenRemovingALinkLeavesTheGraphAsItWas(@ForAll("linkRecipes") List<Edge> recipe,
             @ForAll @IntRange(min = 0, max = NUM_NODES - 1) int from,
-            @ForAll @IntRange(min = 0, max = NUM_NODES - 1) int to, @ForAll boolean directed,
-            @ForAll boolean explicit) {
+            @ForAll @IntRange(min = 0, max = NUM_NODES - 1) int to, @ForAll boolean directed) {
         Assume.that(from != to);
-        Graph<String> graph = buildGraph(distinctEdges(recipe), explicit);
+        Graph<String> graph = buildGraph(distinctEdges(recipe));
         Assume.that(!graph.isNeighbor(node(from), node(to)));
 
         Map<String, List<String>> neighborhoodBefore = neighborhood(graph);
@@ -129,9 +108,7 @@ class GraphPropertyTest {
 
         assertThat(neighborhood(graph)).isEqualTo(neighborhoodBefore);
         assertThat(countImplicitLinks(graph)).isEqualTo(numLinksBefore);
-        if (explicit) {
-            assertThat(graph.getLinks()).hasSize(numLinksBefore);
-        }
+        assertThat(graph.getLinks()).hasSize(numLinksBefore);
     }
 
     /**
@@ -141,8 +118,8 @@ class GraphPropertyTest {
      */
     @Property
     void removingANodeLeavesNoTraceOfIt(@ForAll("linkRecipesWithSelfLoops") List<Edge> recipe,
-            @ForAll @IntRange(min = 0, max = NUM_NODES - 1) int indexToRemove, @ForAll boolean explicit) {
-        Graph<String> graph = buildGraph(distinctEdges(recipe), explicit);
+            @ForAll @IntRange(min = 0, max = NUM_NODES - 1) int indexToRemove) {
+        Graph<String> graph = buildGraph(distinctEdges(recipe));
         String removedNode = node(indexToRemove);
 
         graph.removeNode(removedNode);
@@ -152,12 +129,9 @@ class GraphPropertyTest {
             assertThat(graph.getParents(node)).doesNotContain(removedNode);
             assertThat(graph.getChildren(node)).doesNotContain(removedNode);
             assertThat(graph.getSiblings(node)).doesNotContain(removedNode);
+            assertThat(graph.getLinks(node)).noneMatch(link -> link.contains(removedNode));
         }
-        if (explicit) {
-            for (Link<String> link : graph.getLinks()) {
-                assertThat(link.contains(removedNode)).isFalse();
-            }
-        }
+        assertThat(graph.getLinks()).noneMatch(link -> link.contains(removedNode));
     }
 
     /**
@@ -167,7 +141,7 @@ class GraphPropertyTest {
     void anUndirectedPathExistsInBothSenses(@ForAll("linkRecipes") List<Edge> recipe,
             @ForAll @IntRange(min = 0, max = NUM_NODES - 1) int one,
             @ForAll @IntRange(min = 0, max = NUM_NODES - 1) int other) {
-        Graph<String> graph = buildGraph(distinctEdges(recipe), false);
+        Graph<String> graph = buildGraph(distinctEdges(recipe));
 
         assertThat(graph.existsPath(node(one), node(other), false, List.of())).isEqualTo(
                 graph.existsPath(node(other), node(one), false, List.of()));
@@ -181,18 +155,11 @@ class GraphPropertyTest {
         return "N" + index;
     }
 
-    /**
-     * Builds a graph with {@link #NUM_NODES} nodes and the given links. When {@code explicit}, the
-     * links are made explicit <em>before</em> adding them, so that they are created as {@link Link}
-     * objects rather than materialised afterwards.
-     */
-    private static Graph<String> buildGraph(List<Edge> links, boolean explicit) {
+    /** Builds a graph with {@link #NUM_NODES} nodes and the given links. */
+    private static Graph<String> buildGraph(List<Edge> links) {
         Graph<String> graph = new Graph<>();
         for (int i = 0; i < NUM_NODES; i++) {
             graph.addNode(node(i));
-        }
-        if (explicit) {
-            graph.makeLinksExplicit(false);
         }
         for (Edge link : links) {
             graph.addLink(node(link.from()), node(link.to()), link.directed());

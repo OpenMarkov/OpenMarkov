@@ -1289,12 +1289,19 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
         return graph.getNumLinks(node);
     }
     
+    /**
+     * @deprecated does nothing: the links of a network are explicit from the moment they are added.
+     */
+    @Deprecated @SuppressWarnings({ "unused", "removal" })
     public void makeLinksExplicit(boolean createLabelledLinks) {
-        graph.makeLinksExplicit(createLabelledLinks);
+        // Nothing to do: see Graph.
     }
-    
-    public boolean hasExplicitLinks() {
-        return graph.hasExplicitLinks();
+
+    /**
+     * @deprecated always {@code true}: there is no longer a network without explicit links.
+     */
+    @Deprecated public boolean hasExplicitLinks() {
+        return true;
     }
     
     public boolean existsPath(Node node1, Node node2, boolean directed, List<Link<Node>> linksToIgnore) {

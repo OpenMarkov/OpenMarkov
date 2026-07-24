@@ -54,7 +54,6 @@ public class CanoAndMoralTest {
 		Node nodeU1 = probNet.addNode(varU1, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeA, nodeB, true);
 		probNet.addLink(nodeA, nodeU, true);
 		probNet.addLink(nodeB, nodeD, true);

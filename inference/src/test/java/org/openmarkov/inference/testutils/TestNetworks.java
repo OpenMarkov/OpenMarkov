@@ -56,7 +56,6 @@ public class TestNetworks {
 		Node nodeTuberculosis = probNet.addNode(varTuberculosis, NodeType.CHANCE);
 		Node nodeTubOrCancer = probNet.addNode(varTubOrCancer, NodeType.CHANCE);
 
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeBronchitis, nodeDyspnea, true);
 		probNet.addLink(nodeVisitToAsia, nodeTuberculosis, true);
 		probNet.addLink(nodeSmoker, nodeBronchitis, true);
@@ -124,7 +123,6 @@ public class TestNetworks {
 		Node nodeB = probNet.addNode(varB, NodeType.CHANCE);
 		Node nodeC = probNet.addNode(varC, NodeType.CHANCE);
 
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeA, nodeB, true);
 		probNet.addLink(nodeB, nodeC, true);
 
@@ -164,7 +162,6 @@ public class TestNetworks {
 		Node nodeD = probNet.addNode(varD, NodeType.DECISION);
 		Node nodeU = probNet.addNode(varU, NodeType.UTILITY);
 
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeC, nodeD, true);
 		probNet.addLink(nodeC, nodeU, true);
 		probNet.addLink(nodeD, nodeU, true);
@@ -204,7 +201,6 @@ public class TestNetworks {
 		Node nodeC = probNet.addNode(varC, NodeType.CHANCE);
 		Node nodeD = probNet.addNode(varD, NodeType.CHANCE);
 
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeA, nodeB, true);
 		probNet.addLink(nodeA, nodeC, true);
 		probNet.addLink(nodeB, nodeD, true);

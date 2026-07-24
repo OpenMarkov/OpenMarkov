@@ -37,7 +37,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeX = oneChanceDAN.addNode(variableX, NodeType.CHANCE);
 		Node nodeU = oneChanceDAN.addNode(variableU, NodeType.UTILITY);
 
-		oneChanceDAN.makeLinksExplicit(false);
 		oneChanceDAN.addLink(variableX, variableU, true);
 
 		TablePotential potentialX = new TablePotential(Arrays.asList(variableX), PotentialRole.CONDITIONAL_PROBABILITY);
@@ -64,7 +63,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeHealth_state = probNet.addNode(varHealth_state, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDisease, nodeHealth_state, true);
 		probNet.addLink(nodeTherapy, nodeHealth_state, true);
 
@@ -100,7 +98,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeHealth_state = probNet.addNode(varHealth_state, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDisease, nodeHealth_state, true);
 		probNet.addLink(nodeTherapy, nodeHealth_state, true);
 
@@ -140,7 +137,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeCost_of_therapy = probNet.addNode(varCost_of_therapy, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDisease, nodeHealth_state, true);
 		probNet.addLink(nodeDisease, nodeResult_of_test, true);
 		probNet.addLink(nodeTherapy, nodeHealth_state, true);
@@ -184,7 +180,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeT = dan.addNode(variableT, NodeType.DECISION);
 		Node nodeU = dan.addNode(variableU, NodeType.UTILITY);
 
-		dan.makeLinksExplicit(false);
 		dan.addLink(variableX, variableU, true);
 		dan.addLink(variableT, variableU, true);
 		dan.addLink(variableX, variableT, true);
@@ -229,7 +224,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeCost_of_Therapy = probNet.addNode(varCost_of_Therapy, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDisease, nodeHealth_state, true);
 		probNet.addLink(nodeDisease, nodeResult_of_test, true);
 		probNet.addLink(nodeTherapy, nodeHealth_state, true);
@@ -319,7 +313,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeUmExp = datingDAN.addNode(variableUmExp, NodeType.UTILITY);
 		Node nodeUrExp = datingDAN.addNode(variableUrExp, NodeType.UTILITY);
 
-		datingDAN.makeLinksExplicit(false);
 		datingDAN.addLink(variableAsk, variableAccept, true);
 		datingDAN.addLink(variableLikesMe, variableAccept, true);
 		datingDAN.addLink(variableLikesMe, variableToDo, true);
@@ -495,7 +488,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeUTVExp = datingDAN.addNode(variableUTVExp, NodeType.UTILITY);
 		Node nodeUNCExp = datingDAN.addNode(variableUNCExp, NodeType.UTILITY);
 
-		datingDAN.makeLinksExplicit(false);
 		datingDAN.addLink(variableTV, variableTVExp, true);
 		datingDAN.addLink(variableNClub, variableTVExp, true);
 		datingDAN.addLink(variableNClub, variableClub, true);
@@ -605,7 +597,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeUmExp = datingDAN.addNode(variableUmExp, NodeType.UTILITY);
 		Node nodeUrExp = datingDAN.addNode(variableUrExp, NodeType.UTILITY);
 
-		datingDAN.makeLinksExplicit(false);
 		datingDAN.addLink(variableAsk, variableAccept, true);
 		datingDAN.addLink(variableLikesMe, variableAccept, true);
 		datingDAN.addLink(variableLikesMe, variableToDo, true);
@@ -774,7 +765,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeUrExp = datingDAN.addNode(variableUrExp, NodeType.UTILITY);
 		Node nodeLikesMe = datingDAN.addNode(variableLikesMe, NodeType.CHANCE);
 
-		datingDAN.makeLinksExplicit(false);
 		datingDAN.addLink(variableToDo, variableMovie, true);
 		datingDAN.addLink(variableToDo, variableRest, true);
 		datingDAN.addLink(variableMovie, variableMExp, true);
@@ -844,7 +834,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeE = probNet.addNode(varE, NodeType.DECISION);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeD, nodeU, true);
 		probNet.addLink(nodeE, nodeU, true);
 
@@ -876,7 +865,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeU = probNet.addNode(varU, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeY, nodeU, true);
 		probNet.addLink(nodeX, nodeU, true);
 		probNet.addLink(nodeD, nodeX, true);
@@ -941,7 +929,6 @@ public class DANFactory extends NetsFactory {
 				.addNode(varBenefit_of_conventional_reactor, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeResult_of_advanced_reactor, nodeBenefit_of_advanced_reactor, true);
 		probNet.addLink(nodeResult_of_test, nodeBuild_decision, true);
 		probNet.addLink(nodeResult_of_conventional_reactor, nodeBenefit_of_conventional_reactor, true);
@@ -1087,7 +1074,6 @@ public class DANFactory extends NetsFactory {
 		Node nodecost_retirement = probNet.addNode(varcost_retirement, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeQuality_of_wooer, nodeQuality_of_general, true);
 		probNet.addLink(nodeQuality_of_wooer, nodeOffspring, true);
 		probNet.addLink(nodeQuality_of_wooer, nodeU1, true);
@@ -1270,7 +1256,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeQuality_of_life = probNet.addNode(varQuality_of_life, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDiabetes, nodeSymptom, true);
 		probNet.addLink(nodeDiabetes, nodeUrine_test_result, true);
 		probNet.addLink(nodeDiabetes, nodeBlood_test_result, true);
@@ -1371,7 +1356,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeU2 = probNet.addNode(varU2, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDisease, nodeR_T1, true);
 		probNet.addLink(nodeDisease, nodeR_T2, true);
 		probNet.addLink(nodeDisease, nodeU, true);
@@ -1467,7 +1451,6 @@ public class DANFactory extends NetsFactory {
 		}
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDiabetes, nodeSymptom, true);
 		for (int i = 0; i < numTests; i++) {
 			probNet.addLink(nodeDiabetes, nodeTestResult[i], true);
@@ -1566,7 +1549,6 @@ public class DANFactory extends NetsFactory {
 		}
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDiabetes, nodeSymptom, true);
 		for (int i = 0; i < numTests; i++) {
 			probNet.addLink(nodeDiabetes, nodeTestResult[i], true);
@@ -1668,7 +1650,6 @@ public class DANFactory extends NetsFactory {
 		}
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDiabetes, nodeSymptom, true);
 		for (int i = 0; i < numTests; i++) {
 			probNet.addLink(nodeDiabetes, nodeTestResult[i], true);
@@ -1804,7 +1785,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeNet_Effectiveness = probNet.addNode(varNet_Effectiveness, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeN2_N3, nodeCT_scan, true);
 		probNet.addLink(nodeN2_N3, nodeEBUS, true);
 		probNet.addLink(nodeN2_N3, nodeEUS, true);
@@ -2074,7 +2054,6 @@ public class DANFactory extends NetsFactory {
 		Node nodeTotal = probNet.addNode(varTotal, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeCars_Condition, nodeFirst_Result, true);
 		probNet.addLink(nodeCars_Condition, nodeCost_Repair, true);
 		probNet.addLink(nodeCars_Condition, nodeSecond_result, true);

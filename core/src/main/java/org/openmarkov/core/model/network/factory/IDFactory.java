@@ -408,7 +408,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeCost_of_therapy = probNet.addNode(varCost_of_therapy, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDisease, nodeHealth_state, true);
 		probNet.addLink(nodeDisease, nodeResult_of_test, true);
 		probNet.addLink(nodeDisease, nodeSymptom, true);
@@ -524,7 +523,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeHealth_state = probNet.addNode(varHealth_state, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDisease, nodeTherapy, true);
 		probNet.addLink(nodeDisease, nodeHealth_state, true);
 		probNet.addLink(nodeTherapy, nodeHealth_state, true);
@@ -561,7 +559,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeCost_of_therapy = probNet.addNode(varCost_of_therapy, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeDisease, nodeTherapy, true);
 		probNet.addLink(nodeDisease, nodeHealth_state, true);
 		probNet.addLink(nodeTherapy, nodeHealth_state, true);
@@ -654,7 +651,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeMejora_Tratamiento = probNet.addNode(varMejora_Tratamiento, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeIMC, nodeDiabetes, true);
 		probNet.addLink(nodeIMC, nodeInfeccion_PTR, true);
 		probNet.addLink(nodeIMC, nodeRealizar_Implante, true);
@@ -915,7 +911,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeNet_Effectiveness = probNet.addNode(varNet_Effectiveness, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeN2_N3, nodeCT_scan, true);
 		probNet.addLink(nodeN2_N3, nodeEBUS, true);
 		probNet.addLink(nodeN2_N3, nodeEUS, true);
@@ -1190,7 +1185,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeTotal_QALE = probNet.addNode(varTotal_QALE, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeN2_N3, nodeCT_scan, true);
 		probNet.addLink(nodeN2_N3, nodeEBUS, true);
 		probNet.addLink(nodeN2_N3, nodeEUS, true);
@@ -1375,7 +1369,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeNet_Effectiveness = probNet.addNode(varNet_Effectiveness, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeN2_N3, nodeCT_scan, true);
 		probNet.addLink(nodeN2_N3, nodeEBUS, true);
 		probNet.addLink(nodeN2_N3, nodeEUS, true);
@@ -1577,7 +1570,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeNet_Effectiveness = probNet.addNode(varNet_Effectiveness, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeN2_N3, nodeCT_scan, true);
 		probNet.addLink(nodeN2_N3, nodeEBUS, true);
 		probNet.addLink(nodeN2_N3, nodeEUS, true);
@@ -1778,7 +1770,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeE = probNet.addNode(varE, NodeType.CHANCE);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeD, nodeU, true);
 		probNet.addLink(nodeE, nodeU1, true);
 		probNet.addLink(nodeE, nodeD, true);
@@ -1820,7 +1811,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeU1 = probNet.addNode(varU1, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeD, nodeU1, true);
 		probNet.addLink(nodeD, nodeD1, true);
 		probNet.addLink(nodeD1, nodeU, true);
@@ -1863,7 +1853,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeD3 = probNet.addNode(varD3, NodeType.DECISION);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeD2, nodeU2, true);
 		probNet.addLink(nodeD2, nodeD3, true);
 		probNet.addLink(nodeD1, nodeU1, true);
@@ -1918,7 +1907,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeB = probNet.addNode(varB, NodeType.CHANCE);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeD, nodeD1, true);
 		probNet.addLink(nodeD, nodeU1, true);
 		probNet.addLink(nodeD1, nodeU, true);
@@ -1956,7 +1944,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeD = probNet.addNode(varD, NodeType.DECISION);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeD, nodeU, true);
 
 		// Potentials
@@ -1983,7 +1970,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeU = probNet.addNode(varU, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeA, nodeU, true);
 		probNet.addLink(nodeA, nodeD, true);
 		probNet.addLink(nodeD, nodeU, true);
@@ -2018,7 +2004,6 @@ public class IDFactory extends NetsFactory {
 		Node nodeU = probNet.addNode(varU, NodeType.UTILITY);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeX0, nodeD2, true);
 		probNet.addLink(nodeX0, nodeU, true);
 		probNet.addLink(nodeD2, nodeD3, true);

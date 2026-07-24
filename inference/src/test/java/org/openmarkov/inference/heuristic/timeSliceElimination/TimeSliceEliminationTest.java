@@ -55,7 +55,6 @@ public class TimeSliceEliminationTest {
 		Node node1 = probNet.addNode(x1, NodeType.CHANCE);
 		Node node2 = probNet.addNode(x2, NodeType.CHANCE);
 
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(node0, node1, true);
 		probNet.addLink(node1, node2, true);
 

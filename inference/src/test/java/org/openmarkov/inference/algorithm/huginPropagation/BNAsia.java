@@ -41,7 +41,6 @@ class BNAsia {
 		Node nodeTuberculosisOrCancer = probNet.addNode(varTuberculosisOrCancer, NodeType.CHANCE);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeBronchitis, nodeDyspnea, true);
 		probNet.addLink(nodeVisitToAsia, nodeTuberculosis, true);
 		probNet.addLink(nodeSmoker, nodeBronchitis, true);

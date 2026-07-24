@@ -90,9 +90,7 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
     }
     
     @Override protected void doEdit() throws DoEditException.CannotDoEditException {
-        if (probNet.hasExplicitLinks()) {
-            this.link = probNet.getLink(node1, node2, isDirected);
-        }
+        this.link = probNet.getLink(node1, node2, isDirected);
         probNet.removeLink(node1, node2, isDirected);
         if (updatePotentials) {
             this.oldPotentials = node2.getPotentials();
@@ -177,16 +175,14 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
             node2.setPotentials(oldPotentials);
         }
         probNet.addLink(variableFrom, variableTo, isDirected);
-        if (probNet.hasExplicitLinks()) {
-            Link<Node> newLink = probNet.getLink(node1, node2, isDirected);
-            if (link != null && newLink != null) {
-                TablePotential restrictionsPotential = link.getRestrictionsPotential();
-                newLink.setRestrictionsPotential(restrictionsPotential);
-                List<State> revealingStates = link.getRevealingStates();
-                newLink.setRevealingStates(revealingStates);
-                List<PartitionedInterval> revealingIntervals = link.getRevealingIntervals();
-                newLink.setRevealingIntervals(revealingIntervals);
-            }
+        Link<Node> newLink = probNet.getLink(node1, node2, isDirected);
+        if (link != null && newLink != null) {
+            TablePotential restrictionsPotential = link.getRestrictionsPotential();
+            newLink.setRestrictionsPotential(restrictionsPotential);
+            List<State> revealingStates = link.getRevealingStates();
+            newLink.setRevealingStates(revealingStates);
+            List<PartitionedInterval> revealingIntervals = link.getRevealingIntervals();
+            newLink.setRevealingIntervals(revealingIntervals);
         }
     }
 
@@ -201,9 +197,7 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
         setTypicalRedo(false);
         super.redo();
 
-        if (probNet.hasExplicitLinks()) {
-            this.link = probNet.getLink(node1, node2, isDirected);
-        }
+        this.link = probNet.getLink(node1, node2, isDirected);
         probNet.removeLink(node1, node2, isDirected);
         if (updatePotentials) {
             node2.setPotentials(newPotentials);

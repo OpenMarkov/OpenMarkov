@@ -144,7 +144,6 @@ public class PGMXReaderWriterTest {
     private ProbNet createDecisionAnalysisNet() {
         ProbNet probNet = new ProbNet(
                 DecisionAnalysisNetworkType.getUniqueInstance());
-        probNet.makeLinksExplicit(true);
         
         State[] stateA = new State[]{new State("A1"), new State("A2"),
                 new State("A3")};

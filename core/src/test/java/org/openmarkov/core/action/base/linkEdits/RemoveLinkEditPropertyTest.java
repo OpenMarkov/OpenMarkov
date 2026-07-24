@@ -383,10 +383,7 @@ class RemoveLinkEditPropertyTest {
         new AddNodeEdit(net, vB, NodeType.CHANCE, null).executeEdit();
         new AddLinkEdit(net, vA, vB, true).executeEdit();
 
-        // Convert to explicit links and set all three properties on the link
-        net.makeLinksExplicit(false);
-        assertThat(net.hasExplicitLinks()).isTrue();
-
+        // Set all three properties on the link
         Link<Node> link = net.getLink(net.getNode(vA), net.getNode(vB), true);
         assertThat(link).isNotNull();
 

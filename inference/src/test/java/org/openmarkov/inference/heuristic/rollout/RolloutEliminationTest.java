@@ -166,7 +166,6 @@ public class RolloutEliminationTest {
                 nodes[r][c] = net.addNode(var, NodeType.CHANCE);
             }
         }
-        net.makeLinksExplicit(false);
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 if (r + 1 < rows) net.addLink(nodes[r][c], nodes[r + 1][c], true);

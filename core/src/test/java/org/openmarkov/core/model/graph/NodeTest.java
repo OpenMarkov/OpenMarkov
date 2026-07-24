@@ -72,7 +72,6 @@ public class NodeTest {
     }
     
     @Test public void testGetLinks() {
-        graph.makeLinksExplicit(false);
         List<Link<String>> links = graph.getLinks(nodeB);
         assertEquals(3, links.size());
         int directed = 0;

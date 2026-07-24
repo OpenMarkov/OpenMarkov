@@ -80,7 +80,11 @@ public interface GraphNetwork {
     List<Link<Node>> getLinks(Node node);
     @Nullable Link<Node> getLink(Node node1, Node node2, boolean directed);
     int getNumLinks(Node node);
-    boolean hasExplicitLinks();
+
+    /**
+     * @deprecated always {@code true}: there is no longer a network without explicit links.
+     */
+    @Deprecated boolean hasExplicitLinks();
 
     boolean existsPath(Node node1, Node node2, boolean directed, List<Link<Node>> linksToIgnore);
 

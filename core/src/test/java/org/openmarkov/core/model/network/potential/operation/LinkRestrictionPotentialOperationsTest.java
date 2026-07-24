@@ -50,7 +50,6 @@ public class LinkRestrictionPotentialOperationsTest {
         Node nodeG = probNet.addNode(varG, NodeType.CHANCE);
         
         // Links
-        probNet.makeLinksExplicit(false);
         probNet.addLink(nodeA, nodeE, true);
         probNet.addLink(nodeB, nodeE, true);
         probNet.addLink(nodeC, nodeE, true);
@@ -118,7 +117,6 @@ public class LinkRestrictionPotentialOperationsTest {
         
         node = new Node(net, varC, NodeType.CHANCE);
         net.addNode(node);
-        net.makeLinksExplicit(true);
         net.addLink(varA, varB, true);
         net.addLink(varC, varB, true);
         TablePotential potential = new TablePotential(variables, PotentialRole.CONDITIONAL_PROBABILITY);

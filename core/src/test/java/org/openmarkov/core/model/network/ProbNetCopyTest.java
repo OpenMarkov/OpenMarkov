@@ -334,22 +334,12 @@ public class ProbNetCopyTest {
 
     @Test
     public void copyWithExplicitLinksPreservesLinkCount() {
-        original.makeLinksExplicit(false);
-        assertTrue(original.hasExplicitLinks());
         ProbNet copy = original.copy();
         assertEquals(original.getLinks().size(), copy.getLinks().size());
     }
 
     @Test
-    public void copyWithExplicitLinksIsAlsoExplicit() {
-        original.makeLinksExplicit(false);
-        ProbNet copy = original.copy();
-        assertTrue(copy.hasExplicitLinks());
-    }
-
-    @Test
     public void copyWithExplicitLinksReproducesDirection() {
-        original.makeLinksExplicit(false);
         ProbNet copy = original.copy();
         // The Rain→Wet link must remain directed in the copy.
         Node copyRain = copy.getNode(rain);
@@ -359,7 +349,6 @@ public class ProbNetCopyTest {
 
     @Test
     public void copyWithExplicitLinksSharesRestrictionPotentialReference() {
-        original.makeLinksExplicit(false);
         // Assign a restriction potential to the Rain→Wet link.
         Link<Node> link = original.getLink(original.getNode(rain), original.getNode(wet), true);
         TablePotential restriction = new TablePotential(List.of(rain, wet), PotentialRole.LINK_RESTRICTION);

@@ -41,7 +41,6 @@ public class SensitivityAnalysisFactory extends IDFactory {
         Node nodeCost_of_therapy = probNet.addNode(varCost_of_therapy, NodeType.UTILITY);
         
         // Links
-        probNet.makeLinksExplicit(false);
         probNet.addLink(nodeDisease, nodeHealth_state, true);
         probNet.addLink(nodeDisease, nodeResult_of_test, true);
         probNet.addLink(nodeResult_of_test, nodeTherapy, true);
@@ -120,7 +119,6 @@ public class SensitivityAnalysisFactory extends IDFactory {
         Node nodeHealth_state = probNet.addNode(variableU, NodeType.UTILITY);
         
         // Links
-        probNet.makeLinksExplicit(false);
         probNet.addLink(nodeAlive, nodeHealth_state, true);
         
         // Potentials
@@ -156,7 +154,6 @@ public class SensitivityAnalysisFactory extends IDFactory {
         Node nodeHealth_state = probNet.addNode(variableU, NodeType.UTILITY);
         
         // Links
-        probNet.makeLinksExplicit(false);
         probNet.addLink(nodeAlive, nodeHealth_state, true);
         
         // Potentials
@@ -193,7 +190,6 @@ public class SensitivityAnalysisFactory extends IDFactory {
         Node nodeHealth_state = probNet.addNode(variableU, NodeType.UTILITY);
         
         // Links
-        probNet.makeLinksExplicit(false);
         probNet.addLink(nodeAlive, nodeHealth_state, true);
         
         // Potentials

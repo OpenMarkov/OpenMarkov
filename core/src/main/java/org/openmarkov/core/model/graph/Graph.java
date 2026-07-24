@@ -16,13 +16,21 @@ import java.util.stream.Collectors;
  * This class implements the minimal set of methods for creating
  * a graph and inserting nodes and links.
  * <p>
- * Links are represented implicitly by the lists of parents, children and
- * siblings of each node. Links can be explicitly represented as objects of
- * class {@code LabelledLink}.
- * Links are implicit until the method {@code makeLinksExplicit} is
- * invoked.
- * Explicit links do not substitute implicit links. In fact, an explicit link
- * implies the existence of an implicit link.
+ * Every link has two complementary representations, and the graph keeps both of them in step at
+ * all times:
+ * <ul>
+ * <li>the <em>implicit</em> one — the lists of parents, children and siblings of each node — which
+ * answers the neighbourhood questions ({@code getParents}, {@code isChild}, {@code existsPath}…)
+ * without visiting any link object; and</li>
+ * <li>the <em>explicit</em> one — an object of class {@link Link} per link — which is what carries
+ * whatever hangs from a link: its restrictions potential, its revealing conditions, its label.</li>
+ * </ul>
+ * The explicit representation used to be built lazily, the first time a link was asked for, so
+ * that a graph that only ever needed its topology paid nothing for it. That made the plain getters
+ * mutate the graph and, worse, made the behaviour of the graph depend on whether anyone had
+ * happened to read a link before: whether adding a link twice was detectable, whether undoing the
+ * removal of a link kept its restrictions, and so on. Links are now explicit from the start, so
+ * there is a single, mode-independent behaviour.
  *
  * @author Manuel Arias
  * @author fjdiez
@@ -34,10 +42,8 @@ import java.util.stream.Collectors;
  * @since OpenMarkov 1.0
  */
 public class Graph<T> {
-    
+
     // Attributes
-    private boolean explicitLinks = false;
-    
     private final List<T> nodes;
     
     private final Map<T, List<Link<T>>> nodeLinks;
@@ -153,10 +159,13 @@ public class Graph<T> {
     }
     
     /**
-     * @return explicitLinks {@code boolean}.
+     * @return always {@code true}. Links used to become explicit only on demand; they are explicit
+     * from the start now, so there is nothing left to ask about.
+     *
+     * @deprecated there is no longer a graph without explicit links.
      */
-    public boolean hasExplicitLinks() {
-        return explicitLinks;
+    @Deprecated public boolean hasExplicitLinks() {
+        return true;
     }
     
     /**
@@ -173,66 +182,66 @@ public class Graph<T> {
             nodeLinks.get(link.getTo()).add(link);
         }
     }
-    
+
     /**
      * Inserts a link between {@code node1} and {@code node2}. {@code node1} and {@code node2} belongs to this
+     * <p>
+     * A link that already exists is <strong>not</strong> reused: adding it twice leaves two link
+     * objects joining the same pair of nodes. That is deliberate — forbidding it is the job of the
+     * {@code DistinctLinks} constraint, which each kind of network switches on or off.
      *
      * @param node1    {@code Node}
      * @param node2    {@code Node}
      * @param directed {@code boolean}
      *                 {@code graph}
      *
-     * @return the explicit {@link Link} when the graph is in explicit mode, or {@code null} in
-     * implicit mode (there is no {@code Link} object to return then)
+     * @return the {@link Link} just created
      */
     public Link<T> addLink(T node1, T node2, boolean directed) {
-        Link<T> newLink = null;
-        if (explicitLinks) {
-            newLink = new Link<>(node1, node2, directed);
-            addLink(newLink);
-        }
+        Link<T> newLink = new Link<>(node1, node2, directed);
+        addLink(newLink);
         addImplicitLink(node1, node2, directed);
-        
+
         return newLink;
     }
-    
+
     /**
-     * Removes a link between two nodes.
+     * Removes a link between two nodes. Removing one that does not exist does nothing.
      *
      * @param node1    {@code Node}
      * @param node2    {@code Node}
      * @param directed {@code boolean}
      */
     public void removeLink(T node1, T node2, boolean directed) {
-        if (explicitLinks) { // get the explicit link and remove it
-            Link<T> link = getLink(node1, node2, directed);
-            if (link != null) {
-                removeLink(link); // remove explicit and implicit link
-            }
-        } else { // remove the implicit link
-            removeImplicitLink(node1, node2, directed);
+        Link<T> link = getLink(node1, node2, directed);
+        if (link != null) {
+            removeLink(link);
         }
     }
-    
+
     /**
-     * Removes an explicit link. Links must be explicit.
+     * Removes a link, in both of its representations.
      *
      * @param link Link&#60;T&#62;
      */
     public void removeLink(Link<T> link) {
         T node1 = link.getFrom();
         T node2 = link.getTo();
-        
-        nodeLinks.get(node1).remove(link);
-        nodeLinks.get(node2).remove(link);
-        
+
+        List<Link<T>> linksOfNode1 = nodeLinks.get(node1);
+        if (linksOfNode1 != null) {
+            linksOfNode1.remove(link);
+        }
+        List<Link<T>> linksOfNode2 = nodeLinks.get(node2);
+        if (linksOfNode2 != null) {
+            linksOfNode2.remove(link);
+        }
+
         removeImplicitLink(node1, node2, link.isDirected());
     }
     
     /**
-     * Returns the explicit link between {@code node1} and {@code node2}. <strong>Side effect:</strong>
-     * this "getter" forces the graph into explicit mode (materialises every {@link Link} object and
-     * sets {@code explicitLinks = true}), which changes how {@code addLink} behaves afterwards.
+     * Returns the link between {@code node1} and {@code node2}.
      *
      * @param node1    {@code Node}
      * @param node2    {@code Node}
@@ -242,7 +251,6 @@ public class Graph<T> {
      * returns {@code null}
      */
     public Link<T> getLink(T node1, T node2, boolean directed) {
-        makeLinksExplicit(false);
         List<Link<T>> linksNode = nodeLinks.get(node1);
         if (linksNode != null) {
             for (Link<T> link : linksNode) {
@@ -262,66 +270,32 @@ public class Graph<T> {
     }
     
     /**
-     * Creates the explicit links (based on the implicit links).<p> When
-     * {@code createLabelledLinks = true} create explicit links with label
-     * = {@code null}. Otherwise, create unlabeled explicit links.
+     * Does nothing: the links of a graph are explicit from the moment they are added.
      *
-     * @param createLabelledLinks {@code boolean}
+     * @param createLabelledLinks {@code boolean}. Ignored. Labelled links, when needed, are built
+     *                            by whoever needs them — see {@link LabelledLink}.
+     *
+     * @deprecated there is nothing left to materialise.
      */
+    @Deprecated @SuppressWarnings("unused")
     public void makeLinksExplicit(boolean createLabelledLinks) {
-        if (!explicitLinks) {
-            for (T node : nodes) {
-                nodeLinks.put(node, new LinkedList<>());
-            }
-            for (T node : nodes) {
-                List<T> children = nodeChildren.get(node);
-                if (children != null) {
-                    for (T child : children) {
-                        Link<T> newLink;
-                        if (createLabelledLinks) {
-                            newLink = new LabelledLink<>(node, child, true, null);
-                        } else {
-                            newLink = new Link<>(node, child, true);
-                        }
-                        addLink(newLink);
-                    }
-                }
-                List<T> siblings = nodeSiblings.get(node);
-                if (siblings != null) {
-                    int auxNode1Index = nodes.indexOf(node);
-                    for (T sibling : siblings) {
-                        if (auxNode1Index > nodes.indexOf(sibling)) {
-                            Link<T> newLink;
-                            if (createLabelledLinks) {
-                                newLink = new LabelledLink<>(node, sibling, false, null);
-                            } else {
-                                newLink = new Link<>(node, sibling, false);
-                            }
-                            addLink(newLink);
-                        }
-                    }
-                }
-            }
-            this.explicitLinks = true;
-        }
+        // Nothing to do: see the class documentation.
     }
-    
+
     /**
-     * Removes implicit and explicit links to {@code node} from the
-     * neighbors of {@code node}.
+     * Removes every link between {@code node} and its neighbors, in both representations.
      *
      * @param node {@code Node}
      */
     public void removeLinks(T node) {
-        
-        if (explicitLinks) {
-            List<Link<T>> linksNode = new ArrayList<>(nodeLinks.get(node));
-            
-            for (Link<T> link : linksNode) {
+
+        List<Link<T>> linksNode = nodeLinks.get(node);
+        if (linksNode != null) {
+            for (Link<T> link : new ArrayList<>(linksNode)) {
                 removeLink(link);
             }
         }
-        
+
         // Every neighbour list is traversed through a copy. With a self-loop the node is its own
         // neighbour, so the loop body would otherwise remove an element from the very list being
         // iterated, cutting the traversal short and leaving the remaining neighbours pointing at a
@@ -358,25 +332,17 @@ public class Graph<T> {
     }
     
     public List<Link<T>> getLinks(T node) {
-        makeLinksExplicit(false);
         return nodeLinks.containsKey(node) ? new ArrayList<>(nodeLinks.get(node)) : new ArrayList<>();
     }
-    
+
     public int getNumLinks(T node) {
-        int numLinks;
-        if (explicitLinks)
-            numLinks = nodeLinks.containsKey(node) ? nodeLinks.get(node).size() : 0;
-        else
-            numLinks = getNumParents(node) + getNumChildren(node) + getNumSiblings(node);
-        return numLinks;
+        return nodeLinks.containsKey(node) ? nodeLinks.get(node).size() : 0;
     }
-    
+
     /**
-     * @return The {@code Graph} explicit links.
+     * @return The links of the {@code Graph}, each one once.
      */
     public List<Link<T>> getLinks() {
-        makeLinksExplicit(false);
-        
         List<Link<T>> links = new ArrayList<>();
         for (T node : nodes) {
             for (Link<T> link : nodeLinks.get(node)) {
@@ -555,9 +521,7 @@ public class Graph<T> {
      */
     public void addNode(T node) {
         nodes.add(node);
-        if (explicitLinks) {
-            nodeLinks.put(node, new LinkedList<>());
-        }
+        nodeLinks.put(node, new LinkedList<>());
     }
 
     /**
@@ -573,29 +537,8 @@ public class Graph<T> {
                                                                .collect(Collectors.joining());
         
         out += "Links: \n";
-        if (explicitLinks) {
-            for (T node : nodeLinks.keySet()) {
-                List<Link<T>> links = nodeLinks.get(node);
-                for (Link<T> link : links) {
-                    if (node.equals(link.getFrom())) {
-                        out += link + "\n";
-                    }
-                }
-            }
-        } else {
-            for (T node : nodeChildren.keySet()) {
-                for (T child : nodeChildren.get(node)) {
-                    out += node + " --> " + child + "\n";
-                }
-            }
-            for (T node : nodeSiblings.keySet()) {
-                int indexNode = nodes.indexOf(node);
-                for (T sibling : nodeSiblings.get(node)) {
-                    if (indexNode < nodes.indexOf(sibling)) {
-                        out += node + " --- " + sibling + "\n";
-                    }
-                }
-            }
+        for (Link<T> link : getLinks()) {
+            out += link + "\n";
         }
         return out;
     }

@@ -69,7 +69,6 @@ public class UtilityOperationsTest {
         Node nodeCost_of_test = probNet.addNode(varCost_of_test, NodeType.UTILITY);
         
         // Links
-        probNet.makeLinksExplicit(false);
         probNet.addLink(nodeDisease, nodeHealth_state, true);
         probNet.addLink(nodeDisease, nodeResult_of_test, true);
         probNet.addLink(nodeResult_of_test, nodeTherapy, true);

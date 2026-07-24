@@ -46,7 +46,6 @@ public class MulticriteriaEditTest {
                                                                            Variable.getDefaultBelongs(4)));
         
         // Links
-        probNet.makeLinksExplicit(false);
         probNet.addLink(nodeA, nodeB, true);
         probNet.addLink(nodeA, nodeC, true);
         

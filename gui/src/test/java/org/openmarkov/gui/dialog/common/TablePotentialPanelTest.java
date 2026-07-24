@@ -57,7 +57,6 @@ public class TablePotentialPanelTest extends TablePotentialPanel {
 		Node nodeE = probNet.addNode(varE, NodeType.CHANCE);
 
 		// Links
-		probNet.makeLinksExplicit(false);
 		probNet.addLink(nodeA, nodeE, true);
 		probNet.addLink(nodeB, nodeE, true);
 		probNet.addLink(nodeC, nodeE, true);

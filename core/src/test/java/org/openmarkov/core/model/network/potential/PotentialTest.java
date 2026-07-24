@@ -88,7 +88,6 @@ public class PotentialTest {
         Node nodeExponentialUtility = probNet.addNode(varExponentialUtility, NodeType.UTILITY);
         
         // Links
-        probNet.makeLinksExplicit(false);
         probNet.addLink(nodeA, nodeTreeAddUtility, true);
         probNet.addLink(nodeA, nodeTableUtility, true);
         probNet.addLink(nodeB, nodeLCUtility, true);
