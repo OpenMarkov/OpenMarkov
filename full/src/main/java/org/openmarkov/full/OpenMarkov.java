@@ -37,6 +37,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -67,6 +68,12 @@ public class OpenMarkov {
      * @param baseArgs Arguments
      */
     public static void main(String[] baseArgs) {
+        // Numbers and dates are written the English way — decimal point — wherever the application
+        // runs. It is a decision of the application, taken here, in the open: it used to happen as a
+        // side effect of loading the class that holds the texts, so merely mentioning StringDatabase
+        // changed the number format of the whole process, including for anyone using OpenMarkov as a
+        // library (§6.1 of the localize report).
+        Locale.setDefault(Locale.Category.FORMAT, Locale.ENGLISH);
         try {
             OpenMarkov.onSingleInstance(baseArgs);
         } catch (AlreadyLockedException e) {

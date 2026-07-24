@@ -15,7 +15,6 @@ import org.openmarkov.java.initialization.Lazy;
 import org.openmarkov.plugin.PluginSearch;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,6 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
 /**
@@ -78,28 +78,22 @@ public class StringDatabase {
     });
     
     // Create the listener list
-    private List<LocaleChangeListener> listenerList = null;
+    private final List<LocaleChangeListener> listenerList = new CopyOnWriteArrayList<>();
     
     
     /**
-     * This constructor initializes the object with the language of the class.
-     * Then creates all the resource bundles to check if the language is
-     * available for all of them. If this language is not available for all, the
-     * default one is used.
+     * Sets the locale of the language in force. The bundles are not read here: they are read the
+     * first time a text is asked for. (This comment used to claim that the constructor loaded every
+     * bundle to check the language was available in all of them, and it never did.)
      */
     private StringDatabase() {
-        setLocale(new Locale(language));
-        /* Set format locale to english (to format decimal point)*/
-        Locale.setDefault(Locale.Category.FORMAT, Locale.ENGLISH);
-        listenerList = new ArrayList<>();
+        setLocale(StringDatabase.getLocaleByLanguage(language));
     }
     
     
     /**
-     * Returns the unique instance of this class. If the instance doesn't exist,
-     * then a new instance is initialized.
-     *
-     * @return the unique instance.
+     * @return the unique instance, which is created when the class is loaded (there is nothing to
+     * initialise on demand, whatever the old wording of this comment said).
      */
     public static StringDatabase getUniqueInstance() {
         return StringDatabase.INSTANCE;
@@ -113,10 +107,7 @@ public class StringDatabase {
     }
     
     private static Locale getLocaleByLanguage(String language) {
-        if (language.equals("es")) {
-            return new Locale("es");
-        }
-        return Locale.ENGLISH;
+        return Locale.of(language);
     }
     
     /**
@@ -151,8 +142,6 @@ public class StringDatabase {
         }
         language = newLanguage;
         setLocale(StringDatabase.getLocaleByLanguage(newLanguage));
-        /* Set format locale to english (to format decimal point)*/
-        Locale.setDefault(Locale.Category.FORMAT, Locale.ENGLISH);
         resetBundles();
         fireLocaleChangeEvent(new LocaleChangeEvent(this, newLanguage));
     }
@@ -199,7 +188,7 @@ public class StringDatabase {
                            .filter(Objects::nonNull);
     }
     
-    public Map<String, StringBundle> getAllBundles() {
+    public synchronized Map<String, StringBundle> getAllBundles() {
         if (bundles == null) {
             bundles = calculateAllBundles();
         }
@@ -238,7 +227,7 @@ public class StringDatabase {
      * standing meant the served texts stayed in the first language for ever, even once the bundles
      * had been reloaded in another one.
      */
-    private void resetBundles() {
+    private synchronized void resetBundles() {
         this.bundles = null;
         this.keysToValues.reset();
     }

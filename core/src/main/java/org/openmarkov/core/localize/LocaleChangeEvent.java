@@ -41,13 +41,9 @@ public class LocaleChangeEvent extends EventObject {
 
 		super(source);
 		this.language = language;
-		if (language.equals(Locale.ENGLISH.getLanguage())) {
-			locale = Locale.ENGLISH;
-		} else if (language.equals("es")) {
-			locale = new Locale("es");
-		} else {
-			locale = Locale.ENGLISH;
-		}
+		// One single mapping language -> locale, the same one StringDatabase uses. It used to be
+		// spelled out here again, with "es" written by hand and the deprecated Locale constructor.
+		locale = Locale.of(language);
 	}
 
 	/**
