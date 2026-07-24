@@ -175,7 +175,7 @@ public class NodeStateEdit extends PNEdit {
                 
                 // We restore the link restriction's
                 for (Link<Node> link : linkRestrictionMap.keySet()) {
-                    link.initializesRestrictionsPotential();
+                    LinkOperations.initializesRestrictionsPotential(link);
                     TablePotential restrictionPotential = (TablePotential) link.getRestrictionsPotential();
                     restrictionPotential.setValues(linkRestrictionMap.get(link));
                 }
@@ -251,7 +251,7 @@ public class NodeStateEdit extends PNEdit {
         
         for (Node child : node.getChildren()) {
             Link<Node> link = probNet.getLink(node, child, true);
-            if (link.hasRevealingConditions()) {
+            if (LinkOperations.hasRevealingConditions(link)) {
                 VariableType varType = link.getFrom().getVariable().getVariableType();
                 if (varType == VariableType.NUMERIC) {
                     this.revelationConditionMap.put(link, link.getRevealingIntervals());

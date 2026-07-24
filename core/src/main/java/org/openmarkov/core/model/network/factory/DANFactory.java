@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.network.factory;
 
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.LinkOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -195,7 +196,7 @@ public class DANFactory extends NetsFactory {
 		nodeX.setAlwaysObserved(true);
 
 		Link<Node> link = dan.getLink(nodeX, nodeT, true);
-		link.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link);
 		TablePotential restrictionsPotential = (TablePotential) link.getRestrictionsPotential();
 		restrictionsPotential.setValues(new double[] { 0, 1, 1, 1 });
 
@@ -257,7 +258,7 @@ public class DANFactory extends NetsFactory {
 
 		// Link restrictions and revealing states
 		Link link_nodeDo_test__nodeResult_of_test = probNet.getLink(nodeDo_test_, nodeResult_of_test, true);
-		link_nodeDo_test__nodeResult_of_test.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDo_test__nodeResult_of_test);
 		TablePotential restrictions_nodeDo_test__nodeResult_of_test = (TablePotential) link_nodeDo_test__nodeResult_of_test
 				.getRestrictionsPotential();
 		restrictions_nodeDo_test__nodeResult_of_test.setValues(new double[] { 0, 1, 0, 1 });
@@ -412,29 +413,29 @@ public class DANFactory extends NetsFactory {
 		nodeUNCExp.setPotential(potentialUNCExp);
 
 		Link<Node> linkAskAccept = datingDAN.getLink(nodeAsk, nodeAccept, true);
-		linkAskAccept.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkAskAccept);
 		TablePotential restrictionsAskAccept = (TablePotential) linkAskAccept.getRestrictionsPotential();
 		restrictionsAskAccept.setValues(new double[] { 1, 1, 0, 1 });
 		linkAskAccept.setRevealingStates(Arrays.asList(variableAsk.getStates()[0], variableAsk.getStates()[1]));
 
 		Link<Node> linkAcceptNClub = datingDAN.getLink(nodeAccept, nodeNClub, true);
-		linkAcceptNClub.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkAcceptNClub);
 		TablePotential restrictionsAcceptNClub = (TablePotential) linkAcceptNClub.getRestrictionsPotential();
 		restrictionsAcceptNClub.setValues(new double[] { 1, 0, 1, 0 });
 
 		Link<Node> linkAcceptToDo = datingDAN.getLink(nodeAccept, nodeToDo, true);
-		linkAcceptToDo.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkAcceptToDo);
 		TablePotential restrictionsAcceptToDo = (TablePotential) linkAcceptToDo.getRestrictionsPotential();
 		restrictionsAcceptToDo.setValues(new double[] { 0, 1, 0, 1 });
 		linkAcceptToDo.setRevealingStates(Arrays.asList(variableAccept.getStates()[1]));
 
 		Link<Node> linkToDoMovie = datingDAN.getLink(nodeToDo, nodeMovie, true);
-		linkToDoMovie.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkToDoMovie);
 		TablePotential restrictionsToDoMovie = (TablePotential) linkToDoMovie.getRestrictionsPotential();
 		restrictionsToDoMovie.setValues(new double[] { 0, 1, 0, 1 });
 
 		Link<Node> linkToDoRest = datingDAN.getLink(nodeToDo, nodeRest, true);
-		linkToDoRest.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkToDoRest);
 		TablePotential restrictionsToDoRest = (TablePotential) linkToDoRest.getRestrictionsPotential();
 		restrictionsToDoRest.setValues(new double[] { 1, 0, 1, 0 });
 
@@ -445,19 +446,19 @@ public class DANFactory extends NetsFactory {
 		linkRestREXp.setRevealingStates(Arrays.asList(variableRest.getStates()[0], variableRest.getStates()[1]));
 
 		Link<Node> linkNClubTVExp = datingDAN.getLink(nodeNClub, nodeTVExp, true);
-		linkNClubTVExp.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkNClubTVExp);
 		TablePotential restrictionsNClubTVExp = (TablePotential) linkNClubTVExp.getRestrictionsPotential();
 		restrictionsNClubTVExp.setValues(new double[] { 1, 0, 1, 0 });
 		linkNClubTVExp.setRevealingStates(Arrays.asList(variableNClub.getStates()[0]));
 
 		Link<Node> linkNClubClub = datingDAN.getLink(nodeNClub, nodeClub, true);
-		linkNClubClub.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkNClubClub);
 		TablePotential restrictionsNClubClub = (TablePotential) linkNClubClub.getRestrictionsPotential();
 		restrictionsNClubClub.setValues(new double[] { 0, 1, 0, 1 });
 		linkNClubClub.setRevealingStates(Arrays.asList(variableNClub.getStates()[1]));
 
 		Link<Node> linkNClubMeetFr = datingDAN.getLink(nodeNClub, nodeMeetFr, true);
-		linkNClubMeetFr.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkNClubMeetFr);
 		TablePotential restrictionsNClubMeetFr = (TablePotential) linkNClubMeetFr.getRestrictionsPotential();
 		restrictionsNClubMeetFr.setValues(new double[] { 0, 1, 0, 1 });
 		linkNClubMeetFr.setRevealingStates(Arrays.asList(variableNClub.getStates()[1]));
@@ -530,19 +531,19 @@ public class DANFactory extends NetsFactory {
 		nodeUNCExp.setPotential(potentialUNCExp);
 
 		Link<Node> linkNClubTVExp = datingDAN.getLink(nodeNClub, nodeTVExp, true);
-		linkNClubTVExp.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkNClubTVExp);
 		TablePotential restrictionsNClubTVExp = (TablePotential) linkNClubTVExp.getRestrictionsPotential();
 		restrictionsNClubTVExp.setValues(new double[] { 1, 0, 1, 0 });
 		linkNClubTVExp.setRevealingStates(Arrays.asList(variableNClub.getStates()[0]));
 
 		Link<Node> linkNClubClub = datingDAN.getLink(nodeNClub, nodeClub, true);
-		linkNClubClub.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkNClubClub);
 		TablePotential restrictionsNClubClub = (TablePotential) linkNClubClub.getRestrictionsPotential();
 		restrictionsNClubClub.setValues(new double[] { 0, 1, 0, 1 });
 		linkNClubClub.setRevealingStates(Arrays.asList(variableNClub.getStates()[1]));
 
 		Link<Node> linkNClubMeetFr = datingDAN.getLink(nodeNClub, nodeMeetFr, true);
-		linkNClubMeetFr.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkNClubMeetFr);
 		TablePotential restrictionsNClubMeetFr = (TablePotential) linkNClubMeetFr.getRestrictionsPotential();
 		restrictionsNClubMeetFr.setValues(new double[] { 0, 1, 0, 1 });
 		linkNClubMeetFr.setRevealingStates(Arrays.asList(variableNClub.getStates()[1]));
@@ -691,29 +692,29 @@ public class DANFactory extends NetsFactory {
 		nodeUNCExp.setPotential(potentialUNCExp);
 
 		Link<Node> linkAskAccept = datingDAN.getLink(nodeAsk, nodeAccept, true);
-		linkAskAccept.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkAskAccept);
 		TablePotential restrictionsAskAccept = (TablePotential) linkAskAccept.getRestrictionsPotential();
 		restrictionsAskAccept.setValues(new double[] { 1, 1, 0, 1 });
 		linkAskAccept.setRevealingStates(Arrays.asList(variableAsk.getStates()[0], variableAsk.getStates()[1]));
 
 		Link<Node> linkAcceptNClub = datingDAN.getLink(nodeAccept, nodeNClub, true);
-		linkAcceptNClub.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkAcceptNClub);
 		TablePotential restrictionsAcceptNClub = (TablePotential) linkAcceptNClub.getRestrictionsPotential();
 		restrictionsAcceptNClub.setValues(new double[] { 1, 0, 1, 0 });
 
 		Link<Node> linkAcceptToDo = datingDAN.getLink(nodeAccept, nodeToDo, true);
-		linkAcceptToDo.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkAcceptToDo);
 		TablePotential restrictionsAcceptToDo = (TablePotential) linkAcceptToDo.getRestrictionsPotential();
 		restrictionsAcceptToDo.setValues(new double[] { 0, 1, 0, 1 });
 		linkAcceptToDo.setRevealingStates(Arrays.asList(variableAccept.getStates()[1]));
 
 		Link<Node> linkToDoMovie = datingDAN.getLink(nodeToDo, nodeMovie, true);
-		linkToDoMovie.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkToDoMovie);
 		TablePotential restrictionsToDoMovie = (TablePotential) linkToDoMovie.getRestrictionsPotential();
 		restrictionsToDoMovie.setValues(new double[] { 0, 1, 0, 1 });
 
 		Link<Node> linkToDoRest = datingDAN.getLink(nodeToDo, nodeRest, true);
-		linkToDoRest.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkToDoRest);
 		TablePotential restrictionsToDoRest = (TablePotential) linkToDoRest.getRestrictionsPotential();
 		restrictionsToDoRest.setValues(new double[] { 1, 0, 1, 0 });
 
@@ -724,19 +725,19 @@ public class DANFactory extends NetsFactory {
 		linkRestREXp.setRevealingStates(Arrays.asList(variableRest.getStates()[0], variableRest.getStates()[1]));
 
 		Link<Node> linkNClubTVExp = datingDAN.getLink(nodeNClub, nodeTVExp, true);
-		linkNClubTVExp.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkNClubTVExp);
 		TablePotential restrictionsNClubTVExp = (TablePotential) linkNClubTVExp.getRestrictionsPotential();
 		restrictionsNClubTVExp.setValues(new double[] { 1, 0, 1, 0 });
 		linkNClubTVExp.setRevealingStates(Arrays.asList(variableNClub.getStates()[0]));
 
 		Link<Node> linkNClubClub = datingDAN.getLink(nodeNClub, nodeClub, true);
-		linkNClubClub.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkNClubClub);
 		TablePotential restrictionsNClubClub = (TablePotential) linkNClubClub.getRestrictionsPotential();
 		restrictionsNClubClub.setValues(new double[] { 0, 1, 0, 1 });
 		linkNClubClub.setRevealingStates(Arrays.asList(variableNClub.getStates()[1]));
 
 		Link<Node> linkNClubMeetFr = datingDAN.getLink(nodeNClub, nodeMeetFr, true);
-		linkNClubMeetFr.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkNClubMeetFr);
 		TablePotential restrictionsNClubMeetFr = (TablePotential) linkNClubMeetFr.getRestrictionsPotential();
 		restrictionsNClubMeetFr.setValues(new double[] { 0, 1, 0, 1 });
 		linkNClubMeetFr.setRevealingStates(Arrays.asList(variableNClub.getStates()[1]));
@@ -801,12 +802,12 @@ public class DANFactory extends NetsFactory {
 		nodeUrExp.setPotential(potentialUrExp);
 
 		Link<Node> linkToDoMovie = datingDAN.getLink(nodeToDo, nodeMovie, true);
-		linkToDoMovie.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkToDoMovie);
 		TablePotential restrictionsToDoMovie = (TablePotential) linkToDoMovie.getRestrictionsPotential();
 		restrictionsToDoMovie.setValues(new double[] { 0, 1, 0, 1 });
 
 		Link<Node> linkToDoRest = datingDAN.getLink(nodeToDo, nodeRest, true);
-		linkToDoRest.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(linkToDoRest);
 		TablePotential restrictionsToDoRest = (TablePotential) linkToDoRest.getRestrictionsPotential();
 		restrictionsToDoRest.setValues(new double[] { 1, 0, 1, 0 });
 
@@ -983,14 +984,14 @@ public class DANFactory extends NetsFactory {
 		// Link<Node> restrictions and revealing states
 		Link<Node> link_nodeResult_of_test_nodeBuild_decision = probNet
 				.getLink(nodeResult_of_test, nodeBuild_decision, true);
-		link_nodeResult_of_test_nodeBuild_decision.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeResult_of_test_nodeBuild_decision);
 		TablePotential restrictions_nodeResult_of_test_nodeBuild_decision = (TablePotential) link_nodeResult_of_test_nodeBuild_decision
 				.getRestrictionsPotential();
 		restrictions_nodeResult_of_test_nodeBuild_decision.setValues(new double[] { 0, 1, 1, 1, 1, 1, 1, 1, 1 });
 
 		Link<Node> link_nodeTest_decision_nodeResult_of_test = probNet
 				.getLink(nodeTest_decision, nodeResult_of_test, true);
-		link_nodeTest_decision_nodeResult_of_test.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeTest_decision_nodeResult_of_test);
 		TablePotential restrictions_nodeTest_decision_nodeResult_of_test = (TablePotential) link_nodeTest_decision_nodeResult_of_test
 				.getRestrictionsPotential();
 		restrictions_nodeTest_decision_nodeResult_of_test.setValues(new double[] { 1, 0, 1, 0, 1, 0 });
@@ -998,7 +999,7 @@ public class DANFactory extends NetsFactory {
 
 		Link<Node> link_nodeBuild_decision_nodeResult_of_advanced_reactor = probNet
 				.getLink(nodeBuild_decision, nodeResult_of_advanced_reactor, true);
-		link_nodeBuild_decision_nodeResult_of_advanced_reactor.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeBuild_decision_nodeResult_of_advanced_reactor);
 		TablePotential restrictions_nodeBuild_decision_nodeResult_of_advanced_reactor = (TablePotential) link_nodeBuild_decision_nodeResult_of_advanced_reactor
 				.getRestrictionsPotential();
 		restrictions_nodeBuild_decision_nodeResult_of_advanced_reactor.setValues(new double[] { 1, 0, 0, 1, 0, 0, 1, 0,
@@ -1008,7 +1009,7 @@ public class DANFactory extends NetsFactory {
 
 		Link<Node> link_nodeBuild_decision_nodeResult_of_conventional_reactor = probNet
 				.getLink(nodeBuild_decision, nodeResult_of_conventional_reactor, true);
-		link_nodeBuild_decision_nodeResult_of_conventional_reactor.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeBuild_decision_nodeResult_of_conventional_reactor);
 		TablePotential restrictions_nodeBuild_decision_nodeResult_of_conventional_reactor = (TablePotential) link_nodeBuild_decision_nodeResult_of_conventional_reactor
 				.getRestrictionsPotential();
 		restrictions_nodeBuild_decision_nodeResult_of_conventional_reactor.setValues(new double[] { 0, 1, 0, 0, 1, 0 });
@@ -1192,7 +1193,7 @@ public class DANFactory extends NetsFactory {
 
 		// Link<Node> restrictions and revealing states
 		Link<Node> link_nodeWedding_nodeOffspring = probNet.getLink(nodeWedding, nodeOffspring, true);
-		link_nodeWedding_nodeOffspring.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeWedding_nodeOffspring);
 		TablePotential restrictions_nodeWedding_nodeOffspring = (TablePotential) link_nodeWedding_nodeOffspring
 				.getRestrictionsPotential();
 		restrictions_nodeWedding_nodeOffspring.setValues(new double[] { 1, 1, 0, 1 });
@@ -1212,7 +1213,7 @@ public class DANFactory extends NetsFactory {
 				.setRevealingStates(Arrays.asList(varDec_Task_3.getStates()[1], varDec_Task_3.getStates()[0]));
 
 		Link<Node> link_nodeMarriage_nodeWedding = probNet.getLink(nodeMarriage, nodeWedding, true);
-		link_nodeMarriage_nodeWedding.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeMarriage_nodeWedding);
 		TablePotential restrictions_nodeMarriage_nodeWedding = (TablePotential) link_nodeMarriage_nodeWedding
 				.getRestrictionsPotential();
 		restrictions_nodeMarriage_nodeWedding.setValues(new double[] { 1, 0, 0, 1 });
@@ -1309,7 +1310,7 @@ public class DANFactory extends NetsFactory {
 		// Link<Node> restrictions and revealing states
 		Link<Node> link_nodeDec_Blood_Test_nodeBlood_test_result = probNet
 				.getLink(nodeDec_Blood_Test, nodeBlood_test_result, true);
-		link_nodeDec_Blood_Test_nodeBlood_test_result.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDec_Blood_Test_nodeBlood_test_result);
 		TablePotential restrictions_nodeDec_Blood_Test_nodeBlood_test_result = (TablePotential) link_nodeDec_Blood_Test_nodeBlood_test_result
 				.getRestrictionsPotential();
 		restrictions_nodeDec_Blood_Test_nodeBlood_test_result.setValues(new double[] { 0, 1, 0, 1 });
@@ -1318,7 +1319,7 @@ public class DANFactory extends NetsFactory {
 
 		Link<Node> link_nodeDec_Urine_test_nodeUrine_test_result = probNet
 				.getLink(nodeDec_Urine_test, nodeUrine_test_result, true);
-		link_nodeDec_Urine_test_nodeUrine_test_result.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDec_Urine_test_nodeUrine_test_result);
 		TablePotential restrictions_nodeDec_Urine_test_nodeUrine_test_result = (TablePotential) link_nodeDec_Urine_test_nodeUrine_test_result
 				.getRestrictionsPotential();
 		restrictions_nodeDec_Urine_test_nodeUrine_test_result.setValues(new double[] { 0, 1, 0, 1 });
@@ -1397,13 +1398,13 @@ public class DANFactory extends NetsFactory {
 
 		// Link<Node> restrictions and revealing states
 		Link<Node> link_nodeT1_nodeR_T1 = probNet.getLink(nodeT1, nodeR_T1, true);
-		link_nodeT1_nodeR_T1.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeT1_nodeR_T1);
 		TablePotential restrictions_nodeT1_nodeR_T1 = (TablePotential) link_nodeT1_nodeR_T1.getRestrictionsPotential();
 		restrictions_nodeT1_nodeR_T1.setValues(new double[] { 0, 1, 0, 1 });
 		link_nodeT1_nodeR_T1.setRevealingStates(Arrays.asList(varT1.getStates()[1]));
 
 		Link<Node> link_nodeT2_nodeR_T2 = probNet.getLink(nodeT2, nodeR_T2, true);
-		link_nodeT2_nodeR_T2.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeT2_nodeR_T2);
 		TablePotential restrictions_nodeT2_nodeR_T2 = (TablePotential) link_nodeT2_nodeR_T2.getRestrictionsPotential();
 		restrictions_nodeT2_nodeR_T2.setValues(new double[] { 0, 1, 0, 1 });
 		link_nodeT2_nodeR_T2.setRevealingStates(Arrays.asList(varT2.getStates()[1]));
@@ -1499,7 +1500,7 @@ public class DANFactory extends NetsFactory {
 		// Link<Node> restrictions and revealing states
 		for (int i = 0; i < numTests; i++) {
 			Link<Node> link_Dec_To_Test_Result = probNet.getLink(nodeDecTest[i], nodeTestResult[i], true);
-			link_Dec_To_Test_Result.initializesRestrictionsPotential();
+			LinkOperations.initializesRestrictionsPotential(link_Dec_To_Test_Result);
 			TablePotential restrictions_nodeDec_Test_node_test_result = (TablePotential) link_Dec_To_Test_Result
 					.getRestrictionsPotential();
 			restrictions_nodeDec_Test_node_test_result.setValues(new double[] { 0, 1, 0, 1 });
@@ -1601,7 +1602,7 @@ public class DANFactory extends NetsFactory {
 		// Link<Node> restrictions and revealing states
 		for (int i = 0; i < numTests; i++) {
 			Link<Node> link_Dec_To_Test_Result = probNet.getLink(nodeDecTest[i], nodeTestResult[i], true);
-			link_Dec_To_Test_Result.initializesRestrictionsPotential();
+			LinkOperations.initializesRestrictionsPotential(link_Dec_To_Test_Result);
 			TablePotential restrictions_nodeDec_Test_node_test_result = (TablePotential) link_Dec_To_Test_Result
 					.getRestrictionsPotential();
 			restrictions_nodeDec_Test_node_test_result.setValues(new double[] { 0, 1, 0, 1 });
@@ -1696,7 +1697,7 @@ public class DANFactory extends NetsFactory {
 		// Link<Node> restrictions and revealing states
 		for (int i = 0; i < numTests; i++) {
 			Link<Node> link_Dec_To_Test_Result = probNet.getLink(nodeDecTest[i], nodeTestResult[i], true);
-			link_Dec_To_Test_Result.initializesRestrictionsPotential();
+			LinkOperations.initializesRestrictionsPotential(link_Dec_To_Test_Result);
 			TablePotential restrictions_nodeDec_Test_node_test_result = (TablePotential) link_Dec_To_Test_Result
 					.getRestrictionsPotential();
 			restrictions_nodeDec_Test_node_test_result.setValues(new double[] { 0, 1, 0, 1 });
@@ -1979,35 +1980,35 @@ public class DANFactory extends NetsFactory {
 
 		// Link<Node> restrictions and revealing states
 		Link<Node> link_nodeDecTBNA_nodeTBNA = probNet.getLink(nodeDecTBNA, nodeTBNA, true);
-		link_nodeDecTBNA_nodeTBNA.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDecTBNA_nodeTBNA);
 		TablePotential restrictions_nodeDecTBNA_nodeTBNA = (TablePotential) link_nodeDecTBNA_nodeTBNA
 				.getRestrictionsPotential();
 		restrictions_nodeDecTBNA_nodeTBNA.setValues(new double[] { 0, 1, 0, 1 });
 		link_nodeDecTBNA_nodeTBNA.setRevealingStates(Arrays.asList(varDecTBNA.getStates()[1]));
 
 		Link<Node> link_nodeDecPET_nodePET = probNet.getLink(nodeDecPET, nodePET, true);
-		link_nodeDecPET_nodePET.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDecPET_nodePET);
 		TablePotential restrictions_nodeDecPET_nodePET = (TablePotential) link_nodeDecPET_nodePET
 				.getRestrictionsPotential();
 		restrictions_nodeDecPET_nodePET.setValues(new double[] { 1, 0, 0, 1, 0, 1 });
 		link_nodeDecPET_nodePET.setRevealingStates(Arrays.asList(varDecPET.getStates()[0], varDecPET.getStates()[1]));
 
 		Link<Node> link_nodeDecMED_nodeMED = probNet.getLink(nodeDecMED, nodeMED, true);
-		link_nodeDecMED_nodeMED.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDecMED_nodeMED);
 		TablePotential restrictions_nodeDecMED_nodeMED = (TablePotential) link_nodeDecMED_nodeMED
 				.getRestrictionsPotential();
 		restrictions_nodeDecMED_nodeMED.setValues(new double[] { 0, 1, 0, 1 });
 		link_nodeDecMED_nodeMED.setRevealingStates(Arrays.asList(varDecMED.getStates()[1]));
 
 		Link<Node> link_nodeDecEBUS_nodeEBUS = probNet.getLink(nodeDecEBUS, nodeEBUS, true);
-		link_nodeDecEBUS_nodeEBUS.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDecEBUS_nodeEBUS);
 		TablePotential restrictions_nodeDecEBUS_nodeEBUS = (TablePotential) link_nodeDecEBUS_nodeEBUS
 				.getRestrictionsPotential();
 		restrictions_nodeDecEBUS_nodeEBUS.setValues(new double[] { 0, 1, 0, 1 });
 		link_nodeDecEBUS_nodeEBUS.setRevealingStates(Arrays.asList(varDecEBUS.getStates()[1]));
 
 		Link<Node> link_nodeDecEUS_nodeEUS = probNet.getLink(nodeDecEUS, nodeEUS, true);
-		link_nodeDecEUS_nodeEUS.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDecEUS_nodeEUS);
 		TablePotential restrictions_nodeDecEUS_nodeEUS = (TablePotential) link_nodeDecEUS_nodeEUS
 				.getRestrictionsPotential();
 		restrictions_nodeDecEUS_nodeEUS.setValues(new double[] { 0, 1, 0, 1 });
@@ -2129,14 +2130,14 @@ public class DANFactory extends NetsFactory {
 
 		// Link<Node> restrictions and revealing states
 		Link<Node> link_nodeFirst_Result_nodeSecond_result = probNet.getLink(nodeFirst_Result, nodeSecond_result, true);
-		link_nodeFirst_Result_nodeSecond_result.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeFirst_Result_nodeSecond_result);
 		TablePotential restrictions_nodeFirst_Result_nodeSecond_result = (TablePotential) link_nodeFirst_Result_nodeSecond_result
 				.getRestrictionsPotential();
 		restrictions_nodeFirst_Result_nodeSecond_result.setValues(new double[] { 0, 1, 1, 1, 0, 1, 1, 1 });
 
 		Link<Node> link_nodeDec_Second_Test_nodeSecond_result = probNet
 				.getLink(nodeDec_Second_Test, nodeSecond_result, true);
-		link_nodeDec_Second_Test_nodeSecond_result.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDec_Second_Test_nodeSecond_result);
 		TablePotential restrictions_nodeDec_Second_Test_nodeSecond_result = (TablePotential) link_nodeDec_Second_Test_nodeSecond_result
 				.getRestrictionsPotential();
 		restrictions_nodeDec_Second_Test_nodeSecond_result.setValues(new double[] { 0, 1, 0, 1 });
@@ -2144,7 +2145,7 @@ public class DANFactory extends NetsFactory {
 
 		Link<Node> link_nodeDec_First_Test_nodeFirst_Result = probNet
 				.getLink(nodeDec_First_Test, nodeFirst_Result, true);
-		link_nodeDec_First_Test_nodeFirst_Result.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDec_First_Test_nodeFirst_Result);
 		TablePotential restrictions_nodeDec_First_Test_nodeFirst_Result = (TablePotential) link_nodeDec_First_Test_nodeFirst_Result
 				.getRestrictionsPotential();
 		restrictions_nodeDec_First_Test_nodeFirst_Result.setValues(new double[] { 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0,
@@ -2155,14 +2156,14 @@ public class DANFactory extends NetsFactory {
 
 		Link<Node> link_nodeDec_First_Test_nodeDec_Second_Test = probNet
 				.getLink(nodeDec_First_Test, nodeDec_Second_Test, true);
-		link_nodeDec_First_Test_nodeDec_Second_Test.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDec_First_Test_nodeDec_Second_Test);
 		TablePotential restrictions_nodeDec_First_Test_nodeDec_Second_Test = (TablePotential) link_nodeDec_First_Test_nodeDec_Second_Test
 				.getRestrictionsPotential();
 		restrictions_nodeDec_First_Test_nodeDec_Second_Test.setValues(new double[] { 1, 1, 1, 1, 0, 0, 1, 0 });
 
 		Link<Node> link_nodeDec_First_Test_nodeSecond_result = probNet
 				.getLink(nodeDec_First_Test, nodeSecond_result, true);
-		link_nodeDec_First_Test_nodeSecond_result.initializesRestrictionsPotential();
+		LinkOperations.initializesRestrictionsPotential(link_nodeDec_First_Test_nodeSecond_result);
 		TablePotential restrictions_nodeDec_First_Test_nodeSecond_result = (TablePotential) link_nodeDec_First_Test_nodeSecond_result
 				.getRestrictionsPotential();
 		restrictions_nodeDec_First_Test_nodeSecond_result.setValues(new double[] { 0, 0, 1, 0, 0, 0, 1, 0 });

@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.LinkOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.gui.configuration.GUIColors;
@@ -139,7 +140,9 @@ public non-sealed class VisualLink extends VisualArrow implements ClassLocalizab
         boolean hasAbsoluteLinkRestriction = this.link.hasTotalRestriction();
         this.setDoubleStriped(hasAbsoluteLinkRestriction);
         this.setSingleStriped(this.link.hasRestrictions() && !hasAbsoluteLinkRestriction);
-        this.setLinkColor(this.link.hasRevealingConditions() ? GUIColors.Network.REVELATION_ARC_VARIABLE : GUIColors.Network.Link.FOREGOUND);
+        this.setLinkColor(LinkOperations.hasRevealingConditions(this.link) ?
+                GUIColors.Network.REVELATION_ARC_VARIABLE :
+                GUIColors.Network.Link.FOREGOUND);
         super.paint(g);
     }
     

@@ -286,7 +286,7 @@ public final class VariableStateOperations {
         List<Node> children = probNet.getChildren(node);
         for (Node child : children) {
             Link<Node> link = probNet.getLink(node, child, true);
-            if (link.hasRevealingConditions()) {
+            if (LinkOperations.hasRevealingConditions(link)) {
                 VariableType varType = link.getFrom().getVariable().getVariableType();
                 if (varType == VariableType.NUMERIC) {
                     revelationConditionMap.put(link, link.getRevealingIntervals());

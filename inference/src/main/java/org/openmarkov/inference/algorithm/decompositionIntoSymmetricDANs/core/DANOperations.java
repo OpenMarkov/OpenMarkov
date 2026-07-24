@@ -16,6 +16,7 @@ import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.LinkOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -76,7 +77,7 @@ public class DANOperations {
             instantiatedNet.removeLink(link.getFrom().getVariable(), link.getTo().getVariable(), true);
             
             if (destinationNode.getNodeType() == NodeType.CHANCE) {
-                if (link.hasRevealingConditions()) {
+                if (LinkOperations.hasRevealingConditions(link)) {
                     if (link.getRevealingStates().contains(state)) {
                         List<Node> predecessorDecisions = ProbNetOperations
                                 .getPredecessorDecisions(destinationNode, instantiatedNet);
@@ -316,7 +317,7 @@ public class DANOperations {
         for (Node node : decisionNodes) {
             List<Node> revealedByDecision = new ArrayList<>();
             for (Link<Node> link : node.getLinks()) {
-                if (link.getFrom().equals(node) && link.hasRevealingConditions()) {
+                if (link.getFrom().equals(node) && LinkOperations.hasRevealingConditions(link)) {
                     revealedByDecision.add(link.getTo());
                 }
             }
@@ -362,7 +363,7 @@ public class DANOperations {
         for (Node node : decisionNodes) {
             List<Node> revealedByDecision = new ArrayList<>();
             for (Link<Node> link : node.getLinks()) {
-                if (link.getFrom().equals(node) && link.hasRevealingConditions()) {
+                if (link.getFrom().equals(node) && LinkOperations.hasRevealingConditions(link)) {
                     revealedByDecision.add(link.getTo());
                 }
             }

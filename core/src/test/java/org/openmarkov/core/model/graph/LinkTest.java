@@ -35,7 +35,7 @@ public class LinkTest {
         nodeA = net.addNode(varA, NodeType.CHANCE);
         nodeB = net.addNode(varB, NodeType.CHANCE);
         link = new Link<>(nodeA, nodeB, true);
-        link.initializesRestrictionsPotential();
+        LinkOperations.initializesRestrictionsPotential(link);
     }
     
     @Test public void testRestrictionsPotential() {
@@ -48,32 +48,45 @@ public class LinkTest {
             }
         }
         
-        link.setCompatibilityValue(stateA[0], stateB[0], 0);
+        LinkOperations.setCompatibilityValue(link, stateA[0], stateB[0], 0);
         Assertions.assertEquals(0, link.areCompatible(stateA[0], stateB[0]));
         Assertions.assertFalse(link.hasTotalRestriction());
-        link.setCompatibilityValue(stateA[0], stateB[0], 1);
+        LinkOperations.setCompatibilityValue(link, stateA[0], stateB[0], 1);
         Assertions.assertEquals(1, link.areCompatible(stateA[0], stateB[1]));
-        link.setCompatibilityValue(stateA[0], stateB[0], 0);
-        link.setCompatibilityValue(stateA[0], stateB[1], 0);
+        LinkOperations.setCompatibilityValue(link, stateA[0], stateB[0], 0);
+        LinkOperations.setCompatibilityValue(link, stateA[0], stateB[1], 0);
         Assertions.assertTrue(link.hasTotalRestriction());
         
         Set<State> statesRestrictTotally = link.getStatesRestrictTotally();
         Set<State> expectedStates = new HashSet<>();
         expectedStates.add(stateA[0]);
         Assertions.assertEquals(statesRestrictTotally, expectedStates);
-        link.setCompatibilityValue(stateA[2], stateB[0], 0);
+        LinkOperations.setCompatibilityValue(link, stateA[2], stateB[0], 0);
         statesRestrictTotally = link.getStatesRestrictTotally();
         Assertions.assertEquals(statesRestrictTotally, expectedStates);
-        link.setCompatibilityValue(stateA[1], stateB[0], 0);
+        LinkOperations.setCompatibilityValue(link, stateA[1], stateB[0], 0);
         statesRestrictTotally = link.getStatesRestrictTotally();
         Assertions.assertEquals(statesRestrictTotally, expectedStates);
-        link.setCompatibilityValue(stateA[2], stateB[1], 0);
+        LinkOperations.setCompatibilityValue(link, stateA[2], stateB[1], 0);
         statesRestrictTotally = link.getStatesRestrictTotally();
         expectedStates.add(stateA[2]);
         Assertions.assertEquals(statesRestrictTotally, expectedStates);
         
     }
     
+    @Test public void aLinkBetweenEndsThatAreNotNodesWorksJustTheSame() {
+        // P10: the operations that read the variable of a node live in LinkOperations, so nothing
+        // left in Link casts its ends to Node. A link between plain strings is fully usable.
+        Link<String> stringLink = new Link<>("A", "B", true);
+
+        Assertions.assertEquals("A", stringLink.getFrom());
+        Assertions.assertFalse(stringLink.hasRestrictions());
+        Assertions.assertFalse(stringLink.hasTotalRestriction());
+        Assertions.assertTrue(stringLink.getStatesRestrictTotally().isEmpty());
+        Assertions.assertDoesNotThrow(stringLink::tryResetRestrictionsPotential);
+        Assertions.assertEquals("A --> B", stringLink.toString());
+    }
+
     @Test public void containsRecognisesAnEndByEqualityNotByIdentity() {
         // A node equal to one of the ends must be recognised, as everywhere else in Graph: comparing
         // by identity made getLink(node1, node2, false) miss undirected links.
@@ -114,7 +127,7 @@ public class LinkTest {
     }
 
     @Test public void testRevelationArc() {
-        Assertions.assertFalse(link.hasRevealingConditions());
+        Assertions.assertFalse(LinkOperations.hasRevealingConditions(link));
         link.addRevealingState(stateA[0]);
         Assertions.assertEquals(1, link.getRevealingStates().size());
         Assertions.assertTrue(link.getRevealingStates().contains(stateA[0]));

@@ -21,6 +21,7 @@ import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.LinkOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.core.model.network.ProbNet;
@@ -251,7 +252,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
                 if (!links.isEmpty()) {
                     Link<Node> link = links.getFirst().getLink();
                     if (!link.hasRestrictions()) {
-                        link.initializesRestrictionsPotential();
+                        LinkOperations.initializesRestrictionsPotential(link);
                     }
                     new LinkRestrictionEditDialog(GUIUtils.getOwner(networkPanel.getEditorPanel()), link).requestValues();
                     link.tryResetRestrictionsPotential();

@@ -103,7 +103,7 @@ public class ProbNetTest {
                 assertEquals(link1.getFrom().getVariable().getName(), link2.getFrom().getVariable().getName());
                 assertEquals(link1.getTo().getVariable().getName(), link2.getTo().getVariable().getName());
                 assertEquals(link1.hasRestrictions(), link2.hasRestrictions());
-                assertEquals(link1.hasRevealingConditions(), link2.hasRevealingConditions());
+                assertEquals(LinkOperations.hasRevealingConditions(link1), LinkOperations.hasRevealingConditions(link2));
             }
             
             // Check that the potentials are the same

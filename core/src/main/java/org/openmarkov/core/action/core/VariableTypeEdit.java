@@ -14,6 +14,7 @@ import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.LinkOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.PartitionedInterval;
@@ -136,7 +137,7 @@ public class VariableTypeEdit extends MultiStepEdit {
         
         for (Node child : probNet.getChildren(node)) {
             Link<Node> link = probNet.getLink(node, child, true);
-            if (link.hasRevealingConditions()) {
+            if (LinkOperations.hasRevealingConditions(link)) {
                 var originalRevealingIntervals = link.getRevealingIntervals();
                 var originalRevealingStates = link.getRevealingStates();
                 var newRevealingIntervals = new ArrayList<PartitionedInterval>();

@@ -9,22 +9,24 @@ package org.openmarkov.core.model.graph;
 
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.localize.ConsiderAutoLocalizationIsValid;
-import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.VariableType;
-import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
- * This class implements explicit links.
+ * This class implements the links of a {@link Graph}, of whatever kind its nodes are.
+ * <p>
+ * A link joins two ends, knows whether it is directed, and holds whatever hangs from it: a
+ * restrictions potential and the revealing conditions. The operations that have to look
+ * <em>inside</em> the ends — the ones that read the variable of a node — do not live here, because
+ * the ends of a link are not necessarily nodes; they live in {@code LinkOperations}, which works on
+ * a {@code Link<Node>}.
  * <p>
  * Equality is deliberately by <em>identity</em> (neither {@code equals} nor {@code hashCode} is
  * overridden): the graph stores the <em>same</em> {@link Link} object in the link lists of both
@@ -34,7 +36,6 @@ import java.util.Set;
  * @author manuel
  * @author fjdiez
  * @version 1.0
- * @see Node
  * @see Graph
  * @since OpenMarkov 1.0
  */
@@ -90,8 +91,8 @@ public class Link<T> implements ClassLocalizable {
      * This constructor should be called only from the {@code addLink}
      * function in the class Graph. Both nodes must belong to the same graph.
      *
-     * @param from     {@code Node}.
-     * @param to       {@code Node}.
+     * @param from     the first end of the link; its parent, if the link is directed.
+     * @param to       the second end of the link; its child, if the link is directed.
      * @param directed {@code boolean}.
      *
      */
@@ -123,7 +124,7 @@ public class Link<T> implements ClassLocalizable {
     }
     
     /**
-     * @param node {@code Node}.
+     * @param node the node to look for.
      *
      * @return {@code true} if {@code node} is one of the two ends of the link. Ends are compared by
      * equality, as {@link Graph} does everywhere else — its maps and lists of neighbours, and the
@@ -224,19 +225,6 @@ public class Link<T> implements ClassLocalizable {
         return compatibilityValue >= COMPATIBILITY_MIDPOINT;
     }
 
-    /**
-     * Initializes a TablePotential for the variable associated to node1 and
-     * node2, whose values are all 1.
-     */
-    public void initializesRestrictionsPotential() {
-        List<Variable> variables = new ArrayList<>();
-        variables.add(((Node) from).getVariable());
-        variables.add(((Node) to).getVariable());
-        restrictionsPotential = new TablePotential(variables, PotentialRole.LINK_RESTRICTION);
-        Arrays.fill(restrictionsPotential.getValues(), 1);
-        
-    }
-    
     /*****
      * Assigns a null value to the restrictionsPotential if the restrictions
      * potential does not contain restrictions
@@ -253,28 +241,6 @@ public class Link<T> implements ClassLocalizable {
             }
         }
         restrictionsPotential = null;
-    }
-    
-    /*****
-     * Assigns the value of the parameter compatibility to the combination of
-     * the variables state1 and state2.
-     *
-     * @param state1 the state1
-     *            state of the variable of node1
-     * @param state2 the state2
-     *            state of the variable of node2
-     * @param compatibility the compatibility
-     *            value of compatibility
-     */
-    public void setCompatibilityValue(State state1, State state2, int compatibility) {
-        if (this.restrictionsPotential == null) {
-            this.initializesRestrictionsPotential();
-        }
-        int[] indexes = new int[2];
-        indexes[0] = restrictionsPotential.getVariable(0).getStateIndex(state1);
-        indexes[1] = restrictionsPotential.getVariable(1).getStateIndex(state2);
-        List<Variable> variables = restrictionsPotential.getVariables();
-        restrictionsPotential.setValue(variables, indexes, compatibility);
     }
     
     /******
@@ -326,22 +292,6 @@ public class Link<T> implements ClassLocalizable {
             return from.toString() + " --- " + to.toString();
         }
         return from.toString() + " --> " + to.toString();
-    }
-    
-    /*****
-     * This method indicates whether there are revealing conditions for the
-     * link.
-     *
-     * @return {@code true} if there exist revealing conditions.
-     */
-    public boolean hasRevealingConditions() {
-        
-        VariableType varType = ((Node) from).getVariable().getVariableType();
-        
-        if (varType == VariableType.NUMERIC) {
-            return !revealingIntervals.isEmpty();
-        }
-        return !revealingStates.isEmpty();
     }
     
     /**
@@ -420,14 +370,5 @@ public class Link<T> implements ClassLocalizable {
     public void removeRevealingInterval(PartitionedInterval interval) {
         this.revealingIntervals.remove(interval);
     }
-    
-	public void linkRestrictionPotentialValue(Integer newValue, int row, int col){
-		int numStates2 = ((Node) to).getVariable().getNumStates();
-		int stateIndex1 = col - 1;
-		int stateIndex2 = numStates2 - row;
-		State state1 = ((Node) from).getVariable().getStates()[stateIndex1];
-		State state2 = ((Node) to).getVariable().getStates()[stateIndex2];
-		setCompatibilityValue(state1, state2, newValue);
-	}
 
 }

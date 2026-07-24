@@ -27,6 +27,7 @@ import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.CycleLength;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.LinkOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.PartitionedInterval;
@@ -1083,7 +1084,7 @@ public class PGMXReader_0_2 {
                     if (xmlPotential != null) {
                         Potential potential = getPotential(xmlPotential, probNet);
                         Link<Node> link = probNet.getLink(node1, node2, directed);
-                        link.initializesRestrictionsPotential();
+                        LinkOperations.initializesRestrictionsPotential(link);
                         link.setRestrictionsPotential((TablePotential) potential);
                     }
                     Element xmlRevelationCondition = xmlLink.getChild(XMLTags.REVELATION_CONDITIONS.toString());

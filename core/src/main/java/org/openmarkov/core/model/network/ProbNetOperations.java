@@ -717,7 +717,7 @@ public class ProbNetOperations {
             asymmetryFound |= link.hasTotalRestriction() || (
                     link.hasRestrictions() && link.getTo().getNodeType() == NodeType.DECISION
             ) || (
-                    link.hasRevealingConditions() && link.getRevealingStates().size() < link.getFrom().getVariable()
+                    LinkOperations.hasRevealingConditions(link) && link.getRevealingStates().size() < link.getFrom().getVariable()
                                                                                             .getNumStates()
             );
         }
@@ -823,7 +823,7 @@ public class ProbNetOperations {
                         link = links.get(i);
                         isFound = link.getFrom().equals(nodeToProcess) && link.getTo() == child;
                     }
-                    if (link.hasRevealingConditions()) {
+                    if (LinkOperations.hasRevealingConditions(link)) {
                         observable.add(child);
                         variablesToProcess.add(child.getVariable());
                     }

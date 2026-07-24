@@ -597,7 +597,7 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
                 if (link.hasRestrictions()) {
                     getLinkRestriction(link, linkElement);
                 }
-                if (link.hasRevealingConditions()) {
+                if (LinkOperations.hasRevealingConditions(link)) {
                     getRevelationConditions(link, linkElement);
                 }
                 // linkElement.addContent(varaibleElement)

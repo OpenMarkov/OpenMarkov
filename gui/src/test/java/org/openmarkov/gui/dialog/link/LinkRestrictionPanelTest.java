@@ -10,6 +10,7 @@ package org.openmarkov.gui.dialog.link;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.LinkOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -39,9 +40,9 @@ public class LinkRestrictionPanelTest {
 		Node nodeB = new Node(net, varB, NodeType.CHANCE);
 		Link<Node> link = new Link<Node>(nodeA, nodeB, true);
 		net.addLink(nodeA, nodeB, true);
-		link.initializesRestrictionsPotential();
-		link.setCompatibilityValue(stateA[1], stateB[0], 0);
-		link.setCompatibilityValue(stateA[0], stateB[1], 0);
+		LinkOperations.initializesRestrictionsPotential(link);
+		LinkOperations.setCompatibilityValue(link, stateA[1], stateB[0], 0);
+		LinkOperations.setCompatibilityValue(link, stateA[0], stateB[1], 0);
 		panel = new LinkRestrictionPanel(link);
 
 	}

@@ -84,7 +84,7 @@ public class LinkRestrictionPotentialOperationsTest {
         
         // Link restrictions and revealing states
         Link link_nodeA_nodeE = probNet.getLink(nodeA, nodeE, true);
-        link_nodeA_nodeE.initializesRestrictionsPotential();
+        LinkOperations.initializesRestrictionsPotential(link_nodeA_nodeE);
         TablePotential restrictions_nodeA_nodeE = (TablePotential) link_nodeA_nodeE.getRestrictionsPotential();
         restrictions_nodeA_nodeE.setValues(new double[]{0, 1, 0, 1, 0, 1, 0, 1});
         
@@ -132,7 +132,7 @@ public class LinkRestrictionPotentialOperationsTest {
             }
             
         }
-        link.initializesRestrictionsPotential();
+        LinkOperations.initializesRestrictionsPotential(link);
     }
     
     @Test public void testHasLinkRestriction() {
@@ -181,9 +181,9 @@ public class LinkRestrictionPotentialOperationsTest {
     }
     
     @Test public void testUpdatePotentialByLinkRestrictions() {
-        link.setCompatibilityValue(stateA[0], stateB[0], 0);
-        link2.initializesRestrictionsPotential();
-        link2.setCompatibilityValue(stateC[0], stateB[0], 0);
+        LinkOperations.setCompatibilityValue(link, stateA[0], stateB[0], 0);
+        LinkOperations.initializesRestrictionsPotential(link2);
+        LinkOperations.setCompatibilityValue(link2, stateC[0], stateB[0], 0);
         
         TablePotential probabilityPotential = (TablePotential) LinkRestrictionPotentialOperations
                 .updatePotentialByLinkRestrictions(net.getNode("B"));
@@ -208,9 +208,9 @@ public class LinkRestrictionPotentialOperationsTest {
     }
     
     @Test public void testGetStateCombinationsWithLinkRestriction() {
-        link.setCompatibilityValue(stateA[0], stateB[0], 0);
-        link2.initializesRestrictionsPotential();
-        link2.setCompatibilityValue(stateC[0], stateB[0], 0);
+        LinkOperations.setCompatibilityValue(link, stateA[0], stateB[0], 0);
+        LinkOperations.initializesRestrictionsPotential(link2);
+        LinkOperations.setCompatibilityValue(link2, stateC[0], stateB[0], 0);
         List<int[]> states = LinkRestrictionPotentialOperations
                 .getStateCombinationsWithLinkRestriction(net.getNode("B"));
         Assertions.assertEquals(5, states.size());

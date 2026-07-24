@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.LinkOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -168,8 +169,8 @@ public class PGMXReaderWriterTest {
         probNet.addPotential(potential);
         for (Link<Node> link : links) {
             if (link.getFrom().getVariable().equals(varA)) {
-                link.initializesRestrictionsPotential();
-                link.setCompatibilityValue(stateA[0], stateB[0], 0);
+                LinkOperations.initializesRestrictionsPotential(link);
+                LinkOperations.setCompatibilityValue(link, stateA[0], stateB[0], 0);
                 link.addRevealingState(stateA[0]);
                 
             }

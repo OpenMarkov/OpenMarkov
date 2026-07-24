@@ -9,6 +9,7 @@ package org.openmarkov.gui.action;
 
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.LinkOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -87,7 +88,7 @@ public class LinkRestrictionPotentialValueEdit extends PNEdit {
 		int stateIndex2 = numStates2 - row;
 		State state1 = node1.getVariable().getStates()[stateIndex1];
 		State state2 = node2.getVariable().getStates()[stateIndex2];
-        link.setCompatibilityValue(state1, state2, this.newValue);
+        LinkOperations.setCompatibilityValue(link, state1, state2, this.newValue);
 		newTable = link.getRestrictionsPotential().getValues().clone();
 
 	}
@@ -96,7 +97,7 @@ public class LinkRestrictionPotentialValueEdit extends PNEdit {
 		this.setTypicalRedo(false);
 		super.redo();
 		if (!link.hasRestrictions()) {
-			link.initializesRestrictionsPotential();
+			LinkOperations.initializesRestrictionsPotential(link);
 			this.tablePotential = link.getRestrictionsPotential();
 		}
 		tablePotential.setValues(newTable);
@@ -106,7 +107,7 @@ public class LinkRestrictionPotentialValueEdit extends PNEdit {
 	@Override public void undo() {
 		super.undo();
 		if (!link.hasRestrictions()) {
-			link.initializesRestrictionsPotential();
+			LinkOperations.initializesRestrictionsPotential(link);
 			this.tablePotential = link.getRestrictionsPotential();
 		}
 		tablePotential.setValues(lastTable);
