@@ -59,10 +59,21 @@ public class StringFormat {
             \s*
             (?<functionOrAttribute>\w+)
             \s*
+            (\(\s*\))?      <- the empty parentheses of a method call, tolerated but not required
+            \s*
      */
-    private static final Pattern FUNCTION_AND_ATTRIBUTES_REGEX = Pattern.compile("(?x)\\s*(?<functionOrAttributeMark>[.\\#])\\s*(?<functionOrAttribute>\\w+)\\s*");
+    private static final Pattern FUNCTION_AND_ATTRIBUTES_REGEX = Pattern.compile("(?x)\\s*(?<functionOrAttributeMark>[.\\#])\\s*(?<functionOrAttribute>\\w+)\\s*(\\(\\s*\\))?\\s*");
     
     /*
+        There is a SECOND COPY of this grammar in
+        annotationProcessing/.../localization_bindings/XMLConstantsParser: the annotation processor
+        reads the same bundles at compile time. Both must accept exactly the same placeholders, so any
+        change here goes there too.
+
+        They cannot share the code: core is compiled with that processor in its
+        annotationProcessorPaths, so the processor has to be compilable before core and cannot depend
+        on it. (Neither is built today: the module is commented out of the reactor.)
+
         Pattern is:
         (?x)
         \{

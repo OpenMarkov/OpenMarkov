@@ -63,6 +63,20 @@ class StringFormatTest {
                                 StringFormat.extractParameterNames("The { NetName } and the {Other}"));
     }
 
+    /**
+     * A method written with its empty parentheses, as a person naturally writes it, must resolve like
+     * one written without them. Two placeholders of a real message —
+     * {@code core_class_localizations_en.xml}, the potential that cannot be converted to a table —
+     * were written that way and did not resolve at all: the user saw the braces.
+     */
+    @Test final void aMethodWrittenWithParenthesesResolvesLikeOneWithout() {
+        Map<String, Object> values = Map.of("probNetWrapper", new ProbNetWrapper("MyNet"));
+
+        Assertions.assertEquals("MyNet", StringFormat.apply("{probNetWrapper.getNet.getName()}", values));
+        Assertions.assertEquals(StringFormat.apply("{probNetWrapper.getNet.getName}", values),
+                                StringFormat.apply("{probNetWrapper.getNet.getName( )}", values));
+    }
+
     /** B2: an array holding a null element must be rendered, not throw. */
     @Test final void anArrayWithANullElementIsRendered() {
         Map<String, Object> values = new HashMap<>();

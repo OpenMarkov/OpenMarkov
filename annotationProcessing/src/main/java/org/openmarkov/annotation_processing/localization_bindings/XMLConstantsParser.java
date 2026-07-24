@@ -23,9 +23,26 @@ import java.util.stream.Stream;
 class XMLConstantsParser {
     
     private static final String FIRST_ELEMENT_TO_IGNORE = "properties";
+
+    /*
+     * SECOND COPY of the grammar of org.openmarkov.core.stringformat.StringFormat. Both must accept
+     * exactly the same placeholders; keep them in step.
+     *
+     * They cannot share the code: this annotation processor has to be compilable *before* core —
+     * core is compiled with it in its annotationProcessorPaths — so it cannot depend on core.
+     *
+     * The two had already drifted apart: this copy did not accept the .method / #field part, so out
+     * of the 43 placeholders that use it in the bundles ({variable.getName}, {this.getNodes.size}…)
+     * it extracted no parameter at all.
+     */
+    private static final Pattern FUNCTION_AND_ATTRIBUTES_REGEX = Pattern.compile(
+            "(?x)\\s*(?<functionOrAttributeMark>[.\\#])\\s*(?<functionOrAttribute>\\w+)\\s*(\\(\\s*\\))?\\s*");
+
     private static final Pattern NAMED_PARAMETER_REGEX = Pattern.compile("(?x)" +
                                                                                  "\\{" +
                                                                                  "\\s*(?<name>\\w+?)\\s*" +
+                                                                                 "(?<functionAndAttributes>("
+                                                                                 + XMLConstantsParser.FUNCTION_AND_ATTRIBUTES_REGEX.pattern() + ")*)?" +
                                                                                  "(,\\s*(?<format>\\w+?)\\s*)?" +
                                                                                  "(,\\s*(?<style>\\w+?)\\s*)?" +
                                                                                  "(?<unused>,\\w*?)?" +
@@ -149,7 +166,7 @@ class XMLConstantsParser {
         return NAMED_PARAMETER_REGEX
                 .matcher(pattern)
                 .results()
-                .map(match -> match.group(1))
+                .map(match -> match.group("name"))   // by name, never by number: see NAMED_PARAMETER_REGEX
                 .filter(alreadyFoundParameters::add)
                 .toList();
     }
