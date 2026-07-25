@@ -81,10 +81,9 @@ public class PotentialsCanBeClonedTest {
      * equality - two Variable objects with the same name and states are equal by value, and
      * everything else in the model looks variables up by identity.
      */
-    @Disabled("Two families still keep variables of the source network when deepCopy(otherNet) is "
-            + "called directly, and the paths say where: AugmentedProbTablePotential at "
-            + ".augmentedProbTable.variables (the inner table is not carried over to the destination) "
-            + "and UnivariateDistrPotential at .tableVariables. Switch on as each is fixed.")
+    @Disabled("One family still keeps a variable of the source network when deepCopy(otherNet) is "
+            + "called directly: UnivariateDistrPotential at .tableVariables. Switch on when it is "
+            + "fixed.")
     @ParameterizedTest
     @MethodSource("deepCloneTestData")
     void deepCopyUsesTheVariablesOfTheDestinationNetwork(DeepCloneTestData deepCloneTestData) {

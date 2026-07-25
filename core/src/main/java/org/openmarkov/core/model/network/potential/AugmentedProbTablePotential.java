@@ -36,6 +36,17 @@ public class AugmentedProbTablePotential extends Potential {
     /*Note should be discrete variables*/
     public AugmentedProbTablePotential(List<Variable> variables, PotentialRole role) {
         super(variables, role);
+        classifyVariables();
+        setAugmentedProbTable(new AugmentedProbTable(getFiniteStatesVariables(), role));
+    }
+
+    /**
+     * Sorts {@code variables} into the two lists this potential works with: the finite-state ones -
+     * the conditioned variable and every discrete parent, which are what the inner table is indexed
+     * by - and the numeric parameter ones, whose values are resolved from the evidence at projection
+     * time.
+     */
+    private void classifyVariables() {
         setFiniteStatesVariables(new ArrayList<>());
         setParameterVariables(new ArrayList<>());
         getFiniteStatesVariables().add(variables.getFirst());
@@ -48,8 +59,6 @@ public class AugmentedProbTablePotential extends Potential {
                 parameterVariables.add(variable);
             }
         }
-        
-        setAugmentedProbTable(new AugmentedProbTable(getFiniteStatesVariables(), role));
     }
     
     public AugmentedProbTablePotential(AugmentedProbTablePotential AugmentedProbTablePotential) {
@@ -141,6 +150,22 @@ public class AugmentedProbTablePotential extends Potential {
     
     @Override public Potential copy() {
         return new AugmentedProbTablePotential(this);
+    }
+
+    /**
+     * Everything this potential holds beyond {@code variables} is derived from them, and
+     * {@link Potential#deepCopy} only re-points {@code variables} itself: it builds the copy through
+     * the copy constructor, which sorted the variables of the SOURCE network into
+     * {@code finiteStatesVariables} and {@code parameterVariables} and built the inner table over
+     * them. The copy came out pointing at the network it was leaving. Both are rebuilt here from the
+     * variables the copy now has, and the inner table - a potential in its own right - is deep-copied
+     * into the destination as well.
+     */
+    @Override public Potential deepCopy(ProbNet copyNet) {
+        AugmentedProbTablePotential potential = (AugmentedProbTablePotential) super.deepCopy(copyNet);
+        potential.classifyVariables();
+        potential.augmentedProbTable = (AugmentedProbTable) this.augmentedProbTable.deepCopy(copyNet);
+        return potential;
     }
     
     @Override public boolean isUncertain() {
