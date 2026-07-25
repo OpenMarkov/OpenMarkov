@@ -606,9 +606,6 @@ public abstract class ICIPotential extends Potential implements Projectable {
         potential.family = this.family;
         potential.modelType = this.modelType;
         potential.leakyParameters = this.leakyParameters.clone();
-        if (this.leakyVariable != null) {
-            potential.leakyVariable = copyNet.getVariable(this.leakyVariable.getName());
-        }
         // Deep-clone the 2D noisy parameters: double[][].clone() is shallow and would share the
         // inner rows with the original, breaking the independence deepCopy promises (and being
         // inconsistent with the copy constructor, which clones each row). Latent today -- no code
@@ -617,7 +614,30 @@ public abstract class ICIPotential extends Potential implements Projectable {
         for (int i = 0; i < this.noisyParameters.length; i++) {
             potential.noisyParameters[i] = this.noisyParameters[i] == null ? null : this.noisyParameters[i].clone();
         }
-        potential.zVariables = new HashMap<>(this.zVariables);
+        // The auxiliary variables - one z per parent, plus the leak - are rebuilt from the copy's own
+        // variables, exactly as the two constructors build them. They cannot be looked up in copyNet,
+        // because they are not nodes of the network: it holds the child and the parents, not the z
+        // variables nor the leak. Copying the old map over instead left two faults, both of which did
+        // happen:
+        //
+        //   - Its keys stayed the parents of the ORIGINAL network, while super.deepCopy had already
+        //     re-pointed "variables" at the copy's. Variable compares by identity, so in
+        //     getNoisyPotentials() the expression "noisyParameters[variables.indexOf(parent) - 1]"
+        //     looked for a parent that was not there, got -1 and read index -2. The first inference
+        //     over a copied canonical model died with ArrayIndexOutOfBoundsException.
+        //   - The leak was fetched with copyNet.getVariable(name), which returns null for a variable
+        //     the network does not contain, so the copy silently lost it.
+        //
+        // A HashMap also dropped the insertion order that the constructors keep with a LinkedHashMap.
+        Variable copiedChild = potential.getConditionedVariable();
+        potential.zVariables = new LinkedHashMap<>();
+        for (int i = 1; i < potential.variables.size(); ++i) {
+            Variable copiedParent = potential.variables.get(i);
+            potential.zVariables.put(copiedParent, createZVariable(copiedParent, copiedChild));
+        }
+        potential.leakyVariable = (this.leakyVariable == null) ?
+                null :
+                new Variable(copiedChild.getName() + "-leaky", copiedChild.getStates());
         return potential;
     }
     
