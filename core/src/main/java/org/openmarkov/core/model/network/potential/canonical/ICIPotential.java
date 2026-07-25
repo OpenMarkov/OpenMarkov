@@ -90,7 +90,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
         for (int i = 1; i < variables.size(); ++i) {
             zVariables.put(variables.get(i), createZVariable(variables.get(i), conditionedVariable));
         }
-        leakyVariable = new Variable(conditionedVariable.getName() + "-leaky", conditionedVariable.getStates());
+        leakyVariable = createLeakyVariable(conditionedVariable);
         
     }
     
@@ -111,7 +111,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
         for (int i = 1; i < variables.size(); ++i) {
             zVariables.put(variables.get(i), createZVariable(variables.get(i), conditionedVariable));
         }
-        leakyVariable = new Variable(conditionedVariable.getName() + "-leaky", conditionedVariable.getStates());
+        leakyVariable = createLeakyVariable(conditionedVariable);
         for (int i = 1; i < variables.size(); ++i) {
             setNoisyParameters(variables.get(i), potential.getNoisyParameters(variables.get(i)).clone());
         }
@@ -451,6 +451,22 @@ public abstract class ICIPotential extends Potential implements Projectable {
     private static Variable createZVariable(Variable parent, Variable child) {
         return new Variable("z_" + parent.getName() + "_" + child.getName(), child.getStates());
     }
+
+    /**
+     * Builds the leak variable of {@code child}: same states, name marked with "-leaky".
+     *
+     * <p>The mark has to be appended to the BASE name, putting the time slice back afterwards.
+     * Variable reads a trailing " [n]" as a time slice and then rebuilds its name out of the two
+     * parts, so asking it for "X [0]-leaky" gave back a variable called plainly "X [0]": the mark
+     * was parsed as part of the brackets and dropped. The leak of every temporal node was therefore
+     * named exactly like the node it is the leak of. Non-temporal children are unaffected - with no
+     * time slice to put back, the name is "X-leaky" as before.
+     */
+    private static Variable createLeakyVariable(Variable child) {
+        Variable leakyVariable = new Variable(child.getBaseName() + "-leaky", child.getStates());
+        leakyVariable.setTimeSlice(child.getTimeSlice());
+        return leakyVariable;
+    }
     
     @Override public int sampleConditionedVariable(Random randomGenerator, Map<Variable, Integer> sampledParents) {
         int[] iciSampledStates = new int[noisyParameters.length + 1];
@@ -635,9 +651,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
             Variable copiedParent = potential.variables.get(i);
             potential.zVariables.put(copiedParent, createZVariable(copiedParent, copiedChild));
         }
-        potential.leakyVariable = (this.leakyVariable == null) ?
-                null :
-                new Variable(copiedChild.getName() + "-leaky", copiedChild.getStates());
+        potential.leakyVariable = (this.leakyVariable == null) ? null : createLeakyVariable(copiedChild);
         return potential;
     }
     
