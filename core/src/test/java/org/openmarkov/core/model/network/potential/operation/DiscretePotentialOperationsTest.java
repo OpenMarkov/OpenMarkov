@@ -583,17 +583,24 @@ public class DiscretePotentialOperationsTest {
         assertEquals(12, tablePotential.getValues().length);
     }
     
-    // que me lleva a desactivar este test.
-    //
-    
+    /**
+     * Summing out the disease must leave a utility that still depends on the therapy.
+     * <p>
+     * This used to be disabled blaming the way SumOutVariable partitions its input between
+     * probability and utility potentials. That partition is fine: it asks each potential
+     * {@code isAdditive()}, which is {@code criterion != null}. What was wrong was how this test
+     * built its input. It used a helper that reached inside an ExactDistrPotential for the raw
+     * wrapped table, and it is the projection - ExactDistrPotential.tableProject - that copies the
+     * criterion over from the utility node. Without it every utility looked like a probability, so
+     * no utility came out at all. Projecting the way the application does fixes it.
+     */
     @Test
-    @Disabled("Manolo> Hay un problema con la forma en que el métoodo SumOutVariable particiona el conjunto de potenciales entre de probabilidad y de utilidad")
     public void testSumOutVariable2() throws NonProjectablePotentialException {
         ProbNet perfectKnowledge = IDFactory.createNoKnowledge();
         Variable disease = perfectKnowledge.getVariable("Disease");
         Variable therapy = perfectKnowledge.getVariable("Therapy");
         List<Potential> networkPotentials = perfectKnowledge.getPotentials(disease);
-        List<TablePotential> networkTablePotentials = generateTablePotentials(networkPotentials);
+        List<TablePotential> networkTablePotentials = projectToTable(networkPotentials, perfectKnowledge);
         Marginalization marginalization = new SumOutVariable(disease, networkTablePotentials);
         // Asserts
         TablePotential utility = marginalization.getUtility();
@@ -875,18 +882,6 @@ public class DiscretePotentialOperationsTest {
         assertEquals(3, ch.getNumValues(), "All three tied states must be recorded");
     }
 
-    private List<TablePotential> generateTablePotentials(List<Potential> potentials) throws NonProjectablePotentialException {
-        List<TablePotential> tablePotentials = new ArrayList<>(potentials.size());
-        for (Potential potential : potentials) {
-            if (potential instanceof ExactDistrPotential) {
-                tablePotentials.add(((ExactDistrPotential) potential).getTablePotential());
-            } else {
-                tablePotentials.add(potential.getCPT());
-            }
-        }
-        return tablePotentials;
-    }
-    
     /**
      * A decision has no probability potential of its own, and the way to say that is the constant 1,
      * not a null. A null used to travel into the list that multiply() walks and come out three
