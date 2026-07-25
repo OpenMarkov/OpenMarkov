@@ -66,16 +66,7 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
         super(variables, role);
         List<Variable> parents = variables.subList(1, variables.size());
         setEventAsStates(parents);
-        tableVariables = new ArrayList<>();
-        tableVariables.add(variables.get(0));
-        
-        for (Variable variable : parents) {
-            if (variable.getVariableType() != VariableType.EVENT)
-                tableVariables.add(variable);
-        }
-        if (events != null) {
-            tableVariables.add(events);
-        }
+        rebuildTableVariables();
         //At the moment there is always a TablePotential
         setTablePotential(new TablePotential(tableVariables, role));
         //TablePotential when there is no numeric parents, TableWithFunctions when there are numeric parents
@@ -89,6 +80,26 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     }
     
     
+    /**
+     * Recomputes {@code tableVariables} from the variables this potential currently has: the
+     * conditioned one, then every parent that is not an event, and last the single variable that
+     * stands for all the event parents together, when there is one. Kept apart from the constructor
+     * so that a deep copy, which changes the variables underneath, can ask for them to be worked out
+     * again instead of carrying over the ones of the network it came from.
+     */
+    protected void rebuildTableVariables() {
+        tableVariables = new ArrayList<>();
+        tableVariables.add(variables.get(0));
+        for (Variable variable : variables.subList(1, variables.size())) {
+            if (variable.getVariableType() != VariableType.EVENT) {
+                tableVariables.add(variable);
+            }
+        }
+        if (events != null) {
+            tableVariables.add(events);
+        }
+    }
+
     //TODO
     public TableWithEvents(TableWithEvents potential) {
         super(potential);

@@ -14,6 +14,7 @@ import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
@@ -77,19 +78,7 @@ public class UnivariateDistrPotential extends TableWithEvents implements DESSimu
         if (this.role == null) {
             this.role = PotentialRole.CONDITIONAL_PROBABILITY;
         }
-        finiteStatesVariables = new ArrayList<>();
-        parameterVariables = new ArrayList<>();
-        
-        for (Variable variable : variables.subList(1, variables.size())) {
-            if ((variable.getVariableType() == VariableType.FINITE_STATES) || (
-                    variable.getVariableType() == VariableType.DISCRETIZED
-            )) {
-                finiteStatesVariables.add(variable);
-            } else {
-                parameterVariables.add(variable);
-            }
-        }
-        
+        classifyVariables();
         setProbDensFunctionClass(ExactFunction.class);
         setDistributionTable();
         
@@ -131,9 +120,12 @@ public class UnivariateDistrPotential extends TableWithEvents implements DESSimu
      */
     public UnivariateDistrPotential(UnivariateDistrPotential potential) {
         super(potential);
-        finiteStatesVariables = potential.getFiniteStatesVariables();
-        parameterVariables = potential.getParameterVariables();
-        
+        // Copies of the lists, not the lists themselves: sharing them made the copy and its original
+        // the same potential wherever either was edited, and a comparison by value cannot see it -
+        // sharing makes the two look MORE alike, not less.
+        finiteStatesVariables = new ArrayList<>(potential.getFiniteStatesVariables());
+        parameterVariables = new ArrayList<>(potential.getParameterVariables());
+
         setProbDensFunctionClass(potential.getProbDensFunctionClass());
         setDistributionTable((AugmentedProbTable) (potential.getDistributionTable()).copy());
         
@@ -371,6 +363,47 @@ public class UnivariateDistrPotential extends TableWithEvents implements DESSimu
     
     @Override public Potential copy() {
         return new UnivariateDistrPotential(this);
+    }
+
+    /**
+     * Sorts the parents into the finite-state ones, which give the distribution table its shape, and
+     * the numeric parameter ones, whose values feed the density function. The conditioned variable
+     * belongs to neither list.
+     */
+    private void classifyVariables() {
+        finiteStatesVariables = new ArrayList<>();
+        parameterVariables = new ArrayList<>();
+        for (Variable variable : variables.subList(1, variables.size())) {
+            if ((variable.getVariableType() == VariableType.FINITE_STATES) || (
+                    variable.getVariableType() == VariableType.DISCRETIZED
+            )) {
+                finiteStatesVariables.add(variable);
+            } else {
+                parameterVariables.add(variable);
+            }
+        }
+    }
+
+    /**
+     * This potential keeps three lists of variables besides {@code variables}, and
+     * {@link Potential#deepCopy} re-points only that one: the two the parents are sorted into, the
+     * list the table of events is built on, and the variables of the distribution table itself. All
+     * of them were worked out from the variables of the SOURCE network and carried over untouched, so
+     * a copy went into its new network still pointing at the old one. They are worked out again here
+     * from the variables the copy has.
+     *
+     * <p>The first variable of the distribution table is the pseudo variable that stands for the
+     * parameters of the density function. It is not a node of the network and cannot be looked up
+     * there; the copy already built its own in the copy constructor, and that is the one used.
+     */
+    @Override public Potential deepCopy(ProbNet copyNet) {
+        UnivariateDistrPotential potential = (UnivariateDistrPotential) super.deepCopy(copyNet);
+        potential.classifyVariables();
+        potential.rebuildTableVariables();
+        List<Variable> variablesOfDistributionTable = new ArrayList<>(potential.finiteStatesVariables);
+        variablesOfDistributionTable.addFirst(potential.pseudoVariableDistribution);
+        potential.distributionTable.setVariables(variablesOfDistributionTable);
+        return potential;
     }
 
     @Override public void scalePotential(double scale) {

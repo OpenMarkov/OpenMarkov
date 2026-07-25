@@ -1,6 +1,5 @@
 package org.openmarkov.integrationTests.core.model.network;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -81,9 +80,6 @@ public class PotentialsCanBeClonedTest {
      * equality - two Variable objects with the same name and states are equal by value, and
      * everything else in the model looks variables up by identity.
      */
-    @Disabled("One family still keeps a variable of the source network when deepCopy(otherNet) is "
-            + "called directly: UnivariateDistrPotential at .tableVariables. Switch on when it is "
-            + "fixed.")
     @ParameterizedTest
     @MethodSource("deepCloneTestData")
     void deepCopyUsesTheVariablesOfTheDestinationNetwork(DeepCloneTestData deepCloneTestData) {
@@ -112,8 +108,6 @@ public class PotentialsCanBeClonedTest {
      * it matters, and the comparison by value cannot see it: sharing makes them <em>more</em> equal,
      * not less. Reported as the fields that are the same instance on both sides.
      */
-    @Disabled("Finds one: UnivariateDistrPotential.copy() shares finiteStatesVariables and "
-            + "parameterVariables with its original. Switch on when that is fixed.")
     @ParameterizedTest
     @MethodSource("cloneTestData")
     void copyDoesNotShareMutableStateWithItsOriginal(Potential sourcePotential) {
