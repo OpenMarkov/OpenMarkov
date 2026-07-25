@@ -211,7 +211,18 @@ public abstract class DANEvaluationTest extends NetworkEvaluationInferenceTest {
     }
     
     
-    @Disabled @Test public void testDANDatingAskNo()
+    /**
+     * Left off, but the expected value is the suspect here, not the code. The TODO below is its
+     * author's: they did not know the right number. The evaluation gives 9.407584, which is what
+     * testDANDating expects for the unrestricted problem - and that is consistent, because if not
+     * asking is the optimal choice then restricting the network to "ask = no" cannot change the
+     * maximum expected utility. See the note on testDANDating: the defect is there, and settling
+     * that one settles the number this test should expect.
+     */
+    @Disabled("Gives 9.407584 where it expects 8.1632, and its own TODO says the author did not know "
+            + "the right value. 9.407584 is what testDANDating expects, which is consistent if not "
+            + "asking is optimal. Settle testDANDating first.")
+    @Test public void testDANDatingAskNo()
             throws
             NotEvaluableNetworkException, ProbNetParserException, URISyntaxException, IOException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         //TODO I still have to find out the exact value of the evaluation, because I have found that different algorithms return different expected utilities
@@ -228,7 +239,27 @@ public abstract class DANEvaluationTest extends NetworkEvaluationInferenceTest {
     }
     
     
-    @Disabled @Test
+    /**
+     * A real defect in evaluating an asymmetric decision network, not a stale expectation.
+     * <p>
+     * The evaluation returns 0.0. That is wrong whatever the true value is, by an argument that
+     * needs no reference number: the unrestricted problem can always choose "ask = no", so its
+     * maximum expected utility cannot be below that of the network restricted to "ask = no", and
+     * that one evaluates to 9.407584. A maximum cannot be worse than one of the things it is a
+     * maximum over.
+     * <p>
+     * What is known. The network loads correctly: 20 nodes, 12 chance, 4 decisions, 4 utilities.
+     * Both evaluation algorithms return 0.0 - the decision tree one and the decomposition into
+     * symmetric DANs - so it is in code they share, not in one of them. And the three networks of
+     * this family line up by number of decisions: with none, dating-ask-no-nclub-no passes; with
+     * one, dating-ask-no gives 9.407584; with four, this gives 0.
+     * <p>
+     * Not diagnosed further here. It needs a session of its own, on the DAN evaluation itself.
+     */
+    @Disabled("Evaluating the full asymmetric network gives 0.0. Provably wrong: the unrestricted "
+            + "problem cannot score below the same network restricted to \"ask = no\", which gives "
+            + "9.407584. Both algorithms give 0.0, so it is in shared code. Needs its own session.")
+    @Test
     public void testDANDating()
             throws
             NotEvaluableNetworkException, ProbNetParserException, URISyntaxException, IOException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
