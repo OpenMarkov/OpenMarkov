@@ -527,8 +527,29 @@ public class ProbNetOperationsTest {
      * numeric variables to finite states leaves a covariate of the previous time slice without a
      * value. Not investigated yet; it needs a pass of its own rather than a guess.
      */
-    @Disabled("Fails converting the network with CannotResolveVariable on \"Age at state entry [0]\", "
-            + "not on the WeibullHazardPotential its previous reason named. Needs its own look.")
+    /**
+     * Two obstacles, one of them now gone.
+     * <p>
+     * The first was in this test: the three "Age at state entry" regressions listed their own
+     * conditioned variable among their covariates instead of the corresponding "Age", so they read
+     * {CONSTANT, ageAtStateEntry, timeInState} where the regression they mean - age at state entry
+     * = age - time in state, with coefficients {0, 1, -1} - needs {CONSTANT, age, timeInState}.
+     * A covariate naming the conditioned variable can never resolve, because a projection only
+     * ever has values for the parents, so the conversion died with CannotResolveVariable. Fixed.
+     * <p>
+     * The second is what the original reason said, and it is a question about the conversion
+     * rather than a defect in it. For a node that is not numeric but whose parents were converted,
+     * convertNumericalVariablesToFS copies the potential and re-points it at the new
+     * finite-states variables (replaceNumericVariable); it does not tabulate it. So "Transition
+     * [2]" keeps its WeibullHazardPotential, and this test casts it to TablePotential and expects
+     * eight concrete numbers. Keeping the functional form is defensible - the new variables carry
+     * the numeric values as state names, so it can still be projected later - but then this
+     * expectation is wrong. Which of the two is intended is for whoever owns the conversion.
+     */
+    @Disabled("Gets all the way through the conversion now. What remains: the conversion keeps the "
+            + "WeibullHazardPotential of a non-numeric node with converted parents rather than "
+            + "tabulating it, and this test expects a TablePotential. Tabulate or keep functional "
+            + "is a design decision, not a fix.")
     @Test
     public final void testConvertNumericalVariablesToFS() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException {
         //Initialize network
@@ -606,7 +627,7 @@ public class ProbNetOperationsTest {
                                                                                                role);
         ageAtStateEntryPotential_0.setCovariates(new VariableExpression[]{
                 VariableExpression.Common.CONSTANT,
-                ageAtStateEntryVar_0.asVariableExpression(),
+                ageVar_0.asVariableExpression(),
                 timeInStateVar_0.asVariableExpression()}
         );
         ageAtStateEntryPotential_0.setCoefficients(new double[]{0, 1, -1});
@@ -617,7 +638,7 @@ public class ProbNetOperationsTest {
                                                                                                role);
         ageAtStateEntryPotential_1.setCovariates(new VariableExpression[]{
                 VariableExpression.Common.CONSTANT,
-                ageAtStateEntryVar_1.asVariableExpression(),
+                ageVar_1.asVariableExpression(),
                 timeInStateVar_1.asVariableExpression()}
         );
         
@@ -629,7 +650,7 @@ public class ProbNetOperationsTest {
                                                                                                role);
         ageAtStateEntryPotential_2.setCovariates(new VariableExpression[]{
                 VariableExpression.Common.CONSTANT,
-                ageAtStateEntryVar_2.asVariableExpression(),
+                ageVar_2.asVariableExpression(),
                 timeInStateVar_2.asVariableExpression()}
         );
         ageAtStateEntryPotential_2.setCoefficients(new double[]{0, 1, -1});
