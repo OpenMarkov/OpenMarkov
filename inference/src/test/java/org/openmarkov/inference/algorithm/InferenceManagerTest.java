@@ -8,14 +8,14 @@
 package org.openmarkov.inference.algorithm;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.inference.InferenceAlgorithm;
 import org.openmarkov.core.inference.annotation.InferenceManager;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.testTags.TestSpeed;
+import org.openmarkov.inference.algorithm.likelihoodWeighting.LikelihoodWeighting;
+import org.openmarkov.inference.algorithm.variableElimination.tasks.VariableElimination;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class InferenceManagerTest {
 
     @BeforeEach public void setUp() {
         inferenceManager = new InferenceManager();
-        probNet = new ProbNet();
+        probNet = new ProbNet();     // a Bayesian network
     }
 
     @Tag(TestSpeed.FAST)
@@ -45,25 +45,66 @@ public class InferenceManagerTest {
                 "LikelihoodWeighting should be registered");
         assertTrue(algorithmNames.contains("LogicSampling"),
                 "LogicSampling should be registered");
+        assertTrue(algorithmNames.contains("VariableElimination"),
+                "VariableElimination should be registered, and it accepts Bayesian networks");
     }
 
-    // getInferenceAlgorithmByName requires a static checkEvaluability method
-    // that no algorithm currently implements (HuginPropagation has it commented out).
-    @Disabled("No algorithm implements checkEvaluability — InferenceManager.getInferenceAlgorithmByName always throws NoSuchMethodException")
     @Tag(TestSpeed.FAST)
     @Test
     public void testGetInferenceAlgorithmByName() throws Exception {
         InferenceAlgorithm lw = inferenceManager.getInferenceAlgorithmByName(
                 "LikelihoodWeighting", probNet);
         assertNotNull(lw, "Should be able to instantiate LikelihoodWeighting by name");
+        assertInstanceOf(LikelihoodWeighting.class, lw);
     }
 
-    // getDefaultInferenceAlgorithm tries to find "VariableElimination" by name,
-    // but VariableElimination is abstract and not registered via @InferenceAnnotation.
-    @Disabled("InferenceManager.getDefaultInferenceAlgorithm references 'VariableElimination' which is not registered")
+    /**
+     * An unregistered name is a question with an answer — "there is no such algorithm" — not a
+     * breakdown. It used to reach {@code null.getConstructor(...)} and raise a bare
+     * {@code NullPointerException}.
+     */
+    @Tag(TestSpeed.FAST)
     @Test
-    public void testGetDefaultInferenceAlgorithm() throws NotEvaluableNetworkException {
+    public void anUnregisteredNameGivesNullAndNotAnException() throws Exception {
+        assertNull(inferenceManager.getInferenceAlgorithmByName("NoSuchAlgorithm", probNet));
+    }
+
+    /**
+     * Every name that {@code getInferenceAlgorithmNames} reports must be one that
+     * {@code getInferenceAlgorithms} can actually build: both answer the same question.
+     */
+    @Tag(TestSpeed.FAST)
+    @Test
+    public void theAlgorithmsAndTheirNamesAgree() {
+        List<String> names = inferenceManager.getInferenceAlgorithmNames(probNet);
+        List<InferenceAlgorithm> algorithms = inferenceManager.getInferenceAlgorithms(probNet);
+
+        assertEquals(names.size(), algorithms.size());
+        assertFalse(algorithms.isEmpty());
+    }
+
+    /**
+     * The default for a Bayesian network is variable elimination, which is exact: the same
+     * algorithm the graphical interface already uses to propagate evidence. This used to fail
+     * with a {@code NullPointerException}, because the manager asked for an algorithm named
+     * "VariableElimination" that nothing had registered.
+     */
+    @Tag(TestSpeed.FAST)
+    @Test
+    public void testGetDefaultInferenceAlgorithm() {
         InferenceAlgorithm algorithm = inferenceManager.getDefaultInferenceAlgorithm(probNet);
+
         assertNotNull(algorithm);
+        assertInstanceOf(VariableElimination.class, algorithm,
+                "Variable elimination is exact, so it is preferred over the sampling algorithms");
+    }
+
+    @Tag(TestSpeed.FAST)
+    @Test
+    public void testGetDefaultApproximateAlgorithm() {
+        InferenceAlgorithm algorithm = inferenceManager.getDefaultApproximateAlgorithm(probNet);
+
+        assertNotNull(algorithm);
+        assertInstanceOf(LikelihoodWeighting.class, algorithm);
     }
 }

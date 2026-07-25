@@ -10,6 +10,7 @@ package org.openmarkov.inference.algorithm.variableElimination.tasks;
 import org.apache.logging.log4j.LogManager;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.MulticriteriaOptions;
+import org.openmarkov.core.inference.annotation.InferenceAnnotation;
 import org.openmarkov.core.inference.heuristic.EliminationHeuristic;
 import org.openmarkov.core.inference.tasks.Propagation;
 import org.openmarkov.core.inference.tasks.TaskUtilities;
@@ -43,6 +44,11 @@ import java.util.List;
  * Optional input: post-resolution evidence.
  * <p>
  * Output: a table for each utility or chance node
+ * <p>
+ * It registers itself under the name "VariableElimination" so that the inference manager can
+ * offer it, and hand it out as the default algorithm wherever it applies. Before that, the
+ * manager asked for an algorithm of that name that nothing provided, while the application
+ * propagated evidence by building this very class by hand.
  *
  * @author mluque
  * @author fjdiez
@@ -51,6 +57,7 @@ import java.util.List;
  * @author artasom
  */
 
+@InferenceAnnotation(name = "VariableElimination")
 public class VEPropagation extends VariableElimination implements Propagation {
     
     // Attributes
