@@ -48,7 +48,7 @@ public class PCAlgorithmTest {
 	private double significanceLevel = 0.05;
 	private String path = "/networks/learning/";
 
-	private String learnTestDatabaseFilename = "/networks/learning/learnTestDataBase.dbc";
+	private String learnTestDatabaseFilename = "/networks/learning/learnTestDataBase.csv";
 	private String asiaDatabaseFilename = "/networks/learning/asia10K.csv";
 	private String alarmDatabaseFilename = "/networks/learning/alarm500.csv";
 	private String alarm10kDatabaseFilename = "/networks/learning/alarm10k.csv";
@@ -132,13 +132,33 @@ public class PCAlgorithmTest {
 		Assertions.assertEquals(0.8, eGivenABC.getValue(vars, new int[]{ePresent, aPresent, bPresent, cAbsent}), maxError);
 	}
 
-	@Disabled("Making CaseDatabase = null until fixing Elvira database parser with antlr4")
 	@Test
-	public void testLearnTestDataBase() throws org.openmarkov.core.exception.CannotNormalizePotentialException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
-		//TODO Commented and making CaseDatabase = null until fixing Elvira database parser with antlr4
-		//ElviraDataBaseIO databaseIO = new ElviraDataBaseIO();
-		//CaseDatabase learnTestDatabase = databaseIO.load(getClass().getResource(learnTestDatabaseFilename).getFile());
-		CaseDatabase learnTestDatabase = null;
+	/**
+	 * Still disabled, but no longer for the reason it used to give. The database is no longer the
+	 * problem: it is read from CSV now, like the other four of this class. What fails is a
+	 * structural expectation. This test expects C to be a parent of D; the algorithm makes D a
+	 * parent of C, and gives C three parents (A, B and D), which creates collider structures the
+	 * expected graph does not have - so this is not the orientation of one undirected edge being
+	 * decided arbitrarily. Everything else it expects matches: A and B as parents of C, A as parent
+	 * of D, D as parent of E.
+	 * <p>
+	 * It is not the state order either. The .dbc declared the states as (presente, ausente) and CSV
+	 * reads them as (ausente, presente), so every binary index flips; that was checked by running
+	 * the algorithm on both orderings of the same data, and the learned structure is identical.
+	 * <p>
+	 * So the question is for whoever knows the PC implementation: is D as a parent of C right, and
+	 * the expectation stale, or is this a regression? Not answered here, and deliberately not
+	 * papered over by editing the assertion to match what the code currently does.
+	 */
+	@Disabled("Expects C to be a parent of D; PC makes D a parent of C, with A, B and D all parents "
+			+ "of C. Verified not to be a consequence of the state order. Needs someone who knows "
+			+ "the PC implementation to say which structure is right.")
+	public void testLearnTestDataBase() throws org.openmarkov.core.exception.CannotNormalizePotentialException, EmptyDatabaseException, java.io.FileNotFoundException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+		// This database used to be read from Elvira's .dbc format, whose reader is not exported by
+		// the io module and is no longer maintained. It was converted once, with OpenMarkov's own
+		// code, to the CSV the other four databases of this class already use.
+		CSVDataBaseIO csvReader = new CSVDataBaseIO();
+		CaseDatabase learnTestDatabase = csvReader.load(new File(getClass().getResource(learnTestDatabaseFilename).getFile()));
 		ProbNet learnedNet = new ProbNet();
 		for (Variable variable : learnTestDatabase.getVariables()) {
 			learnedNet.addNode(variable, NodeType.CHANCE);
