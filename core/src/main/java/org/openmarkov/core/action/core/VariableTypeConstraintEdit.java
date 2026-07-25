@@ -61,7 +61,7 @@ import java.util.List;
     public void checkConstraintsWillBeMet(ConstraintChecker constraintChecker) {
         if (newVariableTypeConstraint instanceof OnlyDiscreteVariables constraint) {
             for (Node node : probNet.getNodes()) {
-                if (node.getVariable().getVariableType() != VariableType.FINITE_STATES) {
+                if (!OnlyDiscreteVariables.isDiscrete(node.getNodeType(), node.getVariable().getVariableType())) {
                     constraintChecker.addException(new ConstraintViolatedException.OnlyDiscreteVariablesAllowed(constraint, node.getVariable()));
                 }
             }

@@ -53,7 +53,7 @@ public class VariableTypeEdit extends MultiStepEdit {
     
     @Override public void checkConstraintsWillBeMet(ConstraintChecker constraintChecker) {
         if (probNet.getConstraintOfClass(OnlyDiscreteVariables.class) instanceof OnlyDiscreteVariables constraint) {
-            if (this.newType != VariableType.DISCRETIZED) {
+            if (!OnlyDiscreteVariables.isDiscrete(this.node.getNodeType(), this.newType)) {
                 constraintChecker.addException(
                         new ConstraintViolatedException.OnlyDiscreteVariablesAllowed(constraint, this.node
                                 .getVariable()));

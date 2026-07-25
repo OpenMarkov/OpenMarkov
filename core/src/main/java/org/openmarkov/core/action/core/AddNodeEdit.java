@@ -96,7 +96,7 @@ public class AddNodeEdit extends PNEdit {
             }
         }
         if (probNet.getConstraintOfClass(OnlyDiscreteVariables.class) instanceof OnlyDiscreteVariables constraint) {
-            if (this.variable.getVariableType() != VariableType.DISCRETIZED) {
+            if (!OnlyDiscreteVariables.isDiscrete(this.nodeType, this.variable.getVariableType())) {
                 constraintChecker.addException(new ConstraintViolatedException.OnlyDiscreteVariablesAllowed(constraint, this.variable));
             }
         }
