@@ -175,7 +175,6 @@ public class CEAGlobalAnalysisTest {
 
 	}
 	
-	@Disabled
 	@Tag(TestSpeed.SLOW)
 	@SuppressWarnings("rawtypes")
     @Test
@@ -212,7 +211,6 @@ public class CEAGlobalAnalysisTest {
 		}
 	}
 
-	@Disabled
 	@Tag(TestSpeed.SLOW)
 	@SuppressWarnings("rawtypes")
     @Test
@@ -278,7 +276,6 @@ public class CEAGlobalAnalysisTest {
 		}
 	}
 	
-	@Disabled
     @Tag(TestSpeed.SLOW)
     @Test
 	public void testHPV() throws NonProjectablePotentialException, ProbNetParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {

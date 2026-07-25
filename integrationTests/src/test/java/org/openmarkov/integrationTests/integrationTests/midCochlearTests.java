@@ -9,7 +9,8 @@ package org.openmarkov.integrationTests.integrationTests;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.openmarkov.core.testTags.TestSpeed;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.exception.ConstraintViolatedException;
@@ -59,7 +60,8 @@ public class midCochlearTests {
         }
     }
     
-    @Disabled
+    // 131 seconds on its own, so it is tagged slow and left out of the pre-commit hook.
+    @Tag(TestSpeed.SLOW)
     @Test
     public void veTemporalEvaluationTest() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
         TemporalEvaluation temporalEvaluation = new TemporalEvaluation(probNet);
