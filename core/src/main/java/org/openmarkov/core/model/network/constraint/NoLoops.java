@@ -9,42 +9,36 @@ package org.openmarkov.core.model.network.constraint;
 
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.GraphNetwork;
 import org.openmarkov.core.model.network.Node;
-import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.constraint.annotation.Constraint;
 
-import java.util.Collections;
 import java.util.List;
 
+/**
+ * Forbids loops: a closed path leaving the orientation of the links aside. A network with this
+ * constraint is a poly-tree — between any two nodes there is at most one path.
+ * <p>
+ * A link closes a loop when its two ends are <em>already</em> joined by some other path. That is the
+ * whole check, and it is asked of the network without touching it, by having {@code existsPath}
+ * ignore the very link being judged.
+ * <p>
+ * It used to be done the other way round: the link was <strong>removed</strong> from the network, the
+ * path looked for, and the link added back — except that it was added back the other way round
+ * ({@code removeLink(node2, node1)} … {@code addLink(node1, node2)}), so every arc of the network came
+ * out reversed. As this check runs during ordinary validation, validating a network left it corrupted,
+ * in silence, and a constraint is precisely what must not modify what it validates.
+ */
 @Constraint(name = "NoLoops", defaultBehavior = ConstraintBehavior.OPTIONAL) public class NoLoops extends PNConstraint {
-    
-    @Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {
-		List<Node> nodesGraph = probNet.getNodes();
-		boolean probNetOK = true;
-		boolean directed;
-		ProbNet mutableNet = (ProbNet) probNet;
-		for (Node node1 : nodesGraph) {
-			List<Node> neighbors = probNet.getNeighbors(node1);
-			for (Node node2 : neighbors) {
-				if (probNet.isChild(node1, node2)) {
-					mutableNet.removeLink(node2, node1, true);
-					directed = true;
-				} else if (probNet.isSibling(node1, node2)) {
-					mutableNet.removeLink(node1, node2, false);
-					directed = false;
-				} else {
-					continue;
-				}
-				if (probNet.existsPath(node1, node2, false, Collections.emptyList())) {
-					probNetOK = false;
-				}
-				mutableNet.addLink(node1, node2, directed);
-				if (!probNetOK) {
-                    constraintChecker.addException(new ConstraintViolatedException.ThereIsALoop(this, node1, node2));
-				}
+
+	@Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {
+		for (Link<Node> link : probNet.getLinks()) {
+			if (probNet.existsPath(link.getFrom(), link.getTo(), false, List.of(link))) {
+				constraintChecker.addException(
+						new ConstraintViolatedException.ThereIsALoop(this, link.getFrom(), link.getTo()));
 			}
 		}
 	}
- 
+
 }
