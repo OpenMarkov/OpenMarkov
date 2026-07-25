@@ -94,10 +94,13 @@ public class PotentialsCanBeClonedTest {
         Potential clone = deepCloneTestData.potential.deepCopy(destination);
 
         List<String> strangers = new ArrayList<>();
-        for (Variable variable : variablesReachableFrom(clone)) {
+        for (Map.Entry<Variable, String> reached : variablesReachableFrom(clone).entrySet()) {
+            Variable variable = reached.getKey();
             Variable ofDestination = destination.getVariable(variable.getName());
             if (ofDestination != null && ofDestination != variable) {
-                strangers.add(variable.getName());
+                // The path is the point: knowing WHICH field still holds the old instance is the
+                // whole diagnosis; the name alone only says that one of them does.
+                strangers.add(variable.getName() + " at " + reached.getValue());
             }
         }
         assertThat(strangers)
@@ -128,35 +131,43 @@ public class PotentialsCanBeClonedTest {
 
     // ---------------------------------------------------------------- reflection helpers
 
-    private Set<Variable> variablesReachableFrom(Object root) {
-        Set<Variable> found = java.util.Collections.newSetFromMap(new IdentityHashMap<>());
-        walk(root, java.util.Collections.newSetFromMap(new IdentityHashMap<>()), found, 0);
+    /**
+     * Every variable the object graph hanging off {@code root} can reach, each mapped to the chain of
+     * fields, list positions and map slots that leads to it. Keyed by identity, because two variables
+     * with the same name are equal and this test exists precisely to tell them apart.
+     */
+    private Map<Variable, String> variablesReachableFrom(Object root) {
+        Map<Variable, String> found = new IdentityHashMap<>();
+        walk(root, java.util.Collections.newSetFromMap(new IdentityHashMap<>()), found, 0, "");
         return found;
     }
 
-    private void walk(Object value, Set<Object> seen, Set<Variable> found, int depth) {
+    private void walk(Object value, Set<Object> seen, Map<Variable, String> found, int depth, String path) {
         if (value == null || depth > 6 || !seen.add(value)) {
             return;
         }
         if (value instanceof Variable variable) {
-            found.add(variable);
+            found.putIfAbsent(variable, path);
             return;
         }
         if (value instanceof Collection<?> collection) {
-            collection.forEach(element -> walk(element, seen, found, depth + 1));
+            int position = 0;
+            for (Object element : collection) {
+                walk(element, seen, found, depth + 1, path + "[" + position++ + "]");
+            }
             return;
         }
         if (value instanceof Map<?, ?> map) {
             map.forEach((key, mapped) -> {
-                walk(key, seen, found, depth + 1);
-                walk(mapped, seen, found, depth + 1);
+                walk(key, seen, found, depth + 1, path + "{key}");
+                walk(mapped, seen, found, depth + 1, path + "{value}");
             });
             return;
         }
         if (value.getClass().isArray()) {
             if (!value.getClass().getComponentType().isPrimitive()) {
                 for (int i = 0; i < Array.getLength(value); i++) {
-                    walk(Array.get(value, i), seen, found, depth + 1);
+                    walk(Array.get(value, i), seen, found, depth + 1, path + "[" + i + "]");
                 }
             }
             return;
@@ -167,7 +178,7 @@ public class PotentialsCanBeClonedTest {
         for (Field field : fieldsOf(value.getClass())) {
             try {
                 field.setAccessible(true);
-                walk(field.get(value), seen, found, depth + 1);
+                walk(field.get(value), seen, found, depth + 1, path + "." + field.getName());
             } catch (RuntimeException | ReflectiveOperationException ignored) {
                 // a field this test cannot open is a field it cannot judge
             }
