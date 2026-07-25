@@ -6,7 +6,9 @@
  */
 package org.openmarkov.core.model.network.potential;
 
+import cern.jet.random.Normal;
 import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.RandomEngine;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
@@ -21,6 +23,7 @@ import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -127,12 +130,17 @@ import java.util.List;
             int numStates = getConditionedVariable().getNumStates();
             // TODO define thresholds
             double[] thresholds = getThresholds();
+            // Only the cumulative distribution function is used below, which is deterministic,
+            // so a single engine shared by every configuration is enough.
+            RandomEngine randomEngine = new MersenneTwister();
             // Copy configurations using the accumulated offsets algorithm
             for (int configuration = 0; configuration < numConfigurations; configuration++) {
                 int configurationIndex = configuration * numStates;
                 double mean = projectedMeanPotential.getValues()[configuration];
                 double variance = projectedVariancePotential.getValues()[configuration];
-                cern.jet.random.Normal dist = new cern.jet.random.Normal(mean, variance, new MersenneTwister());
+                // Colt's second parameter is the standard deviation, not the variance.
+                double standardDeviation = Math.sqrt(variance);
+                Normal dist = new Normal(mean, standardDeviation, randomEngine);
                 double lastCdf = 0;
                 for (int i = 0; i < numStates - 1; i++) {
                     double cdf = dist.cdf(thresholds[i]);
@@ -201,12 +209,9 @@ import java.util.List;
         //TablePotential variancePotential = new TablePotential(varianceVariable, variancePotentialVariables);
         TablePotential variancePotential = new TablePotential(variancePotentialVariables,
                                                               PotentialRole.CONDITIONAL_PROBABILITY);
-        // Set variance to 1 for all configurations (except for the first one; previously, when
-        // using a utility potential, the first variable was removed)
-        //for(int i=0;i<variancePotential.getValues().length;++i) {
-        for (int i = 1; i < variancePotential.getValues().length; ++i) {
-            variancePotential.getValues()[i] = 1;
-        }
+        // Set the variance to 1 for every configuration, the first one included: leaving it at 0
+        // made that configuration a degenerate distribution, with all the mass on a single state.
+        Arrays.fill(variancePotential.getValues(), 1);
         return variancePotential;
     }
     
