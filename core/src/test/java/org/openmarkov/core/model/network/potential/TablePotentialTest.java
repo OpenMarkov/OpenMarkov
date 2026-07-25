@@ -25,6 +25,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 /**
  * @author manuel
@@ -273,7 +274,6 @@ public class TablePotentialTest {
      * each one with 2 states.<p> evidenceCase: fsVariable2 = 1, fsVariable4 =
      * 0.
      */
-    @Disabled
     @Test
     public void testProject1() throws NonProjectablePotentialException {
         TablePotential projected = tablePotential5.tableProject(evidenceCase, null);
@@ -282,13 +282,18 @@ public class TablePotentialTest {
         assertEquals(1, projected.getVariables().size());
         assertEquals(fsVariable1, projected.getVariables().get(0));
         
-        // Test same table as original potential
+        // Projecting used to return a view over the original table: the same array, with
+        // initialPosition and offsets marking the window that the evidence selects. It now returns
+        // the window itself, in an array of its own - here the two values of the original table
+        // that correspond to fsVariable2 = 1. The test still checks the same two numbers below;
+        // what changed is that they are found at 0 and 1 instead of at 2 and 3.
         double[] tableProjected = projected.getValues();
-        assertArrayEquals(tablePotential5.getValues(), tableProjected);
-        
+        assertArrayEquals(new double[]{2.0, 3.0}, tableProjected);
+        assertNotSame(tablePotential5.getValues(), tableProjected);
+
         // Initial position
         int initialPosition = projected.getInitialPosition();
-        assertEquals(2, initialPosition);
+        assertEquals(0, initialPosition);
         
         // Offsets
         int[] offsets = projected.getOffsets();

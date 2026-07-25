@@ -162,7 +162,28 @@ public class EvidenceCaseTest {
         assertNotNull(evidence.getFinding(variableB));
     }
 
-    @Disabled
+    /**
+     * Disabled on a question of meaning, not of code. EvidenceCase.extendEvidence returns at once
+     * unless the network is a MID:
+     * <pre>if (probNet.getNetworkType() != MIDType.getUniqueInstance()) return;</pre>
+     * This test builds a Bayesian network, so it gets no findings where it expects three.
+     * <p>
+     * What was checked. Removing that guard makes this test pass exactly - three findings, B at
+     * state 1 - and the whole suite of the eighteen modules stays green, inference and the
+     * integration tests included. The two production callers,
+     * TaskUtilities.extendPreResolutionEvidence and extendPostResolutionEvidence, do not check the
+     * network type either, so for every network that is not a MID both of them silently do
+     * nothing. And inducing findings is not a MID-only idea: TablePotential itself implements
+     * getInducedFindings, so a deterministic table in a plain Bayesian network does imply a value.
+     * <p>
+     * So the guard is either a deliberate narrowing or an over-restriction, and the difference is
+     * a modelling decision: extending the evidence changes what every inference algorithm sees for
+     * every network type. It is left in place until someone decides. Removing it is one line.
+     */
+    @Disabled("EvidenceCase.extendEvidence does nothing unless the network is a MID, and this test "
+            + "uses a Bayesian network. Removing that guard makes it pass and keeps the whole suite "
+            + "green, but it changes what inference sees for every network type, so it is a "
+            + "decision to take rather than a fix to apply.")
     @Test public void extendEvidence() {
         
         assertNotNull(probNet);

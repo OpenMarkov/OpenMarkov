@@ -53,14 +53,19 @@ public class NetworkTypeTest {
         Assertions.assertFalse(constraints.contains(new OnlyChanceNodes()));
     }
     
-    //(expected = ConstraintViolatedException.class)
-    @Disabled
+    /**
+     * A Bayesian network has no decisions, so turning an influence diagram that has one back into
+     * a Bayesian network has to be refused. It is refused - the test simply never checked, because
+     * the check was a JUnit 4 "expected" attribute that was commented out instead of being written
+     * as an assertion, which left the test running the conversion and letting the exception escape.
+     */
     @Test public void testImpossibleNetworkTypeConversion() throws ConstraintViolatedException {
         ProbNet probNet = new ProbNet(BayesianNetworkType.getUniqueInstance());
         probNet.setNetworkType(InfluenceDiagramType.getUniqueInstance());
-        
         probNet.addNode(new Variable("a"), NodeType.DECISION);
-        probNet.setNetworkType(BayesianNetworkType.getUniqueInstance());
+
+        Assertions.assertThrows(ConstraintViolatedException.class,
+                                () -> probNet.setNetworkType(BayesianNetworkType.getUniqueInstance()));
     }
     
     //(expected = ConstraintViolatedException.class)

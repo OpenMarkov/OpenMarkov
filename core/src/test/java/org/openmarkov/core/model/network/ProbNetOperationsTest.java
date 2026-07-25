@@ -518,7 +518,17 @@ public class ProbNetOperationsTest {
         }
     }
     
-    @Disabled("Last check expects for the Potential to be a TablePotential, but it is WeibullHazardPotential")
+    /**
+     * The reason this used to give - "last check expects for the Potential to be a TablePotential,
+     * but it is WeibullHazardPotential" - is stale: that is not what happens any more. It now fails
+     * much earlier, converting the network, with
+     * NonProjectablePotentialException.CannotResolveVariable: "no value resolved for variable
+     * Age at state entry [0]", raised from ReferencedExpression.resolve. So the conversion of
+     * numeric variables to finite states leaves a covariate of the previous time slice without a
+     * value. Not investigated yet; it needs a pass of its own rather than a guess.
+     */
+    @Disabled("Fails converting the network with CannotResolveVariable on \"Age at state entry [0]\", "
+            + "not on the WeibullHazardPotential its previous reason named. Needs its own look.")
     @Test
     public final void testConvertNumericalVariablesToFS() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException {
         //Initialize network
