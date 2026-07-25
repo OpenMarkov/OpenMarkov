@@ -1,7 +1,8 @@
 package org.openmarkov.core.developmentStaticAnalysis.mutability;
 
 /**
- * An Exterior Immutable object is an object whose fields internal state cannot be changed after the object is created.
+ * An Interior Immutable object is an object whose fields' internal state cannot be changed after the object is
+ * created: not only can its fields not be reassigned, what they hold cannot change either.
  * <p>
  * See more in {@link org.openmarkov.core.developmentStaticAnalysis.mutability}
  */
