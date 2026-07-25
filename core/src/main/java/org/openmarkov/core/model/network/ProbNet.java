@@ -26,7 +26,7 @@ import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.model.network.type.NetworkType;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -73,11 +73,18 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
     
     /**
      * Potentials that have no associated variables (i.e. constant potentials).
-     * Uses a concurrent set so that {@code addPotential}, {@code removeNode},
-     * and the various {@code getPotentials*} getters can be called safely from
-     * different threads without {@link ConcurrentModificationException}.
+     * Copy-on-write so that {@code addPotential}, {@code removeNode}, and the various
+     * {@code getPotentials*} getters can be called safely from different threads without
+     * {@link ConcurrentModificationException}: iteration walks a snapshot.
+     *
+     * <p>A list and not a set, and held <em>by identity</em>. Two constant potentials that carry the
+     * same number are two contributions to the utility of the network, not one, and merging them
+     * loses a term of the sum. That is what a hash set would now do, because potentials hash the way
+     * they compare - by value. Until they had a hashCode at all this was a set only in name: it
+     * hashed by identity and so kept both. Being a list also fixes the order, which used to depend on
+     * identity hashes and therefore changed from one run of the program to the next.
      */
-    private final Set<Potential> constantPotentials;
+    private final List<Potential> constantPotentials;
     
     // Constructors
     
@@ -98,7 +105,7 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
         this.pNESupport = new PNESupport(this);
         this.constraints = new TreeSet<>();
         this.nodeDepot = new NodeTypeDepot();
-        this.constantPotentials = ConcurrentHashMap.newKeySet();
+        this.constantPotentials = new CopyOnWriteArrayList<>();
         try {
             this.setNetworkType(networkType);
         } catch (ConstraintViolatedException e) {
@@ -688,7 +695,9 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
             }
         }
         //Couldn't find the potential in any node.
-        constantPotentials.remove(potential);
+        // By identity, as the search through the nodes just above is: removing a different constant
+        // potential that happens to hold the same number would be removing the wrong one.
+        constantPotentials.removeIf(constant -> constant == potential);
         return null;
     }
     
@@ -926,7 +935,7 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
         
         // add the potential
         if (variables.isEmpty()) {
-            this.constantPotentials.add(potential);
+            addConstantPotential(potential);
         } else {
             nodes.getFirst().addPotential(potential);
         }
@@ -1155,8 +1164,22 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
      *
      * @return unmodifiable view of the constant {@link TablePotential}s
      */
-    public Set<Potential> getConstantPotentials() {
-        return Collections.unmodifiableSet(constantPotentials);
+    public List<Potential> getConstantPotentials() {
+        return Collections.unmodifiableList(constantPotentials);
+    }
+
+    /**
+     * Adds a constant potential unless that very object is already there. Identity, not equality: two
+     * constants holding the same number are two utilities to be added up, and only the same object
+     * added twice is a repetition.
+     */
+    private void addConstantPotential(Potential potential) {
+        for (Potential constant : constantPotentials) {
+            if (constant == potential) {
+                return;
+            }
+        }
+        constantPotentials.add(potential);
     }
     
     

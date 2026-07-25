@@ -22,7 +22,8 @@ import org.openmarkov.core.model.network.potential.UncertainTablePotential;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -189,8 +190,10 @@ final class TablePotentialMerge {
                                                             List<Variable> decisionsTotallyOrdered) {
         List<TablePotential> orderedListOfPotentials = new ArrayList<>();
         if (decisionsTotallyOrdered != null) {
-            Set<TablePotential> inputPotentialsSet = new HashSet<>(inputPotentialsList);
-            Set<TablePotential> potentialsWithoutIntervention = new HashSet<>();
+            // Identity, not equality: see the note in identitySetOfPotentials below.
+            Set<TablePotential> inputPotentialsSet = identitySetOfPotentials();
+            inputPotentialsSet.addAll(inputPotentialsList);
+            Set<TablePotential> potentialsWithoutIntervention = identitySetOfPotentials();
             for (TablePotential auxPot : inputPotentialsSet) {
                 if (!auxPot.hasInterventions()) {
                     potentialsWithoutIntervention.add(auxPot);
@@ -287,12 +290,22 @@ final class TablePotentialMerge {
 
     private static Set<TablePotential> getPotentialsWithDecisionInIntervention(Variable decision,
                                                                                 Set<TablePotential> inputPotentials) {
-        Set<TablePotential> result = new HashSet<>();
+        Set<TablePotential> result = identitySetOfPotentials();
         for (TablePotential auxPot : inputPotentials) {
             if (auxPot.hasInterventionForDecision(decision)) {
                 result.add(auxPot);
             }
         }
         return result;
+    }
+
+    /**
+     * A set of potentials that tells its members apart by identity. Every set of potentials here means
+     * "these factors", not "these values": two factors carrying the same numbers are still two factors,
+     * and merging them loses a term of the utility. Until potentials had a hashCode at all, a plain
+     * HashSet behaved this way by accident, because Object hashes each instance differently.
+     */
+    private static Set<TablePotential> identitySetOfPotentials() {
+        return Collections.newSetFromMap(new IdentityHashMap<>());
     }
 }

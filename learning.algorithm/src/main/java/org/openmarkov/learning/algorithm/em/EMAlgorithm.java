@@ -34,6 +34,7 @@ import org.openmarkov.learning.core.util.LearningEditProposal;
 import org.openmarkov.learning.core.util.ModelNetUse;
 
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,10 +128,12 @@ public class EMAlgorithm extends LearningAlgorithm {
         
         // Init sigma
         List<TablePotential> potentials = new ArrayList<>();
-        Map<ICIPotential, List<TablePotential>> iciSubpotentials = new HashMap<>();
+        Map<ICIPotential, List<TablePotential>> iciSubpotentials = new IdentityHashMap<>();
         ProbNet expandedNet = adaptNetwork(probNet, potentials, iciSubpotentials);
         
-        HashMap<Potential, TablePotential> expertKnowledge = new HashMap<Potential, TablePotential>();
+        // Keyed by identity: potentials hash the way they compare, and two potentials holding the
+        // same numbers must still be told apart as two sets of parameters to learn.
+        Map<Potential, TablePotential> expertKnowledge = new IdentityHashMap<>();
         for (TablePotential potential : potentials) {
             expertKnowledge.put(potential, new TablePotential(potential));
         }
@@ -141,7 +144,7 @@ public class EMAlgorithm extends LearningAlgorithm {
         int iterations = 0;
         
         do {
-            HashMap<Potential, TablePotential> expectedCountsMap = new HashMap<>();
+            Map<Potential, TablePotential> expectedCountsMap = new IdentityHashMap<>();
             
             // E-step: compute expected sufficient statistics for each case
             for (int i = 0; i < cases.length; ++i) {

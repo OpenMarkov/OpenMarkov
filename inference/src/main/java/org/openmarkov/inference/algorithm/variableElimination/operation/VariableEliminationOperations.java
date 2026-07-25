@@ -12,7 +12,8 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -35,8 +36,12 @@ public class VariableEliminationOperations {
 	public static List<TablePotential> orderPotentialsByPartialOrder(List<TablePotential> utilityPotentialsVariable,
 			List<Variable> decisionsUntilEnd) {
 		List<TablePotential> orderedPotentials = new ArrayList<>();
-        Set<TablePotential> setOfInputPotentials = new HashSet<>(utilityPotentialsVariable);
-		Set<TablePotential> potentialsWithoutIntervention = new HashSet<>();
+		// Identity, not equality. Two utility factors that hold the same numbers are two terms of the
+		// sum, and dropping one of them loses utility. Potentials hash the way they compare - by value -
+		// so a plain HashSet would drop it.
+		Set<TablePotential> setOfInputPotentials = identitySetOfPotentials();
+		setOfInputPotentials.addAll(utilityPotentialsVariable);
+		Set<TablePotential> potentialsWithoutIntervention = identitySetOfPotentials();
 		//Remove from inputPotentials the potentials without Interventions
 		for (TablePotential inputPotential : setOfInputPotentials) {
 			if (!VariableEliminationOperations.containsInterventions(inputPotential)) {
@@ -80,7 +85,7 @@ public class VariableEliminationOperations {
 	public static Set<TablePotential> getPotentialsWithDecisionInIntervention(Variable decision,
 			Collection<TablePotential> potentials) {
 
-		Set<TablePotential> potentialsWithDecisionInIntervention = new HashSet<TablePotential>();
+		Set<TablePotential> potentialsWithDecisionInIntervention = identitySetOfPotentials();
 		for (TablePotential potential : potentials) {
 			if (VariableEliminationOperations.hasDecisionInIntervention(decision, potential)) {
 				potentialsWithDecisionInIntervention.add(potential);
@@ -100,4 +105,14 @@ public class VariableEliminationOperations {
 		return tablePotential.hasInterventionForDecision(decision);
 	}
 
+
+	/**
+	 * A set of potentials that tells its members apart by identity. Every set of potentials in the
+	 * elimination means "these factors", not "these values": two factors carrying the same numbers are
+	 * still two factors, and merging them loses a term. Until potentials had a hashCode at all, a plain
+	 * HashSet behaved this way by accident, because Object hashes each instance differently.
+	 */
+	private static Set<TablePotential> identitySetOfPotentials() {
+		return Collections.newSetFromMap(new IdentityHashMap<>());
+	}
 }

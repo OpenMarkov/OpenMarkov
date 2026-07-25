@@ -720,8 +720,8 @@ public class Classificator extends PGMXReader_0_2 {
         int numPotentials = probNet1.getNumPotentials();
         boolean same = numPotentials == probNet2.getNumPotentials();
         if (same && numPotentials > 0) {
-            Set<Potential> constantPotentials1 = probNet1.getConstantPotentials();
-            Set<Potential> constantPotentials2 = probNet2.getConstantPotentials();
+            List<Potential> constantPotentials1 = probNet1.getConstantPotentials();
+            List<Potential> constantPotentials2 = probNet2.getConstantPotentials();
             same = sameInfoConstantPotentials(constantPotentials1, constantPotentials2);
             if (same) {
                 List<Potential> potentials1 = probNet1.getPotentials();
@@ -936,7 +936,7 @@ public class Classificator extends PGMXReader_0_2 {
         return same;
     }
     
-    private boolean sameInfoConstantPotentials(Set<Potential> constantPotentials1, Set<Potential> constantPotentials2) {
+    private boolean sameInfoConstantPotentials(List<Potential> constantPotentials1, List<Potential> constantPotentials2) {
         boolean bothNotNull = constantPotentials1 != null && constantPotentials2 != null;
         boolean bothNull = constantPotentials1 == null && constantPotentials2 == null;
         boolean same = bothNull || (bothNotNull && constantPotentials1.size() == constantPotentials2.size());

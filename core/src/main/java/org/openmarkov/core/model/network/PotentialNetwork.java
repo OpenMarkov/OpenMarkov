@@ -11,7 +11,6 @@ import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 
 /**
@@ -38,7 +37,7 @@ public interface PotentialNetwork extends GraphNetwork {
     List<Potential> getPotentialsByType(NodeType nodeType);
     List<Potential> getAdditivePotentials();
     List<Potential> getSortedPotentials();
-    Set<Potential>  getConstantPotentials();
+    List<Potential> getConstantPotentials();
     int             getNumPotentials();
 
     List<Potential> getProbPotentials(Variable variable);

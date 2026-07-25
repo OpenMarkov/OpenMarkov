@@ -52,7 +52,12 @@ public class StrategyTree extends TreeADDPotential implements Cloneable {
     public StrategyTree(Variable topVariable, List<State> states, List<StrategyTree> strategyTrees) {
         this(null, topVariable);
         List<StrategyTree> distinctStrategyTrees = new ArrayList<>();
-        Map<StrategyTree, Set<State>> correspondingStates = new HashMap<>();
+        // Keyed by identity. A strategy tree inherits from Potential an equality that only looks at
+        // the class, the variables and the role, so two different trees over the same variables count
+        // as the same key - and since potentials now hash the way they compare, a plain HashMap would
+        // hand back the states of the wrong tree. The real comparison between trees is the deep one
+        // below, which this loop calls explicitly.
+        Map<StrategyTree, Set<State>> correspondingStates = new IdentityHashMap<>();
         int numInterventions = strategyTrees.size();
         for (int i = 0; i < numInterventions; i++) {
             StrategyTree strategyTree = strategyTrees.get(i);
@@ -638,7 +643,8 @@ public class StrategyTree extends TreeADDPotential implements Cloneable {
         
         String content = "digraph G {\n";
         
-        Map<StrategyTree, Integer> idNode = new HashMap<>();
+        // By identity: two nodes of the drawing that happen to look alike are still two nodes.
+        Map<StrategyTree, Integer> idNode = new IdentityHashMap<>();
         
         Set<StrategyTree> nodes = this.getInterventions();
         Set<StrategyTree> leaves = this.getInterventionsLeaves();
@@ -691,7 +697,7 @@ public class StrategyTree extends TreeADDPotential implements Cloneable {
      */
     private Set<StrategyTree> getInterventionsLeaves() {
         
-        Set<StrategyTree> auxSet = new HashSet<>();
+        Set<StrategyTree> auxSet = identitySetOfStrategyTrees();
         
         if (branches.isEmpty()) {
             auxSet.add(this);
@@ -793,13 +799,23 @@ public class StrategyTree extends TreeADDPotential implements Cloneable {
         return string;
     }
     
+    /**
+     * A set that tells its members apart by identity, which is what every collection of strategy
+     * trees in this class means: the nodes of a tree are distinct objects even when two of them have
+     * the same shape. Their inherited equality cannot make that distinction - it compares only class,
+     * variables and role - and potentials hash the way they compare.
+     */
+    private static Set<StrategyTree> identitySetOfStrategyTrees() {
+        return Collections.newSetFromMap(new IdentityHashMap<>());
+    }
+
     private Set<StrategyTree> getInterventions() {
         return this.auxGetInterventions();
     }
     
     private Set<StrategyTree> auxGetInterventions() {
         
-        Set<StrategyTree> auxSet = new HashSet<>();
+        Set<StrategyTree> auxSet = identitySetOfStrategyTrees();
         auxSet.add(this);
         
         if (branches != null) {
