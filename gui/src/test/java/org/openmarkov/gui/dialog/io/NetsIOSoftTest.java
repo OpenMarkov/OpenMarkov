@@ -39,7 +39,6 @@ public class NetsIOSoftTest {
         urlsToTest.add("https://bitbucket.org/cisiad/org.probmodelxml.networks/raw/master/pomdp/Dec-POMDP-wireless-network.pgmx");
     }
 
-    @Disabled("Ignored because a deprecated network")
     @Test
     public void testURLConnection() throws java.io.IOException, ProbNetParserException, NoReaderForFileException, CorruptNetworkFile {
         for (String urlString : urlsToTest) {

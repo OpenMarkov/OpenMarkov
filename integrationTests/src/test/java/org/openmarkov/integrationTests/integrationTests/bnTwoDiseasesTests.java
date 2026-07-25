@@ -106,8 +106,7 @@ public class bnTwoDiseasesTests {
 			}
 	}
 
-	@Disabled
-    @Test
+	@Test
     public void vePropagationWithPostResolutionEvidence1() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
 		VEPropagation vePropagation;
 		EvidenceCase postResolutionEvidence = new EvidenceCase();

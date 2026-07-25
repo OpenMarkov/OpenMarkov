@@ -67,8 +67,7 @@ public class midChancellorTests {
 			this.preResolutionEvidence = probNetInfo.evidence().get(0);
 		}
 	}
-	@Disabled
-    @Test
+	@Test
 	public void veResolutionTestWithoutEvidence() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		VEEvaluation veEvaluation;
 			veEvaluation = new VEEvaluation(probNet);
@@ -76,8 +75,7 @@ public class midChancellorTests {
 			TablePotential utility = veEvaluation.getUtility();
 			Assertions.assertEquals(utility.getValues()[0], 50608.78077314, deltaEquals);
 	}
-	@Disabled
-    @Test
+	@Test
 	public void veOptimalPolicyTest() throws NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ConstraintViolatedException {
 		OptimalPolicies veOptimalPolicy;
 			Variable decisionVariable = probNet.getVariable("Therapy type");
@@ -86,8 +84,7 @@ public class midChancellorTests {
 			double[] expectedValues = { 0, 1 };
 			Assertions.assertArrayEquals(optimalPolicy.getValues(), expectedValues, deltaEquals);
 	}
-	@Disabled
-    @Test
+	@Test
 	public void veOptimalIntervention() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		VEOptimalIntervention veOptimalIntervention;
 			veOptimalIntervention = new VEOptimalIntervention(probNet, preResolutionEvidence);
@@ -119,8 +116,7 @@ public class midChancellorTests {
 			Assertions.assertEquals(cep.getEffectiveness(303383.4), 8.93739, deltaEquals);
 			Assertions.assertEquals(cep.getCost(6274.05), 50599.843384, deltaEquals);
 	}
-	@Disabled
-    @Test
+	@Test
 	public void veCEADecisionDecTestTests() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		CEAnalysis veceaDecision;
 			Variable decisionVariable = null;
@@ -146,8 +142,7 @@ public class midChancellorTests {
 			Assertions.assertEquals(combinationtherapyCEP.getCost(500000.0), 50599.84338424, deltaEquals);
 			Assertions.assertEquals(combinationtherapyCEP.getEffectiveness(30000.0), 8.9374, deltaEquals);
 	}
-	@Disabled
-    @Test
+	@Test
 	public void stateVETemporalEvolutionTests() throws NonProjectablePotentialException, NotEvaluableNetworkException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
 		Variable stateVariable = null;
 			stateVariable = probNet.getVariable("State", 0);
@@ -208,8 +203,7 @@ public class midChancellorTests {
 					0.002862441788179781 };
 			Assertions.assertArrayEquals(valuesToCheck, posteriorValues.get(variableToCheck).getValues(), deltaEquals);
 	}
-	@Disabled
-    @Test
+	@Test
 	public void costLamiduvineVETemporalEvolutionTests() throws NonProjectablePotentialException, NotEvaluableNetworkException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
 		Variable stateVariable = null;
 			stateVariable = probNet.getVariable("Cost lamivudine", 0);
@@ -350,8 +344,7 @@ public class midChancellorTests {
 			valuesToCheck = new double[] { 109.25632334292308 };
 			Assertions.assertArrayEquals(valuesToCheck, posteriorValues.get(variableToCheck).getValues(), deltaEquals);
 	}
-	@Disabled
-    @Test
+	@Test
 	public void communityCareCostVETemporalEvolutionTests() throws NonProjectablePotentialException, NotEvaluableNetworkException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
 		Variable stateVariable = null;
 			stateVariable = probNet.getVariable("Community care cost", 0);
@@ -405,8 +398,7 @@ public class midChancellorTests {
 			valuesToCheck = new double[] { 33.90036725029396 };
 			Assertions.assertArrayEquals(valuesToCheck, posteriorValues.get(variableToCheck).getValues(), deltaEquals);
 	}
-	@Disabled
-    @Test
+	@Test
 	public void veTemporalEvaluationTest() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 			TemporalEvaluation temporalEvaluation = new TemporalEvaluation(probNet);
 			temporalEvaluation.setPreResolutionEvidence(preResolutionEvidence);

@@ -58,8 +58,7 @@ public class idCEATest2therapiesTests {
 			this.preResolutionEvidence = probNetInfo.evidence().get(0);
 		}
 	}
-	@Disabled
-    @Test
+	@Test
     public void veResolutionTestWithoutEvidence() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		VEEvaluation veEvaluation;
 			veEvaluation = new VEEvaluation(probNet);
@@ -117,8 +116,7 @@ public class idCEATest2therapiesTests {
 			Assertions.assertEquals(utility.getValues()[0], 124850, deltaEquals);
 	}
 
-	@Disabled
-    @Test
+	@Test
     public void veOptimalPolicyTest() throws NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ConstraintViolatedException {
 		OptimalPolicies veOptimalPolicy;
 			Variable decisionVariable = probNet.getVariable("Therapy");

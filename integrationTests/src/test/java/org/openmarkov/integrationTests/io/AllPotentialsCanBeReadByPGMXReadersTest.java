@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Disabled("On hold until July 2026")
 class AllPotentialsCanBeReadByPGMXReadersTest {
     
     static final HashSet<Class<? extends PGMXReader_0_2>> READERS_THAT_CAN_MISS_POTENTIAL_READER_METHODS

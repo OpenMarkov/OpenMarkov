@@ -24,8 +24,7 @@ import org.openmarkov.inference.algorithm.variableElimination.tasks.VEOptimalInt
 public abstract class idDecideTestNetworkTests extends IDNetworkTests {
 
 
-	@Disabled
-    @Test
+	@Test
     public void veResolutionTestWithoutEvidence() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		VEEvaluation veEvaluation;
 			veEvaluation = new VEEvaluation(probNet);
@@ -103,8 +102,7 @@ public abstract class idDecideTestNetworkTests extends IDNetworkTests {
 			Assertions.assertArrayEquals(expectedUtility.getValues(), expectedValues, deltaEquals);
 	}
 
-	@Disabled
-    @Test
+	@Test
     public void veOptimalIntervention() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		VEOptimalIntervention veOptimalIntervention;
 			veOptimalIntervention = new VEOptimalIntervention(probNet, preResolutionEvidence);

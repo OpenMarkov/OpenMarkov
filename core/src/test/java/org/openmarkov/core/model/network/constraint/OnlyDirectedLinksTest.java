@@ -34,7 +34,6 @@ public class OnlyDirectedLinksTest {
      * Checks or not all the <code>probNet</code> in different situations in
      * <code>OnlyDirectedLinks</code> constructor.
      */
-    @Disabled
     @Test public void testCheckProbNet() {
         // test only directed links insertions without checking.
         PNConstraint constraint = new OnlyDirectedLinks();

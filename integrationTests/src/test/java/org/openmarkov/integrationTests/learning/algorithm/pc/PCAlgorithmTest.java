@@ -234,7 +234,6 @@ public class PCAlgorithmTest {
 		Assertions.assertEquals(0.1414342, probabilities[7], maxError);
 	}
 
-	@Disabled
 	@Tag(TestSpeed.MEDIUM)
     @Test
 	public void testAsia10k() throws org.openmarkov.core.exception.CannotNormalizePotentialException, EmptyDatabaseException, java.io.FileNotFoundException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
@@ -343,7 +342,6 @@ public class PCAlgorithmTest {
 
 	}
 	
-	@Disabled
 	@Tag(TestSpeed.SLOW)
     @Test
 	public void testAlarm500() throws org.openmarkov.core.exception.CannotNormalizePotentialException, ProbNetParserException, EmptyDatabaseException, IOException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {

@@ -48,7 +48,6 @@ public abstract class IDNetworkTests {
         return new PGMXReader_0_2();
     }
     
-    @Disabled
     @Test
     public void veSensAnTornadoSpiderTests() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
         List<UncertainParameter> uncertainParameterList = SystematicSampling.getUncertainParameters(this.probNet);
