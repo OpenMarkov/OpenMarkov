@@ -81,9 +81,11 @@ public class PotentialsCanBeClonedTest {
      * equality - two Variable objects with the same name and states are equal by value, and
      * everything else in the model looks variables up by identity.
      */
-    @Disabled("Finds four families that keep the source network's variables when deepCopy(otherNet) "
-            + "is called directly: MaxPotential, MinPotential and TuningPotential keep their parents, "
-            + "and UnivariateDistrPotential keeps its own. Switch on as each is fixed.")
+    @Disabled("Four families still keep a variable of the source network when deepCopy(otherNet) is "
+            + "called directly. Since the pseudo variable was fixed it is their CONDITIONED variable, "
+            + "not their parents: MaxPotential keeps Max_Canonical, MinPotential Min_Canonical, "
+            + "TuningPotential Tuning_Canonical; AugmentedProbTablePotential keeps its parents and its "
+            + "own. Switch on as each is fixed.")
     @ParameterizedTest
     @MethodSource("deepCloneTestData")
     void deepCopyUsesTheVariablesOfTheDestinationNetwork(DeepCloneTestData deepCloneTestData) {

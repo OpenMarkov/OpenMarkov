@@ -179,7 +179,14 @@ public abstract class MinMaxPotential extends ICIPotential {
     
     @Override public Potential deepCopy(ProbNet copyNet) {
         MinMaxPotential potential = (MinMaxPotential) super.deepCopy(copyNet);
-        potential.pseudoVariable = this.pseudoVariable;
+        // The pseudo variable is not a node of the network - it exists only inside the
+        // factorization - so it is built, never looked up. Built here from the copy's own
+        // conditioned variable, as both constructors build it. Taking the original's instead, as
+        // this line used to, handed the two potentials the same object and undid the fresh one the
+        // copy constructor had already made.
+        Variable copiedChild = potential.getConditionedVariable();
+        potential.pseudoVariable = new Variable("pseudo-" + copiedChild.getName(),
+                                                copiedChild.getNumStates());
         return potential;
     }
     
