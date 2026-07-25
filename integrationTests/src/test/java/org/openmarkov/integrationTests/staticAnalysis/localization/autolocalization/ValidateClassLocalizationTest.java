@@ -34,11 +34,11 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * See the method {@link ValidateClassLocalization#validateAutoLocalization()}, which is the purpose of this test class.
+ * See the method {@link ValidateClassLocalizationTest#validateAutoLocalization()}, which is the purpose of this test class.
  *
  * @author jrico
  */
-public class ValidateClassLocalization {
+public class ValidateClassLocalizationTest {
     
     /**
      * List of all {@link Bundle}, including their {@link StringBundle} preloaded.
@@ -50,7 +50,7 @@ public class ValidateClassLocalization {
     /**
      * Map where every module has a list of {@link Bundle}s that are defined in said module.
      */
-    private static final Map<Module, List<Bundle>> MODULES_AND_BUNDLES = ValidateClassLocalization.BUNDLES
+    private static final Map<Module, List<Bundle>> MODULES_AND_BUNDLES = ValidateClassLocalizationTest.BUNDLES
             .stream()
             .collect(Collectors.groupingBy(bundle -> bundle.provider.getClass().getModule()));
     /**
@@ -67,12 +67,12 @@ public class ValidateClassLocalization {
      * List where every {@link ClassLocalizable} of every module is associated to the Bundles that can be accessed in
      * said module.
      */
-    private static final List<AutolocalizablesAndBundles> LOCALIZABLES_AND_ACCESIBLE_BUNDLES = ValidateClassLocalization.MODULES_AND_AUTOLOCALIZABLES
+    private static final List<AutolocalizablesAndBundles> LOCALIZABLES_AND_ACCESIBLE_BUNDLES = ValidateClassLocalizationTest.MODULES_AND_AUTOLOCALIZABLES
             .entrySet()
             .stream()
             .map(moduleAndLocalizable -> {
                 var targetModule = moduleAndLocalizable.getKey();
-                List<Bundle> resourceProviders = ValidateClassLocalization.MODULES_AND_BUNDLES
+                List<Bundle> resourceProviders = ValidateClassLocalizationTest.MODULES_AND_BUNDLES
                         .entrySet()
                         .stream()
                         .filter(providersModule -> targetModule.canRead(providersModule.getKey()))
@@ -99,11 +99,11 @@ public class ValidateClassLocalization {
      * print some advice and example code on how to solve it.
      */
     @Test void validateAutoLocalization() {
-        List<Error> errors = ValidateClassLocalization.findAllAutoLocalizationErrors();
+        List<Error> errors = ValidateClassLocalizationTest.findAllAutoLocalizationErrors();
         if (errors.isEmpty()) {
             return;
         }
-        ValidateClassLocalization.failWithLocalizationErrors(errors);
+        ValidateClassLocalizationTest.failWithLocalizationErrors(errors);
     }
     
     private static void failWithLocalizationErrors(List<Error> errors) {
@@ -202,7 +202,7 @@ public class ValidateClassLocalization {
     
     private static @NotNull List<Error> findAllAutoLocalizationErrors() {
         List<Error> errors = new ArrayList<>();
-        ValidateClassLocalization.LOCALIZABLES_AND_ACCESIBLE_BUNDLES
+        ValidateClassLocalizationTest.LOCALIZABLES_AND_ACCESIBLE_BUNDLES
                 .stream()
                 .flatMap(autolocalizablesAndBundles ->
                                  autolocalizablesAndBundles.localizablesClasses
@@ -221,7 +221,7 @@ public class ValidateClassLocalization {
                     if (accessibleBundle.isPresent()) {
                         localizedBundle = accessibleBundle.get();
                     } else {
-                        Optional<Bundle> inaccessibleBundle = ValidateClassLocalization.BUNDLES.stream()
+                        Optional<Bundle> inaccessibleBundle = ValidateClassLocalizationTest.BUNDLES.stream()
                                                                                                .filter(bundles -> bundles.stringBundle.getString(keyName) != null)
                                                                                                .findFirst();
                         if (inaccessibleBundle.isPresent()) {
@@ -262,12 +262,12 @@ public class ValidateClassLocalization {
                             switch (lastMethodOrFieldUsed) {
                                 case Method method -> {
                                     Arrays.stream(method.getGenericParameterTypes())
-                                          .flatMap(ValidateClassLocalization::extractParameterizedTypes)
+                                          .flatMap(ValidateClassLocalizationTest::extractParameterizedTypes)
                                           .forEach(classesUsedInLocalization::add);
                                     classesUsedInLocalization.add((Class<Object>) method.getReturnType());
                                 }
                                 case Field field -> {
-                                    ValidateClassLocalization.extractParameterizedTypes(field.getGenericType())
+                                    ValidateClassLocalizationTest.extractParameterizedTypes(field.getGenericType())
                                                              .forEach(classesUsedInLocalization::add);
                                     classesUsedInLocalization.add((Class<Object>) field.getType());
                                 }
@@ -281,7 +281,7 @@ public class ValidateClassLocalization {
                             .stream()
                             .filter(usedClassInLocalization -> {
                                 boolean willBeProperlyLocalized = false;
-                                if (ValidateClassLocalization.OPENMARKOV_CLASSES.contains(usedClassInLocalization)) {
+                                if (ValidateClassLocalizationTest.OPENMARKOV_CLASSES.contains(usedClassInLocalization)) {
                                     willBeProperlyLocalized = Localizable.class.isAssignableFrom(usedClassInLocalization);
                                 } else {
                                     willBeProperlyLocalized = implementsToString(usedClassInLocalization)

@@ -31,7 +31,7 @@ import java.util.List;
 
 @Disabled("The network '21-gene-190909-psa.pgmx' is missing.")
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class mid21gene {
+public class Mid21GeneTest {
     
     
     // Delta parameter for Assert.Equals methods

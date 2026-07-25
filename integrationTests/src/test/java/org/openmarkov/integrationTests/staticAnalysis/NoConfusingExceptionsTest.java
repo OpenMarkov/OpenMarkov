@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class NoConfusingExceptions {
+public class NoConfusingExceptionsTest {
     
     /**
      * Tests classes created in OpenMarkov that extend {@link Throwable} don't have names belonging to other

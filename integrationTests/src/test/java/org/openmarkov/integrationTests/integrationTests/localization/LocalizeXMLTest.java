@@ -13,11 +13,11 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
- * See the method {@link LocalizeXML#keysArentRepeated()} ()}, which is the purpose of this test class.
+ * See the method {@link LocalizeXMLTest#keysArentRepeated()} ()}, which is the purpose of this test class.
  *
  * @author jrico
  */
-public class LocalizeXML {
+public class LocalizeXMLTest {
     
     /**
      * Ensures there are no localization keys repeated across multiple bundles given by

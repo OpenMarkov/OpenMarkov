@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class testUnreachableExceptionStacktrace {
+public class UnreachableExceptionStacktraceTest {
     
     /**
      * Tests {@link UnreachableException} always contains just the target exception, meaning an
@@ -29,13 +29,13 @@ public class testUnreachableExceptionStacktrace {
         Throwable flat = ThrowableUtils.flatten(exception);
         assertEquals(flat.getClass(), EmptyDatabaseException.class);
         var stackTraceInOrder = List.of(
-                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.testUnreachableExceptionStacktrace.thrower",
-                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.testUnreachableExceptionStacktrace.callerD",
-                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.testUnreachableExceptionStacktrace.callerC",
-                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.testUnreachableExceptionStacktrace.callerC",
-                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.testUnreachableExceptionStacktrace.callerB",
-                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.testUnreachableExceptionStacktrace.callerA",
-                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.testUnreachableExceptionStacktrace.testFlattening"
+                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.UnreachableExceptionStacktraceTest.thrower",
+                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.UnreachableExceptionStacktraceTest.callerD",
+                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.UnreachableExceptionStacktraceTest.callerC",
+                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.UnreachableExceptionStacktraceTest.callerC",
+                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.UnreachableExceptionStacktraceTest.callerB",
+                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.UnreachableExceptionStacktraceTest.callerA",
+                "org.openmarkov.integrationTests.integrationTests.testRuntimeExceptions.UnreachableExceptionStacktraceTest.testFlattening"
         );
         for (int i = 0; i < stackTraceInOrder.size(); i++) {
             var expectedMethodInStackTrace = stackTraceInOrder.get(i);

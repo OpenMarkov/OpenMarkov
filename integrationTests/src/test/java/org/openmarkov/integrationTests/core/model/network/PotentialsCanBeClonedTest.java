@@ -19,13 +19,13 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PotentialsCanBeCloned {
+public class PotentialsCanBeClonedTest {
     
     record DeepCloneTestData(Potential potential, ProbNet probNet) {
     }
     
     Stream<DeepCloneTestData> deepCloneTestData() throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
-        var net = NetsIO.openNetworkURL(PotentialsCanBeCloned.DAN_WITH_EVERY_POTENTIAL_URL)
+        var net = NetsIO.openNetworkURL(PotentialsCanBeClonedTest.DAN_WITH_EVERY_POTENTIAL_URL)
                         .probNet();
         return net.getNodes().stream()
                   .filter(node -> !node.getName().endsWith("Parent1"))
@@ -55,5 +55,5 @@ public class PotentialsCanBeCloned {
     }
     
     private static final URL DAN_WITH_EVERY_POTENTIAL_URL = Objects.requireNonNull(
-            PotentialsCanBeCloned.class.getResource("/networks_for_every_potential/Dynamic-LIMID-every-potential.pgmx"));
+            PotentialsCanBeClonedTest.class.getResource("/networks_for_every_potential/Dynamic-LIMID-every-potential.pgmx"));
 }

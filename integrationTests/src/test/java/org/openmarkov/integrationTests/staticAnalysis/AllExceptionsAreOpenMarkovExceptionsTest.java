@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class AllExceptionsAreOpenMarkovExceptions {
+public class AllExceptionsAreOpenMarkovExceptionsTest {
     
     private static final Set<Class<? extends Throwable>> ALLOWED_EXCEPTIONS = Set.of(
             org.openmarkov.core.exception.UnreachableException.class,

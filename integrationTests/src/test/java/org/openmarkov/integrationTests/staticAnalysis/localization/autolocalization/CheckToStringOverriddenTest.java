@@ -16,13 +16,13 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * See the method {@link CheckToStringOverridden#addToStringOnMissingClasses()}, which is the purpose of this test
+ * See the method {@link CheckToStringOverriddenTest#addToStringOnMissingClasses()}, which is the purpose of this test
  * class.
  *
  * @author jrico
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CheckToStringOverridden {
+public class CheckToStringOverriddenTest {
     
     /**
      * This tests searches for classes extending {@link Localizable}, and if they don't override
@@ -42,12 +42,12 @@ public class CheckToStringOverridden {
      */
     @Test
     public void addToStringOnMissingClasses() {
-        var superClassesMissingToString = CheckToStringOverridden.classesMissingToString(
-                CheckToStringOverridden.getSuperLocalizablesClasses());
+        var superClassesMissingToString = CheckToStringOverriddenTest.classesMissingToString(
+                CheckToStringOverriddenTest.getSuperLocalizablesClasses());
         var unfixedSuperClasses = new HashSet<>(superClassesMissingToString);
         /*
         superClassesMissingToString.forEach(superClassMissingToString -> {
-            var classLocation = CheckToStringOverridden.getClassLocation(superClassMissingToString);
+            var classLocation = CheckToStringOverriddenTest.getClassLocation(superClassMissingToString);
             if (classLocation == null) return;
             try {
                 var classContents = Files.readString(classLocation.toPath());
@@ -102,10 +102,10 @@ public class CheckToStringOverridden {
      * @return every class implementing {@link Localizable} directly.
      */
     private static @NotNull List<Class<? extends Localizable>> getSuperLocalizablesClasses() {
-        return CheckToStringOverridden
+        return CheckToStringOverriddenTest
                 .getAllLocalizablesClasses()
                 .filter(localizableClass ->
-                                CheckToStringOverridden.getSuperClasses(localizableClass)
+                                CheckToStringOverriddenTest.getSuperClasses(localizableClass)
                                                        .stream()
                                                        .noneMatch(Localizable.class::isAssignableFrom))
                 .toList();

@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @Disabled("Localization is no longer applied to multiple languages, just English")
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class LocalizeXMLCompare {
+public class LocalizeXMLCompareTest {
     
     private static final int LANGUAGE_CODE_PLUS_EXTENSION_LENGHT = 7;
     private static final Language LANGUAGE_ENGLISH = new Language("English", "_en.xml", "en");
@@ -76,7 +76,7 @@ public class LocalizeXMLCompare {
                                                                                  .filter(file -> file.toLowerCase()
                                                                                                      .endsWith("xml"))
                                                                                  //Removes extension from file
-                                                                                 .map(file -> file.substring(0, file.length() - LocalizeXMLCompare.LANGUAGE_CODE_PLUS_EXTENSION_LENGHT))
+                                                                                 .map(file -> file.substring(0, file.length() - LocalizeXMLCompareTest.LANGUAGE_CODE_PLUS_EXTENSION_LENGHT))
                                                                                  .distinct());
         });
     }
@@ -89,8 +89,8 @@ public class LocalizeXMLCompare {
     }
     
     private static Stream<Pair<FileAndLocalizeResource, Language>> getLocalizationFilesAndProvidersWithLanguages() {
-        var languages = LocalizeXMLCompare.languages()
-                                          .filter(language -> language != LocalizeXMLCompare.LANGUAGE_ENGLISH)
+        var languages = LocalizeXMLCompareTest.languages()
+                                          .filter(language -> language != LocalizeXMLCompareTest.LANGUAGE_ENGLISH)
                                           .toList();
         if (languages.isEmpty()) {
             return Stream.empty();
@@ -115,7 +115,7 @@ public class LocalizeXMLCompare {
     @ParameterizedTest
     @MethodSource("getLocalizationFilesAndProviders")
     public void checkSameFiles(FileAndLocalizeResource fileAndLocalizeResource) {
-        var languages = LocalizeXMLCompare.languages();
+        var languages = LocalizeXMLCompareTest.languages();
         var missingLanguages = languages.filter(language ->
                                                         fileToInputStream(fileAndLocalizeResource.localizeResourcesProvider, fileAndLocalizeResource.file + language.suffix) == null)
                                         .toList();
@@ -134,7 +134,7 @@ public class LocalizeXMLCompare {
         var provider = fileAndLanguage.getLeft().localizeResourcesProvider;
         var file = fileAndLanguage.getLeft().file;
         var language = fileAndLanguage.getRight();
-        checkStructure(provider, file + LocalizeXMLCompare.LANGUAGE_ENGLISH.suffix, file + language.suffix);
+        checkStructure(provider, file + LocalizeXMLCompareTest.LANGUAGE_ENGLISH.suffix, file + language.suffix);
     }
     
     @ParameterizedTest

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class VerifyImmutableClasses {
+public class VerifyImmutableClassesTest {
     
     private static final int IDENTATION_OF_SUBMESSAGES = 4;
     private static final MutabilityKind[] IMMUTABILITY_KINDS = MutabilityKind.values();

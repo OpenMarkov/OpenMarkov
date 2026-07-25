@@ -10,8 +10,11 @@ import org.openmarkov.plugin.PluginSearch;
 
 import java.util.stream.Stream;
 
-@Disabled("On hold until July 2026")
-public class AllPotentialsHaveAPanel {
+@Disabled("36 of the 39 potential types do have an editing panel; ExternalPotential, "
+        + "IncrementPotential and TableWithEvents do not, so the user cannot edit them. "
+        + "Re-enable once those three have a panel. (The previous reason, \"on hold until "
+        + "July 2026\", had expired and did not say what was wrong.)")
+public class AllPotentialsHaveAPanelTest {
     
     public static Stream<Class<? extends Potential>> toolPotentialClasses() {
         return PluginSearch.init().childrenOf(Potential.class).filter(ClassUtils::isConcrete).stream();

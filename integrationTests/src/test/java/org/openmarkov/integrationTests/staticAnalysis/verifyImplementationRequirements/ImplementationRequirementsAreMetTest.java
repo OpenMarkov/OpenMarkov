@@ -15,9 +15,11 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class ImplementationRequirementsAreMet {
+public class ImplementationRequirementsAreMetTest {
     
-    @Disabled("This test has been ignored for longer than a year")
+    @Disabled("58 classes do not meet the constructor requirements this checks; run it to get "
+            + "the list. It is a backlog of its own, not a broken test. (The previous reason, "
+            + "\"ignored for longer than a year\", said how long but not what.)")
     @Tag(TestSpeed.FAST)
     @Test
     public void requirementsAreMet() {
