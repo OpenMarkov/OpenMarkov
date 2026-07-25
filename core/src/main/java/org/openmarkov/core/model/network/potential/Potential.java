@@ -532,11 +532,33 @@ public abstract class Potential implements Localizable {
     }
     
     @Override public boolean equals(Object arg0) {
-        if (arg0.getClass() != this.getClass()) {
+        // Asking whether something equals null is not an error: it is how collections probe for
+        // absence, and every one of them expects "no" rather than a NullPointerException.
+        if (arg0 == null || arg0.getClass() != this.getClass()) {
             return false;
         }
         Potential potential = (Potential) arg0;
         return variables.equals(potential.variables) && role == potential.role;
+    }
+
+    /**
+     * Hashed on what every equality in this hierarchy demands: the exact class, the variables and the
+     * role. Subclasses compare more than that - a TablePotential also compares its values - but
+     * comparing more only makes equality stricter, and stricter equality sharing a hash is precisely
+     * what the contract allows. So this one definition serves the whole hierarchy.
+     *
+     * <p>The values are deliberately left out. They are edited in place throughout the code, and a
+     * potential whose hash changes while it sits in a hash-based collection is a potential that
+     * collection can no longer find: it stays in the bucket its old hash chose, invisible to
+     * {@code contains} and to {@code remove}. Variables and role do not shift under a potential's
+     * feet during inference; values do, constantly.
+     *
+     * <p>Note that {@link #setVariables} does move one of the two, so a potential must not be put
+     * into a hash-based collection before its variables are settled. Deep copies set them on a fresh
+     * object, before anyone can hold it.
+     */
+    @Override public int hashCode() {
+        return Objects.hash(getClass(), variables, role);
     }
     
     /**
