@@ -127,7 +127,18 @@ public class bnCatarnetTests {
 				Assertions.assertArrayEquals(posteriorVales.get(variable).getValues(), expectedValues, deltaEquals);
 			}
 	}
-	@Disabled
+	/**
+	 * Evidence that cannot occur must make the propagation fail rather than return numbers.
+	 * <p>
+	 * It does fail, but note which exception. Exact propagation lets
+	 * CannotNormalizePotentialException out of TablePotentialTransform.normalize, which says "all
+	 * the values are 0.0 in potential P(av_sin_catar)" - it names a potential, and says nothing
+	 * about the user's evidence being contradictory. Sampling reports the same situation as
+	 * IncompatibleEvidenceException.SamplesWeightIsZero (StochasticPropagation:180). So the two
+	 * families of algorithm answer the same question differently, and the name of this test says
+	 * which of the two its author expected. Unifying them would change what callers catch, so it is
+	 * left as it is and written down here.
+	 */
     @Test
 	public void vePropagationIncompatibleEvidence() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
 		VEPropagation vePropagation;
@@ -145,12 +156,12 @@ public class bnCatarnetTests {
 			Finding finding3 = new Finding(probNet.getVariable("av_pre"), 3);
 			postResolutionEvidence.addFinding(finding3);
 
-		boolean incompatibleEvidenceExceptionOcurred = false;
-			vePropagation = new VEPropagation(probNet);
-			vePropagation.setVariablesOfInterest(variablesOfInterest);
-			vePropagation.setPreResolutionEvidence(preResolutionEvidence);
-			vePropagation.setPostResolutionEvidence(postResolutionEvidence);
-			vePropagation.getPosteriorValues();
+		vePropagation = new VEPropagation(probNet);
+		vePropagation.setVariablesOfInterest(variablesOfInterest);
+		vePropagation.setPreResolutionEvidence(preResolutionEvidence);
+		vePropagation.setPostResolutionEvidence(postResolutionEvidence);
+
+		Assertions.assertThrows(CannotNormalizePotentialException.class, vePropagation::getPosteriorValues);
 	}
 
 }

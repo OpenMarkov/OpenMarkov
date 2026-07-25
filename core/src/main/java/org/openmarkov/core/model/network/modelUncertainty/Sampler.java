@@ -58,6 +58,12 @@ public abstract class Sampler {
 		List<Integer> indexes = new ArrayList<>();
 		for (int i = 0; i < uncertainValues.size(); i++) {
 			UncertainValue uncertainValue = uncertainValues.get(i);
+			// A null entry means that cell of the table carries no uncertainty, which is a normal
+			// state of an uncertainty table - UncertainTablePotential.copy() checks for it too. A
+			// parameter with no uncertainty is of none of the types being looked for, so skip it.
+			if (uncertainValue == null) {
+				continue;
+			}
 			ProbDensFunction probDensFunction = uncertainValue.getProbDensFunction();
 			boolean isInTypes = false;
 			for (int j = 0; (j < types.size()) && !isInTypes; j++) {
@@ -122,6 +128,11 @@ public abstract class Sampler {
 		List<Integer> indexes = new ArrayList<>();
 		for (int i = 0; i < uncertainValues.size(); i++) {
 			UncertainValue uncertainValue = uncertainValues.get(i);
+			// Same as in getIndexesUncertainValuesNotOfClasses: a null entry is a cell with no
+			// uncertainty, which is not a parameter to sample and so belongs in neither list.
+			if (uncertainValue == null) {
+				continue;
+			}
 			ProbDensFunction probDensFunction = uncertainValue.getProbDensFunction();
 			boolean isInTypes = false;
 			for (int j = 0; (j < types.size()) && !isInTypes; j++) {
