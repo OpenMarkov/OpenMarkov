@@ -217,6 +217,9 @@
     <Localization class="org.openmarkov.core.exception.NetworkHasNoNodesException" value="{probNet} has no nodes."/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$CannotEvaluate"
                   value="Cannot evaluate '{elementToEvaluate}' due to {evaluationException.getMessage}"/>
+    <Localization
+            class="org.openmarkov.core.exception.NonProjectablePotentialException$CoefficientsDoNotMatchCovariates"
+            value="Potential {potential} has {coefficientCount} coefficients but {covariateCount} covariates, so it cannot be projected: a generalized linear model needs one coefficient per covariate"/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$CannotResolveVariable"
                   value="An expression cannot be resolved as there is no value resolved for variable {reference}"/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$MissingEvidenceInVariable"

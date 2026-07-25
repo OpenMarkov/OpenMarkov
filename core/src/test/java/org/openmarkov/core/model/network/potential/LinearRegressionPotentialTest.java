@@ -47,5 +47,36 @@ public class LinearRegressionPotentialTest {
         double[] expectedValues = new double[]{0, 1, 1, 0};
         Assertions.assertArrayEquals(expectedValues, projectedPotential.getValues(), 0.00001);
     }
-    
+
+    /**
+     * A generalized linear model needs one coefficient per covariate, and the two can be set
+     * separately, so nothing stops them from going out of step. Asked to project itself in that
+     * state, the potential must say so. It used to throw ArrayIndexOutOfBoundsException from inside
+     * the projection loop, which walks the coefficients while indexing the covariates.
+     */
+    @Test public void aProjectionSaysSoWhenThereAreMoreCoefficientsThanCovariates() {
+        potential.setCoefficients(new double[]{0, 1, -1, 0.5});   // one too many
+
+        var thrown = Assertions.assertThrows(NonProjectablePotentialException.CoefficientsDoNotMatchCovariates.class,
+                                             () -> potential.tableProject(new EvidenceCase(), null));
+
+        Assertions.assertEquals(4, thrown.coefficientCount);
+        Assertions.assertEquals(3, thrown.covariateCount);
+    }
+
+    /**
+     * The other direction matters more, because it used not to fail at all: the covariates with no
+     * coefficient were simply left out of the sum, and the projection returned a wrong number
+     * without a word.
+     */
+    @Test public void aProjectionSaysSoWhenThereAreFewerCoefficientsThanCovariates() {
+        potential.setCoefficients(new double[]{0, 1});            // one too few
+
+        var thrown = Assertions.assertThrows(NonProjectablePotentialException.CoefficientsDoNotMatchCovariates.class,
+                                             () -> potential.tableProject(new EvidenceCase(), null));
+
+        Assertions.assertEquals(2, thrown.coefficientCount);
+        Assertions.assertEquals(3, thrown.covariateCount);
+    }
+
 }

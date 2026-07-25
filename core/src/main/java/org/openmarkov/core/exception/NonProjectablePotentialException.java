@@ -41,6 +41,24 @@ public abstract sealed class NonProjectablePotentialException extends OpenMarkov
         public final Potential potential;
     }
     
+    /**
+     * A generalized linear model needs exactly one coefficient per covariate. Nothing stops the
+     * two from being set separately and out of step — the file readers set the coefficients first
+     * and the covariates only if the file carries them — so the mismatch is caught here, when the
+     * potential is asked to project itself, and reported with both counts.
+     */
+    public static final class CoefficientsDoNotMatchCovariates extends NonProjectablePotentialException {
+        public CoefficientsDoNotMatchCovariates(Potential potential, int coefficientCount, int covariateCount) {
+            this.potential = potential;
+            this.coefficientCount = coefficientCount;
+            this.covariateCount = covariateCount;
+        }
+
+        public final Potential potential;
+        public final int coefficientCount;
+        public final int covariateCount;
+    }
+
     public static final class PotentialCannotBeConvertedToATableDueToVariable extends NonProjectablePotentialException {
         public PotentialCannotBeConvertedToATableDueToVariable(Potential potential, Variable variable) {
             this.potential = potential;

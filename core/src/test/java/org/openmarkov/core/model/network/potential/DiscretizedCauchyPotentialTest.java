@@ -39,10 +39,17 @@ public class DiscretizedCauchyPotentialTest {
                 .asList(predictedAudiometry, processorTypeChanged, micAge, electrodeChanged);
         List<Variable> potentialVariables = new ArrayList<>(parentVariables);
         potentialVariables.addFirst(audiometry);
-        LinearCombinationPotential medianPotential = new LinearCombinationPotential(parentVariables,
+        // The median and the scale are regressions on the parents, so their own conditioned
+        // variable is the numeric one the test already declares above. Leaving it out gave them
+        // four covariates and five coefficients, which is what made the projection fail.
+        List<Variable> medianPotentialVariables = new ArrayList<>(parentVariables);
+        medianPotentialVariables.addFirst(medianVariable);
+        List<Variable> scalePotentialVariables = new ArrayList<>(parentVariables);
+        scalePotentialVariables.addFirst(scaleVariable);
+        LinearCombinationPotential medianPotential = new LinearCombinationPotential(medianPotentialVariables,
                                                                                     PotentialRole.CONDITIONAL_PROBABILITY);
         medianPotential.setCoefficients(new double[]{0, 1, 0.1, -0.2, 0.05});
-        LinearCombinationPotential scalePotential = new LinearCombinationPotential(parentVariables,
+        LinearCombinationPotential scalePotential = new LinearCombinationPotential(scalePotentialVariables,
                                                                                    PotentialRole.CONDITIONAL_PROBABILITY);
         scalePotential.setCoefficients(new double[]{1, 0, 0.2, 0.2, 0.1});
         discretizedPotential = new DiscretizedCauchyPotential(potentialVariables,
@@ -51,27 +58,36 @@ public class DiscretizedCauchyPotentialTest {
         discretizedPotential.setScale(scalePotential);
     }
     
-    @Disabled
+    /**
+     * A Cauchy distribution, not a normal one: the expected values below come from
+     * F(x) = 1/2 + atan((x - median) / scale) / pi, worked out independently of this code. The
+     * numbers this test used to expect were the normal ones, copied over from
+     * ConditionalGaussianPotentialTest - 0.6914 is Phi(0.5), whereas the Cauchy value at the same
+     * threshold is 0.6476.
+     */
     @Test public void testTableProject() throws NonProjectablePotentialException {
         
         TablePotential projectedPotential = discretizedPotential.tableProject(new EvidenceCase(), null);
         
         Assertions.assertEquals(288, projectedPotential.tableSize);
-        Assertions.assertEquals(0.6914, projectedPotential.getValues()[0], 10E-4);
-        Assertions.assertEquals(0.2417, projectedPotential.getValues()[1], 10E-4);
-        Assertions.assertEquals(0.0668, projectedPotential.getValues()[2], 10E-4);
-        Assertions.assertEquals(0.3085, projectedPotential.getValues()[3], 10E-4);
-        Assertions.assertEquals(0.3829, projectedPotential.getValues()[4], 10E-4);
-        Assertions.assertEquals(0.3085, projectedPotential.getValues()[5], 10E-4);
-        Assertions.assertEquals(0.0668, projectedPotential.getValues()[6], 10E-4);
-        Assertions.assertEquals(0.2417, projectedPotential.getValues()[7], 10E-4);
-        Assertions.assertEquals(0.6914, projectedPotential.getValues()[8], 10E-4);
-        Assertions.assertEquals(0.6305, projectedPotential.getValues()[9], 10E-4);
-        Assertions.assertEquals(0.2477, projectedPotential.getValues()[10], 10E-4);
-        Assertions.assertEquals(0.1216, projectedPotential.getValues()[11], 10E-4);
+        // median 0, scale 1
+        Assertions.assertEquals(0.6475836, projectedPotential.getValues()[0], 10E-4);
+        Assertions.assertEquals(0.1652493, projectedPotential.getValues()[1], 10E-4);
+        Assertions.assertEquals(0.1871670, projectedPotential.getValues()[2], 10E-4);
+        // median 1, scale 1
+        Assertions.assertEquals(0.3524164, projectedPotential.getValues()[3], 10E-4);
+        Assertions.assertEquals(0.2951672, projectedPotential.getValues()[4], 10E-4);
+        Assertions.assertEquals(0.3524164, projectedPotential.getValues()[5], 10E-4);
+        // median 2, scale 1
+        Assertions.assertEquals(0.1871670, projectedPotential.getValues()[6], 10E-4);
+        Assertions.assertEquals(0.1652493, projectedPotential.getValues()[7], 10E-4);
+        Assertions.assertEquals(0.6475836, projectedPotential.getValues()[8], 10E-4);
+        // median 0.1, scale 1.2
+        Assertions.assertEquals(0.6024164, projectedPotential.getValues()[9], 10E-4);
+        Assertions.assertEquals(0.1720209, projectedPotential.getValues()[10], 10E-4);
+        Assertions.assertEquals(0.2255627, projectedPotential.getValues()[11], 10E-4);
     }
     
-    @Disabled
     @Test public void testTableProjectWithEvidence()
             throws NonProjectablePotentialException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         
@@ -82,19 +98,21 @@ public class DiscretizedCauchyPotentialTest {
         TablePotential projectedPotential = discretizedPotential.tableProject(evidence, null);
         
         Assertions.assertEquals(24, projectedPotential.tableSize);
-        Assertions.assertEquals(0.2160, projectedPotential.getValues()[0], 10E-4);
-        Assertions.assertEquals(0.2555, projectedPotential.getValues()[1], 10E-4);
-        Assertions.assertEquals(0.5284, projectedPotential.getValues()[2], 10E-4);
-        Assertions.assertEquals(0.2266, projectedPotential.getValues()[3], 10E-4);
-        Assertions.assertEquals(0.2236, projectedPotential.getValues()[4], 10E-4);
-        Assertions.assertEquals(0.5497, projectedPotential.getValues()[5], 10E-4);
-        Assertions.assertEquals(0.2216, projectedPotential.getValues()[6], 10E-4);
-        Assertions.assertEquals(0.2385, projectedPotential.getValues()[7], 10E-4);
-        Assertions.assertEquals(0.5398, projectedPotential.getValues()[8], 10E-4);
+        // median 1.6, scale 1.4
+        Assertions.assertEquals(0.2880154, projectedPotential.getValues()[0], 10E-4);
+        Assertions.assertEquals(0.1892867, projectedPotential.getValues()[1], 10E-4);
+        Assertions.assertEquals(0.5226979, projectedPotential.getValues()[2], 10E-4);
+        // median 1.7, scale 1.6
+        Assertions.assertEquals(0.2951672, projectedPotential.getValues()[3], 10E-4);
+        Assertions.assertEquals(0.1652493, projectedPotential.getValues()[4], 10E-4);
+        Assertions.assertEquals(0.5395834, projectedPotential.getValues()[5], 10E-4);
+        // median 1.65, scale 1.5
+        Assertions.assertEquals(0.2917990, projectedPotential.getValues()[6], 10E-4);
+        Assertions.assertEquals(0.1764755, projectedPotential.getValues()[7], 10E-4);
+        Assertions.assertEquals(0.5317255, projectedPotential.getValues()[8], 10E-4);
         
     }
     
-    @Disabled("Ignored because an ArrayIndexOutOfBoundsException")
     @Test public void testTableProjectWithFullEvidence()
             throws NonProjectablePotentialException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         

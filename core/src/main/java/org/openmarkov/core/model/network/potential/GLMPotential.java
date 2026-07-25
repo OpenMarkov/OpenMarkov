@@ -203,6 +203,15 @@ public abstract class GLMPotential extends Potential {
     @Override
     public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials) throws NonProjectablePotentialException {
         double[] coefficients = (sampledCoefficients == null) ? this.coefficients : this.sampledCoefficients;
+        // One coefficient per covariate, checked here because this is the one place every
+        // subclass goes through. Their projection loops walk the coefficients while indexing the
+        // covariates, so without this a mismatch either throws ArrayIndexOutOfBoundsException from
+        // inside the loop (more coefficients) or, worse, silently drops the covariates that have
+        // no coefficient (fewer). Neither says what is actually wrong.
+        if (coefficients.length != covariates.length) {
+            throw new NonProjectablePotentialException.CoefficientsDoNotMatchCovariates(this, coefficients.length,
+                                                                                       covariates.length);
+        }
         List<Variable> evidencelessVariables = new ArrayList<>();
         Map<Variable, String> variableValues = new HashMap<>();
         int firstParentVariableIndex = 1;
