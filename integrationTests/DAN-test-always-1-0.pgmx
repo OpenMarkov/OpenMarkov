@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="1.0.0">
+  <ProbNet type="DAN">
+    <Comment showWhenOpeningNetwork="false"><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This problem consists in deciding how to treat a patient that may suffer 
+      from a certain disease. The decision maker may order a test to be done 
+      and treat the patient depending on the result of the test.
+    </p>
+  </body>
+</html>]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <AdditionalProperties>
+      <Property name="VisualPrecision" value="0.0" />
+      <Property name="KindOfGraph" value="directed" />
+      <Property name="Version" value="1.0" />
+    </AdditionalProperties>
+    <Variables>
+      <Variable name="Disease" type="finiteStates" role="chance">
+        <Coordinates x="126" y="83" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="X" />
+        </AdditionalProperties>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Result of test" type="finiteStates" role="chance">
+        <Coordinates x="297" y="155" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Y" />
+        </AdditionalProperties>
+        <AlwaysObserved />
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="414" y="232" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="D" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Health state" type="numeric" role="utility">
+        <Coordinates x="232" y="312" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="U" />
+          <Property name="Min" value="0.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Cost of therapy" type="numeric" role="utility">
+        <Coordinates x="501" y="310" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Health state" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of test" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Health state" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Cost of therapy" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.86 0.14</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Result of test" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.97 0.03 0.09 0.91</Values>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact" parametrization="nu">
+        <Variables>
+          <Variable name="Health state" />
+          <Variable name="Disease" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Functions>"1" "1" "1" "1"</Functions>
+        <Parameters>9.8 2.8 8.8 7.8</Parameters>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact" parametrization="nu">
+        <Variables>
+          <Variable name="Cost of therapy" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Functions>"1" "1"</Functions>
+        <Parameters>0.0 -0.25</Parameters>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+  <DefaultStates>
+    <State name="absent" />
+    <State name="present" />
+  </DefaultStates>
+</ProbModelXML>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="1.0.0">
+  <ProbNet type="BayesianNetwork">
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <AdditionalProperties>
+      <Property name="Version" value="1.0" />
+      <Property name="KindOfGraph" value="directed" />
+      <Property name="VisualPrecision" value="0.0" />
+    </AdditionalProperties>
+    <Variables>
+      <Variable name="Paludism" type="finiteStates" role="chance">
+        <Coordinates x="107" y="94" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Paludism" />
+        </AdditionalProperties>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Pneumonia" type="finiteStates" role="chance">
+        <Coordinates x="306" y="94" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Pneumonia" />
+        </AdditionalProperties>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Meningitis" type="finiteStates" role="chance">
+        <Coordinates x="504" y="92" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Meningitis" />
+        </AdditionalProperties>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Flu" type="finiteStates" role="chance">
+        <Coordinates x="711" y="91" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Flu" />
+        </AdditionalProperties>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Fever" type="finiteStates" role="chance">
+        <Coordinates x="372" y="206" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Fever" />
+        </AdditionalProperties>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Paludism" />
+        <Variable name="Fever" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Pneumonia" />
+        <Variable name="Fever" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Meningitis" />
+        <Variable name="Fever" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Flu" />
+        <Variable name="Fever" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Paludism" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Pneumonia" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Meningitis" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Flu" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="ICIModel">
+        <Variables>
+          <Variable name="Fever" />
+          <Variable name="Paludism" />
+          <Variable name="Pneumonia" />
+          <Variable name="Meningitis" />
+          <Variable name="Flu" />
+        </Variables>
+        <Model>OR / MAX</Model>
+        <Subpotentials>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Fever" />
+              <Variable name="Paludism" />
+            </Variables>
+            <Values>1.0 0.0 0.1 0.9</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Fever" />
+              <Variable name="Pneumonia" />
+            </Variables>
+            <Values>1.0 0.0 0.07 0.93</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Fever" />
+              <Variable name="Meningitis" />
+            </Variables>
+            <Values>1.0 0.0 0.05 0.95</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Fever" />
+              <Variable name="Flu" />
+            </Variables>
+            <Values>1.0 0.0 0.13 0.87</Values>
+          </Potential>
+          <Potential type="Table">
+            <Variables>
+              <Variable name="Fever" />
+            </Variables>
+            <Values>0.9999 1.0E-4</Values>
+          </Potential>
+        </Subpotentials>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+  <DefaultStates>
+    <State name="absent" />
+    <State name="present" />
+  </DefaultStates>
+</ProbModelXML>

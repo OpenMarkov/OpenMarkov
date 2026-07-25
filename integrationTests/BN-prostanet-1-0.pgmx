@@ -1,0 +1,1341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="1.0.0">
+  <ProbNet type="BayesianNetwork">
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <AdditionalProperties>
+      <Property name="VisualPrecision" value="0.0" />
+      <Property name="KindOfGraph" value="directed" />
+      <Property name="Version" value="1.0" />
+    </AdditionalProperties>
+    <Variables>
+      <Variable name="Edad" type="finiteStates" role="chance">
+        <Coordinates x="545" y="28" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Title" value="A" />
+        </AdditionalProperties>
+        <States>
+          <State name="menor50" />
+          <State name="50a60" />
+          <State name="60a70" />
+          <State name="mayor70" />
+        </States>
+      </Variable>
+      <Variable name="Actividad sexual" type="finiteStates" role="chance">
+        <Coordinates x="739" y="119" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="B" />
+        </AdditionalProperties>
+        <States>
+          <State name="poconada" />
+          <State name="normal" />
+          <State name="mucho" />
+        </States>
+      </Variable>
+      <Variable name="Cáncer de próstata" type="finiteStates" role="chance">
+        <Coordinates x="688" y="368" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Disease" />
+          <Property name="Relevance" value="10.0" />
+          <Property name="Title" value="E" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Prostatitis crónica" type="finiteStates" role="chance">
+        <Comment><![CDATA[Infección gonocócica]]></Comment>
+        <Coordinates x="478" y="206" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Disease" />
+          <Property name="Title" value="F" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Metástasis" type="finiteStates" role="chance">
+        <Coordinates x="478" y="406" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Sign" />
+          <Property name="Relevance" value="8.0" />
+          <Property name="Title" value="G" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Cistitis" type="finiteStates" role="chance">
+        <Coordinates x="315" y="327" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Disease" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="I" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Gammagrafía" type="finiteStates" role="chance">
+        <Coordinates x="553" y="559" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Test" />
+          <Property name="Relevance" value="9.0" />
+          <Property name="Title" value="K" />
+        </AdditionalProperties>
+        <States>
+          <State name="negativo" />
+          <State name="positivo" />
+        </States>
+      </Variable>
+      <Variable name="Exploración rectal" type="finiteStates" role="chance">
+        <Comment><![CDATA[Tocar nodulo petreo]]></Comment>
+        <Coordinates x="872" y="516" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Test" />
+          <Property name="Relevance" value="9.0" />
+          <Property name="Title" value="L" />
+        </AdditionalProperties>
+        <States>
+          <State name="normal" />
+          <State name="fibrosairregular" />
+          <State name="petrea" />
+        </States>
+      </Variable>
+      <Variable name="Dolor" type="finiteStates" role="chance">
+        <Comment><![CDATA[Dolor en cintura pelviana,  hombros y extremidades  inferiores]]></Comment>
+        <Coordinates x="466" y="578" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Symptom" />
+          <Property name="Relevance" value="4.0" />
+          <Property name="Title" value="M" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Anemia" type="finiteStates" role="chance">
+        <Coordinates x="103" y="528" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Sign" />
+          <Property name="Relevance" value="4.0" />
+          <Property name="Title" value="N" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Pérdida de peso" type="finiteStates" role="chance">
+        <Coordinates x="315" y="550" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Sign" />
+          <Property name="Relevance" value="4.0" />
+          <Property name="Title" value="O" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Afección hígado" type="finiteStates" role="chance">
+        <Coordinates x="140" y="598" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Sign" />
+          <Property name="Relevance" value="4.0" />
+          <Property name="Title" value="P" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Hematuria" type="finiteStates" role="chance">
+        <Comment><![CDATA[Hematies en orina]]></Comment>
+        <Coordinates x="187" y="480" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Sign" />
+          <Property name="Relevance" value="4.0" />
+          <Property name="Title" value="Q" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Masa supra" type="finiteStates" role="chance">
+        <Comment><![CDATA[Ganglio supraclavicular]]></Comment>
+        <Coordinates x="452" y="531" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Sign" />
+          <Property name="Relevance" value="4.0" />
+          <Property name="Title" value="R" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Vaciado incompleto" type="finiteStates" role="chance">
+        <Coordinates x="99" y="127" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Symptom" />
+          <Property name="Relevance" value="3.0" />
+          <Property name="Title" value="V" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Antecedentes" type="finiteStates" role="chance">
+        <Coordinates x="933" y="246" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="4.0" />
+          <Property name="Title" value="X" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Gleason" type="finiteStates" role="chance">
+        <Comment><![CDATA[Grado histologico tumoral. Mide  la agresividad del tumor]]></Comment>
+        <Coordinates x="674" y="565" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Test" />
+          <Property name="Relevance" value="9.0" />
+          <Property name="Title" value="Y" />
+        </AdditionalProperties>
+        <States>
+          <State name="cero" />
+          <State name="menor6" />
+          <State name="mayor6" />
+        </States>
+      </Variable>
+      <Variable name="HPB" type="finiteStates" role="chance">
+        <Coordinates x="250" y="54" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Disease" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="J" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Vegetariano" type="finiteStates" role="chance">
+        <Comment><![CDATA[Base: soja]]></Comment>
+        <Coordinates x="914" y="76" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="A1" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Congestión prostática" type="finiteStates" role="chance">
+        <Coordinates x="703" y="222" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Disease" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="D" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Obesidad" type="finiteStates" role="chance">
+        <Coordinates x="915" y="140" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="B1" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Factores hormonales" type="finiteStates" role="chance">
+        <Comment><![CDATA[Testosterona. Hormonodependiente]]></Comment>
+        <Coordinates x="907" y="202" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="C1" />
+        </AdditionalProperties>
+        <States>
+          <State name="negativo" />
+          <State name="positivo" />
+        </States>
+      </Variable>
+      <Variable name="IPSS" type="finiteStates" role="chance">
+        <Coordinates x="98" y="479" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Symptom" />
+          <Property name="Title" value="S" />
+        </AdditionalProperties>
+        <States>
+          <State name="de0a7" />
+          <State name="de8a19" />
+          <State name="mayor19" />
+        </States>
+      </Variable>
+      <Variable name="Flujometria" type="finiteStates" role="chance">
+        <Comment><![CDATA[Mide una cantidad de volumen de orina emitido en un tiempo  determinado.]]></Comment>
+        <Coordinates x="50" y="391" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Test" />
+          <Property name="Title" value="W" />
+        </AdditionalProperties>
+        <States>
+          <State name="menorqmax" />
+          <State name="mayorqmax" />
+        </States>
+      </Variable>
+      <Variable name="Polaquiuria" type="finiteStates" role="chance">
+        <Comment><![CDATA[Aumento de la frecuencia miccional]]></Comment>
+        <Coordinates x="190" y="396" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Symptom" />
+          <Property name="Title" value="U" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Disuria" type="finiteStates" role="chance">
+        <Comment><![CDATA[Dolor al orinar]]></Comment>
+        <Coordinates x="333" y="472" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Symptom" />
+          <Property name="Title" value="T" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Biopsia" type="finiteStates" role="chance">
+        <Comment><![CDATA[Biopsia de la prostata]]></Comment>
+        <Coordinates x="881" y="351" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Test" />
+          <Property name="Relevance" value="9.0" />
+          <Property name="Title" value="D1" />
+        </AdditionalProperties>
+        <States>
+          <State name="negativo" />
+          <State name="positivo" />
+        </States>
+      </Variable>
+      <Variable name="TAC" type="finiteStates" role="chance">
+        <Comment><![CDATA[Tomografia axial computerizada]]></Comment>
+        <Coordinates x="889" y="451" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Test" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="E1" />
+        </AdditionalProperties>
+        <States>
+          <State name="negativo" />
+          <State name="positivo" />
+        </States>
+      </Variable>
+      <Variable name="Sindrome constitucional" type="finiteStates" role="chance">
+        <Comment><![CDATA[Astenia, anorexia, perdida de  peso, febricula o fiebre no filiada.]]></Comment>
+        <Coordinates x="344" y="592" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Symptom" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="F1" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="PSA total" type="finiteStates" role="chance">
+        <Coordinates x="692" y="498" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Test" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="C" />
+        </AdditionalProperties>
+        <States>
+          <State name="menor4" />
+          <State name="de4a10" />
+          <State name="de10a20" />
+          <State name="mayor20" />
+        </States>
+      </Variable>
+      <Variable name="PSAl /PSAt" type="finiteStates" role="chance">
+        <Coordinates x="785" y="580" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Test" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="G1" />
+        </AdditionalProperties>
+        <States>
+          <State name="mayor0.1" />
+          <State name="menor0.1" />
+        </States>
+      </Variable>
+      <Variable name="Pais de origen" type="finiteStates" role="chance">
+        <Coordinates x="917" y="18" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="H1" />
+        </AdditionalProperties>
+        <States>
+          <State name="oriental" />
+          <State name="resto" />
+        </States>
+      </Variable>
+      <Variable name="ETS" type="finiteStates" role="chance">
+        <Comment><![CDATA[Enfermedades de transmisión sexual: Gonococia]]></Comment>
+        <Coordinates x="335" y="147" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="I1" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Promiscuidad" type="finiteStates" role="chance">
+        <Coordinates x="548" y="101" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="J1" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Itus_uno" type="finiteStates" role="chance">
+        <Comment><![CDATA[Infección urinaria]]></Comment>
+        <Coordinates x="243" y="176" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Disease" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="K1" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Sondaje" type="finiteStates" role="chance">
+        <Coordinates x="406" y="105" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="L1" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="MedFinas" type="finiteStates" role="chance">
+        <Comment><![CDATA[Medicación con finasteride]]></Comment>
+        <Coordinates x="101" y="183" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Treatment" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="M1" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Microtraumatismos" type="finiteStates" role="chance">
+        <Comment><![CDATA[Ciclistas]]></Comment>
+        <Coordinates x="743" y="35" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="N1" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="RAO" type="finiteStates" role="chance">
+        <Comment><![CDATA[Retención aguda de orina]]></Comment>
+        <Coordinates x="449" y="59" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Sign" />
+          <Property name="Relevance" value="3.0" />
+          <Property name="Title" value="O1" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Itus_dos" type="finiteStates" role="chance">
+        <Comment><![CDATA[Infección urinaria por gérmenes  acantonados en la prostata]]></Comment>
+        <Coordinates x="280" y="230" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Disease" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="P1" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Itus" type="finiteStates" role="chance">
+        <Comment><![CDATA[Cultivo de orina]]></Comment>
+        <Coordinates x="106" y="291" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Aux" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Q1" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Cultivo" type="finiteStates" role="chance">
+        <Coordinates x="52" y="445" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Test" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="R1" />
+        </AdditionalProperties>
+        <States>
+          <State name="negativo" />
+          <State name="positivo" />
+        </States>
+      </Variable>
+      <Variable name="Cancer_o_c" type="finiteStates" role="chance">
+        <Coordinates x="550" y="289" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Aux" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="S1" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Cancer_f_r" type="finiteStates" role="chance">
+        <Coordinates x="833" y="293" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Aux" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="T1" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="PSA aux" type="finiteStates" role="chance">
+        <Coordinates x="634" y="454" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Aux" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="H" />
+        </AdditionalProperties>
+        <States>
+          <State name="de0a4" />
+          <State name="de4a10" />
+          <State name="de10a20" />
+          <State name="masde20" />
+        </States>
+      </Variable>
+      <Variable name="Ecografía" type="finiteStates" role="chance">
+        <Comment><![CDATA[Detecta la presencia de areas]]></Comment>
+        <Coordinates x="876" y="405" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Test" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="V1" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Fiebre" type="finiteStates" role="chance">
+        <Coordinates x="261" y="509" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Sign" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Z" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Edad" />
+        <Variable name="Actividad sexual" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Edad" />
+        <Variable name="Congestión prostática" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Edad" />
+        <Variable name="HPB" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Edad" />
+        <Variable name="Promiscuidad" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Edad" />
+        <Variable name="Microtraumatismos" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Edad" />
+        <Variable name="Cancer_f_r" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Actividad sexual" />
+        <Variable name="Congestión prostática" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Actividad sexual" />
+        <Variable name="ETS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Actividad sexual" />
+        <Variable name="Cancer_f_r" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cáncer de próstata" />
+        <Variable name="Biopsia" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cáncer de próstata" />
+        <Variable name="TAC" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cáncer de próstata" />
+        <Variable name="Metástasis" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cáncer de próstata" />
+        <Variable name="PSAl /PSAt" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cáncer de próstata" />
+        <Variable name="PSA aux" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cáncer de próstata" />
+        <Variable name="Cistitis" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cáncer de próstata" />
+        <Variable name="Exploración rectal" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cáncer de próstata" />
+        <Variable name="Hematuria" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cáncer de próstata" />
+        <Variable name="Ecografía" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cáncer de próstata" />
+        <Variable name="Gleason" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Prostatitis crónica" />
+        <Variable name="Congestión prostática" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Prostatitis crónica" />
+        <Variable name="PSA aux" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Prostatitis crónica" />
+        <Variable name="Itus_dos" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Prostatitis crónica" />
+        <Variable name="IPSS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Prostatitis crónica" />
+        <Variable name="Cancer_o_c" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Prostatitis crónica" />
+        <Variable name="Flujometria" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="TAC" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="Sindrome constitucional" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="PSA aux" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="Gammagrafía" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="Exploración rectal" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="Dolor" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="Anemia" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="Pérdida de peso" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="Afección hígado" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="Masa supra" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="Ecografía" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Metástasis" />
+        <Variable name="Gleason" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cistitis" />
+        <Variable name="Hematuria" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cistitis" />
+        <Variable name="Cultivo" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cistitis" />
+        <Variable name="Disuria" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cistitis" />
+        <Variable name="Polaquiuria" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cistitis" />
+        <Variable name="Fiebre" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Vaciado incompleto" />
+        <Variable name="Itus_uno" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Antecedentes" />
+        <Variable name="Cancer_f_r" />
+      </Link>
+      <Link directed="true">
+        <Variable name="HPB" />
+        <Variable name="Actividad sexual" />
+      </Link>
+      <Link directed="true">
+        <Variable name="HPB" />
+        <Variable name="Cistitis" />
+      </Link>
+      <Link directed="true">
+        <Variable name="HPB" />
+        <Variable name="MedFinas" />
+      </Link>
+      <Link directed="true">
+        <Variable name="HPB" />
+        <Variable name="RAO" />
+      </Link>
+      <Link directed="true">
+        <Variable name="HPB" />
+        <Variable name="IPSS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="HPB" />
+        <Variable name="Vaciado incompleto" />
+      </Link>
+      <Link directed="true">
+        <Variable name="HPB" />
+        <Variable name="Flujometria" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Vegetariano" />
+        <Variable name="Obesidad" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Vegetariano" />
+        <Variable name="Congestión prostática" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Congestión prostática" />
+        <Variable name="Cistitis" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Congestión prostática" />
+        <Variable name="Itus_dos" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Congestión prostática" />
+        <Variable name="IPSS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Congestión prostática" />
+        <Variable name="Cancer_o_c" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Congestión prostática" />
+        <Variable name="Flujometria" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Obesidad" />
+        <Variable name="Factores hormonales" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Obesidad" />
+        <Variable name="Cancer_f_r" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Factores hormonales" />
+        <Variable name="Cancer_f_r" />
+      </Link>
+      <Link directed="true">
+        <Variable name="PSA total" />
+        <Variable name="PSAl /PSAt" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Pais de origen" />
+        <Variable name="Vegetariano" />
+      </Link>
+      <Link directed="true">
+        <Variable name="ETS" />
+        <Variable name="Prostatitis crónica" />
+      </Link>
+      <Link directed="true">
+        <Variable name="ETS" />
+        <Variable name="Itus_uno" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Promiscuidad" />
+        <Variable name="ETS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Itus_uno" />
+        <Variable name="Prostatitis crónica" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Itus_uno" />
+        <Variable name="Itus" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Sondaje" />
+        <Variable name="Itus_uno" />
+      </Link>
+      <Link directed="true">
+        <Variable name="MedFinas" />
+        <Variable name="PSA total" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Microtraumatismos" />
+        <Variable name="Congestión prostática" />
+      </Link>
+      <Link directed="true">
+        <Variable name="RAO" />
+        <Variable name="Itus_uno" />
+      </Link>
+      <Link directed="true">
+        <Variable name="RAO" />
+        <Variable name="Sondaje" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Itus_dos" />
+        <Variable name="Itus" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Itus" />
+        <Variable name="Cistitis" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Itus" />
+        <Variable name="Hematuria" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Itus" />
+        <Variable name="Cultivo" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Itus" />
+        <Variable name="Fiebre" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cancer_o_c" />
+        <Variable name="Cáncer de próstata" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cancer_f_r" />
+        <Variable name="Cáncer de próstata" />
+      </Link>
+      <Link directed="true">
+        <Variable name="PSA aux" />
+        <Variable name="PSA total" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Edad" />
+        </Variables>
+        <Values>0.6931 0.1152 0.0921 0.0996</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Actividad sexual" />
+          <Variable name="Edad" />
+          <Variable name="HPB" />
+        </Variables>
+        <Values>0.01 0.59 0.4 0.1 0.65 0.25 0.55 0.4 0.05 0.978 0.02 0.002 0.05 0.65 0.3 0.4 0.5 0.1 0.797 0.2 0.003 0.989 0.01 0.001</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Cáncer de próstata" />
+          <Variable name="Cancer_o_c" />
+          <Variable name="Cancer_f_r" />
+        </Variables>
+        <Values>1.0 0.0 0.0 1.0 0.0 1.0 0.0 1.0</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Cáncer de próstata" />
+          <Variable name="Cancer_o_c" />
+          <Variable name="Cancer_f_r" />
+        </Variables>
+        <Values>0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Prostatitis crónica" />
+          <Variable name="ETS" />
+          <Variable name="Itus_uno" />
+        </Variables>
+        <Values>0.8 0.2 0.6 0.4 0.6 0.4 0.4 0.6</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Prostatitis crónica" />
+          <Variable name="ETS" />
+          <Variable name="Itus_uno" />
+        </Variables>
+        <Values>0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Metástasis" />
+          <Variable name="Cáncer de próstata" />
+        </Variables>
+        <Values>0.998 0.002 0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Cistitis" />
+          <Variable name="HPB" />
+          <Variable name="Cáncer de próstata" />
+          <Variable name="Congestión prostática" />
+          <Variable name="Itus" />
+        </Variables>
+        <Values>0.95 0.05 0.8 0.2 0.75 0.25 0.63 0.37 0.7 0.3 0.59 0.41 0.55 0.45 0.47 0.53 0.25 0.75 0.21 0.79 0.2 0.8 0.17 0.83 0.18 0.82 0.16 0.84 0.15 0.85 0.13 0.87</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Gammagrafía" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.99 0.01 0.05 0.95</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Exploración rectal" />
+          <Variable name="Cáncer de próstata" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.5 0.5 0.0 0.07 0.18 0.75 0.44 0.55 0.01 0.02 0.08 0.9</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Dolor" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.7 0.3 0.1 0.9</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Anemia" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.6 0.4 0.3 0.7</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Pérdida de peso" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.7 0.3 0.2 0.8</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Afección hígado" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.8 0.2 0.4 0.6</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Hematuria" />
+          <Variable name="Cáncer de próstata" />
+          <Variable name="Cistitis" />
+          <Variable name="Itus" />
+        </Variables>
+        <Values>0.95 0.05 0.6 0.4 0.3 0.7 0.25 0.75 0.2 0.8 0.2 0.8 0.2 0.8 0.05 0.95</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Masa supra" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.999 0.001 0.1 0.9</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Vaciado incompleto" />
+          <Variable name="HPB" />
+        </Variables>
+        <Values>0.95 0.05 0.15 0.85</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Antecedentes" />
+        </Variables>
+        <Values>0.99 0.01</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Gleason" />
+          <Variable name="Cáncer de próstata" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>1.0 0.0 0.0 0.0 0.7 0.3 0.0 0.2 0.8 0.0 0.1 0.9</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="HPB" />
+          <Variable name="Edad" />
+        </Variables>
+        <Values>0.8 0.2 0.6 0.4 0.2 0.8 0.0 1.0</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Vegetariano" />
+          <Variable name="Pais de origen" />
+        </Variables>
+        <Values>0.05 0.95 0.95 0.05</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Congestión prostática" />
+          <Variable name="Vegetariano" />
+          <Variable name="Prostatitis crónica" />
+          <Variable name="Microtraumatismos" />
+          <Variable name="Edad" />
+          <Variable name="Actividad sexual" />
+        </Variables>
+        <Values>0.99 0.01 0.99 0.01 0.63 0.33 0.65 0.3 0.63 0.33 0.65 0.3 0.5 0.5 0.5 0.5 0.76 0.24 0.8 0.2 0.43 0.57 0.45 0.55 0.43 0.57 0.45 0.55 0.2 0.8 0.22 0.78 0.59 0.41 0.61 0.39 0.39 0.61 0.42 0.58 0.39 0.61 0.42 0.58 0.15 0.85 0.2 0.8 0.47 0.53 0.5 0.5 0.19 0.81 0.22 0.78 0.19 0.81 0.22 0.78 0.1 0.9 0.15 0.85 0.992 0.008 0.996 0.004 0.74 0.26 0.75 0.25 0.74 0.26 0.75 0.25 0.55 0.45 0.55 0.45 0.83 0.17 0.87 0.13 0.53 0.47 0.55 0.45 0.53 0.47 0.55 0.45 0.3 0.7 0.36 0.64 0.62 0.38 0.65 0.35 0.39 0.61 0.42 0.58 0.39 0.61 0.42 0.58 0.18 0.82 0.22 0.78 0.52 0.48 0.55 0.45 0.27 0.73 0.3 0.7 0.27 0.73 0.3 0.7 0.15 0.85 0.25 0.75 0.998 0.002 0.999 0.001 0.78 0.22 0.8 0.2 0.78 0.22 0.8 0.2 0.6 0.4 0.6 0.4 0.87 0.13 0.9 0.1 0.55 0.45 0.57 0.43 0.55 0.45 0.57 0.43 0.3 0.7 0.4 0.6 0.65 0.35 0.7 0.3 0.42 0.58 0.45 0.55 0.42 0.58 0.45 0.55 0.2 0.8 0.25 0.75 0.57 0.43 0.6 0.4 0.33 0.67 0.36 0.64 0.33 0.67 0.36 0.64 0.2 0.8 0.3 0.7</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Obesidad" />
+          <Variable name="Vegetariano" />
+        </Variables>
+        <Values>0.85 0.15 0.95 0.05</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Factores hormonales" />
+          <Variable name="Obesidad" />
+        </Variables>
+        <Values>0.8 0.2 0.4 0.6</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Factores hormonales" />
+          <Variable name="Obesidad" />
+        </Variables>
+        <Values>0.5 0.5 0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="IPSS" />
+          <Variable name="HPB" />
+          <Variable name="Congestión prostática" />
+          <Variable name="Prostatitis crónica" />
+        </Variables>
+        <Values>0.7 0.2 0.1 0.4 0.5 0.1 0.1 0.6 0.3 0.06 0.64 0.3 0.15 0.25 0.6 0.09 0.31 0.6 0.01 0.3 0.69 0.01 0.3 0.69</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Flujometria" />
+          <Variable name="HPB" />
+          <Variable name="Congestión prostática" />
+          <Variable name="Prostatitis crónica" />
+        </Variables>
+        <Values>0.75 0.25 0.1 0.9 0.5 0.5 0.07 0.93 0.5 0.5 0.07 0.93 0.33 0.67 0.044 0.956</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Polaquiuria" />
+          <Variable name="Cistitis" />
+        </Variables>
+        <Values>0.85 0.15 0.05 0.95</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Disuria" />
+          <Variable name="Cistitis" />
+        </Variables>
+        <Values>0.95 0.05 0.05 0.95</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Biopsia" />
+          <Variable name="Cáncer de próstata" />
+        </Variables>
+        <Values>0.95 0.05 0.1 0.9</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="TAC" />
+          <Variable name="Cáncer de próstata" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.7 0.3 0.5 0.5 0.2 0.8 0.05 0.95</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Sindrome constitucional" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.96 0.04 0.1 0.9</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="PSA total" />
+          <Variable name="MedFinas" />
+          <Variable name="PSA aux" />
+        </Variables>
+        <Values>1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.5 0.5 0.0 0.0 0.0 0.0 1.0 0.0 0.1 0.4 0.5 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="PSAl /PSAt" />
+          <Variable name="PSA total" />
+          <Variable name="Cáncer de próstata" />
+        </Variables>
+        <Values>0.99 0.01 0.95 0.05 0.93 0.07 0.9 0.1 0.2 0.8 0.15 0.85 0.1 0.9 0.05 0.95</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Pais de origen" />
+        </Variables>
+        <Values>0.03 0.97</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="ETS" />
+          <Variable name="Actividad sexual" />
+          <Variable name="Promiscuidad" />
+        </Variables>
+        <Values>0.999 0.001 0.99 0.01 0.98 0.02 0.4 0.6 0.3 0.7 0.2 0.8</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Promiscuidad" />
+          <Variable name="Edad" />
+        </Variables>
+        <Values>0.2 0.8 0.3 0.7 0.4 0.6 0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Itus_uno" />
+          <Variable name="ETS" />
+          <Variable name="Vaciado incompleto" />
+          <Variable name="Sondaje" />
+          <Variable name="RAO" />
+        </Variables>
+        <Values>0.99 0.01 0.65 0.35 0.9 0.1 0.5 0.5 0.39 0.61 0.37 0.63 0.22 0.78 0.05 0.95 0.95 0.05 0.6 0.4 0.6 0.4 0.3 0.7 0.37 0.63 0.35 0.65 0.2 0.8 0.03 0.97</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Sondaje" />
+          <Variable name="RAO" />
+        </Variables>
+        <Values>0.98 0.02 0.0 1.0</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="MedFinas" />
+          <Variable name="HPB" />
+        </Variables>
+        <Values>0.85 0.15 0.25 0.75</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Microtraumatismos" />
+          <Variable name="Edad" />
+        </Variables>
+        <Values>0.99 0.01 0.992 0.008 0.995 0.005 0.999 0.001</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="RAO" />
+          <Variable name="HPB" />
+        </Variables>
+        <Values>0.95 0.05 0.7 0.3</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Itus_dos" />
+          <Variable name="Prostatitis crónica" />
+          <Variable name="Congestión prostática" />
+        </Variables>
+        <Values>0.99 0.01 0.4 0.6 0.6 0.4 0.3 0.7</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Itus" />
+          <Variable name="Itus_uno" />
+          <Variable name="Itus_dos" />
+        </Variables>
+        <Values>1.0 0.0 0.0 1.0 0.0 1.0 0.0 1.0</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Cultivo" />
+          <Variable name="Itus" />
+          <Variable name="Cistitis" />
+        </Variables>
+        <Values>0.9 0.1 0.01 0.99 0.3 0.7 0.01 0.99</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Cancer_o_c" />
+          <Variable name="Congestión prostática" />
+          <Variable name="Prostatitis crónica" />
+        </Variables>
+        <Values>0.999 0.001 0.95 0.05 0.9 0.1 0.85 0.15</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Cancer_f_r" />
+          <Variable name="Factores hormonales" />
+          <Variable name="Antecedentes" />
+          <Variable name="Obesidad" />
+          <Variable name="Edad" />
+          <Variable name="Actividad sexual" />
+        </Variables>
+        <Values>0.9999 1.0E-4 0.995 0.005 0.995 0.005 0.92 0.08 0.999 0.001 0.92 0.08 0.92 0.08 0.9 0.1 0.87 0.13 0.87 0.13 0.87 0.13 0.72 0.28 0.85 0.15 0.82 0.18 0.82 0.18 0.7 0.3 0.72 0.28 0.62 0.38 0.62 0.38 0.42 0.58 0.7 0.3 0.6 0.4 0.6 0.4 0.4 0.6 0.67 0.33 0.52 0.48 0.52 0.48 0.27 0.73 0.65 0.35 0.5 0.5 0.5 0.5 0.25 0.75 0.99995 5.0E-5 0.997 0.003 0.997 0.003 0.95 0.05 0.9995 5.0E-4 0.95 0.05 0.95 0.05 0.92 0.08 0.92 0.08 0.89 0.11 0.89 0.11 0.77 0.23 0.9 0.1 0.85 0.15 0.85 0.15 0.75 0.25 0.77 0.23 0.67 0.33 0.67 0.33 0.47 0.53 0.75 0.25 0.65 0.35 0.65 0.35 0.45 0.55 0.72 0.28 0.57 0.43 0.57 0.43 0.32 0.68 0.7 0.3 0.55 0.45 0.55 0.45 0.3 0.7 0.99999 1.0E-5 0.999 0.001 0.999 0.001 0.98 0.02 0.9999 1.0E-4 0.99 0.01 0.99 0.01 0.95 0.05 0.97 0.03 0.92 0.08 0.92 0.08 0.82 0.18 0.95 0.05 0.9 0.1 0.9 0.1 0.8 0.2 0.82 0.18 0.72 0.28 0.72 0.28 0.52 0.48 0.8 0.2 0.7 0.3 0.7 0.3 0.5 0.5 0.77 0.23 0.62 0.38 0.62 0.38 0.37 0.63 0.75 0.25 0.6 0.4 0.6 0.4 0.35 0.65</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="PSA aux" />
+          <Variable name="Cáncer de próstata" />
+          <Variable name="Prostatitis crónica" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.8 0.1 0.08 0.02 0.02 0.33 0.35 0.3 0.7 0.19 0.09 0.02 0.01 0.24 0.3 0.45 0.7 0.19 0.09 0.02 0.01 0.24 0.25 0.5 0.5 0.38 0.1 0.02 0.0 0.25 0.25 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Ecografía" />
+          <Variable name="Cáncer de próstata" />
+          <Variable name="Metástasis" />
+        </Variables>
+        <Values>0.9 0.1 0.1 0.9 0.9 0.1 0.0 1.0</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Fiebre" />
+          <Variable name="Cistitis" />
+          <Variable name="Itus" />
+        </Variables>
+        <Values>0.99 0.01 0.4 0.6 0.4 0.6 0.05 0.95</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+  <DefaultStates>
+    <State name="absent" />
+    <State name="present" />
+  </DefaultStates>
+</ProbModelXML>

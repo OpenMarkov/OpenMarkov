@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="1.0.0">
+  <ProbNet type="InfluenceDiagram">
+    <Comment showWhenOpeningNetwork="false"><![CDATA[<<Double click to add/modify comment>>]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <Variables>
+      <Variable name="¿Dónde está el premio?" type="finiteStates" role="chance">
+        <Coordinates x="183" y="122" />
+        <States>
+          <State name="C" />
+          <State name="B" />
+          <State name="A" />
+        </States>
+      </Variable>
+      <Variable name="Puerta escogida por el presentador" type="finiteStates" role="chance">
+        <Coordinates x="411" y="268" />
+        <States>
+          <State name="C" />
+          <State name="B" />
+          <State name="A" />
+        </States>
+      </Variable>
+      <Variable name="Cambiar" type="finiteStates" role="decision">
+        <Coordinates x="799" y="342" />
+        <States>
+          <State name="no" />
+          <State name="sí" />
+        </States>
+      </Variable>
+      <Variable name="Puerta escogida 2" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Puerta escogida por el concursante tras ver la que ha abierto el 
+      presentador.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="501" y="432" />
+        <States>
+          <State name="C" />
+          <State name="B" />
+          <State name="A" />
+        </States>
+      </Variable>
+      <Variable name="Premio" type="numeric" role="utility">
+        <Coordinates x="291" y="579" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Puerta escogida 1" type="finiteStates" role="decision">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Puerta escogida por el concursante al principio.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="690" y="118" />
+        <States>
+          <State name="C" />
+          <State name="B" />
+          <State name="A" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="¿Dónde está el premio?" />
+        <Variable name="Puerta escogida por el presentador" />
+      </Link>
+      <Link directed="true">
+        <Variable name="¿Dónde está el premio?" />
+        <Variable name="Premio" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Puerta escogida por el presentador" />
+        <Variable name="Puerta escogida 2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cambiar" />
+        <Variable name="Puerta escogida 2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Puerta escogida 2" />
+        <Variable name="Premio" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Puerta escogida 1" />
+        <Variable name="Puerta escogida por el presentador" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Puerta escogida 1" />
+        <Variable name="Puerta escogida 2" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform">
+        <Variables>
+          <Variable name="¿Dónde está el premio?" />
+        </Variables>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Puerta escogida por el presentador" />
+          <Variable name="Puerta escogida 1" />
+          <Variable name="¿Dónde está el premio?" />
+        </Variables>
+        <Values>0.0 0.5 0.5 0.0 0.0 1.0 0.0 1.0 0.0 0.0 0.0 1.0 0.5 0.0 0.5 1.0 0.0 0.0 0.0 1.0 0.0 1.0 0.0 0.0 0.5 0.5 0.0</Values>
+      </Potential>
+      <Potential type="Tree/ADD">
+        <Variables>
+          <Variable name="Puerta escogida 2" />
+          <Variable name="Cambiar" />
+          <Variable name="Puerta escogida por el presentador" />
+          <Variable name="Puerta escogida 1" />
+        </Variables>
+        <TopVariable name="Cambiar" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="no" />
+            </States>
+            <Potential type="ProbTable">
+              <Variables>
+                <Variable name="Puerta escogida 2" />
+                <Variable name="Puerta escogida 1" />
+              </Variables>
+              <Values>1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="sí" />
+            </States>
+            <Potential type="ProbTable">
+              <Variables>
+                <Variable name="Puerta escogida 2" />
+                <Variable name="Puerta escogida 1" />
+                <Variable name="Puerta escogida por el presentador" />
+              </Variables>
+              <Values>0.3333333333 0.3333333333 0.3333333333 0.0 0.0 1.0 0.0 1.0 0.0 0.0 0.0 1.0 0.3333333333 0.3333333333 0.3333333333 1.0 0.0 0.0 0.0 1.0 0.0 1.0 0.0 0.0 0.3333333333 0.3333333333 0.3333333333</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact" parametrization="nu">
+        <Variables>
+          <Variable name="Premio" />
+          <Variable name="¿Dónde está el premio?" />
+          <Variable name="Puerta escogida 2" />
+        </Variables>
+        <Functions>"1" "1" "1" "1" "1" "1" "1" "1" "1"</Functions>
+        <Parameters>1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0</Parameters>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+  <DefaultStates>
+    <State name="absent" />
+    <State name="present" />
+  </DefaultStates>
+</ProbModelXML>

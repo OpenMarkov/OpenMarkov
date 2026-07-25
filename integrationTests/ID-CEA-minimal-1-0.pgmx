@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="1.0.0">
+  <ProbNet type="InfluenceDiagram">
+    <DecisionCriteria>
+      <Criterion name="Cost" unit="€" />
+      <Criterion name="Effectiveness" unit="QALY" />
+    </DecisionCriteria>
+    <AdditionalProperties>
+      <Property name="Version" value="1.0" />
+      <Property name="VisualPrecision" value="0.0" />
+      <Property name="KindOfGraph" value="directed" />
+    </AdditionalProperties>
+    <Variables>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="252" y="87" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="D" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Effectiveness" type="numeric" role="utility">
+        <Coordinates x="158" y="234" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="U" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="Effectiveness" />
+      </Variable>
+      <Variable name="Cost" type="numeric" role="utility">
+        <Coordinates x="391" y="234" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Cost" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Effectiveness" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Cost" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="UnivariateDistr" distribution="Exact" parametrization="nu">
+        <Variables>
+          <Variable name="Effectiveness" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Functions>"1" "1"</Functions>
+        <Parameters>0.8 1.3</Parameters>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact" parametrization="nu">
+        <Variables>
+          <Variable name="Cost" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Functions>"1" "1"</Functions>
+        <Parameters>0.0 14000.0</Parameters>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>COST_EFFECTIVENESS</SelectedAnalysisType>
+      <Unicriterion>
+        <Unit>€</Unit>
+        <Scales>
+          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Effectiveness" Value="30000.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Effectiveness" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="Cost" Value="Cost" />
+          <CE_Criterion Criterion="Effectiveness" Value="Effectiveness" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+  <DefaultStates>
+    <State name="absent" />
+    <State name="present" />
+  </DefaultStates>
+</ProbModelXML>
