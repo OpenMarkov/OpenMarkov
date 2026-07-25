@@ -29,7 +29,11 @@ import java.util.List;
 
 //import java.io.FileOutputStream;
 
-@Disabled("The network '21-gene-190909-psa.pgmx' is missing.")
+@Disabled("The network it asks for, '21-gene-190909-psa.pgmx', is not in the repository and never "
+        + "has been. But '21-gene.pgmx' is, in the same directory: what is missing is the variant "
+        + "for probabilistic sensitivity analysis, not the model. So this is recoverable - either "
+        + "find that variant or point the test at the network that is here - and the class is kept "
+        + "rather than deleted.")
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class Mid21GeneTest {
     
