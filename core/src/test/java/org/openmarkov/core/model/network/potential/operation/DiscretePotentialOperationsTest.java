@@ -887,7 +887,25 @@ public class DiscretePotentialOperationsTest {
         return tablePotentials;
     }
     
-    @Disabled("Ignored because a NullPointerException")
+    /**
+     * A decision has no probability potential of its own, and the way to say that is the constant 1,
+     * not a null. A null used to travel into the list that multiply() walks and come out three
+     * frames deeper as a NullPointerException on TablePotential.getCriterion(), which named neither
+     * the argument nor the caller.
+     */
+    @Test
+    public void maxOutVariableSaysSoWhenTheProbabilityIsNull() {
+        ProbNet perfectKnowledge = IDFactory.createPerfectKnowledge();
+        Variable therapy = perfectKnowledge.getVariable("Therapy");
+        TablePotential someUtility = DiscretePotentialOperations.createZeroUtilityPotential(null);
+
+        NullPointerException thrown = assertThrows(NullPointerException.class,
+                                                  () -> new MaxOutVariable(therapy, null, someUtility));
+
+        assertTrue(thrown.getMessage().contains("createUnityProbabilityPotential"),
+                   "the message should say what to pass instead, but was: " + thrown.getMessage());
+    }
+
     @Test
     public void testMaxOutVariable() throws NonProjectablePotentialException {
         // Method invocation
@@ -896,7 +914,10 @@ public class DiscretePotentialOperationsTest {
         Variable therapy = perfectKnowledge.getVariable("Therapy");
         List<Potential> potentials = perfectKnowledge.getPotentials(therapy);
         List<TablePotential> tablePotentials = projectToTable(potentials, perfectKnowledge);
-        TablePotential utility = (new MaxOutVariable(therapy, null, tablePotentials)).getUtility();
+        // No probability potential for a decision means the constant 1, which is what decision
+        // variable elimination passes; a null used to reach multiply() and fail there.
+        TablePotential unityProbability = DiscretePotentialOperations.createUnityProbabilityPotential();
+        TablePotential utility = (new MaxOutVariable(therapy, unityProbability, tablePotentials)).getUtility();
         
         // Asserts
         // Test utility potential

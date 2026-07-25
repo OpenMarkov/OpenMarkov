@@ -15,6 +15,7 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * From a probability and one or more additive potentials, that contains a given variable,
@@ -47,6 +48,14 @@ public class MaxOutVariable {
 	 * @param inputAdditivePotential Input additive potential
 	 */
 	public MaxOutVariable(Variable decisionVariable, TablePotential probability, TablePotential inputAdditivePotential) {
+		// "No probability" is not null here, it is the constant 1, which is what
+		// DiscretePotentialOperations.createUnityProbabilityPotential() builds and what decision
+		// variable elimination passes when there are no probability potentials. A null would end up
+		// as a null element inside the list that multiply() walks, and surface three frames deeper
+		// as a NullPointerException that says nothing about where it came from.
+		Objects.requireNonNull(probability,
+							   "MaxOutVariable needs a probability potential; for no probability pass "
+									   + "DiscretePotentialOperations.createUnityProbabilityPotential(), not null");
 		TablePotential additivePotentialToMaximize = DiscretePotentialOperations.multiply(probability, inputAdditivePotential);
 		List<Variable> additivePotentialToMaximizeVariables = additivePotentialToMaximize.getVariables();
 
