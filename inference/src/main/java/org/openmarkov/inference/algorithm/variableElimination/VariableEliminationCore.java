@@ -87,13 +87,7 @@ public class VariableEliminationCore {
      */
     public VariableEliminationCore(ProbNet markovDecisionNetwork, EliminationHeuristic heuristic,
                                    boolean isUnicriterion) {
-        initialize(markovDecisionNetwork, heuristic, isUnicriterion);
-        try {
-            performVariableElimination();
-        } catch (DoEditException | IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther |
-                 NonProjectablePotentialException e) {
-            throw new UnreachableException(e);
-        }
+        this(markovDecisionNetwork, heuristic, isUnicriterion, defLambdaMin, defLambdaMax);
     }
     
     /**
@@ -350,11 +344,11 @@ public class VariableEliminationCore {
         pneSupport.addListener(heuristic);
         
         this.isUnicriterion = isUnicriterion;
-        
-        if (!isUnicriterion) {
-            lambdaMin = defLambdaMin;
-            lambdaMax = defLambdaMax;
-        }
+
+        // The bounds are NOT set here. They used to be, overwritten with the defaults whenever the
+        // analysis was bi-criteria - which is the only case the five-argument constructor is for, so
+        // the bounds that constructor was given were put back to zero and infinity every time. They
+        // now arrive as arguments, and the constructor without them passes the defaults itself.
         optimalPolicies = new LinkedHashMap<Variable, TablePotential>();
         // The iterators through LinkedHashMap follows the insertion order, which can be useful later
     }
