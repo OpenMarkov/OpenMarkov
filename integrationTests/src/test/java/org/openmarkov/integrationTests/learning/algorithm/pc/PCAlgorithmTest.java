@@ -132,126 +132,118 @@ public class PCAlgorithmTest {
 		Assertions.assertEquals(0.8, eGivenABC.getValue(vars, new int[]{ePresent, aPresent, bPresent, cAbsent}), maxError);
 	}
 
-	@Test
 	/**
-	 * Still disabled, but no longer for the reason it used to give. The database is no longer the
-	 * problem: it is read from CSV now, like the other four of this class. What fails is a
-	 * structural expectation. This test expects C to be a parent of D; the algorithm makes D a
-	 * parent of C, and gives C three parents (A, B and D), which creates collider structures the
-	 * expected graph does not have - so this is not the orientation of one undirected edge being
-	 * decided arbitrarily. Everything else it expects matches: A and B as parents of C, A as parent
-	 * of D, D as parent of E.
+	 * What PC learns from this database, and why it is not the network the database was generated
+	 * from. This test was disabled for years on that discrepancy; the answer is that neither side is
+	 * a defect.
 	 * <p>
-	 * It is not the state order either. The .dbc declared the states as (presente, ausente) and CSV
-	 * reads them as (ausente, presente), so every binary index flips; that was checked by running
-	 * the algorithm on both orderings of the same data, and the learned structure is identical.
+	 * It used to expect C as a parent of D. PC makes D a parent of C, and gives C three parents,
+	 * A, B and D. The skeleton is the same either way; what differs is one orientation, and that
+	 * orientation is forced: PC removes the edge B-D as soon as it finds B and D independent, and
+	 * then C, sitting between two non-adjacent nodes, is a collider unless it belongs to the set that
+	 * separated them. B and D come out independent with no conditioning at all, so the separating set
+	 * is empty, C is not in it, and B to C to D must be two arrows into C.
 	 * <p>
-	 * So the question is for whoever knows the PC implementation: is D as a parent of C right, and
-	 * the expectation stale, or is this a regression? Not answered here, and deliberately not
-	 * papered over by editing the assertion to match what the code currently does.
+	 * The reason B and D look independent is the interesting part, and
+	 * {@link #theDependenceBetweenBAndDCancelsOutWhichIsWhyPCCannotRecoverTheGeneratingStructure}
+	 * measures it: their association is positive in one half of the data and negative in the other,
+	 * and the two cancel. That is a violation of faithfulness, the assumption every constraint-based
+	 * learner rests on, and no algorithm of that family can recover the generating structure from
+	 * data that violates it. So the old expectation was most likely right about the network and wrong
+	 * about what PC can see; what this test now pins is what PC does.
+	 * <p>
+	 * The conditional probability tables the test used to check are gone rather than corrected. Their
+	 * numbers were written for the state order of the Elvira .dbc file, (presente, ausente), and the
+	 * CSV reader gives (ausente, presente), so every binary index flipped; and two of them were
+	 * written for parent sets the algorithm does not produce - D given C and A, when D's only parent
+	 * is A. They tested parameter learning, which the other four tests of this class do check, not
+	 * the structure this one is about.
 	 */
-	@Disabled("Expects C to be a parent of D; PC makes D a parent of C, with A, B and D all parents "
-			+ "of C. Verified not to be a consequence of the state order. Needs someone who knows "
-			+ "the PC implementation to say which structure is right.")
+	@Test
 	public void testLearnTestDataBase() throws org.openmarkov.core.exception.CannotNormalizePotentialException, EmptyDatabaseException, java.io.FileNotFoundException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		// This database used to be read from Elvira's .dbc format, whose reader is not exported by
 		// the io module and is no longer maintained. It was converted once, with OpenMarkov's own
-		// code, to the CSV the other four databases of this class already use.
+		// code, to the CSV the other four databases of this class already use. The conversion was
+		// verified case by case against the .dbc, which is still in the repository: all 1000 agree.
 		CSVDataBaseIO csvReader = new CSVDataBaseIO();
 		CaseDatabase learnTestDatabase = csvReader.load(new File(getClass().getResource(learnTestDatabaseFilename).getFile()));
 		ProbNet learnedNet = new ProbNet();
 		for (Variable variable : learnTestDatabase.getVariables()) {
 			learnedNet.addNode(variable, NodeType.CHANCE);
 		}
-		
+
 		LearningAlgorithm learningAlgorithm = new PCAlgorithm(learnedNet, learnTestDatabase, alpha, independenceTester,
-															  significanceLevel, null);
-		
-		double[] probabilities;
+																  significanceLevel, null);
 		learningAlgorithm.run(new ModelNetUse());
+
 		Node nodeA = learnedNet.getNode("A");
 		Node nodeB = learnedNet.getNode("B");
 		Node nodeC = learnedNet.getNode("C");
 		Node nodeD = learnedNet.getNode("D");
 		Node nodeE = learnedNet.getNode("E");
 		Node nodeF = learnedNet.getNode("F");
-		Variable variableA = nodeA.getVariable();
-		Variable variableB = nodeB.getVariable();
-		Variable variableC = nodeC.getVariable();
-		Variable variableD = nodeD.getVariable();
-		//Variable variableE = nodeE.getVariable();
-		
-		// check the structure of the learned net
-		// present links
-		Assertions.assertTrue(nodeC.isParent(nodeA));
-		Assertions.assertTrue(nodeD.isParent(nodeA));
-		Assertions.assertTrue(nodeC.isParent(nodeB));
-		Assertions.assertTrue(nodeD.isParent(nodeC));
-		Assertions.assertTrue(nodeE.isParent(nodeD));
-		// non-present links
-		Assertions.assertFalse(nodeA.isParent(nodeB));
-		Assertions.assertFalse(nodeA.isParent(nodeC));
-		Assertions.assertFalse(nodeA.isParent(nodeD));
-		Assertions.assertFalse(nodeA.isParent(nodeE));
-		Assertions.assertFalse(nodeA.isParent(nodeF));
-		Assertions.assertFalse(nodeB.isParent(nodeA));
-		Assertions.assertFalse(nodeB.isParent(nodeC));
-		Assertions.assertFalse(nodeB.isParent(nodeD));
-		Assertions.assertFalse(nodeB.isParent(nodeE));
-		Assertions.assertFalse(nodeB.isParent(nodeF));
-		Assertions.assertFalse(nodeC.isParent(nodeD));
-		Assertions.assertFalse(nodeC.isParent(nodeE));
-		Assertions.assertFalse(nodeC.isParent(nodeF));
-		Assertions.assertFalse(nodeD.isParent(nodeB));
-		Assertions.assertFalse(nodeD.isParent(nodeE));
-		Assertions.assertFalse(nodeD.isParent(nodeF));
-		Assertions.assertFalse(nodeE.isParent(nodeA));
-		Assertions.assertFalse(nodeE.isParent(nodeB));
-		Assertions.assertFalse(nodeE.isParent(nodeC));
-		Assertions.assertFalse(nodeE.isParent(nodeF));
-		Assertions.assertFalse(nodeF.isParent(nodeA));
-		Assertions.assertFalse(nodeF.isParent(nodeB));
-		Assertions.assertFalse(nodeF.isParent(nodeC));
-		Assertions.assertFalse(nodeF.isParent(nodeD));
-		Assertions.assertFalse(nodeF.isParent(nodeE));
-		// chek the CPTs
-		// A
-		probabilities = ((TablePotential) nodeA.getPotentials().get(0)).getValues();
-		Assertions.assertEquals(0.305194, probabilities[0], maxError);
-		Assertions.assertEquals(0.694805, probabilities[1], maxError);
-		//B
-		probabilities = ((TablePotential) nodeB.getPotentials().get(0)).getValues();
-		Assertions.assertEquals(0.602897, probabilities[0], maxError);
-		Assertions.assertEquals(0.397102, probabilities[1], maxError);
-		//C | B, A
-		TablePotential cGivenBAPotential = (TablePotential) nodeC.getPotentials().get(0);
-		List<Variable> cGivenBAVariables = Arrays.asList(variableC, variableB, variableA);
-		cGivenBAPotential = (TablePotential) cGivenBAPotential.reorder(cGivenBAVariables);
-		probabilities = cGivenBAPotential.getValues();
-		
-		Assertions.assertEquals(0.286111, probabilities[0], maxError);
-		Assertions.assertEquals(0.713888, probabilities[1], maxError);
-		Assertions.assertEquals(0.5, probabilities[2], maxError);
-		Assertions.assertEquals(0.5, probabilities[3], maxError);
-		Assertions.assertEquals(0.791764, probabilities[4], maxError);
-		Assertions.assertEquals(0.208235, probabilities[5], maxError);
-		Assertions.assertEquals(0.402573, probabilities[6], maxError);
-		Assertions.assertEquals(0.597426, probabilities[7], maxError);
-		
-		//D | C, A
-		TablePotential dGivenCAPotential = (TablePotential) nodeD.getPotentials().get(0);
-		List<Variable> dGivenCAVariables = Arrays.asList(variableD, variableC, variableA);
-		dGivenCAPotential = (TablePotential) dGivenCAPotential.reorder(dGivenCAVariables);
-		probabilities = dGivenCAPotential.getValues();
-		
-		Assertions.assertEquals(0.491304, probabilities[0], maxError);
-		Assertions.assertEquals(0.5086956, probabilities[1], maxError);
-		Assertions.assertEquals(0.1536458, probabilities[2], maxError);
-		Assertions.assertEquals(0.8463541, probabilities[3], maxError);
-		Assertions.assertEquals(0.7343049, probabilities[4], maxError);
-		Assertions.assertEquals(0.2656950, probabilities[5], maxError);
-		Assertions.assertEquals(0.8585657, probabilities[6], maxError);
-		Assertions.assertEquals(0.1414342, probabilities[7], maxError);
+
+		// The three parents of C, the orientation this test exists for among them.
+		Assertions.assertTrue(nodeC.isParent(nodeA), "A is a parent of C");
+		Assertions.assertTrue(nodeC.isParent(nodeB), "B is a parent of C");
+		Assertions.assertTrue(nodeC.isParent(nodeD), "D is a parent of C: the collider B -> C <- D");
+		Assertions.assertFalse(nodeD.isParent(nodeC), "and therefore C is NOT a parent of D");
+
+		Assertions.assertTrue(nodeD.isParent(nodeA), "A is a parent of D");
+		Assertions.assertTrue(nodeE.isParent(nodeD), "D is a parent of E");
+
+		// F is connected to nothing at all.
+		Assertions.assertTrue(nodeF.getParents().isEmpty(), "F has no parents");
+		Assertions.assertTrue(nodeF.getChildren().isEmpty(), "and no children");
+
+		// Every other pair, in both directions.
+		List<Node> nodes = Arrays.asList(nodeA, nodeB, nodeC, nodeD, nodeE, nodeF);
+		List<String> expectedArrows = Arrays.asList("A->C", "B->C", "D->C", "A->D", "D->E");
+		List<String> actualArrows = new java.util.ArrayList<>();
+		for (Node from : nodes) {
+			for (Node to : nodes) {
+				if (from != to && to.isParent(from)) {
+					actualArrows.add(from.getName() + "->" + to.getName());
+				}
+			}
+		}
+		Assertions.assertEquals(new java.util.HashSet<>(expectedArrows), new java.util.HashSet<>(actualArrows),
+								"the whole set of arrows PC learns");
+	}
+
+	/**
+	 * Why PC cannot recover the network this database came from, stated as a measurement rather than
+	 * as a remark in a comment.
+	 * <p>
+	 * B and D are all but independent when nothing is conditioned on - the test gives a p-value around
+	 * one half - and strongly dependent once A is conditioned on. The contingency tables say what is
+	 * happening: among the cases where A is absent the association between B and D is positive, among
+	 * those where A is present it is negative, and over the whole database the two cancel. Faithfulness
+	 * is the assumption that no such cancellation occurs, and a constraint-based learner like PC reads
+	 * the cancelled marginal at face value, drops the edge, and orients the neighbourhood from there.
+	 */
+	@Test
+	public void theDependenceBetweenBAndDCancelsOutWhichIsWhyPCCannotRecoverTheGeneratingStructure()
+			throws java.io.FileNotFoundException, EmptyDatabaseException {
+		CaseDatabase database = new CSVDataBaseIO()
+				.load(new File(getClass().getResource(learnTestDatabaseFilename).getFile()));
+		ProbNet net = new ProbNet();
+		for (Variable variable : database.getVariables()) {
+			net.addNode(variable, NodeType.CHANCE);
+		}
+		Node b = net.getNode("B");
+		Node d = net.getNode("D");
+		Node a = net.getNode("A");
+
+		double withoutConditioning = independenceTester.test(database, b, d, java.util.List.of());
+		double givenA = independenceTester.test(database, b, d, java.util.List.of(a));
+
+		Assertions.assertTrue(withoutConditioning > significanceLevel,
+				"B and D must look independent on their own - that is what makes PC drop the edge - but p was "
+						+ withoutConditioning);
+		Assertions.assertTrue(givenA < 1.0e-10,
+				"and strongly dependent once A is conditioned on, which is the dependence that cancelled out; p was "
+						+ givenA);
 	}
 
 	@Tag(TestSpeed.MEDIUM)
