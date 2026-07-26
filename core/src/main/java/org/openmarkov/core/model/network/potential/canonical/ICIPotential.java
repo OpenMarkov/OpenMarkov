@@ -305,9 +305,30 @@ public abstract class ICIPotential extends Potential implements Projectable {
      *
      * @param noisyPotentials list of table potentials whose values replace the noisy parameters
      */
+    /**
+     * Takes the noisy parameters back from potentials shaped as {@link #getNoisyPotentials} hands them
+     * out, which is over (the z variable of a parent, that parent). The parent is therefore the
+     * SECOND variable of each one.
+     *
+     * <p>This used to read the first, which is the z variable - and z variables are not among this
+     * potential's variables, so {@code indexOf} returned -1, one was subtracted from it, and the
+     * assignment failed with index -2. It is the exact inverse of the method it has to undo and it did
+     * not match it. Nothing noticed because nothing learned the parameters of a canonical model: the
+     * one caller is the expectation-maximization algorithm, and none of its tests used one.
+     *
+     * @param noisyPotentials one potential per parent, over (z variable of the parent, parent)
+     */
     public void setNoisyPotentials(List<TablePotential> noisyPotentials) {
         for (TablePotential noisyPotential : noisyPotentials) {
-            noisyParameters[variables.indexOf(noisyPotential.getVariable(0)) - 1] = noisyPotential.getValues();
+            Variable parent = noisyPotential.getVariable(1);
+            int position = variables.indexOf(parent);
+            if (position < 1) {
+                throw new UnrecoverableException(new InvalidArgumentException(
+                        "The potential over " + noisyPotential.getVariable(0).getName() + " and " + parent
+                                .getName() + " cannot carry noisy parameters of " + getConditionedVariable()
+                                .getName() + ": " + parent.getName() + " is not one of its parents"));
+            }
+            noisyParameters[position - 1] = noisyPotential.getValues();
         }
     }
     
