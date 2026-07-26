@@ -103,19 +103,21 @@ public abstract class MinMaxPotential extends ICIPotential {
     }
     
     /**
-     * @return Given a model in witch A-&#62;D and B-&#62;D, this method returns:
-     * delta<sub>D,D'</sub>, C<sub>D'</sub><sup>A</sup>,
-     * C<sub>D'</sub><sup>B</sup>, C<sub>D</sub><sup>*</sup>.
-     * {@code ArrayList} of {@code TablePotential}
+     * The factorization of this model: one accrued potential per parent, one for the leak, and the
+     * delta. Given a model in which A-&#62;D and B-&#62;D, this returns C<sub>D'</sub><sup>A</sup>,
+     * C<sub>D'</sub><sup>B</sup>, C<sub>D'</sub><sup>*</sup> and delta<sub>D,D'</sub>.
+     *
+     * <p>It used to accrue what {@link #buildFactorization} handed it, and that list was already
+     * accrued: every parent's contribution came out summed twice, the delta came out summed as though
+     * it were a distribution, and a second delta was put in front of the lot. Five factors instead of
+     * four, two of them mentioning the child. Nothing called this method, so nothing noticed. The
+     * method it called was named buildSubpotentialList, which is what invited the mistake: it does
+     * not return subpotentials, and it is called buildFactorization now.
+     *
+     * @return the factors this model breaks into
      */
     public List<TablePotential> getTablePotentials() {
-        List<TablePotential> iCIPotentials = new ArrayList<>();
-        iCIPotentials.add(getDeltaPotential());
-        // subPotentials must be of sub-type TablePotential
-        for (TablePotential potential : buildSubpotentialList()) {
-            iCIPotentials.add(getAccruedPotential(potential));
-        }
-        return iCIPotentials;
+        return buildFactorization();
     }
     
     /**
@@ -125,7 +127,7 @@ public abstract class MinMaxPotential extends ICIPotential {
     @Override
     public @NotNull TablePotential tableProject(EvidenceCase evidence, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials) throws NonProjectablePotentialException {
         List<TablePotential> potentials = new ArrayList<>();
-        List<TablePotential> subPotentials = buildSubpotentialList();
+        List<TablePotential> subPotentials = buildFactorization();
         for (TablePotential subPotential : subPotentials) {
             potentials.add(subPotential.tableProject(evidence, null, projectedPotentials));
         }
@@ -138,7 +140,7 @@ public abstract class MinMaxPotential extends ICIPotential {
     @Override public TablePotential getCPT() {
         List<Variable> variablesToEliminate = Arrays.asList(pseudoVariable);
         return DiscretePotentialOperations
-                .multiplyAndMarginalize(buildSubpotentialList(), variables, variablesToEliminate);
+                .multiplyAndMarginalize(buildFactorization(), variables, variablesToEliminate);
     }
     
     public Variable getPseudoVariable() {
@@ -146,11 +148,14 @@ public abstract class MinMaxPotential extends ICIPotential {
     }
     
     /**
-     * There will be a potential for each link, plus the leak potential
+     * Builds the factors this model breaks into: the accrued potential of each link, the accrued
+     * potential of the leak, and the delta. Note what it returns - the FINISHED factorization, not the
+     * raw per-link tables it starts from. It was called buildSubpotentialList, and that name cost a
+     * defect: {@link #getTablePotentials} accrued its result a second time.
      *
-     * @return {@code ArrayList} of {@code TablePotential}.
+     * @return {@code List} of {@code TablePotential}, one per link plus the leak plus the delta
      */
-    protected List<TablePotential> buildSubpotentialList() {
+    protected List<TablePotential> buildFactorization() {
         List<TablePotential> subpotentials = new ArrayList<>();
         
         //Noisy parents
