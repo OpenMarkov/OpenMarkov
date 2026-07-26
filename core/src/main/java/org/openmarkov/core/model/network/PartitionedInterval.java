@@ -10,6 +10,7 @@ package org.openmarkov.core.model.network;
 import org.openmarkov.core.localize.ClassLocalizable;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Defines a set of intervals
@@ -334,6 +335,27 @@ public class PartitionedInterval implements Cloneable, Serializable, ClassLocali
             }
         } else {
             result = false;
+        }
+        return result;
+    }
+
+    /**
+     * Consistent with {@link #equals}, which compares the two arrays element by element.
+     *
+     * <p>The limits are folded in one by one rather than with {@code Arrays.hashCode}, because equals
+     * compares them with {@code ==} and {@code ==} says that -0.0 equals 0.0 while
+     * {@code Double.hashCode} gives them different numbers. Adding 0.0 turns -0.0 into 0.0 and leaves
+     * every other value alone, so the two agree. (Two intervals holding NaN are never equal under
+     * {@code ==}, so that case needs nothing.)
+     *
+     * <p>Both arrays are written in place by {@code changeLimit} and its neighbours, so this hash can
+     * move. No hash-based collection of partitioned intervals exists in the code today; if one is ever
+     * added, it must not hold an interval that is still being edited.
+     */
+    @Override public int hashCode() {
+        int result = Arrays.hashCode(belongsToLeftSide);
+        for (double limit : limits) {
+            result = 31 * result + Double.hashCode(limit + 0.0);
         }
         return result;
     }

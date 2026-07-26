@@ -12,6 +12,7 @@ import org.openmarkov.core.localize.ClassLocalizable;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents a single state of a finite-state variable.
@@ -60,11 +61,25 @@ public class State implements Cloneable, ClassLocalizable {
         additionalProperties.put(key, value);
     }
     
-    public boolean equals(Object other) {
+    @Override public boolean equals(Object other) {
         if (!(other instanceof State state)) {
             return false;
         }
-        return this.name.equals(state.name);
+        return Objects.equals(this.name, state.name);
+    }
+
+    /**
+     * The name, and only the name, because that is all {@link #equals} compares. The additional
+     * properties are metadata and are deliberately left out of both.
+     *
+     * <p>Two states of the same variable cannot share a name, so within one variable this hash tells
+     * every state apart. Note that it can move: {@link #setName} exists, and renaming a state that is
+     * sitting inside a hash-based collection would leave it in the bucket its old name chose. Every
+     * collection of states in the code is a local variable built and consumed inside one method, so
+     * no rename can happen underneath one; a state must not be renamed while it is a key somewhere.
+     */
+    @Override public int hashCode() {
+        return Objects.hashCode(name);
     }
     
     @Override public String toString() {
