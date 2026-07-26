@@ -43,9 +43,19 @@ import java.util.List;
 	/**
 	 *
 	 */
+	/**
+	 * Alpha counts the successes and N the observations, so both are positive and N is the larger.
+	 *
+	 * <p>The test used to be the other way round: it threw when N WAS greater than alpha and let the
+	 * impossible case through, while saying "N should be greater than alpha". It rejected exactly the
+	 * parameters it exists to accept.
+	 */
 	@Override public void verifyParameters(double[] parameters) {
-		if ((parameters[0] > 0) && (parameters[1] > 0) && (parameters[1] > parameters[0])) {
-			throw new InvalidArgumentException(List.of(parameters[0], parameters[1]), "N", "N should be greater than alpha " + this.getClass().getName());
+		boolean acceptable = (parameters[0] > 0) && (parameters[1] > 0) && (parameters[1] > parameters[0]);
+		if (!acceptable) {
+			throw new InvalidArgumentException(List.of(parameters[0], parameters[1]), "N",
+					"N should be greater than alpha, and both greater than zero, but alpha was "
+							+ parameters[0] + " and N was " + parameters[1] + " in " + this.getClass().getName());
 		}
 	}
 

@@ -7,8 +7,8 @@
 
 package org.openmarkov.core.model.network.modelUncertainty;
 
-import cern.jet.random.Gamma;
 import org.apache.commons.math3.distribution.GammaDistribution;
+import org.apache.commons.math3.random.RandomGeneratorFactory;
 
 import java.util.Random;
 
@@ -37,8 +37,20 @@ public abstract class GammaAbstract extends ProbDensFunction {
 		return (kAbstract * thetaAbstract);
 	}
 
+	/**
+	 * A sample drawn from the generator handed in, which is the whole point of receiving one.
+	 *
+	 * <p>It used to draw from Colt's static generator and ignore the argument, so two runs seeded
+	 * alike came out different and no probabilistic sensitivity analysis could be reproduced - nor was
+	 * a static generator with no owner safe to share between threads. Beta and Dirichlet arrive here
+	 * too: a Dirichlet samples gammas and a beta samples a Dirichlet.
+	 *
+	 * <p>The distribution is unchanged. Colt was asked for shape k and rate 1/theta, which is the same
+	 * gamma as shape k and scale theta - the pair {@link #getInterval} has always used.
+	 */
 	@Override public final double getSample(Random randomGenerator) {
-		return Gamma.staticNextDouble(kAbstract, 1.0 / thetaAbstract);
+		return new GammaDistribution(RandomGeneratorFactory.createRandomGenerator(randomGenerator),
+				kAbstract, thetaAbstract).sample();
 	}
 
 	public boolean isAnErlangFunction(double epsilon) {
