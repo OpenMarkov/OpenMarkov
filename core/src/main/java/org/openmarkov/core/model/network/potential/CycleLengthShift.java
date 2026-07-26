@@ -93,7 +93,7 @@ public class CycleLengthShift extends Potential {
      * projected potential with its values shifted one state.
      */
     @Override
-    public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials) throws NonProjectablePotentialException.MissingVariableInEvidence {
+    public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials) throws NonProjectablePotentialException {
         Variable conditionedVariable = getConditionedVariable();
         Variable conditioningVariable = variables.get((conditionedVariable == variables.getFirst()) ? 1 : 0);
         TablePotential projectedPotential;
@@ -110,7 +110,8 @@ public class CycleLengthShift extends Potential {
         }
         // Build projected potential based on parent's potential
         TablePotential projectedParentPotential = findPotentialByVariable(conditioningVariable,
-                                                                          projectedPotentials);
+                                                                          projectedPotentials, evidenceCase,
+                                                                          inferenceOptions);
         List<Variable> projectedVariables = projectedParentPotential.getVariables();
         // replace parent variable with child variable in the list of
         // variables of the projected potential

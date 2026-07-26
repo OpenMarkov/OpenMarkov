@@ -8,7 +8,11 @@ package org.openmarkov.core.model.network.potential;
 
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.exception.UnrecoverableException;
+import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 
 import java.util.List;
@@ -41,7 +45,7 @@ public class MissingProjectionIsReportedTest {
                 new TablePotential(List.of(new Variable("Z", 2)), PotentialRole.CONDITIONAL_PROBABILITY));
 
         UnrecoverableException thrown = assertThrows(UnrecoverableException.class,
-                                                    () -> Potential.findPotentialByVariable(wanted, projectedSoFar));
+                                                    () -> Potential.findPotentialByVariable(wanted, projectedSoFar, new EvidenceCase(), null));
 
         assertTrue(thrown.getMessage().contains("Y"), "the message must name the variable: " + thrown.getMessage());
     }
@@ -50,7 +54,8 @@ public class MissingProjectionIsReportedTest {
     @Test public void theMessageOffersBothExplanations() {
         UnrecoverableException thrown = assertThrows(UnrecoverableException.class,
                                                     () -> Potential.findPotentialByVariable(new Variable("Y", 2),
-                                                                                            List.of()));
+                                                                                            List.of(),
+                                                                                            new EvidenceCase(), null));
 
         assertTrue(thrown.getMessage().contains("not been projected yet"), thrown.getMessage());
         assertTrue(thrown.getMessage().contains("several factors"), thrown.getMessage());
@@ -69,5 +74,65 @@ public class MissingProjectionIsReportedTest {
         assertThrows(UnrecoverableException.class,
                      () -> sum.tableProject(new EvidenceCase(), null, List.of()),
                      "with nothing projected, the parent cannot be found and that must be said");
+    }
+
+    /**
+     * The point of the whole arrangement: a potential that hands over factors instead of a table stays
+     * usable by whoever needs the table. None of its factors is conditioned on its own variable - that
+     * is what makes the factorization cheap - so the table is built on demand, by projecting the
+     * potential the old way, and only for the caller that asked.
+     */
+    @Test public void aFactorizedPotentialIsCollapsedForWhoeverNeedsItsTable() throws Exception {
+        ProbNet net = new ProbNet();
+        Variable child = new Variable("Y", 2);
+        net.addNode(child, NodeType.CHANCE);
+        net.getNode(child).setPotential(new FactorizingPotential(List.of(child)));
+
+        List<TablePotential> factors = net.tableProjectPotentials(new EvidenceCase());
+        assertEquals(2, factors.size(), "it hands over two factors");
+        for (TablePotential factor : factors) {
+            assertNotEquals(child, factor.getConditionedVariable(),
+                            "and none of them is conditioned on Y, which is why the table has to be built");
+        }
+
+        TablePotential table = Potential.findPotentialByVariable(child, factors, new EvidenceCase(),
+                                                                new InferenceOptions(net, null));
+
+        assertEquals(child, table.getConditionedVariable(), "the table built on demand is the one asked for");
+        assertArrayEquals(new double[]{0.25, 0.75}, table.getValues(), 1e-12);
+    }
+
+    /** Stands in for a canonical model: factors over a pseudo variable, and a table when asked. */
+    private static final class FactorizingPotential extends Potential {
+
+        private static final Variable PSEUDO = new Variable("pseudo-Y", 2);
+
+        private FactorizingPotential(List<Variable> variables) {
+            super(variables, PotentialRole.CONDITIONAL_PROBABILITY);
+        }
+
+        @Override public List<TablePotential> tableProjectToFactors(EvidenceCase evidenceCase,
+                                                                    InferenceOptions inferenceOptions,
+                                                                    List<TablePotential> alreadyProjected) {
+            return List.of(new TablePotential(List.of(PSEUDO), PotentialRole.CONDITIONAL_PROBABILITY),
+                           new TablePotential(List.of(PSEUDO), PotentialRole.CONDITIONAL_PROBABILITY));
+        }
+
+        @Override public @NotNull TablePotential tableProject(EvidenceCase evidenceCase,
+                                                              InferenceOptions inferenceOptions,
+                                                              List<TablePotential> alreadyProjected) {
+            TablePotential collapsed = new TablePotential(variables, PotentialRole.CONDITIONAL_PROBABILITY);
+            collapsed.getValues()[0] = 0.25;
+            collapsed.getValues()[1] = 0.75;
+            return collapsed;
+        }
+
+        @Override public Potential project(EvidenceCase evidenceCase) {
+            throw new UnsupportedOperationException("not needed by this test");
+        }
+
+        @Override public Potential copy() {
+            return new FactorizingPotential(variables);
+        }
     }
 }

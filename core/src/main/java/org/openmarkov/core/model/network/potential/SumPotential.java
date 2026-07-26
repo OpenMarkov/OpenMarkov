@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -95,12 +96,14 @@ import java.util.List;
      * @return The table potential resulting from summing the parents' potentials.
      */
     @Override
-    public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials) {
+    public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials)
+            throws NonProjectablePotentialException {
         List<Variable> parentVariables = new ArrayList<>(variables);
         parentVariables.remove(getConditionedVariable());
         List<TablePotential> parentPotentials = new ArrayList<>();
         for (Variable parentVariable : parentVariables) {
-            parentPotentials.add(findPotentialByVariable(parentVariable, projectedPotentials));
+            parentPotentials.add(findPotentialByVariable(parentVariable, projectedPotentials, evidenceCase,
+                                                        inferenceOptions));
         }
         return DiscretePotentialOperations.sum(parentPotentials);
     }

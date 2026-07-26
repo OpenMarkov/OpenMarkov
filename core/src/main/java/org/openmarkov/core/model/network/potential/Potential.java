@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.ImplementationRequirements;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.RequiredConstructor;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.RequiredMethod;
@@ -156,43 +157,69 @@ public abstract class Potential implements Localizable {
     }
     
     /**
-     * The projected potential conditioned on the given variable, among those projected so far.
+     * The projection of the given variable's potential: the factor already projected that is
+     * conditioned on it or, failing that, the single table its potential projects to.
      *
-     * @param variable   the variable to search for
-     * @param potentials list of table potentials to search
+     * <p>Potentials hand their projection over as one or more factors. Almost all of them give a
+     * single table conditioned on their own variable, and that is the case this finds at once. A
+     * canonical model gives its factorization instead - one small table per parent, written on a
+     * pseudo variable - and then nothing in the list is conditioned on the variable being asked
+     * about, because the point of the factorization is that the child's table is never built.
      *
-     * @return the potential conditioned on {@code variable}, never {@code null}
-     * @throws UnrecoverableException wrapping an {@link InvalidArgumentException} if there is none
+     * <p>So it is built here, for the caller that needs it. That is what {@code tableProject} does and
+     * has always done: multiply the factors and marginalize them back. The factorization is an
+     * optimization, and whoever cannot use it pays for the table rather than making everyone else pay
+     * for it. Reaching the potential needs the network, which travels in the inference options; if
+     * those are absent there is nothing to fall back on and the failure is reported as before.
+     *
+     * @param variable         the variable whose projection is wanted
+     * @param potentials       the factors projected so far
+     * @param evidenceCase     evidence to project onto, should the table have to be built
+     * @param inferenceOptions inference options, which carry the network; may be {@code null}
+     *
+     * @return the projection of {@code variable}, never {@code null}
+     * @throws NonProjectablePotentialException if the table has to be built and cannot be
+     * @throws UnrecoverableException wrapping an {@link InvalidArgumentException} if there is no
+     *                                projection and no way to build one
      */
-    protected static TablePotential findPotentialByVariable(Variable variable, List<TablePotential> potentials) {
-        int i = 0;
-        TablePotential potential = null;
-        while (i < potentials.size() && potential == null) {
-            if (variable.equals(potentials.get(i).getConditionedVariable())) {
-                potential = potentials.get(i);
+    protected static TablePotential findPotentialByVariable(Variable variable, List<TablePotential> potentials,
+                                                            EvidenceCase evidenceCase,
+                                                            InferenceOptions inferenceOptions)
+            throws NonProjectablePotentialException {
+        for (TablePotential potential : potentials) {
+            if (variable.equals(potential.getConditionedVariable())) {
+                return potential;
             }
-            ++i;
         }
-        if (potential == null) {
-            // Saying so here rather than handing back a null that travels. Every one of the three
-            // callers goes straight on to use the answer: two put it into a sum, which returns null
-            // without complaint when the list holds a single element and fails with a
-            // NullPointerException when it holds more, and the third dereferences it at once. So the
-            // old null turned either into a wrong result or into a failure several frames away from
-            // the cause.
-            //
-            // Two things bring you here. Either nothing has projected that variable yet, which means
-            // the potentials are being visited out of topological order; or its potential contributed
-            // several factors instead of one table, none of them conditioned on it - which is what a
-            // canonical model does when it hands over its factorization, and is the reason this
-            // message names the possibility.
-            throw new UnrecoverableException(new InvalidArgumentException(
-                    "No projected potential is conditioned on " + variable.getName()
-                            + ", so it cannot be found among the " + potentials.size()
-                            + " projected so far. Either it has not been projected yet, or its potential"
-                            + " contributed several factors rather than a single table."));
+        TablePotential collapsed = collapseOnDemand(variable, potentials, evidenceCase, inferenceOptions);
+        if (collapsed != null) {
+            return collapsed;
         }
-        return potential;
+        // Two things bring you here. Either nothing has projected that variable yet, which means the
+        // potentials are being visited out of topological order; or its potential factorizes and the
+        // network was not reachable to ask it for the table. Saying so rather than handing back a null
+        // that travels: of the callers, two put the answer into a sum - which returns null without
+        // complaint when the list holds a single element - and one dereferences it at once.
+        throw new UnrecoverableException(new InvalidArgumentException(
+                "No projected potential is conditioned on " + variable.getName()
+                        + ", so it cannot be found among the " + potentials.size()
+                        + " projected so far. Either it has not been projected yet, or its potential"
+                        + " contributed several factors rather than a single table."));
+    }
+
+    /** The variable's own potential projected to a single table, or null if it cannot be reached. */
+    private static @Nullable TablePotential collapseOnDemand(Variable variable, List<TablePotential> potentials,
+                                                             EvidenceCase evidenceCase,
+                                                             InferenceOptions inferenceOptions)
+            throws NonProjectablePotentialException {
+        if (inferenceOptions == null || inferenceOptions.probNet == null) {
+            return null;
+        }
+        Node node = inferenceOptions.probNet.getNode(variable);
+        if (node == null || node.getPotentials().isEmpty()) {
+            return null;
+        }
+        return node.getPotentials().getFirst().tableProject(evidenceCase, inferenceOptions, potentials);
     }
     
     /**
