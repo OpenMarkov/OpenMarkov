@@ -105,8 +105,12 @@ public final class ProbNetPotentialQueries {
         List<TablePotential> projectedPotentials = new ArrayList<>();
         for (Potential potential : originalPotentials) {
             InferenceOptions inferenceOptions = new InferenceOptions(probNet, null);
-            projectedPotentials.add(
-                    potential.tableProject(evidenceCase, inferenceOptions, projectedPotentials));
+            // addAll, not add: a potential may contribute more than one factor. All of them do
+            // contribute exactly one today - that is the default in Potential - so this changes
+            // nothing yet. It is what lets a canonical model hand over its factorization instead of
+            // the single table it currently multiplies them back into.
+            projectedPotentials.addAll(
+                    potential.tableProjectToFactors(evidenceCase, inferenceOptions, projectedPotentials));
         }
         return projectedPotentials;
     }

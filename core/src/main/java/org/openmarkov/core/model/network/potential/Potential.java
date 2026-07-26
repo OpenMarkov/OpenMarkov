@@ -295,6 +295,38 @@ public abstract class Potential implements Localizable {
             throws NonProjectablePotentialException {
         throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
     }
+
+    /**
+     * The factors this potential contributes to inference, projected onto the evidence. By default
+     * exactly one - the table {@link #tableProject} returns - which is what all but one kind of
+     * potential is: a single table.
+     *
+     * <p>The point of the plural is the canonical models. A noisy-MAX or noisy-MIN over k parents
+     * factorizes into one small table per parent plus a delta, and multiplying those back into a
+     * single table is what makes it cost 2^(k+1) numbers instead of 4k+6. Projection is where that
+     * multiplication happens today, so this is the door through which the factors can reach variable
+     * elimination unmultiplied. A potential that wants to hand over several factors overrides this;
+     * one that is a table need do nothing.
+     *
+     * <p>Note for whoever overrides it: {@code alreadyProjectedPotentials} is searched by conditioned
+     * variable, by {@link SumPotential} and {@link ProductPotential}, to find the projections of their
+     * parents. A potential that returns factors none of which is conditioned on its own variable
+     * therefore becomes invisible to a super-value node above it. That has to be dealt with before any
+     * potential starts returning more than one.
+     *
+     * @param evidenceCase               evidence to project onto
+     * @param inferenceOptions           inference options
+     * @param alreadyProjectedPotentials the factors contributed so far, in topological order
+     *
+     * @return one or more factors, never empty
+     *
+     * @throws NonProjectablePotentialException if the potential cannot be projected
+     */
+    public List<TablePotential> tableProjectToFactors(EvidenceCase evidenceCase, InferenceOptions inferenceOptions,
+                                                      List<TablePotential> alreadyProjectedPotentials)
+            throws NonProjectablePotentialException {
+        return List.of(tableProject(evidenceCase, inferenceOptions, alreadyProjectedPotentials));
+    }
     
     //    /** @return isUtility <code>boolean</code> */
     //    public boolean isUtility ()
