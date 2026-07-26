@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public final class ReflectionEquality {
@@ -96,12 +97,11 @@ public final class ReflectionEquality {
         boolean comparisonResult = this.optionsSet.contains(ReflectionEqualityOptions.EQUALS_SHORT_CIRCUIT) && (o1.equals(o2) || o2.equals(o1));
         if (!comparisonResult) {
             comparisonResult = switch (Tuples.record(o1, o2)) {
-                case Tuple2Record(HashMap<?, ?> c1, HashMap<?, ?> c2) -> this.checkAreEquals(c1.keySet(), c2.keySet(), indent+1)
-                        && c1.entrySet()
-                             .stream()
-                             .allMatch(entry -> this.checkAreEquals(entry.getValue(), c2.get(entry.getKey()),indent+1));
+                case Tuple2Record(Map<?, ?> c1, Map<?, ?> c2) ->
+                        c1.size() == c2.size() && this.everyEntryHasAMatch(c1, c2, indent + 1);
                 case Tuple2Record(Set<?> c1, Set<?> c2) ->
-                        c1.size() == c2.size() && ReflectionEquality.allElementsOfCollectionAreInSet(c1, c2) && ReflectionEquality.allElementsOfCollectionAreInSet(c2, c1);
+                        c1.size() == c2.size() && this.allElementsOfCollectionAreInSet(c1, c2, indent + 1)
+                                && this.allElementsOfCollectionAreInSet(c2, c1, indent + 1);
                 case Tuple2Record(Collection<?> c1, Collection<?> c2) -> {
                     if (c1.size() != c2.size()) {
                         yield false;
@@ -146,6 +146,15 @@ public final class ReflectionEquality {
                     // "fields2.get(i).get(o2)" true by construction rather than by that coincidence.
                     var fields1 = ReflectionEquality.extractAllAccesibleFields(o1);
                     var fields2 = ReflectionEquality.extractAllAccesibleFields(o2);
+                    if (fields1.size() < ReflectionEquality.countComparableFields(o1.getClass())) {
+                        // Some of its fields could not be opened - the usual reason is that the class
+                        // belongs to another module, which is the case for every type of the JDK. What
+                        // this used to do was compare the fields it COULD read, and a class none of
+                        // whose fields it can read was compared over no fields at all, which comes out
+                        // true: two different objects declared equal, in silence. Ask the object
+                        // itself instead, which for those types is exactly who knows the answer.
+                        yield o1.equals(o2);
+                    }
                     if (!this.checkAreEquals(fields1, fields2, indent+1)) {
                         yield false;
                     }
@@ -169,20 +178,81 @@ public final class ReflectionEquality {
         return comparisonResult;
     }
     
-    @SuppressWarnings("ProhibitedExceptionCaught")
-    private static boolean allElementsOfCollectionAreInSet(Collection<?> collection, Set<?> set) {
-        for (Object value : collection) {
-            try {
-                if (!set.contains(value)) {
-                    return false;
+    /**
+     * Whether every entry of one map has a matching entry in the other, key and value both decided by
+     * THIS comparison.
+     *
+     * <p>It used to look each key up with {@code get}, which resolves by the key's own hash and
+     * equality - so a map keyed by objects of a class that defines neither found nothing, compared a
+     * value against null, and reported two identical maps as different. Only maps that were literally
+     * a HashMap reached this at all; every other implementation fell through to the walk over fields,
+     * which for a map of the JDK can open none, and came out equal whatever it held.
+     *
+     * <p>Quadratic in the size of the map. That is the price of matching by content when the content
+     * cannot be hashed.
+     */
+    private boolean everyEntryHasAMatch(Map<?, ?> one, Map<?, ?> other, int indent) {
+        for (Map.Entry<?, ?> entry : one.entrySet()) {
+            boolean matched = false;
+            for (Map.Entry<?, ?> candidate : other.entrySet()) {
+                if (this.checkAreEquals(entry.getKey(), candidate.getKey(), indent)
+                        && this.checkAreEquals(entry.getValue(), candidate.getValue(), indent)) {
+                    matched = true;
+                    break;
                 }
-            }catch (NullPointerException | ClassCastException e) {
+            }
+            if (!matched) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Whether every element of the collection has a match in the set, decided by THIS comparison and
+     * not by the elements' own equality.
+     *
+     * <p>It used to ask {@code set.contains}, which is the elements' own {@code equals} - the very
+     * thing this class exists so as not to need. Two structurally identical objects of a class that
+     * defines no equality were reported as absent from each other's sets, so any structure holding
+     * them in a set or as the keys of a map came out different from its own copy.
+     *
+     * <p>Quadratic in the size of the set, which membership by hashing is not. That is the price of
+     * matching by content when the content cannot be hashed.
+     */
+    private boolean allElementsOfCollectionAreInSet(Collection<?> collection, Set<?> set, int indent) {
+        for (Object value : collection) {
+            boolean found = false;
+            for (Object candidate : set) {
+                if (this.checkAreEquals(value, candidate, indent)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
                 return false;
             }
         }
         return true;
     }
     
+    /**
+     * How many fields the comparison would want to read from a class: the non-static, non-transient
+     * ones, all the way up the hierarchy. Compared against how many it could actually open, it says
+     * whether anything was hidden from it.
+     */
+    private static int countComparableFields(Class<?> type) {
+        int count = 0;
+        for (Class<?> current = type; current != null; current = current.getSuperclass()) {
+            for (Field field : current.getDeclaredFields()) {
+                if (!Modifier.isStatic(field.getModifiers()) && !Modifier.isTransient(field.getModifiers())) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     private static ArrayList<Field> extractAllAccesibleFields(Object object) {
         var superclass = object.getClass();
         ArrayList<Field> fields = new ArrayList<>();

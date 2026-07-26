@@ -91,6 +91,59 @@ class ReflectionEqualityTest {
         }
     }
 
+    // ------------------------------------------- objects whose fields cannot be opened
+
+    /**
+     * Two objects that differ must not be declared equal just because their fields cannot be read.
+     * <p>
+     * The comparison walks fields by reflection, and the fields of a class from another module cannot
+     * be opened: setAccessible throws, the field is skipped, and a class all of whose fields are
+     * skipped ends up compared field by field over no fields at all - which comes out true. Any type
+     * of the JDK is in that position.
+     * <p>
+     * The maps have their own reason on top of that: the branch that compares maps is written for
+     * HashMap and not for Map, so every other implementation - TreeMap, what Map.of gives back,
+     * ConcurrentHashMap - never reaches it and falls through to the field walk.
+     * <p>
+     * It is not theoretical. This class is the change detector of the potential editor, and
+     * PiecewiseExponentialPotential keeps its data in five TreeMaps: there is a path along which a
+     * user's edit is declared "no change" and dropped.
+     */
+    @org.junit.jupiter.api.Test
+    void twoTreeMapsWithDifferentContentsAreNotEqual() {
+        java.util.TreeMap<String, Integer> one = new java.util.TreeMap<>(Map.of("a", 1));
+        java.util.TreeMap<String, Integer> other = new java.util.TreeMap<>(Map.of("a", 2));
+
+        assertFalse(ReflectionEquality.areEquals(one, other));
+    }
+
+    @org.junit.jupiter.api.Test
+    void twoTreeMapsWithTheSameContentsAreEqual() {
+        java.util.TreeMap<String, Integer> one = new java.util.TreeMap<>(Map.of("a", 1, "b", 2));
+        java.util.TreeMap<String, Integer> other = new java.util.TreeMap<>(Map.of("b", 2, "a", 1));
+
+        assertTrue(ReflectionEquality.areEquals(one, other));
+    }
+
+    @org.junit.jupiter.api.Test
+    void twoImmutableMapsWithDifferentContentsAreNotEqual() {
+        assertFalse(ReflectionEquality.areEquals(Map.of("a", 1), Map.of("a", 2)));
+    }
+
+    /** The HashMap case already worked; this is here so that fixing the others does not break it. */
+    @org.junit.jupiter.api.Test
+    void twoHashMapsWithDifferentContentsAreStillNotEqual() {
+        assertFalse(ReflectionEquality.areEquals(new HashMap<>(Map.of("a", 1)),
+                                                 new HashMap<>(Map.of("a", 2))));
+    }
+
+    /** And a type with no collection about it at all: two different dates are two different dates. */
+    @org.junit.jupiter.api.Test
+    void twoDifferentDatesAreNotEqual() {
+        assertFalse(ReflectionEquality.areEquals(java.time.LocalDate.of(2026, 7, 27),
+                                                 java.time.LocalDate.of(1999, 1, 1)));
+    }
+
     // ------------------------------------------- the comparison cache and object identity
 
     /**
