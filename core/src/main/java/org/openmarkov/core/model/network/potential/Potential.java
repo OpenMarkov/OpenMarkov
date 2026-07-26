@@ -12,8 +12,10 @@ import org.openmarkov.core.developmentStaticAnalysis.requirements.Implementation
 import org.openmarkov.core.developmentStaticAnalysis.requirements.RequiredConstructor;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.RequiredMethod;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.SelfClass;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.localize.Localizable;
 import org.openmarkov.core.model.network.*;
@@ -154,12 +156,13 @@ public abstract class Potential implements Localizable {
     }
     
     /**
-     * Finds the first potential in the list whose conditioned variable matches the given variable.
+     * The projected potential conditioned on the given variable, among those projected so far.
      *
      * @param variable   the variable to search for
      * @param potentials list of table potentials to search
      *
-     * @return the matching potential, or {@code null} if not found
+     * @return the potential conditioned on {@code variable}, never {@code null}
+     * @throws UnrecoverableException wrapping an {@link InvalidArgumentException} if there is none
      */
     protected static TablePotential findPotentialByVariable(Variable variable, List<TablePotential> potentials) {
         int i = 0;
@@ -169,6 +172,25 @@ public abstract class Potential implements Localizable {
                 potential = potentials.get(i);
             }
             ++i;
+        }
+        if (potential == null) {
+            // Saying so here rather than handing back a null that travels. Every one of the three
+            // callers goes straight on to use the answer: two put it into a sum, which returns null
+            // without complaint when the list holds a single element and fails with a
+            // NullPointerException when it holds more, and the third dereferences it at once. So the
+            // old null turned either into a wrong result or into a failure several frames away from
+            // the cause.
+            //
+            // Two things bring you here. Either nothing has projected that variable yet, which means
+            // the potentials are being visited out of topological order; or its potential contributed
+            // several factors instead of one table, none of them conditioned on it - which is what a
+            // canonical model does when it hands over its factorization, and is the reason this
+            // message names the possibility.
+            throw new UnrecoverableException(new InvalidArgumentException(
+                    "No projected potential is conditioned on " + variable.getName()
+                            + ", so it cannot be found among the " + potentials.size()
+                            + " projected so far. Either it has not been projected yet, or its potential"
+                            + " contributed several factors rather than a single table."));
         }
         return potential;
     }
