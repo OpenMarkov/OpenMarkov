@@ -192,19 +192,15 @@ public class EvidenceCaseTest {
      */
     @Test public void extendingGivesBackANewCaseAndLeavesTheOriginalAlone() {
         EvidenceCase evidence = new EvidenceCase();
-        int findingsBefore = evidence.getFindings().size();
 
         EvidenceCase extended = evidence.extendedWith(probNet);
 
         assertNotSame(evidence, extended, "extending must not hand back the same case it was given");
-        assertEquals(findingsBefore, evidence.getFindings().size(),
-                     "the evidence given must come out of this untouched");
+        assertEquals(3, extended.getFindings().size(), "the extension is the one that gains findings");
+        assertEquals(0, evidence.getFindings().size(),
+                     "the evidence given must come out of this untouched - it is the editor's own");
     }
 
-    @Disabled("EvidenceCase.extendEvidence does nothing unless the network is a MID, and this test "
-            + "uses a Bayesian network. Removing that guard makes it pass and keeps the whole suite "
-            + "green, but it changes what inference sees for every network type, so it is a "
-            + "decision to take rather than a fix to apply.")
     @Test public void extendEvidence() {
         
         assertNotNull(probNet);

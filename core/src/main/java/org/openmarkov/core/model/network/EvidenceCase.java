@@ -13,7 +13,6 @@ import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.model.network.potential.Potential;
-import org.openmarkov.core.model.network.type.MIDType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -315,9 +314,13 @@ public class EvidenceCase implements ClassLocalizable {
     }
 
     private void extendInPlace(ProbNet probNet) {
-        if (probNet.getNetworkType() != MIDType.getUniqueInstance()) {
-            return;
-        }
+        // No test on the network type. There used to be one - it left at once unless the network was
+        // a MID - and nothing recorded why: it arrived with the very first commit of the repository.
+        // Inducing findings is not a MID-only idea. TablePotential implements getInducedFindings, so
+        // a deterministic table in a plain Bayesian network does force a value: if, once every parent
+        // is observed, only one state keeps a non-zero probability, that state is certain. Narrowing
+        // that to one network type meant the two callers in TaskUtilities silently did nothing for
+        // every other type, while reading as though they extended the evidence always.
         for (Potential potential : probNet.getPotentials()) {
             List<Finding> newFindings = (List<Finding>) potential.getInducedFindings(this);
             for (Finding newFinding : newFindings) {
