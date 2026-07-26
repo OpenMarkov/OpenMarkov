@@ -173,8 +173,12 @@ public class VEPropagation extends VariableElimination implements Propagation {
     // Methods
     
     private void InvokeVariableEliminationCore(ProbNet network, EvidenceCase evidence, Variable variableOfInterest) throws CannotNormalizePotentialException {
-        // Build list of variables to eliminate
-        List<Variable> variablesToEliminate = probNet.getChanceAndDecisionVariables();
+        // From the network the elimination will run on, which is the one passed in - not from the
+        // field, which is the network before its potentials were projected. The two hold the same
+        // chance and decision variables today, so this changes nothing; they stop holding the same
+        // ones the moment a potential contributes factors written on a variable of its own, and then
+        // taking the list from the wrong one leaves that variable to survive the elimination.
+        List<Variable> variablesToEliminate = network.getChanceAndDecisionVariables();
         variablesToEliminate.remove(variableOfInterest);
         //TODO: eliminate the observable variables (DANs)
         

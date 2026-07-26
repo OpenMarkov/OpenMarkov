@@ -122,7 +122,7 @@ public abstract class MinMaxPotential extends ICIPotential {
     
     /**
      * @return The accrued potentials plus the Delta potential,
-     * all of them projected onto the evidence
+     * all of them projected onto the evidence, multiplied and marginalized back into a single table
      */
     @Override
     public @NotNull TablePotential tableProject(EvidenceCase evidence, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials) throws NonProjectablePotentialException {

@@ -80,7 +80,10 @@ public class VEEvaluation extends VariableElimination implements Evaluation, Opt
 		}
 
 		// Create heuristic instance
-		EliminationHeuristic heuristic = heuristicFactory(probNet, new ArrayList<>(),
+		// Over the network the elimination runs on, which is also where the list above comes from.
+		// It used to be built over the field instead, so the heuristic reasoned about one network
+		// while the elimination worked on another.
+		EliminationHeuristic heuristic = heuristicFactory(markovNetworkInference, new ArrayList<>(),
 				getPreResolutionEvidence().getVariables(), getConditioningVariables(), variablesToEliminate);
 
 		variableEliminationCore = new VariableEliminationCore(markovNetworkInference, heuristic, true);
