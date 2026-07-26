@@ -534,7 +534,11 @@ public class EvidenceManager {
         List<Variable> utilityVariables = this.networkEditorPanel.getVisualNetwork().getProbNet().getVariables(NodeType.UTILITY);
         for (Variable utility : utilityVariables) {
             ProbNet newNet = this.networkEditorPanel.getVisualNetwork().getProbNet().copy();
-            newNet = TaskUtilities.extendPreResolutionEvidence(newNet, this.preResolutionEvidence);
+            // The call to TaskUtilities.extendPreResolutionEvidence that used to be here did
+            // nothing for this computation - the utility ranges below do not look at the evidence,
+            // and the method returned the network unchanged. Its only effect was a side one: it
+            // extended the panel's own evidence in place, putting findings the user never entered
+            // in front of them. The extension now belongs to inference, which keeps its own copy.
             Node node = newNet.getNode(utility);
             this.minUtilityRange.put(utility, UtilityFunctionComputer.approximateMinUtility(node));
             this.maxUtilityRange.put(utility, UtilityFunctionComputer.approximateMaxUtility(node));

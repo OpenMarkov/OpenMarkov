@@ -89,7 +89,7 @@ public class TemporalEvaluation extends VariableElimination {
         probNet = TaskUtilities.expandNetwork(probNet, isTemporal);
         LogManager.getLogger().debug("Extending pre-resolution evidence");
         // Extend pre-resolution evidence
-        probNet = TaskUtilities.extendPreResolutionEvidence(probNet, getPreResolutionEvidence());
+        replacePreResolutionEvidence(TaskUtilities.extendPreResolutionEvidence(probNet, getPreResolutionEvidence()));
         LogManager.getLogger().debug("Applying discounts");
         // Apply discounts
         probNet = TaskUtilities.applyDiscounts(probNet, isTemporal);

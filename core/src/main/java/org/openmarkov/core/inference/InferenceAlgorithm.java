@@ -51,7 +51,22 @@ public abstract class InferenceAlgorithm implements Task {
      * In influence diagrams this is Ezawa's evidence.
      */
     private EvidenceCase preResolutionEvidence;
-    
+
+    /**
+     * Replaces the pre-resolution evidence with one derived from it during preprocessing - extending
+     * it with the findings the deterministic potentials force, for instance.
+     *
+     * <p>Deliberately NOT {@link #setPreResolutionEvidence}: that one is the public entry point,
+     * several algorithms override it to do more than store the value, and it copies what it is given.
+     * Preprocessing is replacing this algorithm's own evidence with a derived version, which is a
+     * different act from a caller supplying evidence from outside.
+     *
+     * @param evidence the evidence to hold from now on
+     */
+    protected void replacePreResolutionEvidence(EvidenceCase evidence) {
+        this.preResolutionEvidence = evidence;
+    }
+
     /**
      * @param network The network used in the inference
      *

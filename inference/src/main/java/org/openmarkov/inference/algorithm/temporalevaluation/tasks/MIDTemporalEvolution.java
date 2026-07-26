@@ -313,7 +313,7 @@ public class MIDTemporalEvolution extends VariableElimination implements Tempora
         //Not done in TemporalEvaluation
         TaskUtilities.imposePolicies(probNet);
         
-        probNet = TaskUtilities.extendPreResolutionEvidence(probNet, getPreResolutionEvidence());
+        replacePreResolutionEvidence(TaskUtilities.extendPreResolutionEvidence(probNet, getPreResolutionEvidence()));
         //04/11/2022 Changed because we are keeping both discounted and no discounted results
 //        if (isUtility) {
 //            probNet = TaskUtilities.applyDiscounts(probNet, isTemporal);

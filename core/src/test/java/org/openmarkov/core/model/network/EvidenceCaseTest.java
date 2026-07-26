@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 
@@ -180,6 +181,26 @@ public class EvidenceCaseTest {
      * a modelling decision: extending the evidence changes what every inference algorithm sees for
      * every network type. It is left in place until someone decides. Removing it is one line.
      */
+    /**
+     * Extending gives back a new evidence case and leaves the one it was given alone.
+     * <p>
+     * It used to extend in place, and that reached the user: the network editor hands its own
+     * evidence - the very object behind the panel - to
+     * {@code TaskUtilities.extendPreResolutionEvidence}, so findings nobody had entered appeared in
+     * front of whoever was editing. Inference keeps its own copy and is unaffected either way; the
+     * panel is what this protects.
+     */
+    @Test public void extendingGivesBackANewCaseAndLeavesTheOriginalAlone() {
+        EvidenceCase evidence = new EvidenceCase();
+        int findingsBefore = evidence.getFindings().size();
+
+        EvidenceCase extended = evidence.extendedWith(probNet);
+
+        assertNotSame(evidence, extended, "extending must not hand back the same case it was given");
+        assertEquals(findingsBefore, evidence.getFindings().size(),
+                     "the evidence given must come out of this untouched");
+    }
+
     @Disabled("EvidenceCase.extendEvidence does nothing unless the network is a MID, and this test "
             + "uses a Bayesian network. Removing that guard makes it pass and keeps the whole suite "
             + "green, but it changes what inference sees for every network type, so it is a "
@@ -190,10 +211,10 @@ public class EvidenceCaseTest {
         EvidenceCase evidence = new EvidenceCase();
         Variable A = probNet.getVariable("A");
         assertNotNull(A);
-        evidence.extendEvidence(probNet);
-        assertEquals(3, evidence.getFindings().size());
+        EvidenceCase extended = evidence.extendedWith(probNet);
+        assertEquals(3, extended.getFindings().size());
         Variable B = probNet.getVariable("B");
-        Finding bFinding = evidence.getFinding(B);
+        Finding bFinding = extended.getFinding(B);
         assertNotNull(bFinding);
         assertEquals(1, bFinding.getStateIndex());
         

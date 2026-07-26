@@ -75,7 +75,8 @@ public abstract class VariableElimination extends InferenceAlgorithm {
 		TaskUtilities.imposePolicies(probNet);
 
 		// 4. Extend the pre-resolution evidence (the post-resolution evidence is not taken into account). Some potentials may generate pre-resolution findings; for example, a delta potential or a table in which the probability of one of the values (states) of the variables is 1.
-		probNet = TaskUtilities.extendPreResolutionEvidence(probNet, getPreResolutionEvidence());
+		// Keep what comes back: the extension is no longer applied to the evidence in place.
+		replacePreResolutionEvidence(TaskUtilities.extendPreResolutionEvidence(probNet, getPreResolutionEvidence()));
 
 		// 5. If the network has temporal nodes, apply discounts.
 		if (isTemporal) {

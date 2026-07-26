@@ -38,18 +38,19 @@ public class TaskUtilities {
 		}
 	}
 
-	public static ProbNet extendPreResolutionEvidence(ProbNet probNet, EvidenceCase preResolutionEvidence) {
-        if (preResolutionEvidence != null) {
-            preResolutionEvidence.extendEvidence(probNet);
-        }
-        return probNet;
+	/**
+	 * Returns the pre-resolution evidence extended with the findings the network's deterministic
+	 * potentials force. The evidence given is NOT modified: callers must keep what comes back.
+	 * It used to be extended in place and the network returned instead, which quietly rewrote the
+	 * caller's own evidence - including the network editor's, the one the user is looking at.
+	 */
+	public static EvidenceCase extendPreResolutionEvidence(ProbNet probNet, EvidenceCase preResolutionEvidence) {
+		return preResolutionEvidence == null ? null : preResolutionEvidence.extendedWith(probNet);
 	}
 
-	public static ProbNet extendPostResolutionEvidence(ProbNet probNet, EvidenceCase postResolutionEvidence) {
-        if (postResolutionEvidence != null) {
-            postResolutionEvidence.extendEvidence(probNet);
-        }
-        return probNet;
+	/** As {@link #extendPreResolutionEvidence}, for the evidence gathered after resolution. */
+	public static EvidenceCase extendPostResolutionEvidence(ProbNet probNet, EvidenceCase postResolutionEvidence) {
+		return postResolutionEvidence == null ? null : postResolutionEvidence.extendedWith(probNet);
 	}
 
 	// TODO: the imposed policies are already added, aren't they? The nodes must be

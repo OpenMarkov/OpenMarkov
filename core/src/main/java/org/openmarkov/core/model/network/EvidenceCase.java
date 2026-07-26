@@ -293,12 +293,28 @@ public class EvidenceCase implements ClassLocalizable {
     }
     
     /**
-     * Extends an evidence case by taking into account that the deterministic
-     * potentials of a {@code ProbNet} may induce new findings
+     * Returns this evidence extended with the findings that the deterministic potentials of
+     * {@code probNet} force: if, once every parent is observed, a table leaves a single state with
+     * non-zero probability, that state is certain and becomes a finding. Repeated until nothing new
+     * is induced.
      *
-     * @param probNet Network
+     * <p>This evidence is left untouched; the extension is returned. It used to be applied in place,
+     * under the name {@code extendEvidence}, and that mattered: the network editor hands its own
+     * evidence - the one the user sees in the panel - straight to
+     * {@link org.openmarkov.core.inference.tasks.TaskUtilities}, so extending in place made findings
+     * the user never entered appear in front of them. Returning a new case removes that by
+     * construction, rather than by every caller remembering to copy first.
+     *
+     * @param probNet Network whose deterministic potentials may force new findings
+     * @return a new evidence case with this one's findings plus the induced ones
      */
-    public void extendEvidence(ProbNet probNet) {
+    public EvidenceCase extendedWith(ProbNet probNet) {
+        EvidenceCase extended = new EvidenceCase(this);
+        extended.extendInPlace(probNet);
+        return extended;
+    }
+
+    private void extendInPlace(ProbNet probNet) {
         if (probNet.getNetworkType() != MIDType.getUniqueInstance()) {
             return;
         }

@@ -134,7 +134,9 @@ public class VEPropagation extends VariableElimination implements Propagation {
 //		unicriterionPreprocess();
         // TODO - Implement: For each super-value node, create a new node whose parents are all chance or decision nodes
         exactAlgorithmsPreprocessing();
-        probNet = TaskUtilities.extendPostResolutionEvidence(probNet, getPostResolutionEvidence());
+        // Straight to the field, not through setPostResolutionEvidence: this is preprocessing
+        // replacing its own evidence with a derived one, not a caller supplying evidence.
+        this.postResolutionEvidence = TaskUtilities.extendPostResolutionEvidence(probNet, getPostResolutionEvidence());
         
         List<Variable> variablesOfInterestBelongingToEvidence = new ArrayList<>();
         EvidenceCase evidence = getAllEvidence();

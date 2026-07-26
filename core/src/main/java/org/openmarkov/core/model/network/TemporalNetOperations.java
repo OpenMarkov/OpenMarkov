@@ -458,7 +458,7 @@ public class TemporalNetOperations {
         expandedNetwork.setName(networkName);
 //		LogManager.getLogger().debug("Extending pre-resolution evidence");
         // Extend pre-resolution evidence
-        expandedNetwork = TaskUtilities.extendPreResolutionEvidence(expandedNetwork, preResolutionEvidence);
+        preResolutionEvidence = TaskUtilities.extendPreResolutionEvidence(expandedNetwork, preResolutionEvidence);
 //		LogManager.getLogger().debug("Applying discounts");
         // Apply discounts
         expandedNetwork = TaskUtilities.applyDiscounts(expandedNetwork, true);
