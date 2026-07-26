@@ -53,7 +53,9 @@ public class EliminationOrderComesFromOneNetworkTest {
         List<List<Variable>> order = BasicOperations.projectPartialOrder(
                 net, List.of(), List.of(), List.of(), List.of(a, b));
 
-        assertEquals(List.of(a, b), order.stream().flatMap(List::stream).toList());
+        // As a set: within a block the order is not specified - it comes out of a hash set - and
+        // asserting it produced a check that passed alone and failed in the whole suite.
+        assertEquals(java.util.Set.of(a, b), new java.util.HashSet<>(order.stream().flatMap(List::stream).toList()));
     }
 
     /** Query, evidence and conditioning variables are pruned out, which is the intended behaviour. */
