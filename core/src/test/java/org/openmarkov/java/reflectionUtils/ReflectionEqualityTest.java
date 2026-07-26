@@ -81,7 +81,7 @@ class ReflectionEqualityTest {
         List<Human> friends;
         Set<String> favouriteFruits;
         Map<Human, Integer> friendShip;
-        
+
         Human(String name, int age, List<Human> friends, Set<String> favouriteFruits, Map<Human, Integer> friendShip) {
             this.name = name;
             this.age = age;
@@ -90,5 +90,52 @@ class ReflectionEqualityTest {
             this.friendShip = friendShip;
         }
     }
-    
+
+    // ------------------------------------------- the comparison cache and object identity
+
+    /**
+     * A class whose own equality looks at one field and ignores another, which is the shape of
+     * several OpenMarkov model classes: a potential compares its variables and its role, a state
+     * compares its name.
+     */
+    static final class WeaklyEqual {
+        final String tag;
+        final int hidden;
+        WeaklyEqual child;
+
+        WeaklyEqual(String tag, int hidden) {
+            this.tag = tag;
+            this.hidden = hidden;
+        }
+
+        @Override public boolean equals(Object other) {
+            return other instanceof WeaklyEqual weaklyEqual && tag.equals(weaklyEqual.tag);
+        }
+
+        @Override public int hashCode() {
+            return tag.hashCode();
+        }
+    }
+
+    /**
+     * The comparison remembers the pairs it has already seen, both to answer a repeated question at
+     * once and to survive a cycle. Both of those mean "have I already started comparing THESE TWO
+     * OBJECTS", so the memory has to tell objects apart by identity.
+     * <p>
+     * If it goes by value instead, a nested pair whose two members are merely <em>equal</em> to the
+     * outer pair reads the outer entry, finds the "still being compared" marker, and answers yes
+     * without ever looking. Here the two children differ in a field the comparison must see, and the
+     * whole comparison used to come back true. The caller that pays for that is the potential editor,
+     * which asks this class whether the user changed anything: a wrong yes throws the edit away.
+     */
+    @org.junit.jupiter.api.Test
+    void theMemoryOfComparisonsTellsObjectsApartByIdentityAndNotByValue() {
+        WeaklyEqual one = new WeaklyEqual("t", 1);
+        WeaklyEqual other = new WeaklyEqual("t", 1);
+        one.child = new WeaklyEqual("t", 2);
+        other.child = new WeaklyEqual("t", 3);
+
+        assertFalse(ReflectionEquality.areEquals(one, other),
+                    "the two children differ in a field that is compared, so the objects are different");
+    }
 }

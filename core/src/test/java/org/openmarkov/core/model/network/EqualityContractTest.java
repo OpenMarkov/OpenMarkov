@@ -8,23 +8,34 @@ package org.openmarkov.core.model.network;
 
 import org.junit.jupiter.api.Test;
 
+import org.openmarkov.core.model.network.potential.StrategyTree;
+import org.openmarkov.core.model.network.potential.treeadd.Threshold;
+
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * The equality contract for the model classes outside the potential hierarchy that used to define
- * equals without hashCode: {@link State} and {@link PartitionedInterval}.
+ * The equality contract for the model classes outside the potential hierarchy that got it wrong, in
+ * the two ways it can be got wrong.
  * <p>
- * Unlike the potentials, where a value hash had to be kept away from collections that meant identity,
- * these two are the opposite case. Every collection of states in the code means value - the states of
- * one variable, told apart by name - and one of them was quietly broken by the identity hash it got
- * from Object: {@code TreeADDPotential.reorder} looks its branches up in a {@code Map<State,...>} with
- * the State objects the caller passed in, and dropped any branch whose states were equal but not the
- * same objects.
+ * {@link State} and {@link PartitionedInterval} defined equals and no hashCode. Unlike the potentials,
+ * where a value hash had to be kept away from collections that meant identity, these are the opposite
+ * case: every collection of states in the code means value - the states of one variable, told apart by
+ * name - and one of them was quietly broken by the identity hash it got from Object.
+ * {@code TreeADDPotential.reorder} looks its branches up in a {@code Map<State,...>} with the State
+ * objects the caller passed in, and dropped any branch whose states were equal but not the same
+ * objects.
+ * <p>
+ * {@link Threshold} and {@link CEP} got it wrong the other way: they declared
+ * {@code equals(Threshold)} and {@code equals(CEP)}, overloads wearing the clothes of an override.
+ * Java picks an overload by the static type of the argument, so a direct call went to the deep
+ * comparison and looked right while every collection, which knows only {@code equals(Object)}, fell
+ * back to comparing object identities. That asymmetry is why nobody noticed.
  *
  * @author Manuel Arias
  */
@@ -112,5 +123,57 @@ public class EqualityContractTest {
 
     @Test public void aPartitionedIntervalIsNotEqualToNull() {
         assertNotEquals(null, new PartitionedInterval(new double[]{0.0, 1.0}, new boolean[]{false, true}));
+    }
+
+    // ------------------------------------- Threshold and CEP: the overloads that were not overrides
+
+    /**
+     * Both of these used to declare {@code equals(Threshold)} and {@code equals(CEP)}: overloads
+     * wearing the clothes of an override. Java picks an overload by the STATIC type of the argument,
+     * so a direct call with a variable of the right type went to the deep comparison and looked
+     * right, while every collection - which only knows {@code equals(Object)} - fell back to
+     * comparing object identities. The two checks below are the ones that used to fail.
+     */
+    @Test public void thresholdsAreComparedThroughAnObjectReferenceToo() {
+        Object one = new Threshold(2.5, true);
+        Object other = new Threshold(2.5, true);
+
+        assertEquals(one, other);
+        assertEquals(one.hashCode(), other.hashCode());
+    }
+
+    @Test public void aListOfThresholdsFindsAnEqualThreshold() {
+        List<Threshold> thresholds = List.of(new Threshold(1.0, false), new Threshold(2.5, true));
+
+        assertTrue(thresholds.contains(new Threshold(2.5, true)),
+                   "a list must find a threshold equal to the one asked for, not only the same object");
+    }
+
+    @Test public void thresholdsThatDifferAreNotEqual() {
+        assertNotEquals(new Threshold(2.5, true), new Threshold(2.5, false));
+        assertNotEquals(new Threshold(2.5, true), new Threshold(9.0, true));
+        assertNotEquals(null, new Threshold(2.5, true));
+        assertNotEquals("2.5", new Threshold(2.5, true));
+    }
+
+    @Test public void partitionsAreComparedThroughAnObjectReferenceToo() throws Exception {
+        Object one = partition(new double[]{10.0, 20.0}, new double[]{1.0, 2.0}, new double[]{5.0});
+        Object other = partition(new double[]{10.0, 20.0}, new double[]{1.0, 2.0}, new double[]{5.0});
+
+        assertEquals(one, other);
+        assertEquals(one.hashCode(), other.hashCode());
+    }
+
+    @Test public void partitionsThatDifferInACostAreNotEqual() throws Exception {
+        CEP one = partition(new double[]{10.0, 20.0}, new double[]{1.0, 2.0}, new double[]{5.0});
+        CEP other = partition(new double[]{10.0, 99.0}, new double[]{1.0, 2.0}, new double[]{5.0});
+
+        assertNotEquals(one, other);
+        assertNotEquals(null, one);
+    }
+
+    private static CEP partition(double[] costs, double[] effectiveness, double[] thresholds) throws Exception {
+        return new CEP(new StrategyTree[costs.length], costs, effectiveness, thresholds,
+                       Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 }

@@ -61,8 +61,28 @@ public class Threshold implements Cloneable, ClassLocalizable {
 		return value < this.limit || (value == this.limit && belongsToLeft);
 	}
 
-	public boolean equals(Threshold threshold) {
-		return limit == threshold.getLimit() && belongsToLeft == threshold.belongsToLeft();
+	/**
+	 * Compares the limit and the side it belongs to, which is everything a threshold is.
+	 *
+	 * <p>This used to take a Threshold rather than an Object, so it was an overload wearing the
+	 * clothes of an override: no collection ever called it, and every {@code contains}, {@code remove}
+	 * and {@code assertEquals} on thresholds silently fell back to comparing object identities. The
+	 * body is unchanged; only the door it hangs on.
+	 */
+	@Override public boolean equals(Object object) {
+		return object instanceof Threshold threshold
+				&& limit == threshold.getLimit()
+				&& belongsToLeft == threshold.belongsToLeft();
+	}
+
+	/**
+	 * Consistent with {@link #equals}. Note that {@code belongsToLeft} is not final and
+	 * {@link #setBelongsToLeft} can change it, so this hash can move; no hash-based collection of
+	 * thresholds exists in the code today, and one must not hold a threshold that is still being
+	 * edited.
+	 */
+	@Override public int hashCode() {
+		return 31 * Double.hashCode(limit) + (belongsToLeft ? 1 : 0);
 	}
     
     @Override protected Threshold clone() {

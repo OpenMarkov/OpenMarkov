@@ -42,7 +42,30 @@ public final class ReflectionEquality {
     private record Unresolved() implements Cache {
     }
     
+    /**
+     * A pair of objects this comparison has already been asked about. It tells pairs apart by
+     * IDENTITY, overriding what a record would otherwise generate.
+     *
+     * <p>The map this keys serves two purposes and both of them mean identity: it answers a repeated
+     * question at once, and it survives a cycle by marking a pair as {@link Unresolved} while its
+     * members are still being walked. Both are the question "have I already started comparing these
+     * two objects?", not "these two values".
+     *
+     * <p>A record's generated equality would ask the members, and several model classes here answer
+     * that question loosely - a potential compares its variables and its role and nothing else. A
+     * nested pair whose members are merely equal to an outer pair would then read the outer entry,
+     * find the still-being-compared marker and answer yes without looking at anything, and the whole
+     * comparison would come back equal. The caller that pays for that is the potential editor, which
+     * asks this class whether the user changed anything: a wrong yes throws the edit away.
+     */
     private record Comparison(Object o1, Object o2) {
+        @Override public boolean equals(Object other) {
+            return other instanceof Comparison comparison && o1 == comparison.o1 && o2 == comparison.o2;
+        }
+
+        @Override public int hashCode() {
+            return 31 * System.identityHashCode(o1) + System.identityHashCode(o2);
+        }
     }
     
     private ReflectionEquality(EnumSet<ReflectionEqualityOptions> optionsSet) {

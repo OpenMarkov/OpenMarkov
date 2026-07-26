@@ -468,13 +468,31 @@ public class CEP implements Cloneable {
         return getEffectiveness(lambda) * lambda - getCost(lambda);
     }
     
-    public boolean equals(CEP cep) {
-        if (cep != null) {
-            boolean areEquals = Arrays.equals(this.thresholds, cep.thresholds) && Arrays.equals(this.costs, cep.costs) && Arrays
-                    .equals(this.effectiveness, cep.effectiveness);
-            return areEquals;
-        }
-        return false;
+    /**
+     * Compares the thresholds and the cost and effectiveness they carry - the partition itself.
+     * The strategy trees and the threshold bounds are deliberately left out, as they always were.
+     *
+     * <p>This used to take a CEP rather than an Object, so it was an overload wearing the clothes of
+     * an override: no collection ever called it, and every {@code contains}, {@code remove} and
+     * {@code assertEquals} on partitions silently fell back to comparing object identities. What it
+     * compares is unchanged; only the door it hangs on.
+     */
+    @Override public boolean equals(Object object) {
+        return object instanceof CEP cep
+                && Arrays.equals(this.thresholds, cep.thresholds)
+                && Arrays.equals(this.costs, cep.costs)
+                && Arrays.equals(this.effectiveness, cep.effectiveness);
+    }
+
+    /**
+     * Consistent with {@link #equals}: the same three arrays and nothing else.
+     *
+     * <p>All three are written in place by {@code multiply} and {@code divide}, so this hash can move.
+     * No hash-based collection of partitions exists in the code today - they are kept in lists - and
+     * one must not hold a partition that is still being scaled.
+     */
+    @Override public int hashCode() {
+        return 31 * (31 * Arrays.hashCode(thresholds) + Arrays.hashCode(costs)) + Arrays.hashCode(effectiveness);
     }
     
     @Override public CEP clone() {
