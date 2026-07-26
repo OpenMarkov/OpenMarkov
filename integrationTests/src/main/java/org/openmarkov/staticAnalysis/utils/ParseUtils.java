@@ -61,8 +61,13 @@ public class ParseUtils {
                 } catch (IOException e) {
                 }
             } else {
-                if (absolutePath.contains("target\\classes")) {
-                    absolutePath = absolutePath.replace("target\\classes", "src\\main\\java");
+                // With this system's separator: written with backslashes, this matched nothing on
+                // anything that does not use them, and the type solver was pointed at the build output
+                // instead of at the sources. Same defect as in ClassUtils.fileOfClass, second copy.
+                String buildOutput = File.separator + "target" + File.separator + "classes";
+                String sources = File.separator + "src" + File.separator + "main" + File.separator + "java";
+                if (absolutePath.contains(buildOutput)) {
+                    absolutePath = absolutePath.replace(buildOutput, sources);
                 }
                 typeSolver.add(new JavaParserTypeSolver(new File(absolutePath)));
             }

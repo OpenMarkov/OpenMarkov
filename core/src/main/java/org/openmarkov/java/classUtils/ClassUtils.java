@@ -129,7 +129,14 @@ public class ClassUtils {
             return null;
         }
         String path = new File(classUrl.getFile()).getAbsolutePath();
-        path = path.replace("target\\classes", "src\\main\\java");
+        // With this system's separator. It used to be written with backslashes, so on anything that
+        // does not use them the rewrite matched nothing, the path went on pointing inside the build
+        // directory, no .java was there and the answer was null - which left every one of the twelve
+        // tools under staticAnalysis unable to run, since each of them asks this first and hands the
+        // answer straight to the parser.
+        String buildOutput = File.separator + "target" + File.separator + "classes";
+        String sources = File.separator + "src" + File.separator + "main" + File.separator + "java";
+        path = path.replace(buildOutput, sources);
         path = path.substring(0, path.length() - ".class".length());
         path += ".java";
         File file = new File(path);
