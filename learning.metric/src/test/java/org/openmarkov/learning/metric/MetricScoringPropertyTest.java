@@ -69,6 +69,102 @@ class MetricScoringPropertyTest {
                 "structure=" + Arrays.deepToString(base) + " mismatches=" + mismatches);
     }
 
+    /**
+     * Decomposability, which is what makes local search valid and what a generalized canonical score
+     * has to preserve: the score of a network is the sum of one term per node given its parents, so
+     * an edit that changes the parents of one node changes only that node's term. The observable
+     * consequence, checked here: adding the same arrow into the same node must report the same delta
+     * in two structures that agree on that node's parents, however much they differ elsewhere.
+     * <p>
+     * Nothing tested this before. The property that did exist checks that an incremental delta agrees
+     * with a recompute of the whole network, which is a different claim: it would still hold if the
+     * score were not decomposable at all, as long as both routes computed the same non-decomposable
+     * thing.
+     */
+    @Property(tries = 300)
+    void theDeltaOfAnEditDependsOnlyOnTheFamilyItChanges(
+            @ForAll @IntRange(min = 0, max = 63) int firstMask,
+            @ForAll @IntRange(min = 0, max = 63) int secondMask) {
+        int[][] first = decode(firstMask);
+        int[][] second = decode(secondMask);
+        List<String> mismatches = new ArrayList<>();
+        for (Map.Entry<String, Supplier<Metric>> metric : METRICS.entrySet()) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (i == j || contains(first, i, j) || contains(second, i, j)) {
+                        continue;
+                    }
+                    if (!parentsOf(first, j).equals(parentsOf(second, j))) {
+                        continue;
+                    }
+                    Double inFirst = deltaOfAdding(metric.getValue(), first, i, j);
+                    Double inSecond = deltaOfAdding(metric.getValue(), second, i, j);
+                    if (inFirst == null || inSecond == null) {
+                        continue;
+                    }
+                    if (Math.abs(inFirst - inSecond) > TOL) {
+                        mismatches.add(String.format(
+                                "%s add V%d->V%d with parents %s: %.6f in %s but %.6f in %s",
+                                metric.getKey(), i, j, parentsOf(first, j), inFirst,
+                                Arrays.deepToString(first), inSecond, Arrays.deepToString(second)));
+                    }
+                }
+            }
+        }
+        assertTrue(mismatches.isEmpty(), "the same change of family scored differently: " + mismatches);
+    }
+
+    /**
+     * Monotonicity of the likelihood: a node explained by more parents fits the data at least as
+     * well, so the entropy metric - which is the log-likelihood, with no penalty subtracted - must
+     * never go down when an arrow is added. It is the penalized metrics that are allowed to go down,
+     * and that is the whole point of their penalty.
+     * <p>
+     * Checked on the entropy metric alone for that reason. If a canonical score is ever added, this
+     * is the property that says its likelihood part is still a likelihood.
+     */
+    @Property(tries = 200)
+    void addingAParentNeverLowersTheLogLikelihood(@ForAll @IntRange(min = 0, max = 63) int mask) {
+        int[][] base = decode(mask);
+        List<String> drops = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (i == j || contains(base, i, j)) {
+                    continue;
+                }
+                Double delta = deltaOfAdding(EntropyMetric::new, base, i, j);
+                if (delta != null && delta < -TOL) {
+                    drops.add(String.format("add V%d->V%d lowered the log-likelihood by %.6f", i, j, -delta));
+                }
+            }
+        }
+        assertTrue(drops.isEmpty(),
+                "structure=" + Arrays.deepToString(base) + " " + drops);
+    }
+
+    /** The parents of node j in the given structure, as a sorted set so two can be compared. */
+    private static java.util.SortedSet<Integer> parentsOf(int[][] links, int j) {
+        java.util.SortedSet<Integer> parents = new java.util.TreeSet<>();
+        for (int[] link : links) {
+            if (link[1] == j) {
+                parents.add(link[0]);
+            }
+        }
+        return parents;
+    }
+
+    /** The delta a metric reports for adding i-&gt;j, or null if the edit does not apply. */
+    private static Double deltaOfAdding(Supplier<Metric> factory, int[][] base, int i, int j) {
+        ProbNet baseNet = netOrNull(base);
+        if (baseNet == null || netOrNull(add(base, i, j)) == null) {
+            return null;
+        }
+        Metric metric = factory.get();
+        metric.init(baseNet, database());
+        metric.getScore(); // populate caches before asking for a delta
+        return metric.score(new AddLinkEdit(baseNet, VARS.get(i), VARS.get(j), true));
+    }
+
     private static void checkAllEdits(String name, Supplier<Metric> factory, int[][] base, List<String> mismatches) {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
