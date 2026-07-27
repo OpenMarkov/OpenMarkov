@@ -570,8 +570,16 @@ public class DANOperations {
 		return result;
 	}*/
     
+    /**
+     * Name of the dummy variable that a decision tree branches on when several
+     * decisions could be made first: its states are the candidate decisions, and
+     * it has no node in the model. Everyone who needs to recognize that variable
+     * must compare against this constant, not against a literal.
+     */
+    public static final String ORDER_VARIABLE_NAME = "OD";
+
     public static Variable createDummyVariableOfOrder(List<Node> nodes) {
-        Variable dummyVariable = new Variable("OD");
+        Variable dummyVariable = new Variable(ORDER_VARIABLE_NAME);
         dummyVariable.setVariableType(VariableType.FINITE_STATES);
         State[] statesDummyVariable = new State[nodes.size()];
         for (int i = 0; i < nodes.size(); i++) {

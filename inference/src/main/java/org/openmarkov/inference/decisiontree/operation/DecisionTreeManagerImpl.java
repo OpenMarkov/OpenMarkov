@@ -25,6 +25,7 @@ import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.core.inference.tasks.GenerateDecisionTree;
+import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANOperations;
 
 /**
  * Implementation of DecisionTreeManager using Inference algorithms.
@@ -123,8 +124,11 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
         EvidenceCase newEvi = new EvidenceCase(branchEvidence);
         if (branch != null) {
             Variable branchVariable = branch.getBranchVariable();
+            // The order variable is a dummy one with no node in the model, so it can
+            // never be evidence. It is recognized by the one name constant, not by a
+            // literal repeated here.
             if (branchVariable != null
-                    && (!branchVariable.getName().equalsIgnoreCase("OD"))
+                    && (!branchVariable.getName().equals(DANOperations.ORDER_VARIABLE_NAME))
                     && !newEvi.contains(branchVariable)) {
                 try {
                     newEvi.addFinding(new Finding(branchVariable, branch.getBranchState()));
