@@ -47,6 +47,22 @@ public class midCochlearTests {
     
     private ProbNet probNet;
     private EvidenceCase preResolutionEvidence;
+
+    /**
+     * How many time slices this test asks the network to be evaluated over, in place of the
+     * hundred the file declares.
+     * <p>
+     * What is checked below is that the Riemann sum of the utilities of the slices agrees with a
+     * single global cost-effectiveness analysis. That agreement either holds or does not, whatever
+     * the horizon; it does not become truer with more slices. The horizon does decide the price,
+     * and steeply, because the global analysis expands every slice into one network: measured on
+     * this network it costs 1.6 seconds per analysis at twenty slices and 39 at a hundred, so the
+     * test as a whole went from about a hundred seconds to about four.
+     * <p>
+     * What the shorter horizon gives up is the long run: a fault that only showed up after many
+     * cycles, such as numerical error piling up, would no longer be caught here.
+     */
+    private static final int HORIZON = 20;
     
     @BeforeEach public void setUp() throws java.net.URISyntaxException, ProbNetParserException, FileNotFoundException {
         
@@ -60,10 +76,11 @@ public class midCochlearTests {
         }
     }
     
-    // 131 seconds on its own, so it is tagged slow and left out of the pre-commit hook.
+    // A few seconds on its own, so it is tagged slow and left out of the pre-commit hook.
     @Tag(TestSpeed.SLOW)
     @Test
     public void veTemporalEvaluationTest() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+        probNet.getInferenceOptions().getTemporalOptions().setHorizon(HORIZON);
         TemporalEvaluation temporalEvaluation = new TemporalEvaluation(probNet);
         temporalEvaluation.setPreResolutionEvidence(preResolutionEvidence);
         GTablePotential atemporalUtility = (GTablePotential) temporalEvaluation.getAtemporalUtility();
@@ -72,12 +89,15 @@ public class midCochlearTests {
         Assertions.assertEquals(26100, ((CEP) atemporalUtility.elementTable.get(2)).getCost(0), deltaEquals);
         
         List<Potential> potentialsPerSlice = temporalEvaluation.getUtilityPotentialsPerSlice();
-        double[] costs_UCI = new double[101];
-        double[] effectiveness_UCI = new double[101];
-        double[] costs_BCI_Sim = new double[101];
-        double[] effectiveness_BCI_Sim = new double[101];
-        double[] costs_BCI_Seq = new double[101];
-        double[] effectiveness_BCI_Seq = new double[101];
+        // One entry per slice returned, not a fixed 101. A longer array would leave trailing
+        // zeros, and the Riemann sums below would then cover slices that were never evaluated.
+        int slices = potentialsPerSlice.size();
+        double[] costs_UCI = new double[slices];
+        double[] effectiveness_UCI = new double[slices];
+        double[] costs_BCI_Sim = new double[slices];
+        double[] effectiveness_BCI_Sim = new double[slices];
+        double[] costs_BCI_Seq = new double[slices];
+        double[] effectiveness_BCI_Seq = new double[slices];
 
         int slice = 0;
         for (Potential tablePotential : potentialsPerSlice) {
