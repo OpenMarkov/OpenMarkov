@@ -33,6 +33,15 @@
         <openmarkov.version>0.3.0-SNAPSHOT</openmarkov.version>
         <maven.compiler.target>25</maven.compiler.target>
         <maven.compiler.source>25</maven.compiler.source>
+        <!--
+            Empty default for the property the coverage plugin fills in with its agent. A module
+            that writes its own surefire <argLine> has to name this property explicitly, with
+            @{argLine}, or the agent is dropped; see integrationTests/pom.xml. That reference
+            needs something to resolve to when the agent does not run, as with -Djacoco.skip=true,
+            and this is it: without the default the literal text "@{argLine}" reaches the java
+            command line and the test JVM refuses to start.
+        -->
+        <argLine></argLine>
     </properties>
     <build>
         <pluginManagement>
@@ -166,7 +175,11 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.11</version>
+                    <!--
+                        0.8.11 is from 2023 and stops at Java 21 bytecode: against this project's
+                        Java 25 classes it fails with "Unsupported class file major version 69".
+                    -->
+                    <version>0.8.13</version>
                     <executions>
                         <execution>
                             <id>jacoco-prepare-agent</id>
@@ -180,6 +193,19 @@
                             <goals>
                                 <goal>report</goal>
                             </goals>
+                            <configuration>
+                                <!--
+                                    Look at compiled classes and nothing else. The default is to
+                                    read every file under target/classes, and some of those are
+                                    test networks, not code: the spreadsheet
+                                    networks/learning/lineAndStar.xlsx is a zip archive, so the
+                                    report goal opens it looking for classes inside and dies with
+                                    "invalid entry size".
+                                -->
+                                <includes>
+                                    <include>**/*.class</include>
+                                </includes>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
@@ -199,6 +225,16 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <inherited>false</inherited>
+            </plugin>
+            <!--
+                Same reason as above: the coverage plugin and its two executions were declared
+                only in <pluginManagement>, so they never ran and no module ever produced a
+                jacoco.exec or a coverage report. Listing it here activates it, and being
+                inherited it applies to every module.
+            -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

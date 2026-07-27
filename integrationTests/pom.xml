@@ -119,9 +119,17 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <!-- AssertJ-Swing 3.17.1 uses reflection to access JDK internals
-                         that are encapsulated by the Java 9+ module system. -->
+                    <!--
+                        AssertJ-Swing 3.17.1 uses reflection to access JDK internals that are
+                        encapsulated by the Java 9+ module system.
+
+                        "@{argLine}" carries over whatever the coverage plugin put in the argLine
+                        property. It is needed because this element replaces that property instead
+                        of adding to it: drop the reference and this module silently stops being
+                        measured, which is what happened until now.
+                    -->
                     <argLine>
+                        @{argLine}
                         --add-opens java.base/java.util=ALL-UNNAMED
                         --add-opens java.desktop/sun.awt=ALL-UNNAMED
                         --add-opens java.desktop/java.awt=ALL-UNNAMED
