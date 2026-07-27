@@ -135,6 +135,10 @@ class DecisionTreeNodeTest {
         StubDecisionTreeNode<Double> source = new StubDecisionTreeNode<>(decisionNode, probNet);
         source.setUtility(7.5);
         source.setScenarioProbability(0.3);
+        UnicritNodeEvaluation evaluation = new UnicritNodeEvaluation();
+        evaluation.setProb(0.3);
+        evaluation.setUtility(7.5);
+        source.setEvaluation(evaluation);
 
         StubDecisionTreeNode<Double> dest = new StubDecisionTreeNode<>(chanceNode, probNet);
         dest.copy(source);
@@ -144,6 +148,9 @@ class DecisionTreeNodeTest {
         assertSame(decisionVariable, dest.getVariable());
         assertEquals(NodeType.DECISION, dest.getNodeType());
         assertSame(probNet, dest.getNetwork());
+        // The evaluation is state like any other: a copy that keeps the plain
+        // numbers but drops the evaluation leaves the node contradicting itself.
+        assertSame(evaluation, dest.getEvaluation());
     }
 
     @Test
@@ -163,24 +170,48 @@ class DecisionTreeNodeTest {
         assertEquals(2, source.getChildren().size());
     }
 
+    /**
+     * The one use of {@code copy} is grafting a fresh subtree onto a leaf of an
+     * existing tree, so the destination keeps its own place: its parent link is
+     * untouched and the evidence accumulated along the path above it survives the
+     * graft. The previous contract reset the parent to null and expected the
+     * caller to re-attach; the only caller never did, and the grafted node came
+     * back with empty path evidence.
+     */
     @Test
-    void copyResetsParentLink() {
-        // When a node is copied into another tree, its parent must be cleared so
-        // the caller can re-attach it to the new structure.
+    void copyKeepsTheDestinationsPlaceInTheTree() {
         StubDecisionTreeNode<Double> root = new StubDecisionTreeNode<>(decisionNode, probNet);
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable,
                 decisionVariable.getStates()[0]);
         root.addChild(branch);
 
+        StubDecisionTreeNode<Double> dest = new StubDecisionTreeNode<>(chanceNode, probNet);
+        branch.setChild(dest);   // dest hangs from the tree: D=yes on its path
+
         StubDecisionTreeNode<Double> source = new StubDecisionTreeNode<>(chanceNode, probNet);
-        branch.setChild(source);   // source now has a parent
+        dest.copy(source);
+
+        assertEquals(1, dest.getBranchStates().getFindings().size(),
+                "the path evidence above the grafted node must survive the graft");
+    }
+
+    /**
+     * The shared children must point at the node they now hang from. If they kept
+     * the source as parent, the source — an orphan outside the tree — would stay
+     * reachable, and the path evidence of the grafted subtree would be computed
+     * through it.
+     */
+    @Test
+    void copyReparentsTheSharedChildrenToTheDestination() {
+        StubDecisionTreeNode<Double> source = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable,
+                decisionVariable.getStates()[0]);
+        source.addChild(branch);
 
         StubDecisionTreeNode<Double> dest = new StubDecisionTreeNode<>(chanceNode, probNet);
         dest.copy(source);
 
-        // The destination must report empty branch states (no parent), even though
-        // the source was inheriting findings from the branch.
-        assertTrue(dest.getBranchStates().getFindings().isEmpty());
+        assertSame(dest, ((DecisionTreeBranch<?>) dest.getChildren().get(0)).getParent());
     }
 
     @Test

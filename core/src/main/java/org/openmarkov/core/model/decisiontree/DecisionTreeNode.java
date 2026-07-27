@@ -182,10 +182,18 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 	}
 
 	/**
-	 * Copies the state from another node. The children list is duplicated as a new
-	 * {@link ArrayList} containing the same element references (shallow copy of the
-	 * list, not of the elements). The parent link is reset to {@code null}: callers
-	 * are expected to re-attach the copied node to its new place in the tree.
+	 * Copies the state from another node into this one, keeping this node's place
+	 * in the tree. Its one use is grafting a freshly built subtree onto a leaf of
+	 * an existing tree: the leaf takes the subtree root's content and stays where
+	 * it hangs.
+	 * <p>
+	 * The children list is duplicated as a new {@link ArrayList} containing the
+	 * same element references (shallow copy of the list, not of the elements), and
+	 * each child is re-parented to this node — otherwise the children would keep
+	 * pointing at the source, an orphan outside the tree, and the path evidence of
+	 * the grafted subtree would be computed through it. The parent link is left
+	 * untouched for the same reason: resetting it cut this node off from the path
+	 * above, and its accumulated evidence came back empty.
 	 *
 	 * @param node The node to copy from.
 	 */
@@ -194,8 +202,11 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 		scenarioProbability = node.scenarioProbability;
 		variable = node.variable;
 		nodeType = node.getNodeType();
+		evaluation = node.evaluation;
 		children = new ArrayList<>(node.children);
-		parent = null;
+		for (DecisionTreeElement child : children) {
+			child.setParent(this);
+		}
 		network = node.network;
 	}
 
