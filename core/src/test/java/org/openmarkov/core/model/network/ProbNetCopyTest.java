@@ -275,6 +275,74 @@ public class ProbNetCopyTest {
     }
 
     // -----------------------------------------------------------------------
+    // Descriptive metadata of the network (comment, default states, agents)
+    // -----------------------------------------------------------------------
+
+    @Test
+    public void copyCarriesTheNetworkComment() {
+        original.setComment("Built from the 2019 cohort");
+        original.setShowCommentWhenOpening(true);
+
+        ProbNet copy = original.copy();
+
+        assertEquals("Built from the 2019 cohort", copy.getComment());
+        assertTrue(copy.getShowCommentWhenOpening());
+    }
+
+    @Test
+    public void copyCarriesTheDefaultStates() {
+        original.setDefaultStates(new State[]{new State("low"), new State("high")});
+
+        State[] copiedStates = original.copy().getDefaultStates();
+
+        assertEquals(2, copiedStates.length);
+        assertEquals("low", copiedStates[0].getName());
+        assertEquals("high", copiedStates[1].getName());
+    }
+
+    @Test
+    public void copyCarriesTheAgents() {
+        List<StringWithProperties> agents = new ArrayList<>();
+        agents.add(new StringWithProperties("Doctor"));
+        agents.add(new StringWithProperties("Patient"));
+        original.setAgents(agents);
+
+        List<StringWithProperties> copiedAgents = original.copy().getAgents();
+
+        assertNotNull(copiedAgents, "a copy of a multiagent network without agents is another model");
+        assertEquals(2, copiedAgents.size());
+        assertSame(agents.get(0), copiedAgents.get(0), "a shallow copy shares the agent objects");
+    }
+
+    @Test
+    public void addingAnAgentToTheCopyDoesNotAddItToTheOriginal() {
+        List<StringWithProperties> agents = new ArrayList<>();
+        agents.add(new StringWithProperties("Doctor"));
+        original.setAgents(agents);
+
+        ProbNet copy = original.copy();
+        copy.getAgents().add(new StringWithProperties("Patient"));
+
+        assertEquals(1, original.getAgents().size());
+    }
+
+    @Test
+    public void copyOfANetworkWithoutAgentsHasNoAgents() {
+        // null, not an empty list: OnlyOneAgent reads any non-null list as "this is multiagent".
+        assertNull(original.getAgents());
+        assertNull(original.copy().getAgents());
+    }
+
+    @Test
+    public void copyCarriesTheMonteCarloOptions() {
+        // Latent today — nobody reads these off a copy — but the copy used to answer with the
+        // default number of simulations instead of the one the network was configured with.
+        original.getInferenceOptions().getMonteCarloOptions().setNumSimulations(7777);
+
+        assertEquals(7777, original.copy().getInferenceOptions().getMonteCarloOptions().getNumSimulations());
+    }
+
+    // -----------------------------------------------------------------------
     // Empty network
     // -----------------------------------------------------------------------
 

@@ -52,6 +52,7 @@ final class ProbNetCopier {
             node.copyPropertiesTo(newNode);
         }
         copyLinks(source, dest, false);
+        copyMetadata(source, dest, false);
         dest.getPNESupport().setListeners(source.getPNESupport().getListeners());
         dest.setAdditionalProperties(source.getAdditionalProperties());
         if (source.getDecisionCriteria() != null) {
@@ -62,6 +63,7 @@ final class ProbNetCopier {
         }
         dest.getInferenceOptions().setMultiCriteriaOptions(source.getInferenceOptions().getMultiCriteriaOptions());
         dest.getInferenceOptions().setTemporalOptions(source.getInferenceOptions().getTemporalOptions());
+        dest.getInferenceOptions().setMonteCarloOptions(source.getInferenceOptions().getMonteCarloOptions());
         return dest;
     }
 
@@ -89,10 +91,9 @@ final class ProbNetCopier {
             dest.setDecisionCriteria(newCriteria);
         }
 
-        List<PNConstraint> sourceConstraints = source.getConstraints();
-        int numConstraints = sourceConstraints.size();
-        sourceConstraints.stream().skip(1).limit(numConstraints - 1)
-                         .forEach(dest::addConstraint);
+        // Every constraint, with no skipping: the destination was emptied by clearConstraints just
+        // above, so there is nothing here to deduplicate against.
+        source.getConstraints().forEach(dest::addConstraint);
 
         List<Node> nodes = source.getNodes();
         for (Node node : nodes) {
@@ -115,9 +116,41 @@ final class ProbNetCopier {
         }
 
         copyLinks(source, dest, true);
+        copyMetadata(source, dest, true);
         dest.getPNESupport().setListeners(source.getPNESupport().getListeners());
         dest.setAdditionalProperties(source.getAdditionalProperties());
         return dest;
+    }
+
+    /**
+     * Copies the descriptive metadata of {@code source} into {@code dest}: the comment, whether
+     * that comment is shown when the file is opened, the default states offered to new variables,
+     * and the agents. Both copies need all four, so the list lives here only once.
+     *
+     * <p>The agents are the only ones where deep and shallow differ: when {@code deep} the copy
+     * gets its own {@link StringWithProperties} objects, and otherwise it gets the same ones, as
+     * the rest of a shallow copy does. Sharing them is safe because agents are matched by name,
+     * not by identity ({@link ProbNetAgentManager#modifyAgent}). The list itself is always the
+     * copy's own, so adding an agent to one network never adds it to the other. A {@code null}
+     * list is copied as {@code null} because that is what tells the network it has a single
+     * agent, which is what the {@code OnlyOneAgent} constraint reads.
+     */
+    private static void copyMetadata(ProbNet source, ProbNet dest, boolean deep) {
+        dest.setComment(source.getComment());
+        dest.setShowCommentWhenOpening(source.getShowCommentWhenOpening());
+        // getDefaultStates already hands out a copy of the array and of each state, so there is
+        // nothing to share here even in a shallow copy.
+        dest.setDefaultStates(source.getDefaultStates());
+        List<StringWithProperties> sourceAgents = source.getAgents();
+        if (sourceAgents == null) {
+            dest.setAgents(null);
+        } else {
+            List<StringWithProperties> destAgents = new ArrayList<>(sourceAgents.size());
+            for (StringWithProperties agent : sourceAgents) {
+                destAgents.add(deep ? agent.clone() : agent);
+            }
+            dest.setAgents(destAgents);
+        }
     }
 
     /**
