@@ -68,10 +68,6 @@ public abstract class DANInference {
         this.utility = util;
     }
     
-    protected void addProbabilityChildEvaluation(TablePotential prob) {
-    
-    }
-    
     /**
      * @param x Variable
      *          This method...:

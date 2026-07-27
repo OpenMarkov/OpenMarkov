@@ -53,7 +53,6 @@ public class DecisionVariableElimination {
 			jointProbability = DiscretePotentialOperations.multiply(probPotentials);
 			projectedProbability = DiscretePotentialOperations.projectOutVariable(variableToDelete, jointProbability);
 		} else {
-            DiscretePotentialOperations.createUnityProbabilityPotential();
             projectedProbability = DiscretePotentialOperations.createUnityProbabilityPotential();
 		}
 
