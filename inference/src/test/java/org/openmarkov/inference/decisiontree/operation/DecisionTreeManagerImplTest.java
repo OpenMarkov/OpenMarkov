@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Safety-net tests for {@link DecisionTreeManagerImpl} introduced in Phase 0
@@ -60,17 +60,43 @@ class DecisionTreeManagerImplTest {
         assertFalse(firstRealNode.getNodeType() == NodeType.UTILITY);
     }
 
+    /**
+     * A decision tree only makes sense for a decision model. This used to return
+     * null silently — pinned here with a note deferring the change to Phase 6 —
+     * and the null travelled to the GUI and failed far from its cause. The
+     * correction round of 2026-07-27 brought it forward: an unsupported network
+     * type is now said where it happens, naming the types that would work.
+     */
     @Test
-    void buildOnBayesianNetworkReturnsNull() throws Exception {
-        // Documents existing behaviour: BN networks produce a null tree silently.
-        // Phase 6 of the refactor is the right place to change this; until then
-        // any code path that relies on it must continue to work.
+    void buildOnBayesianNetworkSaysSoInsteadOfReturningNull() {
         ProbNet bn = TestNetworks.buildAsia();
 
         DecisionTreeManagerImpl manager = new DecisionTreeManagerImpl();
-        DecisionTreeElement root = manager.buildDecisionTree(bn, DEFAULT_DEPTH);
 
-        assertNull(root);
+        assertThrows(NotEvaluableNetworkException.NotApplicableNetwork.class,
+                () -> manager.buildDecisionTree(bn, DEFAULT_DEPTH));
+    }
+
+    /**
+     * A tree built with depth zero is a single leaf hanging from the root
+     * branch. Expanding it used to do nothing, silently: the graft was guarded
+     * by conditions on the leaf's parent node, and the root leaf has none.
+     */
+    @Test
+    void expandLevelsGraftsOntoARootLeafTree() throws Exception {
+        ProbNet id = simpleIdWithName();
+
+        DecisionTreeManagerImpl manager = new DecisionTreeManagerImpl();
+        DecisionTreeElement root = manager.buildDecisionTree(id, 0);
+        DecisionTreeNode leaf = (DecisionTreeNode) root.getChildren().get(0);
+        assertEquals(NodeType.UTILITY, leaf.getNodeType(), "depth 0 must produce a single leaf");
+
+        manager.expandLevels(root, DEFAULT_DEPTH);
+
+        DecisionTreeNode grafted = (DecisionTreeNode) root.getChildren().get(0);
+        assertFalse(grafted.getNodeType() == NodeType.UTILITY,
+                "expanding the root leaf must graft the real tree onto it");
+        assertFalse(grafted.getChildren().isEmpty());
     }
 
     @Test

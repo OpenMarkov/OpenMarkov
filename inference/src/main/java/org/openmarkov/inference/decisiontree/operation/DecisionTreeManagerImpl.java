@@ -27,6 +27,8 @@ import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.core.inference.tasks.GenerateDecisionTree;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANOperations;
 
+import java.util.List;
+
 /**
  * Implementation of DecisionTreeManager using Inference algorithms.
  */
@@ -56,17 +58,21 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
             NotSupportedOperationException {
+        NetworkType networkType = probNet.getNetworkType();
+        if (!(networkType instanceof InfluenceDiagramType || networkType instanceof DecisionAnalysisNetworkType)) {
+            // A decision tree only makes sense for a decision model. This used to
+            // return null, which travelled to the caller and failed far from here.
+            throw new NotEvaluableNetworkException.NotApplicableNetwork(probNet,
+                    List.of(InfluenceDiagramType.getUniqueInstance(),
+                            DecisionAnalysisNetworkType.getUniqueInstance()));
+        }
         // The branch's utility type is unknown at this layer (it depends on the
         // factory: Double for plain evaluation, CEP for CEA). Phase 4 will type
         // the factory chain end-to-end.
-        DecisionTreeBranch root = null;
-        NetworkType networkType = probNet.getNetworkType();
-        if (networkType instanceof InfluenceDiagramType || networkType instanceof DecisionAnalysisNetworkType) {
-            root = new DecisionTreeBranch(probNet);
-            GenerateDecisionTree genDT = taskFactory.createTask(probNet, depth);
-            genDT.setPreResolutionEvidence(branchEvidence);
-            root.setChild(genDT.getDecisionTree());
-        }
+        DecisionTreeBranch root = new DecisionTreeBranch(probNet);
+        GenerateDecisionTree genDT = taskFactory.createTask(probNet, depth);
+        genDT.setPreResolutionEvidence(branchEvidence);
+        root.setChild(genDT.getDecisionTree());
         return root;
     }
 
@@ -110,11 +116,15 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
             DecisionTreeElement newSubTree = buildDecisionTree(rootDT.getNetwork(), n, branchEvidence);
             if (newSubTree instanceof DecisionTreeBranch) {
                 DecisionTreeNode auxRoot = ((DecisionTreeBranch) newSubTree).getChild();
-                if (parent != null) {
-                    if (parent.getNodeType() == NodeType.DECISION
-                            || (!(parent.getVariable().getName().equalsIgnoreCase(auxRoot.getVariable().getName())))) {
-                        rootDT.copy(auxRoot);
-                    }
+                // The name check guards against grafting a subtree whose root repeats
+                // the chance node above the leaf. With no parent there is nothing to
+                // repeat: the leaf is the root of the whole tree — as when it was
+                // built with depth zero — and skipping the graft here made expansion
+                // silently do nothing.
+                if (parent == null
+                        || parent.getNodeType() == NodeType.DECISION
+                        || (!(parent.getVariable().getName().equalsIgnoreCase(auxRoot.getVariable().getName())))) {
+                    rootDT.copy(auxRoot);
                 }
             }
         }
