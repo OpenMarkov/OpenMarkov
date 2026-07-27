@@ -9,6 +9,7 @@ import org.openmarkov.core.model.network.Configuration;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
@@ -100,10 +101,27 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
         }
     }
 
-    //TODO
+    /**
+     * Copy constructor. Everything this potential holds beyond the variables it shares with any
+     * other one: the table, whether the values are given by functions and the table of functions
+     * itself, the flag and the list of impossible configurations. The variable that stands for all
+     * the event parents together and the list of variables the table is built on are not copied but
+     * <b>worked out again</b> from the variables, because that is what they are: derived from them.
+     *
+     * @param potential potential to copy
+     */
     public TableWithEvents(TableWithEvents potential) {
         super(potential);
         this.setTablePotential(new TablePotential(potential.getTablePotential()));
+        this.useTableWithFunctions = potential.useTableWithFunctions;
+        if (potential.tableWithFunctions != null) {
+            this.tableWithFunctions = (TableWithFunctions) potential.tableWithFunctions.copy();
+        }
+        this.hasImpossibleConfigurations = potential.hasImpossibleConfigurations;
+        this.impossibleConfigurations = potential.impossibleConfigurations == null
+                ? new ArrayList<>() : new ArrayList<>(potential.impossibleConfigurations);
+        setEventAsStates(variables.subList(1, variables.size()));
+        rebuildTableVariables();
     }
     
     
@@ -413,6 +431,27 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     //TODO
     @Override public Potential copy() {
         return new TableWithEvents(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>{@link Potential#deepCopy} re-points the variables to the destination network and nothing
+     * else, so what is derived from them has to be worked out again: the variable standing for the
+     * event parents, the list of variables the table is built on, and the variables of the table
+     * itself. The variable of the events is <b>not</b> a node of the destination network — it is
+     * built here out of the names of the event parents, exactly as the constructor builds it — so
+     * looking for it there would return nothing.
+     */
+    @Override public Potential deepCopy(ProbNet copyNet) {
+        TableWithEvents potential = (TableWithEvents) super.deepCopy(copyNet);
+        potential.setEventAsStates(potential.variables.subList(1, potential.variables.size()));
+        potential.rebuildTableVariables();
+        potential.tablePotential.setVariables(potential.tableVariables);
+        if (potential.tableWithFunctions != null) {
+            potential.tableWithFunctions.setVariables(potential.tableVariables);
+        }
+        return potential;
     }
     
     //TODO

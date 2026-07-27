@@ -74,21 +74,5 @@ public class TransitionTablePotential extends TableWithEvents implements DESSimu
         return tablePotential.sampleConditionedVariable(randomNumbers,convert(parents));
     }
 
-    @Override
-    public Potential deepCopy(ProbNet copyNet) {
-        TransitionTablePotential potential = (TransitionTablePotential) super.deepCopy(copyNet);
-
-        potential.setTablePotential(this.tablePotential);
-        potential.setUseTableWithFunctions(this.useTableWithFunctions);
-        potential.setTableWithFunctions(this.tableWithFunctions);
-        potential.setEvents(this.events);
-        potential.setTableVariables(this.tableVariables);
-        potential.setHasImpossibleConfigurations(this.hasImpossibleConfigurations);
-        potential.setImpossibleConfigurations(this.impossibleConfigurations);
-        potential.properties =  this.properties;
-
-        return potential;
-
-    }
 }
 
