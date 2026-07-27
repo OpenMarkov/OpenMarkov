@@ -143,7 +143,7 @@ public class StrategicTablePotential extends TablePotential implements StrategyC
         if (isAdditive()) {
             newPotential.setCriterion(getCriterion());
         }
-        newPotential.properties = properties;
+        newPotential.properties.putAll(properties);
         return newPotential;
     }
 
@@ -190,7 +190,6 @@ public class StrategicTablePotential extends TablePotential implements StrategyC
         if (isAdditive()) {
             copy.setCriterion(getCriterion());
         }
-        copy.properties = properties;
         return copy;
     }
 }

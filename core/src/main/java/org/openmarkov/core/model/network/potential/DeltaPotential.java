@@ -215,7 +215,7 @@ import java.util.*;
         copy.state = this.state;
         copy.stateIndex = this.stateIndex;
         copy.numericValue = this.numericValue;
-        copy.properties = this.properties;
+        copy.properties.putAll(this.properties);
         return copy;
     }
 
@@ -243,7 +243,7 @@ import java.util.*;
             copy.state = this.state;
             copy.stateIndex = newIndex >= 0 ? newIndex : this.stateIndex;
             copy.numericValue = this.numericValue;
-            copy.properties = this.properties;
+            copy.properties.putAll(this.properties);
             return copy;
         }
         return copy();

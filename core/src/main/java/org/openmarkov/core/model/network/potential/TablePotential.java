@@ -774,7 +774,7 @@ public class TablePotential extends AbstractIndexedPotential
         if (isAdditive()) {
             newPotential.setCriterion(getCriterion());
         }
-        newPotential.properties = properties;
+        newPotential.properties.putAll(properties);
         return newPotential;
     }
     
@@ -808,7 +808,6 @@ public class TablePotential extends AbstractIndexedPotential
         if (isAdditive()) {
             copyPotential.setCriterion(getCriterion());
         }
-        copyPotential.properties = properties;
         return copyPotential;
     }
     

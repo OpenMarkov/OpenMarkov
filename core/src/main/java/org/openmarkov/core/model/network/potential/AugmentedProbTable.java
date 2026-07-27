@@ -254,7 +254,7 @@ public class AugmentedProbTable extends UncertainTablePotential {
             copyTablePosition += accOffsets[incrementedVariable];
         }
         valuesNewPotential[copyTablePosition] = valuesOrigPotential[i];
-        newPotential.properties = properties;
+        newPotential.properties.putAll(properties);
         return newPotential;
     }
 

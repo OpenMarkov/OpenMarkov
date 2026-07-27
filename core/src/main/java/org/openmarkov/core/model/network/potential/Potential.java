@@ -124,6 +124,12 @@ public abstract class Potential implements Localizable {
         this(potential.getVariables(), potential.getPotentialRole());
         this.comment = potential.getComment();
         this.criterion = CloneUtils.safeClone(potential.getCriterion());
+        // Its own map with the same entries, not the map itself: what the copy is told belongs to
+        // the copy. Before this, the properties were lost by every way of copying a potential, and
+        // six methods over five subclasses put them back afterwards by sharing the map.
+        if (potential.properties != null) {
+            this.properties = new HashMap<>(potential.properties);
+        }
     }
     
     // Methods

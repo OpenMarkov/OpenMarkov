@@ -151,7 +151,7 @@ public class UncertainTablePotential extends TablePotential implements Uncertain
             newUncertain[copyTablePosition] = origUncertain[i];
         }
         if (isAdditive()) newPotential.setCriterion(getCriterion());
-        newPotential.properties = properties;
+        newPotential.properties.putAll(properties);
         return newPotential;
     }
 
@@ -197,7 +197,6 @@ public class UncertainTablePotential extends TablePotential implements Uncertain
             }
         }
         if (isAdditive()) copyPotential.setCriterion(getCriterion());
-        copyPotential.properties = properties;
         return copyPotential;
     }
 
