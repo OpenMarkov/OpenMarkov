@@ -571,6 +571,26 @@ public class ProbNetExtendedTest {
         }
 
         @Test
+        void addShiftedNodeCarriesThePropertiesThatDecideBehaviour() {
+            // The new slice gets the potential of the node it comes from (expandPotentialAndLinks),
+            // so a decision marked as having an imposed policy must stay marked in the new slice,
+            // and an event must go on appending: EventEvaluation reads that to simulate it.
+            ProbNet dbn = new ProbNet(DynamicLimidType.getUniqueInstance());
+            Node decision = dbn.addNode(new Variable("D [0]", 2), NodeType.DECISION);
+            decision.setPolicyType(PolicyType.DETERMINISTIC);
+            decision.setAlwaysAppend(true);
+            decision.setInput(true);
+            decision.setAlwaysObserved(true);
+
+            Node shifted = dbn.addShiftedNode(decision, 1, 50.0, 0.0);
+
+            assertEquals(PolicyType.DETERMINISTIC, shifted.getPolicyType());
+            assertTrue(shifted.isAlwaysAppend());
+            assertTrue(shifted.isInput());
+            assertTrue(shifted.isAlwaysObserved());
+        }
+
+        @Test
         void getNodeByVariable() {
             Node found = bn.getNode(A);
             assertNotNull(found);

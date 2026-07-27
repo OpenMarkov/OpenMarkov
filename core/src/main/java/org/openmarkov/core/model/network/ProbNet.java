@@ -1083,13 +1083,13 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
         Variable newVariable = oldVariable.clone();
         newVariable.setTimeSlice(oldVariable.getTimeSlice() + timeDifference);
         Node newNode = addNode(newVariable, oldNode.getNodeType());
+        // The properties come from Node itself, which is the third and last place that used to
+        // carry its own copy of the same list, as the note that sat here asked: "Hacer clon para
+        // node y quitar estas lineas". The coordinates go afterwards because this node is not
+        // placed on top of the one it comes from but shifted to the next slice.
+        oldNode.copyPropertiesTo(newNode);
         newNode.setCoordinateX(oldNode.getCoordinateX() + coordinateXOffset);
         newNode.setCoordinateY(oldNode.getCoordinateY() + coordinateYOffset);
-        // TODO Hacer clon para node y quitar estas lineas
-        newNode.setPurpose(oldNode.getPurpose());
-        newNode.setRelevance(oldNode.getRelevance());
-        newNode.setComment(oldNode.getComment());
-        newNode.setAdditionalProperties(oldNode.getAdditionalProperties());
         return newNode;
     }
     
