@@ -4,6 +4,7 @@ import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
+import org.openmarkov.gui.window.decisiontree.format.DecisionTreeUtilityFormatters;
 
 import javax.swing.*;
 import java.io.FileWriter;
@@ -27,13 +28,18 @@ public class TreeNodeToDot {
         private String nodeName;
         private int number;
         private NodeType type;
-        private final double computedUtility;
-        
-        public DotNode(int number, String nodeName, double computedUtility, NodeType type) {
+        /**
+         * The node's utility already formatted for display. Formatting happens
+         * before this class is built because the utility is not always a number:
+         * a cost-effectiveness tree carries a CEP, and a node may carry nothing.
+         */
+        private final String utilityText;
+
+        public DotNode(int number, String nodeName, String utilityText, NodeType type) {
             this.nodeName = nodeName;
             this.number = number;
             this.type = type;
-            this.computedUtility = computedUtility;
+            this.utilityText = utilityText;
         }
         
         public String getNodeName() {
@@ -71,7 +77,7 @@ public class TreeNodeToDot {
         }
         
         private String buildLabel() {
-            return "<b>" + this.nodeName + "</b><br/><font color=\"red\"> U=" + df.format(this.computedUtility) + "</font>";
+            return "<b>" + this.nodeName + "</b><br/><font color=\"red\">" + this.utilityText + "</font>";
         }
         
         @Override
@@ -147,7 +153,7 @@ public class TreeNodeToDot {
         children.add(treeNode);
         
         DotNode sourceNode = new DotNode(numNode, treeNode.getVariable()
-                                                          .getName(), (double) treeNode.getUtility(), treeNode.getNodeType());
+                                                          .getName(), formatUtility(treeNode), treeNode.getNodeType());
         numNode += 1;
         dotNodes.add(sourceNode);
         
@@ -185,7 +191,7 @@ public class TreeNodeToDot {
             
             DecisionTreeNode childNode = branch.getChild();
             DotNode destinationNode = new DotNode(numNode, childNode.getVariable()
-                                                                    .getName(), (double) childNode.getUtility(), childNode.getNodeType());
+                                                                    .getName(), formatUtility(childNode), childNode.getNodeType());
             numNode += 1;
             dotNodes.add(destinationNode);
             dotLinks.add(new DotLink(sourceNode, destinationNode, branchState, branch.getBranchProbability()));
@@ -195,6 +201,17 @@ public class TreeNodeToDot {
         
     }
     
+    /**
+     * Formats a node's utility by its runtime type — {@code " U=…"} for an
+     * expected-utility tree, the cost/effectiveness text for a CEA tree, and an
+     * empty string for a node with no utility. The old code cast the utility to
+     * {@code double}, which threw on a CEA tree (its utility is a CEP) and on a
+     * node whose utility was not set.
+     */
+    private String formatUtility(DecisionTreeNode treeNode) {
+        return DecisionTreeUtilityFormatters.format(treeNode.getUtility(), df, false);
+    }
+
     /**
      * Sets the number of decimal places used when formatting numeric values.
      *
