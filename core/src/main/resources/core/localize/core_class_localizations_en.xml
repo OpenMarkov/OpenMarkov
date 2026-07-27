@@ -420,11 +420,10 @@
     <Localization class="org.openmarkov.core.model.network.type.DynamicLimidType" value="Dynamic LIMID"/>
     <Localization class="org.openmarkov.core.model.network.type.InfluenceDiagramType" value="Influence diagram"/>
     <Localization class="org.openmarkov.core.model.network.type.LIMIDType" value="LIMID"/>
-    <Localization class="org.openmarkov.core.model.network.type.MDPType" value="MPAD"/>
+    <Localization class="org.openmarkov.core.model.network.type.MDPType" value="MDP"/>
     <Localization class="org.openmarkov.core.model.network.type.MIDType" value="Markov Influence Diagram"/>
-    <Localization class="org.openmarkov.core.model.network.type.MarkovDynamicBayesianNetwork"/>
     <Localization class="org.openmarkov.core.model.network.type.MarkovDynamicBayesianNetwork"
-                  value="Markov Dynamic Bayesian"/>
+                  value="Markov DAN"/>
     <Localization class="org.openmarkov.core.model.network.type.MarkovNetworkType" value="Markov"/>
     <Localization class="org.openmarkov.core.model.network.type.POMDPType" value="POMDP"/>
     <Localization class="org.openmarkov.core.model.network.type.TuningNetworkType" value="Tuning"/>
