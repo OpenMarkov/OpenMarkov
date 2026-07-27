@@ -119,6 +119,48 @@ class DecisionTreeBranchTest {
     }
 
     @Test
+    void getChildrenIsEmptyWhileTheBranchHasNoChild() {
+        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+
+        assertTrue(branch.getChildren().isEmpty());
+    }
+
+    /**
+     * The two kinds of element answer the same question the same way. Consumers walk
+     * the tree through {@link DecisionTreeElement#getChildren()} without knowing which
+     * one they hold, so "no children" has to look alike from both.
+     */
+    @Test
+    void bothKindsOfElementReportNoChildrenTheSameWay() {
+        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+        StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(chanceNode, probNet);
+
+        assertEquals(node.getChildren().isEmpty(), branch.getChildren().isEmpty());
+    }
+
+    /**
+     * What the empty list buys: a walk over a half-built tree reaches its end instead
+     * of dereferencing a placeholder. This mirrors the recursion in
+     * {@code DecisionTreeManagerImpl.inferenceExpandLevels} and in the GUI's
+     * {@code DecisionTreeModel.buildPanelTree}, which is where it used to fail.
+     */
+    @Test
+    void walkingABranchWithNoChildYetDoesNotFail() {
+        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+
+        assertDoesNotThrow(() -> countElements(branch));
+        assertEquals(1, countElements(branch));
+    }
+
+    private static int countElements(DecisionTreeElement element) {
+        int count = 1;
+        for (DecisionTreeElement child : element.getChildren()) {
+            count += countElements(child);
+        }
+        return count;
+    }
+
+    @Test
     void setChildLinksBranchAndNode() {
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
         StubDecisionTreeNode<Double> child = new StubDecisionTreeNode<>(chanceNode, probNet);

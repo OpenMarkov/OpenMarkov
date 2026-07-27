@@ -14,7 +14,6 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -58,11 +57,18 @@ public non-sealed class DecisionTreeBranch<T> implements DecisionTreeElement {
 		this(probNet, null, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>A branch has at most one child, so the list is empty until {@link #setChild}
+	 * is called and holds exactly that child afterwards. It is never a list whose
+	 * single element is {@code null}: every consumer of the tree recurses over the
+	 * children of each element, and a {@code null} among them is a
+	 * {@link NullPointerException} one frame below.
+	 */
 	@Override
 	public List<DecisionTreeElement> getChildren() {
-		List<DecisionTreeElement> children = new LinkedList<>();
-		children.add(child);
-		return children;
+		return (child == null) ? List.of() : List.of(child);
 	}
 
 	/**

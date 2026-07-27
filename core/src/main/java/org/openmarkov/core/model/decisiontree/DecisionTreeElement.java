@@ -17,9 +17,12 @@ import java.util.List;
  */
 public sealed interface DecisionTreeElement permits DecisionTreeBranch, DecisionTreeNode {
 	/**
-	 * Returns the list of children of this element.
-	 * 
-	 * @return List of children.
+	 * Returns the list of children of this element. An element with no children
+	 * returns an empty list, never {@code null} and never a list containing
+	 * {@code null}: the tree is walked by recursing over these children, so a
+	 * placeholder among them would fail one frame below instead of here.
+	 *
+	 * @return List of children, possibly empty.
 	 */
 	List<DecisionTreeElement> getChildren();
 
