@@ -7,8 +7,6 @@
 
 package org.openmarkov.core.model.network;
 
-import io.github.jorgericovivas.rust_essentials.tuples.Tuple2Record;
-import io.github.jorgericovivas.rust_essentials.tuples.Tuples;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
@@ -23,7 +21,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.openmarkov.core.model.network.VariableType.*;
+import static org.openmarkov.core.model.network.VariableType.DISCRETIZED;
+import static org.openmarkov.core.model.network.VariableType.EVENT;
+import static org.openmarkov.core.model.network.VariableType.FINITE_STATES;
+import static org.openmarkov.core.model.network.VariableType.NUMERIC;
 
 /**
  * A probabilistic node has a set of conditional probabilities, one variable,
@@ -299,6 +300,17 @@ public class Node implements Cloneable, ClassLocalizable {
             throw new ThereIsNoPotentialsInNodeException(this);
         }
         return potentials.getFirst();
+    }
+    
+    /**
+     * @return the first potential, or {@code null} if no potentials are assigned
+     */
+    public Potential getPotential() {
+        if (potentials.isEmpty()) {
+            return null;
+        } else {
+            return getPotentials().getFirst();
+        }
     }
     
     /**
@@ -742,17 +754,6 @@ public class Node implements Cloneable, ClassLocalizable {
         target.setPolicyType(this.getPolicyType());
         target.setInput(this.isInput());
         target.setAlwaysAppend(this.isAlwaysAppend());
-    }
-    
-    /**
-     * @return the first potential, or {@code null} if no potentials are assigned
-     */
-    public Potential getPotential() {
-        if (potentials.isEmpty()) {
-            return null;
-        } else {
-            return getPotentials().getFirst();
-        }
     }
     
     /**

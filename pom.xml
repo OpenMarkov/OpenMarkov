@@ -143,6 +143,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.5.2</version>
+                    <configuration>
+                        <argLine>--add-reads ${project.groupId}.${project.artifactId}=org.junit.jupiter.api</argLine>
+                        <argLine>--add-reads ${project.groupId}.${project.artifactId}=ALL-UNNAMED</argLine>
+                        <disableXmlReport>true</disableXmlReport>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -162,7 +167,7 @@
                         <dependency>
                             <groupId>org.junit.platform</groupId>
                             <artifactId>junit-platform-launcher</artifactId>
-                            <version>1.13.0</version>
+                            <version>6.1.1</version>
                         </dependency>
                     </dependencies>
                     <configuration>
@@ -326,6 +331,11 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
@@ -424,7 +434,7 @@
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>5.13.0</version>
+                <version>6.1.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

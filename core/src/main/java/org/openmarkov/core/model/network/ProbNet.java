@@ -11,13 +11,17 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.action.base.PNESupport;
 import org.openmarkov.core.action.base.StateAction;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.model.graph.Graph;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Criterion.CECriterion;
-import org.openmarkov.core.model.network.constraint.*;
+import org.openmarkov.core.model.network.constraint.ConstraintManager;
+import org.openmarkov.core.model.network.constraint.OnlyUndirectedLinks;
+import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -25,7 +29,15 @@ import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.model.network.type.NetworkType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.ConcurrentModificationException;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -478,13 +490,13 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
         List<Potential> potentials = new ArrayList<>();
         for (Node node : getNodes()) {
             for (Potential potential : node.getPotentials()) {
-                if (potential != null && predicate.test(potential)) {
+                if (predicate.test(potential)) {
                     potentials.add(potential);
                 }
             }
         }
         for (Potential potential : constantPotentials) {
-            if (potential != null && predicate.test(potential)) {
+            if (predicate.test(potential)) {
                 potentials.add(potential);
             }
         }

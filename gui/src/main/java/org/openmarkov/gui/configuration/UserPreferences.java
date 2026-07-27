@@ -61,7 +61,7 @@ public final class UserPreferences {
                 });
     
     public static final UserPreference<ArrayList<String>> LAST_SESSION_NETWORK_FILES = UserPreference
-            .of("directories/last_open_networks_files", ArrayList::new, null, new TypeToken<>() {
+            .of("directories/last_session_networks_files", ArrayList::new, null, new TypeToken<>() {
             });
     
     public static final UserPreference<EnumSet<StartupAction>> STARTUP_ACTIONS = UserPreference

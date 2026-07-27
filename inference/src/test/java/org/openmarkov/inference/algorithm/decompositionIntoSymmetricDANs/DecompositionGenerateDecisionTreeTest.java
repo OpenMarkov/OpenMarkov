@@ -1,8 +1,6 @@
-package org.openmarkov.inference.algorithm.decompositionintosymmetricdans;
+package org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs;
 
 import org.junit.jupiter.api.Test;
-
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.DecompositionGenerateDecisionTree;
 
 public class DecompositionGenerateDecisionTreeTest {
 	
