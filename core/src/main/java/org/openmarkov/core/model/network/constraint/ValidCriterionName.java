@@ -8,38 +8,49 @@
 package org.openmarkov.core.model.network.constraint;
 
 import org.openmarkov.core.action.base.ConstraintChecker;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.GraphNetwork;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.constraint.annotation.Constraint;
 
-@Constraint(name = "NoValidCriterionName", defaultBehavior = ConstraintBehavior.YES) public class ValidCriterionName
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Every decision criterion must have a name, and no two criteria may share
+ * one: criteria are matched by name wherever a utility potential declares
+ * which criterion it contributes to.
+ * <p>
+ * The two exceptions this constraint reports existed for years while its body
+ * was a comment, so the application announced the guarantee without imposing
+ * it. The annotation also declared the name "NoValidCriterionName" — a double
+ * negation contradicting the purpose of the class.
+ */
+@Constraint(name = "ValidCriterionName", defaultBehavior = ConstraintBehavior.YES) public class ValidCriterionName
 		extends PNConstraint {
 
-	// Constants for possible errors
-    private static final int IS_EMPTY_NAME = 0;
-    private static final int IS_NAME_ALREADY_EXIST = 1;
-    
-    
     @Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {
-		
-		/*
-		List<Criterion> criteria = probNet.getDecisionCriteria();
-		
-		for(int i = 0; i < criteria.size(); i++){
-			Criterion criterion = criteria.get(i);
-			
-			if(criterion.getCriterionName().equals("")){
-				type_error = IS_EMPTY_NAME;
-				return false;
-			} else {
-				for(int j = i+1; j < criteria.size(); j++){
-					if(criterion.getCriterionName().equals(criteria.get(j).getCriterionName())){
-						type_error = IS_NAME_ALREADY_EXIST;
-						return false;
-					}
-				}
-			}
-		}*/
+        if (!(probNet instanceof ProbNet net)) {
+            // Decision criteria live on ProbNet; a bare graph has none to check.
+            return;
+        }
+        List<Criterion> criteria = net.getDecisionCriteria();
+        if (criteria == null) {
+            return;
+        }
+        Set<String> seenNames = new HashSet<>();
+        for (Criterion criterion : criteria) {
+            String name = criterion.getCriterionName();
+            if (name == null || name.isEmpty()) {
+                constraintChecker.addException(
+                        new ConstraintViolatedException.CriterionNameIsEmpty(this, criterion));
+            } else if (!seenNames.add(name)) {
+                constraintChecker.addException(
+                        new ConstraintViolatedException.CriterionNameIsAlreadyPresent(this, criterion, name));
+            }
+        }
+    }
 
-	}
- 
 }
