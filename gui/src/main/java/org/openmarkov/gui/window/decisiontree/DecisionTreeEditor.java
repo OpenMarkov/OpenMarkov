@@ -125,7 +125,7 @@ public class DecisionTreeEditor extends EditorPanel {
      * @return True if the window closed successfully.
      */
     @Override public boolean close() {
-        this.networkPanel.removeDecisionTreeWindows(null);
+        this.networkPanel.removeDecisionTreeWindows(this);
         return super.close();
     }
     
