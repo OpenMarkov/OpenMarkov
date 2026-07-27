@@ -45,15 +45,11 @@ final class ProbNetCopier {
         for (Node node : source.getNodes()) {
             Variable variable = node.getVariable();
             Node newNode = dest.addNode(variable, node.getNodeType());
-            newNode.setCoordinateX(node.getCoordinateX());
-            newNode.setCoordinateY(node.getCoordinateY());
             newNode.setPotentials(node.getPotentials());
-            // TODO Hacer clon para node y quitar estas lineas
-            newNode.setPurpose(node.getPurpose());
-            newNode.setRelevance(node.getRelevance());
-            newNode.setComment(node.getComment());
-            newNode.setAdditionalProperties(node.getAdditionalProperties());
-            newNode.setAlwaysObserved(node.isAlwaysObserved());
+            // The properties come from Node itself, which is what the note that used to sit here
+            // asked for: "Hacer clon para node y quitar estas lineas". Node.clone is not usable
+            // as it stands because it clones the variable, and a shallow copy shares it.
+            node.copyPropertiesTo(newNode);
         }
         copyLinks(source, dest, false);
         dest.getPNESupport().setListeners(source.getPNESupport().getListeners());

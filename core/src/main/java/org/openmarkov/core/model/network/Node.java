@@ -712,15 +712,36 @@ public class Node implements Cloneable, ClassLocalizable {
             }
         }
         Node newNode = new Node(probNet, newVariable, this.getNodeType());
-        newNode.coordinateX = this.coordinateX;
-        newNode.setCoordinateX(this.getCoordinateX());
-        newNode.setCoordinateY(this.getCoordinateY());
-        newNode.setPurpose(this.getPurpose());
-        newNode.setRelevance(this.getRelevance());
-        newNode.setComment(this.getComment());
-        newNode.setAdditionalProperties(this.additionalProperties);
-        newNode.setAlwaysObserved(this.isAlwaysObserved());
+        copyPropertiesTo(newNode);
         return newNode;
+    }
+
+    /**
+     * Copies onto {@code target} everything that describes this node other than what identifies
+     * it: its variable, its type, and the network it belongs to.
+     * <p>
+     * Both ways of copying a network come through here, {@link #clone(ProbNet)} and the shallow
+     * copy in {@code ProbNetCopier}, because each used to carry its own list of properties and the
+     * two lists had drifted apart while agreeing on what to forget. A property added to a node can
+     * no longer be carried by one way of copying and dropped by the other.
+     *
+     * @param target the node that receives the properties
+     */
+    void copyPropertiesTo(Node target) {
+        target.setCoordinateX(this.getCoordinateX());
+        target.setCoordinateY(this.getCoordinateY());
+        target.setPurpose(this.getPurpose());
+        target.setRelevance(this.getRelevance());
+        target.setComment(this.getComment());
+        target.setAdditionalProperties(this.additionalProperties);
+        target.setAlwaysObserved(this.isAlwaysObserved());
+        // The three below decide behaviour rather than appearance, which is why losing them did
+        // not look like a copy with something missing: it looked like a different model that
+        // works. A decision whose policy was imposed goes back to having one computed, and an
+        // event node stops appending, which is what EventEvaluation reads to simulate it.
+        target.setPolicyType(this.getPolicyType());
+        target.setInput(this.isInput());
+        target.setAlwaysAppend(this.isAlwaysAppend());
     }
     
     /**

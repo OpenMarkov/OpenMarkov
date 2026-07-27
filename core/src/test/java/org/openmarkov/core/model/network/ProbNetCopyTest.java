@@ -165,6 +165,39 @@ public class ProbNetCopyTest {
     }
 
     // -----------------------------------------------------------------------
+    // Node properties that decide behaviour
+    // -----------------------------------------------------------------------
+
+    @Test
+    public void copyPreservesAnImposedPolicy() {
+        ProbNet id = new ProbNet(InfluenceDiagramType.getUniqueInstance());
+        Variable decision = new Variable("D", 2);
+        id.addNode(decision, NodeType.DECISION).setPolicyType(PolicyType.DETERMINISTIC);
+
+        Node copiedDecision = id.copy().getNode(decision);
+
+        // Losing this silently turns an imposed policy back into one to be computed, so the
+        // copy is evaluated as a different decision problem and no one is told.
+        assertEquals(PolicyType.DETERMINISTIC, copiedDecision.getPolicyType());
+    }
+
+    @Test
+    public void copyPreservesTheAlwaysAppendBehaviourOfAnEvent() {
+        Node event = original.getNode(rain);
+        event.setAlwaysAppend(true);
+
+        assertTrue(original.copy().getNode(rain).isAlwaysAppend());
+    }
+
+    @Test
+    public void copyPreservesWhetherTheNodeIsAnInput() {
+        Node node = original.getNode(rain);
+        node.setInput(true);
+
+        assertTrue(original.copy().getNode(rain).isInput());
+    }
+
+    // -----------------------------------------------------------------------
     // Links
     // -----------------------------------------------------------------------
 
