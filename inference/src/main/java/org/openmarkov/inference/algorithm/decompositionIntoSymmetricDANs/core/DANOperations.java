@@ -518,32 +518,33 @@ public class DANOperations {
     }
     
     /**
-     * @param variables the variables
-     * @param dan the dan
+     * Selects a variable of {@code variables} that has no ancestor among the other
+     * {@code variables}, so that a decision tree branches on causes before effects.
      *
-     * @return A variable of 'variables' of 'dan' that has no ancestors belonging to 'variables'
+     * @param variables the candidates; must not be empty
+     * @param dan the network the candidates belong to
+     *
+     * @return a variable of {@code variables} with no ancestor among the others
      */
-    static Variable selectVariableWithoutAncestorsInVariables(List<Variable> variables, ProbNet dan) {
-        boolean withoutAncestors = true;
-        boolean selected = false;
-        Variable variableSelected = null;
-        for (int i = 0; i < variables.size() && !selected; i++) {
-            Variable candidate = variables.get(i);
-            Set<Node> ancestors = ProbNetOperations.getNodeAncestors(dan.getNode(candidate));
-            Set<Variable> ancestorsVariables = new HashSet<>();
-            ancestors.forEach(node -> ancestorsVariables.add(node.getVariable()));
-            for (int j = 0; i < variables.size(); i++) {
-                Variable auxVar = variables.get(j);
-                if (auxVar != candidate) {
-                    withoutAncestors = !ancestorsVariables.contains(auxVar);
+    public static Variable selectVariableWithoutAncestorsInVariables(List<Variable> variables, ProbNet dan) {
+        for (Variable candidate : variables) {
+            Set<Variable> ancestorVariables = new HashSet<>();
+            for (Node ancestor : ProbNetOperations.getNodeAncestors(dan.getNode(candidate))) {
+                ancestorVariables.add(ancestor.getVariable());
+            }
+            boolean hasAncestorAmongCandidates = false;
+            for (Variable other : variables) {
+                if (other != candidate && ancestorVariables.contains(other)) {
+                    hasAncestorAmongCandidates = true;
+                    break;
                 }
             }
-            if (withoutAncestors) {
-                selected = true;
-                variableSelected = candidate;
+            if (!hasAncestorAmongCandidates) {
+                return candidate;
             }
         }
-        return variableSelected;
+        // Unreachable for an acyclic model; a cycle would make every candidate its own ancestor.
+        return variables.get(0);
     }
     
     static EvidenceCase extendEvidenceCase(EvidenceCase evidenceCase, Variable x, State state)

@@ -23,7 +23,6 @@ import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.ProbNetOperations;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.AbstractIndexedPotential;
@@ -42,9 +41,7 @@ import org.openmarkov.inference.algorithm.variableElimination.DecisionVariableEl
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Expansion and evaluation of the decision tree of a decision model — an
@@ -272,48 +269,13 @@ public class DecisionTreeExpansion {
 						!isInfluenceDiagram(probNet)) :
 				DANOperations.getChanceVariablesNotInEvidence(probNet, evidence);
 		if (!observedVariables.isEmpty()) {
-			Variable variable = selectVariableWithoutAncestorsIn(observedVariables, probNet);
+			Variable variable = DANOperations.selectVariableWithoutAncestorsInVariables(observedVariables, probNet);
 			return List.of(probNet.getNode(variable));
 		}
 		if (thereAreDecisions) {
 			return DANOperations.getNextDecisions(probNet, evidence);
 		}
 		return List.of();
-	}
-
-	/**
-	 * Selects a variable that has no ancestor among the given variables, so that
-	 * the tree branches on causes before effects.
-	 * <p>
-	 * This repeats the intent of
-	 * {@code DANOperations.selectVariableWithoutAncestorsInVariables}, which
-	 * cannot be reused: it is package-private, and its inner loop advances the
-	 * outer index instead of its own, so it always returns the first variable
-	 * and never inspects any ancestor.
-	 *
-	 * @param variables the candidates; must not be empty.
-	 * @param probNet   the decision model.
-	 * @return a variable with no ancestor among {@code variables}.
-	 */
-	private static Variable selectVariableWithoutAncestorsIn(List<Variable> variables, ProbNet probNet) {
-		for (Variable candidate : variables) {
-			Set<Variable> ancestors = new HashSet<>();
-			for (Node ancestor : ProbNetOperations.getNodeAncestors(probNet.getNode(candidate))) {
-				ancestors.add(ancestor.getVariable());
-			}
-			boolean hasAncestorAmongCandidates = false;
-			for (Variable other : variables) {
-				if (other != candidate && ancestors.contains(other)) {
-					hasAncestorAmongCandidates = true;
-					break;
-				}
-			}
-			if (!hasAncestorAmongCandidates) {
-				return candidate;
-			}
-		}
-		// Unreachable for an acyclic model; a cycle would make every candidate its own ancestor.
-		return variables.get(0);
 	}
 
 	private static boolean isInfluenceDiagram(ProbNet probNet) {
