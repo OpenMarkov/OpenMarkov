@@ -29,15 +29,21 @@ public class EvaluationDecisionTreeNode extends DecisionTreeNode<Double> {
 
 	@Override
 	public boolean isBestDecision(DecisionTreeBranch<Double> branch) {
-		boolean isBestDecision = false;
-		if (nodeType == NodeType.DECISION) {
-			isBestDecision = true;
-			double thisUtility = branch.getUtility();
-			for (DecisionTreeElement otherBranch : children) {
-				@SuppressWarnings("unchecked")
-				DecisionTreeBranch<Double> typedBranch = (DecisionTreeBranch<Double>) otherBranch;
-				isBestDecision &= thisUtility >= typedBranch.getUtility();
-			}
+		if (nodeType != NodeType.DECISION) {
+			return false;
+		}
+		Double thisUtility = branch.getUtility();
+		if (thisUtility == null) {
+			// A branch not yet evaluated cannot claim to be the best one. The GUI
+			// asks this while painting, and a half-built tree has such branches.
+			return false;
+		}
+		boolean isBestDecision = true;
+		for (DecisionTreeElement otherBranch : children) {
+			@SuppressWarnings("unchecked")
+			DecisionTreeBranch<Double> typedBranch = (DecisionTreeBranch<Double>) otherBranch;
+			Double otherUtility = typedBranch.getUtility();
+			isBestDecision &= otherUtility == null || thisUtility >= otherUtility;
 		}
 		return isBestDecision;
 	}

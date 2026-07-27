@@ -176,12 +176,15 @@ public non-sealed class DecisionTreeBranch<T> implements DecisionTreeElement {
 	}
 
 	/**
-	 * Returns the utility of the child node.
+	 * Returns the utility of the child node, or {@code null} while the branch has
+	 * no child yet — a half-built tree has such branches, and "no utility yet" is
+	 * an answer its consumers already understand, where dereferencing the missing
+	 * child was a {@code NullPointerException} away from the cause.
 	 *
-	 * @return The utility value.
+	 * @return The utility value, or {@code null} if the branch has no child.
 	 */
 	public T getUtility() {
-		return child.getUtility();
+		return (child == null) ? null : child.getUtility();
 	}
 
 }

@@ -126,6 +126,19 @@ class DecisionTreeBranchTest {
     }
 
     /**
+     * Same situation, same kind of answer: a branch without a child has no
+     * utility, and says so with null — which its consumers (the formatters, the
+     * best-decision check) already understand — instead of dereferencing the
+     * missing child.
+     */
+    @Test
+    void getUtilityIsNullWhileTheBranchHasNoChild() {
+        DecisionTreeBranch<Double> branch = new DecisionTreeBranch<>(probNet, decisionVariable, yes);
+
+        assertNull(branch.getUtility());
+    }
+
+    /**
      * The two kinds of element answer the same question the same way. Consumers walk
      * the tree through {@link DecisionTreeElement#getChildren()} without knowing which
      * one they hold, so "no children" has to look alike from both.
