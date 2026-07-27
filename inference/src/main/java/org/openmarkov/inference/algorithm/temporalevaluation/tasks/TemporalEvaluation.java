@@ -213,8 +213,6 @@ public class TemporalEvaluation extends VariableElimination {
         variableEliminationCore = null;
         
         for (int i = 1; i <= numberOfSlices; i++) {
-            Runtime r = Runtime.getRuntime();
-            r.gc();
             LogManager.getLogger().debug("Cycle {}", i);
             // Add probabilities of the new slice
             for (TablePotential probabilityPontial : probabilityPotentialBySlice.get(i)) {
