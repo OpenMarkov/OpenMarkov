@@ -42,12 +42,16 @@ import java.util.Random;
 	}
 
 	/**
-	 * @param parameters - parameters[1]= mu and parameters[0] = sigma^2
-	 * @throws IllegalArgumentException - thrown if sigma&#60;0
+	 * @param parameters - parameters[0] = mu and parameters[1] = sigma
+	 * @throws InvalidArgumentException - thrown if sigma is not positive
 	 */
 	@Override public void verifyParameters(double[] parameters) {
-		if (!(parameters[0] > 0)) {
-			throw new InvalidArgumentException(parameters[0], "N", "N should be greater than 0");
+		// It used to check parameters[0] - the mean, which may be any real
+		// number - with a message copied from the Beta family: every Normal
+		// with a non-positive mean was rejected, and a negative sigma passed.
+		if (!(parameters[1] > 0)) {
+			throw new InvalidArgumentException(parameters[1], "sigma",
+					"sigma must be greater than 0");
 		}
 	}
 
