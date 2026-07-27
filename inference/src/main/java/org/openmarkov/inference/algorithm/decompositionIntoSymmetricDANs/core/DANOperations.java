@@ -310,39 +310,19 @@ public class DANOperations {
      * @return list of possible next decisions
      */
     public static List<Node> getNextDecisions(ProbNet probNet) {
-        List<Node> decisionNodes = ProbNetOperations.getParentlessDecisions(probNet);
-        // Check if the nodes revealed by a decision node are the subset of another
-        // In that case we don't need to consider them as valid orders
-        List<List<Node>> revealedNodes = new ArrayList<>();
-        for (Node node : decisionNodes) {
-            List<Node> revealedByDecision = new ArrayList<>();
-            for (Link<Node> link : node.getLinks()) {
-                if (link.getFrom().equals(node) && LinkOperations.hasRevealingConditions(link)) {
-                    revealedByDecision.add(link.getTo());
-                }
-            }
-            revealedNodes.add(revealedByDecision);
-        }
-        List<Node> dominatedDecisions = new ArrayList<>();
-        for (int i = 0; i < decisionNodes.size(); ++i) {
-            Node nodeA = decisionNodes.get(i);
-            if (!revealedNodes.get(i).isEmpty()) {
-                for (int j = 0; j < decisionNodes.size(); ++j) {
-                    Node nodeB = decisionNodes.get(j);
-                    if (nodeA != nodeB && revealedNodes.get(i).containsAll(revealedNodes.get(j)))
-                        dominatedDecisions.add(nodeB);
-                }
-            }
-        }
-        decisionNodes.removeAll(dominatedDecisions);
-        
-        return decisionNodes;
+        return getNextDecisions(probNet, null);
     }
-    
+
     /**
-     * Get the decisions that could be made first
+     * Get the decisions that could be made first. A decision is discarded when
+     * another candidate reveals everything it reveals: considering it first adds
+     * no order worth exploring. When two candidates reveal exactly the same
+     * non-empty set, the one listed first stays — one of a tie is discardable,
+     * the whole tie is not, because an empty answer tells the caller the model
+     * has nothing left to decide.
      *
      * @param probNet network
+     * @param evidence evidence whose variables are excluded from the candidates; may be {@code null}
      *
      * @return list of possible next decisions
      */
@@ -356,7 +336,7 @@ public class DANOperations {
                 }
             }
         }
-        
+
         // Check if the nodes revealed by a decision node are the subset of another
         // In that case we don't need to consider them as valid orders
         List<List<Node>> revealedNodes = new ArrayList<>();
@@ -371,17 +351,23 @@ public class DANOperations {
         }
         List<Node> dominatedDecisions = new ArrayList<>();
         for (int i = 0; i < decisionNodes.size(); ++i) {
-            Node nodeA = decisionNodes.get(i);
-            if (!revealedNodes.get(i).isEmpty()) {
+            List<Node> revealedByA = revealedNodes.get(i);
+            if (!revealedByA.isEmpty()) {
                 for (int j = 0; j < decisionNodes.size(); ++j) {
-                    Node nodeB = decisionNodes.get(j);
-                    if (nodeA != nodeB && revealedNodes.get(i).containsAll(revealedNodes.get(j)))
-                        dominatedDecisions.add(nodeB);
+                    List<Node> revealedByB = revealedNodes.get(j);
+                    if (i != j && revealedByA.containsAll(revealedByB)) {
+                        boolean equalSets = revealedByB.containsAll(revealedByA);
+                        // On an exact tie only the later candidate is dominated, so
+                        // exactly one of the tie survives instead of none.
+                        if (!equalSets || i < j) {
+                            dominatedDecisions.add(decisionNodes.get(j));
+                        }
+                    }
                 }
             }
         }
         decisionNodes.removeAll(dominatedDecisions);
-        
+
         return decisionNodes;
     }
     
