@@ -78,6 +78,6 @@ class NetworkTypeContractsTest {
     /** Same trap, second case: the "Markov DAN" type is not a Bayesian network. */
     @Test
     void theMarkovDANTypeIsNotLabelledBayesian() {
-        assertEquals("Markov DAN", MarkovDynamicBayesianNetwork.getUniqueInstance().toString());
+        assertEquals("Markov DAN", MarkovDANType.getUniqueInstance().toString());
     }
 }

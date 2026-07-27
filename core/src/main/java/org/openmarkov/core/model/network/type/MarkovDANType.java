@@ -11,11 +11,11 @@ import org.openmarkov.core.model.network.constraint.*;
 import org.openmarkov.core.model.network.type.plugin.NetworkTypeInfo;
 
 @NetworkTypeInfo(name = "Markov DAN", visualName = "Markov DAN")
-public final class MarkovDynamicBayesianNetwork extends NetworkType {
-    private static final MarkovDynamicBayesianNetwork INSTANCE = new MarkovDynamicBayesianNetwork();
+public final class MarkovDANType extends NetworkType {
+    private static final MarkovDANType INSTANCE = new MarkovDANType();
     
     // Constructor
-    private MarkovDynamicBayesianNetwork() {
+    private MarkovDANType() {
         super();
         overrideConstraintBehavior(NoRevelationArc.class, ConstraintBehavior.NO);
         overrideConstraintBehavior(NoLinkRestriction.class, ConstraintBehavior.NO);
@@ -24,7 +24,7 @@ public final class MarkovDynamicBayesianNetwork extends NetworkType {
     }
     
     // Methods
-    public static MarkovDynamicBayesianNetwork getUniqueInstance() {
+    public static MarkovDANType getUniqueInstance() {
         return INSTANCE;
     }
     

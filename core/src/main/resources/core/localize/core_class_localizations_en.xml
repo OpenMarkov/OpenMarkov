@@ -422,7 +422,7 @@
     <Localization class="org.openmarkov.core.model.network.type.LIMIDType" value="LIMID"/>
     <Localization class="org.openmarkov.core.model.network.type.MDPType" value="MDP"/>
     <Localization class="org.openmarkov.core.model.network.type.MIDType" value="Markov Influence Diagram"/>
-    <Localization class="org.openmarkov.core.model.network.type.MarkovDynamicBayesianNetwork"
+    <Localization class="org.openmarkov.core.model.network.type.MarkovDANType"
                   value="Markov DAN"/>
     <Localization class="org.openmarkov.core.model.network.type.MarkovNetworkType" value="Markov"/>
     <Localization class="org.openmarkov.core.model.network.type.POMDPType" value="POMDP"/>
