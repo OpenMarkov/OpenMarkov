@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 public class ConstraintManager {
     private static final ConstraintManager INSTANCE = new ConstraintManager();
     private final HashMap<Class<? extends PNConstraint>, ConstraintBehavior> defaultConstraintBehaviors;
-    
+
     /**
      * Constructor for ConstraintManager.
      */
@@ -32,9 +32,9 @@ public class ConstraintManager {
             this.defaultConstraintBehaviors.put(plugin, lAnnotation.defaultBehavior());
         });
     }
-    
+
     // Methods
-    
+
     /**
      * Singleton pattern.
      *
@@ -43,7 +43,7 @@ public class ConstraintManager {
     public static ConstraintManager getUniqueInstance() {
         return INSTANCE;
     }
-    
+
     /**
      * Generates the minimal (i.e. not including optional constraints)
      * constraint list given the network type and the Constraints annotated as
@@ -69,38 +69,41 @@ public class ConstraintManager {
                 }
             }
         }
-        
+
         // Overwrite the list with the constraints specified in the corresponding network type
         HashMap<Class<? extends PNConstraint>, ConstraintBehavior> overwrittenConstraints = type
                 .getOverwrittenConstraints();
         for (Class<? extends PNConstraint> constraintClass : overwrittenConstraints.keySet()) {
             if (overwrittenConstraints.get(constraintClass) == ConstraintBehavior.YES) {
-                try {
-                    constraints.add(constraintClass.getDeclaredConstructor().newInstance());
-                } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
-                         InvocationTargetException e) {
-                    throw new UnreachableException(e);
-                }
-            } else if (overwrittenConstraints.get(constraintClass) == ConstraintBehavior.NO) {
-                for (int i = 0; i < constraints.size(); ++i) {
-                    if (constraints.get(i).getClass() == constraintClass) {
-                        constraints.remove(i);
+                // A network type may re-declare as YES a constraint that is already mandatory by
+                // default (MDP does it with NoCycle, NoSelfLoop and OnlyDirectedLinks). Adding it
+                // again would put the same constraint twice in the list.
+                boolean alreadyPresent = constraints.stream()
+                                                    .anyMatch(constraint -> constraint.getClass() == constraintClass);
+                if (!alreadyPresent) {
+                    try {
+                        constraints.add(constraintClass.getDeclaredConstructor().newInstance());
+                    } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
+                             InvocationTargetException e) {
+                        throw new UnreachableException(e);
                     }
                 }
+            } else if (overwrittenConstraints.get(constraintClass) == ConstraintBehavior.NO) {
+                constraints.removeIf(constraint -> constraint.getClass() == constraintClass);
             }
         }
         return constraints;
-        
+
     }
-    
+
     public final ArrayList<PNConstraint> buildConstraintList(NetworkType type) {
         return buildConstraintList(type, false);
     }
-    
+
     public ConstraintBehavior getDefaultBehavior(Class<?> constraintClass) {
         return defaultConstraintBehaviors.get(constraintClass);
     }
-    
+
     public static @NotNull Stream<Class<? extends PNConstraint>> findAllConstraints() {
         return PluginSearch.init().annotatedWith(Constraint.class).childrenOf(PNConstraint.class).stream();
     }

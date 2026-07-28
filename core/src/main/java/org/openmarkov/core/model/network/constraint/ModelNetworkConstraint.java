@@ -13,7 +13,6 @@ import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.action.base.linkEdits.BaseLinkEdit;
 import org.openmarkov.core.model.network.GraphNetwork;
 import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.constraint.annotation.Constraint;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -23,8 +22,13 @@ import java.util.Set;
  * This constraint ensures that the editions done during the learning of a
  * network respect the structure of the model net and the constraints
  * selected by the user.
+ *
+ * <p>This constraint is deliberately <em>not</em> annotated with
+ * {@link org.openmarkov.core.model.network.constraint.annotation.Constraint}. That annotation
+ * makes {@link ConstraintManager} build the constraint by reflection through its no-argument
+ * constructor, and this one cannot have such a constructor: it needs the model network and the
+ * three permissions. {@code LearningManager} creates it explicitly.
  */
-@Constraint(name = "ModelNetworkConstraint", defaultBehavior = ConstraintBehavior.OPTIONAL)
 public class ModelNetworkConstraint extends PNConstraint {
     
     private final Set<Tuple2Record<String, String>> forbiddenLinksToModify;
