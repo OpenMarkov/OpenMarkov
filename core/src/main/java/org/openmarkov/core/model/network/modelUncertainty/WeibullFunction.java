@@ -4,6 +4,7 @@ import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.special.Gamma;
 import org.apache.commons.math3.util.FastMath;
 import org.openmarkov.core.exception.InvalidArgumentException;
+import java.util.List;
 
 /**
  * This class represents a Weibull distribution
@@ -141,8 +142,11 @@ public class WeibullFunction extends ProbDensFunctionWithKnownInverseCDF {
      */
     @Override
     public void verifyParameters(double[] parameters) {
-        if (!(parameters[0] > 0)) {
-            throw new IllegalArgumentException("Wrong parameters" + this.getClass().getName());
+        // Both parameters of a Weibull must be positive; this used to check only
+        // the first, so a non-positive shape k slipped through.
+        if (!((parameters[0] > 0) && (parameters[1] > 0))) {
+            throw new InvalidArgumentException(List.of(parameters[0], parameters[1]), "lambda, k",
+                    "both the scale lambda and the shape k must be greater than 0");
         }
     }
 

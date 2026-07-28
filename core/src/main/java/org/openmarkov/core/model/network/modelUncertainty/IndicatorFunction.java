@@ -1,5 +1,9 @@
 package org.openmarkov.core.model.network.modelUncertainty;
 
+import org.openmarkov.core.exception.InvalidArgumentException;
+
+import java.util.List;
+
 import org.apache.commons.math3.exception.OutOfRangeException;
 
 /**
@@ -120,8 +124,12 @@ public class IndicatorFunction extends ProbDensFunctionWithKnownInverseCDF {
      */
     @Override
     public void verifyParameters(double[] parameters) {
-        if (!(probability<=1) && (probability >= 0) && (tte >= 0)) {
-            throw new IllegalArgumentException("Wrong parameters" + this.getClass().getName());
+        // This used to look at the FIELDS instead of the given parameters, with
+        // a parenthesization that only fired for a probability above one: a
+        // negative probability and a negative time both slipped through.
+        if (!((parameters[0] >= 0) && (parameters[0] <= 1) && (parameters[1] >= 0))) {
+            throw new InvalidArgumentException(List.of(parameters[0], parameters[1]), "probability, tte",
+                    "the probability must be in [0, 1] and the time to event must not be negative");
         }
     }
 

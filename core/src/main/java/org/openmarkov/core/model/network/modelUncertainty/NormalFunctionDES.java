@@ -1,5 +1,7 @@
 package org.openmarkov.core.model.network.modelUncertainty;
 
+import org.openmarkov.core.exception.InvalidArgumentException;
+
 /**
  * Normal distribution where a real number of a random stream is provided for sampling in order to cope with nuisance variance
  *
@@ -38,8 +40,10 @@ public class NormalFunctionDES extends ProbDensFunctionWithKnownInverseCDF {
      */
     @Override
     public void verifyParameters(double[] parameters) {
-        if (!(parameters[0] > 0)) {
-            throw new IllegalArgumentException("Wrong parameters" + this.getClass().getName());
+        // Same copied check as its sibling Normals had: it validated the mean,
+        // which may be any real number, and let a negative sigma pass.
+        if (!(parameters[1] > 0)) {
+            throw new InvalidArgumentException(parameters[1], "sigma", "sigma must be greater than 0");
         }
     }
 
