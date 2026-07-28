@@ -73,11 +73,17 @@ public abstract class InferenceAlgorithm implements Task {
      * @throws NotEvaluableNetworkException NotEvaluableNetworkException
      */
     public InferenceAlgorithm(ProbNet network) throws NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
-        this.probNet = network.copy();
+        // Accept or refuse the network before paying for its copy. The checks only read the
+        // network type and the algorithm's own constraints, so they can run on the caller's
+        // network; copying first meant that every refusal cost a full copy of the network —
+        // and the manager refuses often: asking which algorithms accept an influence diagram
+        // copied the network once per registered algorithm, to answer with one name.
+        this.probNet = network;
         this.preResolutionEvidence = new EvidenceCase();
         this.conditioningVariables = new ArrayList<>();
         checkEvaluability();
         checkConsistency();
+        this.probNet = network.copy();
     }
     
     /**

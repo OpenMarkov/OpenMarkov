@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.openmarkov.core.inference.InferenceAlgorithm;
 import org.openmarkov.core.inference.annotation.InferenceManager;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.inference.algorithm.likelihoodWeighting.LikelihoodWeighting;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VariableElimination;
@@ -106,5 +107,53 @@ public class InferenceManagerTest {
 
         assertNotNull(algorithm);
         assertInstanceOf(LikelihoodWeighting.class, algorithm);
+    }
+
+    /**
+     * A network that counts how many times it gets copied. Whether an algorithm accepts a
+     * network is decided by building it, and building starts by copying the network — so
+     * refusals used to cost a full copy each.
+     */
+    private static final class CopyCountingProbNet extends ProbNet {
+        private int copies = 0;
+
+        private CopyCountingProbNet() {
+            super(InfluenceDiagramType.getUniqueInstance());
+        }
+
+        @Override public ProbNet copy() {
+            copies++;
+            return super.copy();
+        }
+    }
+
+    /**
+     * Of the four registered algorithms only variable elimination accepts an influence
+     * diagram, so listing the names must cost one copy — not four. The three sampling
+     * algorithms refuse the network by its type, which is read, not copied.
+     */
+    @Tag(TestSpeed.FAST)
+    @Test
+    public void aRefusalDoesNotCostACopyOfTheNetwork() {
+        CopyCountingProbNet influenceDiagram = new CopyCountingProbNet();
+
+        List<String> names = inferenceManager.getInferenceAlgorithmNames(influenceDiagram);
+
+        assertEquals(List.of("VariableElimination"), names);
+        assertEquals(names.size(), influenceDiagram.copies,
+                "Each refused algorithm copied the whole network before refusing it");
+    }
+
+    /**
+     * Asking by name for an algorithm that refuses the network must not copy it either.
+     */
+    @Tag(TestSpeed.FAST)
+    @Test
+    public void refusingByNameDoesNotCopyTheNetwork() {
+        CopyCountingProbNet influenceDiagram = new CopyCountingProbNet();
+
+        assertThrows(Exception.class,
+                () -> inferenceManager.getInferenceAlgorithmByName("HuginPropagation", influenceDiagram));
+        assertEquals(0, influenceDiagram.copies);
     }
 }
