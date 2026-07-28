@@ -25,7 +25,14 @@ import java.util.Random;
 
     @Override
     public void setSeed(long seed) {
-        this.seed = seed;
+        // Zero is the classic fixed point of the XORShift algorithm: the shifts
+        // keep the state at zero forever, so every draw comes out 0.0 and the
+        // distributions sampled by inversion degenerate (an Exponential answers
+        // 0, a Uniform its minimum, a standard Normal falls into log(0)). Zero
+        // is also the most natural seed a caller can pick, so it is mapped to a
+        // fixed non-zero constant: seeding with 0 stays reproducible, it just
+        // is not the degenerate generator.
+        this.seed = (seed == 0) ? 0x9E3779B97F4A7C15L : seed;
     }
 
     @Override protected int next(int nbits) {

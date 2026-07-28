@@ -45,8 +45,9 @@ public class ErlangFunction extends ProbDensFunction {
 	}
 
 	@Override public double[] getParameters() {
-		// TODO Auto-generated method stub
-		return null;
+		// It used to return null - a filler that turned into a
+		// NullPointerException in any generic consumer, toString included.
+		return new double[]{k, lambda};
 	}
 
 	@Override public void setParameters(double[] args) {
@@ -60,7 +61,8 @@ public class ErlangFunction extends ProbDensFunction {
             throw new InvalidArgumentException(lambda, "lambda", "should be a number bigger than 0");
         }
         if (k < 0) {
-            throw new InvalidArgumentException(lambda, "lambda", "should be a number bigger or equals to 0");
+            // The message used to cite lambda - name and value - for a complaint about k.
+            throw new InvalidArgumentException(k, "k", "should be a number bigger or equals to 0");
         }
 	}
 
