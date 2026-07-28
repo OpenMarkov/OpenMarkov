@@ -63,7 +63,6 @@ public class IDFactory extends NetsFactory {
         
         ExactDistrPotential potentialU = createExactDistrPotential(PotentialRole.CONDITIONAL_PROBABILITY, tableUX, variableU, variableX);
 
-		//Links throws NodeNotFoundException
         probNet.addLink(variableX, variableU, true);
         
         addPotentials(probNet, potentialX, potentialU);
@@ -110,7 +109,6 @@ public class IDFactory extends NetsFactory {
         ExactDistrPotential potentialU = createExactDistrPotential(PotentialRole.CONDITIONAL_PROBABILITY, tableUXD, variableU, variableX,
                                                                    variableD);
 
-		//Links throws NodeNotFoundException
         probNet.addLink(variableX, variableY, true);
         probNet.addLink(variableY, variableD, true);
         probNet.addLink(variableX, variableU, true);
@@ -151,7 +149,6 @@ public class IDFactory extends NetsFactory {
         ExactDistrPotential potentialU = createExactDistrPotential(PotentialRole.CONDITIONAL_PROBABILITY, tableUXD, variableU, variableX,
                                                                    variableD);
 
-		//Links throws NodeNotFoundException
         probNet.addLink(variableX, variableU, true);
         probNet.addLink(variableD, variableU, true);
         
@@ -203,7 +200,6 @@ public class IDFactory extends NetsFactory {
         
         ExactDistrPotential potentialU = createExactDistrPotential(PotentialRole.CONDITIONAL_PROBABILITY, tableUD, variableU, variableD);
 
-		//Links throws NodeNotFoundException
         probNet.addLink(variableD, variableU, true);
         
         addPotentials(probNet, potentialU);
@@ -275,8 +271,7 @@ public class IDFactory extends NetsFactory {
 			//Potential U2
 			potentialU = createSumPotential(variableU,variableU1,variableU2);
 				
-			//Links throws NodeNotFoundException
-			try {
+				try {
 				probNet.addLink(variableU1, variableU, true);
 				probNet.addLink(variableU2, variableU, true);
 				
@@ -339,7 +334,6 @@ public class IDFactory extends NetsFactory {
 		//Potential U3
         ExactDistrPotential potentialU3 = createExactDistrPotential(PotentialRole.CONDITIONAL_PROBABILITY, tableU3T, variableU3, variableT);
 
-		//Links throws NodeNotFoundException
         probNet.addLink(variableX, variableY, true);
         probNet.addLink(variableT, variableY, true);
         probNet.addLink(variableY, variableD, true);
@@ -376,7 +370,6 @@ public class IDFactory extends NetsFactory {
 		// Potential U2
 		SumPotential potentialU = createSumPotential(variableU, utilVariables);
 
-		// Links throws NodeNotFoundException
         for (Variable utilVar : utilVariables) {
             probNet.addLink(utilVar, variableU, true);
         }
@@ -498,7 +491,6 @@ public class IDFactory extends NetsFactory {
 		//Potential U2
         ExactDistrPotential potentialU2 = createExactDistrPotential(PotentialRole.CONDITIONAL_PROBABILITY, tableU2D, variableU2, variableD);
 
-		//Links throws NodeNotFoundException
         probNet.addLink(variableX, variableY, true);
         probNet.addLink(variableY, variableD, true);
         probNet.addLink(variableX, variableU1, true);

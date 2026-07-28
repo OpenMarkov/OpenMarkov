@@ -89,7 +89,6 @@ public class MIDFactory extends NetsFactory {
         ExactDistrPotential potentialQoL = createExactDistrPotential(PotentialRole.CONDITIONAL_PROBABILITY, tableQoL, variableQoL,
                                                                      variableState0, variableTreatment);
 
-		//Links throws NodeNotFoundException
         probNet.addLink(variableTreatment, variableCostOfTreatment, true);
         probNet.addLink(variableTreatment, variableQoL, true);
         probNet.addLink(variableTreatment, variableState1, true);
@@ -114,23 +113,13 @@ public class MIDFactory extends NetsFactory {
 		probNet.setDecisionCriteria(decisionCriteria);
 
 		//Variables
-		Variable duration0 = new Variable("Duration", true, 0.0, 20.0, true, 1);
-		duration0.setBaseName("Duration");
-		duration0.setName("Duration [0]");
-		duration0.setTimeSlice(0);
-		Variable duration1 = new Variable("Duration", true, 0.0, 20.0, true, 1);
-		duration1.setBaseName("Duration");
-		duration1.setName("Duration [1]");
-		duration1.setTimeSlice(1);
+		// Setting the time slice already rebuilds the full name as "Duration [0]"; these four
+		// variables used to spell that rule out by hand, which is the same rule written twice.
+		Variable duration0 = temporal(new Variable("Duration", true, 0.0, 20.0, true, 1), 0);
+		Variable duration1 = temporal(new Variable("Duration", true, 0.0, 20.0, true, 1), 1);
 
-		Variable state0 = new Variable("State", "dead", "alive");
-		state0.setBaseName("State");
-		state0.setName("State [0]");
-		state0.setTimeSlice(0);
-		Variable state1 = new Variable("State", "dead", "alive");
-		state1.setBaseName("State");
-		state1.setName("State [1]");
-		state1.setTimeSlice(1);
+		Variable state0 = createTemporalVariable("State", 0, "dead", "alive");
+		Variable state1 = createTemporalVariable("State", 1, "dead", "alive");
 
 		//Add variables to the network
 		addVariables(probNet, NodeType.CHANCE, duration0, duration1, state0, state1);
@@ -350,11 +339,17 @@ public class MIDFactory extends NetsFactory {
 	}
 
 	private static Variable createTemporalVariable(String baseName, int timeSlice, String... statesStateVariable) {
-		Variable variable = new Variable(baseName, statesStateVariable);
+		return temporal(new Variable(baseName, statesStateVariable), timeSlice);
+	}
+
+	/**
+	 * Places an already built variable in a time slice. Setting the slice rebuilds the full name, so
+	 * the variable ends up called, for instance, "State [0]".
+	 */
+	private static Variable temporal(Variable variable, int timeSlice) {
 		variable.setBaseName(variable.getName());
 		variable.setTimeSlice(timeSlice);
 		return variable;
-
 	}
 
 	public static ProbNet createMIDWithoutStateVariable() {
@@ -401,7 +396,6 @@ public class MIDFactory extends NetsFactory {
         ExactDistrPotential potentialCostOfTreatment = createExactDistrPotential(PotentialRole.CONDITIONAL_PROBABILITY,
                                                                                  tableCostOfTreatment, variableCostOfTreatment, variableTreatment);
 
-		//Links throws NodeNotFoundException
         probNet.addLink(variableTreatment, variableQoL, true);
         probNet.addLink(variableTreatment, variableCostOfTreatment, true);
         

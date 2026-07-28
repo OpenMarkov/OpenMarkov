@@ -110,8 +110,8 @@ public class BNFactory extends NetsFactory {
 	}
 
 	/**
-	 * @return A Bayesian network with three nodes (A, B and C) and two links A -> B, and A -> C.
-	 * This network was stored in file "peque.elv"
+	 * @return A Bayesian network with three nodes (A, B and C) and three links: A -&gt; B, A -&gt; C
+	 * and B -&gt; C. The javadoc used to say two links, and to name a file this method does not read.
 	 */
 	public static ProbNet createBN_ABC() {
         
@@ -127,13 +127,7 @@ public class BNFactory extends NetsFactory {
         String relevance = "Relevance";
         String value = "7.0";
 
-		setAdditionalProperties(relevance, value, variableA);
-
-		variableA.setAdditionalProperty(relevance, value);
-		variableB.setAdditionalProperty(relevance, value);
-		variableC.setAdditionalProperty(relevance, value);
-
-		addVariables(peque, NodeType.CHANCE, variableA, variableB, variableC);
+		setAdditionalProperties(relevance, value, variableA, variableB, variableC);
 
 		//Potentials
 		//PotentialType type = PotentialType.TABLE;
@@ -151,11 +145,8 @@ public class BNFactory extends NetsFactory {
 		double[] tableCAB = { 0.02, 0.98, 0.71, 0.29, 0.16, 0.84, 0.85, 0.15 };
 		TablePotential potentialCAB = createTablePotential(role, tableCAB, variableC, variableA, variableB);
 
-		NodeType nodeType = NodeType.CHANCE;
+		addVariables(peque, NodeType.CHANCE, variableA, variableB, variableC);
 
-		addVariables(peque, nodeType, variableA, variableB, variableC);
-
-		//Links throws NodeNotFoundException
         peque.addLink(variableA, variableB, true);
         peque.addLink(variableA, variableC, true);
         peque.addLink(variableB, variableC, true);
@@ -166,8 +157,9 @@ public class BNFactory extends NetsFactory {
 	}
 
 	/**
-	 * @return A Bayesian network with three nodes (A, B and C) and two links A -> B, and A -> C.
-	 * This network was stored in file "peque.elv"
+	 * @return The Asia network: eight nodes about a visit to Asia, tuberculosis, lung cancer and
+	 * bronchitis. The javadoc used to be a copy of the one of {@link #createBN_ABC()}, describing a
+	 * network of three nodes.
 	 */
 	public static ProbNet createBN_Asia() {
         
