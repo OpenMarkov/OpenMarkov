@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.Choice;
 import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.factory.IDFactory;
 import org.openmarkov.core.model.network.potential.*;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
 import org.openmarkov.core.util.UtilTestMethods;
@@ -596,7 +597,7 @@ public class DiscretePotentialOperationsTest {
      */
     @Test
     public void testSumOutVariable2() throws NonProjectablePotentialException {
-        ProbNet perfectKnowledge = IDFactory.createNoKnowledge();
+        ProbNet perfectKnowledge = OperationsIDFactory.createNoKnowledge();
         Variable disease = perfectKnowledge.getVariable("Disease");
         Variable therapy = perfectKnowledge.getVariable("Therapy");
         List<Potential> networkPotentials = perfectKnowledge.getPotentials(disease);
@@ -890,7 +891,7 @@ public class DiscretePotentialOperationsTest {
      */
     @Test
     public void maxOutVariableSaysSoWhenTheProbabilityIsNull() {
-        ProbNet perfectKnowledge = IDFactory.createPerfectKnowledge();
+        ProbNet perfectKnowledge = OperationsIDFactory.createPerfectKnowledge();
         Variable therapy = perfectKnowledge.getVariable("Therapy");
         TablePotential someUtility = DiscretePotentialOperations.createZeroUtilityPotential(null);
 
@@ -904,7 +905,7 @@ public class DiscretePotentialOperationsTest {
     @Test
     public void testMaxOutVariable() throws NonProjectablePotentialException {
         // Method invocation
-        ProbNet perfectKnowledge = IDFactory.createPerfectKnowledge();
+        ProbNet perfectKnowledge = OperationsIDFactory.createPerfectKnowledge();
         Variable disease = perfectKnowledge.getVariable("Disease");
         Variable therapy = perfectKnowledge.getVariable("Therapy");
         List<Potential> potentials = perfectKnowledge.getPotentials(therapy);
@@ -955,7 +956,7 @@ public class DiscretePotentialOperationsTest {
     //TODO This test should be reviewed after we decide what to do with the role policy
 /*	@Test
 	public void joinTestMaxOutAndSumOut() throws NodeNotFoundException {
-		ProbNet testDecision = org.openmarkov.core.model.network.factory.IDFactory.buildIDDecideTest();
+		ProbNet testDecision = IDFactory.buildIDDecideTest();
 
 		// Remove disease
 		Variable disease = testDecision.getVariable("Disease");

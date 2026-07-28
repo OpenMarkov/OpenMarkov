@@ -21,10 +21,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Builds the small influence diagrams that the tests of the potential operations use.
+ *
+ * <p>It used to be called {@code IDFactory}, the same simple name as
+ * {@link org.openmarkov.core.model.network.factory.IDFactory}, which builds a different set of
+ * influence diagrams — a trap that already forced one test in this package to write the other class
+ * fully qualified.
+ *
  * @author manuel
- * This class creates some influence diagrams for test purposes.
  */
-public class IDFactory {
+public class OperationsIDFactory {
     
     private static final Variable costOfTherapy = new Variable("Cost of therapy");
     private static final Variable costOfTest = new Variable("Cost of test");
