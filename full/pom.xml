@@ -14,7 +14,9 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm-ss</maven.build.timestamp.format>
-        <skip.msi>true</skip.msi>
+        <!-- The msi and exe installers only exist on Windows, so the Installer profile skips
+             them by default; the detect-windows profile below flips this to false. -->
+        <skip.installer.windows>true</skip.installer.windows>
     </properties>
     <dependencies>
         <dependency>
@@ -142,7 +144,8 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>3.1.1</version>
                         <configuration>
-                            <!-- All the following executions won't take place if on Windows -->
+                            <!-- All the following executions only take place on Windows: jpackage
+                                 rejects the msi and exe types on any other operating system. -->
                             <!-- A member of CISIAD with a Linux OS should take care of the Linux installers -->
                             <skip>${skip.installer.windows}</skip>
                         </configuration>

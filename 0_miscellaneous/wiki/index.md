@@ -34,6 +34,8 @@ Once then, there are certain Wiki pages you'll find useful for developing in Ope
   forms to specify the bug or idea.
 * [Using OpenMarkov as a dependency](Using_openmarkov_as_a_dependency.md): how to add OpenMarkov as
   a dependency for your projects.
+* [Building and packaging OpenMarkov](Building_and_packaging_OpenMarkov.md): how to produce a
+  runnable jar and how to build the native installers.
 * [Java's Metaprogramming Overview and Tutorial](Java's_Metaprogramming/Java's_Metaprogramming_Overview_and_Tutorial.md):
   and overview to Java's Annotation Processing as a Metaprogramming system; It includes a tutorial
   on how to use it.
