@@ -225,4 +225,17 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 	 */
 	public abstract void setOnlyValueForUtility(Potential tablePotential);
 
+	/**
+	 * Says what this tree carries as its utility: a single number or a cost-effectiveness
+	 * function of the willingness to pay.
+	 *
+	 * <p>The type parameter {@code T} already says it, but Java erases it at run time, so a
+	 * consumer holding a {@code DecisionTreeNode<?>} had no way of asking — which forced the
+	 * exporters to test against the concrete subclasses of the inference module, coupling a
+	 * file-format module to the internals of an algorithm.
+	 *
+	 * @return the kind of evaluation this node belongs to
+	 */
+	public abstract EvaluationType getEvaluationType();
+
 }

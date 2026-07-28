@@ -38,4 +38,9 @@ final class StubDecisionTreeNode<T> extends DecisionTreeNode<T> {
     public void setOnlyValueForUtility(Potential tablePotential) {
         // unused in tests
     }
+
+    @Override
+    public EvaluationType getEvaluationType() {
+        return EvaluationType.UNICRITERION;
+    }
 }

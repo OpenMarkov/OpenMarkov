@@ -5,7 +5,6 @@ open module org.openmarkov.io {
     requires org.apache.commons.io;
     requires jeval;
     requires org.jetbrains.annotations;
-    requires org.openmarkov.inference;
     requires org.apache.poi.poi;
     requires java.xml;
     requires antlr;

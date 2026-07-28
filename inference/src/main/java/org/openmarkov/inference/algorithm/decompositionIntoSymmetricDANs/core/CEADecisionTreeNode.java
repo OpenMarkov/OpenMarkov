@@ -2,6 +2,7 @@ package org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core;
 
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.EvaluationType;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
@@ -42,6 +43,11 @@ public class CEADecisionTreeNode extends DecisionTreeNode<CEP> {
     @Override
     public void setOnlyValueForUtility(Potential tablePotential) {
         setUtility(DANOperations.getOnlyValuePotentialCEP((GTablePotential) tablePotential));
+    }
+
+    @Override
+    public EvaluationType getEvaluationType() {
+        return EvaluationType.CE;
     }
 
 }

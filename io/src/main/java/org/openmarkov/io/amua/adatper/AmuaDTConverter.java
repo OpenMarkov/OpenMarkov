@@ -2,8 +2,6 @@ package org.openmarkov.io.amua.adatper;
 
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.decisiontree.*;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.EvaluationDecisionTreeNode;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.CEADecisionTreeNode;
 import org.openmarkov.io.amua.model.*;
 
 import java.util.ArrayList;
@@ -292,10 +290,10 @@ public class AmuaDTConverter {
         if (amuaModel != AmuaModel.COST_EFFECTIVENESS_DT) {
             throw new IllegalArgumentException("Invalid tree type for CEA utility.");
         }
-        if (!(node instanceof CEADecisionTreeNode ceaNode)) {
+        if (node.getEvaluationType() != EvaluationType.CE) {
             return null;
         }
-        return ceaNode.getUtility();
+        return (CEP) node.getUtility();
     }
 
 
@@ -310,7 +308,7 @@ public class AmuaDTConverter {
             throw new IllegalArgumentException("Invalid tree type for unicriteria utility.");
         }
 
-        Double utility = ((EvaluationDecisionTreeNode) node).getUtility();
+        Double utility = (Double) node.getUtility();
         return (utility != null) ? utility : 0.0;
     }
 }

@@ -3,6 +3,7 @@ package org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.EvaluationType;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -51,6 +52,11 @@ public class EvaluationDecisionTreeNode extends DecisionTreeNode<Double> {
 	@Override
 	public void setOnlyValueForUtility(Potential tablePotential) {
 		this.setUtility(DANOperations.getOnlyValuePotential((TablePotential) tablePotential));
+	}
+
+	@Override
+	public EvaluationType getEvaluationType() {
+		return EvaluationType.UNICRITERION;
 	}
 
 }

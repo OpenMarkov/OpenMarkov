@@ -2,8 +2,6 @@ package org.openmarkov.io.amua.adatper;
 
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.decisiontree.*;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.EvaluationDecisionTreeNode;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.CEADecisionTreeNode;
 import org.openmarkov.io.amua.model.AmuaModel;
 
 import java.util.EnumSet;
@@ -65,7 +63,7 @@ public class AmuaDTValidator {
                 if (isCriticalError(e)) {
                     throw e;
                 }
-                if (ceError != null && (treeNode instanceof CEADecisionTreeNode)){
+                if (ceError != null && treeNode.getEvaluationType() == EvaluationType.CE){
                     throw ceError;
                 }
                 throw e;
@@ -103,12 +101,12 @@ public class AmuaDTValidator {
      * @throws IllegalStateException if the node is invalid.
      */
     private void isValidNode(DecisionTreeNode<?> node, int maxDecisionNodes, boolean isCE) {
-        // validate node class type
-        if (isCE && !(node instanceof CEADecisionTreeNode)) {
+        // validate the kind of evaluation the node belongs to
+        if (isCE && node.getEvaluationType() != EvaluationType.CE) {
             throw new IllegalStateException("Invalid node type for Cost-Effectiveness tree.");
         }
 
-        if (!isCE && !(node instanceof EvaluationDecisionTreeNode)) {
+        if (!isCE && node.getEvaluationType() != EvaluationType.UNICRITERION) {
             throw new IllegalStateException("Invalid node type for Unicriteria tree.");
         }
 
