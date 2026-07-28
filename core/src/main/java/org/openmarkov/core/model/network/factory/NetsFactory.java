@@ -118,14 +118,19 @@ public class NetsFactory {
 	}
 
 	/**
-	 * Create utility potential
+	 * Creates the potential of a super-value node: the sum of the utilities of its parents.
 	 *
-	 * @param varSV the var sv
-	 * @param parents Variables
-	 * @return A TablePotential
+	 * <p>The list started as {@code Arrays.asList(varSV)}, which is backed by an array and therefore
+	 * of fixed size, so the {@code addAll} that came next threw {@code UnsupportedOperationException}
+	 * every time this method was called.
+	 *
+	 * @param varSV the variable of the super-value node, which goes first
+	 * @param parents the variables whose utilities are added up
+	 * @return A SumPotential over the super-value variable and its parents
 	 */
 	protected static SumPotential createSumPotential(Variable varSV, Variable... parents) {
-		List<Variable> variables = Arrays.asList(varSV);
+		List<Variable> variables = new ArrayList<>();
+		variables.add(varSV);
 		variables.addAll(createVariableList(parents));
 		return new SumPotential(variables, PotentialRole.CONDITIONAL_PROBABILITY);
 	}

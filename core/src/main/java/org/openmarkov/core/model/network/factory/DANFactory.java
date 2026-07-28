@@ -1448,7 +1448,7 @@ public class DANFactory extends NetsFactory {
 		for (int i = 0; i < numTests; i++) {
 			nodeTestResult[i] = probNet.addNode(varTest_Result[i], NodeType.CHANCE);
 			nodeDecTest[i] = probNet.addNode(varDec_Test[i], NodeType.DECISION);
-			nodeCostOfTest[i] = probNet.addNode(varTest_Result[i], NodeType.UTILITY);
+			nodeCostOfTest[i] = probNet.addNode(varCost_of_Test[i], NodeType.UTILITY);
 		}
 
 		// Links
@@ -1484,11 +1484,8 @@ public class DANFactory extends NetsFactory {
 		//Potentials for costs of tests
         ExactDistrPotential[] potentialCostOfTest = new ExactDistrPotential[numTests];
 		for (int i = 0; i < numTests; i++) {
-			List<Variable> variableList = new ArrayList<>();
-			variableList.add(varCost_of_Test[i]);
-			variableList.addAll(Arrays.asList(varDec_Test));
-			potentialCostOfTest[i] = new ExactDistrPotential(variableList);
-			potentialCostOfTest[i].getTablePotential().setValues(new double[] { 0, 50 });
+			potentialCostOfTest[i] = new ExactDistrPotential(Arrays.asList(varCost_of_Test[i], varDec_Test[i]));
+			potentialCostOfTest[i].getTablePotential().setValues(new double[] { 0, -0.5 });
 			nodeCostOfTest[i].setPotential(potentialCostOfTest[i]);
 		}
 
@@ -1496,6 +1493,16 @@ public class DANFactory extends NetsFactory {
 				Arrays.asList(varQuality_of_life, varDiabetes, varTherapy));
 		potQuality_of_life.getTablePotential().setValues(new double[] { 10, 3, 9, 8 });
 		nodeQuality_of_life.setPotential(potQuality_of_life);
+
+		TablePotential potSymptom = new TablePotential(Arrays.asList(varSymptom, varDiabetes),
+				PotentialRole.CONDITIONAL_PROBABILITY);
+		potSymptom.setValues(new double[] { 0.999, 0.001, 0.15, 0.85 });
+		nodeSymptom.setPotential(potSymptom);
+
+		TablePotential potDiabetes = new TablePotential(Arrays.asList(varDiabetes),
+				PotentialRole.CONDITIONAL_PROBABILITY);
+		potDiabetes.setValues(new double[] { 0.93, 0.07 });
+		nodeDiabetes.setPotential(potDiabetes);
 
 		// Link<Node> restrictions and revealing states
 		for (int i = 0; i < numTests; i++) {
