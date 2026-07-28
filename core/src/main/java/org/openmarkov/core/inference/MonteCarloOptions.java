@@ -96,7 +96,12 @@ public class MonteCarloOptions implements Cloneable {
         this.trimmedMean = monteCarloOptions.isTrimmedMean();
         this.median = monteCarloOptions.isMedian();
         this.inputFilePath = monteCarloOptions.inputFilePath;
-
+        // These three were missing, so a copy came back with them at their default value: the
+        // probabilistic sensitivity analysis switched off, and no textual log and no sum even if
+        // the user had asked for them.
+        this.psa = monteCarloOptions.isPsa();
+        this.textualLog = monteCarloOptions.isTextualLog();
+        this.sum = monteCarloOptions.isSum();
     }
 
     /**
