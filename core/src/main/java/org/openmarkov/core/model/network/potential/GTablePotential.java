@@ -63,6 +63,17 @@ public class GTablePotential<E> extends AbstractIndexedPotential implements CEUt
 	}
 
 	/**
+	 * Copy constructor. It routes through the copy constructor of the base class - which is
+	 * what replicates the comment and clones the criterion - and it is also the constructor
+	 * {@code Potential.deepCopy} looks up by reflection: without one whose parameter is
+	 * exactly this class, every deep copy of a generalized table threw.
+	 */
+	public GTablePotential(GTablePotential<E> potential) {
+		super(potential);
+		this.elementTable = new ArrayList<>(potential.elementTable);
+	}
+
+	/**
 	 * Always throws {@link NonProjectablePotentialException} because a generalized
 	 * table of arbitrary elements cannot be projected to a table.
 	 */
@@ -73,7 +84,7 @@ public class GTablePotential<E> extends AbstractIndexedPotential implements CEUt
 
 	@Override
 	public Potential copy() {
-		return new GTablePotential<>(variables, role, new ArrayList<>(elementTable));
+		return new GTablePotential<>(this);
 	}
 
 	/**

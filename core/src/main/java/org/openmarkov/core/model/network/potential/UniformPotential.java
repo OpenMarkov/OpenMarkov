@@ -67,9 +67,10 @@ import java.util.Random;
      */
     public UniformPotential(UniformPotential potential) {
         super(potential);
-        if (allVariablesAreDiscrete(variables)) {
-            discreteValue = calculateDiscreteValue(variables);
-        }
+        // Copied, not recalculated: setDiscreteValue overrides the computed value (the
+        // discount in cost-effectiveness analyses), and recalculating here lost it while
+        // deepCopy preserved it - the two copies of the same potential disagreed.
+        discreteValue = potential.discreteValue;
     }
     
     // Methods

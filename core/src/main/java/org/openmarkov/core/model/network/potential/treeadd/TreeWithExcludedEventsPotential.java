@@ -79,7 +79,10 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
 	 */
 	public TreeWithExcludedEventsPotential(TreeWithExcludedEventsPotential treeWithExcludedEvents) {
 		this(treeWithExcludedEvents.getVariables(),treeWithExcludedEvents.role);
-		TreeADDPotential treesToCopy =(TreeADDPotential) treeWithExcludedEvents.getNoEventTree().copy();
+		// The copied tree used to be built and dropped - the local variable was never
+		// assigned - so the copy kept the fresh empty tree of the delegated constructor
+		// instead of the tree of the original.
+		noEventTree = (TreeADDPotential) treeWithExcludedEvents.getNoEventTree().copy();
 	}
 
 	/**
