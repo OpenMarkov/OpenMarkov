@@ -81,6 +81,8 @@ public enum ActionCommands {
     EDITION_MODE_PREFIX("Edit.Mode"),
     /** Action invoked when the user wants to activate the selection option. */
     OBJECT_SELECTION("Edit.Mode.Selection"),
+
+    SET_NODE_MODE_CREATION("Edit.Mode.NodeCreationMode"),
     /** Action invoked when the user wants to activate the chance node creation option. */
     CHANCE_CREATION("Edit.Mode.Chance"),
     /** Action invoked when the user wants to activate the decision node creation option. */

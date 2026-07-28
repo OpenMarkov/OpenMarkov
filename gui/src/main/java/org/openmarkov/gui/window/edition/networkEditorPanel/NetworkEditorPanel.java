@@ -6,30 +6,18 @@ package org.openmarkov.gui.window.edition.networkEditorPanel;/*
  */
 
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.action.core.AbsorbNodeEdit;
 import org.openmarkov.core.action.core.AbsorbParentsEdit;
 import org.openmarkov.core.action.core.RemovePolicyEdit;
-import org.openmarkov.core.exception.CannotNormalizePotentialException;
-import org.openmarkov.core.exception.ConstraintViolatedException;
-import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.NotEvaluableNetworkException;
-import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.core.exception.WriterException;
+import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.tasks.OptimalPolicies;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
-import org.openmarkov.core.model.network.Node;
-import org.openmarkov.core.model.network.NodeType;
-import org.openmarkov.core.model.network.Point2D;
-import org.openmarkov.core.model.network.PolicyType;
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.gui.action.AutoArrangeEdit;
 import org.openmarkov.gui.action.PasteEdit;
@@ -43,14 +31,9 @@ import org.openmarkov.gui.dialog.node.PotentialEditDialog;
 import org.openmarkov.gui.exception.NoSelectedNodeException;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.exception.PreResolutionNodeInInferenceException;
-import org.openmarkov.gui.graphic.FSVariableBox;
-import org.openmarkov.gui.graphic.InnerBox;
-import org.openmarkov.gui.graphic.NumericVariableBox;
-import org.openmarkov.gui.graphic.VisualLink;
-import org.openmarkov.gui.graphic.VisualNetwork;
-import org.openmarkov.gui.graphic.VisualNode;
-import org.openmarkov.gui.graphic.VisualState;
+import org.openmarkov.gui.graphic.*;
 import org.openmarkov.gui.layout.bayesian.StressLayout;
+import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 import org.openmarkov.gui.menutoolbar.menu.ContextualMenuFactory;
 import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.EditorPanel;
@@ -67,22 +50,10 @@ import org.openmarkov.inference.algorithm.variableElimination.tasks.VEExpectedUt
 import org.openmarkov.java.initialization.Lazy;
 import org.openmarkov.java.swing.PointUtils;
 
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
-import javax.swing.JToolTip;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
+import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.Serial;
@@ -121,12 +92,18 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     // This should be in a future a configuration option that should be read on
     // start
     private static final int DEFAULT_THRESHOLD_VALUE = 5;
-    
-    
+
+
     private final EditorInputHandler editorInputHandler;
     private final EvidenceManager evidenceManager;
     private final InferencePresenter inferencePresenter;
-    
+
+    private @NotNull BaseTool baseTool = BaseTool.SELECTION;
+
+    public enum BaseTool {
+        SELECTION, LINK, NODE,
+    }
+
     /**
      * Object to convert coordinates of the screen to the panel and vice versa.
      */
@@ -151,7 +128,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * This variable indicates which is the expansion threshold of the network
      */
     private double currentExpansionThreshold = NetworkEditorPanel.DEFAULT_THRESHOLD_VALUE;
-    
+
     /**
      * This variable indicates if the propagation mode is automatic or manual.
      */
@@ -165,59 +142,69 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * Object that assists this panel in the operations with the clipboard.
      */
     private static final EditorPanelClipboardAssistant CLIPBOARD_ASSISTANT = new EditorPanelClipboardAssistant();
-    
+
     private final EditionModeManager editionModeManager;
-    
+
+    private NodeType preferredNodeToCreate = NodeType.CHANCE;
+
+    public void setPreferredNodeToCreate(NodeType preferredNodeToCreate) {
+        this.preferredNodeToCreate = preferredNodeToCreate;
+    }
+
+    public NodeType getPreferredNodeToCreate() {
+        return this.preferredNodeToCreate;
+    }
+
     private static final Lazy<JDialog> HELP_DIALOG = GUIUtils
             .generateHelpDialog("Help - Use of the Network editor",
-                                """
-                                        <html lang="en">
-                                        <table>
-                                            <tr>
-                                                <th>
-                                                    Input
-                                                </th>
-                                                <th>
-                                                    Action
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Double-click on empty space
-                                                </td>
-                                                <td>
-                                                    Creates a new node and opens its properties.<br>
-                                                    <br>
-                                                    Note: cancelling the properties will erase the node.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Right click
-                                                </td>
-                                                <td>
-                                                    Opens a contextual menu for the selected element.<br>
-                                                    <br>
-                                                    Right-clicking on an empty spaces shows a contextual<br>
-                                                    menu for the network itself.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Hold Ctrl + Shift
-                                                </td>
-                                                <td>
-                                                    When at least one node is selected, it shows an arrow<br>
-                                                    with which you can select another node to create a link.<br>
-                                                    <br>
-                                                    If the "Alt" key is pressed, the direction of the arrow<br>
-                                                    will change the direction.
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        </html>
-                                        """);
-    
+                    """
+                            <html lang="en">
+                            <table>
+                                <tr>
+                                    <th>
+                                        Input
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Double-click on empty space
+                                    </td>
+                                    <td>
+                                        Creates a new node and opens its properties.<br>
+                                        <br>
+                                        Note: cancelling the properties will erase the node.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Right click
+                                    </td>
+                                    <td>
+                                        Opens a contextual menu for the selected element.<br>
+                                        <br>
+                                        Right-clicking on an empty spaces shows a contextual<br>
+                                        menu for the network itself.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Hold Ctrl + Shift
+                                    </td>
+                                    <td>
+                                        When at least one node is selected, it shows an arrow<br>
+                                        with which you can select another node to create a link.<br>
+                                        <br>
+                                        If the "Alt" key is pressed, the direction of the arrow<br>
+                                        will change the direction.
+                                    </td>
+                                </tr>
+                            </table>
+                            </html>
+                            """);
+
     /**
      * Constructor that creates the instance.
      *
@@ -249,22 +236,22 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         decisionTreeEditors = new ArrayList<>();
         GUIUtils.addHelp(this, NetworkEditorPanel.HELP_DIALOG);
     }
-    
-    
+
+
     @Override
     public void updateUI() {
         super.updateUI();
         this.setBackground(GUIColors.Network.BACKGROUND.getColor());
     }
-    
+
     public double getCurrentWidth() {
         return this.currentWidth;
     }
-    
+
     public double getCurrentHeight() {
         return this.currentHeight;
     }
-    
+
     /**
      * Changes the presentation mode of the foreground of the nodes.
      *
@@ -274,8 +261,9 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.visualNetwork.setByTitle(value);
         this.readjustAndRepaint();
     }
-    
-    @Override protected void doPaint(Graphics2D graphics2D) {
+
+    @Override
+    protected void doPaint(Graphics2D graphics2D) {
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics2D.scale(this.zoomManager.getZoom(), this.zoomManager.getZoom());
         for (VisualLink visualLink : this.visualNetwork.getVisualLinks()) {
@@ -292,49 +280,63 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
             this.visualNetwork.getSelection().paint(graphics2D);
         }
     }
-    
+
     /**
      * Reader used to read this network.
      */
     private ProbNetReader reader;
-    
+
     /**
      * Writer used to save this network
      */
     private ProbNetWriter writer;
-    
+
     public ProbNetReader getReader() {
         return this.reader;
     }
-    
+
     public void setReader(@Nullable ProbNetReader reader) {
         this.reader = reader;
     }
-    
+
     public ProbNetWriter getWriter() {
         return this.writer;
     }
-    
+
     public void setWriter(@Nullable ProbNetWriter writer) {
         this.writer = writer;
     }
-    
+
     /**
      * Changes the state of the edition and carries out the necessary actions in
      * each case.
      *
-     * @param newEditionModeName new edition mode state.
+     * @param baseToolCommand new edition mode state.
      */
-    public void setEditionMode(String newEditionModeName) {
-        EditionMode newEditionMode = this.editionModeManager.getEditionMode(newEditionModeName);
-        if (!this.editionMode.equals(newEditionMode)) {
-            this.setCursor(this.editionModeManager.getCursor(newEditionModeName));
-            this.visualNetwork.setSelectedAllObjects(false);
-            this.editionMode = newEditionMode;
-            this.repaint();
+    public void setBaseTool(String baseToolCommand) {
+        ActionCommands command = ActionCommands.of(baseToolCommand);
+        BaseTool tool = switch (command) {
+            case LINK_CREATION -> BaseTool.LINK;
+            case OBJECT_SELECTION -> BaseTool.SELECTION;
+            case SET_NODE_MODE_CREATION -> BaseTool.NODE;
+            case null -> null;
+            default -> null;
+        };
+        if (tool != null) {
+            setBaseTool(tool);
         }
     }
-    
+
+    public void setBaseTool(@NotNull BaseTool tool) {
+        this.baseTool = tool;
+        mainPanel.getEditionToolBar().updateFor(this);
+        this.repaint();
+    }
+
+    public @NotNull BaseTool getBaseTool() {
+        return this.baseTool;
+    }
+
     /**
      * Selects all nodes and links.
      */
@@ -342,7 +344,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.visualNetwork.setSelectedAllObjects(true);
         this.repaint();
     }
-    
+
     /**
      * Re-positions every node of the current network using stress-
      * majorization with a directional bias that keeps parents above
@@ -368,7 +370,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
             throw new UnreachableException(e);
         }
     }
-    
+
     /**
      * Return the height of the panel after applying the zoomManager.
      *
@@ -377,7 +379,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     private double getNewHeight() {
         return this.zoomManager.panelToScreen(this.currentHeight);
     }
-    
+
     /**
      * Return the width of the panel after applying the zoomManager.
      *
@@ -386,7 +388,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     private double getNewWidth() {
         return this.zoomManager.panelToScreen(this.currentWidth);
     }
-    
+
     /**
      * Returns the value of the zoomManager.
      *
@@ -395,7 +397,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public double getZoom() {
         return this.zoomManager.getZoom();
     }
-    
+
     /**
      * Changes the value of the zoomManager.
      *
@@ -410,7 +412,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
             this.readjustAndRepaint();
         }
     }
-    
+
     /**
      * Sets a new contextual menu factory.
      *
@@ -419,8 +421,8 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void setContextualMenuFactory(ContextualMenuFactory newContextualMenuFactory) {
         this.editorInputHandler.setContextualMenuFactory(newContextualMenuFactory);
     }
-    
-    
+
+
     public Node getSelectedNode() {
         VisualNode selectedNode = this.visualNetwork.getLastSelectedNode();
         if (selectedNode == null) { // This never happens
@@ -428,7 +430,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         }
         return selectedNode.getNode();
     }
-    
+
     /**
      * This method shows a dialog box with the additionalProperties of a node.
      * If some property has changed, insert a new undo point into the network
@@ -436,7 +438,6 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      *
      * @param selectedNode the selected node
      * @param newNode      the new node
-     *
      * @return the result
      */
     boolean changeNodeProperties(VisualNode selectedNode, boolean newNode) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
@@ -449,7 +450,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         }
         return userAcceptedChanges;
     }
-    
+
     public void changeNodeProperties() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         var selectedNode = this.visualNetwork.getLastSelectedNode();
         if (selectedNode == null) {
@@ -457,7 +458,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         }
         this.changeNodeProperties(selectedNode, false);
     }
-    
+
     public void showPotentialDialog(boolean readOnly) throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, ConstraintViolatedException, CannotNormalizePotentialException {
         Node node = this.visualNetwork.getLastSelectedNode().getNode();
         if (this.requestPotentialValues(GUIUtils.getOwner(this), node, readOnly)) {
@@ -466,7 +467,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
             this.evidenceManager.removeNodeEvidenceInAllCases(node);
         }
     }
-    
+
     /**
      * This method requests to the user the additionalProperties of a node.
      *
@@ -476,7 +477,6 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      *                           and where changes will be saved.
      * @param newNode            specifies if the node whose additionalProperties are going
      *                           to be edited is new.
-     *
      * @return true, if the user save the changes on node; otherwise, false.
      */
     private static boolean requestNodePropertiesToUser2(Window owner, NetworkEditorPanel networkEditorPanel, VisualNode node, boolean newNode) {
@@ -490,7 +490,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         }
         return result;
     }
-    
+
     private boolean requestPotentialValues(Window owner, Node node, boolean readOnly) {
         /**
          * Object Dialog for potentials edition
@@ -504,7 +504,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
                         == OkCancelDialog.ChosenOption.Ok
         );
     }
-    
+
     /**
      * This method shows a dialog box with the additionalProperties of a link.
      * If some property has changed, insert a new undo point into the network
@@ -518,7 +518,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
          * editing the additionalProperties of a link in future versions.
          */
     }
-    
+
     /**
      * This method shows a dialog box with the additionalProperties of the
      * network. If some property has changed, insert a new undo point into the
@@ -530,7 +530,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         NetworkPropertiesDialog dialogProperties = new NetworkPropertiesDialog(owner, this.visualNetwork.getProbNet(), this.workingMode != WorkingMode.EDITION);
         dialogProperties.showProperties();
     }
-    
+
     /**
      * This method imposes a policy in a decision node.
      */
@@ -540,7 +540,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
     }
-    
+
     /**
      * This method edits an imposed policy of a decision node.
      */
@@ -550,7 +550,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
     }
-    
+
     /**
      * This method removes an imposed policy from a decision node.
      */
@@ -565,13 +565,13 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
     }
-    
+
     private static void requestImposePolicyValues(Window owner, Node node) {
         PotentialEditDialog imposePolicyDialog = new ImposePolicyDialog(owner, false, node);
         imposePolicyDialog.requestValues();
     }
-    
-    
+
+
     /**
      * This method shows the expected utility of a decision node.
      */
@@ -589,7 +589,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
     }
-    
+
     /**
      * This method shows the optimal policy for a decision node.
      */
@@ -616,8 +616,8 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
     }
-    
-    
+
+
     /**
      * This method returns true if propagation type currently set is automatic;
      * false if manual.
@@ -627,7 +627,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public boolean isAutomaticPropagation() {
         return this.automaticPropagation;
     }
-    
+
     /**
      * This method sets the current propagation type.
      *
@@ -636,7 +636,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void setAutomaticPropagation(boolean automaticPropagation) {
         this.automaticPropagation = automaticPropagation;
     }
-    
+
     /**
      * This method sets the propagation status.
      *
@@ -646,7 +646,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.propagationActive = propagationActive;
         this.visualNetwork.setPropagationActive(propagationActive);
     }
-    
+
     /**
      * This method returns the associated network panel.
      *
@@ -655,7 +655,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public NetworkEditorPanel getNetworkEditorPanel() {
         return this;
     }
-    
+
     /**
      * This method returns the current expansion threshold.
      *
@@ -664,7 +664,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public double getExpansionThreshold() {
         return this.currentExpansionThreshold;
     }
-    
+
     /**
      * This method changes the current expansion threshold.
      *
@@ -673,7 +673,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void setExpansionThreshold(double expansionThreshold) {
         this.currentExpansionThreshold = expansionThreshold;
     }
-    
+
     /**
      * This method updates the expansion state (expanded/contracted) of the
      * nodes. It is used in transitions from edition to inference mode and vice
@@ -706,7 +706,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
             }
         }
     }
-    
+
     public void temporalEvolution() {
         List<VisualNode> selectedNode = this.visualNetwork.getSelectedNodes();
         if (selectedNode.size() == 1) {
@@ -720,8 +720,8 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
                     .getProbNet(), this.evidenceManager.getPreResolutionEvidence());
         }
     }
-    
-    
+
+
     /**
      * This method updates all visual states of all visual nodes when it is
      * needed for a navigation operation among the existing evidence cases, a
@@ -750,7 +750,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         }
         this.repaint();
     }
-    
+
     /**
      * Returns the visualNetwork.
      *
@@ -759,7 +759,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public VisualNetwork getVisualNetwork() {
         return this.visualNetwork;
     }
-    
+
     /**
      * Sets workingMode
      *
@@ -773,10 +773,10 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
             this.setCursor(this.editionModeManager.getDefaultCursor());
         }
     }
-    
+
     private static final int EXTRA_PIXELS_SPACE_ON_RIGHT_SIDE = 300;
     private static final int EXTRA_PIXELS_SPACE_ON_BOTTOM_SIDE = 140;
-    
+
     /**
      * If the dimensions of the network are greater than the dimensions of the
      * panel, changes the dimensions of the panel in order to accommodate the
@@ -790,11 +790,11 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
                 (int) Math.round(this.getNewWidth()) + NetworkEditorPanel.EXTRA_PIXELS_SPACE_ON_RIGHT_SIDE,
                 (int) Math.round(this.getNewHeight()) + NetworkEditorPanel.EXTRA_PIXELS_SPACE_ON_BOTTOM_SIDE
         );
-        
+
         this.setPreferredSize(newDimension);
         this.setSize(newDimension);
     }
-    
+
     /**
      * Sets the zoomManager so the displayed network fits in the panel.
      */
@@ -802,46 +802,46 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         double[] networkBounds = this.visualNetwork.getNetworkBounds((Graphics2D) this.getGraphics());
         Dimension panelBounds = this.getMainPanel().getNetworksTabPanel().getSize();
         double zoom = 1;
-        
+
         while (((networkBounds[1] * zoom) > panelBounds.getWidth())
                 || ((networkBounds[3] * zoom) > panelBounds.getHeight()) && zoom > 0.1) {
             zoom -= 0.1;
         }
         this.setZoom(zoom);
     }
-    
+
     // The key listener needs a focusable object to listen
     @Override
     public boolean isFocusable() {
         return true;
     }
-    
+
     public EvidenceManager getEvidenceManager() {
         return this.evidenceManager;
     }
-    
+
     public void readjustAndRepaint() {
         this.adjustPanelDimension();
         this.revalidate();
         this.repaint();
     }
-    
+
     public InferencePresenter getInferencePresenter() {
         return inferencePresenter;
     }
-    
+
     public ZoomManager getZoomManager() {
         return this.zoomManager;
     }
-    
+
     public EditionMode getEditionMode() {
         return this.editionMode;
     }
-    
+
     public void updateName(String baseName) {
         this.setName("NetworkEditorOf" + baseName);
     }
-    
+
     /**
      * Application main
      */
@@ -850,7 +850,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * Name of the file where the network is saved (updated or not).
      */
     private String networkFile = null;
-    
+
     /**
      * Indicates if the network has been modified.
      */
@@ -860,15 +860,15 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * is initially set to Edition Mode
      */
     private WorkingMode workingMode = WorkingMode.EDITION;
-    
+
     private final ArrayList<DecisionTreeEditor> decisionTreeEditors;
-    
+
     public enum WorkingMode {
         EDITION, INFERENCE
     }
-    
+
     private final List<Consumer<NetworkEditorPanel>> onModificationListener;
-    
+
     /**
      * This method initializes this.
      *
@@ -877,7 +877,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public NetworkEditorPanel getEditorPanel() {
         return this;
     }
-    
+
     /**
      * Returns the network which is edited.
      *
@@ -886,7 +886,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public ProbNet getProbNet() {
         return visualNetwork.getProbNet();
     }
-    
+
     /**
      * Returns the application main panel.
      *
@@ -895,7 +895,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public MainPanel getMainPanel() {
         return mainPanel;
     }
-    
+
     /**
      * Returns the modification state of the network.
      *
@@ -904,11 +904,11 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public boolean getModified() {
         return modified;
     }
-    
+
     public void addOnModification(Consumer<NetworkEditorPanel> action) {
         this.onModificationListener.add(action);
     }
-    
+
     /**
      * Sets the modification state of the network to a new value.
      *
@@ -920,7 +920,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
             onModification.accept(this);
         }
     }
-    
+
     public void onSave() {
         this.getProbNet().getPNESupport().onSave();
         modified = false;
@@ -928,7 +928,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
             onModification.accept(this);
         }
     }
-    
+
     /**
      * Returns the name of the file where the network is saved.
      *
@@ -937,8 +937,8 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public String getNetworkFile() {
         return networkFile;
     }
-    
-    
+
+
     /**
      * Sets the name of the file where the network is saved.
      *
@@ -947,7 +947,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void setNetworkFile(String name) {
         networkFile = name;
     }
-    
+
     /**
      * Returns the current working mode.
      *
@@ -956,7 +956,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public WorkingMode getWorkingMode() {
         return workingMode;
     }
-    
+
     @Override
     public JToolTip createToolTip() {
         JToolTip customTip = new JToolTip();
@@ -965,35 +965,35 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         }
         customTip.addAncestorListener(new AncestorListener() {
             private int originalDismissDelay;
-            
+
             @Override
             public void ancestorAdded(AncestorEvent event) {
                 originalDismissDelay = ToolTipManager.sharedInstance().getDismissDelay();
                 ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
             }
-            
+
             @Override
             public void ancestorRemoved(AncestorEvent event) {
                 ToolTipManager.sharedInstance().setDismissDelay(originalDismissDelay);
             }
-            
+
             @Override
             public void ancestorMoved(AncestorEvent event) {
             }
         });
-        
+
         JEditorPane htmlPane = new JEditorPane();
         htmlPane.setContentType("text/html");
         htmlPane.setText(this.getToolTipText());
         htmlPane.setEditable(false);
         htmlPane.setBackground(customTip.getBackground());
-        
+
         JScrollPane scrollPane = new JScrollPane(htmlPane);
         scrollPane.setBorder(null);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(0));
-        
+
         customTip.setLayout(new BorderLayout());
         customTip.add(scrollPane, BorderLayout.CENTER);
         customTip.setPreferredSize(new Dimension(
@@ -1001,10 +1001,11 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
                 (int) Math.min(250, htmlPane.getPreferredSize().getHeight() + 12)
         ));
         return customTip;
-        
+
     }
-    
-    @Override public Point getToolTipLocation(MouseEvent event) {
+
+    @Override
+    public Point getToolTipLocation(MouseEvent event) {
         if (this.editorInputHandler.getVisualNodeOfToolTip() instanceof VisualNode visualNodeOfToolTip) {
             JToolTip tempTip = this.createToolTip();
             tempTip.setTipText(this.getToolTipText(event));
@@ -1021,10 +1022,10 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
                     new Point((int) (-size.width / 3.65), 0)
             );
         }
-        
+
         return super.getToolTipLocation(event);
     }
-    
+
     /**
      * This method absorbs a node into the rest of the net arc-reversal style. This means updating the only utility
      * child it might have and removing it next.
@@ -1033,7 +1034,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         Node node = this.getSelectedNode();
         new AbsorbNodeEdit(this.getVisualNetwork().getProbNet(), node.getVariable()).executeEdit();
     }
-    
+
     /**
      * This method absorbs intermediate utility nodes.
      */
@@ -1041,28 +1042,28 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         Node node = this.getSelectedNode();
         new AbsorbParentsEdit(this.getVisualNetwork().getProbNet(), node).executeEdit();
     }
-    
+
     /**
      * This method has been created for testing.
      */
     public void changePotential() throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.showPotentialDialog(workingMode != WorkingMode.EDITION);
     }
-    
+
     /**
      * This method adds a finding in a node.
      */
     public void addFinding() {
         this.getEvidenceManager().addFinding();
     }
-    
+
     /**
      * This method removes findings from selected nodes.
      */
     public void removeFinding() throws PreResolutionNodeInInferenceException, DoEditException {
         this.getEvidenceManager().removeFinding();
     }
-    
+
     /**
      * This method updates the value of each state for each node in the network
      * with the current individual probabilities.
@@ -1070,7 +1071,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void updateIndividualProbabilitiesAndUtilities() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.getEvidenceManager().updateIndividualProbabilitiesAndUtilities();
     }
-    
+
     /**
      * This method removes all the findings established in the current evidence
      * case.
@@ -1078,7 +1079,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void removeAllFindings() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.getEvidenceManager().removeAllFindings();
     }
-    
+
     /**
      * This method returns true if there are any finding in the current evidence
      * case.
@@ -1088,7 +1089,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public boolean areThereFindingsInCase() {
         return this.getEvidenceManager().areThereFindingsInCase();
     }
-    
+
     /**
      * This method copies the selected nodes to the clipboard.
      *
@@ -1097,12 +1098,12 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void exportToClipboard(boolean cut) {
         this.getVisualNetwork().exportToClipboard(cut, NetworkEditorPanel.CLIPBOARD_ASSISTANT);
     }
-    
-    
+
+
     public EditorPanelClipboardAssistant getClipboardAssistant() {
         return NetworkEditorPanel.CLIPBOARD_ASSISTANT;
     }
-    
+
     /**
      * This method imports the content from the clipboard and creates it in the
      * network.
@@ -1113,11 +1114,11 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         }
         new PasteEdit(this.getProbNet(), NetworkEditorPanel.CLIPBOARD_ASSISTANT.paste(), centerNodesTo).executeEdit();
     }
-    
+
     public boolean hasPasteContents() {
         return this.getClipboardAssistant().isThereDataStored();
     }
-    
+
     /**
      * This method says if there is data stored in the clipboard.
      *
@@ -1126,7 +1127,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public boolean isThereDataStored() {
         return NetworkEditorPanel.CLIPBOARD_ASSISTANT.isThereDataStored();
     }
-    
+
     /**
      * This method removes the selected objects. First removes the selected
      * links and then removes the selected nodes. Also notifies that there
@@ -1135,7 +1136,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void removeSelectedObjects() {
         this.getVisualNetwork().removeSelectedObjects();
     }
-    
+
     /**
      * Returns the presentation mode of the foreground of the nodes.
      *
@@ -1145,7 +1146,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public boolean getByTitle() {
         return this.getVisualNetwork().getByTitle();
     }
-    
+
     /**
      * Selects or deselects all nodes of the network.
      *
@@ -1154,7 +1155,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void setSelectedAllNodes(boolean selected) {
         this.getVisualNetwork().setSelectedAllNodes(selected);
     }
-    
+
     /**
      * Selects or deselects all objects of the network.
      *
@@ -1163,26 +1164,30 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void setSelectedAllObjects(boolean selected) {
         this.getVisualNetwork().setSelectedAllObjects(selected);
     }
-    
-    @Override public void afterEditExecutes(PNEdit edit) {
+
+    @Override
+    public void afterEditExecutes(PNEdit edit) {
         this.repaint();
         this.setModified(this.getProbNet().getPNESupport().networkIsModified());
     }
-    
-    @Override public void beforeEditExecutes(PNEdit edit) {
+
+    @Override
+    public void beforeEditExecutes(PNEdit edit) {
         this.repaint();
     }
-    
-    @Override public void afterUndoingEdit(PNEdit edit) {
-        this.repaint();
-        this.setModified(this.getProbNet().getPNESupport().networkIsModified());
-    }
-    
-    @Override public void afterRedoingEdit(PNEdit edit) {
+
+    @Override
+    public void afterUndoingEdit(PNEdit edit) {
         this.repaint();
         this.setModified(this.getProbNet().getPNESupport().networkIsModified());
     }
-    
+
+    @Override
+    public void afterRedoingEdit(PNEdit edit) {
+        this.repaint();
+        this.setModified(this.getProbNet().getPNESupport().networkIsModified());
+    }
+
     /**
      * This method returns the number of the current Evidence Case.
      *
@@ -1191,7 +1196,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public int getCurrentCase() {
         return this.getEvidenceManager().getCurrentCase();
     }
-    
+
     /**
      * This method returns the number of Evidence Cases that the ArrayList is
      * currently holding .
@@ -1201,42 +1206,42 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public int getNumberOfCases() {
         return this.getEvidenceManager().getNumberOfCases();
     }
-    
+
     /**
      * This method creates a new evidence case
      */
     public void createNewEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.getEvidenceManager().createNewEvidenceCase();
     }
-    
+
     /**
      * This method makes the first evidence case to be the current
      */
     public void goToFirstEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.getEvidenceManager().goToFirstEvidenceCase();
     }
-    
+
     /**
      * This method makes the previous evidence case to be the current
      */
     public void goToPreviousEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.getEvidenceManager().goToPreviousEvidenceCase();
     }
-    
+
     /**
      * This method makes the next evidence case to be the current
      */
     public void goToNextEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.getEvidenceManager().goToNextEvidenceCase();
     }
-    
+
     /**
      * This method makes the last evidence case to be the current
      */
     public void goToLastEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.getEvidenceManager().goToLastEvidenceCase();
     }
-    
+
     /**
      * This method clears out all the evidence cases. It returns to an 'initial
      * state' in which there is only an initial evidence case with no findings
@@ -1245,7 +1250,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void clearOutAllEvidenceCases() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.getEvidenceManager().clearOutAllEvidenceCases();
     }
-    
+
     /**
      * This method does the propagation of the evidence for all the evidence
      * cases in memory.
@@ -1256,7 +1261,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void propagateEvidence(MainPanelMenuAssistant mainPanelMenuAssistant) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.getEvidenceManager().propagateEvidence(mainPanelMenuAssistant);
     }
-    
+
     /**
      * This method returns the propagation status: true if propagation should be
      * done right now; false otherwise.
@@ -1266,14 +1271,15 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public boolean isPropagationActive() {
         return this.propagationActive;
     }
-    
+
     private final ArrayList<Consumer<NetworkEditorPanel>> onNetworkClose = new ArrayList<>();
-    
+
     public void onNetworkClose(Consumer<NetworkEditorPanel> onNetworkClose) {
         this.onNetworkClose.add(onNetworkClose);
     }
-    
-    @Override public boolean close() {
+
+    @Override
+    public boolean close() {
         try {
             if (!MainGUI.INSTANCE.mainPanel.getMainPanelListenerAssistant().networkCanBeClosed(this)) {
                 return false;
@@ -1288,15 +1294,15 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         }
         return close;
     }
-    
+
     // TODO OOPN end
-    
+
     public void addDecisionTreeWindows(DecisionTreeEditor decisionTreeWindows) {
         this.decisionTreeEditors.add(decisionTreeWindows);
     }
-    
+
     public void removeDecisionTreeWindows(DecisionTreeEditor decisionTreeWindows) {
         this.decisionTreeEditors.remove(decisionTreeWindows);
     }
-    
+
 }

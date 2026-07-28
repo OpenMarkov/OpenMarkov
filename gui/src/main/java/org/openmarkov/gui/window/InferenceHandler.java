@@ -9,31 +9,29 @@ package org.openmarkov.gui.window;
 
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.MulticriteriaOptions;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.TemporalNetOperations;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.potential.StrategyCarrier;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
+import org.openmarkov.gui.dialog.PropagationOptionsDialog;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
-import org.openmarkov.gui.dialog.PropagationOptionsDialog;
 import org.openmarkov.gui.dialog.network.OptimalStrategyDialog;
-import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.decisiontree.DecisionTreeEditor;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
-import org.openmarkov.core.model.network.TemporalNetOperations;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluation.DANDecompositionIntoSymmetricDANsEvaluation;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluation.DANEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEOptimalIntervention;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -86,10 +84,10 @@ class InferenceHandler {
             }
         }
 
-        mainPanel.setToolBarPanel(newWorkingMode);
         mainPanel.changeWorkingModeButton(newWorkingMode);
         if (!fileHandler.getNetworkEditorPanels().isEmpty()) {
             getCurrentNetworkEditorPanel().setWorkingMode(newWorkingMode);
+            mainPanel.updateFor(getCurrentNetworkEditorPanel());
         }
         getCurrentNetworkEditorPanel().setSelectedAllObjects(false);
         mainPanel.getMainPanelMenuAssistant().updateOptionsNetworkDependent(getCurrentNetworkEditorPanel());

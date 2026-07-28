@@ -13,23 +13,8 @@ import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.dialog.common.DialogBase;
 import org.openmarkov.java.initialization.Lazy;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Window;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -74,7 +59,9 @@ public final class GUIUtils {
      * @return true if the mouse event hasn't modifiers; otherwise, false.
      */
     public static boolean noMouseModifiers(MouseEvent e) {
-        return ((e.getModifiersEx() & 0xF) == 0);
+        int modifiersEx = e.getModifiersEx();
+
+        return modifiersEx == 1024;
     }
     
     /**

@@ -11,7 +11,8 @@ public class JComboBoxFunctionRender<T> extends DefaultListCellRenderer {
     public JComboBoxFunctionRender(Function<T, String> mapper) {
         this.mapper = mapper;
     }
-    
+
+
     @Override
     public Component getListCellRendererComponent(JList<?> list, Object value,
                                                   int index, boolean isSelected,

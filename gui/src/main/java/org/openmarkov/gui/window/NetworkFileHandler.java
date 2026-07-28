@@ -9,16 +9,7 @@ package org.openmarkov.gui.window;
 
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.exception.CannotNormalizePotentialException;
-import org.openmarkov.core.exception.ConstraintViolatedException;
-import org.openmarkov.core.exception.EmptyDatabaseException;
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.NotEvaluableNetworkException;
-import org.openmarkov.core.exception.ParsingSourceException;
-import org.openmarkov.core.exception.ProbNetParserException;
-import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.core.exception.WriterException;
+import org.openmarkov.core.exception.*;
 import org.openmarkov.core.io.ProbNetInfo;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
@@ -27,33 +18,22 @@ import org.openmarkov.core.io.format.annotation.FormatManager;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.database.CaseDatabase;
-import org.openmarkov.core.model.network.Criterion;
-import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.Finding;
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.gui.configuration.LastOpenFiles;
 import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.common.CommentHTMLScrollPane;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
-import org.openmarkov.gui.dialog.io.DBReaderOMFileChooser;
-import org.openmarkov.gui.dialog.io.FileFilterByExtension;
-import org.openmarkov.gui.dialog.io.NetsIO;
-import org.openmarkov.gui.dialog.io.NetworkOMFileChooser;
-import org.openmarkov.gui.dialog.io.OMFileChooser;
-import org.openmarkov.gui.dialog.io.URLNetworkChooserDialog;
+import org.openmarkov.gui.dialog.io.*;
 import org.openmarkov.gui.dialog.network.NetworkPropertiesDialog;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -331,8 +311,9 @@ public class NetworkFileHandler {
         if (canClose) {
             mainPanel.getNetworksTabPanel().remove(currentNetworkEditorPanel);
             if (networkPanels.isEmpty()) {
-                mainPanel.setToolBarPanel(NetworkEditorPanel.WorkingMode.EDITION);
                 mainPanel.getMainPanelMenuAssistant().updateOptionsAllNetworkClosed();
+
+                mainPanel.updateFor(mainPanel.getMainPanelMenuAssistant().getCurrentNetworkEditorPanel());
             }
         }
         return canClose;

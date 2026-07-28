@@ -12,16 +12,13 @@ import org.openmarkov.gui.graphics.BackgroundedElement;
 import org.openmarkov.gui.graphics.BoxedElement;
 import org.openmarkov.gui.graphics.Paintable;
 import org.openmarkov.gui.graphics.TextBox;
+import org.openmarkov.gui.window.decisiontree.DecisionTreeEditor;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 
 /**
@@ -30,7 +27,7 @@ import java.util.ArrayList;
  * @author jmendoza
  * @version 1.2 jrico - Added a prototype for toasts.
  */
-public abstract class EditorPanel extends JPanel {
+public abstract sealed class EditorPanel extends JPanel permits DecisionTreeEditor, NetworkEditorPanel {
     /**
      * Static field for serializable class.
      */
@@ -77,7 +74,7 @@ public abstract class EditorPanel extends JPanel {
     public boolean close() {
         MainGUI.INSTANCE.mainPanel.getNetworksTabPanel().remove(this);
         if (MainGUI.INSTANCE.mainPanel.getNetworksTabPanel().getTabCount() == 0) {
-            MainGUI.INSTANCE.mainPanel.setToolBarPanel(NetworkEditorPanel.WorkingMode.EDITION);
+            MainGUI.INSTANCE.mainPanel.updateFor(null);
             MainGUI.INSTANCE.mainPanel.getMainPanelMenuAssistant().updateOptionsAllNetworkClosed();
         }
         return true;

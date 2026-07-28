@@ -7,11 +7,11 @@
 
 package org.openmarkov.gui.window;
 
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.dialog.AboutBox;
 import org.openmarkov.gui.dialog.LanguageDialog;
 import org.openmarkov.gui.dialog.ShortcutsBox;
 import org.openmarkov.gui.dialog.configuration.PreferencesDialog;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
 import javax.swing.undo.CannotRedoException;
@@ -67,7 +67,7 @@ class EditAndViewHandler {
 
     void activateEditionMode(String newEditionMode) {
         NetworkEditorPanel networkPanel = getCurrentNetworkEditorPanel();
-        networkPanel.setEditionMode(newEditionMode);
+        networkPanel.setBaseTool(newEditionMode);
         mainPanel.getMainPanelMenuAssistant().setEditionOption(newEditionMode, networkPanel.isThereDataStored());
     }
 

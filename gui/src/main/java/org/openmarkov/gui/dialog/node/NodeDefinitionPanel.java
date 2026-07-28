@@ -7,39 +7,28 @@
 
 package org.openmarkov.gui.dialog.node;
 
-import org.openmarkov.core.action.core.EventNodeAlwaysAppendEdit;
-import org.openmarkov.core.action.core.NodeAlwaysObservedEdit;
-import org.openmarkov.core.action.core.NodeCommentEdit;
-import org.openmarkov.core.action.core.NodeBaseNameEdit;
-import org.openmarkov.core.action.core.PurposeEdit;
-import org.openmarkov.core.action.core.RelevanceEdit;
-import org.openmarkov.core.action.core.TimeSliceEdit;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.action.core.*;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.*;
-import org.openmarkov.core.model.network.constraint.NoEventNodes;
-import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.gui.action.ChangeNodeTypeEdit;
 import org.openmarkov.gui.action.NodeAgentEdit;
 import org.openmarkov.gui.action.NodeDecisionCriteriaEdit;
-import org.openmarkov.gui.loader.element.IconBind;
-import org.openmarkov.gui.validator.AlwaysObservedPropertyValidator;
 import org.openmarkov.gui.dialog.CommentListener;
 import org.openmarkov.gui.dialog.common.CommentHTMLScrollPane;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.util.Purpose;
+import org.openmarkov.gui.validator.AlwaysObservedPropertyValidator;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -318,25 +307,19 @@ public final class NodeDefinitionPanel extends JPanel
         groupLayout.linkSize(components3);
         setLayout(groupLayout);
     }
-    
-    private record NodeTypeButtonDesc(NodeType nodeType, IconBind icon, boolean enabled) {
-    
-    }
-    
+
     private Component getJPanelNodeTypes() {
         if (jPanelNodeTypes == null) {
             jPanelNodeTypes = new JPanel();
             jPanelNodeTypes.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 0));
             ProbNet probNet = this.networkEditorPanel.getProbNet();
-            var nodeTypesDesc = List.of(
-                    new NodeTypeButtonDesc(NodeType.CHANCE, IconBind.CHANCE_ENABLED, true),
-                    new NodeTypeButtonDesc(NodeType.EVENT, IconBind.EVENT_ENABLED, !probNet.hasConstraintOfClass(OnlyChanceNodes.class) && !probNet.hasConstraintOfClass(NoEventNodes.class)),
-                    new NodeTypeButtonDesc(NodeType.DECISION, IconBind.DECISION_ENABLED, !probNet.hasConstraintOfClass(OnlyChanceNodes.class)),
-                    new NodeTypeButtonDesc(NodeType.UTILITY, IconBind.UTILITY_ENABLED, !probNet.hasConstraintOfClass(OnlyChanceNodes.class))
-            );
-            for (NodeTypeButtonDesc nodeTypeDesc : nodeTypesDesc) {
-                var nodeTypeButton = new JToggleButton(nodeTypeDesc.icon.icon());
-                nodeTypeButton.setEnabled(nodeTypeDesc.enabled);
+            var nodeTypesDesc = Arrays.stream(NodeType.values()).map(NodeTypeInfo::of).toList();
+            for (NodeTypeInfo nodeTypeInfo : nodeTypesDesc) {
+                if (!nodeTypeInfo.isVisuallyRepresented) {
+                    continue;
+                }
+                var nodeTypeButton = new JToggleButton(nodeTypeInfo.iconBind.icon());
+                nodeTypeButton.setEnabled(nodeTypeInfo.canBeUsedInProbnet(probNet));
                 nodeTypeButton.setContentAreaFilled(false);
                 nodeTypeButton.setBorderPainted(false);
                 nodeTypeButton.addItemListener(e -> {
@@ -344,14 +327,14 @@ public final class NodeDefinitionPanel extends JPanel
                     nodeTypeButton.setContentAreaFilled(isSelected);
                     nodeTypeButton.setBorderPainted(isSelected);
                 });
-                boolean isCurrentNodeType = this.node.getNodeType() == nodeTypeDesc.nodeType;
+                boolean isCurrentNodeType = this.node.getNodeType() == nodeTypeInfo.nodeType;
                 nodeTypeButton.setSelected(isCurrentNodeType);
                 nodeTypeButton.addActionListener(_ -> {
                     if(isCurrentNodeType) {
                         return;
                     }
                     try {
-                        new ChangeNodeTypeEdit(this.node, nodeTypeDesc.nodeType).executeEdit();
+                        new ChangeNodeTypeEdit(this.node, nodeTypeInfo.nodeType).executeEdit();
                     } catch (DoEditException e) {
                         throw new UnrecoverableException(e);
                     }

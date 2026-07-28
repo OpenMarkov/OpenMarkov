@@ -3,74 +3,61 @@ package org.openmarkov.gui.window.edition.networkEditorPanel;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.core.AddNodeEdit;
-import org.openmarkov.core.exception.CannotNormalizePotentialException;
-import org.openmarkov.core.exception.ConstraintViolatedException;
-import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.NotEvaluableNetworkException;
-import org.openmarkov.core.exception.NotSupportedOperationException;
-import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.exception.*;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Point2D;
+import org.openmarkov.gui.action.MoveNodeEdit;
+import org.openmarkov.gui.configuration.KeyTracker;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.exception.PreResolutionNodeInInferenceException;
-import org.openmarkov.gui.graphic.VisualElement;
-import org.openmarkov.gui.graphic.VisualLink;
-import org.openmarkov.gui.graphic.VisualNetwork;
-import org.openmarkov.gui.graphic.VisualNode;
-import org.openmarkov.gui.graphic.VisualState;
+import org.openmarkov.gui.graphic.*;
 import org.openmarkov.gui.menutoolbar.menu.ContextualMenu;
 import org.openmarkov.gui.menutoolbar.menu.ContextualMenuFactory;
 import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.edition.mode.NodeEditionMode;
+import org.openmarkov.gui.window.edition.mode.SelectionState;
 
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
-import java.awt.Graphics2D;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
-import java.util.Optional;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Handles all mouse and keyboard input for the {@link NetworkEditorPanel},
  * delegating to the current {@link EditionMode} and managing contextual menus.
  */
 class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListener, FocusListener {
-    
+
     private final NetworkEditorPanel networkEditorPanel;
-    
+
     EditorInputHandler(NetworkEditorPanel networkEditorPanel) {
         this.networkEditorPanel = networkEditorPanel;
     }
-    
+
     /**
      * Invoked when a mouse button has been clicked (pressed and released) on
      * the component.
      *
      * @param e mouse event information.
      */
-    @Override public void mouseClicked(MouseEvent e) {
+    @Override
+    public void mouseClicked(MouseEvent e) {
         this.networkEditorPanel.requestFocus();
     }
-    
+
     private int lastClickCount = 0;
     private boolean lastLeftClickProducedANode = false;
-    
-    
+
+
     /**
      * Invoked when a mouse button has been pressed on the component.
      *
      * @param e mouse event information.
      */
-    @Override public void mousePressed(MouseEvent e) {
+    @Override
+    public void mousePressed(MouseEvent e) {
         this.networkEditorPanel.requestFocus();
         // requestFocusInWindow(); Activate if nodes can't be moved by arrows.
         if (e.getClickCount() <= (this.lastClickCount + 1)) {
@@ -82,18 +69,41 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
         // requestFocusInWindow(); Activate if nodes can't be moved by arrows.
         Graphics2D g = (Graphics2D) this.networkEditorPanel.getGraphics();
         this.cursorPosition.setLocation(this.networkEditorPanel.getZoomManager()
-                                                               .screenToPanel(e.getX()), this.networkEditorPanel.getZoomManager()
-                                                                                                                .screenToPanel(e.getY()));
+                .screenToPanel(e.getX()), this.networkEditorPanel.getZoomManager()
+                .screenToPanel(e.getY()));
         // Specific functionality depending on the edition mode;
-        try {
-            var oldNodesCount = this.networkEditorPanel.getNetworkEditorPanel().getProbNet().getNodes().size();
-            this.networkEditorPanel.getEditionMode().mousePressed(e, this.cursorPosition, g);
-            if (e.getClickCount() == 1) {
-                int newNodesCount = this.networkEditorPanel.getNetworkEditorPanel().getProbNet().getNodes().size();
-                this.lastLeftClickProducedANode = oldNodesCount < newNodesCount;
+        var oldNodesCount = this.networkEditorPanel.getNetworkEditorPanel().getProbNet().getNodes().size();
+        this.currentlyHoldingMouse = true;
+        if (this.selectionState == SelectionState.NOTHING && SwingUtilities.isLeftMouseButton(e)) {
+            if (e.isControlDown() || e.isShiftDown()) {
+                this.networkEditorPanel.getVisualNetwork().addToSelection(this.cursorPosition, g);
+            } else {
+                if (this.networkEditorPanel.getVisualNetwork().selectElementInPosition(this.cursorPosition, g) == null) {
+                    this.networkEditorPanel.getVisualNetwork().startSelectionRectangle(this.cursorPosition);
+                    this.setSelectionState(SelectionState.SELECTING);
+                }
             }
-        } catch (DoEditException ex) {
-            throw new UnrecoverableException(ex);
+        }
+        if (e.getClickCount() == 1 && this.networkEditorPanel.getBaseTool() == NetworkEditorPanel.BaseTool.NODE
+                && SwingUtilities.isLeftMouseButton(e) && GUIUtils.noMouseModifiers(e) && networkEditorPanel.getVisualNetwork().getElementInPosition(this.cursorPosition, g) == null
+        ) {
+            NodeEditionMode.createNode(this.networkEditorPanel.getProbNet(), this.networkEditorPanel.getPreferredNodeToCreate(), this.cursorPosition, networkEditorPanel);
+            this.lastLeftClickProducedANode = true;
+            return;
+        }
+        if (e.getClickCount() == 1 && this.networkEditorPanel.getBaseTool() == NetworkEditorPanel.BaseTool.LINK && SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1 && GUIUtils.noMouseModifiers(e)) {
+            var node = this.networkEditorPanel.getVisualNetwork().whatNodeInPosition(cursorPosition, g);
+            if (node == null) {
+                return;
+            }
+            if (!this.networkEditorPanel.getVisualNetwork().getSelectedNodes().contains(node)) {
+                this.networkEditorPanel.getVisualNetwork().removeSelectedObjects();
+                this.networkEditorPanel.getVisualNetwork().setSelectionOfElement(node, true);
+            }
+            ;
+            this.networkEditorPanel.getVisualNetwork().startLinkCreation(cursorPosition, g, VisualNetwork.LinkCreationSourceDirection.PARENT, false, this.networkEditorPanel.getVisualNetwork().getSelectedNodes());
+            this.setSelectionState(SelectionState.CREATING_LINK);
+            return;
         }
         // Generic functionality regardless of the edition mode
         if (SwingUtilities.isRightMouseButton(e)) {
@@ -115,7 +125,7 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
                 }
                 try {
                     this.networkEditorPanel.showPotentialDialog(this.networkEditorPanel.getNetworkEditorPanel()
-                                                                                       .getWorkingMode() != NetworkEditorPanel.WorkingMode.EDITION);
+                            .getWorkingMode() != NetworkEditorPanel.WorkingMode.EDITION);
                 } finally {
                     this.networkEditorPanel.repaint();
                     return;
@@ -126,27 +136,39 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
             this.networkEditorPanel.repaint();
             return;
         }
-        this.networkEditorPanel.getEditionMode().tryCancelCurrentAction(e, this.cursorPosition, g);
-        
-        
+        this.currentlyHoldingMouse = false;
+        switch (this.selectionState) {
+            case SelectionState.NOTHING -> {
+            }
+            case SelectionState.MOVING -> {
+                try {
+                    this.tryFinishNodesMovements();
+                } catch (DoEditException ex1) {
+                    throw new UnreachableException(ex1);
+                }
+            }
+            case SelectionState.SELECTING ->
+                    this.networkEditorPanel.getVisualNetwork().finishSelectionRectangle(this.cursorPosition);
+            case CREATING_LINK -> this.networkEditorPanel.getVisualNetwork().cancelLinkCreation();
+        }
+        this.setSelectionState(SelectionState.NOTHING);
+        this.networkEditorPanel.repaint();
+
+
         switch (this.networkEditorPanel.getNetworkEditorPanel().getWorkingMode()) {
             case EDITION -> {
                 // If we are in Edition Mode a double click might open the corresponding properties dialog (for node or link)
-                
+
                 VisualLink link = this.networkEditorPanel.getVisualNetwork().whatLinkInPosition(this.cursorPosition, g);
                 if (link != null) {
                     this.networkEditorPanel.changeLinkProperties(link);
                 } else {
                     node = this.networkEditorPanel.getVisualNetwork().whatNodeInPosition(this.cursorPosition, g);
                     if (node == null) {
-                        try {
-                            NodeEditionMode.createNode(this.networkEditorPanel.getProbNet(), NodeType.CHANCE, this.cursorPosition, networkEditorPanel);
-                            node = this.networkEditorPanel.getVisualNetwork()
-                                                          .whatNodeInPosition(this.cursorPosition, g);
-                            this.lastLeftClickProducedANode = true;
-                        } catch (DoEditException ex) {
-                            throw new UnreachableException(ex);
-                        }
+                        NodeEditionMode.createNode(this.networkEditorPanel.getProbNet(), NodeType.CHANCE, this.cursorPosition, networkEditorPanel);
+                        node = this.networkEditorPanel.getVisualNetwork()
+                                .whatNodeInPosition(this.cursorPosition, g);
+                        this.lastLeftClickProducedANode = true;
                     }
                     try {
                         boolean userAcceptedChanges = this.networkEditorPanel.changeNodeProperties(node, this.lastLeftClickProducedANode);
@@ -154,14 +176,14 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
                             ArrayList<PNEdit> undone;
                             do {
                                 undone = this.networkEditorPanel.getNetworkEditorPanel()
-                                                                .getProbNet()
-                                                                .getPNESupport()
-                                                                .undo();
+                                        .getProbNet()
+                                        .getPNESupport()
+                                        .undo();
                             } while (undone != null && undone.stream().noneMatch(AddNodeEdit.class::isInstance));
                             this.networkEditorPanel.getNetworkEditorPanel()
-                                                   .getProbNet()
-                                                   .getPNESupport()
-                                                   .removeUndoneEdits();
+                                    .getProbNet()
+                                    .getPNESupport()
+                                    .removeUndoneEdits();
                         }
                     } catch (NotEvaluableNetworkException | NonProjectablePotentialException |
                              NotEnoughMemoryException |
@@ -176,12 +198,12 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
             }
             case INFERENCE -> {
                 VisualState visualState = this.networkEditorPanel.getVisualNetwork()
-                                                                 .whatStateInPosition(this.cursorPosition, g);
+                        .whatStateInPosition(this.cursorPosition, g);
                 if (visualState == null) {
                     if ((this.networkEditorPanel.getVisualNetwork()
-                                                .whatNodeInPosition(this.cursorPosition, g) != null) && (
+                            .whatNodeInPosition(this.cursorPosition, g) != null) && (
                             this.networkEditorPanel.getVisualNetwork()
-                                                   .whatInnerBoxInPosition(this.cursorPosition, g) == null
+                                    .whatInnerBoxInPosition(this.cursorPosition, g) == null
                     )) {
                         try {
                             this.networkEditorPanel.changeNodeProperties();
@@ -198,16 +220,16 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
                     this.networkEditorPanel.repaint();
                     return;
                 }
-                
+
                 // If we are in Inference Mode a double click inside a
                 // visual state of a node without pre-resolution finding
                 // must introduce evidence in that node.
                 // If the double click is inside a node but outside its
                 // inner box (in its 'expanded external shape'), its
                 // properties dialog should be open
-                
+
                 VisualNode visualNode = this.networkEditorPanel.getVisualNetwork()
-                                                               .whatNodeInPosition(this.cursorPosition, g);
+                        .whatNodeInPosition(this.cursorPosition, g);
                 if (visualNode.isPreResolutionFinding()) {
                     throw new UnrecoverableException(new PreResolutionNodeInInferenceException(visualNode));
                 }
@@ -219,84 +241,282 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
                          ConstraintViolatedException ex) {
                     throw new UnreachableException(ex);
                 }
-                
+
             }
         }
     }
-    
+
     /**
      * Invoked when a mouse button is pressed on a component and then dragged.
      *
      * @param e mouse event information.
      */
-    @Override public void mouseDragged(MouseEvent e) {
+    @Override
+    public void mouseDragged(MouseEvent e) {
         Graphics2D g = (Graphics2D) this.networkEditorPanel.getGraphics();
         Point2D.Double point = new Point2D.Double(this.networkEditorPanel.getZoomManager()
-                                                                         .screenToPanel(e.getX()), this.networkEditorPanel.getZoomManager()
-                                                                                                                          .screenToPanel(e.getY()));
+                .screenToPanel(e.getX()), this.networkEditorPanel.getZoomManager()
+                .screenToPanel(e.getY()));
         double diffX = point.getX() - this.cursorPosition.getX();
         double diffY = point.getY() - this.cursorPosition.getY();
         this.cursorPosition.setLocation(point);
-        this.networkEditorPanel.getEditionMode().mouseMoved(e, point, diffX, diffY, g);
+        this.lastMousePos = point;
+
+        if (this.selectionState == SelectionState.SELECTING) {
+            this.networkEditorPanel.getVisualNetwork().updateSelectionRectangle(diffX, diffY, g);
+        } else if (this.selectionState == SelectionState.CREATING_LINK) {
+            this.networkEditorPanel.getVisualNetwork().updateLinkCreation(point, g);
+            this.networkEditorPanel.repaint();
+        } else if (this.selectionState == SelectionState.MOVING ||
+                (this.selectionState == SelectionState.NOTHING && SwingUtilities.isLeftMouseButton(e) && !this.networkEditorPanel.getVisualNetwork().getSelectedNodes()
+                        .isEmpty())) {
+            this.setSelectionState(SelectionState.MOVING);
+            this.networkEditorPanel.getVisualNetwork().moveSelectedElements(diffX, diffY);
+        }
+        this.networkEditorPanel.repaint();
     }
-    
+
     /**
      * Invoked when a mouse button has been released on the component.
      *
      * @param e mouse event information.
      */
-    @Override public void mouseReleased(MouseEvent e) {
+    @Override
+    public void mouseReleased(MouseEvent e) {
         Graphics2D g = (Graphics2D) this.networkEditorPanel.getGraphics();
         Point2D.Double position = new Point2D.Double(this.networkEditorPanel.getZoomManager()
-                                                                            .screenToPanel(e.getX()), this.networkEditorPanel.getZoomManager()
-                                                                                                                             .screenToPanel(e.getY()));
+                .screenToPanel(e.getX()), this.networkEditorPanel.getZoomManager()
+                .screenToPanel(e.getY()));
         try {
-            this.networkEditorPanel.getEditionMode().mouseReleased(e, position, g);
+            boolean finished = false;
+            this.currentlyHoldingMouse = false;
+            switch (this.selectionState) {
+                case SelectionState.NOTHING -> {
+                }
+                case SelectionState.MOVING -> this.tryFinishNodesMovements();
+                case SelectionState.SELECTING ->
+                        this.networkEditorPanel.getVisualNetwork().finishSelectionRectangle(position);
+                case CREATING_LINK -> {
+                    this.networkEditorPanel.getVisualNetwork().finishLinkCreation(position, g);
+                    if (this.currentlyHeldKeys.contains(KeyEvent.VK_SHIFT)) {
+                        this.networkEditorPanel.getVisualNetwork().startLinkCreation(position, g, VisualNetwork.LinkCreationSourceDirection.PARENT, true, this.networkEditorPanel.getVisualNetwork().getSelectedNodes());
+                        this.networkEditorPanel.repaint();
+                        finished = true;
+                    }
+                }
+            }
+            if (!finished) {
+                this.setSelectionState(SelectionState.NOTHING);
+                this.networkEditorPanel.repaint();
+            }
         } catch (DoEditException ex) {
             throw new UnrecoverableException(ex);
         }
     }
-    
+
     /**
      * Invoked when the mouse button enters the component.
      *
      * @param e mouse event information.
      */
-    @Override public void mouseEntered(MouseEvent e) {
+    @Override
+    public void mouseEntered(MouseEvent e) {
     }
-    
+
     /**
      * Invoked when the mouse button exits the component.
      *
      * @param e mouse event information.
      */
-    @Override public void mouseExited(MouseEvent e) {
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
-    
+
+
+    private static final int NODE_SPEED_ON_ARROW_PRESS = 2;
+
+    private SelectionState selectionState = SelectionState.NOTHING;
+
+    private boolean currentlyHoldingMouse;
+    private final Set<Integer> currentlyHeldKeys = new HashSet<>();
+
+
+    public boolean startLinkCreation(Point2D.Double cursorPosition, VisualNetwork.LinkCreationSourceDirection sourceDirection) {
+        if (this.networkEditorPanel.getVisualNetwork().getSelectedNodes().isEmpty()) {
+            return false;
+        }
+        this.linkCreationStartedWithKey = false;
+        this.networkEditorPanel.getVisualNetwork().startLinkCreation(cursorPosition, (Graphics2D) this.networkEditorPanel.getGraphics(), sourceDirection, false, this.networkEditorPanel.getVisualNetwork().getSelectedNodes());
+        this.setSelectionState(SelectionState.CREATING_LINK);
+        return true;
+    }
+
+    private void tryFinishNodesMovements() throws DoEditException {
+        if (this.isMovingNodes()) {
+            return;
+        }
+        List<VisualNode> movedNodes = this.networkEditorPanel.getVisualNetwork().fillVisualNodesSelected();
+        new MoveNodeEdit(movedNodes).executeEdit();
+        this.networkEditorPanel.adjustPanelDimension();
+        this.setSelectionState(SelectionState.NOTHING);
+    }
+
+    public boolean isMovingNodes() {
+        return this.selectionState == SelectionState.MOVING && (this.currentlyHoldingMouse || isHoldingAnArrow());
+    }
+
+    private boolean isHoldingAnArrow() {
+        return this.currentlyHeldKeys.contains(KeyEvent.VK_UP)
+                || this.currentlyHeldKeys.contains(KeyEvent.VK_RIGHT)
+                || this.currentlyHeldKeys.contains(KeyEvent.VK_DOWN)
+                || this.currentlyHeldKeys.contains(KeyEvent.VK_LEFT);
+    }
+
+    /**
+     * Changes the state of the selection and carries out the necessary actions
+     * in each case.
+     *
+     * @param newState new mouse state.
+     */
+    private void setSelectionState(SelectionState newState) {
+        this.networkEditorPanel.setCursor(newState.getCursor());
+        this.selectionState = newState;
+    }
+
+
+    private void onPresses(@Nullable KeyEvent e, int keyCode) {
+        this.currentlyHeldKeys.add(keyCode);
+        KeyTracker.isHeld(keyCode);
+
+        if (this.networkEditorPanel.getVisualNetwork().getSelectedNodes().isEmpty()) {
+            return;
+        }
+        switch (this.selectionState) {
+            case MOVING -> applyKeyArrowsOnNodes();
+            case NOTHING -> {
+                switch (keyCode) {
+                    case KeyEvent.VK_UP, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT ->
+                            applyKeyArrowsOnNodes();
+                    case KeyEvent.VK_SHIFT, KeyEvent.VK_CONTROL -> {
+                        if (this.currentlyHeldKeys.contains(KeyEvent.VK_SHIFT) && this.currentlyHeldKeys.contains(KeyEvent.VK_CONTROL)) {
+                            if (this.startLinkCreation(this.lastMousePos, VisualNetwork.LinkCreationSourceDirection.PARENT)) {
+                                this.linkCreationStartedWithKey = true;
+                            }
+                        }
+                    }
+                }
+            }
+            case SELECTING -> {
+            }
+            case CREATING_LINK -> {
+                switch (keyCode) {
+                    case KeyEvent.VK_ESCAPE -> {
+                        this.networkEditorPanel.getVisualNetwork().cancelLinkCreation();
+                        this.setSelectionState(SelectionState.NOTHING);
+                    }
+                    case KeyEvent.VK_ALT -> {
+                        this.networkEditorPanel.getVisualNetwork().toggleLinkCreationSource(this.lastMousePos);
+                        if (e != null) {
+                            e.consume();
+                        }
+                    }
+                }
+            }
+        }
+        this.networkEditorPanel.repaint();
+    }
+
+    private void onReleases(int keyCode) {
+        switch (this.selectionState) {
+            case NOTHING -> {
+            }
+            case MOVING -> {
+                boolean wasHoldingAnArrow = this.isHoldingAnArrow();
+                this.currentlyHeldKeys.remove(keyCode);
+                if (wasHoldingAnArrow && !this.isHoldingAnArrow()) {
+                    try {
+                        this.tryFinishNodesMovements();
+                    } catch (DoEditException ex) {
+                        throw new UnrecoverableException(ex);
+                    }
+                }
+            }
+            case SELECTING -> {
+            }
+            case CREATING_LINK -> {
+                switch (keyCode) {
+                    case KeyEvent.VK_SHIFT, KeyEvent.VK_CONTROL -> {
+                        if (this.linkCreationStartedWithKey) {
+                            this.networkEditorPanel.getVisualNetwork().cancelLinkCreation();
+                            this.linkCreationStartedWithKey = false;
+                            this.setSelectionState(SelectionState.NOTHING);
+                        }
+                    }
+                }
+            }
+        }
+        this.networkEditorPanel.setBaseTool(NetworkEditorPanel.BaseTool.SELECTION);
+    }
+
+    private void applyKeyArrowsOnNodes() {
+        int diffX = 0, diffY = 0;
+        for (var key : this.currentlyHeldKeys) {
+            switch (key) {
+                case KeyEvent.VK_UP -> diffY -= EditorInputHandler.NODE_SPEED_ON_ARROW_PRESS;
+                case KeyEvent.VK_RIGHT -> diffX += EditorInputHandler.NODE_SPEED_ON_ARROW_PRESS;
+                case KeyEvent.VK_DOWN -> diffY += EditorInputHandler.NODE_SPEED_ON_ARROW_PRESS;
+                case KeyEvent.VK_LEFT -> diffX -= EditorInputHandler.NODE_SPEED_ON_ARROW_PRESS;
+            }
+        }
+        if (diffX == 0 && diffY == 0) {
+            return;
+        }
+        this.setSelectionState(SelectionState.MOVING);
+        this.networkEditorPanel.getVisualNetwork().moveSelectedElements(diffX, diffY);
+    }
+
+
+    private Point2D.Double lastMousePos;
+    private boolean linkCreationStartedWithKey;
+
+
     private VisualNode visualNodeOfToolTip;
-    
+
     public VisualNode getVisualNodeOfToolTip() {
         return this.visualNodeOfToolTip;
     }
-    
+
     /**
      * Invoked when the mouse cursor has been moved onto a component but no
      * buttons have been pushed.
      *
      * @param e mouse event information.
      */
-    @Override public void mouseMoved(MouseEvent e) {
+    @Override
+    public void mouseMoved(MouseEvent e) {
         Graphics2D g = (Graphics2D) this.networkEditorPanel.getGraphics();
         Point2D.Double point = new Point2D.Double(this.networkEditorPanel.getZoomManager()
-                                                                         .screenToPanel(e.getX()), this.networkEditorPanel.getZoomManager()
-                                                                                                                          .screenToPanel(e.getY()));
+                .screenToPanel(e.getX()), this.networkEditorPanel.getZoomManager()
+                .screenToPanel(e.getY()));
         double diffX = point.getX() - this.cursorPosition.getX();
         double diffY = point.getY() - this.cursorPosition.getY();
         this.cursorPosition.setLocation(point);
-        this.networkEditorPanel.getEditionMode().mouseMoved(e, point, diffX, diffY, g);
+        this.lastMousePos = point;
+        if (this.selectionState == SelectionState.SELECTING) {
+            this.networkEditorPanel.getVisualNetwork().updateSelectionRectangle(diffX, diffY, g);
+        } else if (this.selectionState == SelectionState.CREATING_LINK) {
+            this.networkEditorPanel.getVisualNetwork().updateLinkCreation(point, g);
+            this.networkEditorPanel.repaint();
+        } else if (this.selectionState == SelectionState.MOVING ||
+                (this.selectionState == SelectionState.NOTHING && SwingUtilities.isLeftMouseButton(e) && !this.networkEditorPanel.getVisualNetwork().getSelectedNodes()
+                        .isEmpty())) {
+            this.setSelectionState(SelectionState.MOVING);
+            this.networkEditorPanel.getVisualNetwork().moveSelectedElements(diffX, diffY);
+        }
+        this.networkEditorPanel.repaint();
         if (this.visualNodeOfToolTip != this.networkEditorPanel.getVisualNetwork()
-                                                               .whatNodeInPosition(this.cursorPosition, g)) {
-            
+                .whatNodeInPosition(this.cursorPosition, g)) {
+
             this.networkEditorPanel.setToolTipText(null);
             //This forces to reset the tooltip "enter" timer when moving between visual elements.
             ToolTipManager.sharedInstance().mousePressed(new MouseEvent(
@@ -307,37 +527,38 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
                     0, 0,
                     0, false
             ));
-            
+
         }
         this.visualNodeOfToolTip = this.networkEditorPanel.getVisualNetwork()
-                                                          .whatNodeInPosition(this.cursorPosition, g);
+                .whatNodeInPosition(this.cursorPosition, g);
         if (this.visualNodeOfToolTip instanceof VisualNode visualNode) {
             this.networkEditorPanel.setToolTipText(visualNode.getNode().getComment());
         }
     }
-    
-    
+
+
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        this.networkEditorPanel.getEditionMode().keyPressed(keyEvent);
+        int keyCode = keyEvent.getKeyCode();
+        onPresses(keyEvent, keyCode);
     }
-    
+
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        this.networkEditorPanel.getEditionMode().keyReleased(keyEvent);
+        onReleases(keyEvent.getKeyCode());
     }
-    
-    
+
+
     @Override
     public void keyTyped(KeyEvent keyEvent) {
-        this.networkEditorPanel.getEditionMode().keyTyped(keyEvent);
+
     }
-    
+
     /**
      * Position of the mouse cursor when it is pressed.
      */
     private final Point2D.Double cursorPosition = new Point2D.Double();
-    
+
     /**
      * Shows contextual menu
      *
@@ -357,23 +578,23 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
             visualNetwork.setSelectionOfElement(selectedElement, true);
         } else {
             boolean canBeExpanded = this.networkEditorPanel.getNetworkEditorPanel()
-                                                           .getProbNet()
-                                                           .thereAreTemporalNodes();
+                    .getProbNet()
+                    .thereAreTemporalNodes();
             contextualMenu = this.contextualMenuFactory.getNetworkContextualMenu(canBeExpanded);
         }
         contextualMenu.show(this.networkEditorPanel, e.getX(), e.getY());
     }
-    
+
     /**
      * Object that creates the contextual menus.
      */
     private ContextualMenuFactory contextualMenuFactory = null;
-    
-    
+
+
     void setContextualMenuFactory(ContextualMenuFactory contextualMenuFactory) {
         this.contextualMenuFactory = contextualMenuFactory;
     }
-    
+
     /**
      * Retrieves the contextual menu that corresponds to the selectedElement.
      *
@@ -381,15 +602,22 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
      */
     private @Nullable ContextualMenu getContextualMenu(VisualElement selectedElement, NetworkEditorPanel panel) {
         return Optional.ofNullable(this.contextualMenuFactory)
-                       .map(menuFactory -> menuFactory.getContextualMenu(selectedElement, panel))
-                       .orElse(null);
+                .map(menuFactory -> menuFactory.getContextualMenu(selectedElement, panel))
+                .orElse(null);
     }
-    
-    @Override public void focusGained(FocusEvent e) {
-        this.networkEditorPanel.getEditionMode().focusGained(e);
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        var currentlyHeldKeys1 = KeyTracker.getHeldKeys().boxed()
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        var removedKeys = this.currentlyHeldKeys.stream().filter(key -> !currentlyHeldKeys1.contains(key)).toList();
+        var newlyPressedKeys = currentlyHeldKeys1.stream().filter(key -> !this.currentlyHeldKeys.contains(key)).toList();
+        removedKeys.forEach(this::onReleases);
+        newlyPressedKeys.forEach(key -> this.onPresses(null, key));
     }
-    
-    @Override public void focusLost(FocusEvent e) {
-        this.networkEditorPanel.getEditionMode().focusLost(e);
+
+    @Override
+    public void focusLost(FocusEvent e) {
+
     }
 }

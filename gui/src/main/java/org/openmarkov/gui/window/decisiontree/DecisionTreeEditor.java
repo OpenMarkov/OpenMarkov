@@ -7,7 +7,10 @@
 
 package org.openmarkov.gui.window.decisiontree;
 
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.PotentialOperationException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
@@ -22,13 +25,13 @@ import org.openmarkov.gui.menutoolbar.menu.ContextualMenuFactory;
 import org.openmarkov.gui.menutoolbar.menu.TreeContextualMenu;
 import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.util.TreeNodeToDot;
+import org.openmarkov.gui.window.EditorPanel;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.decisiontree.elements.DecisionTreeBranchPanel;
 import org.openmarkov.gui.window.decisiontree.elements.DecisionTreeElementPanel;
 import org.openmarkov.gui.window.decisiontree.elements.DecisionTreeNodePanel;
 import org.openmarkov.gui.window.edition.ZoomManager;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
-import org.openmarkov.gui.window.EditorPanel;
 import org.openmarkov.inference.decisiontree.operation.DecisionTreeManagerImpl;
 import org.openmarkov.java.swing.MouseListenerUtils;
 
@@ -43,7 +46,7 @@ import java.awt.event.MouseListener;
 
 
 @SuppressWarnings("serial")
-public class DecisionTreeEditor extends EditorPanel {
+public final class DecisionTreeEditor extends EditorPanel {
     
     /** The source network panel associated with this tree window. */
     private final NetworkEditorPanel networkPanel;

@@ -30,14 +30,10 @@ import org.openmarkov.gui.window.edition.EditorPanelClipboardAssistant;
 import org.openmarkov.gui.window.edition.SelectedContent;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -945,7 +941,11 @@ public class VisualNetwork implements PNEditListener {
     public enum LinkCreationSourceDirection {
         PARENT, CHILD;
     }
-    
+
+    public boolean isLinkCreation() {
+        return !this.newLinks.isEmpty();
+    }
+
     /**
      * Starts link creation
      *
@@ -954,7 +954,7 @@ public class VisualNetwork implements PNEditListener {
      * @param g              the g
      */
     public void startLinkCreation(Point2D.Double cursorPosition, Graphics2D g, LinkCreationSourceDirection linkSourceDirection, boolean preserveLinkSourceDirection, List<VisualNode> selectedNodes) {
-        if (!this.newLinks.isEmpty()) {
+        if (isLinkCreation()) {
             return;
         }
         if(!preserveLinkSourceDirection){

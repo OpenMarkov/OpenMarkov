@@ -7,11 +7,13 @@
 
 package org.openmarkov.gui.menutoolbar.toolbar;
 
+import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.ImplementationRequirements;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.RequiredConstructor;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.menutoolbar.common.MenuToolBarBasic;
 import org.openmarkov.gui.menutoolbar.common.MenuToolBarBasicImpl;
+import org.openmarkov.gui.window.EditorPanel;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -122,6 +124,10 @@ public abstract class ToolBarBasic extends JToolBar implements MenuToolBarBasic 
     @Override public void setText(String actionCommand, String text) {
     
     }
-    
+
+    public void updateFor(@Nullable EditorPanel editorPanel) {
+
+    }
+
 }
 

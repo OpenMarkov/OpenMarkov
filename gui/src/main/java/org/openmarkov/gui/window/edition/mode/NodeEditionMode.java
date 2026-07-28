@@ -10,6 +10,7 @@ package org.openmarkov.gui.window.edition.mode;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.core.AddNodeEdit;
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.gui.action.MoveNodeEdit;
 import org.openmarkov.gui.util.GUIDefaultStates;
@@ -72,8 +73,8 @@ public class NodeEditionMode extends EditionMode {
     @Override public void keyReleased(KeyEvent e) {
     
     }
-    
-    public static void createNode(ProbNet currentNetwork, NodeType nodeType, Point2D.Double position, NetworkEditorPanel networkEditorPanel) throws DoEditException {
+
+    public static void createNode(ProbNet currentNetwork, NodeType nodeType, Point2D.Double position, NetworkEditorPanel networkEditorPanel) {
         HashSet<String> existingNames = new HashSet<>();
         for (Node node : currentNetwork.getNodes()) {
             String name = node.getName();
@@ -98,16 +99,20 @@ public class NodeEditionMode extends EditionMode {
         if (nodeType == NodeType.UTILITY && decisionCriteria != null) {
             variable.setDecisionCriterion(decisionCriteria.getFirst());
         }
-        currentNetwork.getPNESupport().setWithUndo(true);
-        currentNetwork.getPNESupport().openNewSubEditHistory();
-        PNEdit addNodeEdit = new AddNodeEdit(currentNetwork, variable, nodeType, position);
-        addNodeEdit.executeEdit();
-        var visualNode = networkEditorPanel.getVisualNetwork().getAllNodes().stream().filter(node->node.getNode().getVariable()==variable).findFirst().get();
-        var visualNodeShape = visualNode.getShape((Graphics2D) networkEditorPanel.getGraphics());
-        visualNode.setTemporalCoordinateX(visualNode.getTemporalPosition().x-(visualNodeShape.getBounds2D().getWidth()/2));
-        visualNode.setTemporalCoordinateY(visualNode.getTemporalPosition().y-(visualNodeShape.getBounds2D().getHeight()/2));
-        new MoveNodeEdit(List.of(visualNode)).executeEdit();
-        currentNetwork.getPNESupport().closeSubEditHistory();
+        try {
+            currentNetwork.getPNESupport().setWithUndo(true);
+            currentNetwork.getPNESupport().openNewSubEditHistory();
+            PNEdit addNodeEdit = new AddNodeEdit(currentNetwork, variable, nodeType, position);
+            addNodeEdit.executeEdit();
+            var visualNode = networkEditorPanel.getVisualNetwork().getAllNodes().stream().filter(node -> node.getNode().getVariable() == variable).findFirst().get();
+            var visualNodeShape = visualNode.getShape((Graphics2D) networkEditorPanel.getGraphics());
+            visualNode.setTemporalCoordinateX(visualNode.getTemporalPosition().x - (visualNodeShape.getBounds2D().getWidth() / 2));
+            visualNode.setTemporalCoordinateY(visualNode.getTemporalPosition().y - (visualNodeShape.getBounds2D().getHeight() / 2));
+            new MoveNodeEdit(List.of(visualNode)).executeEdit();
+            currentNetwork.getPNESupport().closeSubEditHistory();
+        } catch (DoEditException e) {
+            throw new UnreachableException(e);
+        }
         
         networkEditorPanel.adjustPanelDimension();
         networkEditorPanel.repaint();

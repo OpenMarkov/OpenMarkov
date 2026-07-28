@@ -7,31 +7,28 @@
 
 package org.openmarkov.gui.window;
 
+import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.PNEdit;
-import org.openmarkov.core.action.core.ChangeNetworkTypeEdit;
 import org.openmarkov.core.action.base.PNEditListener;
-import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.action.core.ChangeNetworkTypeEdit;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.constraint.NoEventNodes;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.SameAsPrevious;
-import org.openmarkov.core.model.network.type.BayesianNetworkType;
-import org.openmarkov.core.model.network.type.DESNetworkType;
-import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
-import org.openmarkov.core.model.network.type.InfluenceDiagramType;
-import org.openmarkov.core.model.network.type.MIDType;
-import org.openmarkov.core.model.network.type.NetworkType;
-import org.openmarkov.gui.graphic.*;
-import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.model.network.type.*;
+import org.openmarkov.gui.graphic.SelectionListener;
+import org.openmarkov.gui.graphic.VisualLink;
+import org.openmarkov.gui.graphic.VisualNode;
 import org.openmarkov.gui.localize.MenuLocalizer;
 import org.openmarkov.gui.menutoolbar.common.*;
 import org.openmarkov.gui.window.decisiontree.DecisionTreeEditor;
-import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.gui.window.edition.ZoomManager;
+import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -425,9 +422,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         updateUndoRedo(currentNetworkEditorPanel.getProbNet().getPNESupport().getCanUndo(),
                        currentNetworkEditorPanel.getProbNet().getPNESupport().getCanRedo());
         // updateUndoRedo(networkPanel.getUndoManager());
-        mainPanel.setToolBarPanel(currentNetworkEditorPanel.getWorkingMode());
-        
-        
+        mainPanel.updateFor(currentNetworkEditorPanel);
     }
     
     /**
@@ -779,18 +774,27 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         updateOptionsNetworkModified(probNet.getPNESupport().getCanUndo() && workingModeIsNotInference,
                                      probNet.getPNESupport().getCanRedo() && workingModeIsNotInference);
     }
-    
-    public NetworkEditorPanel getCurrentNetworkEditorPanel() {
-        int selectedIndex = mainPanel.getNetworksTabPanel().getSelectedIndex();
-        if (selectedIndex <= -1 || selectedIndex >= mainPanel.getNetworksTabPanel().getTabCount()) return null;
-        Component componentAt = mainPanel.getNetworksTabPanel().getComponentAt(selectedIndex);
+
+    public @Nullable NetworkEditorPanel getCurrentNetworkEditorPanel() {
+        Component componentAt = getCurrentEditor();
+        if (componentAt == null) return null;
         if (componentAt instanceof NetworkEditorPanel networkPanel) {
             return networkPanel;
         }
         return null;
     }
-    
-    
+
+    public @Nullable EditorPanel getCurrentEditor() {
+        int selectedIndex = mainPanel.getNetworksTabPanel().getSelectedIndex();
+        if (selectedIndex <= -1 || selectedIndex >= mainPanel.getNetworksTabPanel().getTabCount()) return null;
+        Component componentAt = mainPanel.getNetworksTabPanel().getComponentAt(selectedIndex);
+        if (componentAt instanceof EditorPanel editorPanel) {
+            return editorPanel;
+        }
+        return null;
+    }
+
+
     /**
      * Enables or disables options on 'File' menu depending on the type of
      * window selected.
@@ -849,6 +853,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         
         //mainPanel.getStandardToolBar().getDecisionTreeButton().setSelected(true);
         setZoom(decisionTreeEditor.getZoom());
+        mainPanel.updateFor(currentNetworkEditorPanel);
     }
     
     public void updateOptionsNetworkOpenedURL(boolean networkOpenedURL) {

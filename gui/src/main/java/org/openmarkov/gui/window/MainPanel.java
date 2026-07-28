@@ -27,32 +27,15 @@ import org.openmarkov.gui.menutoolbar.toolbar.plugin.ToolbarManager;
 import org.openmarkov.gui.window.decisiontree.DecisionTreeEditor;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Insets;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -178,7 +161,7 @@ public class MainPanel extends JPanel {
             }
             this.mainMenu.reInitialize();
         });
-        this.initialize();
+        this.updateFor(null);
     }
     
     /**
@@ -309,29 +292,31 @@ public class MainPanel extends JPanel {
         return toolBarPanel;
         
     }
-    
+
     /**
      * This method establishes the type of tool bar (Edition or Inference) to be
      * set in the panel.
      *
      * @param barType new type of tool bar to be set in the panel
      */
-    protected void setToolBarPanel(NetworkEditorPanel.WorkingMode barType) {
-        switch (barType) {
-            case EDITION -> {
-                getToolBarPanel().remove(getInferenceToolBar());
-                getToolBarPanel().add(getEditionToolBar(), 1);
-            }
-            case INFERENCE -> {
-                getToolBarPanel().remove(getEditionToolBar());
-                getInferenceToolBar().setExpansionThreshold(this.getMainPanelListenerAssistant().
-                                                                getCurrentNetworkEditorPanel()
-                                                                .getExpansionThreshold());
-                getToolBarPanel().add(getInferenceToolBar(), 1);
-            }
-        }
+    public void updateFor(@Nullable EditorPanel currentNetworkEditorPanel) {
+        var toolbars = switch (currentNetworkEditorPanel) {
+            case DecisionTreeEditor _ -> List.of(getStandardToolBar());
+            case NetworkEditorPanel networkEditorPanel -> switch (networkEditorPanel.getWorkingMode()) {
+                case EDITION -> List.of(getStandardToolBar(), getEditionToolBar());
+                case INFERENCE -> {
+                    getInferenceToolBar().setExpansionThreshold(this.getMainPanelListenerAssistant().
+                            getCurrentNetworkEditorPanel()
+                            .getExpansionThreshold());
+                    yield List.of(getStandardToolBar(), getInferenceToolBar());
+                }
+            };
+            case null -> List.of(getStandardToolBar());
+        };
+        getToolBarPanel().removeAll();
+        toolbars.forEach(toolBarPanel::add);
+        toolbars.forEach(toolBarBasic -> toolBarBasic.updateFor(currentNetworkEditorPanel));
         initialize();
-        
     }
     
     /**
@@ -366,11 +351,9 @@ public class MainPanel extends JPanel {
      * @return a new edition toolbar.
      */
     public EditionToolBar getEditionToolBar() {
-        
         if (editionToolBar == null) {
             editionToolBar = new EditionToolBar(mainPanelListenerAssistant);
         }
-        
         return editionToolBar;
         
     }
@@ -480,7 +463,8 @@ public class MainPanel extends JPanel {
             this.getToolBarPanel().setPreferredSize(null);
         }
     }
-    
+
+
     private static class TabHeader extends JPanel {
         
         private final JLabel titleLabel;
@@ -540,9 +524,7 @@ public class MainPanel extends JPanel {
                 int tabIndex = mainPanel.networksTabPanel.indexOfTabComponent(tabComponent);
                 switch (e.getButton()) {
                     //LEFT_CLICK
-                    case 1 -> {
-                        mainPanel.networksTabPanel.setSelectedIndex(tabIndex);
-                    }
+                    case 1 -> mainPanel.networksTabPanel.setSelectedIndex(tabIndex);
                     //RIGHT_CLICK
                     case 3 -> {
                         JPopupMenu tabContextMenu = new JPopupMenu();
