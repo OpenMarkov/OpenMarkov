@@ -11,7 +11,7 @@ import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
-import org.openmarkov.core.inference.tasks.SensAnTornadoSpider;
+import org.openmarkov.core.inference.tasks.SensitivityAnalysis;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * @author jperez-martin
  */
-public class VESensAnTornadoSpider implements SensAnTornadoSpider {
+public class VESensAnTornadoSpider implements SensitivityAnalysis {
 
 	/**
      * Potentials of each {@code UncertainParameter } conditioned on a dummy

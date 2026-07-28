@@ -48,7 +48,6 @@ public class Choice {
 	public Choice(Variable variable, int[] values) {
 		this.variable = variable;
 		this.setValues(values);
-		numValues = values.length;
 	}
 
 	/**
@@ -65,17 +64,22 @@ public class Choice {
 	// Methods
 
 	/**
-	 * @return values {@code int[]}.
+	 * @return A copy of the values. Handing out the internal array would let any caller
+	 * mutate this choice from outside; the copy costs a few ints, since a choice holds one
+	 * value, or a handful in case of draws.
 	 */
 	public int[] getValues() {
-		return values;
+		int[] copy = new int[numValues];
+		System.arraycopy(values, 0, copy, 0, numValues);
+		return copy;
 	}
 
 	/**
-	 * @param values {@code int[]}.
+	 * @param values {@code int[]}. Copied: this choice does not keep the array it receives.
 	 */
 	public void setValues(int[] values) {
-		this.values = values;
+		this.values = new int[values.length];
+		System.arraycopy(values, 0, this.values, 0, values.length);
 		numValues = values.length;
 	}
 
@@ -95,7 +99,7 @@ public class Choice {
 	 */
 	public void addValue(int value) {
 		int[] newValues = new int[numValues + 1];
-        if (numValues >= 0) System.arraycopy(values, 0, newValues, 0, numValues);
+		System.arraycopy(values, 0, newValues, 0, numValues);
 		newValues[numValues++] = value;
 		values = newValues;
 	}
@@ -154,12 +158,16 @@ public class Choice {
 	 * and the same option (or options set)
 	 */
 	public boolean sameInformation(Object object) {
-		Choice choice = (Choice) object;
+		// Guarded: this used to cast without checking, so asking about anything that is
+		// not a Choice was a ClassCastException instead of the "no" it means.
+		if (!(object instanceof Choice choice)) {
+			return false;
+		}
 		if (choice.variable.getName().equals(this.variable.getName())) {
 			if (choice.getNumValues() != numValues) {
 				return false;
 			}
-			int[] otherValues = choice.getValues();
+			int[] otherValues = choice.values;
 			for (int i = 0; i < numValues; i++) {
 				if (values[i] != otherValues[i]) {
 					return false;

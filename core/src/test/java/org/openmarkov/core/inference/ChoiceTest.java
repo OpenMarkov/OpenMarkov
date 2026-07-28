@@ -46,9 +46,8 @@ class ChoiceTest {
     }
 
     @Test
-    void arrayConstructorLeavesInitializedFalse() {
-        // When initialized=false, addValue() should use the correct append path.
-        Choice c = new Choice(dec, new int[]{0}); // initialized = false
+    void arrayConstructorThenAddValueAppends() {
+        Choice c = new Choice(dec, new int[]{0});
         c.addValue(1);
         // Append path: numValues = 2
         assertEquals(2, c.getNumValues());
@@ -57,7 +56,7 @@ class ChoiceTest {
     }
 
     @Test
-    void singleIntConstructorSetsNumValuesAndInitialized() {
+    void singleIntConstructorSetsNumValues() {
         Choice c = new Choice(dec, 1);
         assertEquals(1, c.getNumValues());
         assertEquals(1, c.getValues()[0]);
@@ -85,14 +84,13 @@ class ChoiceTest {
 
     @Test
     void setValueSetsInitializedFlag_verifiedBySubsequentAddValueBehavior() {
-        // Before setValue: initialized=false → addValue appends correctly.
         Choice c = new Choice(dec, new int[]{0});
-        c.addValue(1); // goes to correct (!initialized) branch
+        c.addValue(1);
         assertEquals(2, c.getNumValues());
     }
 
     // -----------------------------------------------------------------------
-    // addValue on UNINITIALISED Choice (initialized = false)
+    // addValue on a freshly built Choice
     // -----------------------------------------------------------------------
 
     @Test
@@ -116,17 +114,17 @@ class ChoiceTest {
     }
 
     /**
-     * When initialized=false and numValues == values.length (no spare capacity),
+     * When numValues == values.length (no spare capacity),
      * addValue() must reallocate and append.
      * Note: the "if (numValues > values.length)" branch in addValue() is dead
      * code (numValues can never exceed values.length), so the else-branch always
-     * runs when !initialized.
+     * always reallocates.
      */
     @Test
     void addValueUninitializedAlwaysReallocatesAndAppends() {
         // numValues == values.length, so the condition (numValues > values.length) is false
         // → else-branch runs → realloc to numValues+1 and append
-        Choice c = new Choice(dec, new int[3]); // numValues=3, values.length=3, initialized=false
+        Choice c = new Choice(dec, new int[3]); // numValues=3, values.length=3
         c.addValue(1);
         assertEquals(4, c.getNumValues());
         assertEquals(1, c.getValues()[3], "Appended value must be at index 3");
@@ -138,8 +136,8 @@ class ChoiceTest {
 
     @Test
     void addValueAfterSetValueAppendsNewEntry() {
-        Choice c = new Choice(dec, new int[1]); // initialized = false
-        c.setValue(0);                           // sets initialized = true
+        Choice c = new Choice(dec, new int[1]);
+        c.setValue(0);
 
         c.addValue(1);                           // tied state — must append
 
@@ -150,8 +148,8 @@ class ChoiceTest {
 
     @Test
     void addValueAfterSetValueThreeTiesHasThreeEntries() {
-        Choice c = new Choice(dec, new int[3]); // numValues=3, initialized=false
-        c.setValue(0);                           // numValues=1, initialized=true
+        Choice c = new Choice(dec, new int[3]);
+        c.setValue(0);                           // numValues=1
 
         c.addValue(1);
         c.addValue(2);
@@ -209,7 +207,7 @@ class ChoiceTest {
 
     @Test
     void sameInformationReturnsFalseForDifferentNumValues() {
-        Choice a = new Choice(dec, new int[]{0, 1}); // numValues = 2, initialized = false
+        Choice a = new Choice(dec, new int[]{0, 1}); // numValues = 2
         Choice b = new Choice(dec, 0);               // numValues = 1
         assertFalse(a.sameInformation(b));
     }
@@ -247,5 +245,46 @@ class ChoiceTest {
     void toStringMultipleValues() {
         Choice c = new Choice(dec, new int[]{0, 2});
         assertEquals("D={s0,s2}", c.toString());
+    }
+
+    // -----------------------------------------------------------------------
+    // Defensive copies and the guarded comparison (P5 of the inference report)
+    // -----------------------------------------------------------------------
+
+    /** The constructor used to keep the very array it received: mutating it from outside mutated the choice. */
+    @Test
+    void theConstructorCopiesTheArrayItReceives() {
+        int[] vals = {0, 2};
+        Choice c = new Choice(dec, vals);
+
+        vals[0] = 1;
+
+        assertEquals(0, c.getValues()[0], "The choice changed when the caller's array changed");
+    }
+
+    /** getValues() used to hand out the internal array: mutating it mutated the choice. */
+    @Test
+    void getValuesHandsOutACopy() {
+        Choice c = new Choice(dec, new int[]{0, 2});
+
+        c.getValues()[0] = 1;
+
+        assertEquals(0, c.getValues()[0], "The choice changed through the array getValues handed out");
+    }
+
+    /** Asking whether a non-Choice carries the same information means "no", not a ClassCastException. */
+    @Test
+    void sameInformationAnswersNoToAnythingThatIsNotAChoice() {
+        Choice c = new Choice(dec, 1);
+
+        assertFalse(c.sameInformation("D=s1"));
+    }
+
+    /** And "no" for null too, instead of a NullPointerException. */
+    @Test
+    void sameInformationAnswersNoToNull() {
+        Choice c = new Choice(dec, 1);
+
+        assertFalse(c.sameInformation(null));
     }
 }

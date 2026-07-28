@@ -11,7 +11,7 @@ import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
-import org.openmarkov.core.inference.tasks.SensAnPlot;
+import org.openmarkov.core.inference.tasks.SensitivityAnalysis;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * @author jperez-martin
  */
-public class VESensAnPlot implements SensAnPlot {
+public class VESensAnPlot implements SensitivityAnalysis {
 
 	private final HashMap<UncertainParameter, TablePotential> uncertainParametersPotentials;
 	private final ProbNet probNet;
