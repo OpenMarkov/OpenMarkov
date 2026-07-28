@@ -560,7 +560,19 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         
         private final ProbNet probNet;
     }
-    
+
+    public static class NetworkCanHaveOnlyOneUtilityNode extends ConstraintViolatedException {
+
+        public NetworkCanHaveOnlyOneUtilityNode(PNConstraint constraint, List<Node> utilityNodes) {
+            super(constraint);
+            this.numUtilityNodes = utilityNodes.size();
+            this.utilityNodes = utilityNodes.stream().map(Node::getName).sorted().collect(Collectors.joining(", "));
+        }
+
+        private final int numUtilityNodes;
+        private final String utilityNodes;
+    }
+
     public static class UtilityNodeHasNoPotentials extends ConstraintViolatedException {
         
         public UtilityNodeHasNoPotentials(ProperUtilityPotentials constraint, Node utilityNode) {

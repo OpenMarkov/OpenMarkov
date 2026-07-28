@@ -8,14 +8,35 @@
 package org.openmarkov.core.model.network.constraint;
 
 import org.openmarkov.core.action.base.ConstraintChecker;
+import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.model.network.GraphNetwork;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.constraint.annotation.Constraint;
 
+import java.util.List;
+
+/**
+ * The network may have at most one utility node. Several utility nodes mean a utility that is a sum
+ * — or another combination — of separate terms, which the algorithms of some network types are not
+ * written to put together.
+ * <p>
+ * This is an upper bound only: a network with no utility node at all satisfies it. Demanding at
+ * least one is what {@link UtilityNodes} and {@link ProperUtilityPotentials} do.
+ * <p>
+ * The body was a {@code TODO} stub, so the constraint announced a guarantee it did not impose.
+ * Nobody noticed while asking a network type for its optional constraints failed outright; now that
+ * it works, whoever asks receives this one.
+ */
 @Constraint(name = "OnlyOneUtilityNode", defaultBehavior = ConstraintBehavior.OPTIONAL) public class OnlyOneUtilityNode
 		extends PNConstraint {
-    
+
     @Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {
-		// TODO Auto-generated method stub
+		List<Node> utilityNodes = probNet.getNodes(NodeType.UTILITY);
+		if (utilityNodes.size() > 1) {
+			constraintChecker.addException(
+					new ConstraintViolatedException.NetworkCanHaveOnlyOneUtilityNode(this, utilityNodes));
+		}
 	}
- 
+
 }
