@@ -1,6 +1,7 @@
 package org.openmarkov.staticAnalysis.utils;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Range;
 import com.github.javaparser.StaticJavaParser;
@@ -42,7 +43,10 @@ public class ParseUtils {
     
     static {
         PARSER_CONFIGURATION = StaticJavaParser.getParserConfiguration();
-        ParseUtils.PARSER_CONFIGURATION.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_21);
+        // The project compiles with <release>25</release>; parsing at a lower level
+        // rejects sources that use newer syntax (the first casualty was an unnamed
+        // variable '_', reserved below Java 22).
+        ParseUtils.PARSER_CONFIGURATION.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
         typeSolver.add(new ReflectionTypeSolver(false)); //Adds parsing of JDK code
         ScanResult scan = new ClassGraph().scan();
@@ -76,6 +80,26 @@ public class ParseUtils {
         StaticJavaParser.setConfiguration(ParseUtils.PARSER_CONFIGURATION);
     }
     
+
+    /**
+     * Whether the class belongs to the integrationTests module, which holds the
+     * analysis tools themselves and is not part of the analyzed application.
+     * <p>
+     * This used to compare {@code getModule()}, which only tells modules apart
+     * on the module path; the build runs on the classpath, where every class
+     * shares the unnamed module, so the comparison excluded everything and the
+     * tools analyzed zero classes. The code source — the jar or classes
+     * directory a class was loaded from — tells them apart in both launch modes.
+     */
+    private static boolean isInIntegrationTestsModule(Class<?> clazz) {
+        var integrationTestsSource = IntegrationTest.class.getProtectionDomain().getCodeSource();
+        var classSource = clazz.getProtectionDomain().getCodeSource();
+        if (integrationTestsSource == null || classSource == null) {
+            return false;
+        }
+        return Objects.equals(integrationTestsSource.getLocation(), classSource.getLocation());
+    }
+
     public record ParsedClass(Class<?> originalClass, CompilationUnit compilationUnit) {
     }
     
@@ -84,7 +108,7 @@ public class ParseUtils {
                     .init()
                     .stream()
                     .parallel()
-                    .filter(openmarkovClass -> openmarkovClass.getModule() != IntegrationTest.class.getModule()) //Exclusion of integration tests
+                    .filter(openmarkovClass -> !ParseUtils.isInIntegrationTestsModule(openmarkovClass)) //Exclusion of integration tests
                     //.filter(openmarkovClass -> openmarkovClass.getModule() != AnnotationProcessing.class.getModule()) //Exclusion of annotation processing
                     .map(ParseUtils::parseClass)
                     .filter(Objects::nonNull)
@@ -107,6 +131,12 @@ public class ParseUtils {
             }
             return new ParsedClass(openmarkovClass, StaticJavaParser.parse(ClassUtils.fileOfClass(openmarkovClass)));
         } catch (FileNotFoundException | IllegalArgumentException e) {
+            return null;
+        } catch (ParseProblemException e) {
+            // One unparseable source must not kill every analysis tool: the parse
+            // used to escape the lazy initializer and break them all at once, and
+            // the exception did not even name the file.
+            System.err.println("ParseUtils: could not parse " + openmarkovClass.getName() + ": " + e.getMessage());
             return null;
         }
     }

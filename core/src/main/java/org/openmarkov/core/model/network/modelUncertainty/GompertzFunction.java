@@ -30,7 +30,7 @@ import org.apache.commons.math3.exception.OutOfRangeException;
  *
  * quantile function (inverse distribution function) is
  *
- * 		Q( p |a, b) = (1/a)*ln(1 - (b/a)* ln(1-p ))
+ * 		Q( p |a, b) = (1/a)*ln(1 - (a/b)* ln(1-p ))
  *
  * The hazard is increasing for shape a>0 and decreasing for a<0. For a=0 the Gompertz is equivalent to the exponential distribution with constant hazard and rate b.
  *
@@ -133,24 +133,58 @@ public class GompertzFunction extends ProbDensFunctionWithKnownInverseCDF {
 
 
 	/**
-	 * Returns Double.NaN because it is not implemented yet
-	 * Should return the mean of this GompertzFunction distribution.
-	 * The mean of a Gompertz distribution is E[X]= (b/a)*exp(b/a)*integral[0,infinity]((1/a)*exp(b*x/a)*log(x)dx
-	 * @return Double.NaN
+	 * The mean of this Gompertz distribution, computed numerically as the
+	 * integral of the quantile function over the unit interval — the Gompertz
+	 * mean has no comfortable closed form. Both methods used to throw a plain
+	 * RuntimeException, and the mean is what sensitivity analysis takes as the
+	 * base-line value of an uncertain parameter, so any path that touched a
+	 * Gompertz fell over.
+	 * <p>
+	 * For shape {@code a = 0} the distribution is the Exponential with rate
+	 * {@code b}; for {@code a < 0} it is defective — it puts probability
+	 * {@code exp(b/a)} on never failing — so its mean is infinite.
 	 */
 	@Override public double getMean() {
-		throw new RuntimeException("Method for Gompertz function not implemented yet");
-//		return Double.NaN;
+		if (a == 0) {
+			return 1 / b;
+		}
+		if (a < 0) {
+			return Double.POSITIVE_INFINITY;
+		}
+		return integrateQuantile(1);
 	}
 
 	/**
-	 * Returns Double.NaN because it is not implemented yet
-	 * Should return the variance of this GompertzFunction distribution
-	 * @return Double.NaN
+	 * The variance, computed numerically like {@link #getMean()}: infinite for
+	 * a defective distribution, the Exponential's for {@code a = 0}.
 	 */
 	@Override public double getVariance() {
-		throw new RuntimeException("Method for Gompertz function not implemented yet");
-//		return Double.NaN;
+		if (a == 0) {
+			return 1 / (b * b);
+		}
+		if (a < 0) {
+			return Double.POSITIVE_INFINITY;
+		}
+		double mean = integrateQuantile(1);
+		return integrateQuantile(2) - mean * mean;
+	}
+
+	/**
+	 * Composite Simpson integration of {@code Q(p)^power} over the unit
+	 * interval. The quantile grows like a double logarithm near {@code p = 1},
+	 * so the sliver left out at the upper end contributes a negligible amount.
+	 */
+	private double integrateQuantile(int power) {
+		final int intervals = 200_000; // even
+		final double upper = 1 - 1e-12;
+		double h = upper / intervals;
+		double sum = 0; // Q(0) = 0, so the lower endpoint contributes nothing.
+		for (int i = 1; i < intervals; i++) {
+			double q = getInverseCumulativeDistributionFunction(i * h);
+			sum += (i % 2 == 1 ? 4 : 2) * Math.pow(q, power);
+		}
+		sum += Math.pow(getInverseCumulativeDistributionFunction(upper), power);
+		return sum * h / 3;
 	}
 
 	/**
@@ -173,7 +207,7 @@ public class GompertzFunction extends ProbDensFunctionWithKnownInverseCDF {
 
 	/**
 	 * Returns Q(y, a, b) where Q is the inverse cumulative distribution (quantile function) for a Gompertz distribution
-	 * Inverse cumulative distribution Q( y |a, b) = (1/a)*ln(1 - (b/a)* ln(1-y ))
+	 * Inverse cumulative distribution Q( y |a, b) = (1/a)*ln(1 - (a/b)* ln(1-y ))
 	 * @param y 0<=y<=1; probability
 	 * @return Q(y, lambda, k) where Q is the Inverse Cumulative Distribution for this Gompertz distribution
 	 */

@@ -11,7 +11,12 @@ public class UnrecoverableException extends RuntimeException {
     }
     
     private static Throwable extractUnderlyingCause(Throwable cause) {
-        while (cause instanceof UnreachableException) {
+        // Flattens nestings of THIS type, like its sibling UnreachableException
+        // flattens its own. This one unwrapped UnreachableException too - line for
+        // line the sibling's loop, a copy-paste - so wrapping an
+        // UnrecoverableException in another kept the wrapper as the effective
+        // cause instead of the real failure.
+        while (cause instanceof UnrecoverableException) {
             cause = cause.getCause();
         }
         return cause;

@@ -22,7 +22,7 @@ public final class BayesianNetworkType extends NetworkType {
 	}
 
 	// Methods
-    public static synchronized BayesianNetworkType getUniqueInstance() {
+    public static BayesianNetworkType getUniqueInstance() {
         return INSTANCE;
 	}
 

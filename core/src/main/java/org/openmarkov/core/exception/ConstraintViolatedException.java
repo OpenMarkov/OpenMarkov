@@ -583,6 +583,32 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         private final int numUtilityPotentials;
     }
     
+    public static class NetworkCannotHaveRevelationArcs extends ConstraintViolatedException {
+
+        public NetworkCannotHaveRevelationArcs(PNConstraint constraint, Variable parentVariable,
+                Variable childVariable) {
+            super(constraint);
+            this.parentVariable = parentVariable;
+            this.childVariable = childVariable;
+        }
+
+        private final Variable parentVariable;
+        private final Variable childVariable;
+    }
+
+    public static class NetworkCannotHaveLinkRestrictions extends ConstraintViolatedException {
+
+        public NetworkCannotHaveLinkRestrictions(PNConstraint constraint, Variable parentVariable,
+                Variable childVariable) {
+            super(constraint);
+            this.parentVariable = parentVariable;
+            this.childVariable = childVariable;
+        }
+
+        private final Variable parentVariable;
+        private final Variable childVariable;
+    }
+
     public static class CriterionNameIsEmpty extends ConstraintViolatedException {
         
         public CriterionNameIsEmpty(ValidCriterionName constraint, Criterion criterion) {

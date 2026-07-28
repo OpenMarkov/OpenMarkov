@@ -10,10 +10,14 @@ package org.openmarkov.core.model.network.potential.canonical;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.potential.TablePotential;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -42,6 +46,33 @@ public class MaxPotentialTest {
         maxPotential.setNoisyParameters(variableB, new double[]{1.0, 0.0, 0.0, 0.0, 0.2, 0.8});
     }
     
+    /**
+     * Projecting on evidence for some of the parents must return a table whose
+     * FIRST variable is the conditioned one: {@code getConditionedVariable()} is
+     * defined as the first variable, and consumers use it to decide which node a
+     * projected table belongs to. The multiplication of the factorization used to
+     * order the result however the product came out; measured on the DAN
+     * evaluation that uncovered it, the projected table came back headed by a
+     * parent, was attributed to that parent's node, and overwrote the parent's
+     * own distribution (the testDANDating family).
+     */
+    @Test public void tableProjectKeepsTheConditionedVariableFirst() throws Exception {
+        maxPotential.setLeakyParameters(new double[]{0.989, 0.01, 0.001});
+        Variable variableB = maxPotential.getVariables().get(2);
+        EvidenceCase evidence = new EvidenceCase();
+        evidence.addFinding(new Finding(variableB, variableB.getState("B1")));
+
+        TablePotential projected = maxPotential.tableProject(evidence, null);
+
+        assertEquals("C", projected.getVariables().get(0).getName(),
+                "the conditioned variable must stay first after projecting");
+        // And the numbers are the ones the expanded CPT gives when projected the
+        // plain-table way, which keeps the variable order on its own.
+        TablePotential reference = maxPotential.getCPT().tableProject(evidence, null);
+        assertEquals(reference.getVariables(), projected.getVariables());
+        assertArrayEquals(reference.getValues(), projected.getValues(), admissibleError);
+    }
+
     @Test public void testGetLeakPotential() {
         maxPotential.setLeakyParameters(new double[]{0.989, 0.01, 0.001});
         assertEquals(0.989, maxPotential.getLeakyParameters()[0], admissibleError);

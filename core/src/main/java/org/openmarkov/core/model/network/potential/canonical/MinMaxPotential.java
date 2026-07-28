@@ -131,7 +131,11 @@ public abstract class MinMaxPotential extends ICIPotential {
         for (TablePotential subPotential : subPotentials) {
             potentials.add(subPotential.tableProject(evidence, null, projectedPotentials));
         }
-        return DiscretePotentialOperations.multiplyAndMarginalize(potentials, variables);
+        // See ICIPotential#withConditionedVariableFirst: the multiplication orders
+        // the result by how the product came out, not with the conditioned
+        // variable first, and consumers read the conditioned variable off the
+        // first position.
+        return withConditionedVariableFirst(DiscretePotentialOperations.multiplyAndMarginalize(potentials, variables));
     }
     
     /**

@@ -194,7 +194,7 @@
                 <MDP value="Markov Decision Process"/>
                 <MID value="Markov Influence Diagram"/>
                 <MPAD value="MPAD"/>
-                <MarkovDynamicBayesianNetwork value="Markov Decision analysis network"/>
+                <MarkovDANType value="Markov Decision analysis network"/>
             </Items>
             <Mnemonic value="t"/>
             <Text value="Network type:"/>

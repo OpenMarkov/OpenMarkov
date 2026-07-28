@@ -41,9 +41,10 @@ import java.util.Random;
         super();
         this.alpha = betaFunction.alpha;
         this.beta = betaFunction.beta;
-        if (betaFunction.dirichletForSampling != null) {
-            this.dirichletForSampling = betaFunction.dirichletForSampling;
-        }
+        // Built afresh from alpha and beta, like every other constructor does.
+        // The copy used to share the original's mutable sampling family, so the
+        // "copy" was not independent.
+        initializePdfForSampling();
     }
     
     //CMI

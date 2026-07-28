@@ -20,13 +20,11 @@ import java.util.stream.Collectors;
  */
 public class ReferencedExpression<T> {
     private static final Pattern EXTRACT_VARIABLE_PATTERN = Pattern.compile("\\{([^\\{]+?)\\}");
-    private final List<T> references;
     private final Function<T, String> stringifyReference;
     private final List<? extends ExpressionContent<T>> contents;
     private final Function<T, @Nullable String> resolveToJEval;
     
     public ReferencedExpression(Map<String, T> references, String expression, Function<T, String> stringifyReference, Function<T, @Nullable String> resolveToJEval) {
-        this.references = new ArrayList<>();
         this.stringifyReference = stringifyReference;
         this.resolveToJEval = resolveToJEval;
         var allRanges = SplitByRegex.splitAll(EXTRACT_VARIABLE_PATTERN, expression);
@@ -46,8 +44,7 @@ public class ReferencedExpression<T> {
     
     public final String asStringExpression() {
         return contents.stream()
-            .map(content -> (ExpressionContent<T>) content) // Forzamos el tipo aquí
-            .map(expressionContent -> switch (expressionContent) {
+            .map(expressionContent -> switch ((ExpressionContent<T>) expressionContent) {
                 case ExpressionContent.VariableReference<T> vr -> 
                         "{" + this.stringifyReference.apply(vr.reference()) + "}";
                 case ExpressionContent.UnparsedExpression<T> ue -> 
@@ -108,11 +105,27 @@ public class ReferencedExpression<T> {
     
     public String evaluateWith(Map<T, String> variablesValues) throws NonProjectablePotentialException.CannotEvaluate, NonProjectablePotentialException.CannotResolveVariable {
         String processedExpression = this.processedExpression(variablesValues);
+        String result;
         try {
-            return new net.sourceforge.jeval.Evaluator().evaluate(processedExpression);
+            result = new net.sourceforge.jeval.Evaluator().evaluate(processedExpression);
         } catch (EvaluationException e) {
             throw new NonProjectablePotentialException.CannotEvaluate(processedExpression, e);
         }
+        // Measured: jeval answers a division by zero with the string "Infinity"
+        // (and an indeterminate one with "NaN") instead of failing. Every numeric
+        // caller parses this result straight into a potential, where an infinity
+        // is silent corruption, so a non-finite number is reported here as what
+        // it is: an expression that could not be evaluated. Non-numeric results
+        // pass through untouched.
+        try {
+            if (!Double.isFinite(Double.parseDouble(result))) {
+                throw new NonProjectablePotentialException.CannotEvaluate(
+                        processedExpression + " = " + result, null);
+            }
+        } catch (NumberFormatException notANumber) {
+            // A non-numeric result is legitimate; finiteness only applies to numbers.
+        }
+        return result;
     }
     
     public boolean isEvaluable(Map<T, String> variablesValues) {

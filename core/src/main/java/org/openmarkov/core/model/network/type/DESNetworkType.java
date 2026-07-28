@@ -20,7 +20,11 @@ import org.openmarkov.core.model.network.type.plugin.NetworkTypeInfo;
  */
 @NetworkTypeInfo(name = "DESNet", visualName = "DESNet")
 public class DESNetworkType extends NetworkType {
-	private static DESNetworkType instance = null;
+	// Eager, like the other thirteen types: class initialization makes the one
+	// instance unique and safe. The lazy unsynchronized version could hand two
+	// different instances to two threads, and network types are compared by
+	// reference identity.
+	private static final DESNetworkType INSTANCE = new DESNetworkType();
 
 	// Constructor
 	private DESNetworkType() {
@@ -40,10 +44,7 @@ public class DESNetworkType extends NetworkType {
 
 	// Methods
 	public static DESNetworkType getUniqueInstance() {
-		if (instance == null) {
-			instance = new DESNetworkType();
-		}
-		return instance;
+		return INSTANCE;
 	}
 
 	// TODO

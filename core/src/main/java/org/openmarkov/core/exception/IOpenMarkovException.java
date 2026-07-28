@@ -85,7 +85,10 @@ public interface IOpenMarkovException extends Localizable {
      * @return an exception turned into {@link IOpenMarkovException}.
      */
     @SuppressWarnings("unchecked")
-    static @NotNull IOpenMarkovException of(@Nullable Exception exception) {
+    // The parameter used to be annotated @Nullable while the body dereferenced
+    // it unconditionally; the method promises a non-null result, so it asks for
+    // a non-null argument.
+    static @NotNull IOpenMarkovException of(@NotNull Exception exception) {
         if (exception instanceof IOpenMarkovException alreadyPrepared) {
             return alreadyPrepared;
         }
@@ -154,19 +157,26 @@ public interface IOpenMarkovException extends Localizable {
             return null;
         }
         Map<String, Object> fieldsAndValues = new HashMap<>();
-        var classForFields = openMarkovException.getClass();
-        while (classForFields != IOpenMarkovException.class) {
+        Class<?> classForFields = openMarkovException.getClass();
+        // Walk the exception's own classes: those are the ones whose fields fill
+        // the template. The old stop condition compared the superclass chain
+        // against IOpenMarkovException - an interface, which a superclass chain
+        // never reaches - so the walk climbed into the JDK, where making a field
+        // accessible dies with InaccessibleObjectException, and would have gone
+        // past Object to dereference null. Measured: the first exception to adopt
+        // the recommended bundled-message pattern died right there.
+        while (classForFields != null && IOpenMarkovException.class.isAssignableFrom(classForFields)) {
             Arrays.stream(classForFields.getDeclaredFields()).forEach(field -> {
                 try {
                     field.setAccessible(true);
                     if (!fieldsAndValues.containsKey(field.getName())) {
                         fieldsAndValues.put(field.getName(), field.get(openMarkovException));
                     }
-                } catch (IllegalAccessException ex) {
+                } catch (IllegalAccessException | java.lang.reflect.InaccessibleObjectException ex) {
                     LOGGER.warn(ex);
                 }
             });
-            classForFields = (Class<? extends IOpenMarkovException>) classForFields.getSuperclass();
+            classForFields = classForFields.getSuperclass();
         }
         return StringFormat.apply(preformatedString, fieldsAndValues);
     }

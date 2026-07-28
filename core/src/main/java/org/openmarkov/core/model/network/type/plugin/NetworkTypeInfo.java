@@ -15,5 +15,13 @@ import java.lang.annotation.Target;
 	String name();
 	
 	String visualName();
-	String[] alternativeNames() default "";
+	/**
+	 * Alternative serialization names, for files written before a type was
+	 * renamed. The default is an empty array — "no alternative names". It used
+	 * to be the literal {@code ""}, which as an array default means
+	 * <i>one</i> alternative name, the empty string: every type without
+	 * alternatives answered to {@code ""}, and looking a type up by the empty
+	 * string returned whichever type came first instead of null.
+	 */
+	String[] alternativeNames() default {};
 }

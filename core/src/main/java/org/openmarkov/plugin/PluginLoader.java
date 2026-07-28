@@ -10,6 +10,8 @@ package org.openmarkov.plugin;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +51,14 @@ import java.util.zip.ZipFile;
  */
 
 @SuppressWarnings("unchecked") class PluginLoader {
+
+    /**
+     * Discovery failures used to vanish into empty catches: an unreadable jar
+     * did not fail, it simply made its extensions disappear. They are reported
+     * here now — discovery still goes on without the unreadable piece, but it
+     * leaves a trace saying what was skipped.
+     */
+    private static final Logger logger = LogManager.getLogger(PluginLoader.class);
     
     private static final ClassLoader CLASS_LOADER = ClassLoader.getSystemClassLoader();
     private static final String CLASS_EXTENSION = ".class";
@@ -94,7 +104,8 @@ import java.util.zip.ZipFile;
                 var className = subpath.toString().replace("/", ".");
                 classesToLoad.add(className.substring(0, className.length() - PluginLoader.CLASS_EXTENSION.length()));
             }
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            logger.warn("Could not walk the Java runtime image; the JAVA plugin category will be incomplete", e);
         }
         PluginLoader.LOADED_CLASSES.put(PluginClassCategory.JAVA, classesToLoad
                 .stream()
@@ -105,7 +116,8 @@ import java.util.zip.ZipFile;
                         if (PluginLoader.verifyClass(loadedClass)) {
                             return loadedClass;
                         }
-                    } catch (ClassNotFoundException | NoClassDefFoundError ignored) {
+                    } catch (ClassNotFoundException | NoClassDefFoundError e) {
+                        logger.debug("Skipping Java runtime class {}: {}", classToLoad, e.toString());
                     }
                     return null;
                 })
@@ -161,7 +173,8 @@ import java.util.zip.ZipFile;
                         if (PluginLoader.verifyClass(loadedClass)) {
                             return loadedClass;
                         }
-                    } catch (ClassNotFoundException | NoClassDefFoundError | ClassFormatError ignored) {
+                    } catch (ClassNotFoundException | NoClassDefFoundError | ClassFormatError e) {
+                        logger.debug("Skipping classpath class {}: {}", classToLoad, e.toString());
                     }
                     return null;
                 })
@@ -205,7 +218,8 @@ import java.util.zip.ZipFile;
                                            .replace('/', PluginLoader.PACKAGE_SEPARATOR);
                                })
                                .toList();
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            logger.warn("Could not read {} as a jar; any extensions it contains will not be discovered", file, e);
             return List.of();
         }
     }
@@ -222,6 +236,8 @@ import java.util.zip.ZipFile;
         try {
             pathName = classpath.getCanonicalPath();
         } catch (IOException e) {
+            logger.warn("Could not resolve classpath directory {}; any extensions it contains will not be discovered",
+                    classpath, e);
             return List.of();
         }
         ArrayDeque<File> directoriesQueue = new ArrayDeque<>(List.of(classpath));
@@ -241,6 +257,7 @@ import java.util.zip.ZipFile;
                         try {
                             return file.getCanonicalPath();
                         } catch (IOException e) {
+                            logger.warn("Could not resolve {}; if it is a class, it will not be discovered", file, e);
                             return null;
                         }
                     })

@@ -129,6 +129,10 @@
                   value="Name of variable {variable} cannot be empty."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfVariableIsAlreadyPresent"
                   value="Name of variable {variableName} already belongs to another variable."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkCannotHaveRevelationArcs"
+                  value="This kind of network cannot have revelation arcs; the link from {parentVariable} to {childVariable} has revealing conditions."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkCannotHaveLinkRestrictions"
+                  value="This kind of network cannot have link restrictions; the link from {parentVariable} to {childVariable} has a restrictions potential."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkHasNoUtilityNodes"
                   value="Network {probNet} must have at least one utility node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NoSuperValueNodeAllowed"
@@ -416,11 +420,10 @@
     <Localization class="org.openmarkov.core.model.network.type.DynamicLimidType" value="Dynamic LIMID"/>
     <Localization class="org.openmarkov.core.model.network.type.InfluenceDiagramType" value="Influence diagram"/>
     <Localization class="org.openmarkov.core.model.network.type.LIMIDType" value="LIMID"/>
-    <Localization class="org.openmarkov.core.model.network.type.MDPType" value="MPAD"/>
+    <Localization class="org.openmarkov.core.model.network.type.MDPType" value="MDP"/>
     <Localization class="org.openmarkov.core.model.network.type.MIDType" value="Markov Influence Diagram"/>
-    <Localization class="org.openmarkov.core.model.network.type.MarkovDynamicBayesianNetwork"/>
-    <Localization class="org.openmarkov.core.model.network.type.MarkovDynamicBayesianNetwork"
-                  value="Markov Dynamic Bayesian"/>
+    <Localization class="org.openmarkov.core.model.network.type.MarkovDANType"
+                  value="Markov DAN"/>
     <Localization class="org.openmarkov.core.model.network.type.MarkovNetworkType" value="Markov"/>
     <Localization class="org.openmarkov.core.model.network.type.POMDPType" value="POMDP"/>
     <Localization class="org.openmarkov.core.model.network.type.TuningNetworkType" value="Tuning"/>

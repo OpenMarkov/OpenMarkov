@@ -226,7 +226,38 @@ public abstract class ICIPotential extends Potential implements Projectable {
             //add resulting potential
             potentials.addFirst(DiscretePotentialOperations.multiplyAndMarginalize(relatedPotentials, allVariables));
         }
-        return DiscretePotentialOperations.multiplyAndMarginalize(potentials, variables);
+        return withConditionedVariableFirst(DiscretePotentialOperations.multiplyAndMarginalize(potentials, variables));
+    }
+
+    /**
+     * Returns the given projected table with this model's conditioned variable in
+     * first position, which is where every consumer of a conditional table looks
+     * for it ({@code getConditionedVariable()} is defined as the first variable).
+     * <p>
+     * A plain table keeps its variable order when projected, so its conditioned
+     * variable stays first on its own. This model projects by multiplying its
+     * factorization and marginalizing, and that operation orders the result by
+     * how the product came out — with evidence on some parents, the conditioned
+     * variable landed wherever. A consumer that then asked the projected table
+     * for its conditioned variable got a parent, and — measured on the DAN
+     * evaluation that uncovered this — attributed the table to that parent's
+     * node, overwriting the parent's own distribution.
+     */
+    protected TablePotential withConditionedVariableFirst(TablePotential projected) {
+        List<Variable> projectedVariables = projected.getVariables();
+        Variable conditioned = variables.get(0);
+        if (projectedVariables.size() < 2 || !projectedVariables.contains(conditioned)
+                || projectedVariables.get(0) == conditioned) {
+            return projected;
+        }
+        List<Variable> reordered = new ArrayList<>(projectedVariables.size());
+        reordered.add(conditioned);
+        for (Variable variable : projectedVariables) {
+            if (variable != conditioned) {
+                reordered.add(variable);
+            }
+        }
+        return (TablePotential) projected.reorder(reordered);
     }
     
     /**

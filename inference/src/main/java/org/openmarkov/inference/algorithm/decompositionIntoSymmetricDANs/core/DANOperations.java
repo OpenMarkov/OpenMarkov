@@ -109,10 +109,22 @@ public class DANOperations {
                     disposableNodes.push(destinationNode);
                     while (!disposableNodes.isEmpty()) {
                         Node disposableNode = disposableNodes.pop();
-                        // If it's a decision originalNode, check if there is another
-                        // path to it from another decision
-                        if (disposableNode.getNodeType() != NodeType.DECISION || !ProbNetOperations
-                                .hasPredecessorDecision(disposableNode, instantiatedNet)) {
+                        // A decision is spared when a decision still reaches it: it can
+                        // be made even though this branch removed the node that
+                        // restricted it. The path must survive in the copy - a path
+                        // through the nodes being removed does not keep a decision
+                        // alive - but the link from the very node being instantiated
+                        // counts even though it is gone from the copy: this same loop
+                        // removes that node's outgoing links one per iteration, so on
+                        // the copy alone the answer depended on the order in which the
+                        // links happened to be iterated.
+                        Node originalDisposable = originalDAN.getNode(disposableNode.getVariable().getName());
+                        boolean sparedDecision = disposableNode != destinationNode
+                                && disposableNode.getNodeType() == NodeType.DECISION
+                                && (ProbNetOperations.hasPredecessorDecision(disposableNode, instantiatedNet)
+                                        || (originalDisposable != null
+                                                && originalDAN.getChildren(originalNode).contains(originalDisposable)));
+                        if (!sparedDecision) {
                             for (Node descendant : instantiatedNet.getChildren(disposableNode)) {
                                 disposableNodes.push(descendant);
                             }

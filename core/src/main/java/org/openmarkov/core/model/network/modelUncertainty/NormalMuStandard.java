@@ -12,7 +12,12 @@ import org.openmarkov.core.exception.InvalidArgumentException;
 /**
  * Normal probability density function parameterised by mean ({@code mu}) and
  * standard deviation ({@code standard}). Internally delegates to
- * {@link NormalFunction}, which uses mean and variance.
+ * {@link NormalFunction}, whose second parameter — its field {@code sigma} —
+ * is also the standard deviation: it samples {@code sigma * z + mu} and its
+ * variance is {@code sigma * sigma}. This class used to square the standard
+ * deviation on the way in, so the distribution it sampled had standard
+ * deviation s² instead of the s the user asked for — internally consistent,
+ * which is why nothing noticed.
  */
 @ProbDensFunctionType(name = "NormalMuStandardFunction", univariateName = "Normal", isValidForProbabilities = false, isValidForNumeric = false, parameters = {
         "mu", "standard"}) public class NormalMuStandard extends NormalFunction {
@@ -26,7 +31,7 @@ import org.openmarkov.core.exception.InvalidArgumentException;
     }
     
     public NormalMuStandard(double mu, double standard) {
-        super(mu, standard * standard);
+        super(mu, standard);
         this.setMu(mu);
         this.setStandard(standard);
     }
@@ -39,15 +44,31 @@ import org.openmarkov.core.exception.InvalidArgumentException;
     //For Univariate
     
     /**
-     * @param parameters - parameters[1]= mu and parameters[0] = standard deviation
-     * @throws IllegalArgumentException - thrown if standard&#60;0
+     * @param parameters - parameters[0] = mu and parameters[1] = standard deviation
+     * @throws InvalidArgumentException - thrown if the standard deviation is not positive
      */
     @Override public void verifyParameters(double[] parameters) {
-        if (!(parameters[0] > 0)) {
-            throw new InvalidArgumentException(parameters[0], "N", "N must be greater than 0");
+        // It used to check parameters[0] - the mean, which may be any real number -
+        // with a message copied from the Beta family ("N must be greater than 0").
+        if (!(parameters[1] > 0)) {
+            throw new InvalidArgumentException(parameters[1], "standard",
+                    "the standard deviation must be greater than 0");
         }
     }
     //CMF
+
+    /**
+     * Keeps the subclass fields and the base's in step. Without this override,
+     * the base's setParameters changed the sigma while mu and standard here kept
+     * their old values, so getParameters answered stale numbers and the object's
+     * behaviour depended on whether it was built by constructor or by
+     * setParameters.
+     */
+    @Override public void setParameters(double[] args) {
+        super.setParameters(args);
+        this.setMu(args[0]);
+        this.setStandard(args[1]);
+    }
     
     @Override public double[] getParameters() {
         double[] a = new double[2];
