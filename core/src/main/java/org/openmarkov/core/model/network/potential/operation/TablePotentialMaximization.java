@@ -289,7 +289,11 @@ final class TablePotentialMaximization {
     static boolean isThereAUtilityPotential(List<TablePotential> arrayListPotentials) {
         boolean isThere = false;
         for (int i = 0; (i < arrayListPotentials.size()) && !isThere; i++) {
-            // isThere = arrayListPotentials.get(i).getPotentialRole() == PotentialRole.UTILITY;
+            // The predicate this loop lost was commented out when the UTILITY role was
+            // retired, so the method answered "no utilities here" for every list. A utility
+            // potential is nowadays one measured under a decision criterion - the same
+            // question sumByCriterion asks.
+            isThere = arrayListPotentials.get(i).getCriterion() != null;
         }
         return isThere;
     }

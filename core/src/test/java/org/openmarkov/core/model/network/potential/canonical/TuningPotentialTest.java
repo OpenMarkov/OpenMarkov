@@ -54,4 +54,31 @@ public class TuningPotentialTest {
         assertEquals(1.0, cPTValues[18], admissibleError);
         assertEquals(1.0, cPTValues[80], admissibleError);
     }
+
+    // -----------------------------------------------------------------------
+    // The x=+ column with ASYMMETRIC parameters (the fixed copy-paste slip)
+    // -----------------------------------------------------------------------
+
+    /**
+     * The middle cell of the x=+ column used to repeat the expression of the x=- column, so
+     * with asymmetric parameters (c++ != c--, c+- != c-+) the x=+ column did not add up
+     * to 1: the table was not a probability distribution. The parameters of the fixture
+     * above are symmetric, which is exactly why the old tests could not see it.
+     */
+    @Test public void withAsymmetricParametersEveryColumnAddsUpToOne() {
+        Variable child = new Variable("Z", "down", "st.quo", "up");
+        Variable parent = new Variable("X", "down", "st.quo", "up");
+        TuningPotential potential = new TuningPotential(new ArrayList<>(List.of(child, parent)));
+
+        // c++ = 0.6, c+- = 0.1, c-+ = 0.2, c-- = 0.3 : deliberately asymmetric
+        potential.setNoisyParameters(parent, new double[]{0.6, 0.1, 0.2, 0.3});
+
+        double[] table = potential.getNoisyParameters(parent);
+        for (int column = 0; column < 3; column++) {
+            double sum = table[3 * column] + table[3 * column + 1] + table[3 * column + 2];
+            assertEquals(1.0, sum, admissibleError, "Column " + column + " does not add up to 1");
+        }
+        assertEquals(1 - 0.6 - 0.1, table[7], admissibleError,
+                "The middle cell of the x=+ column must be the complement of its own column");
+    }
 }

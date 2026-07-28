@@ -372,19 +372,9 @@ public class DiscretePotentialOperationsRegressionTest {
         assertEquals(PotentialRole.UNSPECIFIED, role);
     }
 
-    // -----------------------------------------------------------------------
-    // isThereAUtilityPotential — stub: always returns false
-    // -----------------------------------------------------------------------
-
-    @Test
-    public void isThereAUtilityPotentialAlwaysReturnsFalse() {
-        // The method body is commented out; it always returns false regardless of input.
-        TablePotential additive = new TablePotential(List.of(a), PotentialRole.UNSPECIFIED);
-        additive.setCriterion(new org.openmarkov.core.model.network.Criterion("Cost"));
-
-        assertFalse(DiscretePotentialOperations.isThereAUtilityPotential(List.of(additive)),
-                "isThereAUtilityPotential has its body commented out and always returns false");
-    }
+    // isThereAUtilityPotential: the golden test that pinned its commented-out body ("always
+    // returns false") is gone — the body is restored, asking for the decision criterion, and
+    // the corrected behaviour is pinned by UtilityDetectionTest.
 
     // -----------------------------------------------------------------------
     // multiplyAndMarginalize(TablePotential prob, TablePotential util, Variable)

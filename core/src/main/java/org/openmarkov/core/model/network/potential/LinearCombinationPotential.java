@@ -185,14 +185,25 @@ public class LinearCombinationPotential extends GLMPotential implements Scalable
             List<Variable> newVariables = new ArrayList<>(variables);
             newVariables.remove(variable);
             newPotential = new LinearCombinationPotential(newVariables, this.role);
-            //List<String> newCovariates = new ArrayList<>();
+            // Keep every covariate that does not mention the removed variable, each one with
+            // its coefficient - the mirror of addVariable, which appends both. This used to
+            // rebuild the coefficients from an empty list, so the potential came back with
+            // its covariates and no coefficients at all, and the next projection failed far
+            // from here.
+            List<VariableExpression> newCovariates = new ArrayList<>();
             List<Double> newCoefficients = new ArrayList<>();
-            
+            String removedVariableMark = "{" + variable.getName() + "}";
+            for (int i = 0; i < covariates.length; i++) {
+                if (!covariates[i].asStringExpression().contains(removedVariableMark)) {
+                    newCovariates.add(covariates[i]);
+                    newCoefficients.add(coefficients[i]);
+                }
+            }
+            newPotential.setCovariates(newCovariates.toArray(new VariableExpression[0]));
             double[] newCoefficientsArray = new double[newCoefficients.size()];
             for (int i = 0; i < newCoefficients.size(); ++i) {
                 newCoefficientsArray[i] = newCoefficients.get(i);
             }
-            
             newPotential.setCoefficients(newCoefficientsArray);
         } else {
             newPotential = new LinearCombinationPotential(this);

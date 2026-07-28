@@ -87,37 +87,8 @@ public class TuningPotential extends ICIPotential {
      *                   c<sub><i>i</i></sub><sup>-+</sup>,
      *                   c<sub><i>i</i></sub><sup>--</sup>
      */
-    // TODO Fix the value of values[7]: the x=+ column does not add up to 1.
-    //
-    //  The 3x3 noisy table holds P(Z | X) column by column, one column per state
-    //  of the parent: x=- (values[0..2]), x=0 (values[3..5]) and x=+ (values[6..8]).
-    //  Each column must add up to 1, and the middle cell of a column is by
-    //  definition the complement of the other two.
-    //
-    //  For the x=+ column that complement is P(Z=0 | X=+) = 1 - c++ - c+-, that is
-    //  1 - parameters[0] - parameters[1]. The line below instead repeats the
-    //  expression used for values[1], which is the complement of the x=- column
-    //  (1 - c-+ - c--). The trailing comment already states the intended formula,
-    //  so this is a copy-paste slip rather than a deliberate choice.
-    //
-    //  Effect: whenever the "up" parameters differ from the "down" ones, the x=+
-    //  column adds up to something other than 1 and the resulting CPT is not a
-    //  probability distribution.
-    //
-    //  Why this has gone unnoticed: TuningPotentialTest only uses symmetric
-    //  parameters (c++ == c-- and c+- == c-+), and under that symmetry both
-    //  expressions happen to yield the same number.
-    //
-    //  Fix: values[7] = 1 - parameters[0] - parameters[1], plus a regression test
-    //  built on ASYMMETRIC parameters asserting that every column of getCPT()
-    //  adds up to 1. A symmetric test cannot detect this.
-    //
-    //  Not urgent: this 4-parameter branch appears to be unreachable from
-    //  production code. The GUI edits already-stored parameters
-    //  (ICITablePotentialValueEdit clones the stored 9-value array), and the PGMX
-    //  reader passes whatever the file holds -- confirm the arity used by real
-    //  Tuning networks before assuming saved models are affected. Today only test
-    //  code is known to call this branch.
+    // The 3x3 noisy table holds P(Z | X) column by column, one column per state
+    // of the parent: x=- (values[0..2]), x=0 (values[3..5]) and x=+ (values[6..8]).
     @Override public void setNoisyParameters(Variable parent, double[] parameters) {
         double[] values;
         if (parameters.length == 4) {
@@ -130,7 +101,11 @@ public class TuningPotential extends ICIPotential {
             values[4] = 1.0;
             values[5] = 0.0;
             values[6] = parameters[1]; // c+-
-            values[7] = 1 - parameters[2] - parameters[3]; // 1 - c++ - c+-
+            // The complement of ITS OWN column: this cell used to repeat the expression of
+            // values[1] (the x=- column), so with asymmetric parameters the x=+ column did
+            // not add up to 1 and the table was not a probability distribution. The symmetric
+            // parameters of the existing test could not tell the two expressions apart.
+            values[7] = 1 - parameters[0] - parameters[1]; // 1 - c++ - c+-
             values[8] = parameters[0]; // c++
         } else if (parameters.length == 9) {
             values = parameters;
