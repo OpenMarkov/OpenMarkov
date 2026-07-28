@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * This class implements the edition toolbar of the application.
@@ -109,11 +110,6 @@ public class EditionToolBar extends ToolBarBasic implements MouseMotionListener 
         this.nodeTypeComboBox = Lazy.of(() -> {
             var comboBox = new JComboBox<NodeTypeInfo>();
             Arrays.stream(NodeType.values()).map(NodeTypeInfo::of).filter(NodeTypeInfo::isVisuallyRepresented).forEach(comboBox::addItem);
-            Dimension size = new Dimension(25, 25);
-            comboBox.setSize(size);
-            comboBox.setPreferredSize(size);
-            comboBox.setMinimumSize(size);
-            comboBox.setMaximumSize(size);
             comboBox.setBackground(GUIColors.General.TRANSPARENT.getColor());
             comboBox.setActionCommand(ActionCommands.SET_NODE_MODE_CREATION.getCommandName());
 
@@ -121,15 +117,15 @@ public class EditionToolBar extends ToolBarBasic implements MouseMotionListener 
             comboBox.setRenderer(new DefaultListCellRenderer() {
                 @Override
                 public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                    JPanel jPanel = new JPanel();
                     if (index == -1) {
-                        return jPanel;
+                        return new JPanel();
                     }
-                    JLabel jLabel = new JLabel(((NodeTypeInfo) value).iconBind.icon());
+                    NodeTypeInfo nodeTypeInfo = (NodeTypeInfo) value;
+                    JLabel jLabel = new JLabel(nodeTypeInfo.iconBind.icon());
                     jLabel.setHorizontalAlignment(SwingConstants.LEFT);
                     jLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-                    jPanel.add(jLabel);
-                    return jPanel;
+                    jLabel.setToolTipText("Insert " + nodeTypeInfo.visualName.toLowerCase() + " nodes");
+                    return jLabel;
                 }
             });
             comboBox.addItemListener(e -> {
@@ -185,13 +181,41 @@ public class EditionToolBar extends ToolBarBasic implements MouseMotionListener 
     }
 
     public void updateFor(EditorPanel editorPanel) {
-        this.nodeTypeComboBox.get().removeAllItems();
         if (editorPanel instanceof NetworkEditorPanel networkEditorPanel) {
             NodeType preferredNodeToCreate = networkEditorPanel.getPreferredNodeToCreate();
-            Arrays.stream(NodeTypeInfo.NODE_TYPE_INFOS)
+            var nodeTypeInfos = Arrays.stream(NodeTypeInfo.NODE_TYPE_INFOS)
                     .filter(NodeTypeInfo::isVisuallyRepresented)
                     .filter(nodeTypeInfo -> nodeTypeInfo.canBeUsedInProbnet(networkEditorPanel.getProbNet()))
-                    .forEach(nodeTypeInfo -> this.nodeTypeComboBox.get().addItem(nodeTypeInfo));
+                    .toList();
+
+            for (int i = 0; i < this.nodeTypeComboBox.get().getItemCount(); i++) {
+                if (!nodeTypeInfos.contains(this.nodeTypeComboBox.get().getItemAt(i))) {
+                    nodeTypeComboBox.get().removeItemAt(i);
+                    i--;
+                }
+            }
+            nodeTypeInfos.stream()
+                    .filter(nodeTypeInfo -> {
+                        for (int i = 0; i < this.nodeTypeComboBox.get().getItemCount(); i++) {
+                            if (this.nodeTypeComboBox.get().getItemAt(i) == nodeTypeInfo) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    })
+                    .forEach(nodeTypeInfo -> {
+                        this.nodeTypeComboBox.get().addItem(nodeTypeInfo);
+                    });
+
+            boolean showNodeTypeComboBox = nodeTypeComboBox.get().getItemCount() > 1;
+            Dimension size = showNodeTypeComboBox ? new Dimension(25, 25) : new Dimension(0, 0);
+            nodeTypeComboBox.get().setSize(size);
+            nodeTypeComboBox.get().setPreferredSize(size);
+            nodeTypeComboBox.get().setMinimumSize(size);
+            nodeTypeComboBox.get().setMaximumSize(size);
+            nodeTypeComboBox.get().setVisible(showNodeTypeComboBox);
+            this.nodeCreationButton.setToolTipText("Insert " + ((NodeTypeInfo) Objects.requireNonNull(this.nodeTypeComboBox.get().getSelectedItem())).visualName.toLowerCase() + " nodes");
+
             this.nodeCreationButton.setIcon(NodeTypeInfo.of(preferredNodeToCreate).iconBind.icon());
             networkEditorPanel.setPreferredNodeToCreate(preferredNodeToCreate);
 
@@ -221,9 +245,9 @@ public class EditionToolBar extends ToolBarBasic implements MouseMotionListener 
 
         addSeparator();
         add(getObjectSelectionButton());
-        add(getLinkCreationButton());
         add(getNodeCreationButton());
         add(this.nodeTypeComboBox.get());
+        add(getLinkCreationButton());
 
 
         add(Box.createHorizontalGlue());

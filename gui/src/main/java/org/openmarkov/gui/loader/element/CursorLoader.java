@@ -10,10 +10,7 @@ package org.openmarkov.gui.loader.element;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.java.initialization.Lazy;
 
-import java.awt.Cursor;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.net.URL;
 
 /**
@@ -36,8 +33,16 @@ public class CursorLoader {
      * Name of the cursor that represents the selection of varios nodes.
      */
     public static final Cursor CURSOR_MULTIPLE_SELECTION = new Cursor(Cursor.CROSSHAIR_CURSOR);
-    
+
     public static final Lazy<Cursor> CURSOR_LINK = Lazy.of(() -> load("link.png"));
+
+    public static final Lazy<Cursor> CURSOR_NODE_CHANCE = Lazy.of(() -> load("chance.png"));
+
+    public static final Lazy<Cursor> CURSOR_NODE_DECISION = Lazy.of(() -> load("decision.png"));
+
+    public static final Lazy<Cursor> CURSOR_NODE_UTILITY = Lazy.of(() -> load("utility.png"));
+
+    public static final Lazy<Cursor> CURSOR_NODE_EVENT = Lazy.of(() -> load("event.png"));
     
     /**
      * Folder where cursors are saved.

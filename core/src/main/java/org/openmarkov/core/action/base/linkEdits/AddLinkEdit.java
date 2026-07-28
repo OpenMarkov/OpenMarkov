@@ -10,17 +10,12 @@ package org.openmarkov.core.action.base.linkEdits;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.model.graph.Link;
-import org.openmarkov.core.model.network.Node;
-import org.openmarkov.core.model.network.NodeType;
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.PurposeType;
-import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.constraint.*;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.SumPotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
 
-import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -136,8 +131,8 @@ public final class AddLinkEdit extends BaseLinkEdit {
             }
         }
         if (probNet.getConstraintOfClass(NoUtilityParent.class) instanceof NoUtilityParent constraint) {
-            Node node1 = probNet.getNode(this.getVariableFrom());
-            Node node2 = probNet.getNode(this.getVariableTo());
+            Node node1 = this.getNodeFrom();
+            Node node2 = this.getNodeTo();
             if (node1.getNodeType() == NodeType.UTILITY && node2.getNodeType() != NodeType.UTILITY) {
                 constraintChecker.addException(new ConstraintViolatedException.CannotHaveUtilityParent(constraint, node1, node2));
             }
