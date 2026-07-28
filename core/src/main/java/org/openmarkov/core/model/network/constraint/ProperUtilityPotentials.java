@@ -35,8 +35,4 @@ import java.util.List;
         }
 	}
 
-	public String toString() {
-		return this.getClass().getName();
-	}
- 
 }

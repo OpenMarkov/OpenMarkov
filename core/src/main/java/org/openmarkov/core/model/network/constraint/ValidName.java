@@ -38,18 +38,6 @@ public class ValidName extends PNConstraint {
         return variablesNames.contains(newName);
     }
     
-    /**
-     * This method checks if exists the specified node.
-     *
-     * @param name name of the node to search.
-     *
-     * @return true if the node exists; otherwise, false.
-     */
-    public static boolean existNode(String name, GraphNetwork probNet) {
-        probNet.getNode(name);
-        return true;
-    }
-    
     @Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {
         List<Variable> variables = probNet.getVariables();
         for (Variable variable : variables) {
