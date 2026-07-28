@@ -8,7 +8,6 @@
 package org.openmarkov.core.inference;
 
 import org.jetbrains.annotations.NotNull;
-import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.graph.Link;
@@ -50,8 +49,7 @@ public class BasicOperations {
             newTable = DiscretePotentialOperations.multiply(parentsPotentials);
         } else {   // FunctionPotential
             try {
-                @ToCheck(reasonKind = ToCheck.ReasonKind.PROBABLE_BUG, reasonDescription = "Are these two exceptions really unreachable?")
-                var a = true;
+                // To check (probable bug): are these two exceptions really unreachable?
                 newTable = DiscretePotentialOperations.evaluateFunctionPotential(
                         (FunctionPotential) nodePotential, parentsPotentials, parentsPotentials.get(0).getVariables());
             } catch (NonProjectablePotentialException.CannotEvaluate |
@@ -686,12 +684,6 @@ public class BasicOperations {
                                                 boolean leaveImplicitSum, Variable utilityVariableToKeep) {
         ProbNet network = sourceProbNet.copy();
         List<Node> utilityNodes = network.getNodes(NodeType.UTILITY);
-        for (Node utilityNode : utilityNodes) {
-            Variable utilityVariable = utilityNode.getVariable();
-            if ((areAllItsParentsAbsorbable(utilityNode) && utilityVariableToKeep == null)
-                    || utilityVariable == utilityVariableToKeep) {
-            }
-        }
         if (!keepComponents) {
             List<Variable> nodesToKeep;
             if (utilityVariableToKeep == null) {

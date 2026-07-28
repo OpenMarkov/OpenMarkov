@@ -67,22 +67,6 @@ public class InferenceOptions {
 		this.setMonteCarloOptions(new MonteCarloOptions(inferenceOptions.getMonteCarloOptions()));
 	}
 
-	/**
-	 * Sets the attribute simulationIndexVariable and returns the variable.
-	 * If numSimulations = 0, it returns null.
-	 * @param numSimulations Number of simulations
-	 * @return Variable
-	 */
-	public static Variable setNumSimulations(int numSimulations) {
-		Variable newVariable;
-		if (numSimulations == 0) {
-			newVariable = null;
-		} else {
-			newVariable = new Variable("###SimulationIndexes###", numSimulations);
-		}
-		return newVariable;
-	}
-
 	public MulticriteriaOptions getMultiCriteriaOptions() {
 		return multiCriteriaOptions;
 	}

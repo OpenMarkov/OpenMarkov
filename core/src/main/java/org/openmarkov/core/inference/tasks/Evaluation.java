@@ -19,7 +19,9 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 public interface Evaluation extends Task {
 
 	/**
-	 * @return The global expected utility
+	 * @return The probability potential of the evaluation, defined over the conditioning
+	 * variables. (The javadoc used to say "the global expected utility", copied from
+	 * {@link #getUtility()}.)
 	 */
 	TablePotential getProbability()
             throws NonProjectablePotentialException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther;

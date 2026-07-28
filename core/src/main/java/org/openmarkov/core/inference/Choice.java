@@ -38,8 +38,6 @@ public class Choice {
 	 */
 	private int numValues;
 
-	private boolean initialized = false;
-
 	// Constructors
 
 	/**
@@ -62,7 +60,6 @@ public class Choice {
 		values[0] = value;
 		this.variable = variable;
 		numValues = 1;
-		initialized = true;
 	}
 
 	// Methods
@@ -80,7 +77,6 @@ public class Choice {
 	public void setValues(int[] values) {
 		this.values = values;
 		numValues = values.length;
-		initialized = true;
 	}
 
 	public List<State> getStates() {
@@ -111,7 +107,6 @@ public class Choice {
 		numValues = 1;
 		values = new int[numValues];
 		values[0] = value;
-		initialized = true;
 	}
 
 	/**

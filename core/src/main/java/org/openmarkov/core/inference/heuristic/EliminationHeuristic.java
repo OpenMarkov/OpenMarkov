@@ -51,11 +51,6 @@ public abstract class EliminationHeuristic implements PNEditListener {
 	 */
 	protected final List<List<Node>> nodesToEliminate;
 
-	/**
-	 * {@code Variable} that the heuristic propose to eliminate.
-	 */
-	protected final Variable variableProposed;
-
 	// Constructor
 
 	/**
@@ -95,7 +90,6 @@ public abstract class EliminationHeuristic implements PNEditListener {
 				this.nodesToEliminate.add(nodes);
 			}
 		}
-		variableProposed = null;
 	}
 
 	// Methods
