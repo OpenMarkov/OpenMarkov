@@ -51,18 +51,23 @@ public class PartialOrderDAN {
 			}
 		}
 
-		//Transitive reduction
+		// Transitive reduction: the link dec -> nodeJ is redundant when another successor of dec,
+		// nodeI, already reaches nodeJ.
+		//
+		// This walked the links *incident* to dec, incoming ones included, and read the end of each
+		// as if it were a successor. For an incoming link that end is dec itself, so nodeI could be
+		// dec, and "does nodeI reach nodeJ?" was then trivially true through the very link being
+		// examined. The effect was that every outgoing link of a decision that had a predecessor got
+		// deleted: in a chain of three phases of tests, the order kept only the links of the first.
 		List<Link<Node>> linksToRemove = new ArrayList<>();
 		for (Node dec : order.getNodes()) {
-			List<Link<Node>> decLinks = order.getLinks(dec);
-			for (int i = 0; i < decLinks.size(); i++) {
-                Node nodeI = decLinks.get(i).getTo();
-				for (int j = 0; j < decLinks.size(); j++) {
-					Link<Node> linkJ = decLinks.get(j);
-                    Node nodeJ = linkJ.getTo();
+			List<Link<Node>> successorLinks = order.getLinks(dec).stream().filter(link -> link.getFrom() == dec).toList();
+			for (Link<Node> linkI : successorLinks) {
+				for (Link<Node> linkJ : successorLinks) {
+					Node nodeI = linkI.getTo();
+					Node nodeJ = linkJ.getTo();
 					if ((nodeI != nodeJ) && order.existsPath(nodeI, nodeJ, true, Collections.emptyList())) {
 						linksToRemove.add(linkJ);
-
 					}
 				}
 			}
