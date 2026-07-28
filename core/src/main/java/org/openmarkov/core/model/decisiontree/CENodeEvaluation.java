@@ -9,6 +9,13 @@ package org.openmarkov.core.model.decisiontree;
 
 import org.openmarkov.core.model.network.CEP;
 
+/**
+ * The evaluation of a node in a cost-effectiveness tree, where the value of a scenario is not a
+ * number but a partition of the willingness to pay into intervals, each with its own optimal
+ * intervention.
+ *
+ * @author Manuel Arias
+ */
 public class CENodeEvaluation extends DecisionTreeNodeEvaluation {
 
 	private CEP cep;

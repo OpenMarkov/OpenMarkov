@@ -7,6 +7,12 @@
 
 package org.openmarkov.core.model.decisiontree;
 
+/**
+ * The result the inference computes for a node of the decision tree: the probability of the
+ * scenario that leads to it, plus whatever its subclasses add as the value of that scenario.
+ *
+ * @author Manuel Arias
+ */
 public class DecisionTreeNodeEvaluation {
 
 	private double prob;

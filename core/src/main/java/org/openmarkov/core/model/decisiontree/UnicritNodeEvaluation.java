@@ -9,6 +9,12 @@ package org.openmarkov.core.model.decisiontree;
 
 import org.openmarkov.core.inference.Strategy;
 
+/**
+ * The evaluation of a node in a tree whose utility is a single number, as in ordinary
+ * expected-utility evaluation.
+ *
+ * @author Manuel Arias
+ */
 public class UnicritNodeEvaluation extends DecisionTreeNodeEvaluation {
 
 	private double utility;
