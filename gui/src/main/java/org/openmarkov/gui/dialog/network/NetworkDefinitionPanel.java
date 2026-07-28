@@ -52,6 +52,14 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
      */
     private JTextArea jTextAreaLabelNetworkDefinitionComment;
     /**
+     * The label of the comment together with the button that edits it.
+     */
+    private JPanel commentHeaderPanel;
+    /**
+     * The button that opens the comment editor.
+     */
+    private JButton jButtonEditComment;
+    /**
      * The Network Comment Scroll Panel box
      */
     private CommentHTMLScrollPane commentHTMLScrollPaneNetworkDefinition = null;
@@ -65,6 +73,10 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
     private final boolean newNetwork;
     private final ProbNet probNet;
     private final NetworkPropertiesDialog parent;
+    /**
+     * Space between the comment label and the button that edits it.
+     */
+    private static final int COMMENT_BUTTON_GAP = 6;
     
     /**
      * Constructor.
@@ -91,7 +103,7 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
                 groupLayout.createSequentialGroup().addContainerGap().addGroup(
                         groupLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
                                            groupLayout.createSequentialGroup()
-                                                      .addComponent(getJTextAreaLabelNetworkDefinitionComment(),
+                                                      .addComponent(getCommentHeaderPanel(),
                                                                     GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
                                                                     GroupLayout.PREFERRED_SIZE)
                                                       .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -109,7 +121,7 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
                                                                            .addGroup(
                                                                                    groupLayout.createSequentialGroup()
                                                                                               .addComponent(getJComboBoxNetworkTypes(),
-                                                                                                            GroupLayout.PREFERRED_SIZE, 182,
+                                                                                                            GroupLayout.PREFERRED_SIZE, 255,
                                                                                                             GroupLayout.PREFERRED_SIZE)
                                                                                               .addContainerGap())))
                                    .addGroup(groupLayout.createParallelGroup()
@@ -123,7 +135,7 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
                                                             GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(
                                    groupLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                              .addComponent(getJTextAreaLabelNetworkDefinitionComment())
+                                              .addComponent(getCommentHeaderPanel())
                                               .addComponent(getCommentHTMLScrollPaneNetworkDefinition(), GroupLayout.DEFAULT_SIZE,
                                                             117, Short.MAX_VALUE)).addGroup(
                                    groupLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
@@ -204,10 +216,58 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
             jTextAreaLabelNetworkDefinitionComment.setText("an Extended Label");
             jTextAreaLabelNetworkDefinitionComment
                     .setText(stringDatabase.getString("NetworkDefinitionPanel.NetworkDefinitionComment.Text"));
+            // A text area stretches as far as it is given room to, and it shares a column with
+            // the comment box, which is far taller. Without a ceiling it swallows that height
+            // and pushes the button below it out of sight of the label.
+            jTextAreaLabelNetworkDefinitionComment.setMaximumSize(
+                    new Dimension(Integer.MAX_VALUE,
+                                  jTextAreaLabelNetworkDefinitionComment.getPreferredSize().height));
         }
         return jTextAreaLabelNetworkDefinitionComment;
     }
-    
+
+    /**
+     * The column to the left of the comment: what the box holds, and the way to change it. The
+     * button replaces the instruction that the label used to carry, which told the user to
+     * double-click but could not be pressed, reached with the keyboard or seen as an action.
+     *
+     * @return the panel with the comment label and the button that edits the comment
+     */
+    private JPanel getCommentHeaderPanel() {
+        if (commentHeaderPanel == null) {
+            commentHeaderPanel = new JPanel();
+            commentHeaderPanel.setName("commentHeaderPanel");
+            commentHeaderPanel.setOpaque(false);
+            commentHeaderPanel.setLayout(new BoxLayout(commentHeaderPanel, BoxLayout.Y_AXIS));
+            getJTextAreaLabelNetworkDefinitionComment().setAlignmentX(LEFT_ALIGNMENT);
+            getJButtonEditComment().setAlignmentX(LEFT_ALIGNMENT);
+            commentHeaderPanel.add(getJTextAreaLabelNetworkDefinitionComment());
+            commentHeaderPanel.add(Box.createVerticalStrut(COMMENT_BUTTON_GAP));
+            commentHeaderPanel.add(getJButtonEditComment());
+            // The column is as tall as the comment box beside it; without this the spare height
+            // is shared out and the button drifts away from the label it belongs to.
+            commentHeaderPanel.add(Box.createVerticalGlue());
+        }
+        return commentHeaderPanel;
+    }
+
+    /**
+     * initialises the button that opens the comment editor
+     *
+     * @return jButtonEditComment the button that edits the comment
+     */
+    private JButton getJButtonEditComment() {
+        if (jButtonEditComment == null) {
+            jButtonEditComment = new JButton(stringDatabase.getString("NetworkDefinitionPanel.EditComment.Text"));
+            jButtonEditComment.setName("jButtonEditComment");
+            jButtonEditComment.setMnemonic(
+                    stringDatabase.getString("NetworkDefinitionPanel.NetworkDefinitionComment.Mnemonic").charAt(0));
+            jButtonEditComment.addActionListener(
+                    e -> getCommentHTMLScrollPaneNetworkDefinition().openEditor());
+        }
+        return jButtonEditComment;
+    }
+
     /**
      * initialises the getCommentHTMLScrollPaneForNetworkDefinition
      *
@@ -218,6 +278,8 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
         if (commentHTMLScrollPaneNetworkDefinition == null) {
             commentHTMLScrollPaneNetworkDefinition = new CommentHTMLScrollPane();
             commentHTMLScrollPaneNetworkDefinition.setName("commentHTMLScrollPaneNetworkDefinition");
+            commentHTMLScrollPaneNetworkDefinition.setToolTipText(
+                    stringDatabase.getString("NetworkDefinitionPanel.NetworkDefinitionComment.Hint"));
             if (!newNetwork) {
                 commentHTMLScrollPaneNetworkDefinition.addCommentListener(this);
             }

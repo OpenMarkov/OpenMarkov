@@ -204,8 +204,12 @@
         </CommentHTMLScrollPaneNetworkDefinition>
         <NetworkDefinitionComment>
             <Mnemonic value="c"/>
-            <Text value="Comment&#13;&#10;(double-click to &#13;&#10;edit) :"/>
+            <Text value="Comment:"/>
+            <Hint value="Double-click to edit the comment"/>
         </NetworkDefinitionComment>
+        <EditComment>
+            <Text value="Edit…"/>
+        </EditComment>
         <NetworkName>
             <Text value="Network Name: "/>
         </NetworkName>

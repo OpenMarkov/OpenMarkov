@@ -14,7 +14,6 @@ import org.openmarkov.gui.dialog.CommentListener;
 import javax.swing.*;
 import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.Serial;
@@ -48,14 +47,6 @@ public class CommentHTMLScrollPane extends JScrollPane implements MouseListener 
     private boolean isEditable = true;
     
     /**
-     * Double Click Selector for the HTML Comment area
-     */
-    private final MouseListener doubleClickSelector = new MouseAdapter() {
-        @Override public void mouseClicked(MouseEvent e) {
-        }
-    };
-    
-    /**
      * This method initialises this instance.
      */
     public CommentHTMLScrollPane() {
@@ -84,7 +75,8 @@ public class CommentHTMLScrollPane extends JScrollPane implements MouseListener 
      * This method configures the dialog box.
      */
     private void initialize() {
-        setBorder(BorderFactory.createLineBorder(SystemColor.activeCaption, 2));
+        // No border of its own: a hard-coded one used the operating system's window-caption
+        // colour and ignored the theme the rest of the dialog follows.
         setViewportView(getJTextPaneCommentHTML());
         setSize(HTML_COMMENT_WIDTH, HTML_COMMENT_HEIGHT);
         hTMLTextEditor = new HTMLTextEditor(null, "");
@@ -103,7 +95,6 @@ public class CommentHTMLScrollPane extends JScrollPane implements MouseListener 
             jTextPaneCommentHTML.setEditable(false);
             jTextPaneCommentHTML.setSize(new Dimension(HTML_COMMENT_WIDTH, HTML_COMMENT_HEIGHT));
             jTextPaneCommentHTML.setText("");
-            jTextPaneCommentHTML.addMouseListener(doubleClickSelector);
             jTextPaneCommentHTML.addMouseListener(this);
         }
         return jTextPaneCommentHTML;
@@ -167,8 +158,18 @@ public class CommentHTMLScrollPane extends JScrollPane implements MouseListener 
     }
     
     @Override public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        if (!((e.getClickCount() == 2) && (isEditable))) {
+        if (e.getClickCount() == 2) {
+            openEditor();
+        }
+    }
+
+    /**
+     * Opens the editor on the current comment and keeps whatever the user accepts. Double
+     * clicking the comment is one way in; a button next to the comment is another, which is why
+     * this is public rather than buried in the mouse handler.
+     */
+    public void openEditor() {
+        if (!isEditable) {
             return;
         }
         String comment = jTextPaneCommentHTML.getText() != null ? jTextPaneCommentHTML.getText() : "";
@@ -185,6 +186,15 @@ public class CommentHTMLScrollPane extends JScrollPane implements MouseListener 
                 throw new UnrecoverableException(ex);
             }
         }
+    }
+
+    /**
+     * Tooltips are shown by the component under the pointer, and that is the text pane inside
+     * the viewport, never the scroll pane itself.
+     */
+    @Override public void setToolTipText(String text) {
+        super.setToolTipText(text);
+        getJTextPaneCommentHTML().setToolTipText(text);
     }
     
     private void notifyCommentChanged() throws DoEditException {
