@@ -396,7 +396,9 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
      * @param variableName Name of the variable
      */
     public void pruneAndGraftNode(String variableName) {
-        if (getRootVariable().getName().toUpperCase().matches(variableName.toUpperCase())) {
+        // The parameter is a plain variable name, not a pattern: brackets and the like, which the
+        // temporal variable names carry, must mean nothing special.
+        if (getRootVariable().getName().equalsIgnoreCase(variableName)) {
             // Find the first branch whose child is a TreeADDPotential and graft it up
             TreeADDPotential graftCandidate = null;
             for (TreeADDBranch branch : branches) {
@@ -419,8 +421,8 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
             Potential potential = branch.getPotential();
             if (potential != null && TreeADDPotential.class.isAssignableFrom(potential.getClass())) {
                 TreeADDPotential childTreeADDPotential = (TreeADDPotential) potential;
-                String childVariableName = childTreeADDPotential.getRootVariable().getName().toUpperCase();
-                if (childVariableName.matches(variableName.toUpperCase())) {
+                String childVariableName = childTreeADDPotential.getRootVariable().getName();
+                if (childVariableName.equalsIgnoreCase(variableName)) {
                     List<TreeADDBranch> potentialBranches = childTreeADDPotential.getBranches();
                     if (!potentialBranches.isEmpty()) {
                         branch.setPotential(potentialBranches.get(0).getPotential());

@@ -8,11 +8,13 @@
 package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
@@ -268,9 +270,22 @@ import java.util.Map;
 
         if (timeVariable == null) throw new RuntimeException("Weibull Hazard potential has no time variable; hazard cannot be computed");
         double[] coefficients =getCoefficients();
-        double gamma =Math.exp(coefficients[0]);
-        Variable variableLambda =variables.stream().filter(variable -> variable.getName().equals("Lambda")).findFirst().orElse(null);
-        double lambda = parents.getFinding(variableLambda).getNumericalValue();
+        // The shape parameter is stored as its logarithm, in the position the covariates declare
+        // for gamma; the rest of the class (getGamma, tableProject) reads it the same way.
+        int gammaIndex = getGammaIndex(covariates);
+        if (gammaIndex == -1) {
+            throw new InvalidArgumentException("covariates", "no covariate declares the shape parameter gamma");
+        }
+        double gamma =Math.exp(coefficients[gammaIndex]);
+        // Sampling takes the scale parameter from a parent variable named Lambda, by convention.
+        Variable variableLambda =variables.stream().filter(variable -> variable.getName().equals("Lambda")).findFirst()
+                .orElseThrow(() -> new InvalidArgumentException("Lambda",
+                        "sampling a Weibull hazard takes the scale parameter from a parent variable named Lambda, and this potential has none"));
+        Finding lambdaFinding = parents.getFinding(variableLambda);
+        if (lambdaFinding == null) {
+            throw new InvalidArgumentException("Lambda", "the evidence carries no value for the variable Lambda");
+        }
+        double lambda = lambdaFinding.getNumericalValue();
         double timeVariableValue = parents.getFinding(timeVariable).getNumericalValue();
         //hazard; for one year cycle; FIXME has to be revised
         double transitionProbability = 1 - Math.exp(lambda*(Math.pow(timeVariableValue-1,gamma) -Math.pow(timeVariableValue,gamma) ));

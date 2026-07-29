@@ -12,7 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Variable;
@@ -62,8 +64,47 @@ public class WeibullHazardPotentialTest {
         double[] cholesky = potential.getCholeskyDecomposition();
         double[] expectedCholesky = new double[]{0.0474, -0.1199, 0.1698, 5.901E-07, -0.00461, 0.00242, 0.0001074,
                 -0.0426, -0.0673, 0.07451, 0.005458, 0.00007454, -0.0455, -0.03864, 0.3778};
-        
+
         Assertions.assertArrayEquals(expectedCholesky, cholesky, 0.0001);
     }
-    
+
+    /**
+     * Sampling relies on a parent variable named exactly {@code Lambda}. Without it, the answer
+     * must say what is missing, not break with a message that names nothing.
+     */
+    @Test
+    public void samplingWithoutALambdaParentSaysWhatIsMissing() throws Exception {
+        potential.setTimeVariable(ageVar);
+        EvidenceCase evidence = new EvidenceCase();
+        evidence.addFinding(new Finding(ageVar, 65.0));
+
+        InvalidArgumentException error = Assertions.assertThrows(InvalidArgumentException.class,
+                () -> potential.sampleConditionedVariable(new double[]{0.5}, evidence));
+        Assertions.assertTrue(error.getMessage().contains("Lambda"),
+                () -> "the error must name the missing variable; it says: " + error.getMessage());
+    }
+
+    /**
+     * The rest of the class locates the shape parameter gamma by asking the covariates for its
+     * position; sampling read position 0 unconditionally, so the two disagreed as soon as the
+     * covariates came in another order.
+     */
+    @Test
+    public void theGammaUsedForSamplingIsTheOneTheCovariatesDeclare() throws Exception {
+        Variable lambdaVar = new Variable("Lambda", true, 0.0, 1000.0, false, 0.001);
+        Variable timeVar = new Variable("Time", true, 0.0, 1000.0, false, 0.001);
+        VariableExpression[] covariates = {VariableExpression.Common.CONSTANT, VariableExpression.Common.GAMMA};
+        // A stray large value sits where the old code read gamma from; the declared gamma is ln 2.
+        double[] coefficients = {99.0, Math.log(2)};
+        WeibullHazardPotential weibull = new WeibullHazardPotential(
+                Arrays.asList(new Variable("X", 2), lambdaVar, timeVar), PotentialRole.CONDITIONAL_PROBABILITY,
+                covariates, coefficients, null);
+        weibull.setTimeVariable(timeVar);
+        EvidenceCase evidence = new EvidenceCase();
+        evidence.addFinding(new Finding(lambdaVar, 0.1));
+        evidence.addFinding(new Finding(timeVar, 2.0));
+
+        // gamma = 2 → transition probability = 1 − exp(0.1·(1² − 2²)) ≈ 0.26 < 0.5 → no event.
+        Assertions.assertEquals(0.0, weibull.sampleConditionedVariable(new double[]{0.5}, evidence));
+    }
 }

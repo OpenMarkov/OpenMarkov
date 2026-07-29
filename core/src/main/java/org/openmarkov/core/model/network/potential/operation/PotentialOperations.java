@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.network.potential.operation;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -188,8 +189,9 @@ public class PotentialOperations {
     }
     
     /**
-     * Multiplies several potentials and maximizes the result removing
-     * variables that does not belong to {@code variablesOfInterest}
+     * Multiplies several potentials and maximizes the result removing the variable that does not
+     * belong to {@code variablesOfInterest}. Exactly one variable must be left out: with none
+     * there is nothing to maximize, and maximizing several in one call is not supported.
      *
      * @param potentials          potentials array to multiply
      * @param variablesOfInterest Set of variables that must be kept (although
@@ -224,7 +226,19 @@ public class PotentialOperations {
                 variablesToEliminate.add(variable);
             }
         }
-        
+
+        // This method maximizes exactly one variable: the only one not kept. Both degenerate
+        // calls are refused with an explanation; the second used to answer wrong in silence,
+        // maximizing the first variable and losing the rest from the partition.
+        if (variablesToEliminate.isEmpty()) {
+            throw new InvalidArgumentException("variablesOfInterest",
+                    "every variable of the potentials is kept, so there is no variable left to maximize");
+        }
+        if (variablesToEliminate.size() > 1) {
+            throw new NotSupportedOperationException("this method maximizes exactly one variable, and "
+                    + variablesToEliminate.size() + " were left to eliminate: " + variablesToEliminate);
+        }
+
         return DiscretePotentialOperations
                 .multiplyAndMaximize(potentials, variablesToKeep, variablesToEliminate.get(0));
     }
