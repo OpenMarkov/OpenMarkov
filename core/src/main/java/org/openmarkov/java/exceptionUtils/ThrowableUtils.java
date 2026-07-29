@@ -2,7 +2,10 @@ package org.openmarkov.java.exceptionUtils;
 
 import org.openmarkov.java.collectionsUtils.arrayUtils.Slice;
 
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 
 public class ThrowableUtils {
     
@@ -59,7 +62,12 @@ public class ThrowableUtils {
      * @see ThrowableUtils#transferStackTrace(Throwable, Throwable)
      */
     public static Throwable flatten(Throwable throwable) {
-        while (throwable.getCause() != null) {
+        // The language forbids an error being its own cause, but not a cycle of two; walking one
+        // would never end. The walk closes on the first already-visited link, and the last new
+        // one plays the root.
+        Set<Throwable> visited = Collections.newSetFromMap(new IdentityHashMap<>());
+        visited.add(throwable);
+        while (throwable.getCause() != null && visited.add(throwable.getCause())) {
             var cause = throwable.getCause();
             ThrowableUtils.transferStackTrace(throwable, cause);
             throwable = cause;
