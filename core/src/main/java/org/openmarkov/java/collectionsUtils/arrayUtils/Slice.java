@@ -16,19 +16,19 @@ public class Slice<T> {
     
     public Slice(Class<T> elementsClass, T[] elements, int start, int end) {
         if (end < start) {
-            throw new IllegalArgumentException("End must be greater than start");
+            throw new IllegalArgumentException("End must be greater than or equal to start");
         }
         if (start < 0) {
-            throw new IndexOutOfBoundsException("Start must be greater than 0");
+            throw new IndexOutOfBoundsException("Start must be greater than or equal to 0");
         }
         if (end < 0) {
-            throw new IndexOutOfBoundsException("End must be greater than 0");
+            throw new IndexOutOfBoundsException("End must be greater than or equal to 0");
         }
         if (start > elements.length) {
-            throw new IndexOutOfBoundsException("End must be less than the length of the array");
+            throw new IndexOutOfBoundsException("Start must not exceed the length of the array");
         }
         if (end > elements.length) {
-            throw new IndexOutOfBoundsException("End must be less than the length of the array");
+            throw new IndexOutOfBoundsException("End must not exceed the length of the array");
         }
         this.elementsClass = elementsClass;
         this.solved = (T[]) Array.newInstance(this.elementsClass, end - start);
@@ -36,14 +36,13 @@ public class Slice<T> {
         this.start = start;
         this.end = end;
     }
-    
+
+    /**
+     * A slice spanning the whole array. Same guarantee as the range constructor, through it:
+     * the slice hands out its own copy, never the array of the caller.
+     */
     public Slice(Class<T> elementsClass, T[] elements) {
-        this.elementsClass = elementsClass;
-        this.solved = elements;
-        this.elements = elements;
-        this.start = 0;
-        this.end = elements.length;
-        this.isSolved = true;
+        this(elementsClass, elements, 0, elements.length);
     }
     
     private void solve() {
@@ -63,6 +62,8 @@ public class Slice<T> {
     
     public static <T> T @Nullable [] slicesToArray(Collection<Slice<T>> slices) {
         if (slices.isEmpty()) {
+            // An empty array of the right type cannot be built here: the class of the elements
+            // travels inside the slices, and an empty collection carries none. Hence the null.
             return null;
         }
         if (slices.size() == 1) {
