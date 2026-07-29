@@ -10,11 +10,13 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -75,5 +77,52 @@ class LazyTest {
         lazy.reset();
         assertFalse(lazy.isInitialized());
         assertEquals(2, lazy.get());
+    }
+
+    /**
+     * An initializer that asks this same Lazy for its own value used to run itself again ---the
+     * monitor lets its own thread back in, and the flag was still down--- and again, until the
+     * stack overflowed with an error that names nothing. The answer must be a refusal that says
+     * what happened.
+     */
+    @Test
+    void anInitializerThatAsksForItsOwnValueIsRefusedWithAnExplanation() {
+        Lazy<Integer>[] holder = new Lazy[1];
+        holder[0] = Lazy.of(() -> holder[0].get());
+
+        IllegalStateException error = assertThrows(IllegalStateException.class, () -> holder[0].get());
+        assertTrue(error.getMessage().contains("initializer"),
+                   () -> "the error must explain the situation; it says: " + error.getMessage());
+    }
+
+    /**
+     * A reader that had just seen the flag up could read the value after a concurrent reset()
+     * nulled it, and answer null for an initializer that never produces one. The flag and the
+     * value travel now in a single reference, so a reader sees both or neither. The window is
+     * narrow: this hammers it rather than proving it, and pins the property from then on.
+     */
+    @Test
+    void aConcurrentResetNeverMakesGetAnswerNull() throws InterruptedException {
+        Lazy<Integer> lazy = Lazy.of(() -> 7);
+        AtomicBoolean sawNull = new AtomicBoolean();
+        Thread resetter = new Thread(() -> {
+            for (int i = 0; i < 200_000; i++) {
+                lazy.reset();
+            }
+        });
+        Thread reader = new Thread(() -> {
+            for (int i = 0; i < 200_000; i++) {
+                if (lazy.get() == null) {
+                    sawNull.set(true);
+                    return;
+                }
+            }
+        });
+        resetter.start();
+        reader.start();
+        resetter.join(30_000);
+        reader.join(30_000);
+
+        assertFalse(sawNull.get(), "get() answered a null its initializer never produced");
     }
 }
