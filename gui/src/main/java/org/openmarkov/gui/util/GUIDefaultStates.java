@@ -8,11 +8,14 @@
 package org.openmarkov.gui.util;
 
 import org.openmarkov.core.model.network.DefaultStates;
+import org.openmarkov.core.model.network.StandardDomain;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.gui.configuration.UserPreferences;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class is used to encapsulate the default states of the nodes and their
@@ -39,6 +42,32 @@ public class GUIDefaultStates extends DefaultStates {
         // } catch (MissingResourceException e) {
 		// return element;
 		// }
+	}
+
+	/**
+	 * Every domain the user may choose from: first the ones written in the preferences, then the
+	 * ones the program brings in {@link StandardDomain}. Both menus that offer domains are built
+	 * from this single list, so neither can offer a catalogue different from the other's.
+	 *
+	 * @return the states of each domain on offer, in the order they are shown.
+	 */
+	public static List<List<String>> getAllDomains() {
+		List<List<String>> domains = new ArrayList<>(UserPreferences.CUSTOM_DOMAINS.get());
+		for (StandardDomain domain : StandardDomain.values()) {
+			domains.add(domain.getStateNames());
+		}
+		return domains;
+	}
+
+	/**
+	 * Returns a string concatenating the language-dependent strings of the states of a domain,
+	 * separated by dashes.
+	 *
+	 * @param stateNames names of the states of the domain.
+	 * @return a string formed by the language-dependent strings of the states.
+	 */
+	public static String getString(List<String> stateNames) {
+		return getString(stateNames.toArray(new String[0]));
 	}
 
 	/**
@@ -91,25 +120,14 @@ public class GUIDefaultStates extends DefaultStates {
 	 * state corresponds to the language-dependent string.
 	 */
 	public static String getStringLanguageDependent(String languageDependentString) {
-		boolean found = false;
-        String result = null;
-        int i1 = 0;
-        int length1 = LIST.size();
-        while (!found && (i1 < length1)) {
-            ArrayList<String> elements = LIST.get(i1);
-            int i2 = 0;
-            int length2 = elements.size();
-            while (!found && (i2 < length2)) {
-				if (languageDependentString.equals(getString(elements.get(i2)))) {
-					result = elements.get(i2);
-					found = true;
-				} else {
-					i2++;
+		for (StandardDomain domain : StandardDomain.values()) {
+			for (String stateName : domain.getStateNames()) {
+				if (languageDependentString.equals(getString(stateName))) {
+					return stateName;
 				}
 			}
-			i1++;
 		}
-		return (found) ? result : languageDependentString;
+		return languageDependentString;
 	}
 
 	/**
@@ -137,11 +155,10 @@ public class GUIDefaultStates extends DefaultStates {
 	 * different states separated by dashes.
 	 */
 	public static String[] getListStrings() {
-        int length = LIST.size();
-        String[] strings = new String[length];
-        for (int i = 0; i < length; i++) {
-            ArrayList<String> states = LIST.get(i);
-            strings[i] = getString(states.toArray(new String[states.size()]));
+		StandardDomain[] domains = StandardDomain.values();
+		String[] strings = new String[domains.length];
+		for (int i = 0; i < domains.length; i++) {
+			strings[i] = getString(domains[i].getStateNames());
 		}
 		return strings;
 	}
@@ -158,22 +175,15 @@ public class GUIDefaultStates extends DefaultStates {
 	 * @return the index in the list of the states set
 	 */
 	public static int getIndexLanguageDependent(String[] elements) {
-		ArrayList<String> statesAsList = new ArrayList<String>();
-        Collections.addAll(statesAsList, elements);
-        int length = LIST.size();
-        boolean found = false;
-        int i = 0;
-        while (!found && (i < length)) {
-            ArrayList<String> languageStrings = new ArrayList<String>();
-            for (String languageString : LIST.get(i)) {
-				languageStrings.add(getString(languageString));
-			}
+		List<String> statesAsList = Arrays.asList(elements);
+		StandardDomain[] domains = StandardDomain.values();
+		for (int i = 0; i < domains.length; i++) {
+			List<String> languageStrings = domains[i].getStateNames().stream()
+			                                        .map(GUIDefaultStates::getString).toList();
 			if (languageStrings.equals(statesAsList)) {
-				found = true;
-			} else {
-				i++;
+				return i;
 			}
 		}
-		return (found) ? i : -1;
+		return -1;
 	}
 }

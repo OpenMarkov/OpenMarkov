@@ -90,21 +90,6 @@
         <low>
             <Text value="low"/>
         </low>
-        <absentPresent>
-            <Text value="absent - present"/>
-        </absentPresent>
-        <noYes>
-            <Text value="no - yes"/>
-        </noYes>
-        <negativePositive>
-            <Text value="negative - positive"/>
-        </negativePositive>
-        <absentMildModerateSevere>
-            <Text value="absent - mild - moderate - severe"/>
-        </absentMildModerateSevere>
-        <lowMediumhigh>
-            <Text value="low - medium - high"/>
-        </lowMediumhigh>
     </defaultStates>
     <defaultCriteria>
         <costBenefitEuros>

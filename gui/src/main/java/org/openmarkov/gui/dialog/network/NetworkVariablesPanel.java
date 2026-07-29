@@ -13,25 +13,24 @@ import org.openmarkov.core.action.core.VariableTypeConstraintEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.core.model.network.DefaultStates;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.constraint.OnlyContinuousVariables;
 import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
-import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.util.GUIDefaultStates;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import java.util.ArrayList;
+import java.awt.Component;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Panel to set the definition of the variables of a network. It will have a
@@ -59,9 +58,11 @@ public class NetworkVariablesPanel extends JPanel {
      */
     private JLabel jLabelDefaultStates = null;
     /**
-     * Combobox where the user can choose the default states.
+     * Combobox where the user can choose the default states. Each item is a domain, the states it
+     * is made of, so that reading the choice back does not depend on the position of the item nor
+     * on undoing the text shown for it.
      */
-    private JComboBox<String> jComboBoxDefaultStates = null;
+    private JComboBox<List<String>> jComboBoxDefaultStates = null;
     /**
      * Specifies if the network whose additionalProperties are edited is new.
      */
@@ -168,19 +169,30 @@ public class NetworkVariablesPanel extends JPanel {
      *
      * @return the Default States JCombo Box
      */
-    private JComboBox<String> getJComboBoxDefaultStates() {
+    private JComboBox<List<String>> getJComboBoxDefaultStates() {
         if (jComboBoxDefaultStates == null) {
             jComboBoxDefaultStates = new JComboBox<>();
-            for (ArrayList<String> states : UserPreferences.CUSTOM_DOMAINS.get()) {
-                jComboBoxDefaultStates.addItem(states.stream().collect(Collectors.joining(" - ")));
+            for (List<String> domain : GUIDefaultStates.getAllDomains()) {
+                jComboBoxDefaultStates.addItem(domain);
             }
-            for (String states : GUIDefaultStates.getListStrings()) {
-                jComboBoxDefaultStates.addItem(states);
-            }
+            jComboBoxDefaultStates.setRenderer(new DomainRenderer());
             jComboBoxDefaultStates.setName("jComboBoxDefaultStates");
             // jComboBoxDefaultStates.addItemListener(this);
         }
         return jComboBoxDefaultStates;
+    }
+
+    /**
+     * Shows a domain as the language-dependent strings of its states separated by dashes.
+     */
+    @SuppressWarnings("serial") private static class DomainRenderer extends DefaultListCellRenderer {
+        @Override public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                               boolean isSelected, boolean cellHasFocus) {
+            Object text = (value instanceof List<?> domain)
+                    ? GUIDefaultStates.getString(domain.stream().map(String::valueOf).toList())
+                    : value;
+            return super.getListCellRendererComponent(list, text, index, isSelected, cellHasFocus);
+        }
     }
     
     /**
@@ -226,7 +238,7 @@ public class NetworkVariablesPanel extends JPanel {
                  */
             }
             jComboBoxVariableType.setSelectedIndex(index);
-            jComboBoxDefaultStates.setSelectedIndex(DefaultStates.getIndex(states));
+            selectDomain(states);
             jComboBoxVariableType.addActionListener(arg0 -> {
                 try {
                     variableTypeChanged();
@@ -275,15 +287,31 @@ public class NetworkVariablesPanel extends JPanel {
         }
     }
     
+    /**
+     * Leaves the default states of the network selected. A network may bring any states at all
+     * ---it may come from a file written elsewhere---, and in that case they are added to the
+     * list, so that the dialog shows the states the network really has instead of an unrelated
+     * domain.
+     *
+     * @param states default states of the network.
+     */
+    private void selectDomain(State[] states) {
+        List<String> stateNames = Arrays.stream(states).map(State::getName).toList();
+        for (int index = 0; index < jComboBoxDefaultStates.getItemCount(); index++) {
+            if (jComboBoxDefaultStates.getItemAt(index).equals(stateNames)) {
+                jComboBoxDefaultStates.setSelectedIndex(index);
+                return;
+            }
+        }
+        jComboBoxDefaultStates.addItem(stateNames);
+        jComboBoxDefaultStates.setSelectedItem(stateNames);
+    }
+
     private void defaultStatesChanged() throws DoEditException {
-        // warning mpalacios relative function to options position.
-        // Review "otros" option
-        if (!(jComboBoxDefaultStates.getSelectedItem() instanceof String selectedStatesNames)) {
+        if (!(jComboBoxDefaultStates.getSelectedItem() instanceof List<?> selectedDomain)) {
             return;
         }
-        State[] defaultStates = Arrays.stream(selectedStatesNames.split("-"))
-                                      .map(stateName -> new State(stateName.trim()))
-                                      .toArray(State[]::new);
+        State[] defaultStates = selectedDomain.stream().map(String::valueOf).map(State::new).toArray(State[]::new);
         NetworkDefaultStatesEdit networkDefaultStatesEdit = new NetworkDefaultStatesEdit(probNet, defaultStates);
         networkDefaultStatesEdit.executeEdit();
     }

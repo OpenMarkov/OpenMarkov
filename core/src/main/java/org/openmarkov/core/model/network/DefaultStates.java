@@ -7,83 +7,39 @@
 
 package org.openmarkov.core.model.network;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
+import java.util.List;
 
 /**
- * This class is used to encapsulate the default states of the nodes and their
- * dependent-language strings.
+ * Access by position to the catalogue of default states declared in {@link StandardDomain}, for the
+ * menus that offer the domains as a list and answer with the position chosen.
  *
  * @author jmendoza
  * @version 1.1 jlgozalo - fix javadoc and initial values for fields
+ * @version 1.2 The domains are no longer declared here: {@link StandardDomain} holds them.
  */
 public class DefaultStates {
-    
-    /**
-     * Internal names of the different states. Each element of the outer
-     * ArrayList contains another ArrayList that has of the posibles states that
-     * a node may take.
-     */
-    protected static final ArrayList<ArrayList<String>> LIST = initializedList();
-    
-    private static @NotNull ArrayList<ArrayList<String>> initializedList() {
-        ArrayList<ArrayList<String>> list = new ArrayList<>();
-        ArrayList<String> defaultStates = new ArrayList<>();
-        defaultStates.add("absent");
-        defaultStates.add("present");
-        list.add(defaultStates);
-        defaultStates = new ArrayList<>();
-        defaultStates.add("no");
-        defaultStates.add("yes");
-        list.add(defaultStates);
-        defaultStates = new ArrayList<>();
-        defaultStates.add("negative");
-        defaultStates.add("positive");
-        list.add(defaultStates);
-        defaultStates = new ArrayList<>();
-        defaultStates.add("absent");
-        defaultStates.add("mild");
-        defaultStates.add("moderate");
-        defaultStates.add("severe");
-        list.add(defaultStates);
-        defaultStates = new ArrayList<>();
-        defaultStates.add("low");
-        defaultStates.add("medium");
-        defaultStates.add("high");
-        //For event nodes
-        defaultStates = new ArrayList<>();
-        defaultStates.add("not happened");
-        defaultStates.add("happened");
-        list.add(defaultStates);
-        //defaultStates = new ArrayList<String>();
-        //defaultStates.add("nonamed");
-        //list.add(defaultStates);
-        return list;
-    }
-    
-    /**
-     * This method adds all the default states.
-     */
-    protected static void fillList() {
-    
-    }
-    
+
     /**
      * This method returns an array containing the default states of an element
-     * of the list. If the index is out of range (index &#60; 0 || index &#62; list
-     * size) the null is returned.
+     * of the list.
      *
      * @param index element of the list of default states.
      *
      * @return an array that contains the default states of an element of the
      * list of default states.
+     *
+     * @throws IndexOutOfBoundsException if the index is not that of a domain of the catalogue.
      */
     public static String[] getByIndex(int index) {
-        var defaultStates = LIST.get(index);
-        return defaultStates.toArray(new String[defaultStates.size()]);
+        if ((index < 0) || (index >= StandardDomain.values().length)) {
+            throw new IndexOutOfBoundsException(
+                    "There is no set of default states number " + index + "; the catalogue has "
+                            + StandardDomain.values().length + " of them.");
+        }
+        List<String> stateNames = StandardDomain.values()[index].getStateNames();
+        return stateNames.toArray(new String[0]);
     }
-    
+
     /**
      * This method returns the index in the list of the states passed as
      * parameter. A states set matches an element of the list if has the same
@@ -97,24 +53,9 @@ public class DefaultStates {
      * @return the index in the list of the states set
      */
     public static int getIndex(State[] states) {
-        
-        ArrayList<String> statesAsList = new ArrayList<>();
-        int i = 0;
-        boolean found = false;
-        for (State state : states) {
-            statesAsList.add(state.getName());
-        }
-        int length = LIST.size();
-        while (!found && (i < length)) {
-            if (LIST.get(i).equals(statesAsList)) {
-                found = true;
-            } else {
-                i++;
-            }
-        }
-        return (found) ? i : length - 1;
+        return StandardDomain.withStates(states).map(Enum::ordinal).orElse(StandardDomain.values().length - 1);
     }
-    
+
     /**
      * Returns the default states that correspond to a type of node. A default
      * set of states is given for the chance nodes. A prefixed set of states
@@ -126,30 +67,11 @@ public class DefaultStates {
      * @return a set of states corresponding to the type of the node.
      */
     public static State[] getStatesNodeType(NodeType type, State[] networkDefaultStates) {
-        
-        ArrayList<String> elements;
-        switch (type) {
-            case CHANCE: {
-                return networkDefaultStates;
-            }
-            case DECISION: {
-                elements = LIST.get(1);
-                String[] statesAux = elements.toArray(new String[elements.size()]);
-                State[] states = new State[elements.size()];
-                int i = 0;
-                for (String stateSingle : statesAux) {
-                    states[i] = new State(stateSingle);
-                    i++;
-                    
-                }
-                return states;
-            }
-            case UTILITY, EVENT: {
-                return new State[]{new State("Default")};
-            }
-            default: {
-                return null;
-            }
-        }
+        return switch (type) {
+            case CHANCE -> networkDefaultStates;
+            case DECISION -> StandardDomain.NO_YES.getStates();
+            case UTILITY, EVENT -> new State[]{new State("Default")};
+            default -> null;
+        };
     }
 }

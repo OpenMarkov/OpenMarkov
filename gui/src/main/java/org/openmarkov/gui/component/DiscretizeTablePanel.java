@@ -16,6 +16,7 @@ import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.StandardDomain;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.TemporalNetOperations;
 import org.openmarkov.core.model.network.Util;
@@ -519,74 +520,23 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
      * selected in the combo box
      */
     public void setNewDataInTable(int selectedIndex) {
-        Object[][] newData;
-        switch (selectedIndex) {
-            case 0: // present-absent
-                if (upMonotony) {
-                    Object[][] auxData = {{GUIDefaultStates.getString("absent"), "[", 0.0, ",", 2.0, "]"},
-                            {GUIDefaultStates.getString("present"), "(", 2.0, ",", 4.0, "]"}};
-                    newData = auxData;
-                } else {
-                    Object[][] auxData = {{GUIDefaultStates.getString("present"), "[", 2.0, ",", 4.0, ")"},
-                            {GUIDefaultStates.getString("absent"), "[", 0.0, ",", 2.0, ")"}};
-                    newData = auxData;
-                }
-                break;
-            case 1: // yes-no
-                if (upMonotony) {
-                    Object[][] auxData = {{GUIDefaultStates.getString("yes"), "[", 0.0, ",", 2.0, "]"},
-                            {GUIDefaultStates.getString("no"), "(", 2.0, ",", 4.0, "]"}};
-                    newData = auxData;
-                } else {
-                    Object[][] auxData = {{GUIDefaultStates.getString("yes"), "[", 2.0, ",", 4.0, ")"},
-                            {GUIDefaultStates.getString("no"), "[", 0.0, ",", 2.0, ")"}};
-                    newData = auxData;
-                }
-                break;
-            case 2: // positive-negative
-                if (upMonotony) {
-                    Object[][] auxData = {{GUIDefaultStates.getString("positive"), "[", 0.0, ",", 2.0, "]"},
-                            {GUIDefaultStates.getString("negative"), "(", 2.0, ",", 4.0, "]"}};
-                    newData = auxData;
-                } else {
-                    Object[][] auxData = {{GUIDefaultStates.getString("positive"), "[", 2.0, ",", 4.0, ")"},
-                            {GUIDefaultStates.getString("negative"), "[", 0.0, ",", 2.0, ")"}};
-                    newData = auxData;
-                }
-                break;
-            case 3: // severe-moderate-mild-absent
-                if (upMonotony) {
-                    Object[][] auxData = {{GUIDefaultStates.getString("severe"), "[", 0.0, ",", 2.0, "]"},
-                            {GUIDefaultStates.getString("moderate"), "(", 2.0, ",", 4.0, "]"},
-                            {GUIDefaultStates.getString("mild"), "(", 4.0, ",", 6.0, "]"},
-                            {GUIDefaultStates.getString("absent"), "(", 6.0, ",", 8.0, "]"}};
-                    newData = auxData;
-                } else {
-                    Object[][] auxData = {{GUIDefaultStates.getString("severe"), "[", 6.0, ",", 8.0, ")"},
-                            {GUIDefaultStates.getString("moderate"), "[", 4.0, ",", 6.0, ")"},
-                            {GUIDefaultStates.getString("mild"), "[", 2.0, ",", 4.0, ")"},
-                            {GUIDefaultStates.getString("absent"), "[", 0.0, ",", 2.0, ")"}};
-                    newData = auxData;
-                }
-                break;
-            case 4: // high-medium-low
-                if (upMonotony) {
-                    Object[][] auxData = {{GUIDefaultStates.getString("high"), "[", 0.0, ",", 2.0, "]"},
-                            {GUIDefaultStates.getString("medium"), "(", 2.0, ",", 4.0, "]"},
-                            {GUIDefaultStates.getString("low"), "(", 4.0, ",", 6.0, "]"}};
-                    newData = auxData;
-                } else {
-                    Object[][] auxData = {{GUIDefaultStates.getString("high"), "[", 4.0, ",", 6.0, ")"},
-                            {GUIDefaultStates.getString("medium"), "[", 2.0, ",", 4.0, ")"},
-                            {GUIDefaultStates.getString("low"), "[", 0.0, ",", 2.0, ")"}};
-                    newData = auxData;
-                }
-                break;
-            default: // nonamed
-                Object[][] auxData = {{GUIDefaultStates.getString("nonamed"), "(", Double.NEGATIVE_INFINITY, ",",
-                        Double.POSITIVE_INFINITY, ")"}};
-                newData = auxData;
-                break;
+        StandardDomain[] domains = StandardDomain.values();
+        if ((selectedIndex < 0) || (selectedIndex >= domains.length)) {
+            setData(new Object[][]{{GUIDefaultStates.getString("nonamed"), "(", Double.NEGATIVE_INFINITY, ",",
+                    Double.POSITIVE_INFINITY, ")"}});
+            return;
+        }
+        List<String> stateNames = domains[selectedIndex].getStateNames();
+        int lastState = stateNames.size() - 1;
+        Object[][] newData = new Object[stateNames.size()][];
+        for (int state = 0; state <= lastState; state++) {
+            // The catalogue writes every domain from the least to the most ---absent before
+            // present, low before high---, so an upwards monotony gives the first state the lowest
+            // interval and a downwards one hands the intervals out backwards.
+            int interval = upMonotony ? state : lastState - state;
+            double lowerBound = 2.0 * interval;
+            newData[state] = new Object[]{GUIDefaultStates.getString(stateNames.get(state)),
+                    (interval == 0) ? "[" : "(", lowerBound, ",", lowerBound + 2.0, "]"};
         }
         setData(newData);
     }
