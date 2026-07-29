@@ -14,9 +14,22 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm-ss</maven.build.timestamp.format>
-        <!-- The msi and exe installers only exist on Windows, so the Installer profile skips
-             them by default; the detect-windows profile below flips this to false. -->
+        <!-- The version the installers show to the user. It is kept apart from ${project.version}
+             because jpackage rejects any version carrying a suffix such as -SNAPSHOT. -->
+        <installer.app.version>0.3</installer.app.version>
+        <!-- Every installer format jpackage produces is tied to the operating system it runs on:
+             msi and exe exist only on Windows, deb and rpm only on Linux. The Installer profile
+             therefore skips them all by default, and each detect-* profile below turns off the
+             skipping of the formats its own operating system can build. -->
         <skip.installer.windows>true</skip.installer.windows>
+        <skip.installer.linux>true</skip.installer.linux>
+        <!-- The portable application image is the one format jpackage builds anywhere, so it is
+             enabled on both Windows and Linux. It stays skipped on macOS, whose icon format
+             (icns) is not in the repository and which nobody in the team can test on. -->
+        <skip.installer.portable>true</skip.installer.portable>
+        <!-- Outside Windows jpackage only accepts a PNG icon: given the ico file it stops with an
+             error and leaves the application image half built. -->
+        <installer.icon>${maven.multiModuleProjectDirectory}/gui/src/main/resources/icons/openmarkov.png</installer.icon>
     </properties>
     <dependencies>
         <dependency>
@@ -94,6 +107,20 @@
             </activation>
             <properties>
                 <skip.installer.windows>false</skip.installer.windows>
+                <skip.installer.portable>false</skip.installer.portable>
+                <installer.icon>${maven.multiModuleProjectDirectory}/gui/src/main/resources/icons/openmarkov.ico</installer.icon>
+            </properties>
+        </profile>
+        <profile>
+            <id>detect-linux</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                </os>
+            </activation>
+            <properties>
+                <skip.installer.linux>false</skip.installer.linux>
+                <skip.installer.portable>false</skip.installer.portable>
             </properties>
         </profile>
         <profile>
@@ -143,12 +170,10 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>3.1.1</version>
-                        <configuration>
-                            <!-- All the following executions only take place on Windows: jpackage
-                                 rejects the msi and exe types on any other operating system. -->
-                            <!-- A member of CISIAD with a Linux OS should take care of the Linux installers -->
-                            <skip>${skip.installer.windows}</skip>
-                        </configuration>
+                        <!-- Each execution decides on its own whether to run, because each format
+                             belongs to a different operating system. Skipping the plugin as a
+                             whole, as was done before, also threw away the portable application
+                             image, which jpackage can perfectly well build outside Windows. -->
                         <executions>
                             <execution>
                                 <id>create-msi</id>
@@ -157,6 +182,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
+                                    <skip>${skip.installer.windows}</skip>
                                     <executable>${java.home}/bin/jpackage</executable>
                                     <arguments>
                                         <argument>--type</argument>
@@ -166,7 +192,7 @@
                                         <argument>--name</argument>
                                         <argument>OpenMarkov</argument>
                                         <argument>--app-version</argument>
-                                        <argument>0.3</argument>
+                                        <argument>${installer.app.version}</argument>
                                         <argument>--copyright</argument>
                                         <argument>Copyright (c) CISIAD, UNED, Spain, 2026. Licensed under the GPLv3
                                             licence.
@@ -185,9 +211,7 @@
                                         <argument>--main-class</argument>
                                         <argument>org.openmarkov.full.OpenMarkov</argument>
                                         <argument>--icon</argument>
-                                        <argument>
-                                            ${maven.multiModuleProjectDirectory}/gui/src/main/resources/icons/openmarkov.ico
-                                        </argument>
+                                        <argument>${installer.icon}</argument>
                                         <argument>--license-file</argument>
                                         <argument>${maven.multiModuleProjectDirectory}/LICENSE</argument>
                                         <argument>--about-url</argument>
@@ -208,6 +232,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
+                                    <skip>${skip.installer.windows}</skip>
                                     <executable>${java.home}/bin/jpackage</executable>
                                     <arguments>
                                         <argument>--type</argument>
@@ -217,7 +242,7 @@
                                         <argument>--name</argument>
                                         <argument>OpenMarkov</argument>
                                         <argument>--app-version</argument>
-                                        <argument>0.3</argument>
+                                        <argument>${installer.app.version}</argument>
                                         <argument>--copyright</argument>
                                         <argument>Copyright (c) CISIAD, UNED, Spain, 2026. Licensed under the GPLv3
                                             licence.
@@ -236,9 +261,7 @@
                                         <argument>--main-class</argument>
                                         <argument>org.openmarkov.full.OpenMarkov</argument>
                                         <argument>--icon</argument>
-                                        <argument>
-                                            ${maven.multiModuleProjectDirectory}/gui/src/main/resources/icons/openmarkov.ico
-                                        </argument>
+                                        <argument>${installer.icon}</argument>
                                         <argument>--license-file</argument>
                                         <argument>${maven.multiModuleProjectDirectory}/LICENSE</argument>
                                         <argument>--about-url</argument>
@@ -259,6 +282,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
+                                    <skip>${skip.installer.portable}</skip>
                                     <executable>${java.home}/bin/jpackage</executable>
                                     <arguments>
                                         <argument>--type</argument>
@@ -268,7 +292,7 @@
                                         <argument>--name</argument>
                                         <argument>OpenMarkov</argument>
                                         <argument>--app-version</argument>
-                                        <argument>0.3</argument>
+                                        <argument>${installer.app.version}</argument>
                                         <argument>--copyright</argument>
                                         <argument>Copyright (c) CISIAD, UNED, Spain, 2026. Licensed under the GPLv3
                                             licence.
@@ -287,9 +311,126 @@
                                         <argument>--main-class</argument>
                                         <argument>org.openmarkov.full.OpenMarkov</argument>
                                         <argument>--icon</argument>
-                                        <argument>
-                                            ${maven.multiModuleProjectDirectory}/gui/src/main/resources/icons/openmarkov.ico
+                                        <argument>${installer.icon}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <!-- The deb package covers Debian, Ubuntu and their derivatives; it
+                                 needs the fakeroot and dpkg-deb programs on the machine that
+                                 builds it. The package name has to be lower case, since Debian
+                                 does not allow capitals in it, while the application keeps its
+                                 own name. -->
+                            <execution>
+                                <id>create-deb</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skip.installer.linux}</skip>
+                                    <executable>${java.home}/bin/jpackage</executable>
+                                    <arguments>
+                                        <argument>--type</argument>
+                                        <argument>deb</argument>
+                                        <argument>--dest</argument>
+                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>--name</argument>
+                                        <argument>OpenMarkov</argument>
+                                        <argument>--app-version</argument>
+                                        <argument>${installer.app.version}</argument>
+                                        <argument>--copyright</argument>
+                                        <argument>Copyright (c) CISIAD, UNED, Spain, 2026. Licensed under the GPLv3
+                                            licence.
                                         </argument>
+                                        <argument>--description</argument>
+                                        <argument>An open-source software tool for probabilistic graphical models (PGMs)
+                                            developed by the Research Centre for Intelligent Decision-Support Systems of
+                                            the UNED in Madrid, Spain.
+                                        </argument>
+                                        <argument>--vendor</argument>
+                                        <argument>CISIAD, UNED</argument>
+                                        <argument>--input</argument>
+                                        <argument>${project.build.directory}/libs</argument>
+                                        <argument>--main-jar</argument>
+                                        <argument>${project.build.finalName}.jar</argument>
+                                        <argument>--main-class</argument>
+                                        <argument>org.openmarkov.full.OpenMarkov</argument>
+                                        <argument>--icon</argument>
+                                        <argument>${installer.icon}</argument>
+                                        <argument>--license-file</argument>
+                                        <argument>${maven.multiModuleProjectDirectory}/LICENSE</argument>
+                                        <argument>--about-url</argument>
+                                        <argument>https://www.openmarkov.org/</argument>
+                                        <argument>--file-associations</argument>
+                                        <argument>${project.basedir}/associations/pgmx.properties</argument>
+                                        <argument>--linux-package-name</argument>
+                                        <argument>openmarkov</argument>
+                                        <argument>--linux-deb-maintainer</argument>
+                                        <argument>openmarkov-users@googlegroups.com</argument>
+                                        <argument>--linux-menu-group</argument>
+                                        <argument>Science</argument>
+                                        <argument>--linux-app-category</argument>
+                                        <argument>science</argument>
+                                        <argument>--linux-shortcut</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <!-- The rpm package covers Red Hat, Fedora, openSUSE and their
+                                 derivatives; it needs the rpm-build package on the machine that
+                                 builds it. It differs from the deb one in the licence type, which
+                                 rpm records in its own field, and in having no maintainer field. -->
+                            <execution>
+                                <id>create-rpm</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skip.installer.linux}</skip>
+                                    <executable>${java.home}/bin/jpackage</executable>
+                                    <arguments>
+                                        <argument>--type</argument>
+                                        <argument>rpm</argument>
+                                        <argument>--dest</argument>
+                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>--name</argument>
+                                        <argument>OpenMarkov</argument>
+                                        <argument>--app-version</argument>
+                                        <argument>${installer.app.version}</argument>
+                                        <argument>--copyright</argument>
+                                        <argument>Copyright (c) CISIAD, UNED, Spain, 2026. Licensed under the GPLv3
+                                            licence.
+                                        </argument>
+                                        <argument>--description</argument>
+                                        <argument>An open-source software tool for probabilistic graphical models (PGMs)
+                                            developed by the Research Centre for Intelligent Decision-Support Systems of
+                                            the UNED in Madrid, Spain.
+                                        </argument>
+                                        <argument>--vendor</argument>
+                                        <argument>CISIAD, UNED</argument>
+                                        <argument>--input</argument>
+                                        <argument>${project.build.directory}/libs</argument>
+                                        <argument>--main-jar</argument>
+                                        <argument>${project.build.finalName}.jar</argument>
+                                        <argument>--main-class</argument>
+                                        <argument>org.openmarkov.full.OpenMarkov</argument>
+                                        <argument>--icon</argument>
+                                        <argument>${installer.icon}</argument>
+                                        <argument>--license-file</argument>
+                                        <argument>${maven.multiModuleProjectDirectory}/LICENSE</argument>
+                                        <argument>--about-url</argument>
+                                        <argument>https://www.openmarkov.org/</argument>
+                                        <argument>--file-associations</argument>
+                                        <argument>${project.basedir}/associations/pgmx.properties</argument>
+                                        <argument>--linux-package-name</argument>
+                                        <argument>openmarkov</argument>
+                                        <argument>--linux-rpm-license-type</argument>
+                                        <argument>GPLv3</argument>
+                                        <argument>--linux-menu-group</argument>
+                                        <argument>Science</argument>
+                                        <argument>--linux-app-category</argument>
+                                        <argument>science</argument>
+                                        <argument>--linux-shortcut</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
