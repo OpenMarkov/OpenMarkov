@@ -8,12 +8,7 @@ import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.component.NumericSpinner;
-import org.openmarkov.gui.configuration.GUIColors;
-import org.openmarkov.gui.configuration.OperatingSystem;
-import org.openmarkov.gui.configuration.StartupAction;
-import org.openmarkov.gui.configuration.Theme;
-import org.openmarkov.gui.configuration.UserPreference;
-import org.openmarkov.gui.configuration.UserPreferences;
+import org.openmarkov.gui.configuration.*;
 import org.openmarkov.gui.configuration.gson.GsonCommon;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.io.FileFilterByExtension;
@@ -24,44 +19,18 @@ import org.openmarkov.java.collectionsUtils.streamUtils.StreamUtils;
 import org.openmarkov.java.langUtils.SwitchUtils;
 import org.openmarkov.java.swing.SimplifiedGridBagConstraint;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.JTree;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class SettingsDialog extends JDialog {
@@ -297,7 +266,7 @@ public final class SettingsDialog extends JDialog {
                 }
                 
                 @Override public void focusLost(FocusEvent e) {
-                    var lines = customDomainArea.getText().split(System.lineSeparator());
+                    var lines = customDomainArea.getText().split("\n");
                     var newDomains = new ArrayList<>(Arrays.stream(lines).map(String::trim)
                                                            .filter(line -> !line.isEmpty())
                                                            .filter(line -> !line.equals("-"))
