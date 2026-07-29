@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.action.base.StateAction;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -172,6 +173,46 @@ public class VariableModifyStateTest {
         variable.modifyState(node, StateAction.RENAME, 1, "any");
         assertEquals("s0", variable.getStates()[0].getName());
         assertEquals("s2", variable.getStates()[2].getName());
+    }
+
+    /**
+     * The renaming rule has a single owner, the variable: a name another state already has is
+     * refused, also through this route, which used to write it without looking.
+     */
+    @Test
+    public void renameToASiblingNameIsRejectedAndNothingChanges() {
+        // stateIndex=0 → "s2"; "s0" belongs to another state.
+        assertThrows(InvalidArgumentException.class,
+                     () -> variable.modifyState(node, StateAction.RENAME, 0, "s0"));
+        assertArrayEquals(new String[]{"s0", "s1", "s2"}, stateNames());
+    }
+
+    /**
+     * Leaving the name as it was is not a collision: the check skips the state being renamed.
+     */
+    @Test
+    public void renameToItsOwnCurrentNameIsAllowed() {
+        variable.modifyState(node, StateAction.RENAME, 0, "s2");
+        assertArrayEquals(new String[]{"s0", "s1", "s2"}, stateNames());
+    }
+
+    /** Same guarantee asking the variable directly, which used to refuse the no-op rename. */
+    @Test
+    public void renameStateToItsOwnNameDirectlyIsAllowed() {
+        variable.renameState(variable.getStates()[2], "s2");
+        assertArrayEquals(new String[]{"s0", "s1", "s2"}, stateNames());
+    }
+
+    /**
+     * The additional properties of a state are stored by state name, so renaming must move them;
+     * this route used to leave them stranded under the old name.
+     */
+    @Test
+    public void renameMovesTheAdditionalPropertiesOfTheState() {
+        variable.setStateAdditionalProperty("s2", "color", "red");
+        variable.modifyState(node, StateAction.RENAME, 0, "renamed");
+        assertEquals("red", variable.getStateAdditionalProperty("renamed", "color"));
+        assertNull(variable.getStateAdditionalProperty("s2", "color"));
     }
 
     // -----------------------------------------------------------------------

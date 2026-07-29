@@ -10,6 +10,7 @@ package org.openmarkov.gui.component;
 import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.action.core.NodeStateEdit;
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
@@ -33,6 +34,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -925,6 +927,12 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
                     nodeStateEdit.executeEdit();
                     propagateNodeStateEditRelatedVariables(StateAction.RENAME, row, newName);
                     //
+                } catch (InvalidArgumentException rejected) {
+                    // The variable refused the new name because another state already has it.
+                    // The cell keeps the old name and the user is told, instead of dying.
+                    valuesTable.setValueAt(node.getVariable().getStateName(indexState), row, column,
+                                           tableEvent.getSource());
+                    warnStateRenameRejected();
                 } catch (DoEditException e) {
                     // If an error occurred or a constraint is broken
                     // we restore the old name of the edited state

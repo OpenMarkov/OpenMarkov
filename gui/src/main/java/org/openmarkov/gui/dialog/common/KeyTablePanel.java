@@ -107,6 +107,16 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
     public KeyTablePanel() {
         this(null, null, false, false, false);
     }
+
+    /**
+     * Tells the user that renaming a state was refused because another state already has the new
+     * name. In a method of its own so tests can silence the dialog.
+     */
+    protected void warnStateRenameRejected() {
+        JOptionPane.showMessageDialog(this, stringDatabase.getString("DuplicatedState.Text"),
+                                      stringDatabase.getString("DuplicatedState.Title"),
+                                      JOptionPane.WARNING_MESSAGE);
+    }
     
     /**
      * This is the default constructor

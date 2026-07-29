@@ -80,7 +80,7 @@
     </ExceptionGeneric>
     <DuplicatedState>
         <Title value="Duplicated state"/>
-        <Text value="Each state can only appears one time"/>
+        <Text value="Each state can only appear once"/>
     </DuplicatedState>
     <ClipboardNotSet>
         <Text value="This panel has not access to the clipboard"/>
