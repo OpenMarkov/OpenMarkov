@@ -123,7 +123,13 @@ public class ClassUtils {
     }
     
     public static boolean isTestClass(Class<?> theClass) {
-        return theClass.getProtectionDomain().getCodeSource().getLocation().toString().contains("test-classes");
+        // The classes of the language itself, and every class inside a jpackage image, carry no
+        // code source. Nothing to look at means it is not a test class.
+        var codeSource = theClass.getProtectionDomain().getCodeSource();
+        if (codeSource == null || codeSource.getLocation() == null) {
+            return false;
+        }
+        return codeSource.getLocation().toString().contains("test-classes");
     }
     
     

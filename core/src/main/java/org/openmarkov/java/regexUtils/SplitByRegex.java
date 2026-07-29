@@ -30,7 +30,11 @@ public class SplitByRegex {
             unmatchesRanges.add(new Range(matchesRanges.getLast().end(), input.length()));
         }
         IntStream.range(0, matchesRanges.size() - 1).forEach(i -> {
-            unmatchesRanges.add(new Range(matchesRanges.get(i).end(), matchesRanges.get(i + 1).start()));
+            Range gap = new Range(matchesRanges.get(i).end(), matchesRanges.get(i + 1).start());
+            // Two adjacent matches leave a zero-width gap; an empty piece says nothing.
+            if (gap.start() < gap.end()) {
+                unmatchesRanges.add(gap);
+            }
         });
         return Stream.concat(unmatchesRanges.stream(), matchesRanges.stream())
                      .sorted(Comparator.comparing(Range::start))
