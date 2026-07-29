@@ -223,4 +223,38 @@ class TablePotentialArithmeticTest {
         assertThrows(Exception.class,
                 () -> TablePotentialArithmetic.dividePotentials(null, pA));
     }
+
+    /**
+     * The element-wise route of the division already answered 0 for a zero denominator — in
+     * variable elimination a zero denominator marks a configuration of probability zero, whose
+     * quotient is never used — but the route where one operand is constant divided raw, so a
+     * zero produced an Infinity that poisons every product it later enters. Same rule, two
+     * places, diverged.
+     */
+    @Test
+    void dividingAConstantByATableWithAZeroYieldsZeroNotInfinity() {
+        TablePotential two = new TablePotential(
+                new ArrayList<>(), PotentialRole.CONDITIONAL_PROBABILITY, new double[]{2.0});
+        TablePotential withAZero = new TablePotential(List.of(a),
+                PotentialRole.CONDITIONAL_PROBABILITY, new double[]{0.0, 0.5});
+
+        double[] values = ((TablePotential) TablePotentialArithmetic.dividePotentials(two, withAZero)).getValues();
+
+        assertEquals(0.0, values[0], "a zero denominator must yield zero, as in the element-wise route");
+        assertEquals(4.0, values[1], 1e-6);
+    }
+
+    /**
+     * And a zero constant denominator zeroes the quotient instead of filling it with infinities.
+     */
+    @Test
+    void dividingByAZeroConstantYieldsZeros() {
+        TablePotential zero = new TablePotential(
+                new ArrayList<>(), PotentialRole.CONDITIONAL_PROBABILITY, new double[]{0.0});
+
+        double[] values = ((TablePotential) TablePotentialArithmetic.dividePotentials(pA, zero)).getValues();
+
+        assertEquals(0.0, values[0]);
+        assertEquals(0.0, values[1]);
+    }
 }

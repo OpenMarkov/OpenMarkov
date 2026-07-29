@@ -409,7 +409,9 @@ public class TablePotential extends AbstractIndexedPotential
      * of received potential.
      */
     @Override public int compareTo(TablePotential other) {
-        return this.tableSize - other.tableSize;
+        // Integer.compare, not subtraction: the difference of two large table sizes can
+        // overflow an int and reverse the order.
+        return Integer.compare(this.tableSize, other.tableSize);
     }
     
     /**

@@ -510,17 +510,23 @@ final class TablePotentialArithmetic {
      */
     private static TablePotential divide(TablePotential numerator, TablePotential denominator, TablePotential quotient,
                                          int numNumeratorVariables, int numDenominatorVariables) {
+        // A zero denominator yields zero, not infinity: the same convention as the
+        // element-wise route above. In variable elimination a zero denominator marks a
+        // configuration of probability zero, whose quotient is never used; an infinity,
+        // in contrast, poisons every product it later enters.
         if (numNumeratorVariables == 0) {
             int sizeTableDenominator = denominator.getValues().length;
             double dNumerator = numerator.getValues()[0];
             for (int i = 0; i < sizeTableDenominator; i++) {
-                quotient.getValues()[i] = dNumerator / denominator.getValues()[i];
+                quotient.getValues()[i] = (denominator.getValues()[i] == 0.0) ? 0.0
+                        : dNumerator / denominator.getValues()[i];
             }
         } else {
             int sizeTableNumerator = numerator.getValues().length;
             double dDenominator = denominator.getValues()[0];
             for (int i = 0; i < sizeTableNumerator; i++) {
-                quotient.getValues()[i] = numerator.getValues()[i] / dDenominator;
+                quotient.getValues()[i] = (dDenominator == 0.0) ? 0.0
+                        : numerator.getValues()[i] / dDenominator;
             }
         }
         quotient.setPotentialRole(PotentialRole.CONDITIONAL_PROBABILITY);

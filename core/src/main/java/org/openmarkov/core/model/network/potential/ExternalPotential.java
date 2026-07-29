@@ -103,7 +103,8 @@ public class ExternalPotential extends Potential implements DESSimulablePotentia
 	}
 
 	@Override public String toString() {
-		return super.toString() + " = Increment";
+		// It used to say "= Increment", copied from IncrementPotential.
+		return super.toString() + " = External";
 	}
 
 	@Override public void scalePotential(double scale) {
