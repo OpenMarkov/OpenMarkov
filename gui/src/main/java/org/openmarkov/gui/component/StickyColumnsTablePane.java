@@ -13,6 +13,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 import java.awt.Component;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.util.Objects;
 import java.util.Vector;
@@ -84,12 +85,17 @@ public class StickyColumnsTablePane extends JScrollPane {
         
         sharedSelectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         
-        this.stickyTable.setDragEnabled(true);
-        this.scrollableTable.setDragEnabled(true);
-        
-        this.stickyTable.setDropMode(DropMode.INSERT_ROWS);
-        this.scrollableTable.setDropMode(DropMode.INSERT_ROWS);
-        
+        // Enabling mouse drag demands a display by contract (setDragEnabled throws without one),
+        // and without a display there is no mouse: in a headless environment ---the tests of the
+        // continuous integration--- the rows are simply not draggable.
+        if (!GraphicsEnvironment.isHeadless()) {
+            this.stickyTable.setDragEnabled(true);
+            this.scrollableTable.setDragEnabled(true);
+
+            this.stickyTable.setDropMode(DropMode.INSERT_ROWS);
+            this.scrollableTable.setDropMode(DropMode.INSERT_ROWS);
+        }
+
         this.rowMoveTransferHandler = new RowMoveTransferHandler(
                 this::getModel, this::getSelectedRows, this::setRowSelectionInterval);
         this.stickyTable.setTransferHandler(this.rowMoveTransferHandler);
