@@ -16,7 +16,6 @@ import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.StrategyTree;
-import org.openmarkov.java.cloneUtils.CloneUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ import java.util.stream.Collectors;
  *
  * @author myebra
  */
-public class TreeADDBranch implements Cloneable, ClassLocalizable {
+public class TreeADDBranch implements ClassLocalizable {
     /**
      * Each TreeADDBranch has an associated potential
      */
@@ -424,27 +423,5 @@ public class TreeADDBranch implements Cloneable, ClassLocalizable {
         branch.statesBranch = this.statesBranch;
         
         return branch;
-    }
-    
-
-    @Override public TreeADDBranch clone() {
-        var clonedBranch = new TreeADDBranch();
-        clonedBranch.potential = this.potential;
-        clonedBranch.rootVariable = CloneUtils.safeClone(this.rootVariable);
-        clonedBranch.states = this.states == null ? null : this.states.stream().map(State::clone).toList();
-        clonedBranch.lowerBound = CloneUtils.safeClone(this.lowerBound);
-        clonedBranch.upperBound = CloneUtils.safeClone(this.upperBound);
-        clonedBranch.intervalBranch = this.intervalBranch;
-        clonedBranch.statesBranch = this.statesBranch;
-        clonedBranch.parentVariables = this.parentVariables.stream().map(CloneUtils::safeClone).toList();
-        clonedBranch.label = this.label;
-        clonedBranch.reference = this.reference;
-        clonedBranch.referencedBranch = CloneUtils.safeClone(this.referencedBranch);
-        clonedBranch.indent = this.indent;
-        return clonedBranch;
-    }
-    
-    private TreeADDBranch() {
-    
     }
 }
