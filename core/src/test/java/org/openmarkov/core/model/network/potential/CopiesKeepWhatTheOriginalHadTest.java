@@ -23,6 +23,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
  * Three more members of the copy family of the campaign, out of reach of the automatic clone
@@ -119,5 +120,42 @@ public class CopiesKeepWhatTheOriginalHadTest {
 		assertEquals("the tree of the original", copy.getNoEventTree().getComment(),
 				"The copy kept a fresh empty tree instead of the tree of the original");
 		assertNotSame(original.getNoEventTree(), copy.getNoEventTree(), "the tree must be a copy, not shared");
+	}
+
+	/**
+	 * The copy constructor rebuilt a fresh distribution variable and then took the
+	 * original's table — the very same object, still indexed by the original's variable: a
+	 * write in either side wrote in both, and a lookup by identity in the copy missed.
+	 */
+	@Test
+	public void aDistributionTableCopySharesTheVariableButNotTheTable() {
+		DistributionTablePotential original = new DistributionTablePotential(
+				new ArrayList<>(List.of(plain("C"), plain("P"), event("E1"))));
+
+		DistributionTablePotential copy = (DistributionTablePotential) original.copy();
+
+		assertNotSame(original.getTableWithEvents(), copy.getTableWithEvents(),
+				"The table of parameters must be a copy, not the original's object");
+		assertSame(original.getDistributionVariable(), copy.getDistributionVariable(),
+				"A shallow copy shares the variables, and the table is indexed by this one");
+	}
+
+	/**
+	 * The copy constructor handed over the original's piecewise table and its time function by
+	 * reference: editing a piece in the copy edited the original.
+	 */
+	@Test
+	public void aPiecewiseExponentialCopyDoesNotShareItsTableNorItsFunction() {
+		Variable time = new Variable("T");
+		PiecewiseExponentialPotential original = new PiecewiseExponentialPotential(
+				new ArrayList<>(List.of(plain("C"), time)), PotentialRole.CONDITIONAL_PROBABILITY);
+
+		PiecewiseExponentialPotential copy = (PiecewiseExponentialPotential) original.copy();
+
+		assertNotSame(original.getPiecewiseTable(), copy.getPiecewiseTable(),
+				"The piecewise table must be a copy, not the original's object");
+		copy.getPiecewiseTable().put(5.0, 0.5);
+		assertEquals(1, original.getPiecewiseTable().size(),
+				"Adding a piece to the copy must not add it to the original");
 	}
 }

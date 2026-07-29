@@ -170,9 +170,13 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 	 * @param potential PiecewiseExponentialPotential from which the new PiecewiseExponentialPotential is created
 	 */
 	public PiecewiseExponentialPotential(PiecewiseExponentialPotential potential) {
+		// The table and the function are copied: they used to be shared by reference, so
+		// editing a piece in the copy edited the original. (What deepCopy still does not do
+		// is re-point numericVariables to the destination network - the field is final and
+		// derived in the constructor; noted in the report of the subpackage.)
 		this(potential.getVariables(),potential.getPotentialRole(),
-				potential.getPiecewiseTable(),
-				potential.initTimeFunction,
+				new TreeMap<>(potential.getPiecewiseTable()),
+				(FunctionPotential) potential.initTimeFunction.copy(),
 				potential.useRates);
 	}
 

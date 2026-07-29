@@ -97,7 +97,12 @@ public class DistributionTablePotential extends Potential implements DESSimulabl
      */
     public DistributionTablePotential(DistributionTablePotential potential) {
         this(potential.getVariables(), potential.getPotentialRole(), potential.getDistributionName(), potential.getParametrizationName());
-        this.setTableWithEvents(potential.getTableWithEvents());
+        // A shallow copy shares the variables of the original, so it shares the distribution
+        // variable too - the delegated constructor had built a fresh one, and the table is
+        // indexed by the original's. And the table itself is cloned: it used to be the very
+        // same object in copy and original, so writing a parameter in one wrote it in both.
+        this.distributionVariable = potential.distributionVariable;
+        this.setTableWithEvents((TableWithEvents) potential.getTableWithEvents().copy());
     }
 
     public DistributionTablePotential(List<Variable> variables) {
