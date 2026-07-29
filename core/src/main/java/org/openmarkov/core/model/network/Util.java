@@ -78,23 +78,6 @@ public class Util {
     }
     
     /**
-     * This method checks if exists the specified node.
-     *
-     * @param probNet Network
-     * @param name    name of the node to search.
-     *
-     * @return true if the node exists; otherwise, false.
-     */
-    
-    //called by nodeDefinitionPanel and nodePropertiesDialogListenerAssitent
-    //for static test (unused)
-    public static boolean existNode(ProbNet probNet, String name) {
-        
-        probNet.getNode(name);
-        return true;
-    }
-    
-    /**
      * Traslates a {@code String} from windows style to UNIX (change \\
      * for /)
      *
