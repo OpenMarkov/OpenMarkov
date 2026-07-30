@@ -135,6 +135,8 @@
                   value="This kind of network cannot have link restrictions; the link from {parentVariable} to {childVariable} has a restrictions potential."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkCanHaveOnlyOneUtilityNode"
                   value="This kind of network can have only one utility node, but it has {numUtilityNodes}: {utilityNodes}."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkAlreadyHasAUtilityNode"
+                  value="This kind of network can have only one utility node, and it already has {utilityNode}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkHasNoUtilityNodes"
                   value="Network {probNet} must have at least one utility node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NoSuperValueNodeAllowed"

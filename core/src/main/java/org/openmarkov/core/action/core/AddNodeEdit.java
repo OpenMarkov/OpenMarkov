@@ -121,6 +121,12 @@ public class AddNodeEdit extends PNEdit {
                 constraintChecker.addException(new ConstraintViolatedException.OnlyTemporalVariablesAllowed(constraint, this.variable));
             }
         }
+        if (probNet.getConstraintOfClass(OnlyOneUtilityNode.class) instanceof OnlyOneUtilityNode constraint) {
+            if (this.nodeType == NodeType.UTILITY && probNet.getNumNodes(NodeType.UTILITY) > 0) {
+                constraintChecker.addException(new ConstraintViolatedException.NetworkAlreadyHasAUtilityNode(constraint,
+                        probNet.getNodes(NodeType.UTILITY).get(0)));
+            }
+        }
         if (probNet.getConstraintOfClass(ProperUtilityPotentials.class) instanceof ProperUtilityPotentials constraint) {
             if (!this.variable.isTemporal()) {
                 int numUtilities = probNet.getNumNodes(NodeType.UTILITY);

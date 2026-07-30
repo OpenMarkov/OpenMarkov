@@ -9,19 +9,20 @@ package org.openmarkov.core.model.network.constraint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.action.base.ConstraintChecker;
+import org.openmarkov.core.action.core.AddNodeEdit;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * OnlyOneUtilityNode is optional, and its check body was an empty {@code TODO} stub: it accepted
- * every network, including the ones it exists to reject. It stayed unnoticed because asking a
- * network type for its optional constraints failed outright, so nobody ever received this one.
+ * A network carrying this constraint accepts at most one utility node, both when the whole network
+ * is checked and when an edit would add a second one.
  *
  * @author Manuel Arias
  */
@@ -90,5 +91,55 @@ class OnlyOneUtilityNodeTest {
 		String message = complaint.toString();
 		assertTrue(message.contains("cost") && message.contains("effectiveness"),
 				"The complaint does not name the utility nodes: " + message);
+	}
+
+	/**
+	 * Checking the whole network is not enough to stop the user: an edit is refused beforehand by
+	 * {@code checkConstraintsWillBeMet}, which is what the editor asks.
+	 */
+	@Test
+	void addingASecondUtilityNodeIsRefused() {
+		ProbNet probNet = influenceDiagramWith(onlyOneUtilityNode);
+		probNet.addNode(new Variable("cost"), NodeType.UTILITY);
+
+		AddNodeEdit edit = new AddNodeEdit(probNet, new Variable("effectiveness"), NodeType.UTILITY, null);
+
+		assertFalse(edit.constraintsWillBeMet(), "The editor would have let a second utility node in");
+	}
+
+	@Test
+	void addingTheFirstUtilityNodeIsAllowed() {
+		ProbNet probNet = influenceDiagramWith(onlyOneUtilityNode);
+		probNet.addNode(new Variable("Disease", "absent", "present"), NodeType.CHANCE);
+
+		AddNodeEdit edit = new AddNodeEdit(probNet, new Variable("cost"), NodeType.UTILITY, null);
+
+		assertTrue(edit.constraintsWillBeMet());
+	}
+
+	/**
+	 * The refusal has to name the utility node the network already has.
+	 */
+	@Test
+	void theRefusedEditNamesTheUtilityNodeAlreadyThere() {
+		ProbNet probNet = influenceDiagramWith(onlyOneUtilityNode);
+		probNet.addNode(new Variable("cost"), NodeType.UTILITY);
+
+		AddNodeEdit edit = new AddNodeEdit(probNet, new Variable("effectiveness"), NodeType.UTILITY, null);
+		ConstraintViolatedException complaint = assertThrows(ConstraintViolatedException.class,
+				edit::tryConstraintsWillBeMet);
+
+		assertTrue(complaint.toString().contains("cost"),
+				"The refusal does not name the utility node already there: " + complaint);
+	}
+
+	/**
+	 * A network type that admits utility nodes, so that what refuses the edit is this constraint and
+	 * not the refusal a Bayesian network makes to any node that is not a chance node.
+	 */
+	private static ProbNet influenceDiagramWith(OnlyOneUtilityNode constraint) {
+		ProbNet influenceDiagram = new ProbNet(InfluenceDiagramType.getUniqueInstance());
+		influenceDiagram.addConstraint(constraint);
+		return influenceDiagram;
 	}
 }
