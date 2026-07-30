@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Stack;
 
 public class DANDecisionTreeInference extends DANInference implements DecisionTreeComputation {
-    /** The extension of the native network format, appended to the names built for the subnetworks. */
-    private static final String PGMX_EXTENSION = ".pgmx";
     private DecisionTreeNode decisionTree;
     //private ProbNet probNet;
     private boolean computeDecisionTreeForGUI;
@@ -255,27 +253,25 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
                 Finding lastFinding = findings.get(size - 1);
                 Variable variable = lastFinding.getVariable();
                 dan.setName(baseName(dan.getName()) + "-" + replaceWhiteSpaces(variable.getName()) + "="
-                        + replaceWhiteSpaces(variable.getStateName(lastFinding.getStateIndex())) + PGMX_EXTENSION);
+                        + replaceWhiteSpaces(variable.getStateName(lastFinding.getStateIndex())));
             }
         }
     }
 
     /**
-     * The name of the network without the {@value #PGMX_EXTENSION} extension, so that the name built
-     * here does not end in two of them.
-     *
-     * <p>This used to chop off the last five characters unconditionally, which assumed every network
-     * is called something ending in {@value #PGMX_EXTENSION}. A network built in memory has no name
-     * at all and the chop threw a {@code NullPointerException}; a name shorter than the extension
-     * threw {@code StringIndexOutOfBoundsException}; and any other name — {@code Untitled}, which is
-     * what a network not yet saved is called, or one read from a file of another format — quietly
-     * lost its last five characters.
+     * The name of the network without its file extension, if it has one. Only the name a network was
+     * read with has an extension: from the first renaming on, the name ends in the finding that
+     * produced the subnetwork, and the dot of a state name is not an extension.
      */
     private static String baseName(String name) {
         if (name == null) {
             return "";
         }
-        return name.endsWith(PGMX_EXTENSION) ? name.substring(0, name.length() - PGMX_EXTENSION.length()) : name;
+        if (name.contains("=")) {
+            return name;
+        }
+        int lastDot = name.lastIndexOf('.');
+        return lastDot > 0 ? name.substring(0, lastDot) : name;
     }
 
     private static String replaceWhiteSpaces(String name) {
