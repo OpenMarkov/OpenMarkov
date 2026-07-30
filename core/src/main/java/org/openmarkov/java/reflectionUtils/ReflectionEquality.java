@@ -140,10 +140,6 @@ public final class ReflectionEquality {
                     if (ReflectionEquality.BASIC_TYPES.contains(o1.getClass()) || ReflectionEquality.BASIC_TYPES.contains(o2.getClass())) {
                         yield o1.equals(o2) || o2.equals(o1);
                     }
-                    // The second list is taken from o2, which is what the loop below reads it against.
-                    // It used to say o1 here, a slip with no effect: the two objects were just checked
-                    // to be of the same class, so the fields are the same either way. Saying o2 makes
-                    // "fields2.get(i).get(o2)" true by construction rather than by that coincidence.
                     var fields1 = ReflectionEquality.extractAllAccesibleFields(o1);
                     var fields2 = ReflectionEquality.extractAllAccesibleFields(o2);
                     if (fields1.size() < ReflectionEquality.countComparableFields(o1.getClass())) {

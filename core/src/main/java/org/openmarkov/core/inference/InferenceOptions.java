@@ -38,11 +38,7 @@ public class InferenceOptions {
 	
 	// Constructor
 
-	/**
-	 * The three sub-options start from their default values, as in {@link #InferenceOptions()}. They
-	 * used to be left null here, so copying options built with this constructor threw a
-	 * {@code NullPointerException} inside {@code MulticriteriaOptions(null)}.
-	 */
+	/** The three sub-options start from their default values, as in {@link #InferenceOptions()}. */
 	public InferenceOptions(ProbNet probNet, Variable simulationIndexVariable) {
 		this();
 		this.probNet = probNet;
@@ -55,10 +51,7 @@ public class InferenceOptions {
 		this.monteCarloOptions = new MonteCarloOptions();
 	}
 
-	/**
-	 * The network and the simulation index variable travel too. Leaving them behind made a copy of a
-	 * network come back with options that no longer say which network they belong to.
-	 */
+	/** The copy carries the network and the simulation index variable too. */
 	public InferenceOptions(InferenceOptions inferenceOptions) {
 		this.probNet = inferenceOptions.probNet;
 		this.simulationIndexVariable = inferenceOptions.simulationIndexVariable;

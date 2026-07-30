@@ -111,12 +111,8 @@ public class ReferencedExpression<T> {
         } catch (EvaluationException e) {
             throw new NonProjectablePotentialException.CannotEvaluate(processedExpression, e);
         }
-        // Measured: jeval answers a division by zero with the string "Infinity"
-        // (and an indeterminate one with "NaN") instead of failing. Every numeric
-        // caller parses this result straight into a potential, where an infinity
-        // is silent corruption, so a non-finite number is reported here as what
-        // it is: an expression that could not be evaluated. Non-numeric results
-        // pass through untouched.
+        // jeval answers a division by zero with the string "Infinity" instead of failing, and the
+        // callers parse the result straight into a potential. Only numbers are checked.
         try {
             if (!Double.isFinite(Double.parseDouble(result))) {
                 throw new NonProjectablePotentialException.CannotEvaluate(
