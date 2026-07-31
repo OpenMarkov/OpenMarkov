@@ -94,7 +94,7 @@ public class PotentialPanelManager {
         try {
             try {
                 Constructor<? extends PotentialPanel> constructor =
-                        potentialPanelClassesByClass.get(node.getFirstPotential().getClass())
+                        potentialPanelClassesByClass.get(node.getPotential().getClass())
                                                     .getConstructor(Node.class);
                 return constructor.newInstance(node);
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |

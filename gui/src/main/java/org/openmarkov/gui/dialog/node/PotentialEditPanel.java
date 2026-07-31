@@ -16,6 +16,7 @@ import org.openmarkov.core.action.core.SetPotentialVariablesEdit;
 import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.localize.StringDatabase;
@@ -140,7 +141,7 @@ public class PotentialEditPanel extends JPanel {
     /**
      * Creates the dialog.
      */
-    public PotentialEditPanel(Node node, boolean readOnly, boolean potentialInitializesOnEditHistory) {
+    public PotentialEditPanel(Node node, boolean readOnly, boolean potentialInitializesOnEditHistory) throws ThereIsNoPotentialsInNodeException {
         this.readOnly = readOnly;
         this.node = node;
         this.onPotentialTypeChanges = new ArrayList<>();
@@ -175,7 +176,7 @@ public class PotentialEditPanel extends JPanel {
      * Sets up the panel where all components, except the buttons of the buttons
      * panel, will be appear.
      */
-    private void configureComponentsPanel() {
+    private void configureComponentsPanel() throws ThereIsNoPotentialsInNodeException {
         this.setLayout(new BorderLayout(5, 5));
         // getComponentsPanel().setSize(294, 29);
         this.setMaximumSize(new Dimension(180, 40));
@@ -224,7 +225,7 @@ public class PotentialEditPanel extends JPanel {
     /**
      * @return ComboBox with the types of families of relation to be used
      */
-    private JComboBox<Class<? extends Potential>> getPotentialTypeJCombobox() {
+    private JComboBox<Class<? extends Potential>> getPotentialTypeJCombobox() throws ThereIsNoPotentialsInNodeException {
         if (this.potentialTypeComboBox == null) {
             Class<? extends Potential> potentialClass = this.node.getPotentials().getFirst().getClass();
             List<Class<? extends Potential>> filteredPotentialNames = new ArrayList<>(PotentialUtils.getFilteredPotentialClasses(this.node));
@@ -238,7 +239,13 @@ public class PotentialEditPanel extends JPanel {
             this.potentialTypeComboBox.setSelectedItem(potentialClass);
             this.potentialTypeComboBox.setBorder(new LineBorder(UIManager.getColor("List.dropLineColor"), 1, false));
             this.potentialTypeComboBox.setName("jComboBoxRelationType");
-            this.potentialTypeComboBox.addActionListener(evt -> this.potentialTypeChanged());
+            this.potentialTypeComboBox.addActionListener(evt -> {
+                try {
+                    this.potentialTypeChanged();
+                } catch (ThereIsNoPotentialsInNodeException e) {
+                    throw new UnrecoverableException(e);
+                }
+            });
             this.potentialTypeComboBox.setEnabled(!this.readOnly);
         }
         return this.potentialTypeComboBox;
@@ -249,7 +256,7 @@ public class PotentialEditPanel extends JPanel {
      *
      * @param enable To indicate if the Potential Type combobox should be enabled
      */
-    public void setEnabledPotentialTypeCombobox(boolean enable) {
+    public void setEnabledPotentialTypeCombobox(boolean enable) throws ThereIsNoPotentialsInNodeException {
         this.getPotentialTypeJCombobox().setEnabled(enable);
     }
     
@@ -270,7 +277,7 @@ public class PotentialEditPanel extends JPanel {
      * @return The panel that indicates the type of the table (and perhaps the
      * type of policy (optimal or imposed))
      */
-    private JPanel getPotentialTypePanel() {
+    private JPanel getPotentialTypePanel() throws ThereIsNoPotentialsInNodeException {
         if (this.potentialTypePanel == null) {
             this.potentialTypePanel = new JPanel();
             this.potentialTypePanel.setLayout(new FlowLayout());
@@ -473,7 +480,7 @@ public class PotentialEditPanel extends JPanel {
         return this.pnlPolicyType;
     }
     
-    private void potentialTypeChanged() {
+    private void potentialTypeChanged() throws ThereIsNoPotentialsInNodeException {
         Class<? extends Potential> potentialType = (Class<? extends Potential>) this.potentialTypeComboBox.getSelectedItem();
         Potential newPotential = null;
         var currentPotential = this.node.getPotential();
@@ -520,7 +527,7 @@ public class PotentialEditPanel extends JPanel {
     }
     
     
-    public boolean commitChanges() throws BinomialPotentialWrongValueException.ThetaValueIsWrong, BinomialPotentialWrongValueException.NValuesIsWrong, DoEditException {
+    public boolean commitChanges() throws BinomialPotentialWrongValueException.ThetaValueIsWrong, BinomialPotentialWrongValueException.NValuesIsWrong, DoEditException, ThereIsNoPotentialsInNodeException {
         if (this.readOnly) {
             return false;
         }
@@ -546,7 +553,7 @@ public class PotentialEditPanel extends JPanel {
         return true;
     }
     
-    boolean potentialHasChanged() {
+    boolean potentialHasChanged() throws ThereIsNoPotentialsInNodeException {
         Potential newPotential = this.node.getPotential();
         boolean potentialsAreDifferent = !ReflectionEquality.areEquals(this.originalPotential, newPotential);
         OpenMarkovLogger.LOGGER.trace("Potentials are different " + potentialsAreDifferent);
@@ -603,7 +610,7 @@ public class PotentialEditPanel extends JPanel {
     /**
      * Shows and activates the options related to decision policy
      */
-    void setEnabledDecisionOptions() {
+    void setEnabledDecisionOptions() throws ThereIsNoPotentialsInNodeException {
         switch (this.node.getPolicyType()) {
             case OPTIMAL, DETERMINISTIC -> this.getPotentialTypeJCombobox().setEnabled(false);
             case PROBABILISTIC -> {

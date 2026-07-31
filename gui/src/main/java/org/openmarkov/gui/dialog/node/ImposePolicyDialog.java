@@ -1,5 +1,6 @@
 package org.openmarkov.gui.dialog.node;
 
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -12,11 +13,11 @@ import java.awt.*;
  */
 public class ImposePolicyDialog extends PotentialEditDialog {
     
-    public ImposePolicyDialog(Window owner, boolean readOnly, Node node) {
+    public ImposePolicyDialog(Window owner, boolean readOnly, Node node) throws ThereIsNoPotentialsInNodeException {
         super(owner, node, readOnly);
     }
     
-    @Override PotentialEditPanel generatePotentialEditPanel(Node node, boolean readOnly) {
+    @Override PotentialEditPanel generatePotentialEditPanel(Node node, boolean readOnly) throws ThereIsNoPotentialsInNodeException {
         return new ImposePolicyPanel(node, readOnly, true);
     }
     

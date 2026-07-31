@@ -8,14 +8,7 @@
 package org.openmarkov.stochasticPropagationOutput;
 
 
-import org.openmarkov.core.exception.CannotNormalizePotentialException;
-import org.openmarkov.core.exception.ConstraintViolatedException;
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.InvalidNetworkTypeException;
-import org.openmarkov.core.exception.NetworkHasNoNodesException;
-import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.NotEvaluableNetworkException;
-import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.exception.*;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
@@ -202,12 +195,12 @@ public class StochasticPropagationOutputFrame extends JDialog implements ActionL
             onActionRequest();
         } catch (IncompatibleEvidenceException | ConstraintViolatedException |
                  NotEvaluableNetworkException.NotApplicableNetwork | NonProjectablePotentialException |
-                 CannotNormalizePotentialException e) {
+                 CannotNormalizePotentialException | ThereIsNoPotentialsInNodeException e) {
             throw new UnrecoverableException(e);
         }
     } // end of actionPerformed
     
-    private void onActionRequest() throws IncompatibleEvidenceException, ConstraintViolatedException, NotEvaluableNetworkException.NotApplicableNetwork, NonProjectablePotentialException, CannotNormalizePotentialException {
+    private void onActionRequest() throws IncompatibleEvidenceException, ConstraintViolatedException, NotEvaluableNetworkException.NotApplicableNetwork, NonProjectablePotentialException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         ButtonModel algorithmButton = algorithms.getSelection();
         ClusterPropagation exactAlgorithm;
         algorithmName = algorithmButton.getActionCommand();

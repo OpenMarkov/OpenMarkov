@@ -46,11 +46,11 @@ public class PotentialsTablePanelOperations {
 	 * @param node node who "owns" the table
 	 */
     public int calculateLastEditableRow(Node node) throws ThereIsNoPotentialsInNodeException {
-        Potential potential = node.getFirstPotential();
+        Potential potential = node.getPotential();
         if (PotentialsTablePanelOperations.getIsExactDistrPotential(potential)) {
 			return potential.getNumVariables() - 1;
 		}
-        return node.getFirstPotential().getNumVariables() - 1 + node.getVariable().getStates().length - 1;
+        return node.getPotential().getNumVariables() - 1 + node.getVariable().getStates().length - 1;
     }
 	
 	/**
@@ -146,7 +146,7 @@ public class PotentialsTablePanelOperations {
 		 * This code is here and in getPotentialIndex because this method is used not only in  getPotentialIndex
 		 * but in org.openmarkov.gui.action.TablePotentialValueEdit
 		 */
-        Potential potential = node.getFirstPotential();
+        Potential potential = node.getPotential();
         TablePotential tablePotential;
 
 		if (potential instanceof ExactDistrPotential exactDistr)

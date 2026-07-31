@@ -188,10 +188,9 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
                                     .removeUndoneEdits();
                         }
                     } catch (NotEvaluableNetworkException | NonProjectablePotentialException |
-                             NotEnoughMemoryException |
-                             IncompatibleEvidenceException | ConstraintViolatedException |
-                             NotSupportedOperationException |
-                             CannotNormalizePotentialException ex) {
+                             NotEnoughMemoryException | IncompatibleEvidenceException | ConstraintViolatedException |
+                             NotSupportedOperationException | CannotNormalizePotentialException |
+                             ThereIsNoPotentialsInNodeException ex) {
                         this.networkEditorPanel.repaint();
                         throw new UnrecoverableException(ex);
                     }
@@ -210,10 +209,9 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
                         try {
                             this.networkEditorPanel.changeNodeProperties();
                         } catch (NotEvaluableNetworkException | NonProjectablePotentialException |
-                                 NotEnoughMemoryException |
-                                 IncompatibleEvidenceException | ConstraintViolatedException |
-                                 NotSupportedOperationException |
-                                 CannotNormalizePotentialException ex) {
+                                 NotEnoughMemoryException | IncompatibleEvidenceException |
+                                 ConstraintViolatedException | NotSupportedOperationException |
+                                 CannotNormalizePotentialException | ThereIsNoPotentialsInNodeException ex) {
                             throw new UnrecoverableException(ex);
                         } finally {
                             this.networkEditorPanel.repaint();
@@ -242,6 +240,8 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
                          NotEnoughMemoryException | DoEditException | CannotNormalizePotentialException |
                          ConstraintViolatedException ex) {
                     throw new UnreachableException(ex);
+                } catch (ThereIsNoPotentialsInNodeException ex) {
+                    throw new UnrecoverableException(ex);
                 }
 
             }

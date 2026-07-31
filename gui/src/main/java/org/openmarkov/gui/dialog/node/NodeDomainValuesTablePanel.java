@@ -11,6 +11,7 @@ import org.openmarkov.core.action.core.NodeReplaceStatesEdit;
 import org.openmarkov.core.action.core.PrecisionEdit;
 import org.openmarkov.core.action.core.VariableTypeEdit;
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.DefaultStates;
@@ -286,7 +287,7 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
      *
      * @param properties object from where load the information.
      */
-    public void setFieldsFromProperties(Node properties) {
+    public void setFieldsFromProperties(Node properties) throws ThereIsNoPotentialsInNodeException {
         setUploadingData(true);
         // jComboBoxStatesValues.removeItemListener(this);
         (getDiscretizedStatesPanel().getStandardDomainButton()).removeActionListener(this);
@@ -911,8 +912,12 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
                 // @@@
                 this.removeAll();
                 initialize();
-                setFieldsFromProperties(node);
-                
+                try {
+                    setFieldsFromProperties(node);
+                } catch (ThereIsNoPotentialsInNodeException e) {
+                    throw new UnrecoverableException(e);
+                }
+
             }
         } else if (comboBox.getName().equals("jComboBoxStatesValues")) {
             // warning mpalacios relative function to options position.
@@ -944,7 +949,7 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
                     this.removeAll();
                     initialize();
                     setFieldsFromProperties(node);
-                } catch (DoEditException e) {
+                } catch (DoEditException | ThereIsNoPotentialsInNodeException e) {
                     comboBox.setSelectedIndex(optionDeselected);
                     comboBox.requestFocus();
                     throw new UnrecoverableException(e);
@@ -1073,13 +1078,13 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
         if (actionComand.equals("StandardDomain")) {
             try {
                 actionPerformedStandardDomain(arg0);
-            } catch (DoEditException e) {
+            } catch (DoEditException | ThereIsNoPotentialsInNodeException e) {
                 throw new UnrecoverableException(e);
             }
         }
     }
     
-    private void actionPerformedStandardDomain(ActionEvent arg0) throws DoEditException {
+    private void actionPerformedStandardDomain(ActionEvent arg0) throws DoEditException, ThereIsNoPotentialsInNodeException {
         StandardDomainsDialog standardDomainDialog = new StandardDomainsDialog(GUIUtils.getOwner(this));
         // @ 2014/11/18. Issue 145.
         // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables

@@ -369,7 +369,11 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
             case ActionCommands.ADD_SUBTREE ->
                 addSubtree(ae, (TreeADDBranch) node, path);
             case ActionCommands.EDIT_POTENTIAL -> {
-                editPotential(ae, (TreeADDBranch) node, path);
+                try {
+                    editPotential(ae, (TreeADDBranch) node, path);
+                } catch (ThereIsNoPotentialsInNodeException e) {
+                    throw new UnrecoverableException(e);
+                }
             }
             case ActionCommands.CHANGE_ROOT_VARIABLE ->
                     changeRootVariable(ae, (TreeADDPotential) node, path);
@@ -1170,7 +1174,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
      * @param branch the branch
      * @param path the path
      */
-    private void editPotential(ActionEvent ae, TreeADDBranch branch, TreePath path) {
+    private void editPotential(ActionEvent ae, TreeADDBranch branch, TreePath path) throws ThereIsNoPotentialsInNodeException {
         TreePath parentPath = path.getParentPath();
         TreeADDPotential parentTreeADD = (TreeADDPotential) parentPath.getLastPathComponent();
         Potential potential = branch.getPotential();

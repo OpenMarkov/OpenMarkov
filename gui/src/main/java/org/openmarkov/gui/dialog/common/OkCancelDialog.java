@@ -7,6 +7,7 @@
 
 package org.openmarkov.gui.dialog.common;
 
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.loader.element.IconBind;
@@ -81,7 +82,11 @@ public class OkCancelDialog extends BottomPanelButtonDialog {
             jButtonCancel.removeActionListener(jButtonCancel.getActionListeners()[0]);
         }
         jButtonCancel.addActionListener(e -> {
-            this.doCancelClickBeforeHide();
+            try {
+                this.doCancelClickBeforeHide();
+            } catch (ThereIsNoPotentialsInNodeException ex) {
+                throw new UnrecoverableException(ex);
+            }
             this.selectedOption = ChosenOption.Cancel;
             this.setVisible(false);
             this.dispose();
@@ -128,7 +133,7 @@ public class OkCancelDialog extends BottomPanelButtonDialog {
      * This method carries out the actions when the user press the Cancel button
      * before hide the dialog.
      */
-    protected void doCancelClickBeforeHide() {
+    protected void doCancelClickBeforeHide() throws ThereIsNoPotentialsInNodeException {
         selectedOption = ChosenOption.Cancel;
     }
     

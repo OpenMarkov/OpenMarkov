@@ -96,7 +96,7 @@ public abstract class StochasticPropagation extends InferenceAlgorithm implement
      * and the weight of the sample.
      * @return an array containing an integer (the index of the state) for each variable to sample, plus the weight.
      */
-    protected abstract double[] getValuesSampledAndWeight() throws NonProjectablePotentialException;
+    protected abstract double[] getValuesSampledAndWeight() throws NonProjectablePotentialException, ThereIsNoPotentialsInNodeException;
 
     /**
      * Propagates the evidence through the net using a stochastic propagation algorithm.
@@ -106,7 +106,7 @@ public abstract class StochasticPropagation extends InferenceAlgorithm implement
      * @return the approximate posterior value(s) for each variable of interest.
      */
     @Override
-    public HashMap<Variable, TablePotential> getPosteriorValues() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, IncompatibleEvidenceException.SamplesWeightIsZero, NonProjectablePotentialException {
+    public HashMap<Variable, TablePotential> getPosteriorValues() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, IncompatibleEvidenceException.SamplesWeightIsZero, NonProjectablePotentialException, ThereIsNoPotentialsInNodeException {
 
         long startTime = System.nanoTime();
 

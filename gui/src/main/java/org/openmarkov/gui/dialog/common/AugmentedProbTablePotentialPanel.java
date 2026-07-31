@@ -94,7 +94,7 @@ public class AugmentedProbTablePotentialPanel extends TablePotentialPanel {
         this.tablePotentialsPanelOperations = new PotentialsTablePanelOperations();
         this.node = node;
         // This panel displays the first potential of the node
-        setPotential(node.getFirstPotential());
+        setPotential(node.getPotential());
         //The table associated to tablePotential
         setTablePotential(getPotential().getAugmentedProbTable());
         

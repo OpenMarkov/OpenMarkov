@@ -53,7 +53,7 @@ class InferenceHandler {
 
     // ── Working mode ──────────────────────────────────────────────
     
-    void toggleWorkingMode() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    void toggleWorkingMode() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         NetworkEditorPanel.WorkingMode currentWorkingMode = getCurrentNetworkEditorPanel().getWorkingMode();
         NetworkEditorPanel.WorkingMode newWorkingMode = switch (currentWorkingMode) {
             case EDITION -> NetworkEditorPanel.WorkingMode.INFERENCE;
@@ -62,7 +62,7 @@ class InferenceHandler {
         setWorkingMode(currentWorkingMode, newWorkingMode);
     }
     
-    void setWorkingMode(NetworkEditorPanel.WorkingMode currentWorkingMode, NetworkEditorPanel.WorkingMode newWorkingMode) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    void setWorkingMode(NetworkEditorPanel.WorkingMode currentWorkingMode, NetworkEditorPanel.WorkingMode newWorkingMode) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         boolean performInference = true;
         boolean isTemporal;
         boolean isMulticriteria = false;
@@ -125,7 +125,7 @@ class InferenceHandler {
 
     // ── Evidence cases ────────────────────────────────────────────
     
-    void evidenceCasesNavigationOption(String command) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    void evidenceCasesNavigationOption(String command) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         switch (command) {
             case "CREATE_NEW_EVIDENCE_CASE" -> getCurrentNetworkEditorPanel().createNewEvidenceCase();
             case "GO_TO_FIRST_EVIDENCE_CASE" -> getCurrentNetworkEditorPanel().goToFirstEvidenceCase();

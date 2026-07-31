@@ -57,18 +57,26 @@ public class ConditionalGaussianPotentialPanel
         JPanel buttonPanel = new JPanel();
         JButton editMeanButton = new JButton("Edit mean potential");
         editMeanButton.addActionListener(e -> {
-            editMeanPotential();
+            try {
+                editMeanPotential();
+            } catch (ThereIsNoPotentialsInNodeException ex) {
+                throw new UnrecoverableException(ex);
+            }
         });
         JButton editVarianceButton = new JButton("Edit variance potential");
         editVarianceButton.addActionListener(e -> {
-            editVariancePotential();
+            try {
+                editVariancePotential();
+            } catch (ThereIsNoPotentialsInNodeException ex) {
+                throw new UnrecoverableException(ex);
+            }
         });
         buttonPanel.add(editMeanButton);
         buttonPanel.add(editVarianceButton);
         add(buttonPanel, BorderLayout.PAGE_START);
     }
     
-    private void editMeanPotential() {
+    private void editMeanPotential() throws ThereIsNoPotentialsInNodeException {
         PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), meanDummyNode,
                                                                           isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
@@ -88,7 +96,7 @@ public class ConditionalGaussianPotentialPanel
         }
     }
     
-    private void editVariancePotential() {
+    private void editVariancePotential() throws ThereIsNoPotentialsInNodeException {
         PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), varianceDummyNode,
                                                                           isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {

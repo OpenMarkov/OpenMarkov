@@ -1,6 +1,7 @@
 package org.openmarkov.gui.action;
 
 import org.openmarkov.core.action.base.PNEdit;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.potential.Potential;
 
@@ -32,7 +33,7 @@ public class ImposePolicyEdit extends PNEdit {
      * @param decisionNode the visual decision node to modify
      * @param newPolicy          the new policy to impose
      */
-    public ImposePolicyEdit(Node decisionNode, Potential newPolicy) {
+    public ImposePolicyEdit(Node decisionNode, Potential newPolicy) throws ThereIsNoPotentialsInNodeException {
         super(decisionNode.getProbNet());
         this.decisionNode = decisionNode;
         this.lastPolicy = this.decisionNode.getPotential();

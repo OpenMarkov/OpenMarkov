@@ -8,11 +8,7 @@
 package org.openmarkov.bnEvaluation;
 
 import org.openmarkov.bnEvaluation.measures.MeasuresSet;
-import org.openmarkov.core.exception.CannotNormalizePotentialException;
-import org.openmarkov.core.exception.ConstraintViolatedException;
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.*;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithm;
 
@@ -75,7 +71,7 @@ public final class CrossValidationController {
      */
     public static MeasuresSet run(Request request) throws IncompatibleEvidenceException,
             ConstraintViolatedException, NonProjectablePotentialException,
-            NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
+            NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         return run(request, LearningEvaluator.ProgressListener.NONE);
     }
 
@@ -90,7 +86,7 @@ public final class CrossValidationController {
     public static MeasuresSet run(Request request, LearningEvaluator.ProgressListener progressListener)
             throws IncompatibleEvidenceException, ConstraintViolatedException,
             NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork,
-            CannotNormalizePotentialException {
+            CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         SplitSetManager splitSetManager = request.reproducible()
                 ? new SplitSetManager(request.database(), request.seed())
                 : new SplitSetManager(request.database());

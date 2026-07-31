@@ -162,7 +162,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
         this.tablePotentialsPanelOperations = new PotentialsTablePanelOperations();
         this.node = node;
         // This panel displays the first potential of the node
-        potential = node.getFirstPotential();
+        potential = node.getPotential();
         isExactDistrPotential = potential instanceof ExactDistrPotential;
         if (potential instanceof ExactDistrPotential exactDistr) {
             tablePotential = exactDistr.getTablePotential();
@@ -376,7 +376,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      * tableSize is always greater than 0
      */
     protected Object[][] createEmptyTable() throws ThereIsNoPotentialsInNodeException {
-        node.getFirstPotential();
+        node.getPotential();
         int numColumns = 1; // Variables column
         
         // First editable row coincides with the number of parents
@@ -825,7 +825,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
     protected void doubleClickEvent(MouseEvent evt) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         if (node.getPotentials().isEmpty()) return;
         try {
-            if (!(node.getFirstPotential() instanceof TablePotential tablePotential)) {
+            if (!(node.getPotential() instanceof TablePotential tablePotential)) {
                 return;
             }
             int selectedColumn = valuesTable.columnAtPoint(evt.getPoint(), evt.getSource());

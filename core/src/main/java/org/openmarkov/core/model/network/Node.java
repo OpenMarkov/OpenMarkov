@@ -289,28 +289,16 @@ public class Node implements Cloneable, ClassLocalizable {
     public @NotNull List<Potential> getPotentials() {
         return new ArrayList<>(potentials);
     }
-    
-    /**
-     * @return the first potential in this node's list
-     *
-     * @throws ThereIsNoPotentialsInNodeException if the node has no potentials
-     */
-    public Potential getFirstPotential() throws ThereIsNoPotentialsInNodeException {
-        if (this.potentials.isEmpty()) {
-            throw new ThereIsNoPotentialsInNodeException(this);
-        }
-        return potentials.getFirst();
-    }
-    
+
     /**
      * @return the first potential, or {@code null} if no potentials are assigned
      */
-    public Potential getPotential() {
+    public Potential getPotential() throws ThereIsNoPotentialsInNodeException {
         if (potentials.isEmpty()) {
-            return null;
-        } else {
-            return getPotentials().getFirst();
+            throw new ThereIsNoPotentialsInNodeException(this);
         }
+        return getPotentials().getFirst();
+
     }
     
     /**

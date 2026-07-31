@@ -7,6 +7,7 @@ import org.openmarkov.core.action.core.SetPotentialEdit;
 import org.openmarkov.core.action.core.VariableTypeEdit;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.VariableType;
@@ -28,7 +29,7 @@ public class ChangeNodeTypeEdit extends MultiStepEdit {
     }
     
     
-    @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException {
+    @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException, ThereIsNoPotentialsInNodeException {
         stepExecuter.execute(new SetNodeTypeEdit(this.node, this.newNodeType));
         VariableType[] availableVariableTypes = VariableType.of(this.newNodeType);
         VariableType oldVariableType = this.node.getVariable().getVariableType();

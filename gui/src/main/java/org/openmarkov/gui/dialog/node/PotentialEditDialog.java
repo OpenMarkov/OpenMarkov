@@ -34,7 +34,7 @@ public class PotentialEditDialog extends OkCancelDialog {
     protected final Node node;
     protected final boolean readOnly;
     
-    public PotentialEditDialog(Window owner, Node node, boolean readOnly) {
+    public PotentialEditDialog(Window owner, Node node, boolean readOnly) throws ThereIsNoPotentialsInNodeException {
         super(owner);
         this.node = node;
         this.readOnly = readOnly;
@@ -62,7 +62,7 @@ public class PotentialEditDialog extends OkCancelDialog {
         });
     }
     
-    protected void initialize() {
+    protected void initialize() throws ThereIsNoPotentialsInNodeException {
         this.potentialEditPanel = this.generatePotentialEditPanel(node, readOnly);
         this.getComponentsPanel().setLayout(new BorderLayout());
         this.getComponentsPanel().add(this.potentialEditPanel, BorderLayout.CENTER);
@@ -87,7 +87,7 @@ public class PotentialEditDialog extends OkCancelDialog {
      * @return An integer indicating the button clicked by the user when closing
      * this dialog
      */
-    public ChosenOption requestValues() {
+    public ChosenOption requestValues() throws ThereIsNoPotentialsInNodeException {
         // Shows the potentials' options table
         if (this.node.getNodeType() == NodeType.DECISION && this.node.getPolicyType() == PolicyType.OPTIMAL && this.readOnly) {
             this.potentialEditPanel.setEnabledDecisionOptions();
@@ -96,13 +96,13 @@ public class PotentialEditDialog extends OkCancelDialog {
         return this.getSelectedOption();
     }
     
-    PotentialEditPanel generatePotentialEditPanel(Node node, boolean readOnly) {
+    PotentialEditPanel generatePotentialEditPanel(Node node, boolean readOnly) throws ThereIsNoPotentialsInNodeException {
         return new PotentialEditPanel(node, readOnly, true);
     }
     
     
     @Override
-    protected boolean doOkClickBeforeHide() throws BinomialPotentialWrongValueException.ThetaValueIsWrong, BinomialPotentialWrongValueException.NValuesIsWrong, DoEditException {
+    protected boolean doOkClickBeforeHide() throws BinomialPotentialWrongValueException.ThetaValueIsWrong, BinomialPotentialWrongValueException.NValuesIsWrong, DoEditException, ThereIsNoPotentialsInNodeException {
         this.potentialEditPanel.commitChanges();
         return true;
     }

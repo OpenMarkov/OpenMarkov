@@ -82,7 +82,7 @@ public class UnivariateDistrPotentialPanel extends TablePotentialPanel {
         this.tablePotentialsPanelOperations = new PotentialsTablePanelOperations();
         
         this.node = node;
-        setPotential(node.getFirstPotential());
+        setPotential(node.getPotential());
         //The list of variables of the UnivariateDistrPotential
         potentialVariables = getPotential().getVariables();
         setTablePotential(getPotential().getDistributionTable());

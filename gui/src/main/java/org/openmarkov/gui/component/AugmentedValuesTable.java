@@ -10,6 +10,7 @@ package org.openmarkov.gui.component;
 import org.jetbrains.annotations.UnknownNullability;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.Node;
@@ -114,7 +115,7 @@ public class AugmentedValuesTable extends ValuesTable {
             var modifiedIndex = PotentialsTablePanelOperations.getPotentialIndex(row, column, ((AugmentedProbTablePotential) node.getPotential()).getAugmentedProbTable());
             priorityList.removeIf(value -> value == modifiedIndex);
             priorityList.add(modifiedIndex);
-        } catch (DoEditException e) {
+        } catch (DoEditException | ThereIsNoPotentialsInNodeException e) {
             throw new UnrecoverableException(e);
         }
     }

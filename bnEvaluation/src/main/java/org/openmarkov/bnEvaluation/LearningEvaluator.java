@@ -98,7 +98,7 @@ public class LearningEvaluator {
      *
      * @return the averaged measures across all iterations
      */
-    public MeasuresSet runEvaluator() throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
+    public MeasuresSet runEvaluator() throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         return runEvaluator(ProgressListener.NONE);
     }
 
@@ -111,7 +111,7 @@ public class LearningEvaluator {
      *                         each one
      * @return the averaged measures across all iterations
      */
-    public MeasuresSet runEvaluator(ProgressListener progressListener) throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException {
+    public MeasuresSet runEvaluator(ProgressListener progressListener) throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         // measuresSetMean has numIterations=0
         MeasuresSet measuresSetMean = new MeasuresSet(measureSetToCalculate);
         progressListener.onProgress(0, numIterations);

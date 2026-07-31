@@ -100,7 +100,7 @@ public class TablePotentialValueEdit extends PotentialChangeEdit {
                                    Object[][] notEditablePositions) throws ThereIsNoPotentialsInNodeException {
         super(node, null, null);
         this.node = node;
-        Potential potential = node.getFirstPotential();
+        Potential potential = node.getPotential();
         this.isExactDistrPotential = potential instanceof ExactDistrPotential;
         if (potential instanceof ExactDistrPotential exactDistr) {
             this.oldExactDistrPotential = exactDistr;

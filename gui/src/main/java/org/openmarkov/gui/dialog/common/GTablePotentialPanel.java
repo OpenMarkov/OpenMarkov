@@ -47,7 +47,7 @@ public class GTablePotentialPanel extends PotentialPanel {
 	public void setData(Node node) throws ThereIsNoPotentialsInNodeException {
 		removeAll();
 
-		Potential potential = node.getFirstPotential();
+		Potential potential = node.getPotential();
 		if (!(potential instanceof GTablePotential<?> gTablePotential)) {
 			add(new JLabel("Not a GTablePotential."), BorderLayout.CENTER);
 			return;

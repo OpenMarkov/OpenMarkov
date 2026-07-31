@@ -8,6 +8,7 @@ package org.openmarkov.core.model.network.potential.plugin;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.network.CycleLength;
 import org.openmarkov.core.model.network.Node;
@@ -118,7 +119,7 @@ public class PotentialUtils {
      *
      * @return a list of potentials' names.
      */
-    public static List<Class<? extends Potential>> getFilteredPotentialClasses(Node node) {
+    public static List<Class<? extends Potential>> getFilteredPotentialClasses(Node node) throws ThereIsNoPotentialsInNodeException {
         List<Class<? extends Potential>> filteredPotentials = new ArrayList<>();
         
         Potential potential = node.getPotential();

@@ -440,7 +440,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * @param newNode      the new node
      * @return the result
      */
-    boolean changeNodeProperties(VisualNode selectedNode, boolean newNode) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    boolean changeNodeProperties(VisualNode selectedNode, boolean newNode) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         boolean userAcceptedChanges = NetworkEditorPanel.requestNodePropertiesToUser2(GUIUtils.getOwner(this), this, selectedNode, newNode);
         if (userAcceptedChanges) {
             this.adjustPanelDimension();
@@ -451,7 +451,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         return userAcceptedChanges;
     }
 
-    public void changeNodeProperties() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void changeNodeProperties() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         var selectedNode = this.visualNetwork.getLastSelectedNode();
         if (selectedNode == null) {
             return;
@@ -459,7 +459,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.changeNodeProperties(selectedNode, false);
     }
 
-    public void showPotentialDialog(boolean readOnly) throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void showPotentialDialog(boolean readOnly) throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         Node node = this.visualNetwork.getLastSelectedNode().getNode();
         if (this.requestPotentialValues(GUIUtils.getOwner(this), node, readOnly)) {
             // if the user has selected the ok button when closing the dialog
@@ -479,7 +479,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      *                           to be edited is new.
      * @return true, if the user save the changes on node; otherwise, false.
      */
-    private static boolean requestNodePropertiesToUser2(Window owner, NetworkEditorPanel networkEditorPanel, VisualNode node, boolean newNode) {
+    private static boolean requestNodePropertiesToUser2(Window owner, NetworkEditorPanel networkEditorPanel, VisualNode node, boolean newNode) throws ThereIsNoPotentialsInNodeException {
         NodePropertiesDialog nodePropertiesDialog = new NodePropertiesDialog(owner, networkEditorPanel, node, newNode, networkEditorPanel.workingMode != WorkingMode.EDITION);
         if (owner instanceof MainGUI gui) {
             gui.freeze();
@@ -491,7 +491,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         return result;
     }
 
-    private boolean requestPotentialValues(Window owner, Node node, boolean readOnly) {
+    private boolean requestPotentialValues(Window owner, Node node, boolean readOnly) throws ThereIsNoPotentialsInNodeException {
         /**
          * Object Dialog for potentials edition
          */
@@ -534,7 +534,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     /**
      * This method imposes a policy in a decision node.
      */
-    public void imposePolicyInNode() {
+    public void imposePolicyInNode() throws ThereIsNoPotentialsInNodeException {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
         NetworkEditorPanel.requestImposePolicyValues(GUIUtils.getOwner(this), visualNode.getNode());
         this.visualNetwork.setSelectedAllNodes(false);
@@ -544,7 +544,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     /**
      * This method edits an imposed policy of a decision node.
      */
-    public void editNodePolicy() {
+    public void editNodePolicy() throws ThereIsNoPotentialsInNodeException {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
         NetworkEditorPanel.requestImposePolicyValues(GUIUtils.getOwner(this), visualNode.getNode());
         this.visualNetwork.setSelectedAllNodes(false);
@@ -566,7 +566,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.repaint();
     }
 
-    private static void requestImposePolicyValues(Window owner, Node node) {
+    private static void requestImposePolicyValues(Window owner, Node node) throws ThereIsNoPotentialsInNodeException {
         PotentialEditDialog imposePolicyDialog = new ImposePolicyDialog(owner, false, node);
         imposePolicyDialog.requestValues();
     }
@@ -575,7 +575,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     /**
      * This method shows the expected utility of a decision node.
      */
-    public void showExpectedUtilityOfNode() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+    public void showExpectedUtilityOfNode() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, ThereIsNoPotentialsInNodeException {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
         Node node = visualNode.getNode();
         VEExpectedUtilityDecision veExpectedUtilityDecision
@@ -593,7 +593,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     /**
      * This method shows the optimal policy for a decision node.
      */
-    public void showOptimalPolicyOfNode() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+    public void showOptimalPolicyOfNode() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, ThereIsNoPotentialsInNodeException {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
         ProbNet dummyProbNet = new ProbNet();
         OptimalPolicies veOptimalPolicy = new VEEvaluation(this.visualNetwork.getProbNet());
@@ -1046,7 +1046,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     /**
      * This method has been created for testing.
      */
-    public void changePotential() throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void changePotential() throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         this.showPotentialDialog(workingMode != WorkingMode.EDITION);
     }
 
@@ -1060,7 +1060,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     /**
      * This method removes findings from selected nodes.
      */
-    public void removeFinding() throws PreResolutionNodeInInferenceException, DoEditException {
+    public void removeFinding() throws PreResolutionNodeInInferenceException, ThereIsNoPotentialsInNodeException {
         this.getEvidenceManager().removeFinding();
     }
 
@@ -1068,7 +1068,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * This method updates the value of each state for each node in the network
      * with the current individual probabilities.
      */
-    public void updateIndividualProbabilitiesAndUtilities() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void updateIndividualProbabilitiesAndUtilities() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         this.getEvidenceManager().updateIndividualProbabilitiesAndUtilities();
     }
 
@@ -1076,7 +1076,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * This method removes all the findings established in the current evidence
      * case.
      */
-    public void removeAllFindings() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void removeAllFindings() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         this.getEvidenceManager().removeAllFindings();
     }
 
@@ -1210,35 +1210,35 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     /**
      * This method creates a new evidence case
      */
-    public void createNewEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void createNewEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         this.getEvidenceManager().createNewEvidenceCase();
     }
 
     /**
      * This method makes the first evidence case to be the current
      */
-    public void goToFirstEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void goToFirstEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         this.getEvidenceManager().goToFirstEvidenceCase();
     }
 
     /**
      * This method makes the previous evidence case to be the current
      */
-    public void goToPreviousEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void goToPreviousEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         this.getEvidenceManager().goToPreviousEvidenceCase();
     }
 
     /**
      * This method makes the next evidence case to be the current
      */
-    public void goToNextEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void goToNextEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         this.getEvidenceManager().goToNextEvidenceCase();
     }
 
     /**
      * This method makes the last evidence case to be the current
      */
-    public void goToLastEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void goToLastEvidenceCase() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         this.getEvidenceManager().goToLastEvidenceCase();
     }
 
@@ -1247,7 +1247,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * state' in which there is only an initial evidence case with no findings
      * (corresponding to prior probabilities)
      */
-    public void clearOutAllEvidenceCases() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void clearOutAllEvidenceCases() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         this.getEvidenceManager().clearOutAllEvidenceCases();
     }
 
@@ -1258,7 +1258,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * @param mainPanelMenuAssistant the menu assistant associated to the main
      *                               panel.
      */
-    public void propagateEvidence(MainPanelMenuAssistant mainPanelMenuAssistant) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+    public void propagateEvidence(MainPanelMenuAssistant mainPanelMenuAssistant) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
         this.getEvidenceManager().propagateEvidence(mainPanelMenuAssistant);
     }
 

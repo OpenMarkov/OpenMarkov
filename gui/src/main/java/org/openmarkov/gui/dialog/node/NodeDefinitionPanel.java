@@ -10,6 +10,7 @@ package org.openmarkov.gui.dialog.node;
 import org.openmarkov.core.action.core.*;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.*;
@@ -338,7 +339,11 @@ public final class NodeDefinitionPanel extends JPanel
                     } catch (DoEditException e) {
                         throw new UnrecoverableException(e);
                     }
-                    nodePropertiesDialog.reinitialize();
+                    try {
+                        nodePropertiesDialog.reinitialize();
+                    } catch (ThereIsNoPotentialsInNodeException e) {
+                        throw new UnrecoverableException(e);
+                    }
                 });
                 jPanelNodeTypes.add(nodeTypeButton);
             }

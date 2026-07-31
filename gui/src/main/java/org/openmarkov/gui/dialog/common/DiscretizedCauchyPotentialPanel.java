@@ -49,18 +49,26 @@ public class DiscretizedCauchyPotentialPanel extends PotentialPanel implements P
         JPanel buttonPanel = new JPanel();
         editMedianButton = new JButton("Edit median potential");
         editMedianButton.addActionListener(e -> {
-            editMedianPotential();
+            try {
+                editMedianPotential();
+            } catch (ThereIsNoPotentialsInNodeException ex) {
+                throw new UnrecoverableException(ex);
+            }
         });
         editScaleButton = new JButton("Edit scale potential");
         editScaleButton.addActionListener(e -> {
-            editScalePotential();
+            try {
+                editScalePotential();
+            } catch (ThereIsNoPotentialsInNodeException ex) {
+                throw new UnrecoverableException(ex);
+            }
         });
         buttonPanel.add(editMedianButton);
         buttonPanel.add(editScaleButton);
         add(buttonPanel, BorderLayout.PAGE_START);
     }
     
-    private void editMedianPotential() {
+    private void editMedianPotential() throws ThereIsNoPotentialsInNodeException {
         PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), medianDummyNode, isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?
@@ -69,7 +77,7 @@ public class DiscretizedCauchyPotentialPanel extends PotentialPanel implements P
         }
     }
     
-    private void editScalePotential() {
+    private void editScalePotential() throws ThereIsNoPotentialsInNodeException {
         PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), scaleDummyNode, isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?

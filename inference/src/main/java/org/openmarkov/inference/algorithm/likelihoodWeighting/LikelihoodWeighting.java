@@ -35,7 +35,7 @@ public class LikelihoodWeighting extends StochasticPropagation {
     }
     
     @Override
-    protected double[] getValuesSampledAndWeight() throws NonProjectablePotentialException {
+    protected double[] getValuesSampledAndWeight() throws NonProjectablePotentialException, ThereIsNoPotentialsInNodeException {
         
         // The configuration of the net, the states of all the variables
         HashMap<Variable, Integer> configuration = new HashMap<>();

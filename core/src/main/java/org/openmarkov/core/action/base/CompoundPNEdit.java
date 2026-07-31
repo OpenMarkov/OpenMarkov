@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.action.base;
 
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.java.initialization.Lazy;
 
@@ -48,7 +49,7 @@ public abstract non-sealed class CompoundPNEdit extends MultiEdit {
      *
      * @return the list of sub-edits
      */
-    protected abstract ArrayList<PNEdit> generateEdits();
+    protected abstract ArrayList<PNEdit> generateEdits() throws ThereIsNoPotentialsInNodeException;
     
 
     

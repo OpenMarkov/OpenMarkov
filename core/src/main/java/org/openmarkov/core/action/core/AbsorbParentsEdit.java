@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.BasicOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
@@ -29,7 +31,7 @@ import org.openmarkov.core.model.network.potential.TablePotential;
     }
     
     @Override
-    public ArrayList<PNEdit> generateEdits() {
+    public ArrayList<PNEdit> generateEdits() throws ThereIsNoPotentialsInNodeException {
         ArrayList<PNEdit> edits = new ArrayList<>();
         // gets neighbors of this node
         Variable nodeVariable = node.getVariable();

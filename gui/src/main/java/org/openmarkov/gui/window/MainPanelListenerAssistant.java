@@ -138,13 +138,15 @@ public class MainPanelListenerAssistant extends WindowAdapter
                     inferenceHandler.toggleWorkingMode();
                 } catch (NotEnoughMemoryException | IncompatibleEvidenceException | ConstraintViolatedException |
                          RuntimeException | NotEvaluableNetworkException | NonProjectablePotentialException |
-                         CannotNormalizePotentialException ex) {
+                         CannotNormalizePotentialException | ThereIsNoPotentialsInNodeException ex) {
                     try {
                         inferenceHandler.setWorkingMode(initialWorkingMode, initialWorkingMode);
                     } catch (NotEvaluableNetworkException | NonProjectablePotentialException |
                              NotEnoughMemoryException | IncompatibleEvidenceException | ConstraintViolatedException |
                              CannotNormalizePotentialException exc) {
                         throw new UnreachableException(exc);
+                    } catch (ThereIsNoPotentialsInNodeException exception) {
+                        throw new UnrecoverableException(exception);
                     }
                     throw new UnrecoverableException(ex);
                 }
