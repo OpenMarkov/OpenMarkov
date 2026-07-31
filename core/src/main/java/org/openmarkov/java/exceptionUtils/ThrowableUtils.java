@@ -2,19 +2,27 @@ package org.openmarkov.java.exceptionUtils;
 
 import org.openmarkov.java.collectionsUtils.arrayUtils.Slice;
 
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 
 public class ThrowableUtils {
     
     /**
-     * Transfers the stack trace from the source to the target {@link Throwable}. This still keeps the target
-     * {@link Throwable}'s stacktrace.
+     * Moves the stack trace from the source to the target {@link Throwable}: the target ends up
+     * with the merged trace ---its own frames first, then the source's--- and <strong>the source is
+     * left with no trace at all</strong>. A transfer moves, it does not copy: the wrapper
+     * exceptions of the project push their trace down into their cause with this, so that a
+     * printed error carries its information in one place instead of repeated in every layer.
      * <p>
-     * If the target {@link Throwable} is a cause of the source {@link Throwable}, then their stacktraces will be
-     * merged.
+     * If the target {@link Throwable} is a cause of the source {@link Throwable}, then their
+     * stacktraces will be merged.
+     * <p>
+     * If either of the two is missing, nothing is done.
      */
     public static void transferStackTrace(Throwable from, Throwable to) {
-        if(to==null){
+        if (from == null || to == null) {
             return;
         }
         Throwable source = from;
@@ -59,7 +67,12 @@ public class ThrowableUtils {
      * @see ThrowableUtils#transferStackTrace(Throwable, Throwable)
      */
     public static Throwable flatten(Throwable throwable) {
-        while (throwable.getCause() != null) {
+        // The language forbids an error being its own cause, but not a cycle of two; walking one
+        // would never end. The walk closes on the first already-visited link, and the last new
+        // one plays the root.
+        Set<Throwable> visited = Collections.newSetFromMap(new IdentityHashMap<>());
+        visited.add(throwable);
+        while (throwable.getCause() != null && visited.add(throwable.getCause())) {
             var cause = throwable.getCause();
             ThrowableUtils.transferStackTrace(throwable, cause);
             throwable = cause;

@@ -37,7 +37,7 @@ public class ExponentialHazardPotential extends WeibullHazardPotential {
 	}
 
 	public ExponentialHazardPotential(List<Variable> variables, PotentialRole role, double[] coefficients) {
-		this(variables, role, getDefaultCovariates(variables, role, MANDATORY_COVARIATES), null, null);
+		this(variables, role, getDefaultCovariates(variables, role, MANDATORY_COVARIATES), coefficients, null);
 	}
     
     public ExponentialHazardPotential(List<Variable> variables, PotentialRole role, VariableExpression[] covariates,

@@ -1,0 +1,1 @@
+a resource whose name carries a space

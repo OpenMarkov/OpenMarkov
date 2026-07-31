@@ -10,6 +10,7 @@ package org.openmarkov.gui.dialog.common;
 import org.openmarkov.core.action.core.NodeStateEdit;
 import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
@@ -296,11 +297,20 @@ public class PrefixedKeyTablePanel extends KeyTablePanel implements TableModelLi
         if (e.getType() != TableModelEvent.DELETE && e.getType() != TableModelEvent.INSERT && renameAction) {
             Object value = ((DefaultTableModel) e.getSource()).getValueAt(row, e.getColumn());
             String newName = value.toString();
-            
+
+            String oldName = node.getVariable().getStateName(node.getVariable().getNumStates() - (row + 1));
             NodeStateEdit nodeStateEdit = new NodeStateEdit(node, StateAction.RENAME, row, newName);
             ProbNet probNet = node.getProbNet();
             try {
                 nodeStateEdit.executeEdit();
+            } catch (InvalidArgumentException rejected) {
+                // The variable refused the new name because another state already has it.
+                // The cell keeps the old name and the user is told, instead of dying.
+                renameAction = false;
+                ((DefaultTableModel) e.getSource()).setValueAt(oldName, row, e.getColumn());
+                renameAction = true;
+                warnStateRenameRejected();
+                return;
             } catch (DoEditException ex) {
                 throw new UnrecoverableException(ex);
             }

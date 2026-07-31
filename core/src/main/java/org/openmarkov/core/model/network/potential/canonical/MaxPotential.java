@@ -76,19 +76,6 @@ import java.util.List;
         throw new NotSupportedOperationException();
     }
     
-    public TablePotential getDefaultLeakyPotential() {
-        ArrayList<Variable> leakyVariables = new ArrayList<>();
-        leakyVariables.add(variables.get(0));
-        TablePotential tablePotential = new TablePotential(leakyVariables, PotentialRole.CONDITIONAL_PROBABILITY);
-        double[] leakyParameters = new double[variables.get(0).getNumStates()];
-        leakyParameters[0] = 1.0;
-        for (int i = 1; i < leakyParameters.length; ++i) {
-            leakyParameters[0] = 0.0;
-        }
-        tablePotential.setValues(leakyParameters);
-        return tablePotential;
-    }
-    
     /**
      * @return A {@code TablePotential} with two variables: {@code conditionedVariable} and {@code pseudoVariable}.
      */

@@ -51,8 +51,15 @@ public class ReflectionUtils {
                 })
                 .filter(Objects::nonNull)
                 .findFirst()
-                .get();
+                // The declared family has the exact member for this case; the bare get() of the
+                // stream threw a NoSuchElementException instead, which names nothing and slips
+                // past a catch written against the declaration.
+                .orElseThrow(() -> new NoSuchFieldException(
+                        "the class " + sourceElement.getTargetClass().getName()
+                                + " does not declare a field named '" + fieldName
+                                + "', nor does any of its ancestors"));
         field.setAccessible(true);
-        return resType.cast(field.get(source));
+        // The instance for an object, null for a static read from a class.
+        return resType.cast(field.get(sourceElement.getInstance()));
     }
 }

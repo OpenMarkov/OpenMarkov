@@ -250,10 +250,28 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 		//Get logarithm of conditioned random number:
 		double u =randomNumbers[0]*initValueSurv;
 
+		// A drawn 0 means the survival never falls that low: the event does not happen in any
+		// representable time. The formula below would answer NaN.
+		if (u <= 0) {
+			return Double.POSITIVE_INFINITY;
+		}
+
 		//Get the quantile interval
 		double tI = inverseAProduct.get(inverseAProduct.floorKey(u));
 		double prodAi = aProduct.get(tI);
 		double pI = piecewiseTable.get(tI);
+		// During a stretch with probability 0 the survival is flat, so u can only be its exact
+		// level and the inverse distribution jumps to the first later time where the risk resumes;
+		// the formula below would divide 0 by 0 there.
+		while (pI == 0) {
+			Double timeWhereRiskResumes = piecewiseTable.higherKey(tI);
+			if (timeWhereRiskResumes == null) {
+				return Double.POSITIVE_INFINITY;
+			}
+			tI = timeWhereRiskResumes;
+			prodAi = aProduct.get(tI);
+			pI = piecewiseTable.get(tI);
+		}
 		double sample = tI + (Math.log(u) - Math.log(prodAi))/Math.log(1 - pI);
 		return sample - initValue;
 

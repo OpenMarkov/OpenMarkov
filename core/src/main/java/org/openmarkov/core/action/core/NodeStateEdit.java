@@ -159,7 +159,9 @@ public class NodeStateEdit extends PNEdit {
         super.undo();
         switch (stateAction) {
             case RENAME:
-                oldState.setName(oldName);
+                // Renaming through the variable moves the additional properties of the state back
+                // under the old name; a plain setName would leave them under the new one.
+                node.getVariable().renameState(oldState, oldName);
                 break;
             case ADD:
             case REMOVE:

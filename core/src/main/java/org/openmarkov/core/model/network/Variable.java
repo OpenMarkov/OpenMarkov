@@ -291,7 +291,9 @@ public class Variable implements Cloneable, Comparable<Variable>, ClassLocalizab
     
     public void renameState(State state, String newName) {
         for (State s : states) {
-            if (s.getName().contentEquals(newName)) {
+            // The state being renamed is skipped: renaming it to its own current name is a no-op,
+            // not a collision.
+            if ((s != state) && s.getName().contentEquals(newName)) {
                 throw new InvalidArgumentException(newName, "new name", "that name already belongs to another state");
             }
         }

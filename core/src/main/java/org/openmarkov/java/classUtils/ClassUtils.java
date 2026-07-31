@@ -2,9 +2,13 @@ package org.openmarkov.java.classUtils;
 
 import org.jetbrains.annotations.Nullable;
 
+import org.openmarkov.core.exception.InvalidArgumentException;
+
 import java.io.File;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -58,7 +62,14 @@ public class ClassUtils {
     
     //Only usable on testing
     public static File getResourceAsFile(Class<?> sourceClass, String resource){
-        var is = sourceClass.getResource(resource).getFile();
+        URL resourceUrl = sourceClass.getResource(resource);
+        if (resourceUrl == null) {
+            throw new InvalidArgumentException(resource, "resource",
+                    "the class " + sourceClass.getName() + " has no resource with that name");
+        }
+        // The URL carries the path written the web way, where a space arrives as %20; it is
+        // translated back here, as PluginLoader already does with the classpath.
+        var is = URLDecoder.decode(resourceUrl.getFile(), StandardCharsets.UTF_8);
         // On Windows, resource URLs start with /C:/ — strip only the leading slash before a drive letter
         if (is.length() > 2 && is.charAt(0) == '/' && is.charAt(2) == ':') {
             is = is.substring(1);
@@ -112,7 +123,13 @@ public class ClassUtils {
     }
     
     public static boolean isTestClass(Class<?> theClass) {
-        return theClass.getProtectionDomain().getCodeSource().getLocation().toString().contains("test-classes");
+        // The classes of the language itself, and every class inside a jpackage image, carry no
+        // code source. Nothing to look at means it is not a test class.
+        var codeSource = theClass.getProtectionDomain().getCodeSource();
+        if (codeSource == null || codeSource.getLocation() == null) {
+            return false;
+        }
+        return codeSource.getLocation().toString().contains("test-classes");
     }
     
     

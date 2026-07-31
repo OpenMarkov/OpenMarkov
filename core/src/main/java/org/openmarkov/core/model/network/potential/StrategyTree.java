@@ -861,46 +861,6 @@ public class StrategyTree extends TreeADDPotential implements Cloneable {
         return strategyTree;
     }
     
-    /**
-     * Projects this strategy tree into a {@link TablePotential} whose entries are
-     * {@code 1.0} for the configurations selected by the tree and {@code 0.0} otherwise.
-     *
-     * @return The projected table potential.
-     */
-    public TablePotential tableProject() {
-        TablePotential projection = new TablePotential(variables, role);
-        fillPotential(projection, new EvidenceCase(), this);
-        return projection;
-    }
-    
-    private void fillPotential(TablePotential tablePotential, EvidenceCase evidenceCase, Potential potential) {
-        if (potential == null || !potential.getClass().isAssignableFrom(TreeADDPotential.class)) { // leave
-            fillCompatibleConfigurations(tablePotential, evidenceCase);
-        } else {
-            for (TreeADDBranch branch : branches) {
-                for (State state : branch.getStates()) {
-                    evidenceCase.changeFinding(new Finding(topVariable, state));
-                    fillPotential(tablePotential, evidenceCase, branch.getPotential());
-                }
-            }
-        }
-    }
-    
-    private static void fillCompatibleConfigurations(TablePotential tablePotential, EvidenceCase evidenceCase) {
-        if (tablePotential.getNumVariables() == evidenceCase.getNumberOfFindings()) {
-            tablePotential.getValues()[tablePotential.getPosition(evidenceCase)] = 1.0;
-        } else {
-            List<Variable> variables = tablePotential.getVariables();
-            variables.removeAll(evidenceCase.getVariables());
-            Variable variable = variables.get(0);
-            int numStates = variable.getNumStates();
-            for (int i = 0; i < numStates; i++) {
-                evidenceCase.changeFinding(new Finding(variable, i));
-                fillCompatibleConfigurations(tablePotential, evidenceCase);
-            }
-        }
-    }
-    
     @Override public StrategyTree clone() {
         return new StrategyTree(this);
     }

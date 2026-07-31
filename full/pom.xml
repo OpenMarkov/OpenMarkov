@@ -16,13 +16,14 @@
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm-ss</maven.build.timestamp.format>
         <!-- The version the installers show to the user. It is kept apart from ${project.version}
              because jpackage rejects any version carrying a suffix such as -SNAPSHOT. -->
-        <installer.app.version>0.3</installer.app.version>
+        <installer.app.version>1.0</installer.app.version>
         <!-- Every installer format jpackage produces is tied to the operating system it runs on:
              msi and exe exist only on Windows, deb and rpm only on Linux. The Installer profile
              therefore skips them all by default, and each detect-* profile below turns off the
              skipping of the formats its own operating system can build. -->
         <skip.installer.windows>true</skip.installer.windows>
         <skip.installer.linux>true</skip.installer.linux>
+        <skip.installer.macos>true</skip.installer.macos>
         <!-- The portable application image is the one format jpackage builds anywhere, so it is
              enabled on both Windows and Linux. It stays skipped on macOS, whose icon format
              (icns) is not in the repository and which nobody in the team can test on. -->
@@ -121,6 +122,20 @@
             <properties>
                 <skip.installer.linux>false</skip.installer.linux>
                 <skip.installer.portable>false</skip.installer.portable>
+            </properties>
+        </profile>
+        <profile>
+            <id>detect-macos</id>
+            <activation>
+                <os>
+                    <name>mac</name>
+                </os>
+            </activation>
+            <properties>
+                <skip.installer.macos>false</skip.installer.macos>
+                <skip.installer.portable>false</skip.installer.portable>
+                <installer.icon>${maven.multiModuleProjectDirectory}/gui/src/main/resources/icons/openmarkov.icns
+                </installer.icon>
             </properties>
         </profile>
         <profile>
@@ -431,6 +446,120 @@
                                         <argument>--linux-app-category</argument>
                                         <argument>science</argument>
                                         <argument>--linux-shortcut</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <!-- The dmg package is a disk image the user drags into /Applications;
+                                 it needs no extra tooling beyond jpackage itself and is the format
+                                 most macOS users expect. The mac-package-identifier option must be
+                                 a unique reverse-DNS-style string; jpackage uses it to build the
+                                 app bundle's CFBundleIdentifier. File associations are left out
+                                 here because associations/pgmx.properties currently only declares
+                                 the Windows/Linux keys jpackage expects (extension, mime-type,
+                                 icon); add the mac.* keys (see jpackage docs) to that file before
+                                 passing the file-associations option on this platform, or it is
+                                 silently ignored / may error depending on the jpackage version.
+                                 Note that without a Developer ID (mac-sign / mac-signing-key-user-name
+                                 options) the resulting dmg is unsigned and Gatekeeper will warn
+                                 users on first launch; that's expected until the project has a
+                                 signing identity. -->
+                            <execution>
+                                <id>create-dmg</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skip.installer.macos}</skip>
+                                    <executable>${java.home}/bin/jpackage</executable>
+                                    <arguments>
+                                        <argument>--type</argument>
+                                        <argument>dmg</argument>
+                                        <argument>--dest</argument>
+                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>--name</argument>
+                                        <argument>OpenMarkov</argument>
+                                        <argument>--app-version</argument>
+                                        <argument>${installer.app.version}</argument>
+                                        <argument>--copyright</argument>
+                                        <argument>Copyright (c) CISIAD, UNED, Spain, 2026. Licensed under the GPLv3
+                                            licence.
+                                        </argument>
+                                        <argument>--description</argument>
+                                        <argument>An open-source software tool for probabilistic graphical models (PGMs)
+                                            developed by the Research Centre for Intelligent Decision-Support Systems of
+                                            the UNED in Madrid, Spain.
+                                        </argument>
+                                        <argument>--vendor</argument>
+                                        <argument>CISIAD, UNED</argument>
+                                        <argument>--input</argument>
+                                        <argument>${project.build.directory}/libs</argument>
+                                        <argument>--main-jar</argument>
+                                        <argument>${project.build.finalName}.jar</argument>
+                                        <argument>--main-class</argument>
+                                        <argument>org.openmarkov.full.OpenMarkov</argument>
+                                        <argument>--icon</argument>
+                                        <argument>${installer.icon}</argument>
+                                        <argument>--license-file</argument>
+                                        <argument>${maven.multiModuleProjectDirectory}/LICENSE</argument>
+                                        <argument>--about-url</argument>
+                                        <argument>https://www.openmarkov.org/</argument>
+                                        <argument>--mac-package-identifier</argument>
+                                        <argument>org.openmarkov.OpenMarkov</argument>
+                                        <argument>--mac-package-name</argument>
+                                        <argument>OpenMarkov</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <!-- The pkg package is a guided installer (as opposed to the
+                                 drag-to-Applications dmg); some institutional deployment tools
+                                 prefer it because it can be scripted/pushed silently. Same signing
+                                 caveat as create-dmg applies. -->
+                            <execution>
+                                <id>create-pkg</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skip.installer.macos}</skip>
+                                    <executable>${java.home}/bin/jpackage</executable>
+                                    <arguments>
+                                        <argument>--type</argument>
+                                        <argument>pkg</argument>
+                                        <argument>--dest</argument>
+                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>--name</argument>
+                                        <argument>OpenMarkov</argument>
+                                        <argument>--app-version</argument>
+                                        <argument>${installer.app.version}</argument>
+                                        <argument>--copyright</argument>
+                                        <argument>Copyright (c) CISIAD, UNED, Spain, 2026. Licensed under the GPLv3
+                                            licence.
+                                        </argument>
+                                        <argument>--description</argument>
+                                        <argument>An open-source software tool for probabilistic graphical models (PGMs)
+                                            developed by the Research Centre for Intelligent Decision-Support Systems of
+                                            the UNED in Madrid, Spain.
+                                        </argument>
+                                        <argument>--vendor</argument>
+                                        <argument>CISIAD, UNED</argument>
+                                        <argument>--input</argument>
+                                        <argument>${project.build.directory}/libs</argument>
+                                        <argument>--main-jar</argument>
+                                        <argument>${project.build.finalName}.jar</argument>
+                                        <argument>--main-class</argument>
+                                        <argument>org.openmarkov.full.OpenMarkov</argument>
+                                        <argument>--icon</argument>
+                                        <argument>${installer.icon}</argument>
+                                        <argument>--license-file</argument>
+                                        <argument>${maven.multiModuleProjectDirectory}/LICENSE</argument>
+                                        <argument>--about-url</argument>
+                                        <argument>https://www.openmarkov.org/</argument>
+                                        <argument>--mac-package-identifier</argument>
+                                        <argument>org.openmarkov.OpenMarkov</argument>
+                                        <argument>--mac-package-name</argument>
+                                        <argument>OpenMarkov</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

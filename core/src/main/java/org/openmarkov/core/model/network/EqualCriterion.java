@@ -2,6 +2,8 @@
 
 package org.openmarkov.core.model.network;
 
+import java.util.Objects;
+
 
 /**
  * A criterion has a name and the units of measure, subclass equal due to I don't know how equality should be treated in other netorks
@@ -39,23 +41,22 @@ public class EqualCriterion extends Criterion {
 
 	/**
 	 * Indicates whether some other object is "equal to" this one.
-	 * Two EqualCriterion are equal if they have the same name
+	 * Two EqualCriterion are equal if they have the same name; anything that is not an
+	 * EqualCriterion, including null, is answered with false instead of an exception.
 	 */
 	@Override
 	public boolean equals(Object obj) {
-//		String s =this.getCriterionName();
-//		String s1 = ((EqualCriterion)obj).getCriterionName();
-		boolean result = this.getCriterionName().equals(((EqualCriterion)obj).getCriterionName());
-		return result;
+		return (obj instanceof EqualCriterion other)
+				&& Objects.equals(this.getCriterionName(), other.getCriterionName());
 	}
 
 	/**
-	 * For using HashMap I need the same hashcode
-	 * @return 1
+	 * Derived from the name, so that equal criteria share it and different names
+	 * (almost always) do not.
 	 */
 	@Override
 	public int hashCode() {
-		return 1;
+		return Objects.hashCode(getCriterionName());
 	}
 
 

@@ -188,9 +188,11 @@ public final class VariableStateOperations {
 
     private static void renameState(Variable variable, int selectedStateIndex, String newName) {
         if (selectedStateIndex >= 0 && selectedStateIndex < variable.getNumStates()) {
-            // getStates() returns a clone of the array, but the State objects
-            // inside are shared references, so setName() modifies the actual state.
-            variable.getStates()[selectedStateIndex].setName(newName);
+            // getStates() returns a clone of the array, but the State objects inside are shared
+            // references, so renaming through the variable modifies the actual state. The variable
+            // is the owner of the renaming rule: it rejects a name another state already has, and
+            // it moves the additional properties of the state, which are indexed by name.
+            variable.renameState(variable.getStates()[selectedStateIndex], newName);
         }
     }
 
