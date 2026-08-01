@@ -9,6 +9,7 @@ package org.openmarkov.gui.dialog;
 
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.logging.OpenMarkovLogger;
+import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.loader.element.ImageLoader;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.plugin.PluginSearch;
@@ -20,7 +21,9 @@ import javax.swing.JWindow;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.plaf.basic.BasicProgressBarUI;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.Arrays;
 
 /**
@@ -36,7 +39,7 @@ public class SplashScreenLoader {
     /**
      * the logo file
      */
-    private static final String LOGO_FILE = "/images/OpenMarkov33.jpg";
+    private static final String LOGO_FILE = "/images/openmarkov-splash.png";
     
     
     private record Operation(String description, int progress, Runnable action) {
@@ -53,7 +56,20 @@ public class SplashScreenLoader {
                     BorderLayout.CENTER);
             
             var progressBar = new JProgressBar(0, 100);
+            // The look and feel chooses the colour of the text on the bar; this UI takes it from the splash colours.
+            progressBar.setUI(new BasicProgressBarUI() {
+                @Override protected Color getSelectionForeground() {
+                    return GUIColors.SplashScreen.PROGRESS_BAR_TEXT_ON_FOREGROUND.getColor();
+                }
+
+                @Override protected Color getSelectionBackground() {
+                    return GUIColors.SplashScreen.PROGRESS_BAR_TEXT_ON_BACKGROUND.getColor();
+                }
+            });
             progressBar.setStringPainted(true);
+            progressBar.setBorderPainted(false);
+            progressBar.setForeground(GUIColors.SplashScreen.PROGRESS_BAR_FOREGROUND.getColor());
+            progressBar.setBackground(GUIColors.SplashScreen.PROGRESS_BAR_BACKGROUND.getColor());
             content.add(progressBar, BorderLayout.SOUTH);
             
             splashWindow.pack();
