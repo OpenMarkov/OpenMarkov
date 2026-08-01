@@ -8,6 +8,8 @@ package org.openmarkov.inference.algorithm.variableElimination;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Posteriors of small networks with canonical (ICI) nodes, frozen as constants. The expected
@@ -103,28 +106,37 @@ public class PosteriorsOfCanonicalNetworksAreGoldenTest {
     // ------------------------------------------------------------- the golden values
 
     @Tag(TestSpeed.FAST)
-    @Test public void theMarginalsOfAMaxNetworkMatchTheEnumeration() throws Exception {
-        HashMap<Variable, TablePotential> posteriors = posteriors(maxNetwork());
+    @ParameterizedTest(name = "keeping the factorization: {0}")
+    @ValueSource(booleans = {false, true})
+    public void theMarginalsOfAMaxNetworkMatchTheEnumeration(boolean keepingTheFactorization) throws Exception {
+        HashMap<Variable, TablePotential> posteriors = posteriors(maxNetwork(), keepingTheFactorization);
         assertMarginal(posteriors, "A", 0.6, 0.4);
         assertMarginal(posteriors, "B", 0.5, 0.3, 0.2);
         assertMarginal(posteriors, "Y", 0.12144, 0.31081, 0.56775);
     }
 
     @Tag(TestSpeed.FAST)
-    @Test public void theMarginalsOfAMinNetworkMatchTheEnumeration() throws Exception {
-        HashMap<Variable, TablePotential> posteriors = posteriors(minNetwork());
+    @ParameterizedTest(name = "keeping the factorization: {0}")
+    @ValueSource(booleans = {false, true})
+    public void theMarginalsOfAMinNetworkMatchTheEnumeration(boolean keepingTheFactorization) throws Exception {
+        HashMap<Variable, TablePotential> posteriors = posteriors(minNetwork(), keepingTheFactorization);
         assertMarginal(posteriors, "Y", 0.65629, 0.25971, 0.084);
     }
 
     @Tag(TestSpeed.FAST)
-    @Test public void theMarginalsOfANoisyOrNetworkMatchTheEnumeration() throws Exception {
-        HashMap<Variable, TablePotential> posteriors = posteriors(noisyOrNetwork());
+    @ParameterizedTest(name = "keeping the factorization: {0}")
+    @ValueSource(booleans = {false, true})
+    public void theMarginalsOfANoisyOrNetworkMatchTheEnumeration(boolean keepingTheFactorization) throws Exception {
+        HashMap<Variable, TablePotential> posteriors = posteriors(noisyOrNetwork(), keepingTheFactorization);
         assertMarginal(posteriors, "Y", 0.306527, 0.693473);
     }
 
     @Tag(TestSpeed.FAST)
-    @Test public void theMarginalsOfTwoChainedMaxNodesWithASharedParentMatchTheEnumeration() throws Exception {
-        HashMap<Variable, TablePotential> posteriors = posteriors(chainedNetwork());
+    @ParameterizedTest(name = "keeping the factorization: {0}")
+    @ValueSource(booleans = {false, true})
+    public void theMarginalsOfTwoChainedMaxNodesWithASharedParentMatchTheEnumeration(boolean keepingTheFactorization)
+            throws Exception {
+        HashMap<Variable, TablePotential> posteriors = posteriors(chainedNetwork(), keepingTheFactorization);
         assertMarginal(posteriors, "Y1", 0.12144, 0.31081, 0.56775);
         assertMarginal(posteriors, "Y2", 0.1401052875, 0.2991406455, 0.560754067);
     }
@@ -146,6 +158,28 @@ public class PosteriorsOfCanonicalNetworksAreGoldenTest {
             }
         }
         assertArrayEquals(new double[]{0.12144, 0.31081, 0.56775}, marginal, TOLERANCE);
+    }
+
+    /** The pseudo variables of the factorization are working material, not answers. */
+    @Tag(TestSpeed.FAST)
+    @Test public void thePseudoVariablesStayOutOfThePosteriors() throws Exception {
+        HashMap<Variable, TablePotential> posteriors = posteriors(chainedNetwork(), true);
+
+        assertTrue(posteriors.keySet().stream().noneMatch(variable -> variable.getName().startsWith("pseudo-")),
+                   "a pseudo variable of the factorization leaked into the posteriors");
+    }
+
+    /** Below the default minimum of parents the switch changes nothing, including the answers. */
+    @Tag(TestSpeed.FAST)
+    @Test public void withTheDefaultMinimumOfParentsASmallModelAnswersTheSame() throws Exception {
+        ProbNet network = maxNetwork();
+        network.getInferenceOptions().setIciAwareVE(true);
+
+        VEPropagation propagation = new VEPropagation(network);
+        propagation.setVariablesOfInterest(network.getVariables());
+        HashMap<Variable, TablePotential> posteriors = propagation.getPosteriorValues();
+
+        assertMarginal(posteriors, "Y", 0.12144, 0.31081, 0.56775);
     }
 
     // ------------------------------------------------------------- helpers
@@ -186,7 +220,12 @@ public class PosteriorsOfCanonicalNetworksAreGoldenTest {
         return max;
     }
 
-    private static HashMap<Variable, TablePotential> posteriors(ProbNet network) throws Exception {
+    private static HashMap<Variable, TablePotential> posteriors(ProbNet network,
+            boolean keepingTheFactorization) throws Exception {
+        if (keepingTheFactorization) {
+            network.getInferenceOptions().setIciAwareVE(true);
+            network.getInferenceOptions().setIciMinParentsToFactorize(0);
+        }
         VEPropagation propagation = new VEPropagation(network);
         propagation.setVariablesOfInterest(network.getVariables());
         return propagation.getPosteriorValues();
