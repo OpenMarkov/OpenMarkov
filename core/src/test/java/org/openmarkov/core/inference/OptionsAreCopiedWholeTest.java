@@ -105,10 +105,12 @@ class OptionsAreCopiedWholeTest {
 	void theCopyKeepsTheIciAwareSwitch() {
 		InferenceOptions original = new InferenceOptions();
 		original.setIciAwareVE(true);
+		original.setIciMinParentsToFactorize(2);
 
 		InferenceOptions copy = new InferenceOptions(original);
 
-		assertEquals(true, copy.isIciAwareVE());
+		assertAll(() -> assertEquals(true, copy.isIciAwareVE()),
+				() -> assertEquals(2, copy.getIciMinParentsToFactorize()));
 	}
 
 	/** The sub-options must be copies, not the very same objects the original holds. */

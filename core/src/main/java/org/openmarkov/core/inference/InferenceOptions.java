@@ -38,6 +38,11 @@ public class InferenceOptions {
 
 	private boolean iciAwareVE;
 
+	/** Below four parents the expanded table of a MAX/MIN model is not bigger than its factors. */
+	public static final int DEFAULT_ICI_MIN_PARENTS_TO_FACTORIZE = 4;
+
+	private int iciMinParentsToFactorize = DEFAULT_ICI_MIN_PARENTS_TO_FACTORIZE;
+
 	// Constructor
 
 	/** The three sub-options start from their default values, as in {@link #InferenceOptions()}. */
@@ -61,6 +66,7 @@ public class InferenceOptions {
 		this.temporalOptions = new TemporalOptions(inferenceOptions.getTemporalOptions());
 		this.setMonteCarloOptions(new MonteCarloOptions(inferenceOptions.getMonteCarloOptions()));
 		this.iciAwareVE = inferenceOptions.iciAwareVE;
+		this.iciMinParentsToFactorize = inferenceOptions.iciMinParentsToFactorize;
 	}
 
 	public MulticriteriaOptions getMultiCriteriaOptions() {
@@ -120,6 +126,15 @@ public class InferenceOptions {
 
 	public void setIciAwareVE(boolean iciAwareVE) {
 		this.iciAwareVE = iciAwareVE;
+	}
+
+	/** An ICI model with fewer parents than this projects as its table even when {@link #isIciAwareVE()}. */
+	public int getIciMinParentsToFactorize() {
+		return iciMinParentsToFactorize;
+	}
+
+	public void setIciMinParentsToFactorize(int iciMinParentsToFactorize) {
+		this.iciMinParentsToFactorize = iciMinParentsToFactorize;
 	}
 
 }
