@@ -174,8 +174,7 @@ public class GUIColors {
         
         public static final GUIColor PROGRESS_BAR_FOREGROUND = new GUIColor(new Color(250, 203, 141));
         public static final GUIColor PROGRESS_BAR_BACKGROUND = new GUIColor(new Color(80, 70, 50));
-        public static final GUIColor PROGRESS_BAR_TEXT_ON_FOREGROUND = new GUIColor(new Color(23, 21, 15));
-        public static final GUIColor PROGRESS_BAR_TEXT_ON_BACKGROUND = new GUIColor(new Color(250, 203, 141));
+        public static final GUIColor MESSAGE_FOREGROUND = new GUIColor(new Color(186, 182, 182));
     }
     
     public static final class TemporalEvoluation {
