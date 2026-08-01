@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
@@ -160,6 +162,63 @@ public class PosteriorsOfCanonicalNetworksAreGoldenTest {
         assertArrayEquals(new double[]{0.12144, 0.31081, 0.56775}, marginal, TOLERANCE);
     }
 
+    // ------------------------------------------------------------- the golden values, with evidence
+
+    @Tag(TestSpeed.FAST)
+    @ParameterizedTest(name = "keeping the factorization: {0}")
+    @ValueSource(booleans = {false, true})
+    public void evidenceOnAParentReachesTheChild(boolean keepingTheFactorization) throws Exception {
+        ProbNet network = maxNetwork();
+        HashMap<Variable, TablePotential> posteriors =
+                posteriors(network, evidence(network, "A", 1), keepingTheFactorization);
+        assertMarginal(posteriors, "Y", 0.0264, 0.2206, 0.753);
+        assertMarginal(posteriors, "B", 0.5, 0.3, 0.2);
+    }
+
+    @Tag(TestSpeed.FAST)
+    @ParameterizedTest(name = "keeping the factorization: {0}")
+    @ValueSource(booleans = {false, true})
+    public void evidenceOnTheChildReachesTheParents(boolean keepingTheFactorization) throws Exception {
+        ProbNet network = maxNetwork();
+        HashMap<Variable, TablePotential> posteriors =
+                posteriors(network, evidence(network, "Y", 2), keepingTheFactorization);
+        assertMarginal(posteriors, "A", 0.4694848084544252, 0.5305151915455747);
+        assertMarginal(posteriors, "B", 0.4121532364597092, 0.2824306472919419, 0.3054161162483487);
+    }
+
+    @Tag(TestSpeed.FAST)
+    @ParameterizedTest(name = "keeping the factorization: {0}")
+    @ValueSource(booleans = {false, true})
+    public void evidenceOnEveryParentLeavesOneColumnOfTheTable(boolean keepingTheFactorization) throws Exception {
+        ProbNet network = maxNetwork();
+        EvidenceCase evidence = evidence(network, "A", 1);
+        evidence.addFinding(new Finding(network.getVariable("B"), 0));
+        HashMap<Variable, TablePotential> posteriors = posteriors(network, evidence, keepingTheFactorization);
+        assertMarginal(posteriors, "Y", 0.04, 0.264, 0.696);
+    }
+
+    @Tag(TestSpeed.FAST)
+    @ParameterizedTest(name = "keeping the factorization: {0}")
+    @ValueSource(booleans = {false, true})
+    public void evidenceOnTheChildOfANoisyOrReachesItsParents(boolean keepingTheFactorization) throws Exception {
+        ProbNet network = noisyOrNetwork();
+        HashMap<Variable, TablePotential> posteriors =
+                posteriors(network, evidence(network, "Y", 1), keepingTheFactorization);
+        assertMarginal(posteriors, "X1", 0.5855599280721817, 0.4144400719278184);
+    }
+
+    @Tag(TestSpeed.FAST)
+    @ParameterizedTest(name = "keeping the factorization: {0}")
+    @ValueSource(booleans = {false, true})
+    public void evidenceOnTheSecondChildTravelsThroughTheSharedParent(boolean keepingTheFactorization)
+            throws Exception {
+        ProbNet network = chainedNetwork();
+        HashMap<Variable, TablePotential> posteriors =
+                posteriors(network, evidence(network, "Y2", 2), keepingTheFactorization);
+        assertMarginal(posteriors, "Y1", 0.019952276155315, 0.1275192837789976, 0.8525284400656874);
+        assertMarginal(posteriors, "A", 0.4648164361864537, 0.5351835638135461);
+    }
+
     /** The pseudo variables of the factorization are working material, not answers. */
     @Tag(TestSpeed.FAST)
     @Test public void thePseudoVariablesStayOutOfThePosteriors() throws Exception {
@@ -222,13 +281,27 @@ public class PosteriorsOfCanonicalNetworksAreGoldenTest {
 
     private static HashMap<Variable, TablePotential> posteriors(ProbNet network,
             boolean keepingTheFactorization) throws Exception {
+        return posteriors(network, null, keepingTheFactorization);
+    }
+
+    private static HashMap<Variable, TablePotential> posteriors(ProbNet network, EvidenceCase evidence,
+            boolean keepingTheFactorization) throws Exception {
         if (keepingTheFactorization) {
             network.getInferenceOptions().setIciAwareVE(true);
             network.getInferenceOptions().setIciMinParentsToFactorize(0);
         }
         VEPropagation propagation = new VEPropagation(network);
         propagation.setVariablesOfInterest(network.getVariables());
+        if (evidence != null) {
+            propagation.setPostResolutionEvidence(evidence);
+        }
         return propagation.getPosteriorValues();
+    }
+
+    private static EvidenceCase evidence(ProbNet network, String variableName, int state) throws Exception {
+        EvidenceCase evidence = new EvidenceCase();
+        evidence.addFinding(new Finding(network.getVariable(variableName), state));
+        return evidence;
     }
 
     private static void assertMarginal(HashMap<Variable, TablePotential> posteriors, String variableName,

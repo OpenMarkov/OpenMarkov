@@ -154,25 +154,30 @@ public abstract class MinMaxPotential extends ICIPotential {
 
     /**
      * With {@code iciAwareVE} on, hands the elimination the factors of this model instead of its
-     * table, so the parents never meet in a single potential. Falls back to the table when there is
-     * evidence, when the model has fewer parents than the configured minimum, or when the network
-     * has utility nodes, whose projection looks potentials up by their conditioned variable and
-     * would not find a factorization.
+     * table, each one projected onto the evidence, so the parents never meet in a single potential.
+     * Falls back to the table when the model has fewer parents than the configured minimum, or when
+     * the network has utility nodes, whose projection looks potentials up by their conditioned
+     * variable and would not find a factorization.
      */
     @Override public List<TablePotential> tableProjectToFactors(EvidenceCase evidenceCase,
             InferenceOptions inferenceOptions, List<TablePotential> alreadyProjectedPotentials)
             throws NonProjectablePotentialException {
-        if (factorizationApplies(evidenceCase, inferenceOptions)) {
-            return buildFactorization();
+        if (!factorizationApplies(inferenceOptions)) {
+            return super.tableProjectToFactors(evidenceCase, inferenceOptions, alreadyProjectedPotentials);
         }
-        return super.tableProjectToFactors(evidenceCase, inferenceOptions, alreadyProjectedPotentials);
+        List<TablePotential> factors = buildFactorization();
+        if (evidenceCase == null || evidenceCase.isEmpty()) {
+            return factors;
+        }
+        List<TablePotential> projectedFactors = new ArrayList<>(factors.size());
+        for (TablePotential factor : factors) {
+            projectedFactors.add(factor.tableProject(evidenceCase, inferenceOptions));
+        }
+        return projectedFactors;
     }
 
-    private boolean factorizationApplies(EvidenceCase evidenceCase, InferenceOptions inferenceOptions) {
+    private boolean factorizationApplies(InferenceOptions inferenceOptions) {
         if (inferenceOptions == null || !inferenceOptions.isIciAwareVE()) {
-            return false;
-        }
-        if (evidenceCase != null && !evidenceCase.isEmpty()) {
             return false;
         }
         if (variables.size() - 1 < inferenceOptions.getIciMinParentsToFactorize()) {
