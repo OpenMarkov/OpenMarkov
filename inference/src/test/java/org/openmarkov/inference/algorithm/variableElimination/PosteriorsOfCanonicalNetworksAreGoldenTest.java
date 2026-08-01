@@ -226,6 +226,10 @@ public class PosteriorsOfCanonicalNetworksAreGoldenTest {
 
         assertTrue(posteriors.keySet().stream().noneMatch(variable -> variable.getName().startsWith("pseudo-")),
                    "a pseudo variable of the factorization leaked into the posteriors");
+        assertTrue(posteriors.values().stream()
+                           .flatMap(potential -> potential.getVariables().stream())
+                           .noneMatch(variable -> variable.getName().startsWith("pseudo-")),
+                   "a pseudo variable of the factorization survived inside a posterior table");
     }
 
     /** Below the default minimum of parents the switch changes nothing, including the answers. */

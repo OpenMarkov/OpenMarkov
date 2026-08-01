@@ -152,6 +152,22 @@ public abstract class VariableElimination extends InferenceAlgorithm {
 		List<List<Variable>> projectedOrderVariables = BasicOperations
 				.projectPartialOrder(this.probNet, queryVariables, evidenceVariables, conditioningVariables,
 						variablesToEliminate);
+		// The projection only returns variables of the original network. A potential may contribute
+		// factors written on a variable of its own - a factorized canonical model does - and that
+		// variable must be eliminated with the rest, or it survives into the posteriors.
+		List<Variable> unknownToTheNetwork = new ArrayList<>();
+		for (Variable variable : variablesToEliminate) {
+			if (this.probNet.getVariable(variable.getName()) == null) {
+				unknownToTheNetwork.add(variable);
+			}
+		}
+		if (!unknownToTheNetwork.isEmpty()) {
+			if (projectedOrderVariables.isEmpty()) {
+				projectedOrderVariables.add(unknownToTheNetwork);
+			} else {
+				projectedOrderVariables.getLast().addAll(unknownToTheNetwork);
+			}
+		}
 		return heuristicFactory.getHeuristic(markovNetworkInference, projectedOrderVariables);
 	}
 
