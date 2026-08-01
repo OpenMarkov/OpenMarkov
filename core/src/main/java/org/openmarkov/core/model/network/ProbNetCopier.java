@@ -61,9 +61,8 @@ final class ProbNetCopier {
         if (source.getCycleLength() != null) {
             dest.setCycleLength(source.getCycleLength());
         }
-        dest.getInferenceOptions().setMultiCriteriaOptions(source.getInferenceOptions().getMultiCriteriaOptions());
-        dest.getInferenceOptions().setTemporalOptions(source.getInferenceOptions().getTemporalOptions());
-        dest.getInferenceOptions().setMonteCarloOptions(source.getInferenceOptions().getMonteCarloOptions());
+        // Shared like the potentials: a shallow copy carries the very options of the original.
+        dest.setInferenceOptions(source.getInferenceOptions());
         return dest;
     }
 

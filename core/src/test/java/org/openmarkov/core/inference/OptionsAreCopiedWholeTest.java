@@ -113,6 +113,20 @@ class OptionsAreCopiedWholeTest {
 				() -> assertEquals(2, copy.getIciMinParentsToFactorize()));
 	}
 
+	/** {@code ProbNet.copy()} is how inference prunes a network, so the options must survive it. */
+	@Test
+	void theShallowCopyOfANetworkCarriesItsOptions() {
+		ProbNet network = new ProbNet();
+		network.getInferenceOptions().setIciAwareVE(true);
+		Variable simulationIndex = new Variable("index", 3);
+		network.getInferenceOptions().simulationIndexVariable = simulationIndex;
+
+		ProbNet copy = network.copy();
+
+		assertAll(() -> assertEquals(true, copy.getInferenceOptions().isIciAwareVE()),
+				() -> assertSame(simulationIndex, copy.getInferenceOptions().simulationIndexVariable));
+	}
+
 	/** The sub-options must be copies, not the very same objects the original holds. */
 	@Test
 	void theSubOptionsOfTheCopyAreNotSharedWithTheOriginal() {
