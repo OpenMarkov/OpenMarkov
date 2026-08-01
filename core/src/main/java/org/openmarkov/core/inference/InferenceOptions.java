@@ -33,9 +33,11 @@ public class InferenceOptions {
 	private MulticriteriaOptions multiCriteriaOptions;
 
 	private TemporalOptions temporalOptions;
-	
+
 	private MonteCarloOptions monteCarloOptions;
-	
+
+	private boolean iciAwareVE;
+
 	// Constructor
 
 	/** The three sub-options start from their default values, as in {@link #InferenceOptions()}. */
@@ -58,6 +60,7 @@ public class InferenceOptions {
 		this.multiCriteriaOptions = new MulticriteriaOptions(inferenceOptions.getMultiCriteriaOptions());
 		this.temporalOptions = new TemporalOptions(inferenceOptions.getTemporalOptions());
 		this.setMonteCarloOptions(new MonteCarloOptions(inferenceOptions.getMonteCarloOptions()));
+		this.iciAwareVE = inferenceOptions.iciAwareVE;
 	}
 
 	public MulticriteriaOptions getMultiCriteriaOptions() {
@@ -102,9 +105,21 @@ public class InferenceOptions {
 	public MonteCarloOptions getMonteCarloOptions() {
 		return monteCarloOptions;
 	}
-	
+
 	public void setMonteCarloOptions(MonteCarloOptions monteCarloOptions) {
 		this.monteCarloOptions = monteCarloOptions;
 	}
-	
+
+	/**
+	 * Whether variable elimination keeps the factorization of ICI models instead of expanding
+	 * each one to its conditional probability table. Off by default.
+	 */
+	public boolean isIciAwareVE() {
+		return iciAwareVE;
+	}
+
+	public void setIciAwareVE(boolean iciAwareVE) {
+		this.iciAwareVE = iciAwareVE;
+	}
+
 }

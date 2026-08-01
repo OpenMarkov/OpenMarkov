@@ -100,6 +100,17 @@ class OptionsAreCopiedWholeTest {
 				() -> assertSame(simulationIndex, copy.simulationIndexVariable));
 	}
 
+	/** {@code iciAwareVE} switches the factorized projection of canonical models on. */
+	@Test
+	void theCopyKeepsTheIciAwareSwitch() {
+		InferenceOptions original = new InferenceOptions();
+		original.setIciAwareVE(true);
+
+		InferenceOptions copy = new InferenceOptions(original);
+
+		assertEquals(true, copy.isIciAwareVE());
+	}
+
 	/** The sub-options must be copies, not the very same objects the original holds. */
 	@Test
 	void theSubOptionsOfTheCopyAreNotSharedWithTheOriginal() {
