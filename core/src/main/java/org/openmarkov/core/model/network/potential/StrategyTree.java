@@ -861,6 +861,10 @@ public class StrategyTree extends TreeADDPotential implements Cloneable {
         return strategyTree;
     }
     
+    @Override public Potential copy() {
+        return new StrategyTree(this);
+    }
+
     @Override public StrategyTree clone() {
         return new StrategyTree(this);
     }

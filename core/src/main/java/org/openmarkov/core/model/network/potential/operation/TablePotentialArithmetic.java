@@ -230,9 +230,11 @@ final class TablePotentialArithmetic {
                     ? stp.strategyTrees : null;
             if (iConstantPotentialStrategyTrees != null) {
                 StrategyTree onlyStrategyTreeIConstantPotential = iConstantPotentialStrategyTrees[0];
+                // concatenate() writes into its receiver, so the receiver is cloned first: the
+                // trees of the summands must stay intact.
                 constantPotentialsStrategyTree = (constantPotentialsStrategyTree == null)
                         ? onlyStrategyTreeIConstantPotential
-                        : constantPotentialsStrategyTree.concatenate(onlyStrategyTreeIConstantPotential);
+                        : constantPotentialsStrategyTree.clone().concatenate(onlyStrategyTreeIConstantPotential);
             }
         }
 
@@ -290,7 +292,7 @@ final class TablePotentialArithmetic {
                     if (thereAreInterventions && strategyTrees[iPotential] != null) {
                         StrategyTree auxIStrategyTree = strategyTrees[iPotential][potentialsPositions[iPotential]];
                         resultStrategyTree = (resultStrategyTree == null) ? auxIStrategyTree
-                                : resultStrategyTree.concatenate(auxIStrategyTree);
+                                : resultStrategyTree.clone().concatenate(auxIStrategyTree);
                     }
 
                     // update the current position in each potential table
@@ -310,7 +312,8 @@ final class TablePotentialArithmetic {
                     if (resultStrategyTrees[i] == null) {
                         resultStrategyTrees[i] = constantPotentialsStrategyTree;
                     } else {
-                        resultStrategyTrees[i].concatenate(constantPotentialsStrategyTree);
+                        resultStrategyTrees[i] = resultStrategyTrees[i].clone()
+                                                                       .concatenate(constantPotentialsStrategyTree);
                     }
                 }
             }
