@@ -487,7 +487,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
         // if position == 0, it is the conditioned variable, not a noisy one
         if (position > 0) {
             zVariables.remove(oldVariable);
-            zVariables.put(variable, createZVariable(variables.getFirst(), variable));
+            zVariables.put(variable, createZVariable(variable, variables.getFirst()));
         }
         
     }
