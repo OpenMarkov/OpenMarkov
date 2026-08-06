@@ -169,7 +169,7 @@ final class TablePotentialArithmetic {
                                                               thereAreInterventions, resultStrategyTrees);
     }
 
-    private static Criterion findFirstNonNullCriterion(List<TablePotential> tablePotentials) {
+    static Criterion findFirstNonNullCriterion(List<TablePotential> tablePotentials) {
         Criterion criterion = null;
         for (int i = 0; i < tablePotentials.size() && criterion == null; i++) {
             criterion = tablePotentials.get(i).getCriterion();
