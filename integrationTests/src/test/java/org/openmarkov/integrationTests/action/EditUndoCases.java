@@ -206,7 +206,7 @@ final class EditUndoCases {
                 () -> new VariableTypeEdit(bayesianNetwork().getNode("A"), VariableType.NUMERIC, true)));
 
         // Potentials
-        cases.add(fails(PotentialChangeEdit.class, "changing the potential of a node", "G1", () -> {
+        cases.add(passes(PotentialChangeEdit.class, "changing the potential of a node", () -> {
             ProbNet net = bayesianNetwork();
             Node node = net.getNode("A");
             return new PotentialChangeEdit(node, node.getPotentials().getFirst(), otherPotentialOf(node));
