@@ -79,6 +79,8 @@ public class ChangeNodeTypeEdit extends MultiStepEdit {
             try {
                 this.probNet.checkConstraints();
             } catch (ConstraintViolatedException e) {
+                // A step that fails is not written down, so nothing else undoes this one.
+                this.node.setNodeType(this.oldNodeType);
                 throw new DoEditException.CannotDoEditException(e, this);
             }
         }
