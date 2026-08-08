@@ -168,9 +168,16 @@ final class EditUndoCases {
             ProbNet net = bayesianNetwork();
             return new MultiAddLinkEdit(net, List.of(net.getNode("A")), List.of(net.getNode("B")), true);
         }));
-        cases.add(fails(AbsorbNodeEdit.class, "absorbing a parent into its child", "G2", () -> {
+        cases.add(fails(AbsorbNodeEdit.class, "absorbing a parent into its child",
+                "undo() puts the absorbed node back at the end of the network, so the file lists the "
+                + "variables in another order. Its potentials and links are restored: see "
+                + "AbsorbNodeEditTest", () -> {
             ProbNet net = bayesianNetwork();
             return new AbsorbNodeEdit(net, net.getVariable("A"));
+        }));
+        cases.add(passes(AbsorbNodeEdit.class, "absorbing a parent whose utility children merge", () -> {
+            ProbNet net = influenceDiagramWithTwoUtilities();
+            return new AbsorbNodeEdit(net, net.getVariable("X"));
         }));
 
         // Properties of a node
@@ -289,6 +296,36 @@ final class EditUndoCases {
         new AddLinkEdit(net, net.getVariable("A"), net.getVariable("C"), true).executeEdit();
         new AddLinkEdit(net, net.getVariable("B"), net.getVariable("C"), true).executeEdit();
         return net;
+    }
+
+    /**
+     * X → U1 and X → U2: absorbing X merges its two utility children into one. The utility nodes
+     * carry table potentials, which is what the merge needs to add them up.
+     */
+    static ProbNet influenceDiagramWithTwoUtilities() throws Exception {
+        ProbNet net = new ProbNet(InfluenceDiagramType.getUniqueInstance());
+        net.setName("undo");
+        new AddNodeEdit(net, new Variable("X", 2), NodeType.CHANCE, null).executeEdit();
+        new AddNodeEdit(net, new Variable("U1"), NodeType.UTILITY, null).executeEdit();
+        new AddNodeEdit(net, new Variable("U2"), NodeType.UTILITY, null).executeEdit();
+        new AddLinkEdit(net, net.getVariable("X"), net.getVariable("U1"), true).executeEdit();
+        new AddLinkEdit(net, net.getVariable("X"), net.getVariable("U2"), true).executeEdit();
+        tableUtilityOf(net.getNode("U1"), 10.0, 20.0);
+        tableUtilityOf(net.getNode("U2"), 3.0, 7.0);
+        return net;
+    }
+
+    /**
+     * Gives a utility node a table potential over itself and its parent.
+     */
+    private static void tableUtilityOf(Node node, double... values) {
+        List<Variable> variables = new ArrayList<>();
+        variables.add(node.getVariable());
+        for (Node parent : node.getParents()) {
+            variables.add(parent.getVariable());
+        }
+        TablePotential potential = new TablePotential(variables, PotentialRole.UNSPECIFIED, values);
+        node.setPotentials(new ArrayList<>(List.of(potential)));
     }
 
     /**

@@ -33,14 +33,26 @@ public final class NodeAbsorptionHandler {
     }
 
     /**
+     * What the absorption changed, so that it can be undone.
+     *
+     * @param oldPotentials  the potentials the child had before
+     * @param newPotentials  the potentials the child has now
+     * @param newParentLinks the links created towards the child
+     */
+    public record Absorption(List<Potential> oldPotentials, List<Potential> newPotentials,
+                             List<Link<Node>> newParentLinks) {
+    }
+
+    /**
      * Absorbs {@code absorbedVariable}'s node into its single utility child,
      * multiplying (for chance parents) or maximizing (for decision parents)
      * the potentials and updating the graph links.
      *
      * @param node             the node performing the absorption (the utility child's context)
      * @param absorbedVariable the variable whose node is being absorbed
+     * @return what changed, for the edit that has to undo it
      */
-    public static void absorbNodeConsistently(Node node, Variable absorbedVariable) throws NonProjectablePotentialException {
+    public static Absorption absorbNodeConsistently(Node node, Variable absorbedVariable) throws NonProjectablePotentialException {
         ProbNet probNet = node.getProbNet();
         Node absorbedNode = probNet.getNode(absorbedVariable);
         Node child = absorbedNode.getChildren().getFirst();
@@ -114,5 +126,6 @@ public final class NodeAbsorptionHandler {
             // Parents of decision node don't turn into parents of utility node
         }
         child.setPotentials(newPotentials);
+        return new Absorption(oldUtilityPotentials, newPotentials, newParentLinks);
     }
 }

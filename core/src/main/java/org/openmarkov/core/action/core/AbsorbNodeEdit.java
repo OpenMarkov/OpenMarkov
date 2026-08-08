@@ -93,7 +93,11 @@ import java.util.stream.Collectors;
         }
         
         try {
-            NodeAbsorptionHandler.absorbNodeConsistently(absorbedNode, absorbedVariable);
+            NodeAbsorptionHandler.Absorption absorption =
+                    NodeAbsorptionHandler.absorbNodeConsistently(absorbedNode, absorbedVariable);
+            oldUtilityPotentials = absorption.oldPotentials();
+            newPotentials = absorption.newPotentials();
+            newParentLinks.addAll(absorption.newParentLinks());
         } catch (NonProjectablePotentialException e) {
             throw new DoEditException.CannotDoEditException(e, this);
         }
@@ -149,8 +153,9 @@ import java.util.stream.Collectors;
         // Get the potential table of every component child
         List<TablePotential> utilityChildrenPotentials = new ArrayList<>();
         for (Node child : oldUtilityChildren) {
-            // Change the variable of the component potentials to the merged variable
-            TablePotential componentPotential = child.getPotentials().getFirst().getCPT();
+            // Change the variable of the component potentials to the merged variable, on a copy:
+            // getCPT() may hand back the child's own potential, which undo() still needs.
+            TablePotential componentPotential = new TablePotential(child.getPotentials().getFirst().getCPT());
             componentPotential.replaceVariable(componentPotential.getVariable(0), mergedVariable);
             // Add the potential to the list to be summed
             utilityChildrenPotentials.add(componentPotential);
