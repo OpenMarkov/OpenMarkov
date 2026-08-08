@@ -201,13 +201,13 @@ final class EditUndoCases {
                 () -> new NodeReplaceStatesEdit(bayesianNetwork().getNode("A"),
                         new State[] { new State("low"), new State("high") })));
         cases.add(fails(NodeStateEdit.class, "adding a state",
-                "G4, and undo() also hands the node the potentials of its neighbours, because it saves "
-                + "what getPotentials(variable) returns", () -> new NodeStateEdit(
+                "undo() hands the node the potentials of its neighbours, because it saves what "
+                + "getPotentials(variable) returns", () -> new NodeStateEdit(
                         bayesianNetwork().getNode("A"), StateAction.ADD, 0, "another")));
         cases.add(passes(NodeStateEdit.class, "renaming a state",
                 () -> new NodeStateEdit(bayesianNetwork().getNode("A"), StateAction.RENAME, 0, "renamed")));
         cases.add(fails(NodeStateEdit.class, "removing a state",
-                "G4, same as adding a state", () -> new NodeStateEdit(
+                "same as adding a state", () -> new NodeStateEdit(
                         bayesianNetwork().getNode("A"), StateAction.REMOVE, 0, "absent")));
         cases.add(passes(VariableTypeEdit.class, "turning the variable into a numeric one",
                 () -> new VariableTypeEdit(bayesianNetwork().getNode("A"), VariableType.NUMERIC, true)));
