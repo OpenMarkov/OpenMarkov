@@ -211,6 +211,11 @@ final class EditUndoCases {
                         bayesianNetwork().getNode("A"), StateAction.REMOVE, 0, "absent")));
         cases.add(passes(VariableTypeEdit.class, "turning the variable into a numeric one",
                 () -> new VariableTypeEdit(bayesianNetwork().getNode("A"), VariableType.NUMERIC, true)));
+        cases.add(passes(VariableTypeEdit.class, "turning a numeric variable back into a finite states one", () -> {
+            ProbNet net = bayesianNetwork();
+            new VariableTypeEdit(net.getNode("A"), VariableType.NUMERIC, true).executeEdit();
+            return new VariableTypeEdit(net.getNode("A"), VariableType.FINITE_STATES, true);
+        }));
 
         // Potentials
         cases.add(passes(PotentialChangeEdit.class, "changing the potential of a node", () -> {
