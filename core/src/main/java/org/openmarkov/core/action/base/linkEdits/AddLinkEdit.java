@@ -134,7 +134,7 @@ public final class AddLinkEdit extends BaseLinkEdit {
             Node node1 = this.getNodeFrom();
             Node node2 = this.getNodeTo();
             if (node1.getNodeType() == NodeType.UTILITY && node2.getNodeType() != NodeType.UTILITY) {
-                constraintChecker.addException(new ConstraintViolatedException.CannotHaveUtilityParent(constraint, node1, node2));
+                constraintChecker.addException(new ConstraintViolatedException.CannotHaveUtilityParent(constraint, node2, node1));
             }
         }
         if (probNet.getConstraintOfClass(OnlyDirectedLinks.class) instanceof OnlyDirectedLinks constraint) {
