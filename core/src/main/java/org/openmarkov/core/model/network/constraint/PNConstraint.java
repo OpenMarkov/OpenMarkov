@@ -51,7 +51,7 @@ public abstract class PNConstraint implements PNEditListener, ClassLocalizable, 
     }
     
     @Override public boolean equals(Object paramObject) {
-        if (this.getClass() != paramObject.getClass()) {
+        if (paramObject == null || this.getClass() != paramObject.getClass()) {
             return false;
         }
         return this.compareTo(this.getClass().cast(paramObject)) == 0;

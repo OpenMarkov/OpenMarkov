@@ -27,8 +27,8 @@ public class AllChanceVariablesHaveChancePotentials extends PNConstraint {
             Variable variable = chanceNode.getVariable();
             List<Potential> potentialsNode = chanceNode.getPotentials();
             boolean hasPotential = potentialsNode.stream()
-                                                 .anyMatch(potential -> potential.getVariables()
-                                                                                 .getFirst() == variable);
+                                                 .anyMatch(potential -> !potential.getVariables().isEmpty()
+                                                         && potential.getVariables().getFirst() == variable);
             if (!hasPotential) {
                 constraintChecker.addException(new ConstraintViolatedException.VariableHasNoPotentials(this, variable));
             }

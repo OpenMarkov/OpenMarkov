@@ -31,7 +31,8 @@ import java.util.List;
         List<Potential> potentials = ((PotentialNetwork) probNet).getPotentials();
         int numUtilityPontentials = 0;
         for (Potential potential : potentials) {
-            if (potential.getVariable(0).getDecisionCriterion() != null) {
+            // A constant potential has no variable whose criterion to ask for.
+            if (!potential.getVariables().isEmpty() && potential.getVariable(0).getDecisionCriterion() != null) {
                 numUtilityPontentials++;
             }
         }
