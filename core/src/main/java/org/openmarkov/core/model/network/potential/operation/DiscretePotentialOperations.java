@@ -116,14 +116,13 @@ public final class DiscretePotentialOperations {
     }
     
     /**
+     * Multiplies a probability potential and a utility potential, then sums out
+     * {@code variableToEliminate}. The variable may appear at any position of the operands.
+     *
      * @param probPotential       probability potential
      * @param utilityPotential    utility potential
-     * @param variableToEliminate The set of variables eliminated by marginalization
-     *                            (in general, by summing out or maximizing)
-     *
+     * @param variableToEliminate variable to eliminate
      * @return A {@code TablePotential} result of multiply and marginalize.
-     * Condition: variablesToKeep and variablesToEliminate are a partition
-     * of the union of the variables of the potential
      */
     public static TablePotential multiplyAndMarginalize(TablePotential probPotential, TablePotential utilityPotential,
                                                         Variable variableToEliminate) {

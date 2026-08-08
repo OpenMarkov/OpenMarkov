@@ -9,6 +9,7 @@ package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.inference.InferenceOptions;
@@ -51,25 +52,25 @@ public class TablePotential extends AbstractIndexedPotential
      *                  {@code TablePotential}.
      * @param role      . {@code PotentialRole}
      */
-    @SuppressWarnings("ThrowInsideCatchBlockWhichIgnoresCaughtException")
     public TablePotential(List<Variable> variables, PotentialRole role) {
         super(variables, role); // AbstractIndexedPotential: computes dimensions, offsets, tableSize
-        try {
-            values = new double[tableSize];
-        } catch (NegativeArraySizeException e) {
-            throw new OutOfMemoryError();
-        }
+        values = new double[tableSize];
         setUniform(); // Initializes the table as an uniform potential
     }
     
     /**
      * @param variables . {@code ArrayList} of {@code Variable}
      * @param role      . {@code PotentialRole}
-     * @param table     . {@code double[]}
+     * @param table     . {@code double[]} whose length must be the product of
+     *                  the numbers of states of {@code variables}.
      *                  Condition: All variables must be discrete.
      */
     public TablePotential(List<Variable> variables, PotentialRole role, double[] table) {
         this(variables, role);
+        if (table.length != tableSize) {
+            throw new InvalidArgumentException(table.length, "table",
+                    "its length must be " + tableSize + ", the product of the numbers of states of the variables");
+        }
         this.values = table;
     }
     

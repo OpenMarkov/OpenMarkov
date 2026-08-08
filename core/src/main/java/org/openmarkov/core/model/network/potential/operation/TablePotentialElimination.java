@@ -274,14 +274,21 @@ final class TablePotentialElimination {
             return result;
         }
 
-        List<Variable> allVariables = probPotential.getVariables();
+        // The configuration walk increments the first variable of allVariables fastest,
+        // so the variable to eliminate goes first, wherever the operands carry it.
+        List<Variable> allVariables = new ArrayList<>();
+        allVariables.add(variableToEliminate);
+        for (Variable variable : probPotential.getVariables()) {
+            if (!allVariables.contains(variable)) {
+                allVariables.add(variable);
+            }
+        }
         for (Variable variable : utilityPotential.getVariables()) {
             if (!allVariables.contains(variable)) {
                 allVariables.add(variable);
             }
         }
-        List<Variable> variablesToKeep = new ArrayList<>(allVariables);
-        variablesToKeep.remove(variableToEliminate);
+        List<Variable> variablesToKeep = new ArrayList<>(allVariables.subList(1, allVariables.size()));
 
         boolean thereAreInterventions = utilityPotential instanceof StrategicTablePotential;
         StrategicTablePotential strategicUtil    = thereAreInterventions ? (StrategicTablePotential) utilityPotential : null;
