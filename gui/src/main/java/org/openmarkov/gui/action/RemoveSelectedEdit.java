@@ -40,12 +40,16 @@ public class RemoveSelectedEdit extends CompoundPNEdit {
 		super(visualNetwork.getNetwork());
 		this.nodesToRemove = visualNetwork.getSelectedNodes();
 		this.linksToRemove = union(visualNetwork.getSelectedLinks(), visualNetwork.getLinksOfNodes(this.nodesToRemove));
-        System.out.println();
 	}
-    
+
     @Override public ArrayList<PNEdit> generateEdits() {
         ArrayList<PNEdit> edits = new ArrayList<>();
 		for (VisualLink link : linksToRemove) {
+            // The links of a node that goes away are removed by CRemoveNodeEdit, which also
+            // restores them: removing them here as well leaves two of each when undoing.
+            if (isRemoved(link.getSourceNode()) || isRemoved(link.getDestinationNode())) {
+                continue;
+            }
             edits.add(new RemoveLinkEdit(probNet, probNet.getVariable(link.getSourceNode().getNode().getName()),
                                          probNet.getVariable(link.getDestinationNode().getNode().getName()),
                                          link.getLink().isDirected()));
@@ -54,6 +58,14 @@ public class RemoveSelectedEdit extends CompoundPNEdit {
 			edits.add(new CRemoveNodeEdit(probNet, node.getNode()));
 		}
 		return edits;
+	}
+
+	/**
+	 * @param node a node of one end of a link
+	 * @return whether that node is one of the ones being removed
+	 */
+	private boolean isRemoved(VisualNode node) {
+		return nodesToRemove.stream().anyMatch(toRemove -> toRemove.getNode() == node.getNode());
 	}
 
 	/**
