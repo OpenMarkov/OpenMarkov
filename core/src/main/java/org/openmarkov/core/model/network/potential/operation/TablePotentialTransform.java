@@ -38,7 +38,9 @@ final class TablePotentialTransform {
      *
      * @param potential the potential to normalize
      * @return the same potential, normalized
-     * @throws CannotNormalizePotentialException if all values are zero
+     * @throws CannotNormalizePotentialException if all values are zero, or if the values
+     *                                           for some configuration of the conditioning
+     *                                           variables are all zero
      */
     static TablePotential normalize(TablePotential potential) throws CannotNormalizePotentialException {
         TablePotential tablePotential = potential;
@@ -50,6 +52,17 @@ final class TablePotentialTransform {
             if (potential.getPotentialRole() == PotentialRole.CONDITIONAL_PROBABILITY) {
                 int numStates = variables.get(0).getNumStates();
                 double normalizationFactor;
+                // Detect zero columns before dividing, so throwing leaves the potential untouched.
+                for (int i = 0; i < tablePotential.getValues().length; i += numStates) {
+                    normalizationFactor = 0.0;
+                    for (int j = 0; j < numStates; j++) {
+                        normalizationFactor += tablePotential.getValues()[i + j];
+                    }
+                    if (normalizationFactor == 0.0) {
+                        throw new CannotNormalizePotentialException.AllValuesForAParentsConfigurationAreZero(
+                                tablePotential);
+                    }
+                }
                 for (int i = 0; i < tablePotential.getValues().length; i += numStates) {
                     normalizationFactor = 0.0;
                     for (int j = 0; j < numStates; j++) {

@@ -236,6 +236,22 @@ public class DiscretePotentialOperationsRegressionTest {
     }
 
     @Test
+    public void normalizeThrowsWhenOneColumnSumsZeroAndLeavesThePotentialUntouched() {
+        // P(B|A): the column for a0 is normalizable, the column for a1 is all zeros.
+        TablePotential potential = new TablePotential(List.of(b, a), PotentialRole.CONDITIONAL_PROBABILITY,
+                new double[]{0.9, 0.1, 0.0, 0.0});
+
+        CannotNormalizePotentialException exception = assertThrows(CannotNormalizePotentialException.class,
+                () -> DiscretePotentialOperations.normalize(potential));
+
+        assertInstanceOf(CannotNormalizePotentialException.AllValuesForAParentsConfigurationAreZero.class, exception);
+        assertTrue(exception.getExceptionMessage().contains("configuration of the parents"),
+                "The localized message of the subclass must resolve");
+        assertArrayEquals(new double[]{0.9, 0.1, 0.0, 0.0}, potential.getValues(),
+                "Throwing must not leave the potential half normalized");
+    }
+
+    @Test
     public void normalizeAlreadyNormalizedIsIdentity() throws CannotNormalizePotentialException {
         TablePotential result = DiscretePotentialOperations.normalize(pA);
         // P(A) sums to 1 already; each value should be the same.

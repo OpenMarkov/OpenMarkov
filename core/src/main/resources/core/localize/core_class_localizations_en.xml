@@ -91,6 +91,8 @@
                   value="Raw set of type to {originalVariableType}"/>
     <Localization class="org.openmarkov.core.exception.CannotNormalizePotentialException"
                   value="All the values are 0.0 in potential {potential}"/>
+    <Localization class="org.openmarkov.core.exception.CannotNormalizePotentialException$AllValuesForAParentsConfigurationAreZero"
+                  value="All the values for a configuration of the parents are 0.0 in potential {potential}"/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException"
                   value="Could not met the constraint: {constraint}"/>
     <Localization

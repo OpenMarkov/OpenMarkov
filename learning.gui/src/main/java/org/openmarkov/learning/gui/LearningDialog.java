@@ -73,6 +73,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -935,8 +936,11 @@ public class LearningDialog extends JDialog {
             this.setVisible(false);
         } catch (OutOfMemoryError e1) {
             throw new UnreachableException(new NotEnoughMemoryException(e1));
-        } catch (UnobservedVariablesException | EmptyModelNetException | CannotNormalizePotentialException
-                 | DoEditException e) {
+        } catch (CannotNormalizePotentialException e) {
+            JOptionPane.showMessageDialog(this,
+                    e.getExceptionMessage() + "\n" + stringDatabase.getString("Learning.Alpha.SmoothingAdvice"),
+                    e.getExceptionTitle(), JOptionPane.ERROR_MESSAGE);
+        } catch (UnobservedVariablesException | EmptyModelNetException | DoEditException e) {
             throw new UnreachableException(e);
         }
     }// GEN-LAST:event_learnButtonActionPerformed
