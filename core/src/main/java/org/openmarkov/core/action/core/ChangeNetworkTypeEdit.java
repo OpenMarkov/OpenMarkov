@@ -17,6 +17,7 @@ import org.openmarkov.core.model.network.StringWithProperties;
 import org.openmarkov.core.model.network.type.NetworkType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@code ChangeNetworkTypeEdit} is a edit that allow to change the
@@ -37,6 +38,11 @@ import java.util.ArrayList;
      * The new NetworkTypeConstraint associated with the network
      */
     private final NetworkType newNetworkType;
+
+    /**
+     * The agents the network had before the edit, to put them back when it is undone
+     */
+    private List<StringWithProperties> oldAgents;
     
     /**
      * Creates a new {@code ChangeNetworkTypeEdit} that allow to change the
@@ -53,6 +59,7 @@ import java.util.ArrayList;
     
     // Methods
     @Override protected void doEdit() throws DoEditException.CannotDoEditException {
+        oldAgents = probNet.getAgents() != null ? new ArrayList<>(probNet.getAgents()) : null;
         try {
             probNet.setNetworkType(newNetworkType);
         } catch (ConstraintViolatedException e) {
@@ -69,10 +76,9 @@ import java.util.ArrayList;
     @Override public void undo() {
         super.undo();
         try {
+            // The agents go back first: the old type may forbid the ones the edit added.
+            probNet.setAgents(oldAgents);
             probNet.setNetworkType(currentNetworkType);
-            if (!probNet.isMultiagent()) {
-                probNet.setAgents(null);
-            }
         } catch (ConstraintViolatedException e) {
             throw new UnreachableException(e);
         }

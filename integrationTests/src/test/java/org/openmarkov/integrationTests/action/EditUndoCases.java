@@ -63,7 +63,9 @@ import org.openmarkov.core.model.network.constraint.OnlyNumericVariables;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
+import org.openmarkov.core.model.network.type.DECPOMDPType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
+import org.openmarkov.core.model.network.type.MIDType;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -259,6 +261,8 @@ final class EditUndoCases {
                         new State[] { new State("yes"), new State("no") })));
         cases.add(passes(ChangeNetworkTypeEdit.class, "turning a Bayesian network into an influence diagram",
                 () -> new ChangeNetworkTypeEdit(bayesianNetwork(), InfluenceDiagramType.getUniqueInstance())));
+        cases.add(passes(ChangeNetworkTypeEdit.class, "turning a temporal network into a multiagent one",
+                () -> new ChangeNetworkTypeEdit(temporalNetwork(), DECPOMDPType.getUniqueInstance())));
         cases.add(passes(CycleLengthEdit.class, "changing the length of the cycle",
                 () -> new CycleLengthEdit(bayesianNetwork(), new CycleLength(CycleLength.Unit.MONTH, 3))));
         cases.add(passes(TemporalOptionsEdit.class, "changing the temporal options",
@@ -300,6 +304,18 @@ final class EditUndoCases {
         new AddNodeEdit(net, new Variable("C", 2), NodeType.CHANCE, null).executeEdit();
         new AddLinkEdit(net, net.getVariable("A"), net.getVariable("C"), true).executeEdit();
         new AddLinkEdit(net, net.getVariable("B"), net.getVariable("C"), true).executeEdit();
+        return net;
+    }
+
+    /**
+     * A network of temporal variables, which is what a multiagent network requires.
+     */
+    static ProbNet temporalNetwork() throws Exception {
+        ProbNet net = new ProbNet(MIDType.getUniqueInstance());
+        net.setName("undo");
+        Variable variable = new Variable("A", 2);
+        variable.setTimeSlice(0);
+        new AddNodeEdit(net, variable, NodeType.CHANCE, null).executeEdit();
         return net;
     }
 
