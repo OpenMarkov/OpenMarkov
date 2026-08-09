@@ -319,6 +319,18 @@ public class ScopePanel extends JPanel {
     }
     
     /**
+     * Rebuilds the scenario against the evidence the network has now: a variable that has gained
+     * evidence since the panel was built shows its state and can no longer be chosen.
+     */
+    public void refreshScenarioFromEvidence() {
+        refreshScenario();
+        // With a global scope there is no scenario to update.
+        if (selectedScenario != null) {
+            updateSelectedScenario();
+        }
+    }
+
+    /**
      * Rebuilds the scenario panel
      */
     private void refreshScenario() {
