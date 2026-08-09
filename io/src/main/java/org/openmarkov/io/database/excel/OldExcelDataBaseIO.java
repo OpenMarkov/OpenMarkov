@@ -7,7 +7,9 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.EmptyDatabaseException;
+import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
+import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseFormat;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
@@ -28,7 +30,8 @@ import java.util.List;
         extends ExcelDataBaseIO {
     
     @Override
-    public @NotNull CaseDatabase load(File file) throws IOException, EmptyDatabaseException {
+    public @NotNull CaseDatabase load(File file)
+            throws IOException, EmptyDatabaseException, ParsingSourceException.RepeatedVariableNames {
         /* Each field stores an ArrayList with the StateNames of the
          * corresponding variable */
         
@@ -125,7 +128,7 @@ import java.util.List;
                 i++;
             }
             probNet.setAdditionalProperties(ioNet);
-            return new CaseDatabase(probNet.getVariables(), cases);
+            return CaseDatabaseReader.withDistinctVariableNames(file, new CaseDatabase(probNet.getVariables(), cases));
         }
     }
     

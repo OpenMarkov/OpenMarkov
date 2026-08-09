@@ -9,6 +9,7 @@ package org.openmarkov.io.database.excel;
 
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.EmptyDatabaseException;
+import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
@@ -102,7 +103,8 @@ import java.util.Scanner;
      *
      * @return {@code CaseDatabase} with the cases in the database.
      */
-    @Override public @NotNull CaseDatabase load(File file) throws EmptyDatabaseException, FileNotFoundException {
+    @Override public @NotNull CaseDatabase load(File file)
+            throws EmptyDatabaseException, FileNotFoundException, ParsingSourceException.RepeatedVariableNames {
         // TODO Solve: This method assumes that 1) ALL the states of every variable are always included in the dataset, 2) All the variables are discrete.
         // First row contains all the attributes names and the attributes number
         Scanner scanner = new Scanner(file);
@@ -159,7 +161,7 @@ import java.util.Scanner;
                 cases[i][j] = row[j];
             }
         }
-        return new CaseDatabase(probNet.getVariables(), cases);
+        return CaseDatabaseReader.withDistinctVariableNames(file, new CaseDatabase(probNet.getVariables(), cases));
     }
     
     @Override public void save(File file, CaseDatabase database) throws IOException {

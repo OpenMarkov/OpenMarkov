@@ -99,7 +99,7 @@ public class TemporalEvolutionDialog extends OkCancelDialog {
     private void showWindow(Window owner, ProbNet probNet, EvidenceCase preResolutionEvidence) {
         setMinimumSize(new Dimension(300, 300));
         this.setResizable(true);
-        this.preResolutionEvidence = new EvidenceCase(preResolutionEvidence.getFindings());
+        this.preResolutionEvidence = new EvidenceCase(preResolutionEvidence);
         this.setTitle(stringDatabase.getString("TemporalEvolutionResultDialog.Title") + probNet
                 .getName());
         getComponentsPanel().setLayout(new BoxLayout(getComponentsPanel(), BoxLayout.PAGE_AXIS));

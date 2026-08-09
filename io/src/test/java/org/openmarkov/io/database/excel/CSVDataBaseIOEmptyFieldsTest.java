@@ -9,6 +9,7 @@ package org.openmarkov.io.database.excel;
 
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.exception.EmptyDatabaseException;
+import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Variable;
 
@@ -30,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class CSVDataBaseIOEmptyFieldsTest {
 
-    private CaseDatabase loadCsv(String content) throws IOException, EmptyDatabaseException, FileNotFoundException {
+    private CaseDatabase loadCsv(String content) throws IOException, EmptyDatabaseException, ParsingSourceException {
         File file = File.createTempFile("openmarkov-csv-test", ".csv");
         file.deleteOnExit();
         Files.writeString(file.toPath(), content, StandardCharsets.UTF_8);

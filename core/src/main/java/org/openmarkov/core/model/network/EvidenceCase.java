@@ -51,15 +51,16 @@ public class EvidenceCase implements ClassLocalizable {
      * Constructor
      *
      * @param findings Findings
+     *
+     * @throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther if two findings give
+     *                                                                      the same variable
+     *                                                                      different states
      */
-    public EvidenceCase(List<Finding> findings) {
+    public EvidenceCase(List<Finding> findings)
+            throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         this.findings = new HashMap<>();
         for (Finding finding : findings) {
-            try {
-                this.addFinding(finding);
-            } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther ignored) {
-                //If finding is incompatible with other, don't add it.
-            }
+            this.addFinding(finding);
         }
     }
     

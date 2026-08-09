@@ -39,7 +39,8 @@ public class HillClimbingAlgorithmTest {
 	private ProbNet learned;
 	private Metric metric;
 
-	@BeforeEach public void setUp() throws EmptyDatabaseException, java.io.FileNotFoundException {
+	@BeforeEach public void setUp() throws EmptyDatabaseException, java.io.FileNotFoundException,
+			org.openmarkov.core.exception.ParsingSourceException {
 
 		// This database used to be read from Elvira's .dbc format, whose reader is not exported by
 		// the io module and is no longer maintained. It was converted once, with OpenMarkov's own

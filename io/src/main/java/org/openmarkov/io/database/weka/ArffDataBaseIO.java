@@ -50,7 +50,9 @@ public class ArffDataBaseIO implements CaseDatabaseReader, CaseDatabaseWriter {
      *                     correct.
      */
     @Override
-    public @NotNull CaseDatabase load(File file) throws IOException, ParsingSourceException.CouldNotParseSourceException {
+    public @NotNull CaseDatabase load(File file)
+            throws IOException, ParsingSourceException.CouldNotParseSourceException,
+            ParsingSourceException.RepeatedVariableNames {
         try (FileInputStream fileStream = new FileInputStream(file)) {
             ArffParser parser = new ArffParser(new ArffLexer(fileStream));
             ioNet = parser.relation();
@@ -60,7 +62,8 @@ public class ArffDataBaseIO implements CaseDatabaseReader, CaseDatabaseWriter {
                 properties.put(property.getKey(), property.getValue().toString());
             }
             probNet.setAdditionalProperties(properties);
-            return new CaseDatabase(probNet.getVariables(), parser.getCases());
+            return CaseDatabaseReader.withDistinctVariableNames(file,
+                    new CaseDatabase(probNet.getVariables(), parser.getCases()));
         } catch (TokenStreamException | RecognitionException e) {
             throw new ParsingSourceException.CouldNotParseSourceException(e);
         }

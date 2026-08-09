@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network.potential;
 
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.expression.VariableExpression;
@@ -36,7 +37,8 @@ public class PotentialTest {
      * @param potential2 <code>Potential</code>
      * @return <code>true</code> if both potentials are equal.
      */
-    public static boolean equalPotentials(Potential potential1, Potential potential2) {
+    public static boolean equalPotentials(Potential potential1, Potential potential2)
+            throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         boolean equals = true;
         if (potential1.getPotentialRole() == potential2.getPotentialRole() && potential1.getClass() == potential2
                 .getClass() && potential1.getComment().contentEquals(potential2.getComment())
