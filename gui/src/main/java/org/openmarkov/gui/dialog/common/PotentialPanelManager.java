@@ -13,11 +13,12 @@ import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.gui.dialog.node.PotentialEditPanel;
 import org.openmarkov.java.classUtils.ClassUtils;
 import org.openmarkov.plugin.ExtensionTree;
 import org.openmarkov.plugin.PluginSearch;
 
-import java.lang.reflect.Constructor;
+import javax.swing.JComponent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.stream.Stream;
@@ -70,6 +71,7 @@ public class PotentialPanelManager {
      * Returns the panel class registered for the given potential type.
      *
      * @param potentialClass the potential class to look up
+     *
      * @return the corresponding panel class, or {@code null} if none is registered
      */
     public Class<? extends PotentialPanel> getPotentialPanelClassOf(Class<? extends Potential> potentialClass) {
@@ -90,16 +92,21 @@ public class PotentialPanelManager {
      *
      * @return a new Potential instance given the parameters.
      */
-    public final PotentialPanel createPotentialPanel(Node node) {
+    public final PotentialPanel createPotentialPanel(Node node, PotentialEditPanel potentialEditPanel) {
         try {
+            Class<? extends PotentialPanel> potentialPanelClass =
+                    potentialPanelClassesByClass.get(node.getFirstPotential().getClass());
             try {
-                Constructor<? extends PotentialPanel> constructor =
-                        potentialPanelClassesByClass.get(node.getFirstPotential().getClass())
-                                                    .getConstructor(Node.class);
-                return constructor.newInstance(node);
+                return potentialPanelClass.getConstructor(Node.class, JComponent.class)
+                                          .newInstance(node, potentialEditPanel);
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
-                     InvocationTargetException e) {
-                throw new UnreachableException(e);
+                     InvocationTargetException _) {
+                try {
+                    return potentialPanelClass.getConstructor(Node.class).newInstance(node);
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                         InvocationTargetException e) {
+                    throw new UnreachableException(e);
+                }
             }
         } catch (ThereIsNoPotentialsInNodeException e) {
             throw new UnrecoverableException(e);

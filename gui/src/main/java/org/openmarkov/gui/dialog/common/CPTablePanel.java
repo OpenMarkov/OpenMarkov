@@ -12,6 +12,8 @@ import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.gui.component.ValuesTable;
 
+import javax.swing.JComponent;
+
 /**
  * This class extends from {@code TablePotentialPanel}, is a panel used by
  * {@code ICIOptionListenerAssistant} to show the complete parameters
@@ -25,9 +27,9 @@ import org.openmarkov.gui.component.ValuesTable;
 	 * Indicates if the data of the table is modifiable.
 	 */
 	private boolean modifiable;
-    
-    public CPTablePanel(Node node) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
-		super(node);
+	
+	public CPTablePanel(Node node, JComponent owner) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
+		super(node, owner);
 		modifiable = false;
 	}
 
