@@ -146,6 +146,7 @@
     "ProbabilisticNetworkTypeMissing",
     "ProbabilisticNetworkTypeNotRecognized",
     "RemovingAllStatesIsNotAllowedException",
+    "RepeatedVariableNames",
     "ResourceNotFoundException",
     "Rule1Broken",
     "Rule2Broken",

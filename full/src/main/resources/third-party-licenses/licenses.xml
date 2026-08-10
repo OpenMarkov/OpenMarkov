@@ -1,1048 +1,1047 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <licenseSummary>
-    <dependencies>
-        <dependency>
-            <groupId>antlr</groupId>
-            <artifactId>antlr</artifactId>
-            <version>2.7.7</version>
-            <licenses>
-                <license>
-                    <name>BSD License</name>
-                    <url>http://www.antlr.org/license.html</url>
-                    <distribution>repo</distribution>
-                    <file>bsd license - license.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>ca.umontreal.iro.simul</groupId>
-            <artifactId>ssj</artifactId>
-            <version>3.3.1</version>
-            <licenses>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-                    <distribution>repo</distribution>
-                    <file>apache-2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>colt</groupId>
-            <artifactId>colt</artifactId>
-            <version>1.2.0</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>com.formdev</groupId>
-            <artifactId>flatlaf</artifactId>
-            <version>3.7.1</version>
-            <licenses>
-                <license>
-                    <name>The Apache License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>com.github.oshi</groupId>
-            <artifactId>oshi-core</artifactId>
-            <version>5.8.6</version>
-            <licenses>
-                <license>
-                    <name>MIT License</name>
-                    <url>https://opensource.org/licenses/MIT</url>
-                    <distribution>repo</distribution>
-                    <file>mit license - mit.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>com.github.rwl</groupId>
-            <artifactId>optimization</artifactId>
-            <version>1.3</version>
-            <licenses>
-                <license>
-                    <name>Custom FPL License</name>
-                    <url>http://www1.fpl.fs.fed.us/optimization.html</url>
-                    <distribution>repo</distribution>
-                    <comments>Public domain with no warranty</comments>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>com.github.virtuald</groupId>
-            <artifactId>curvesapi</artifactId>
-            <version>1.08</version>
-            <licenses>
-                <license>
-                    <name>BSD License</name>
-                    <url>http://opensource.org/licenses/BSD-3-Clause</url>
-                    <distribution>repo</distribution>
-                    <file>bsd license - bsd-3-clause.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>com.github.vlsi.mxgraph</groupId>
-            <artifactId>jgraphx</artifactId>
-            <version>4.2.2</version>
-            <licenses>
-                <license>
-                    <name>BSD</name>
-                    <url>https://github.com/vlsi/jgraphx-publish/LICENSE</url>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service-annotations</artifactId>
-            <version>1.1.1</version>
-            <licenses>
-                <license>
-                    <name>Apache 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <file>apache 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.13.2</version>
-            <licenses>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>com.google.errorprone</groupId>
-            <artifactId>error_prone_annotations</artifactId>
-            <version>2.41.0</version>
-            <licenses>
-                <license>
-                    <name>Apache 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <file>apache 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>com.jhlabs</groupId>
-            <artifactId>filters</artifactId>
-            <version>2.0.235</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-                    <file>apache-2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>SparseBitSet</artifactId>
-            <version>1.3</version>
-            <licenses>
-                <license>
-                    <name>The Apache Software License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>apache 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.17.1</version>
-            <licenses>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.19.0</version>
-            <licenses>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>concurrent</groupId>
-            <artifactId>concurrent</artifactId>
-            <version>1.3.4</version>
-            <licenses>
-                <license>
-                    <name>Public domain, Sun Microsoystems</name>
-                    <url>&gt;http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html</url>
-                    <comments>All classes are released to the public domain and may be used for any purpose whatsoever
-                        without permission or acknowledgment. Portions of the CopyOnWriteArrayList and
-                        ConcurrentReaderHashMap classes are adapted from Sun JDK source code. These are copyright of Sun
-                        Microsystems, Inc, and are used with their kind permission, &lt;a
-                        href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/sun-u.c.license.pdf"&gt;as
-                        described in this license&lt;/a&gt;.
-                    </comments>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>de.jangassen</groupId>
-            <artifactId>jfa</artifactId>
-            <version>1.2.0</version>
-            <licenses>
-                <license>
-                    <name>Apache 2.0</name>
-                    <url>https://opensource.org/licenses/Apache-2.0</url>
-                    <distribution>repo</distribution>
-                    <file>apache 2.0 - apache-2.0.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>io.github.classgraph</groupId>
-            <artifactId>classgraph</artifactId>
-            <version>4.8.184</version>
-            <licenses>
-                <license>
-                    <name>The MIT License (MIT)</name>
-                    <url>http://opensource.org/licenses/MIT</url>
-                    <distribution>repo</distribution>
-                    <file>the mit license (mit) - mit.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>io.github.g00fy2</groupId>
-            <artifactId>versioncompare</artifactId>
-            <version>1.4.1</version>
-            <licenses>
-                <license>
-                    <name>The Apache Software License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>io.github.jorgericovivas</groupId>
-            <artifactId>rust_essentials</artifactId>
-            <version>1.0.0</version>
-            <licenses>
-                <license>
-                    <name>Creative Commons Zero v1.0 Universal</name>
-                    <url>https://creativecommons.org/publicdomain/zero/1.0/deed.en</url>
-                    <file>creative commons zero v1.0 universal - deed.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>jfree</groupId>
-            <artifactId>jcommon</artifactId>
-            <version>1.0.15</version>
-            <licenses>
-                <license>
-                    <name>GNU Lesser General Public Licence</name>
-                    <url>http://www.gnu.org/licenses/lgpl.txt</url>
-                    <distribution>repo</distribution>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.12</version>
-            <licenses>
-                <license>
-                    <name>GNU Lesser General Public Licence</name>
-                    <url>http://www.gnu.org/licenses/lgpl.txt</url>
-                    <distribution>repo</distribution>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.17.1</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                    <comments>A business-friendly OSS license</comments>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna</artifactId>
-            <version>5.14.0</version>
-            <licenses>
-                <license>
-                    <name>LGPL-2.1-or-later</name>
-                    <url>https://www.gnu.org/licenses/old-licenses/lgpl-2.1</url>
-                    <distribution>repo</distribution>
-                    <comments>Java Native Access (JNA) is licensed under the LGPL, version 2.1 or
-                        later, or the Apache License, version 2.0. You can freely decide which
-                        license you want to apply to the project.
-                    </comments>
-                </license>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                    <comments>Java Native Access (JNA) is licensed under the LGPL, version 2.1 or
-                        later, or the Apache License, version 2.0. You can freely decide which
-                        license you want to apply to the project.
-                    </comments>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna-platform</artifactId>
-            <version>5.14.0</version>
-            <licenses>
-                <license>
-                    <name>LGPL-2.1-or-later</name>
-                    <url>https://www.gnu.org/licenses/old-licenses/lgpl-2.1</url>
-                    <distribution>repo</distribution>
-                    <comments>Java Native Access (JNA) is licensed under the LGPL, version 2.1 or
-                        later, or the Apache License, version 2.0. You can freely decide which
-                        license you want to apply to the project.
-                    </comments>
-                </license>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                    <comments>Java Native Access (JNA) is licensed under the LGPL, version 2.1 or
-                        later, or the Apache License, version 2.0. You can freely decide which
-                        license you want to apply to the project.
-                    </comments>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>net.jqwik</groupId>
-            <artifactId>jqwik</artifactId>
-            <version>1.10.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License - v 2.0</name>
-                    <url>http://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license - v 2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>net.jqwik</groupId>
-            <artifactId>jqwik-api</artifactId>
-            <version>1.10.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License - v 2.0</name>
-                    <url>http://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license - v 2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>net.jqwik</groupId>
-            <artifactId>jqwik-engine</artifactId>
-            <version>1.10.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License - v 2.0</name>
-                    <url>http://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license - v 2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>net.jqwik</groupId>
-            <artifactId>jqwik-time</artifactId>
-            <version>1.10.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License - v 2.0</name>
-                    <url>http://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license - v 2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>net.jqwik</groupId>
-            <artifactId>jqwik-web</artifactId>
-            <version>1.10.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License - v 2.0</name>
-                    <url>http://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license - v 2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.jeval</groupId>
-            <artifactId>jeval</artifactId>
-            <version>0.9.4</version>
-            <licenses>
-                <license>
-                    <name>The Apache Software License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>apache 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4-runtime</artifactId>
-            <version>4.13.1</version>
-            <licenses>
-                <license>
-                    <name>BSD-3-Clause</name>
-                    <url>https://www.antlr.org/license.html</url>
-                    <distribution>repo</distribution>
-                    <file>bsd-3-clause - license.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>4.4</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.27.1</version>
-            <licenses>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.20.0</version>
-            <licenses>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>3.6.1</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>apache 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.26.1</version>
-            <licenses>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.26.1</version>
-            <licenses>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>5.4.0</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>5.4.0</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml-lite</artifactId>
-            <version>5.4.0</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.xmlbeans</groupId>
-            <artifactId>xmlbeans</artifactId>
-            <version>5.3.0</version>
-            <licenses>
-                <license>
-                    <name>The Apache Software License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apfloat</groupId>
-            <artifactId>apfloat</artifactId>
-            <version>1.10.1</version>
-            <licenses>
-                <license>
-                    <name>MIT License</name>
-                    <url>https://opensource.org/licenses/MIT</url>
-                    <distribution>repo</distribution>
-                    <file>mit license - mit.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.apiguardian</groupId>
-            <artifactId>apiguardian-api</artifactId>
-            <version>1.1.2</version>
-            <licenses>
-                <license>
-                    <name>The Apache License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <file>apache 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>4.0.0-M1</version>
-            <licenses>
-                <license>
-                    <name>Apache-2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-swing</artifactId>
-            <version>3.17.1</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>apache 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-util</artifactId>
-            <version>1.2.5</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>LICENSE.txt</url>
-                    <distribution>repo</distribution>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.jdom</groupId>
-            <artifactId>jdom2</artifactId>
-            <version>2.0.6.1</version>
-            <licenses>
-                <license>
-                    <name>Similar to Apache License but with the acknowledgment clause removed</name>
-                    <url>https://raw.github.com/hunterhacker/jdom/master/LICENSE.txt</url>
-                    <distribution>repo</distribution>
-                    <file>similar to apache license but with the acknowledgment clause removed - license.txt</file>
-                    <comments>/*--
-                        Copyright (C) 2000-2012 Jason Hunter &amp; Brett McLaughlin.
-                        All rights reserved.
-                        Redistribution and use in source and binary forms, with or without
-                        modification, are permitted provided that the following conditions
-                        are met:
-                        1. Redistributions of source code must retain the above copyright
-                        notice, this list of conditions, and the following disclaimer.
-                        2. Redistributions in binary form must reproduce the above copyright
-                        notice, this list of conditions, and the disclaimer that follows
-                        these conditions in the documentation and/or other materials
-                        provided with the distribution.
-                        3. The name "JDOM" must not be used to endorse or promote products
-                        derived from this software without prior written permission. For
-                        written permission, please contact &lt;request_AT_jdom_DOT_org&gt;.
-                        4. Products derived from this software may not be called "JDOM", nor
-                        may "JDOM" appear in their name, without prior written permission
-                        from the JDOM Project Management &lt;request_AT_jdom_DOT_org&gt;.
-                        In addition, we request (but do not require) that you include in the
-                        end-user documentation provided with the redistribution and/or in the
-                        software itself an acknowledgement equivalent to the following:
-                        "This product includes software developed by the
-                        JDOM Project (http://www.jdom.org/)."
-                        Alternatively, the acknowledgment may be graphical using the logos
-                        available at http://www.jdom.org/images/logos.
-                        THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
-                        WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-                        OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-                        DISCLAIMED. IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
-                        CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-                        SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-                        LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-                        USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-                        ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-                        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-                        OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-                        SUCH DAMAGE.
-                        This software consists of voluntary contributions made by many
-                        individuals on behalf of the JDOM Project and was originally
-                        created by Jason Hunter &lt;jhunter_AT_jdom_DOT_org&gt; and
-                        Brett McLaughlin &lt;brett_AT_jdom_DOT_org&gt;. For more information
-                        on the JDOM Project, please see &lt;http://www.jdom.org/&gt;.
-                        */
-                    </comments>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>26.0.2</version>
-            <licenses>
-                <license>
-                    <name>The Apache Software License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.5.6</version>
-            <licenses>
-                <license>
-                    <name>GNU Lesser General Public Licence</name>
-                    <url>http://www.gnu.org/licenses/lgpl.txt</url>
-                    <distribution>repo</distribution>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.jgrapht</groupId>
-            <artifactId>jgrapht-core</artifactId>
-            <version>1.5.2</version>
-            <licenses>
-                <license>
-                    <name>GNU Lesser General Public License Version 2.1, February 1999</name>
-                    <url>http://jgrapht.sourceforge.net/LGPL.html</url>
-                    <distribution>repo</distribution>
-                </license>
-                <license>
-                    <name>Eclipse Public License (EPL) 2.0</name>
-                    <url>http://www.eclipse.org/legal/epl-v20.html</url>
-                    <distribution>repo</distribution>
-                    <file>eclipse public license - v 2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.jgrapht</groupId>
-            <artifactId>jgrapht-ext</artifactId>
-            <version>1.5.2</version>
-            <licenses>
-                <license>
-                    <name>GNU Lesser General Public License Version 2.1, February 1999</name>
-                    <url>http://jgrapht.sourceforge.net/LGPL.html</url>
-                    <distribution>repo</distribution>
-                </license>
-                <license>
-                    <name>Eclipse Public License (EPL) 2.0</name>
-                    <url>http://www.eclipse.org/legal/epl-v20.html</url>
-                    <distribution>repo</distribution>
-                    <file>eclipse public license - v 2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.jheaps</groupId>
-            <artifactId>jheaps</artifactId>
-            <version>0.14</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <distribution>repo</distribution>
-                    <file>apache 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.jspecify</groupId>
-            <artifactId>jspecify</artifactId>
-            <version>1.0.0</version>
-            <licenses>
-                <license>
-                    <name>The Apache License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <file>apache 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>6.1.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License v2.0</name>
-                    <url>https://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license v2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>6.1.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License v2.0</name>
-                    <url>https://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license v2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>6.1.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License v2.0</name>
-                    <url>https://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license v2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>6.1.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License v2.0</name>
-                    <url>https://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license v2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-commons</artifactId>
-            <version>6.1.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License v2.0</name>
-                    <url>https://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license v2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-engine</artifactId>
-            <version>6.1.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License v2.0</name>
-                    <url>https://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license v2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <version>6.1.1</version>
-            <licenses>
-                <license>
-                    <name>Eclipse Public License v2.0</name>
-                    <url>https://www.eclipse.org/legal/epl-v20.html</url>
-                    <file>eclipse public license v2.0 - epl-v20.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openani.jsystemthemedetector</groupId>
-            <artifactId>jSystemThemeDetector</artifactId>
-            <version>3.8</version>
-            <licenses>
-                <license>
-                    <name>Apache License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0</url>
-                    <distribution>https://www.apache.org/licenses/LICENSE-2.0</distribution>
-                    <file>apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>bnEvaluation</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>core</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>costEffectiveness</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>dbGenerator</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>gui</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>inference</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>inference.des</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>io</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>learning.algorithm</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>learning.core</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>learning.gui</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>learning.metric</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>sensitivityAnalysis</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.openmarkov</groupId>
-            <artifactId>stochasticPropagationOutput</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-            <licenses>
-                <!-- No license information available. -->
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.opentest4j</groupId>
-            <artifactId>opentest4j</artifactId>
-            <version>1.3.0</version>
-            <licenses>
-                <license>
-                    <name>The Apache License, Version 2.0</name>
-                    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                    <file>the apache license, version 2.0 - license-2.0.txt</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.18</version>
-            <licenses>
-                <license>
-                    <name>MIT</name>
-                    <url>https://opensource.org/license/mit</url>
-                    <distribution>repo</distribution>
-                    <file>mit - mit.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.18</version>
-            <licenses>
-                <license>
-                    <name>MIT</name>
-                    <url>https://opensource.org/license/mit</url>
-                    <distribution>repo</distribution>
-                    <file>mit - mit.html</file>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.swinglabs</groupId>
-            <artifactId>swing-layout</artifactId>
-            <version>1.0.3</version>
-            <licenses>
-                <license>
-                    <name>Lesser General Public License (LGPL)</name>
-                    <url>http://www.gnu.org/copyleft/lesser.html</url>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.swinglabs</groupId>
-            <artifactId>swing-worker</artifactId>
-            <version>1.1</version>
-            <licenses>
-                <license>
-                    <name>Lesser General Public License (LGPL)</name>
-                    <url>http://www.gnu.org/copyleft/lesser.html</url>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <groupId>org.swinglabs</groupId>
-            <artifactId>swingx</artifactId>
-            <version>1.6.1</version>
-            <licenses>
-                <license>
-                    <name>Lesser General Public License (LGPL)</name>
-                    <url>http://www.gnu.org/copyleft/lesser.html</url>
-                </license>
-            </licenses>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>2.7.7</version>
+      <licenses>
+        <license>
+          <name>BSD License</name>
+          <url>http://www.antlr.org/license.html</url>
+          <distribution>repo</distribution>
+          <file>bsd license - license.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>ca.umontreal.iro.simul</groupId>
+      <artifactId>ssj</artifactId>
+      <version>3.3.1</version>
+      <licenses>
+        <license>
+          <name>Apache-2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+          <distribution>repo</distribution>
+          <file>apache-2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>colt</groupId>
+      <artifactId>colt</artifactId>
+      <version>1.2.0</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.formdev</groupId>
+      <artifactId>flatlaf</artifactId>
+      <version>3.7.1</version>
+      <licenses>
+        <license>
+          <name>The Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.github.oshi</groupId>
+      <artifactId>oshi-core</artifactId>
+      <version>5.8.6</version>
+      <licenses>
+        <license>
+          <name>MIT License</name>
+          <url>https://opensource.org/licenses/MIT</url>
+          <distribution>repo</distribution>
+          <file>mit license - mit.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.github.rwl</groupId>
+      <artifactId>optimization</artifactId>
+      <version>1.3</version>
+      <licenses>
+        <license>
+          <name>Custom FPL License</name>
+          <url>http://www1.fpl.fs.fed.us/optimization.html</url>
+          <distribution>repo</distribution>
+          <comments>Public domain with no warranty</comments>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.github.virtuald</groupId>
+      <artifactId>curvesapi</artifactId>
+      <version>1.08</version>
+      <licenses>
+        <license>
+          <name>BSD License</name>
+          <url>http://opensource.org/licenses/BSD-3-Clause</url>
+          <distribution>repo</distribution>
+          <file>bsd license - bsd-3-clause.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.github.vlsi.mxgraph</groupId>
+      <artifactId>jgraphx</artifactId>
+      <version>4.2.2</version>
+      <licenses>
+        <license>
+          <name>BSD</name>
+          <url>https://github.com/vlsi/jgraphx-publish/LICENSE</url>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.google.auto.service</groupId>
+      <artifactId>auto-service-annotations</artifactId>
+      <version>1.1.1</version>
+      <licenses>
+        <license>
+          <name>Apache 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>apache 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.13.2</version>
+      <licenses>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.google.errorprone</groupId>
+      <artifactId>error_prone_annotations</artifactId>
+      <version>2.41.0</version>
+      <licenses>
+        <license>
+          <name>Apache 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>apache 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.jhlabs</groupId>
+      <artifactId>filters</artifactId>
+      <version>2.0.235</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+          <file>apache-2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>SparseBitSet</artifactId>
+      <version>1.3</version>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>apache 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.17.1</version>
+      <licenses>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.19.0</version>
+      <licenses>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>concurrent</groupId>
+      <artifactId>concurrent</artifactId>
+      <version>1.3.4</version>
+      <licenses>
+        <license>
+          <name>Public domain, Sun Microsoystems</name>
+          <url>&gt;http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html</url>
+          <comments>All classes are released to the public domain and may be used for any purpose whatsoever without
+            permission or acknowledgment. Portions of the CopyOnWriteArrayList and ConcurrentReaderHashMap classes are
+            adapted from Sun JDK source code. These are copyright of Sun Microsystems, Inc, and are used with their kind
+            permission, &lt;a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/sun-u.c.license.pdf"&gt;as
+            described in this license&lt;/a&gt;.
+          </comments>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>de.jangassen</groupId>
+      <artifactId>jfa</artifactId>
+      <version>1.2.0</version>
+      <licenses>
+        <license>
+          <name>Apache 2.0</name>
+          <url>https://opensource.org/licenses/Apache-2.0</url>
+          <distribution>repo</distribution>
+          <file>apache 2.0 - apache-2.0.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>io.github.classgraph</groupId>
+      <artifactId>classgraph</artifactId>
+      <version>4.8.184</version>
+      <licenses>
+        <license>
+          <name>The MIT License (MIT)</name>
+          <url>http://opensource.org/licenses/MIT</url>
+          <distribution>repo</distribution>
+          <file>the mit license (mit) - mit.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>io.github.g00fy2</groupId>
+      <artifactId>versioncompare</artifactId>
+      <version>1.4.1</version>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>io.github.jorgericovivas</groupId>
+      <artifactId>rust_essentials</artifactId>
+      <version>1.0.0</version>
+      <licenses>
+        <license>
+          <name>Creative Commons Zero v1.0 Universal</name>
+          <url>https://creativecommons.org/publicdomain/zero/1.0/deed.en</url>
+          <file>creative commons zero v1.0 universal - deed.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>jfree</groupId>
+      <artifactId>jcommon</artifactId>
+      <version>1.0.15</version>
+      <licenses>
+        <license>
+          <name>GNU Lesser General Public Licence</name>
+          <url>http://www.gnu.org/licenses/lgpl.txt</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>jfree</groupId>
+      <artifactId>jfreechart</artifactId>
+      <version>1.0.12</version>
+      <licenses>
+        <license>
+          <name>GNU Lesser General Public Licence</name>
+          <url>http://www.gnu.org/licenses/lgpl.txt</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <version>1.17.1</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+          <comments>A business-friendly OSS license</comments>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>5.14.0</version>
+      <licenses>
+        <license>
+          <name>LGPL-2.1-or-later</name>
+          <url>https://www.gnu.org/licenses/old-licenses/lgpl-2.1</url>
+          <distribution>repo</distribution>
+          <comments>Java Native Access (JNA) is licensed under the LGPL, version 2.1 or
+            later, or the Apache License, version 2.0. You can freely decide which
+            license you want to apply to the project.
+          </comments>
+        </license>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+          <comments>Java Native Access (JNA) is licensed under the LGPL, version 2.1 or
+            later, or the Apache License, version 2.0. You can freely decide which
+            license you want to apply to the project.
+          </comments>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna-platform</artifactId>
+      <version>5.14.0</version>
+      <licenses>
+        <license>
+          <name>LGPL-2.1-or-later</name>
+          <url>https://www.gnu.org/licenses/old-licenses/lgpl-2.1</url>
+          <distribution>repo</distribution>
+          <comments>Java Native Access (JNA) is licensed under the LGPL, version 2.1 or
+            later, or the Apache License, version 2.0. You can freely decide which
+            license you want to apply to the project.
+          </comments>
+        </license>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+          <comments>Java Native Access (JNA) is licensed under the LGPL, version 2.1 or
+            later, or the Apache License, version 2.0. You can freely decide which
+            license you want to apply to the project.
+          </comments>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.jqwik</groupId>
+      <artifactId>jqwik</artifactId>
+      <version>1.10.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License - v 2.0</name>
+          <url>http://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license - v 2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.jqwik</groupId>
+      <artifactId>jqwik-api</artifactId>
+      <version>1.10.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License - v 2.0</name>
+          <url>http://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license - v 2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.jqwik</groupId>
+      <artifactId>jqwik-engine</artifactId>
+      <version>1.10.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License - v 2.0</name>
+          <url>http://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license - v 2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.jqwik</groupId>
+      <artifactId>jqwik-time</artifactId>
+      <version>1.10.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License - v 2.0</name>
+          <url>http://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license - v 2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.jqwik</groupId>
+      <artifactId>jqwik-web</artifactId>
+      <version>1.10.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License - v 2.0</name>
+          <url>http://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license - v 2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.jeval</groupId>
+      <artifactId>jeval</artifactId>
+      <version>0.9.4</version>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>apache 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr4-runtime</artifactId>
+      <version>4.13.1</version>
+      <licenses>
+        <license>
+          <name>BSD-3-Clause</name>
+          <url>https://www.antlr.org/license.html</url>
+          <distribution>repo</distribution>
+          <file>bsd-3-clause - license.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <version>4.4</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.27.1</version>
+      <licenses>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.20.0</version>
+      <licenses>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6.1</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>apache 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.26.1</version>
+      <licenses>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.26.1</version>
+      <licenses>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>5.4.0</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>5.4.0</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml-lite</artifactId>
+      <version>5.4.0</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xmlbeans</groupId>
+      <artifactId>xmlbeans</artifactId>
+      <version>5.3.0</version>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apfloat</groupId>
+      <artifactId>apfloat</artifactId>
+      <version>1.10.1</version>
+      <licenses>
+        <license>
+          <name>MIT License</name>
+          <url>https://opensource.org/licenses/MIT</url>
+          <distribution>repo</distribution>
+          <file>mit license - mit.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apiguardian</groupId>
+      <artifactId>apiguardian-api</artifactId>
+      <version>1.1.2</version>
+      <licenses>
+        <license>
+          <name>The Apache License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>apache 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>4.0.0-M1</version>
+      <licenses>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-swing</artifactId>
+      <version>3.17.1</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>apache 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.easytesting</groupId>
+      <artifactId>fest-util</artifactId>
+      <version>1.2.5</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>LICENSE.txt</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom2</artifactId>
+      <version>2.0.6.1</version>
+      <licenses>
+        <license>
+          <name>Similar to Apache License but with the acknowledgment clause removed</name>
+          <url>https://raw.github.com/hunterhacker/jdom/master/LICENSE.txt</url>
+          <distribution>repo</distribution>
+          <file>similar to apache license but with the acknowledgment clause removed - license.txt</file>
+          <comments>/*--
+            Copyright (C) 2000-2012 Jason Hunter &amp; Brett McLaughlin.
+            All rights reserved.
+            Redistribution and use in source and binary forms, with or without
+            modification, are permitted provided that the following conditions
+            are met:
+            1. Redistributions of source code must retain the above copyright
+            notice, this list of conditions, and the following disclaimer.
+            2. Redistributions in binary form must reproduce the above copyright
+            notice, this list of conditions, and the disclaimer that follows
+            these conditions in the documentation and/or other materials
+            provided with the distribution.
+            3. The name "JDOM" must not be used to endorse or promote products
+            derived from this software without prior written permission. For
+            written permission, please contact &lt;request_AT_jdom_DOT_org&gt;.
+            4. Products derived from this software may not be called "JDOM", nor
+            may "JDOM" appear in their name, without prior written permission
+            from the JDOM Project Management &lt;request_AT_jdom_DOT_org&gt;.
+            In addition, we request (but do not require) that you include in the
+            end-user documentation provided with the redistribution and/or in the
+            software itself an acknowledgement equivalent to the following:
+            "This product includes software developed by the
+            JDOM Project (http://www.jdom.org/)."
+            Alternatively, the acknowledgment may be graphical using the logos
+            available at http://www.jdom.org/images/logos.
+            THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+            WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+            OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+            DISCLAIMED. IN NO EVENT SHALL THE JDOM AUTHORS OR THE PROJECT
+            CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+            SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+            LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+            USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+            ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+            OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+            OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+            SUCH DAMAGE.
+            This software consists of voluntary contributions made by many
+            individuals on behalf of the JDOM Project and was originally
+            created by Jason Hunter &lt;jhunter_AT_jdom_DOT_org&gt; and
+            Brett McLaughlin &lt;brett_AT_jdom_DOT_org&gt;. For more information
+            on the JDOM Project, please see &lt;http://www.jdom.org/&gt;.
+            */
+          </comments>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>26.0.2</version>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.jfree</groupId>
+      <artifactId>jfreechart</artifactId>
+      <version>1.5.6</version>
+      <licenses>
+        <license>
+          <name>GNU Lesser General Public Licence</name>
+          <url>http://www.gnu.org/licenses/lgpl.txt</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.jgrapht</groupId>
+      <artifactId>jgrapht-core</artifactId>
+      <version>1.5.2</version>
+      <licenses>
+        <license>
+          <name>GNU Lesser General Public License Version 2.1, February 1999</name>
+          <url>http://jgrapht.sourceforge.net/LGPL.html</url>
+          <distribution>repo</distribution>
+        </license>
+        <license>
+          <name>Eclipse Public License (EPL) 2.0</name>
+          <url>http://www.eclipse.org/legal/epl-v20.html</url>
+          <distribution>repo</distribution>
+          <file>eclipse public license - v 2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.jgrapht</groupId>
+      <artifactId>jgrapht-ext</artifactId>
+      <version>1.5.2</version>
+      <licenses>
+        <license>
+          <name>GNU Lesser General Public License Version 2.1, February 1999</name>
+          <url>http://jgrapht.sourceforge.net/LGPL.html</url>
+          <distribution>repo</distribution>
+        </license>
+        <license>
+          <name>Eclipse Public License (EPL) 2.0</name>
+          <url>http://www.eclipse.org/legal/epl-v20.html</url>
+          <distribution>repo</distribution>
+          <file>eclipse public license - v 2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.jheaps</groupId>
+      <artifactId>jheaps</artifactId>
+      <version>0.14</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>apache 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.jspecify</groupId>
+      <artifactId>jspecify</artifactId>
+      <version>1.0.0</version>
+      <licenses>
+        <license>
+          <name>The Apache License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>apache 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>6.1.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License v2.0</name>
+          <url>https://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license v2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>6.1.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License v2.0</name>
+          <url>https://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license v2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>6.1.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License v2.0</name>
+          <url>https://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license v2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>6.1.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License v2.0</name>
+          <url>https://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license v2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
+      <version>6.1.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License v2.0</name>
+          <url>https://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license v2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-engine</artifactId>
+      <version>6.1.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License v2.0</name>
+          <url>https://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license v2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-launcher</artifactId>
+      <version>6.1.1</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License v2.0</name>
+          <url>https://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license v2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openani.jsystemthemedetector</groupId>
+      <artifactId>jSystemThemeDetector</artifactId>
+      <version>3.8</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+          <distribution>https://www.apache.org/licenses/LICENSE-2.0</distribution>
+          <file>apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>bnEvaluation</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>core</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>costEffectiveness</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>dbGenerator</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>gui</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>inference</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>inference.des</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>io</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>learning.algorithm</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>learning.core</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>learning.gui</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>learning.metric</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>sensitivityAnalysis</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.openmarkov</groupId>
+      <artifactId>stochasticPropagationOutput</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.opentest4j</groupId>
+      <artifactId>opentest4j</artifactId>
+      <version>1.3.0</version>
+      <licenses>
+        <license>
+          <name>The Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>the apache license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.18</version>
+      <licenses>
+        <license>
+          <name>MIT</name>
+          <url>https://opensource.org/license/mit</url>
+          <distribution>repo</distribution>
+          <file>mit - mit.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.18</version>
+      <licenses>
+        <license>
+          <name>MIT</name>
+          <url>https://opensource.org/license/mit</url>
+          <distribution>repo</distribution>
+          <file>mit - mit.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.swinglabs</groupId>
+      <artifactId>swing-layout</artifactId>
+      <version>1.0.3</version>
+      <licenses>
+        <license>
+          <name>Lesser General Public License (LGPL)</name>
+          <url>http://www.gnu.org/copyleft/lesser.html</url>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.swinglabs</groupId>
+      <artifactId>swing-worker</artifactId>
+      <version>1.1</version>
+      <licenses>
+        <license>
+          <name>Lesser General Public License (LGPL)</name>
+          <url>http://www.gnu.org/copyleft/lesser.html</url>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.swinglabs</groupId>
+      <artifactId>swingx</artifactId>
+      <version>1.6.1</version>
+      <licenses>
+        <license>
+          <name>Lesser General Public License (LGPL)</name>
+          <url>http://www.gnu.org/copyleft/lesser.html</url>
+        </license>
+      </licenses>
+    </dependency>
+  </dependencies>
 </licenseSummary>
