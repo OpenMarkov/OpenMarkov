@@ -7,14 +7,14 @@
 
 package org.openmarkov.gui.dialog.network;
 
-import java.awt.Window;
-import java.util.List;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.localize.StringDatabase;
+
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Window;
+import java.util.List;
 
 /**
  * Panel to set network decision criteria.
@@ -92,8 +92,6 @@ public class NetworkDecisionCriteriaPanel extends JPanel {
 			}
 			// initialising data structure for the table model
 			getDecisionCriteriaTablePanel().setData(data);
-			// initialising data structure for supervising data order in GUI
-			getDecisionCriteriaTablePanel().setDataTable(data);
 		}
 	}
 	

@@ -10,10 +10,13 @@ package org.openmarkov.gui.dialog.common;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.loader.element.IconBind;
+import org.openmarkov.gui.util.GUIUtils;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import java.awt.Window;
 import java.io.Serial;
+import java.util.List;
 
 /**
  * This class implements a dialog box with a horizontal buttons panel placed in
@@ -87,6 +90,9 @@ public class OkCancelDialog extends BottomPanelButtonDialog {
             this.dispose();
         });
         this.setCancelButton(jButtonCancel);
+        GUIUtils.assignButtonsToKeys((JComponent) this.getContentPane(), List.of(jButtonOK, jButtonCancel), _ -> {
+            jButtonCancel.doClick();
+        });
         this.pack();
     }
     

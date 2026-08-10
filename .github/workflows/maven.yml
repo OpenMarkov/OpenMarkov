@@ -12,7 +12,7 @@ on:
       - '**.java'
       - '**.xml'
 
-  # Same configuration from "push" on Pull requests
+  # Same configuration from "push" on Pull requests.
   pull_request:
     branches:
       - "development"
@@ -29,22 +29,11 @@ permissions:
   pages: write
   id-token: write
 
-# Only the newest run of a branch is worth finishing. When several commits are pushed one after another, this cancels
-# the runs of the earlier ones instead of spending half an hour building a jar that the next commit has already
-# replaced. Runs cancelled for this reason say so on their page; do not read them as the job timeout below.
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
 
   Build_and_test:
     runs-on: ubuntu-latest
-    # A failsafe just in case a commit causes an infinite loop, like a wrong written test that never ends. It is not a
-    # budget for how long the build is allowed to take: the suite honestly needs about four minutes on a twenty-core
-    # machine, more on a two-core runner, and the jar is still built afterwards. It was 5 minutes until the tests grew
-    # past it, and then every run was killed halfway through "integrationTests", so nothing reached GitHub Pages.
-    timeout-minutes: 25
+    timeout-minutes: 5
     steps:
     - uses: actions/checkout@v6
 
@@ -56,11 +45,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-      # First, we run tests. Meaning if the tests fail, nothing else would execute on the workflow.
     - name: Run tests
       run: mvn test --batch-mode
 
-      # Compilation of "full" as a .jar with all dependencies.
     - name: Build OpenMarkov.jar
       run: mvn package -pl full -am -DskipTests --batch-mode -PGenerateFullJar
 
@@ -78,11 +65,11 @@ jobs:
     needs:
       - Build_and_test
     runs-on: ubuntu-latest
+    timeout-minutes: 4
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    # Deploys the GitHub page that contains the compilation of "OpenMarkov.jar".
     steps:
-    - name: Deploy to GitHub Pages
+      - name: Deploy OpenMarkov.jar to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4

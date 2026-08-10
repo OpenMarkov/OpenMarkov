@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="BayesianNetwork">
+    <Variables>
+      <Variable name="Disease" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="170" y="106" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Disease" />
+          <Property name="Relevance" value="10.0" />
+          <Property name="Title" value="D" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Symptom" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="218" y="274" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Symptom" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="E" />
+        </AdditionalProperties>
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Symptom" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.97 0.03</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptom" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.98 0.02 0.05 0.95</Values>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties>
+      <Property name="VisualPrecision" value="0.0" />
+      <Property name="KindOfGraph" value="directed" />
+      <Property name="Version" value="1.0" />
+    </AdditionalProperties>
+  </ProbNet>
+</ProbModelXML>
+

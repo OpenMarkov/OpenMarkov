@@ -1,46 +1,14 @@
 package org.openmarkov.gui.configuration;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
-import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.function.Supplier;
 
-public class GUIColor {
+public class GUIColor extends ThemedItem<Color> {
     
-    private final Color defaultColor;
-    private @Nullable EnumMap<Theme, ColorResolver> themedColors;
-    
-    public GUIColor(@NotNull Color defaultColor) {
-        this.defaultColor = defaultColor;
-    }
-    
-    private void initializeThemedColors() {
-        if (this.themedColors == null) {
-            this.themedColors = new EnumMap<>(Theme.class);
-        }
-    }
-    
-    public GUIColor inDark(@NotNull Color color) {
-        return this.inTheme(Theme.DARK, color);
-    }
-    
-    public GUIColor inDark(Supplier<Color> color) {
-        return this.inTheme(Theme.DARK, color);
-    }
-    
-    public GUIColor inTheme(Theme theme, @NotNull Color color) {
-        this.initializeThemedColors();
-        this.themedColors.put(theme, new RawColor(color));
-        return this;
-    }
-    
-    public GUIColor inTheme(Theme theme, Supplier<Color> color) {
-        this.initializeThemedColors();
-        this.themedColors.put(theme, new LambdaColor(color));
-        return this;
+    public GUIColor(@NotNull Color defaultItem) {
+        super(defaultItem);
     }
     
     public GUIColor negativizeInDark() {
@@ -48,61 +16,38 @@ public class GUIColor {
     }
     
     public GUIColor negativizeColorInTheme(Theme theme) {
-        this.initializeThemedColors();
+        var defaultColor = this.getNoTheme();
+        
         return this.inTheme(theme, new Color(
-                255 - this.defaultColor.getRed(),
-                255 - this.getColor().getGreen(),
-                255 - this.defaultColor.getBlue(),
-                this.defaultColor.getAlpha()));
+                255 - defaultColor.getRed(),
+                255 - defaultColor.getGreen(),
+                255 - defaultColor.getBlue(),
+                defaultColor.getAlpha()));
     }
     
-    public @NotNull Color getUnthemedColor() {
-        return this.defaultColor;
+    
+    public GUIColor inDark(@NotNull Color color) {
+        super.inTheme(Theme.DARK, color);
+        return this;
     }
     
-    public @NotNull Color getColor() {
-        if (this.themedColors == null) {
-            return this.defaultColor;
-        }
-        Theme theme = UserPreferences.PREFERRED_THEME.get();
-        HashSet<Theme> visitedThemes = new HashSet<>();
-        while (theme != null) {
-            if (!visitedThemes.add(theme)) {
-                break;
-            }
-            switch (this.themedColors.get(theme)) {
-                case LambdaColor lambdaColor -> {
-                    Color resultingColor = lambdaColor.colorSupplier.get();
-                    if (resultingColor != null) {
-                        return resultingColor;
-                    }
-                }
-                case RawColor(Color rawColor) -> {
-                    return rawColor;
-                }
-                case null -> {
-                }
-            }
-            theme = GUIColor.themeInderection(theme);
-        }
-        return this.defaultColor;
+    public GUIColor inDark(Supplier<Color> color) {
+        super.inTheme(Theme.DARK, color);
+        return this;
     }
     
-    private static Theme themeInderection(Theme originalTheme) {
-        return switch (originalTheme) {
-            case SYSTEM_LF, DARK -> Theme.LIGHT;
-            case SYNC_OS -> Theme.OSisDark()?Theme.DARK:Theme.LIGHT;
-            case LIGHT -> Theme.SYSTEM_LF;
-        };
+    public GUIColor inTheme(Theme theme, @NotNull Color color) {
+        super.inTheme(theme, color);
+        return this;
     }
     
-    private sealed interface ColorResolver {
+    public GUIColor inTheme(Theme theme, Supplier<Color> color) {
+        super.inTheme(theme, color);
+        return this;
     }
     
-    record RawColor(@NotNull Color color) implements ColorResolver {
-    }
-    
-    record LambdaColor(Supplier<Color> colorSupplier) implements ColorResolver {
+    public Color getColor() {
+        return super.get();
     }
     
 }

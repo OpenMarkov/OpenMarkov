@@ -129,8 +129,6 @@ public class ValidateClassLocalizationTest {
                                                          + error.missingComponent
                                                          + " in "
                                                          + error.classWithMissingComponent.getName()
-                                                         + " of module "
-                                                         + error.classWithMissingComponent.getModule().getName()
                                                          + " when localizing "
                                                          + error.localizableClass.getName())
                                     .distinct()
@@ -145,10 +143,7 @@ public class ValidateClassLocalizationTest {
                             String subErrorsDetails = errorsForClass
                                     .stream()
                                     .map(error ->
-                                                 "\t- Class " + error.localizableClass.getName() + " is localized in " + error.wrongBundle.stringBundle + "_en.xml of module " + error.wrongBundle.provider.getClass()
-                                                                                                                                                                                                           .getModule()
-                                                                                                                                                                                                           .getName() + ", but it should be in " + error.localizableClass.getModule()
-                                                                                                                                                                                                                                                                         .getName())
+                                                 "\t- Class " + error.localizableClass.getName() + " is localized in " + error.wrongBundle.stringBundle + "_en.xml, but it's not accessible from " + error.localizableClass.getSimpleName())
                                     .distinct()
                                     .collect(Collectors.joining(System.lineSeparator()));
                             yield "Some classes are localized in the wrong module, you can apply this movements:" + System.lineSeparator() + subErrorsDetails;

@@ -1,0 +1,820 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="1.0.0">
+  <ProbNet type="DAN">
+    <Comment showWhenOpeningNetwork="true"><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Decision analysis network for total knee arthroplasty, i.e., for 
+      deciding whether the knee should be replaced with a prosthesis, 
+      depending on the body mass index and the possible presence of diabetes 
+      and antibiotic allergy.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      Adapted by F. J. D&#237;ez from the influence diagram built by Diego Le&#243;n in 
+      collaboration with Rub&#233;n Garc&#237;a-Fraile (orthopedic surgeon) and F. J. 
+      D&#237;ez and Manuel Luque (supervisors).
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      <b>Reference</b>
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      D. Le&#243;n Guerra. <i><a href="http://www.cisiad.uned.es/tesis/master-thesis-dleon.php">A 
+      Probabilistic Graphical Model for Total Knee Arthroplasty</a></i>. 
+      Master Thesis, Dept. Artificial Intelligence, UNED, Madrid, Spain, 2011.
+    </p>
+  </body>
+</html>
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <AdditionalProperties>
+      <Property name="Version" value="1.0" />
+      <Property name="VisualPrecision" value="0.0" />
+      <Property name="KindOfGraph" value="directed" />
+    </AdditionalProperties>
+    <Variables>
+      <Variable name="IMC" type="finiteStates" role="chance">
+        <Coordinates x="121" y="42" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="IMC" />
+        </AdditionalProperties>
+        <AlwaysObserved />
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Diabetes" type="finiteStates" role="chance">
+        <Coordinates x="269" y="42" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Diabetes" />
+        </AdditionalProperties>
+        <AlwaysObserved />
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="Alergia ATB" type="finiteStates" role="chance">
+        <Coordinates x="408" y="43" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Alergia_a_Antibióticos" />
+        </AdditionalProperties>
+        <AlwaysObserved />
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Infeccion PTR" type="finiteStates" role="chance">
+        <Coordinates x="330" y="199" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Infeccion_Protesis_Total_de_Rodilla" />
+        </AdditionalProperties>
+        <States>
+          <State name="ausente" />
+          <State name="presente" />
+        </States>
+      </Variable>
+      <Variable name="VSG" type="finiteStates" role="chance">
+        <Coordinates x="344" y="270" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Analítica_VSG" />
+        </AdditionalProperties>
+        <States>
+          <State name="valor =&lt; 30 mm/h tras 6 meses" />
+          <State name="valor &gt; 30 mm/h tras 6 meses" />
+        </States>
+      </Variable>
+      <Variable name="PCR" type="finiteStates" role="chance">
+        <Coordinates x="215" y="270" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Analítica_PCR" />
+        </AdditionalProperties>
+        <States>
+          <State name="valor =&lt; 10 mg/l tras 3 semanas" />
+          <State name="valor &gt; 10 mg/l tras 3 semanas" />
+        </States>
+      </Variable>
+      <Variable name="Ga67 Tc99" type="finiteStates" role="chance">
+        <Coordinates x="637" y="387" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Gammagrafía_Galio_67_y_Tecnecio_99" />
+        </AdditionalProperties>
+        <States>
+          <State name="Prueba no realizada" />
+          <State name="Negativo" />
+          <State name="Positivo" />
+        </States>
+      </Variable>
+      <Variable name="Movilidad" type="finiteStates" role="chance">
+        <Coordinates x="528" y="267" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Exploración_Movilidad" />
+        </AdditionalProperties>
+        <States>
+          <State name="ROM &gt; 65" />
+          <State name="ROM =&lt; 65" />
+        </States>
+      </Variable>
+      <Variable name="Cortes Congelados" type="finiteStates" role="chance">
+        <Coordinates x="611" y="492" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Biopsia_Sinovial_Cortes_Congelados" />
+        </AdditionalProperties>
+        <States>
+          <State name="Prueba no realizada" />
+          <State name="=&lt; 5 PMFN" />
+          <State name="&gt; 5 PMFN" />
+        </States>
+      </Variable>
+      <Variable name="Isquemia" type="finiteStates" role="chance">
+        <Coordinates x="429" y="133" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Isquemia" />
+        </AdditionalProperties>
+        <States>
+          <State name="Menor 1 hora y media" />
+          <State name="Mayor 1 hora y media" />
+        </States>
+      </Variable>
+      <Variable name="CC_Drenaje" type="finiteStates" role="chance">
+        <Coordinates x="574" y="108" />
+        <AdditionalProperties>
+          <Property name="Purpose" value="Riskfactor" />
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="CC_Drenaje" />
+        </AdditionalProperties>
+        <States>
+          <State name="mayor 800 cc y menor 1000 cc" />
+          <State name="menor 800 cc o mayor 1000 cc" />
+        </States>
+      </Variable>
+      <Variable name="Realizar Implante" type="finiteStates" role="decision">
+        <Coordinates x="105" y="108" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Realizar_Implante" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Realizar Gammagrafias" type="finiteStates" role="decision">
+        <Coordinates x="361" y="362" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Realizar_Gammagrafias" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Realizar Biopsia Sinovial" type="finiteStates" role="decision">
+        <Coordinates x="722" y="435" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Realizar_Biopsia_Sinovial" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="Tratar Infeccion PTR" type="finiteStates" role="decision">
+        <Coordinates x="1065" y="509" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Tratar_Infeccion_PTR" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="si" />
+        </States>
+      </Variable>
+      <Variable name="EVAC Implante" type="numeric" role="utility">
+        <Coordinates x="98" y="471" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="EVAC_Implante" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Molestias Gammagrafía" type="numeric" role="utility">
+        <Coordinates x="343" y="497" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="Molestias_Gammagrafía" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Molestias Biopsia Sinovial" type="numeric" role="utility">
+        <Coordinates x="685" y="591" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="Molestias_Biopsia_Sinovial" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="EVAC Total" type="numeric" role="utility">
+        <Coordinates x="269" y="725" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="EVAC_Total" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Coste Implante" type="numeric" role="utility">
+        <Coordinates x="221" y="537" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="C_Implante" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Coste Tratamiento" type="numeric" role="utility">
+        <Coordinates x="1065" y="714" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="C_Tratamiento" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Coste Gammagrafia" type="numeric" role="utility">
+        <Coordinates x="480" y="544" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="C_Gammagrafia" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Coste Biopsia Sinovial" type="numeric" role="utility">
+        <Coordinates x="748" y="650" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="C_Biopsia_Sinovial" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Coste total" type="numeric" role="utility">
+        <Coordinates x="659" y="736" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="Coste_total" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Coste ajustado" type="numeric" role="utility">
+        <Coordinates x="471" y="789" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="Coste_ajustado" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Beneficio neto" type="numeric" role="utility">
+        <Coordinates x="329" y="843" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="Beneficio_neto" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="C2E" type="numeric" role="utility">
+        <Coordinates x="701" y="789" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="Constante_ajuste" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Mejora Tratamiento" type="numeric" role="utility">
+        <Coordinates x="932" y="678" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="Mejora_Tratamiento" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="IMC" />
+        <Variable name="Diabetes" />
+      </Link>
+      <Link directed="true">
+        <Variable name="IMC" />
+        <Variable name="Infeccion PTR" />
+      </Link>
+      <Link directed="true">
+        <Variable name="IMC" />
+        <Variable name="Realizar Implante" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Diabetes" />
+        <Variable name="Infeccion PTR" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Diabetes" />
+        <Variable name="Realizar Implante" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Alergia ATB" />
+        <Variable name="Infeccion PTR" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Alergia ATB" />
+        <Variable name="Realizar Implante" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Infeccion PTR" />
+        <Variable name="PCR" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Infeccion PTR" />
+        <Variable name="VSG" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Infeccion PTR" />
+        <Variable name="Cortes Congelados" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Infeccion PTR" />
+        <Variable name="Movilidad" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Infeccion PTR" />
+        <Variable name="Ga67 Tc99" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Infeccion PTR" />
+        <Variable name="Mejora Tratamiento" />
+      </Link>
+      <Link directed="true">
+        <Variable name="VSG" />
+        <Variable name="Realizar Gammagrafias" />
+      </Link>
+      <Link directed="true">
+        <Variable name="PCR" />
+        <Variable name="Realizar Gammagrafias" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Ga67 Tc99" />
+        <Variable name="Realizar Biopsia Sinovial" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Movilidad" />
+        <Variable name="Realizar Gammagrafias" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cortes Congelados" />
+        <Variable name="Tratar Infeccion PTR" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Isquemia" />
+        <Variable name="Infeccion PTR" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Isquemia" />
+        <Variable name="Realizar Gammagrafias" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CC_Drenaje" />
+        <Variable name="Infeccion PTR" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CC_Drenaje" />
+        <Variable name="Realizar Gammagrafias" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Implante" />
+        <Variable name="CC_Drenaje" />
+        <Potential type="Table">
+          <Variables>
+            <Variable name="Realizar Implante" />
+            <Variable name="CC_Drenaje" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="si" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Implante" />
+        <Variable name="Coste Implante" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Implante" />
+        <Variable name="EVAC Implante" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Implante" />
+        <Variable name="Infeccion PTR" />
+        <Potential type="Table">
+          <Variables>
+            <Variable name="Realizar Implante" />
+            <Variable name="Infeccion PTR" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="si" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Implante" />
+        <Variable name="Isquemia" />
+        <Potential type="Table">
+          <Variables>
+            <Variable name="Realizar Implante" />
+            <Variable name="Isquemia" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="si" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Gammagrafias" />
+        <Variable name="Coste Gammagrafia" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Gammagrafias" />
+        <Variable name="Ga67 Tc99" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Gammagrafias" />
+        <Variable name="Molestias Gammagrafía" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Biopsia Sinovial" />
+        <Variable name="Cortes Congelados" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Biopsia Sinovial" />
+        <Variable name="Coste Biopsia Sinovial" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Realizar Biopsia Sinovial" />
+        <Variable name="Molestias Biopsia Sinovial" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Tratar Infeccion PTR" />
+        <Variable name="Coste Tratamiento" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Tratar Infeccion PTR" />
+        <Variable name="Mejora Tratamiento" />
+      </Link>
+      <Link directed="true">
+        <Variable name="EVAC Implante" />
+        <Variable name="EVAC Total" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Molestias Gammagrafía" />
+        <Variable name="EVAC Total" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Molestias Biopsia Sinovial" />
+        <Variable name="EVAC Total" />
+      </Link>
+      <Link directed="true">
+        <Variable name="EVAC Total" />
+        <Variable name="Beneficio neto" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Coste Implante" />
+        <Variable name="Coste total" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Coste Tratamiento" />
+        <Variable name="Coste total" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Coste Gammagrafia" />
+        <Variable name="Coste total" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Coste Biopsia Sinovial" />
+        <Variable name="Coste total" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Coste total" />
+        <Variable name="Coste ajustado" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Coste ajustado" />
+        <Variable name="Beneficio neto" />
+      </Link>
+      <Link directed="true">
+        <Variable name="C2E" />
+        <Variable name="Coste ajustado" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Mejora Tratamiento" />
+        <Variable name="EVAC Total" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="IMC" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Diabetes" />
+          <Variable name="IMC" />
+        </Variables>
+        <Values>0.5 0.5 0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Alergia ATB" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Infeccion PTR" />
+          <Variable name="Alergia ATB" />
+          <Variable name="CC_Drenaje" />
+          <Variable name="Diabetes" />
+          <Variable name="Isquemia" />
+          <Variable name="IMC" />
+          <Variable name="Realizar Implante" />
+        </Variables>
+        <Values>0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.5 0.5 0.95031073 0.04968927 0.5 0.5 0.973635023 0.026364977 0.5 0.5 0.5 0.5 0.5 0.5 0.737884101 0.262115899 0.5 0.5 0.361698442 0.638301558 0.5 0.5 0.522484825 0.477515175 0.5 0.5 0.5 0.5 0.5 0.5 0.957344211 0.042655789 0.5 0.5 0.818764618 0.181235382 0.5 0.5 0.897154479 0.102845521 0.5 0.5 0.5 0.5 0.5 0.5 0.39939178 0.60060822 0.5 0.5 0.5 0.5 0.5 0.5 0.205380341 0.794619659 0.5 0.5 0.5 0.5 0.5 0.5</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="VSG" />
+          <Variable name="Infeccion PTR" />
+        </Variables>
+        <Values>0.85 0.15 0.18 0.82</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="PCR" />
+          <Variable name="Infeccion PTR" />
+        </Variables>
+        <Values>0.74 0.26 0.11 0.89</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Ga67 Tc99" />
+          <Variable name="Infeccion PTR" />
+          <Variable name="Realizar Gammagrafias" />
+        </Variables>
+        <Values>1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.86 0.14 0.0 0.67 0.33</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Movilidad" />
+          <Variable name="Infeccion PTR" />
+        </Variables>
+        <Values>0.15 0.85 0.3 0.7</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Cortes Congelados" />
+          <Variable name="Infeccion PTR" />
+          <Variable name="Realizar Biopsia Sinovial" />
+        </Variables>
+        <Values>1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.95 0.05 0.0 0.16 0.84</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Isquemia" />
+          <Variable name="Realizar Implante" />
+        </Variables>
+        <Values>0.0 0.0 0.37275986 0.62724014</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="CC_Drenaje" />
+          <Variable name="Realizar Implante" />
+        </Variables>
+        <Values>0.0 0.0 0.15053763 0.84946237</Values>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact">
+        <Variables>
+          <Variable name="EVAC Implante" />
+          <Variable name="Realizar Implante" />
+        </Variables>
+        <Values>0.0 4.64</Values>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact">
+        <Variables>
+          <Variable name="Molestias Gammagrafía" />
+          <Variable name="Realizar Gammagrafias" />
+        </Variables>
+        <Values>0.0 0.0</Values>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact">
+        <Variables>
+          <Variable name="Molestias Biopsia Sinovial" />
+          <Variable name="Realizar Biopsia Sinovial" />
+        </Variables>
+        <Values>0.0 -9.20547945205E-6</Values>
+      </Potential>
+      <Potential type="Sum">
+        <Variables>
+          <Variable name="EVAC Total" />
+          <Variable name="EVAC Implante" />
+          <Variable name="Molestias Gammagrafía" />
+          <Variable name="Molestias Biopsia Sinovial" />
+          <Variable name="Mejora Tratamiento" />
+        </Variables>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact">
+        <Variables>
+          <Variable name="Coste Implante" />
+          <Variable name="Realizar Implante" />
+        </Variables>
+        <Values>0.0 6865.52</Values>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact">
+        <Variables>
+          <Variable name="Coste Tratamiento" />
+          <Variable name="Tratar Infeccion PTR" />
+        </Variables>
+        <Values>0.0 39196.89</Values>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact">
+        <Variables>
+          <Variable name="Coste Gammagrafia" />
+          <Variable name="Realizar Gammagrafias" />
+        </Variables>
+        <Values>0.0 335.08</Values>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact">
+        <Variables>
+          <Variable name="Coste Biopsia Sinovial" />
+          <Variable name="Realizar Biopsia Sinovial" />
+        </Variables>
+        <Values>0.0 405.28</Values>
+      </Potential>
+      <Potential type="Sum">
+        <Variables>
+          <Variable name="Coste total" />
+          <Variable name="Coste Biopsia Sinovial" />
+          <Variable name="Coste Gammagrafia" />
+          <Variable name="Coste Implante" />
+          <Variable name="Coste Tratamiento" />
+        </Variables>
+      </Potential>
+      <Potential type="Product">
+        <Variables>
+          <Variable name="Coste ajustado" />
+          <Variable name="Coste total" />
+          <Variable name="C2E" />
+        </Variables>
+      </Potential>
+      <Potential type="Sum">
+        <Variables>
+          <Variable name="Beneficio neto" />
+          <Variable name="Coste ajustado" />
+          <Variable name="EVAC Total" />
+        </Variables>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact">
+        <Variables>
+          <Variable name="C2E" />
+        </Variables>
+        <Values>-3.33E-5</Values>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact">
+        <Variables>
+          <Variable name="Mejora Tratamiento" />
+          <Variable name="Infeccion PTR" />
+          <Variable name="Tratar Infeccion PTR" />
+        </Variables>
+        <Values>0.0 -14.4 -4.64 -4.6419231</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

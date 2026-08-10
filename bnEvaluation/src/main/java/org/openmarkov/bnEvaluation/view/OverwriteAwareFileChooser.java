@@ -7,9 +7,11 @@
 
 package org.openmarkov.bnEvaluation.view;
 
+import org.openmarkov.gui.dialog.common.CommonOptions;
+import org.openmarkov.gui.dialog.common.OptionDialog;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 
-import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import java.io.File;
 
 /**
@@ -21,19 +23,18 @@ import java.io.File;
  * reuse the same UX.</p>
  */
 public final class OverwriteAwareFileChooser extends OMFileChooser {
-
+    
     @Override
     public void approveSelection() {
         File file = getSelectedFile();
         if (file != null && file.exists() && getDialogType() == SAVE_DIALOG) {
-            int answer = JOptionPane.showConfirmDialog(this,
-                    "That file already exists, overwrite?",
-                    "Existing file",
-                    JOptionPane.YES_NO_CANCEL_OPTION);
-            switch (answer) {
-                case JOptionPane.YES_OPTION -> super.approveSelection();
-                case JOptionPane.NO_OPTION, JOptionPane.CLOSED_OPTION -> { /* keep dialog open */ }
-                case JOptionPane.CANCEL_OPTION -> cancelSelection();
+            OptionDialog<CommonOptions.YesNoCancel> dialog = new OptionDialog<>(SwingUtilities.windowForComponent(this), "Existing file", "That file already exists, overwrite?", CommonOptions.YesNoCancel.class);
+            var option = dialog.request(CommonOptions.YesNoCancel.CANCEL);
+            switch (option) {
+                case YES -> super.approveSelection();
+                case NO -> {
+                } /* keep dialog open */
+                case CANCEL -> cancelSelection();
             }
             return;
         }

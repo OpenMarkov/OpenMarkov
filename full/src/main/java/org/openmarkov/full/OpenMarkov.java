@@ -16,6 +16,7 @@ import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.logging.OpenMarkovLogger;
+import org.openmarkov.core.model.network.NetworkMetadata;
 import org.openmarkov.gui.configuration.JavaSerializationUtils;
 import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.Theme;
@@ -68,12 +69,6 @@ public class OpenMarkov {
      * @param baseArgs Arguments
      */
     public static void main(String[] baseArgs) {
-        // Numbers and dates are written the English way — decimal point — wherever the application
-        // runs. It is a decision of the application, taken here, in the open: it used to happen as a
-        // side effect of loading the class that holds the texts, so merely mentioning StringDatabase
-        // changed the number format of the whole process, including for anyone using OpenMarkov as a
-        // library (§6.1 of the localize report).
-        Locale.setDefault(Locale.Category.FORMAT, Locale.ENGLISH);
         try {
             OpenMarkov.onSingleInstance(baseArgs);
         } catch (AlreadyLockedException e) {
@@ -90,10 +85,8 @@ public class OpenMarkov {
                 return OpenMarkov.readSingleInstanceMessage(message, appLoaded);
             }
         };
-        
         boolean canBeStandAloneInstance = OpenMarkov.readArguments(baseArgs).isEmpty();
         STARTED_AS_MAIN_INSTANCE = true;
-        
         try {
             JUnique.acquireLock(OpenMarkov.JUNIQUE_ID, instanceMessageHandler);
         } catch (AlreadyLockedException e) {
@@ -116,10 +109,15 @@ public class OpenMarkov {
                 }
             }).start();
         }
+
         if (UserPreferences.UI_SCALE.isSet()) {
             System.setProperty("sun.java2d.uiScale", UserPreferences.UI_SCALE.get().toString());
         }
         System.setProperty("flatlaf.uiScale", String.valueOf(UserPreferences.UI_SCALE.get()));
+        NetworkMetadata.USERS_LOCALE = Locale.getDefault(Locale.Category.FORMAT);
+        // Numbers and dates are written in English's format way, such as using the decimal point instead of the
+        // Spanish's decimal comma. This avoids multiple problems related to localization.
+        Locale.setDefault(Locale.Category.FORMAT, Locale.ENGLISH);
         Thread.setDefaultUncaughtExceptionHandler(new OMExceptionHandler());
         try {
             Theme.updateInterfaceToLook();

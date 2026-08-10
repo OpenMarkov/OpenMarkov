@@ -31,7 +31,8 @@ open module org.openmarkov.gui {
     requires swingx;
     requires com.sun.jna;
     requires com.sun.jna.platform;
-    
+    requires java.net.http;
+
     exports org.openmarkov.gui.action;
     exports org.openmarkov.gui.layout.bayesian;
     exports org.openmarkov.gui.localize;
@@ -64,7 +65,8 @@ open module org.openmarkov.gui {
     exports org.openmarkov.gui.dialog.network;
     exports org.openmarkov.gui.productTour.tour;
     exports org.openmarkov.gui.productTour.tour.action;
-    
+    exports org.openmarkov.gui.license;
+
     uses org.openmarkov.core.localize.spi.LocalizeResourcesProvider;
     provides org.openmarkov.core.localize.spi.LocalizeResourcesProvider with GUIResourceBundleProvider;
     

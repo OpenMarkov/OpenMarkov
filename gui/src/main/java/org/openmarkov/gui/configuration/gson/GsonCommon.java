@@ -8,6 +8,7 @@ public class GsonCommon {
     public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .setStrictness(Strictness.STRICT)
+            .serializeNulls()
             .registerTypeAdapterFactory(new MandatoryFieldFactory())
             .registerTypeAdapter(java.io.File.class, new GsonAdapters.FileAdapter())
             .registerTypeHierarchyAdapter(Class.class, new GsonAdapters.ClassTypeAdapter())

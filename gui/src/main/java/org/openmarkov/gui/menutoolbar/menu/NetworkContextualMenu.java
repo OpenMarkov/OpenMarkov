@@ -9,7 +9,8 @@ package org.openmarkov.gui.menutoolbar.menu;
 
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.core.model.network.constraint.NoEventNodes;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
@@ -18,10 +19,13 @@ import org.openmarkov.gui.localize.LocalizedMenuItem;
 import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 import org.openmarkov.gui.menutoolbar.common.MenuItemNames;
 import org.openmarkov.gui.window.MainPanel;
-import org.openmarkov.gui.window.edition.mode.NodeEditionMode;
+import org.openmarkov.gui.window.edition.networkEditorPanel.EditorInputHandler;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -122,8 +126,8 @@ public class NetworkContextualMenu extends ContextualMenu {
                                 .withActionCommand(nodeMenuGenerator.actionCommand)
                                 .withTooltip(nodeMenuGenerator.tooltip)
                                 .enabled(isEditionMode && nodeMenuGenerator.enabled)
-                                .onClick(e -> NodeEditionMode.createNode(currentNetwork, nodeMenuGenerator.nodeType,
-                                                                         new Point2D.Double(this.getRelativeShownLocationX(), this.getRelativeShownLocationY()), networkEditorPanel))
+                                .onClick(e -> EditorInputHandler.createNode(currentNetwork, nodeMenuGenerator.nodeType,
+                                                                            new Point2D.Double(this.getRelativeShownLocationX(), this.getRelativeShownLocationY()), networkEditorPanel))
                                 .build())
                 
                 )

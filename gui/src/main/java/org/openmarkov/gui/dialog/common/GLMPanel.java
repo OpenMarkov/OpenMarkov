@@ -12,10 +12,11 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.GLMPotential;
 import org.openmarkov.gui.configuration.GUIColors;
 
-import javax.swing.*;
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -33,7 +34,7 @@ import java.util.List;
     private GLMPotential potential = null;
     
     public GLMPanel() {
-        super(new String[]{"Covariate", "Coefficient"}, new Object[0][2], true, true, true);
+        super(new String[]{"Covariate", "Coefficient"}, new Object[0][2], true, true, true, true);
         getValuesTable().onTables(omjTable -> omjTable.setDefaultRenderer(String.class, new CoefficientTableCellRenderer()));
         listeners = new ArrayList<>();
         valuesTable.addMouseListener(new CovariatesTableMouseListener());

@@ -27,7 +27,9 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.font.TextAttribute;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * SplashScreenOpenMarkov Splash Screen Loader in OpenMarkov to prevent impatient user
@@ -59,12 +61,20 @@ public class SplashScreenLoader {
      */
     private static final Font MESSAGE_FONT = new Font(Font.SERIF, Font.ITALIC, 23)
             .deriveFont(Map.of(TextAttribute.TRACKING, 0.11f));
-
-
-    /**
-     * How long each message stays on screen, so that every step of the loading can be read.
-     */
-    private static final long MINIMUM_MILLISECONDS_PER_MESSAGE = 250;
+    
+    private static List<Operation> LOADING_OPERATIONS = Arrays.asList(
+            new Operation("Loading texts", 0, StringDatabase::getUniqueInstance),
+            new Operation("Loading preferences", 30, MainGUI::doReadPreferences),
+            new Operation("Loading resources", 50, () -> PluginSearch.init().stream().forEach(openmarkovClass -> {
+                try {
+                    Class.forName(openmarkovClass.getName(), true, openmarkovClass.getClassLoader());
+                } catch (ClassNotFoundException e) {
+                    OpenMarkovLogger.LOGGER.error(e);
+                }
+            })),
+            new Operation("Starting OpenMarkov", 100, () -> {
+            })
+    );
 
 
     private record Operation(String description, int progress, Runnable action) {
@@ -72,21 +82,12 @@ public class SplashScreenLoader {
 
     public static void asyncLoadWithSplash(final Runnable onLoadFinishes) {
         SwingUtilities.invokeLater(() -> {
-            var operations = Arrays.asList(
-                    new Operation("Loading texts…", 0, StringDatabase::getUniqueInstance),
-                    new Operation("Loading resources…", 30, () -> PluginSearch.init().stream().forEach(ignored -> {
-                    })),
-                    new Operation("Loading preferences…", 70, MainGUI::doReadPreferences),
-                    new Operation("Finished", 100, () -> {
-                    })
-            );
-
             var splashWindow = new JWindow();
             var content = (JPanel) splashWindow.getContentPane();
             content.setLayout(new BorderLayout());
             
             var splashImage = new JLabel("",
-                    ImageLoader.load(SplashScreenLoader.class.getResource(LOGO_FILE), ImageLoader.ImageOptions.SkipAutoScale),
+                                         ImageLoader.load(Objects.requireNonNull(SplashScreenLoader.class.getResource(SplashScreenLoader.LOGO_FILE)), ImageLoader.ImageOptions.SkipAutoScale),
                     SwingConstants.CENTER);
             splashImage.setLayout(null);
             content.add(splashImage, BorderLayout.CENTER);
@@ -97,13 +98,13 @@ public class SplashScreenLoader {
             progressBar.setBorderPainted(false);
             progressBar.setForeground(GUIColors.SplashScreen.PROGRESS_BAR_FOREGROUND.getColor());
             progressBar.setBackground(GUIColors.SplashScreen.PROGRESS_BAR_BACKGROUND.getColor());
-            progressBar.setBounds(PROGRESS_BAR_BOUNDS);
+            progressBar.setBounds(SplashScreenLoader.PROGRESS_BAR_BOUNDS);
             splashImage.add(progressBar);
-
-            var message = new JLabel(operations.getFirst().description, SwingConstants.CENTER);
-            message.setFont(MESSAGE_FONT);
+            
+            var message = new JLabel(SplashScreenLoader.LOADING_OPERATIONS.getFirst().description, SwingConstants.CENTER);
+            message.setFont(SplashScreenLoader.MESSAGE_FONT);
             message.setForeground(GUIColors.SplashScreen.MESSAGE_FOREGROUND.getColor());
-            message.setBounds(MESSAGE_BOUNDS);
+            message.setBounds(SplashScreenLoader.MESSAGE_BOUNDS);
             splashImage.add(message);
 
             splashWindow.pack();
@@ -114,18 +115,12 @@ public class SplashScreenLoader {
 
             var worker = new SwingWorker<Void, Operation>() {
                 @Override
-                protected Void doInBackground() throws InterruptedException {
+                protected Void doInBackground() {
                     OpenMarkovLogger.LOGGER.debug("Start operations");
-                    for (var operation : operations) {
+                    for (var operation : SplashScreenLoader.LOADING_OPERATIONS) {
                         publish(operation);
-                        long startedAt = System.nanoTime();
                         operation.action.run();
                         OpenMarkovLogger.LOGGER.debug("{} finished", operation.description);
-                        long millisecondsLeft = MINIMUM_MILLISECONDS_PER_MESSAGE
-                                - (System.nanoTime() - startedAt) / 1_000_000;
-                        if (millisecondsLeft > 0) {
-                            Thread.sleep(millisecondsLeft);
-                        }
                     }
                     return null;
                 }

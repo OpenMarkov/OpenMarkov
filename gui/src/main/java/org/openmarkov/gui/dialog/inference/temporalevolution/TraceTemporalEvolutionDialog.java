@@ -17,7 +17,6 @@ import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
-//import org.jfree.chart.*;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
@@ -28,20 +27,63 @@ import org.jfree.data.xy.XYDataItem;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotAllNodesHavePoliciesException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.UnexpectedInferenceException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.tasks.TemporalEvolution;
-import org.openmarkov.core.model.network.*;
-import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.model.network.Criterion;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.configuration.GUIColors;
+import org.openmarkov.gui.dialog.common.CommonOptions;
+import org.openmarkov.gui.dialog.common.OptionDialog;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.gui.loader.element.ImageLoader;
 import org.openmarkov.inference.algorithm.temporalevaluation.tasks.MIDTemporalEvolution;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VETemporalEvolution;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.ProgressMonitor;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -49,8 +91,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -1687,11 +1736,9 @@ public class TraceTemporalEvolutionDialog extends JDialog {
         }
         String filename = omFileChooser.getSelectedFile().getAbsolutePath();
         if (omFileChooser.getSelectedFile().exists()) {
-            int result = JOptionPane.showConfirmDialog(this,
-                                                       stringDatabase.getString("OverwriteFile.Text"),
-                                                       stringDatabase.getString("OverwriteFile.Title"),
-                                                       JOptionPane.YES_NO_OPTION);
-            if (result != JOptionPane.YES_OPTION) {
+            OptionDialog<CommonOptions.YesNo> dialog = new OptionDialog<>(SwingUtilities.windowForComponent(this), stringDatabase.getString("OverwriteFile.Title"), stringDatabase.getString("OverwriteFile.Text"), CommonOptions.YesNo.class);
+            var option = dialog.request(CommonOptions.YesNo.NO);
+            if (option != CommonOptions.YesNo.YES) {
                 return;
             }
         }

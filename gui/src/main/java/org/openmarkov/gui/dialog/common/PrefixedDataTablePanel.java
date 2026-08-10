@@ -12,9 +12,9 @@ import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
 import org.openmarkov.core.action.base.linkEdits.RemoveLinkEdit;
 import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.exception.ThereIsNoNodeInDataException;
 import org.openmarkov.gui.util.GUIUtils;
 
@@ -72,7 +72,7 @@ public class PrefixedDataTablePanel extends KeyTablePanel {
     public PrefixedDataTablePanel(Node node, String[] newColumns, Object[][] newData, Object[][] newPrefixedData,
                                   String newTitleToSelectRows, boolean firstColumnHidden) {
         
-        super(newColumns, new Object[0][0], false, false);
+        super(newColumns, new Object[0][0], false, false, false, true);
         this.node = node;
         prefixedData = newPrefixedData.clone();
         titleToSelectRows = newTitleToSelectRows;

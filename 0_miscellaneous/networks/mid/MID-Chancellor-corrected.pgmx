@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="MID">
+    <Comment showWhenOpeningNetwork="true"><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      MID for analyzing the cost-effectiveness of two therapies for HIV:
+    </p>
+    <p style="margin-top: 0">
+      <i>- monotherapy</i>, which means &quot;only zidovudine&quot;.
+    </p>
+    <p style="margin-top: 0">
+      <i>- combined therapy</i>, which means &quot;zidovudine plus lamivudine for 
+      the first three years (i.e., three cycles), then zidovudine alone&quot;.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      Original paper:
+    </p>
+    <p style="margin-top: 0">
+      Chancellor JV, et al.
+    </p>
+    <p style="margin-top: 0">
+      Modelling the cost effectiveness of lamivudine/zidovudine combination 
+      therapy in HIV infection.
+    </p>
+    <p style="margin-top: 0">
+      <i>Pharmacoeconomics </i>1997;12:54-66.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      An MS Excel version of this model was included as an exercise in:
+    </p>
+    <p style="margin-top: 0">
+      Briggs A, Claxton K, Sculpher M.
+    </p>
+    <p style="margin-top: 0">
+      <i>Decision Modelling for Health Economic Evaluation.</i>
+    </p>
+    <p style="margin-top: 0">
+      Oxford University Press, 2006
+    </p>
+    <p style="margin-top: 0">
+      <a href="http://www.herc.ox.ac.uk/pubs/books/material_modelling">http://www.herc.ox.ac.uk/pubs/books/material_modelling</a>, 
+      exercise 4.7, or
+    </p>
+    <p style="margin-top: 0">
+      <a href="http://www.herc.ox.ac.uk/pubs/books/decision/Ex47sol">http://www.herc.ox.ac.uk/pubs/books/decision/Ex47sol</a>.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      MID built by I&#241;igo Bermejo and F. Javier D&#237;ez in July 2013.
+    </p>
+    <p style="margin-top: 0">
+      Revised: 20 January 2015.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      Open the properties dialog of each node to obtain additional 
+      information. See also the chapter on MIDs in <a href="http://www.openmarkov.org/docs/tutorial">OpenMarkov's 
+      tutorial</a>.
+    </p>
+  </body>
+</html>
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->
+<!--StartFragment-->]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="cost" />
+      <Criterion name="effectiveness" />
+    </DecisionCriteria>
+    <TimeUnit unit="YEAR" Value="1.0" />
+    <AdditionalProperties />
+    <Variables>
+      <Variable name="State" timeSlice="0" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Health state of the VIH patient: State A (200&lt;cd4 cells/mm3&lt;500); State 
+      B (cd4&lt;200); State C (AIDs); Death
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="303" y="197" />
+        <States>
+          <State name="Dead" />
+          <State name="State C" />
+          <State name="State B" />
+          <State name="State A" />
+        </States>
+      </Variable>
+      <Variable name="State" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="547" y="197" />
+        <States>
+          <State name="Dead" />
+          <State name="State C" />
+          <State name="State B" />
+          <State name="State A" />
+        </States>
+      </Variable>
+      <Variable name="Time in treatment" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="285" y="131" />
+        <Unit />
+        <Precision>1.0</Precision>
+        <Thresholds>
+          <Threshold value="0.0" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="Time in treatment" timeSlice="1" type="numeric" role="chance">
+        <Coordinates x="485" y="133" />
+        <Unit />
+        <Precision>1.0</Precision>
+        <Thresholds>
+          <Threshold value="0.0" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="Therapy choice" type="finiteStates" role="decision">
+        <Coordinates x="109" y="71" />
+        <States>
+          <State name="monotherapy" />
+          <State name="combination therapy" />
+        </States>
+      </Variable>
+      <Variable name="Cost AZT" timeSlice="1" type="numeric" role="utility">
+        <Coordinates x="267" y="400" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="cost" />
+      </Variable>
+      <Variable name="Life years" timeSlice="1" type="numeric" role="utility">
+        <Coordinates x="739" y="221" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="effectiveness" />
+      </Variable>
+      <Variable name="Direct medical cost" timeSlice="1" type="numeric" role="utility">
+        <Coordinates x="771" y="278" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="cost" />
+      </Variable>
+      <Variable name="Community care cost" timeSlice="1" type="numeric" role="utility">
+        <Coordinates x="715" y="324" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="cost" />
+      </Variable>
+      <Variable name="Therapy applied" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="333" y="334" />
+        <States>
+          <State name="none" />
+          <State name="monotherapy" />
+          <State name="combination therapy" />
+        </States>
+      </Variable>
+      <Variable name="Transition inhibited" timeSlice="1" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      In Chancellor's model, the effect of combined therapy is represented by 
+      a reduction of the relative risk of progressing to more severe degrees 
+      of the disease, as explained in section &quot;Clinical efficay&quot; of their 
+      paper. In this model, this effect is modelled by assuming that combined 
+      therapy sometimes inhibit the transitions, with a probability equal to 
+      the relative risk.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="523" y="276" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Cost lamivudine" timeSlice="1" type="numeric" role="utility">
+        <Coordinates x="424" y="402" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="cost" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="State" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="Therapy applied" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="1" />
+        <Variable name="Life years" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="1" />
+        <Variable name="Direct medical cost" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="1" />
+        <Variable name="Community care cost" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Time in treatment" timeSlice="0" />
+        <Variable name="Time in treatment" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Time in treatment" timeSlice="1" />
+        <Variable name="Therapy applied" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy choice" />
+        <Variable name="Therapy applied" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy applied" timeSlice="1" />
+        <Variable name="Transition inhibited" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy applied" timeSlice="1" />
+        <Variable name="Cost lamivudine" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy applied" timeSlice="1" />
+        <Variable name="Cost AZT" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Transition inhibited" timeSlice="1" />
+        <Variable name="State" timeSlice="1" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Delta" role="conditionalProbability">
+        <Variables>
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <State>State A</State>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="State" timeSlice="1" />
+          <Variable name="Transition inhibited" timeSlice="1" />
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.2498570612 0.7501429388 0.0 0.0 0.0 1.0 0.0 0.0 0.0119236884 0.4069952305 0.5810810811 0.0 0.0 0.0 1.0 0.0 0.0098039216 0.0668973472 0.2018454441 0.7214532872 0.0 0.0 0.0 1.0</Values>
+        <UncertainValues>
+          <Value />
+          <Value />
+          <Value />
+          <Value />
+          <Value />
+          <Value />
+          <Value />
+          <Value />
+          <Value distribution="Beta">437.0 1312.0</Value>
+          <Value distribution="Complement">1.0</Value>
+          <Value distribution="Exact">0.0</Value>
+          <Value distribution="Exact">0.0</Value>
+          <Value />
+          <Value />
+          <Value />
+          <Value />
+          <Value distribution="Dirichlet">15.0</Value>
+          <Value distribution="Dirichlet">512.0</Value>
+          <Value distribution="Dirichlet">731.0</Value>
+          <Value distribution="Exact">0.0</Value>
+          <Value />
+          <Value />
+          <Value />
+          <Value />
+          <Value distribution="Dirichlet">17.0</Value>
+          <Value distribution="Dirichlet">116.0</Value>
+          <Value distribution="Dirichlet">350.0</Value>
+          <Value distribution="Dirichlet">1251.0</Value>
+          <Value />
+          <Value />
+          <Value />
+          <Value />
+        </UncertainValues>
+      </Potential>
+      <Potential type="Delta" role="conditionalProbability">
+        <Variables>
+          <Variable name="Time in treatment" timeSlice="0" />
+        </Variables>
+        <NumericValue>0.0</NumericValue>
+      </Potential>
+      <Potential type="CycleLengthShift" role="conditionalProbability">
+        <Variables>
+          <Variable name="Time in treatment" timeSlice="1" />
+          <Variable name="Time in treatment" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <UtilityVariable name="Cost AZT" timeSlice="1" />
+        <Variables>
+          <Variable name="Therapy applied" timeSlice="1" />
+        </Variables>
+        <TopVariable name="Therapy applied" timeSlice="1" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="none" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="Cost AZT" timeSlice="1" />
+              <Values>0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="monotherapy" />
+              <State name="combination therapy" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="Cost AZT" timeSlice="1" />
+              <Values>2278.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <UtilityVariable name="Life years" timeSlice="1" />
+        <Variables>
+          <Variable name="State" timeSlice="1" />
+        </Variables>
+        <TopVariable name="State" timeSlice="1" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="State C" />
+              <State name="State B" />
+              <State name="State A" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="Life years" timeSlice="1" />
+              <Values>1.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="Dead" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="Life years" timeSlice="1" />
+              <Values>0.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Direct medical cost" timeSlice="1" />
+        <Variables>
+          <Variable name="State" timeSlice="1" />
+        </Variables>
+        <Values>0.0 6948.0 1774.0 1701.0</Values>
+        <UncertainValues>
+          <Value />
+          <Value distribution="Gamma-mv">6948.0 6948.0</Value>
+          <Value distribution="Gamma-mv">1774.0 1774.0</Value>
+          <Value distribution="Gamma-mv">1701.0 1701.0</Value>
+        </UncertainValues>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Community care cost" timeSlice="1" />
+        <Variables>
+          <Variable name="State" timeSlice="1" />
+        </Variables>
+        <Values>0.0 2059.0 1278.0 1055.0</Values>
+        <UncertainValues>
+          <Value />
+          <Value distribution="Gamma-mv">2059.0 2059.0</Value>
+          <Value distribution="Gamma-mv">1278.0 1278.0</Value>
+          <Value distribution="Gamma-mv">1055.0 1055.0</Value>
+        </UncertainValues>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Therapy applied" timeSlice="1" />
+          <Variable name="Time in treatment" timeSlice="1" />
+          <Variable name="Therapy choice" />
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <TopVariable name="State" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="Dead" />
+            </States>
+            <Potential type="Delta">
+              <Variables>
+                <Variable name="Therapy applied" timeSlice="1" />
+              </Variables>
+              <State>none</State>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="State C" />
+              <State name="State B" />
+              <State name="State A" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Therapy applied" timeSlice="1" />
+                <Variable name="Time in treatment" timeSlice="1" />
+                <Variable name="Therapy choice" />
+                <Variable name="State" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Therapy choice" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="monotherapy" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Therapy applied" timeSlice="1" />
+                    </Variables>
+                    <State>monotherapy</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="combination therapy" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Therapy applied" timeSlice="1" />
+                      <Variable name="Time in treatment" timeSlice="1" />
+                      <Variable name="Therapy choice" />
+                      <Variable name="State" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Time in treatment" timeSlice="1" />
+                    <Branches>
+                      <Branch>
+                        <Thresholds>
+                          <Threshold value="0.0" belongsTo="right" />
+                          <Threshold value="2.0" belongsTo="left" />
+                        </Thresholds>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Therapy applied" timeSlice="1" />
+                          </Variables>
+                          <State>combination therapy</State>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <Thresholds>
+                          <Threshold value="2.0" belongsTo="left" />
+                          <Threshold value="Infinity" belongsTo="right" />
+                        </Thresholds>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Therapy applied" timeSlice="1" />
+                          </Variables>
+                          <State>monotherapy</State>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    The reduction in the relative risk due to combined therapy can be modelled 
+    as an inhibition of the transition probability. The probability that the 
+    transition is <b>not</b> inhibited is 0.509, the same as the relative risk 
+    of combined therapy with respect to monotherapy. This value, as well, as 
+    the 95% confidence interval 0.365-0.710, appear in Table IV of the paper 
+    by Chancellor et al. They are taken from a meta-analysis: Staszewski et 
+    al. Reductions in HIV-1 disease progression for zidovudine/lamivudine 
+    relative to control treatments: a meta-analysis of controlled trials. 
+    AIDS, 1997, 11:477-83. The difference of this MID with the Excel version 
+    of the same model is that the second-order distribution for this parameter 
+    is not modelled with a log-normal distribution, which might lead to 
+    transition probabilities below 0 or above 1, but with a Beta.
+  </body>
+</html>]]></Comment>
+        <Variables>
+          <Variable name="Transition inhibited" timeSlice="1" />
+          <Variable name="Therapy applied" timeSlice="1" />
+        </Variables>
+        <Values>1.0 0.0 1.0 0.0 0.5090000944323331 0.490999905567667</Values>
+        <UncertainValues>
+          <Value />
+          <Value />
+          <Value />
+          <Value />
+          <Value distribution="Beta">17.62564 17.00233</Value>
+          <Value distribution="Complement">1.0</Value>
+        </UncertainValues>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost lamivudine" timeSlice="1" />
+        <Variables>
+          <Variable name="Therapy applied" timeSlice="1" />
+        </Variables>
+        <Values>0.0 0.0 2085.50445</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>COST_EFFECTIVENESS</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="cost" Value="1.0" />
+          <Scale Criterion="effectiveness" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="cost" Value="1.0" />
+          <Scale Criterion="effectiveness" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="cost" Value="Cost" />
+          <CE_Criterion Criterion="effectiveness" Value="Effectiveness" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+    <TemporalOptions>
+      <Slices>20</Slices>
+      <Transition>BEGINNING</Transition>
+      <DiscountRates>
+        <DiscountRate Criterion="cost" value="0.06" unit="YEAR" />
+        <DiscountRate Criterion="effectiveness" value="0.0" unit="YEAR" />
+      </DiscountRates>
+    </TemporalOptions>
+  </InferenceOptions>
+</ProbModelXML>

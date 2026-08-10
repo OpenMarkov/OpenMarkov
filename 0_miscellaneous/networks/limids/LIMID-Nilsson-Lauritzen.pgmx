@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="LIMID">
+    <Comment><![CDATA[<<Double click to add/modify comment>>]]></Comment>
+    <Variables>
+      <Variable name="R1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="303" y="253" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="R2" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="445" y="314" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="R3" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="451" y="569" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="R4" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="360" y="433" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="D1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="73" y="56" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="D2" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="184" y="166" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="D3" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="235" y="370" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="D4" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="133" y="503" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="U1" type="numeric" role="utility" isInput="false">
+        <Coordinates x="569" y="415" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="U2" type="numeric" role="utility" isInput="false">
+        <Coordinates x="472" y="663" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="U3" type="numeric" role="utility" isInput="false">
+        <Coordinates x="562" y="266" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="U4" type="numeric" role="utility" isInput="false">
+        <Coordinates x="317" y="668" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="R1" />
+        <Variable name="R2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="R1" />
+        <Variable name="U3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="R1" />
+        <Variable name="R4" />
+      </Link>
+      <Link directed="true">
+        <Variable name="R2" />
+        <Variable name="R3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="R2" />
+        <Variable name="U1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="R3" />
+        <Variable name="U2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="R4" />
+        <Variable name="D4" />
+      </Link>
+      <Link directed="true">
+        <Variable name="R4" />
+        <Variable name="U4" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D1" />
+        <Variable name="D2" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D1" />
+        <Variable name="U3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D1" />
+        <Variable name="D3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D1" />
+        <Variable name="D4" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D2" />
+        <Variable name="D3" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D2" />
+        <Variable name="R1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D2" />
+        <Variable name="D4" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D3" />
+        <Variable name="D4" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D3" />
+        <Variable name="U1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D4" />
+        <Variable name="U4" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D4" />
+        <Variable name="R3" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="R1" />
+          <Variable name="D2" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="R2" />
+          <Variable name="R1" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="R3" />
+          <Variable name="R2" />
+          <Variable name="D4" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="R4" />
+          <Variable name="R1" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="U1" />
+        <Variables>
+          <Variable name="D3" />
+          <Variable name="R2" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="U2" />
+        <Variables>
+          <Variable name="R3" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="U3" />
+        <Variables>
+          <Variable name="D1" />
+          <Variable name="R1" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="U4" />
+        <Variables>
+          <Variable name="D4" />
+          <Variable name="R4" />
+        </Variables>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties />
+  </ProbNet>
+</ProbModelXML>
+

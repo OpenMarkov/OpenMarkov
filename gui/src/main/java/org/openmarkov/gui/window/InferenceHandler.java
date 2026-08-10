@@ -7,7 +7,13 @@
 
 package org.openmarkov.gui.window;
 
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.PotentialOperationException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -30,7 +36,7 @@ import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluat
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluation.DANEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEOptimalIntervention;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -171,8 +177,8 @@ class InferenceHandler {
         fileName = fileName + stringDatabase.getString("CostEffectiveness.ExpandNetwork.FileName") + ".pgmx";
 
         ProbNet expandedNetwork = TemporalNetOperations.expandNetwork(probNet, preResolutionEvidence, fileName);
-
-        NetworkEditorPanel networkPanel = fileHandler.createNewFrame(expandedNetwork);
+        
+        NetworkEditorPanel networkPanel = fileHandler.createNewFrame(expandedNetwork, null);
         mainPanel.getMainPanelMenuAssistant()
                  .setOptionEnabled(ActionCommands.SAVE_OPEN_NETWORK.getCommandName(), false);
         networkPanel.setNetworkFile(path + File.separator + fileName);

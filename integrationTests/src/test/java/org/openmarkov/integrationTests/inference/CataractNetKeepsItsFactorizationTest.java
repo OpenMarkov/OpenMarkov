@@ -26,7 +26,6 @@ import org.openmarkov.io.probmodel.reader.PGMXReader;
 import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -58,8 +57,10 @@ public class CataractNetKeepsItsFactorizationTest {
         EvidenceCase evidence = new EvidenceCase();
         evidence.addFinding(new Finding(load().getVariable("tipo_catarata"), 1));
         evidence.addFinding(new Finding(load().getVariable("camara_estrecha"), 1));
-
-        assertSamePosteriors(posteriors(false, evidence), posteriors(true, evidence));
+        
+        HashMap<Variable, TablePotential> notKeepingFactorization = posteriors(false, evidence);
+        HashMap<Variable, TablePotential> keepingFactorization = posteriors(true, evidence);
+        assertSamePosteriors(notKeepingFactorization, keepingFactorization);
     }
 
     /** Keeping the factorization is what the network is projected for, so it must cost less. */

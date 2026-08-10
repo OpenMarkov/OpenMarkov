@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="DAN">
+    <Comment showWhenOpeningNetwork="false"><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This problem consists in deciding how to treat a patient that may suffer 
+      from a certain disease. The decision maker may order a test to be done 
+      and treat the patient depending on the result of the test.
+    </p>
+  </body>
+</html>]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <AdditionalProperties>
+      <Property name="Version" value="1.0" />
+      <Property name="VisualPrecision" value="0.0" />
+      <Property name="KindOfGraph" value="directed" />
+    </AdditionalProperties>
+    <Variables>
+      <Variable name="Disease" type="finiteStates" role="chance">
+        <Coordinates x="125" y="58" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="X" />
+        </AdditionalProperties>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Result of test" type="finiteStates" role="chance">
+        <Coordinates x="298" y="141" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Y" />
+        </AdditionalProperties>
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="400" y="250" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="D" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Do test?" type="finiteStates" role="decision">
+        <Coordinates x="443" y="59" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="T" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Health state" type="numeric" role="utility">
+        <Coordinates x="232" y="312" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="U" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Cost of test" type="numeric" role="utility">
+        <Coordinates x="517" y="140" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="C" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Health state" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of test" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Health state" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Cost of test" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Result of test" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Do test?" />
+            <Variable name="Result of test" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+        </RevelationCondition>
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.86 0.14</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Result of test" />
+          <Variable name="Do test?" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.0 0.0 0.97 0.03 0.0 0.0 0.09 0.91</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Health state" />
+        <Variables>
+          <Variable name="Disease" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>10.0 3.0 9.0 8.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of test" />
+        <Variables>
+          <Variable name="Do test?" />
+        </Variables>
+        <Values>0.0 -0.25</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

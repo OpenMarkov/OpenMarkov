@@ -8,9 +8,16 @@ import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.component.NumericSpinner;
-import org.openmarkov.gui.configuration.*;
+import org.openmarkov.gui.configuration.GUIColors;
+import org.openmarkov.gui.configuration.OperatingSystem;
+import org.openmarkov.gui.configuration.StartupAction;
+import org.openmarkov.gui.configuration.Theme;
+import org.openmarkov.gui.configuration.UserPreference;
+import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.configuration.gson.GsonCommon;
+import org.openmarkov.gui.dialog.common.CommonOptions;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
+import org.openmarkov.gui.dialog.common.OptionDialog;
 import org.openmarkov.gui.dialog.io.FileFilterByExtension;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.gui.util.GUIUtils;
@@ -19,18 +26,43 @@ import org.openmarkov.java.collectionsUtils.streamUtils.StreamUtils;
 import org.openmarkov.java.langUtils.SwitchUtils;
 import org.openmarkov.java.swing.SimplifiedGridBagConstraint;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JTree;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class SettingsDialog extends JDialog {
@@ -407,13 +439,15 @@ public final class SettingsDialog extends JDialog {
                                                                   """);
             
             restoreBackupButton.addActionListener(e -> {
-                var selection = JOptionPane.showConfirmDialog(this,
-                                                              """
-                                                                      This operation cannot be undone.
-                                                                      Are you sure you want to restore your configuration to default values?
-                                                                      This will restore more than just the values that you can export and re-import.
-                                                                      """, "Non-recoverable operation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                if (selection != JOptionPane.YES_OPTION) {
+                OptionDialog<CommonOptions.YesNo> dialog = new OptionDialog<>(MainGUI.INSTANCE,
+                                                                              "Non-recoverable operation",
+                                                                              """
+                                                                                      This operation cannot be undone.
+                                                                                      Are you sure you want to restore your configuration to default values?
+                                                                                      This will restore more than just the values that you can export and re-import.
+                                                                                      """,
+                                                                              CommonOptions.YesNo.class);
+                if (dialog.request(CommonOptions.YesNo.NO) != CommonOptions.YesNo.YES) {
                     return;
                 }
                 UserPreferences.getAllPreferences().stream()

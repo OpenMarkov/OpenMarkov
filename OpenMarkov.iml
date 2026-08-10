@@ -2,7 +2,10 @@
 <module version="4">
   <component name="AdditionalModuleElements">
     <content url="file://$MODULE_DIR$" dumb="true">
+      <excludeFolder url="file://$MODULE_DIR$/.idea/artifacts" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/inspectionProfiles" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/runConfigurations" />
+      <excludeFolder url="file://$MODULE_DIR$/0_miscellaneous/installer" />
     </content>
   </component>
 </module>

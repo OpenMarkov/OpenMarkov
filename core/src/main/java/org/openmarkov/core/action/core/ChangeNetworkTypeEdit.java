@@ -67,8 +67,8 @@ import java.util.List;
         }
         if (probNet.isMultiagent()) {
             ArrayList<StringWithProperties> agents = new ArrayList<>();
-            agents.add(new StringWithProperties(" Agent 1"));
-            agents.add(new StringWithProperties(" Agent 2"));
+            agents.add(new StringWithProperties("Agent 1"));
+            agents.add(new StringWithProperties("Agent 2"));
             probNet.setAgents(agents);
         }
     }

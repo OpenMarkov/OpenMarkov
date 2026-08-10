@@ -9,17 +9,22 @@ package org.openmarkov.gui.dialog.common;
 
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.component.OMTableModel;
 import org.openmarkov.gui.exception.ThereIsNoNodeInDataException;
 import org.openmarkov.gui.loader.element.IconBind;
-import org.openmarkov.core.localize.StringDatabase;
 
-import javax.swing.*;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.LayoutStyle;
+import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -101,12 +106,8 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
      */
     private final boolean showHeader;
     
-    /**
-     * this is a default constructor with no construction parameters
-     */
-    public KeyTablePanel() {
-        this(null, null, false, false, false);
-    }
+    
+    private final boolean firstColumnHidden;
 
     /**
      * Tells the user that renaming a state was refused because another state already has the new
@@ -121,6 +122,7 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
     /**
      * This is the default constructor
      *
+     * @param firstColumnHidden
      * @param columns     array of texts that appear in the header of the columns.
      * @param data        content of the cells.
      * @param reorderable if true, the elements of the table can be reordered.
@@ -128,16 +130,13 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
      *                    modifiable.
      */
     public KeyTablePanel(String[] columns, Object[][] data, boolean reorderable, boolean modifiable,
-                         boolean showHeader) {
+                         boolean showHeader, boolean firstColumnHidden) {
         this.columns = columns.clone();
         this.data = data.clone();
         this.reorderable = reorderable;
         this.modifiable = modifiable;
         this.showHeader = showHeader;
-    }
-    
-    public KeyTablePanel(String[] columns, Object[][] data, boolean reorderable, boolean modifiable) {
-        this(columns, data, reorderable, modifiable, false);
+        this.firstColumnHidden = firstColumnHidden;
     }
     
     /**
@@ -190,7 +189,7 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
      */
     public KeyTable getValuesTable() {
         if (valuesTable == null) {
-            valuesTable = new KeyTable(getTableModel(), modifiable, true, showHeader);
+            valuesTable = new KeyTable(getTableModel(), modifiable, this.firstColumnHidden, showHeader);
             valuesTable.setName("KeyTablePanel.valuesTable");
             valuesTable.onTables(omjTable -> omjTable.setListSelectionListener(this));
         }
@@ -204,7 +203,7 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
      */
     protected OMTableModel getTableModel() {
         if (tableModel == null) {
-            tableModel = new OMTableModel(data, columns, true);
+            tableModel = new OMTableModel(data, columns, this.firstColumnHidden);
         }
         return tableModel;
     }

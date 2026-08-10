@@ -7,12 +7,21 @@
 
 package org.openmarkov.gui.dialog.node;
 
+import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionManager;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.TextComponent;
+import java.awt.TextField;
+import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
@@ -33,7 +42,8 @@ import java.util.List;
 
     private double[] parameters;
     private final List<TextField> parameterTextFields;
-	public DistributionParameterDialog(Window owner, String distributionType, double[] parameters) {
+    
+    public DistributionParameterDialog(Window owner, String distributionType, @Nullable double[] parameters) {
 		super(owner);
 		this.parameters = parameters;
 		ProbDensFunctionManager distrManager = ProbDensFunctionManager.getUniqueInstance();
@@ -76,12 +86,8 @@ import java.util.List;
 			this.setVisible(false);
 		}
 	}
-
-	public DistributionParameterDialog(Window owner, String distributionType) {
-		this(owner, distributionType, null);
-	}
-
-	@Override protected boolean doOkClickBeforeHide() {
+    
+    @Override protected boolean doOkClickBeforeHide() {
 		if (parameters == null) {
 			parameters = new double[parameterTextFields.size()];
 		}

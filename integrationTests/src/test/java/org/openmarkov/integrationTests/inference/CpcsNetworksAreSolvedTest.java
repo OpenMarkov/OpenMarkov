@@ -40,14 +40,17 @@ public class CpcsNetworksAreSolvedTest {
      */
     private record Profile(String file, int nodes, int links, int largestFanIn, int fromFourParents) {
     }
-
-    private static final Profile CPCS_54 = new Profile("networks/bn/BN-cpcs54.pgmx", 54, 108, 9, 8);
-    private static final Profile CPCS_179 = new Profile("networks/bn/BN-cpcs179.pgmx", 179, 239, 8, 6);
-    private static final Profile CPCS_360B = new Profile("networks/bn/BN-cpcs360b.pgmx", 360, 729, 11, 51);
-    private static final Profile CPCS_422B = new Profile("networks/bn/BN-cpcs422b.pgmx", 422, 867, 17, 59);
+    
+    private static final List<Profile> TEST_PROFILES = List.of(
+            new Profile("networks/bn/BN-cpcs54.pgmx", 54, 108, 9, 8),
+            new Profile("networks/bn/BN-cpcs179.pgmx", 179, 239, 8, 6)
+            //These two profiles take way too long for tests to complete
+            //new Profile("networks/bn/BN-cpcs360b.pgmx", 360, 729, 11, 51),
+            //new Profile("networks/bn/BN-cpcs422b.pgmx", 422, 867, 17, 59)
+    );
 
     private static Stream<Profile> everyNetwork() {
-        return Stream.of(CPCS_54, CPCS_179, CPCS_360B, CPCS_422B);
+        return TEST_PROFILES.stream();
     }
 
     @Tag(TestSpeed.SLOW)

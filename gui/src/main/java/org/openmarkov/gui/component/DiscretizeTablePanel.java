@@ -34,7 +34,6 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -163,7 +162,7 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
      * constructor with parameters
      */
     public DiscretizeTablePanel(String[] newColumns, Object[][] noKeyData, String newKeyPrefix, Node node) {
-        super(newColumns, new Object[0][0], true, true);// , notifier);
+        super(newColumns, new Object[0][0], true, true, false, true);// , notifier);
         this.node = node;
         keyPrefix = newKeyPrefix;
         initialize();

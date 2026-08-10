@@ -11,12 +11,15 @@ import org.openmarkov.gui.component.OMTableModel;
 import org.openmarkov.gui.component.StickyColumnsTablePane;
 import org.openmarkov.gui.configuration.GUIColors;
 
-import javax.swing.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.Serial;
@@ -113,7 +116,7 @@ public class KeyTable extends StickyColumnsTablePane {
     /**
      * @param firstColumnHidden the firstColumnHidden to set
      */
-    protected final void setFirstColumnHidden(boolean firstColumnHidden) {
+    public final void setFirstColumnHidden(boolean firstColumnHidden) {
         this.firstColumnHidden = firstColumnHidden;
     }
     
@@ -169,8 +172,9 @@ public class KeyTable extends StickyColumnsTablePane {
          * This variable is used to set additionalProperties for the columns in the
          * table
          */
-        TableColumn column = this.getColumn(0);
-        if (this.firstColumnHidden && column != null) {
+        
+        if (this.firstColumnHidden && this.getColumnCount() > 0) {
+            TableColumn column = this.getColumn(0);
             column.setMinWidth(0);
             column.setMaxWidth(0);
             column.setWidth(0);

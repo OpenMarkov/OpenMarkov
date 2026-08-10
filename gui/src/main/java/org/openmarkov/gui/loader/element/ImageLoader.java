@@ -7,8 +7,6 @@
 
 package org.openmarkov.gui.loader.element;
 
-import io.github.jorgericovivas.rust_essentials.tuples.Tuple3Record;
-import io.github.jorgericovivas.rust_essentials.tuples.Tuples;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.gui.configuration.UserPreferences;
 
@@ -107,21 +105,24 @@ public class ImageLoader {
         Double uiScale = UserPreferences.UI_SCALE.get();
         var desiredScale = ImageLoader.SCALES[ImageLoader.SCALES.length - 1];
         for (var scale : ImageLoader.SCALES) {
-            if (uiScale >= scale.v0() && uiScale < scale.v1()) {
+            if (uiScale >= scale.minRange && uiScale < scale.maxRange) {
                 desiredScale = scale;
                 break;
             }
         }
-        return new OMImageIcon(source.getScaledInstance(desiredScale.v2(), desiredScale.v2(), Image.SCALE_SMOOTH));
+        return new OMImageIcon(source.getScaledInstance(desiredScale.pixelsToUse, desiredScale.pixelsToUse, Image.SCALE_SMOOTH));
     }
     
-    private static final Tuple3Record<Double, Double, Integer>[] SCALES = new Tuple3Record[]{
-            Tuples.record(Double.MIN_VALUE, 0.1, 1),
-            Tuples.record(0.1, 0.2, 2),
-            Tuples.record(0.2, 0.5, 4),
-            Tuples.record(0.5, 0.7, 8),
-            Tuples.record(0.7, 1.2, 20),
-            Tuples.record(1.2, 1.5, 32),
-            Tuples.record(1.5, Double.MAX_VALUE, 64)
+    record Scale(double minRange, double maxRange, int pixelsToUse) {
+    }
+    
+    private static final Scale[] SCALES = new Scale[]{
+            new Scale(Double.MIN_VALUE, 0.1, 1),
+            new Scale(0.1, 0.2, 2),
+            new Scale(0.2, 0.5, 4),
+            new Scale(0.5, 0.7, 10),
+            new Scale(0.7, 1.2, 24),
+            new Scale(1.2, 1.5, 38),
+            new Scale(1.5, Double.MAX_VALUE, 64)
     };
 }

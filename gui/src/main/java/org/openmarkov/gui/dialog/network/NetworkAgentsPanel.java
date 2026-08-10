@@ -7,14 +7,13 @@
 
 package org.openmarkov.gui.dialog.network;
 
-import java.util.List;
+import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.StringWithProperties;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.StringWithProperties;
-import org.openmarkov.core.localize.StringDatabase;
+import java.util.List;
 
 /**
  * Panel to set the Agents of a network.
@@ -83,8 +82,6 @@ public class NetworkAgentsPanel extends JPanel {
 			}
 			// initialising data structure for the table model
 			getNetworkAgentsTablePanel().setData(data);
-			// initialising data structure for supervising data order in GUI
-			getNetworkAgentsTablePanel().setDataTable(data);
 		}
 	}
 	

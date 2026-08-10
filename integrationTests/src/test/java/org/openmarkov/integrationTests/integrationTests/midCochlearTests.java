@@ -10,7 +10,6 @@ package org.openmarkov.integrationTests.integrationTests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
-import org.openmarkov.core.testTags.TestSpeed;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.exception.ConstraintViolatedException;
@@ -27,6 +26,7 @@ import org.openmarkov.core.model.network.UtilityOperations;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.inference.algorithm.temporalevaluation.tasks.TemporalEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEAnalysis;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
@@ -40,8 +40,7 @@ import java.util.List;
  */
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class midCochlearTests {
-    private final String networkName = "networks/mid/MID-Cochlear.pgmx";
-    
+
     // Delta parameter for Assertions.Equals methods
     private final double deltaEquals = Math.pow(10, -4);
     
@@ -69,6 +68,8 @@ public class midCochlearTests {
         // Load the network: ID-decide-test
         PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();
         PGMXReader.NetworkAndEvidence probNetInfo = null;
+        String networkName = "networks/mid/MID-Cochlear.pgmx";
+        System.out.println(getClass().getClassLoader().getResource(networkName));
         probNetInfo = pgmxReader.read(getClass().getClassLoader().getResource(networkName));
         this.probNet = probNetInfo.probNet();
         if (probNetInfo.evidence().size() != 0) {

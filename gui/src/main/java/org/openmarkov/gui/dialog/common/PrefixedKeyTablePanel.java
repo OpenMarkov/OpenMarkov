@@ -7,8 +7,8 @@
 
 package org.openmarkov.gui.dialog.common;
 
-import org.openmarkov.core.action.core.NodeStateEdit;
 import org.openmarkov.core.action.base.StateAction;
+import org.openmarkov.core.action.core.NodeStateEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.UnrecoverableException;
@@ -16,7 +16,7 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.TemporalNetOperations;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -59,6 +59,7 @@ public class PrefixedKeyTablePanel extends KeyTablePanel implements TableModelLi
      * this a default constructor with no construction parameters
      */
     public PrefixedKeyTablePanel() {
+        super(null, null, false, false, false, true);
         keyPrefix = "";
         initialize();
         getValuesTable().getModel().addTableModelListener(this);
@@ -74,7 +75,7 @@ public class PrefixedKeyTablePanel extends KeyTablePanel implements TableModelLi
      */
     public PrefixedKeyTablePanel(String[] newColumns, Object[][] noKeyData, String newKeyPrefix,
                                  boolean firstColumnHidden) {// , ElementObservable notifier) {
-        super(newColumns, new Object[0][0], true, true);// , notifier);
+        super(newColumns, new Object[0][0], true, true, false, true);// , notifier);
         keyPrefix = newKeyPrefix;
         initialize();
         getValuesTable().getModel().addTableModelListener(this);
@@ -84,7 +85,7 @@ public class PrefixedKeyTablePanel extends KeyTablePanel implements TableModelLi
     
     public PrefixedKeyTablePanel(String[] newColumns, Object[][] noKeyData, String newKeyPrefix,
                                  boolean firstColumnHidden, Node node) {
-        super(newColumns, new Object[0][0], true, true);// , notifier);
+        super(newColumns, new Object[0][0], true, true, false, true);// , notifier);
         this.node = node;
         keyPrefix = newKeyPrefix;
         initialize();

@@ -9,7 +9,13 @@ package org.openmarkov.core.model.network;
 
 import org.openmarkov.core.inference.InferenceOptions;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Currency;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Groups all descriptive and configuration metadata of a {@link ProbNet}:
@@ -21,32 +27,57 @@ import java.util.*;
  * so the public API of the network does not change.
  */
 public class NetworkMetadata {
-
+    
+    public static Locale USERS_LOCALE = Locale.getDefault(Locale.Category.FORMAT);
+    
     private String name;
     private String comment = "";
     private boolean showCommentWhenOpening = false;
-    private State[] defaultStates = { new State("absent"), new State("present") };
+    private State[] defaultStates = {new State("absent"), new State("present")};
     private InferenceOptions inferenceOptions = new InferenceOptions();
     private CycleLength cycleLength = new CycleLength();
     private List<StringWithProperties> agents;
     private List<Criterion> decisionCriteria;
     private final Map<String, String> additionalProperties = new LinkedHashMap<>();
-
+    
     /** Creates metadata with default values. */
     public NetworkMetadata() {
         this.decisionCriteria = new ArrayList<>();
-        this.decisionCriteria.add(new Criterion());
+        String symbol = "€";
+        try {
+            symbol = Currency.getInstance(NetworkMetadata.USERS_LOCALE).getSymbol();
+        } catch (RuntimeException ex) {
+            //Do not catch this exception, it is only used to get the user's preferred currency, but when there is none,
+            //it resorts to €.
+        }
+        this.decisionCriteria.add(new Criterion("Cost", symbol));
+        this.decisionCriteria.add(new Criterion("Effectiveness", "QALY"));
     }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getComment() { return comment; }
-    public void setComment(String comment) { this.comment = comment; }
-
-    public boolean getShowCommentWhenOpening() { return showCommentWhenOpening; }
-    public void setShowCommentWhenOpening(boolean show) { this.showCommentWhenOpening = show; }
-
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getComment() {
+        return comment;
+    }
+    
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+    
+    public boolean getShowCommentWhenOpening() {
+        return showCommentWhenOpening;
+    }
+    
+    public void setShowCommentWhenOpening(boolean show) {
+        this.showCommentWhenOpening = show;
+    }
+    
     /** Returns a defensive copy so callers cannot mutate the stored array. */
     public State[] getDefaultStates() {
         State[] copy = new State[defaultStates.length];
@@ -55,20 +86,43 @@ public class NetworkMetadata {
         }
         return copy;
     }
-    public void setDefaultStates(State[] defaultStates) { this.defaultStates = defaultStates; }
-
-    public InferenceOptions getInferenceOptions() { return inferenceOptions; }
-    public void setInferenceOptions(InferenceOptions inferenceOptions) { this.inferenceOptions = inferenceOptions; }
-
-    public CycleLength getCycleLength() { return cycleLength; }
-    public void setCycleLength(CycleLength cycleLength) { this.cycleLength = cycleLength; }
-
-    public List<StringWithProperties> getAgents() { return agents; }
-    public void setAgents(List<StringWithProperties> agents) { this.agents = agents; }
-
-    public List<Criterion> getDecisionCriteria() { return decisionCriteria; }
-    public void setDecisionCriteria(List<Criterion> decisionCriteria) { this.decisionCriteria = decisionCriteria; }
-
+    
+    public void setDefaultStates(State[] defaultStates) {
+        this.defaultStates = defaultStates;
+    }
+    
+    public InferenceOptions getInferenceOptions() {
+        return inferenceOptions;
+    }
+    
+    public void setInferenceOptions(InferenceOptions inferenceOptions) {
+        this.inferenceOptions = inferenceOptions;
+    }
+    
+    public CycleLength getCycleLength() {
+        return cycleLength;
+    }
+    
+    public void setCycleLength(CycleLength cycleLength) {
+        this.cycleLength = cycleLength;
+    }
+    
+    public List<StringWithProperties> getAgents() {
+        return agents;
+    }
+    
+    public void setAgents(List<StringWithProperties> agents) {
+        this.agents = agents;
+    }
+    
+    public List<Criterion> getDecisionCriteria() {
+        return decisionCriteria;
+    }
+    
+    public void setDecisionCriteria(List<Criterion> decisionCriteria) {
+        this.decisionCriteria = decisionCriteria;
+    }
+    
     /**
      * Returns an unmodifiable view of the additional properties.
      * Use {@link #setAdditionalProperties(Map)} to bulk-replace or
@@ -77,7 +131,7 @@ public class NetworkMetadata {
     public Map<String, String> getAdditionalProperties() {
         return Collections.unmodifiableMap(additionalProperties);
     }
-
+    
     /** Replaces all additional properties; {@code null} is treated as empty. */
     public void setAdditionalProperties(Map<String, String> props) {
         this.additionalProperties.clear();
@@ -85,7 +139,7 @@ public class NetworkMetadata {
             this.additionalProperties.putAll(props);
         }
     }
-
+    
     /** Adds or replaces a single additional property. */
     public void putAdditionalProperty(String key, String value) {
         this.additionalProperties.put(key, value);

@@ -7,8 +7,7 @@
 
 package org.openmarkov.integrationTests.integrationTests.networksTests;
 
-import bitbucket.NetsRepository;
-import org.jetbrains.annotations.NotNull;
+import networks.Networks;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,7 +36,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,113 +52,116 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class NetsIOTest {
     
-    private static final Set<String> NETWORKS_TO_SKIP = NetsIOTest.networksToSkip();
+    private static final Set<String> NETWORKS_TO_SKIP = Set.of(
+            //Already passed with VEPropagation
+            "BN-alarm.pgmx",
+            "BN-asia.pgmx",
+            "BN-catarnet.pgmx",
+            "BN-hepar.pgmx",
+            "BN-nasonet.pgmx",
+            "BN-one-disease.pgmx",
+            "BN-prostanet.pgmx",
+            "BN-two-diseases.pgmx",
+            "BN-two-diseases-naive.pgmx",
+            "BN-noisy-or-four-parents.pgmx",
+            //Already passed with load, save and reload
+            "DAN-3-test-problem.pgmx",
+            "DAN-4-test-problem.pgmx",
+            "DAN-5-test-problem.pgmx",
+            "DAN-6-test-problem.pgmx",
+            "DAN-7-test-problem.pgmx",
+            "DAN-arthronet.pgmx",
+            "DAN-dating.pgmx",
+            "DAN-decide-test-ce.pgmx",
+            "DAN-decide-test-ordered.pgmx",
+            "DAN-decide-test-symptom.pgmx",
+            "DAN-decide-test-with-restrictive-symptom.pgmx",
+            "DAN-decide-test-with-symptom.pgmx",
+            "DAN-decide-test.pgmx",
+            "DAN-decide-test-2therapies.pgmx",
+            "DAN-delayed-result-of-test.pgmx",
+            "DAN-diabetes.pgmx",
+            "DAN-economic-mediastinet.pgmx",
+            "DAN-king.pgmx",
+            "DAN-mediastinet.pgmx",
+            "DAN-mediastinet-ce.pgmx",
+            "DAN-symmetric-test1.pgmx",
+            "DAN-qale-mediastinet.pgmx",
+            "DAN-reactor.pgmx",
+            "DAN-test-always.pgmx",
+            "DAN-test-2therapies.pgmx",
+            "DAN-unordered-two-decs.pgmx",
+            "DAN-used-car-buyer.pgmx",
+            "LIMID-Nilsson-Lauritzen.pgmx",
+            "LIMID-decide-test-symptom.pgmx",
+            "Dec-POMDP-wireless-network.pgmx",
+            "POMDP-coffee-robot.pgmx",
+            // TODO - Check CEA: Already passed with VEResolution, VEPropagation, VETemporalEvolution, VECEADecision, VECEAGlobal, VECEPSA
+            "ID-CEA-minimal.pgmx",
+            //"ID-CEA-test-2therapies-3criteria.pgmx",
+            "ID-CEA-test-2therapies-new-test.pgmx",
+            "ID-CEA-test-2therapies.pgmx",
+            "ID-decide-test-without-dummy-state.pgmx",
+            "ID-decide-test.pgmx",
+            "ID-Monty-Hall-spanish.pgmx",
+            "MID-Chancellor.pgmx",
+            "MID-Chancellor-new.pgmx",
+            "MID-Chancellor-corrected.pgmx",
+            "MID-mammography.pgmx",
+            "MID-hip-Briggs.pgmx",
+            "MID-dmhee-2.5.pgmx",
+            "MID-dmhee-3.5.pgmx",
+            "MID-dmhee-4.7.pgmx",
+            "MID-dmhee-4.8.pgmx",
+            "MID-HPV-without-supervalue.pgmx",
+            // TODO - Failed on VEPropagation (Draw/Tie Policy ?)
+            "ID-delayed-result-of-test.pgmx",
+            // TODO - Failed getting optimal intervention on Resolution
+            "ID-mediastinet-ce.pgmx",
+            
+            // TODO - Failed on Resolution?
+            "MID-CHD-Walker.pgmx",
+            
+            // TODO - Failed in VEPropagation (All with supervalue nodes)
+            "ID-arthronet.pgmx",
+            "ID-arthronet-ce.pgmx",
+            "ID-mediastinet.pgmx",
+            "ID-used-car-buyer.pgmx",
+            "MID-CHAP-Ryan-Griffin.pgmx",
+            "MID-HPV.pgmx",
+            // Too big
+            "MID-Cochlear.pgmx",
+            "MID-Colorectal.pgmx",
+            // TODO - only for 'Augmented bayesian networks' branch
+            "ID-decide-test-0.4.0.pgmx",
+            "ID-decide-test-0.5.0.pgmx",
+            
+            //TODO: These are quite slow to execute
+            "BN-catarnet-1-0.pgmx",
+            "BN-nasonet-1-0.pgmx",
+            "ID-mediastinet-first-ebus-ce.pgmx",
+            "ID-mediastinet-first-eus-ce.pgmx",
+            
+            "MID-CHAP-Ryan-Griffin-1-0.pgmx",
+            "MID-Colorectal-1-0.pgmx",
+            "MID-Cochlear-1-0.pgmx",
+            "MID-HPV-1-0.pgmx",
+            "MID-HPV-without-supervalue-1-0.pgmx",
+            "MID-hip-Briggs-1-0.pgmx"
+    );
     
-    private static @NotNull Set<String> networksToSkip() {
-        return Stream.of(
-                //Already passed with VEPropagation
-                "BN-alarm.pgmx",
-                "BN-asia.pgmx",
-                "BN-catarnet.pgmx",
-                "BN-hepar.pgmx",
-                "BN-nasonet.pgmx",
-                "BN-one-disease.pgmx",
-                "BN-prostanet.pgmx",
-                "BN-two-diseases.pgmx",
-                "BN-two-diseases-naive.pgmx",
-                "BN-noisy-or-four-parents.pgmx",
-                //Already passed with load, save and reload
-                "DAN-3-test-problem.pgmx",
-                "DAN-4-test-problem.pgmx",
-                "DAN-5-test-problem.pgmx",
-                "DAN-6-test-problem.pgmx",
-                "DAN-7-test-problem.pgmx",
-                "DAN-arthronet.pgmx",
-                "DAN-dating.pgmx",
-                "DAN-decide-test-ce.pgmx",
-                "DAN-decide-test-ordered.pgmx",
-                "DAN-decide-test-symptom.pgmx",
-                "DAN-decide-test-with-restrictive-symptom.pgmx",
-                "DAN-decide-test-with-symptom.pgmx",
-                "DAN-decide-test.pgmx",
-                "DAN-decide-test-2therapies.pgmx",
-                "DAN-delayed-result-of-test.pgmx",
-                "DAN-diabetes.pgmx",
-                "DAN-economic-mediastinet.pgmx",
-                "DAN-king.pgmx",
-                "DAN-mediastinet.pgmx",
-                "DAN-mediastinet-ce.pgmx",
-                "DAN-symmetric-test1.pgmx",
-                "DAN-qale-mediastinet.pgmx",
-                "DAN-reactor.pgmx",
-                "DAN-test-always.pgmx",
-                "DAN-test-2therapies.pgmx",
-                "DAN-unordered-two-decs.pgmx",
-                "DAN-used-car-buyer.pgmx",
-                "LIMID-Nilsson-Lauritzen.pgmx",
-                "LIMID-decide-test-symptom.pgmx",
-                "Dec-POMDP-wireless-network.pgmx",
-                "POMDP-coffee-robot.pgmx",
-                // TODO - Check CEA: Already passed with VEResolution, VEPropagation, VETemporalEvolution, VECEADecision, VECEAGlobal, VECEPSA
-                "ID-CEA-minimal.pgmx",
-                //"ID-CEA-test-2therapies-3criteria.pgmx",
-                "ID-CEA-test-2therapies-new-test.pgmx",
-                "ID-CEA-test-2therapies.pgmx",
-                "ID-decide-test-without-dummy-state.pgmx",
-                "ID-decide-test.pgmx",
-                "ID-Monty-Hall-spanish.pgmx",
-                "MID-Chancellor.pgmx",
-                "MID-Chancellor-new.pgmx",
-                "MID-Chancellor-corrected.pgmx",
-                "MID-mammography.pgmx",
-                "MID-hip-Briggs.pgmx",
-                "MID-dmhee-2.5.pgmx",
-                "MID-dmhee-3.5.pgmx",
-                "MID-dmhee-4.7.pgmx",
-                "MID-dmhee-4.8.pgmx",
-                "MID-HPV-without-supervalue.pgmx",
-                // TODO - Failed on VEPropagation (Draw/Tie Policy ?)
-                "ID-delayed-result-of-test.pgmx",
-                // TODO - Failed getting optimal intervention on Resolution
-                "ID-mediastinet-ce.pgmx",
-                
-                // TODO - Failed on Resolution?
-                "MID-CHD-Walker.pgmx",
-                
-                // TODO - Failed in VEPropagation (All with supervalue nodes)
-                "ID-arthronet.pgmx",
-                "ID-arthronet-ce.pgmx",
-                "ID-mediastinet.pgmx",
-                "ID-used-car-buyer.pgmx",
-                "MID-CHAP-Ryan-Griffin.pgmx",
-                "MID-HPV.pgmx",
-                // Too big
-                "MID-Cochlear.pgmx",
-                "MID-Colorectal.pgmx",
-                // TODO - only for 'Augmented bayesian networks' branch
-                "ID-decide-test-0.4.0.pgmx",
-                "ID-decide-test-0.5.0.pgmx",
-                
-                //TODO: These are quite slow to execute
-                "MID-CHAP-Ryan-Griffin-1-0.pgmx",
-                "MID-Cochlear-1-0.pgmx",
-                "MID-HPV-1-0.pgmx",
-                "MID-HPV-without-supervalue-1-0.pgmx",
-                "MID-hip-Briggs-1-0.pgmx"
-        ).collect(Collectors.toSet());
+    record NetworkToTest(URL url, PGMXVersion version) {
     }
     
-    record NetworkToTest(URL url, PGMXVersion version) {}
-    
     static Stream<NetworkToTest> networksToTest() throws IOException {
-        List<URL> listURL = NetsRepository.getNetworks();
+        List<URL> listURL = new ArrayList<>(Networks.getNetworks().toList());
         listURL.removeIf(url -> {
             String networkName = url.getPath();
             networkName = networkName.substring(networkName.lastIndexOf("/") + 1);
             return NETWORKS_TO_SKIP.contains(networkName);
         });
         ArrayList<NetworkToTest> listNetworkToTest = new ArrayList<>(listURL.size());
-        for(URL url : listURL) {
+        for (URL url : listURL) {
             PGMXVersion version = getVersion(url);
             listNetworkToTest.add(new NetworkToTest(url, version));
         }
@@ -220,7 +221,7 @@ public class NetsIOTest {
         boolean useMultithreading = true;
         
         if (!probNetInfo.evidence().isEmpty()) {
-            preResolutionEvidence = probNetInfo.evidence().get(0);
+            preResolutionEvidence = probNetInfo.evidence().getFirst();
         } else {
             preResolutionEvidence = new EvidenceCase();
         }

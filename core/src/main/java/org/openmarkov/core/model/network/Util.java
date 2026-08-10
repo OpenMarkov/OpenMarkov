@@ -303,9 +303,7 @@ public class Util {
     }
     
     public static double roundWithSignificantFigures(double x, int numDecimals) {
-        BigDecimal bigX = new BigDecimal(x);
-        bigX = bigX.round(new MathContext(numDecimals));
-        return bigX.doubleValue();
+        return BigDecimal.valueOf(x).round(new MathContext(numDecimals)).doubleValue();
     }
     
     /**
