@@ -193,10 +193,11 @@
           <name>Public domain, Sun Microsoystems</name>
           <url>&gt;http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html</url>
           <comments>All classes are released to the public domain and may be used for any purpose whatsoever without
-            permission or acknowledgment. Portions of the CopyOnWriteArrayList and ConcurrentReaderHashMap classes are
-            adapted from Sun JDK source code. These are copyright of Sun Microsystems, Inc, and are used with their kind
-            permission, &lt;a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/sun-u.c.license.pdf"&gt;as
-            described in this license&lt;/a&gt;.
+            permission or acknowledgment. Portions of the CopyOnWriteArrayList and ConcurrentReaderHashMap classes
+            are adapted from Sun JDK source code. These are copyright of Sun Microsystems, Inc, and are used with
+            their kind permission, &lt;a
+            href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/sun-u.c.license.pdf"&gt;as described in
+            this license&lt;/a&gt;.
           </comments>
         </license>
       </licenses>

@@ -302,12 +302,11 @@ public final class SettingsDialog extends JDialog {
                     var newDomains = new ArrayList<>(Arrays.stream(lines).map(String::trim)
                                                            .filter(line -> !line.isEmpty())
                                                            .filter(line -> !line.equals("-"))
-                                                           .map(line -> {
-                                                               return new ArrayList<>(Arrays.stream(line.split("-"))
-                                                                                            .map(String::trim)
-                                                                                            .filter(stateName -> !stateName.isEmpty())
-                                                                                            .toList());
-                                                           }).toList());
+                                                           .map(line -> new ArrayList<>(Arrays.stream(line.split("-"))
+                                                                                              .map(String::trim)
+                                                                                              .filter(stateName -> !stateName.isEmpty())
+                                                                                              .distinct()
+                                                                                              .toList())).toList());
                     UserPreferences.CUSTOM_DOMAINS.set(newDomains);
                     reloadDomains.run();
                 }

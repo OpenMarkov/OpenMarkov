@@ -195,7 +195,7 @@ public class NetworkFileHandler {
         if (!networksMatchingThisOne.isEmpty()) {
             OptionDialog<CommonOptions.YesNo> dialog = new OptionDialog<>(MainGUI.INSTANCE,
                                                                           "Network already opened",
-                                                                          "This network is already open, do you want to reload it?",
+                                                                          "The network " + networkFile + " is already open, do you want to reload it?",
                                                                           CommonOptions.YesNo.class);
             if (dialog.request(CommonOptions.YesNo.NO) != CommonOptions.YesNo.YES) {
                 return;
