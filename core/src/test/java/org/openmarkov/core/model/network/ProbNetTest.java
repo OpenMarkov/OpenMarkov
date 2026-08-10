@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network;
 
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,8 @@ public class ProbNetTest {
     /** Compares to probNets: number of nodes, variables, links and potentials.
      * @param probNet1 <code>ProbNet</code>
      * @param probNet2 <code>ProbNet</code> */
-    public static void compareNetworks(ProbNet probNet1, ProbNet probNet2) {
+    public static void compareNetworks(ProbNet probNet1, ProbNet probNet2)
+            throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         // Compare network type restrictions
         assertEquals(probNet1.getNetworkType(), probNet2.getNetworkType());
         // Compare constraints

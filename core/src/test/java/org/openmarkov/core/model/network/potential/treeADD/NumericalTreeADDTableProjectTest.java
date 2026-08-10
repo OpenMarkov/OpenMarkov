@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.factory.MIDFactory;
@@ -110,7 +111,8 @@ public class NumericalTreeADDTableProjectTest {
         
     }
     
-    @Test public void testTableProject() throws NonProjectablePotentialException {
+    @Test public void testTableProject() throws NonProjectablePotentialException,
+            IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         List<Finding> findings = new ArrayList<>();
         Finding value = new Finding(age, 0.5);
         findings.add(value);
@@ -131,7 +133,8 @@ public class NumericalTreeADDTableProjectTest {
     
     @Tag(TestSpeed.SLOW)
     @Test
-    public void testTablePorjectNumericalTop() throws NonProjectablePotentialException {
+    public void testTablePorjectNumericalTop() throws NonProjectablePotentialException,
+            IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         //Evidence
         ProbNet probNet = MIDFactory.createSemiMarkovOnlyChanceNet();
         List<Finding> findings = new ArrayList<>();

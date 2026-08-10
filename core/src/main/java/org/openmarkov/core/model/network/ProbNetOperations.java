@@ -469,12 +469,15 @@ public class ProbNetOperations {
                         Variable parentVariable = parents.get(i).getVariable();
                         numConfigurations *= parentVariable.getNumStates();
                         parentIndices[i] = 0;
+                        // The walk starts at the first state of every parent, replacing the evidence
+                        // the user may have set on it: the states given to the numeric node are the
+                        // same with evidence and without it.
                         if (originalVariables.containsKey(parentVariable)) {
                             Variable originalVariable = originalVariables.get(parentVariable);
                             double numericalValue = Double.parseDouble(parentVariable.getStates()[0].getName());
-                            configuration.addFinding(new Finding(originalVariable, numericalValue));
+                            configuration.changeFinding(new Finding(originalVariable, numericalValue));
                         } else if (parentVariable.getVariableType() == VariableType.FINITE_STATES) {
-                            configuration.addFinding(new Finding(parentVariable, 0));
+                            configuration.changeFinding(new Finding(parentVariable, 0));
                         } else {
                             // TODO throw some exception
                         }

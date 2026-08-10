@@ -9,6 +9,7 @@ import org.openmarkov.bnEvaluation.measures.MeasureMatrix;
 import org.openmarkov.bnEvaluation.measures.MeasureType;
 import org.openmarkov.bnEvaluation.measures.MeasureValue;
 import org.openmarkov.bnEvaluation.measures.MeasuresSet;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -54,6 +55,26 @@ class NetEvaluatorTest {
         NetEvaluator evaluator = new NetEvaluator(net, db, measures);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, evaluator::runEvaluator);
         assertTrue(ex.getMessage().contains("B"), "message should name the missing variable: " + ex.getMessage());
+    }
+
+    /**
+     * Two database columns of the same name resolve to the same network variable. When they
+     * disagree, one of the two findings cannot be added, and the evaluation must say so instead of
+     * scoring the case with the value that happened to come first.
+     */
+    @Test
+    void twoDatabaseColumnsOfTheSameNameThatDisagreeStopTheEvaluation() {
+        Variable first = new Variable("A", 2);
+        Variable repeated = new Variable("A", 2);
+        ProbNet net = netWith(new Variable("A", 2));
+        CaseDatabase db = new CaseDatabase(List.of(first, repeated), new int[][] { { 0, 1 } });
+
+        MeasuresSet measures = new MeasuresSet("test");
+        measures.addMeasureValue(new MeasureValue(MeasureType.LOGLIKELIHOOD));
+
+        NetEvaluator evaluator = new NetEvaluator(net, db, measures);
+        assertThrows(IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther.class, evaluator::runEvaluator,
+                "The case was evaluated with one of the two values, and the other was dropped in silence");
     }
 
     /**

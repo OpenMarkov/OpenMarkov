@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.State;
@@ -105,7 +106,8 @@ public class TablePotentialTest {
      * @param actual
      * @param expected Checks if two potentials are equal
      */
-    public static void checkEqualPotentials(TablePotential actual, TablePotential expected, double maxError) {
+    public static void checkEqualPotentials(TablePotential actual, TablePotential expected, double maxError)
+            throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         
         int numConfigurationsActual = actual.getTableSize();
         assertEquals(numConfigurationsActual, expected.getTableSize());

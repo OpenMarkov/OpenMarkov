@@ -396,13 +396,18 @@ public class EvidenceManager {
      * @param node the node in which to remove the findings.
      */
     void removeNodeEvidenceInAllCases(Node node) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+        // Propagating belongs to the inference mode. This method is reached from the property and
+        // probability dialogs, which are gestures of the edition mode.
+        boolean isInferenceMode = this.networkEditorPanel.getNetworkEditorPanel().getWorkingMode()
+                == NetworkEditorPanel.WorkingMode.INFERENCE;
         try {
             for (int i = 0; i < this.postResolutionEvidence.size(); i++) {
                 List<Finding> findings = this.postResolutionEvidence.get(i).getFindings();
                 for (Finding finding : findings) {
                     if (node.getVariable() == (finding.getVariable())) {
                         this.postResolutionEvidence.get(i).removeFinding(finding.getVariable());
-                        if (this.networkEditorPanel.isAutomaticPropagation() && (this.getInferenceAlgorithm() != null)) {
+                        if (isInferenceMode && this.networkEditorPanel.isAutomaticPropagation()
+                                && (this.getInferenceAlgorithm() != null)) {
                             this.doPropagation(this.postResolutionEvidence.get(i), i);
                         }
                         if (i == this.currentCase) {

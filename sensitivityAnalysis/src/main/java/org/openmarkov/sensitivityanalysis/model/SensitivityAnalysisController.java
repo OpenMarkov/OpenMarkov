@@ -162,10 +162,14 @@ public class SensitivityAnalysisController {
 		}
 		this.sensitivityAnalysisPlots.add(sensitivityAnalysisResultsDialog);
 
-		// Clean preResolutionEvidence of the controller
-        this.preResolutionEvidence = new EvidenceCase(
-                MainGUI.INSTANCE.mainPanel.getMainPanelMenuAssistant().getCurrentNetworkEditorPanel().
-                                          getEditorPanel().getEvidenceManager().getPreResolutionEvidence());
+		readPreResolutionEvidenceFromNetwork();
+	}
+
+	/** Reads again the pre-resolution evidence that the network of the window has now. */
+	public void readPreResolutionEvidenceFromNetwork() {
+		this.preResolutionEvidence = new EvidenceCase(
+				MainGUI.INSTANCE.mainPanel.getMainPanelMenuAssistant().getCurrentNetworkEditorPanel().
+						getEditorPanel().getEvidenceManager().getPreResolutionEvidence());
 	}
 
 	public EvidenceCase getPreResolutionEvidence() {
