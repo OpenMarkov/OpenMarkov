@@ -7,17 +7,23 @@
 
 package org.openmarkov.inference.heuristic.fileElimination;
 
-import org.apache.logging.log4j.LogManager;
 import org.openmarkov.core.action.base.PNEdit;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.inference.heuristic.EliminationHeuristic;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This heuristic reads a list of variable names from a file.
@@ -28,6 +34,9 @@ import java.util.List;
  * @since OpenMarkov 1.0
  */
 public class FileElimination extends EliminationHeuristic {
+
+	/** The position Hugin writes before the name, as in {@code "   24 Row0"}. */
+	private static final Pattern POSITION_AND_NAME = Pattern.compile("\\s*\\d+\\s+(.*?)\\s*");
 
 	// Attributes
 	protected final List<List<Variable>> fileVariables;
@@ -56,48 +65,72 @@ public class FileElimination extends EliminationHeuristic {
 	 */
 	public static List<List<Variable>> readEliminationOrder(String fileName, List<List<Variable>> setsOfSetsVariables) {
 
-		String fullFileName = fileName.replace("elv", "hugin");
+		String orderFileName = replaceExtension(fileName, "hugin");
 
-		ArrayList<String> names = new ArrayList<String>();
-        // Reads the file
-        try (BufferedReader in = new BufferedReader(new FileReader(fullFileName))) {
-            while (true) {
-                String line = in.readLine();
-                if (line == null) break;
-                names.add(line);
-            }
+		List<String> lines;
+		try {
+			lines = Files.readAllLines(Path.of(orderFileName));
 		} catch (IOException ioException) {
-			LogManager.getLogger(FileElimination.class).fatal(ioException);
+			// It used to be logged and swallowed, and the caller got an empty order: the network
+			// was then eliminated in whatever order the heuristic fell back to, with nothing said.
+			throw new UncheckedIOException("Cannot read the elimination order from " + orderFileName, ioException);
 		}
 
-		List<List<Variable>> orderedVariables = new ArrayList<>(1);
-		List<Variable> allVariables = new ArrayList<Variable>();
-		orderedVariables.add(allVariables);
-
-		for (String name : names) {
-			for (List<Variable> variables : setsOfSetsVariables) {
-				for (Variable variable : variables) {
-					if (name.contains(variable.getName())) {
-						allVariables.add(variable);
-						break;
-					}
-				}
+		Map<String, Variable> variablesByName = new HashMap<>();
+		for (List<Variable> variables : setsOfSetsVariables) {
+			for (Variable variable : variables) {
+				variablesByName.putIfAbsent(variable.getName(), variable);
 			}
 		}
 
-		// Reverse variables because they will be taken from the last to the first in the array.
-		int first = 0;
-		int last = allVariables.size() - 1;
-		Variable auxSwap;
-		while (first < last) {
-			auxSwap = allVariables.get(first);
-			allVariables.set(first, allVariables.get(last));
-			allVariables.set(last, auxSwap);
-			first++;
-			last--;
+		List<Variable> allVariables = new ArrayList<>();
+		for (String line : lines) {
+			if (line.isBlank()) {
+				continue;
+			}
+			String name = variableNameIn(line);
+			Variable variable = variablesByName.get(name);
+			if (variable == null) {
+				throw new InvalidArgumentException(line, "fileName",
+						"line of " + orderFileName + " names no variable of the network: " + name);
+			}
+			allVariables.add(variable);
 		}
 
+		// Reverse variables because they will be taken from the last to the first in the array.
+		Collections.reverse(allVariables);
+
+		List<List<Variable>> orderedVariables = new ArrayList<>(1);
+		orderedVariables.add(allVariables);
 		return orderedVariables;
+	}
+
+	/**
+	 * The name of the variable a line names. A line of the file is the position and then the name,
+	 * as Hugin writes it — {@code "   24 Row0"} — so the position is dropped; a line that is only a
+	 * name is taken whole.
+	 * <p>
+	 * The name used to be looked for with {@code line.contains(name)}, which took the position along
+	 * for the ride but also matched any variable whose name is part of another's. In BN-hepar, where
+	 * there is an {@code amn} and a {@code vh_amn}, the line naming {@code vh_amn} answered
+	 * {@code amn}: the order applied was not the order written, {@code amn} was eliminated twice and
+	 * {@code vh_amn} never, and nothing said so.
+	 */
+	private static String variableNameIn(String line) {
+		Matcher positionAndName = POSITION_AND_NAME.matcher(line);
+		return positionAndName.matches() ? positionAndName.group(1) : line.strip();
+	}
+
+	/**
+	 * The same path with its extension replaced. It used to be {@code fileName.replace("elv",
+	 * "hugin")}, which replaces every occurrence anywhere in the path: a directory called
+	 * {@code elvira} became {@code huginira} and the file was then looked for where it is not.
+	 */
+	private static String replaceExtension(String fileName, String extension) {
+		int lastDot = fileName.lastIndexOf('.');
+		int lastSeparator = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+		return lastDot > lastSeparator ? fileName.substring(0, lastDot + 1) + extension
+				: fileName + "." + extension;
 	}
 
 	// Methods
