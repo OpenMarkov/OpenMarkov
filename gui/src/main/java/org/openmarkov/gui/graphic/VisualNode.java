@@ -9,6 +9,7 @@ package org.openmarkov.gui.graphic;
 
 import io.github.jorgericovivas.rust_essentials.tuples.Tuples;
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.gui.configuration.GUIFonts;
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -41,7 +42,7 @@ public final class VisualNode extends VisualElement implements ClassLocalizable 
     /**
      * Font type Helvetica, bold, size 15.
      */
-    private static final Font TEXT_FONT = new Font("Helvetica", Font.BOLD, 15);
+    private static final Font TEXT_FONT = GUIFonts.of(Font.BOLD, 15);
     
     /**
      * Default width of a node when it is contracted. It is the width that it
