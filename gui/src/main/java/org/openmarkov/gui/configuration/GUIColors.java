@@ -26,13 +26,22 @@ public class GUIColors {
         
         public static final class Link{
             
-            public static final GUIColor FOREGOUND = new GUIColor(new Color(0, 0, 0));
+            /** Black on the light canvas; on the dark one it would sit at 2.3:1, so it is lightened there. */
+            public static final GUIColor FOREGOUND = new GUIColor(new Color(0, 0, 0))
+                    .inDark(new Color(227, 227, 227));
             
             public static final class Creation{
-                public static final GUIColor FOREGROUND_ON_SELECTS_NOTHING = new GUIColor(new Color(178, 178, 178));
-                public static final GUIColor FOREGROUND_ON_SELECTS_FAILURE = new GUIColor(new Color(255, 0, 0));
+                // The line that follows the pointer while a link is being drawn. Each colour keeps its
+                // meaning in both themes: grey for nothing under the pointer, red for a target that
+                // cannot take the link, blue for one that can.
+                public static final GUIColor FOREGROUND_ON_SELECTS_NOTHING = new GUIColor(new Color(148, 148, 148))
+                        .inDark(new Color(178, 178, 178));
+                public static final GUIColor FOREGROUND_ON_SELECTS_FAILURE = new GUIColor(new Color(255, 0, 0))
+                        .inDark(new Color(255, 143, 143));
+                // The dark variant used to be darker than the light one, which is the wrong way round: on
+                // the dark canvas it sat at 1.3:1.
                 public static final GUIColor FOREGROUND_ON_SELECTS_SUCCESS = new GUIColor(new Color(0, 25, 209))
-                        .inDark(new Color(0, 21, 174));
+                        .inDark(new Color(178, 188, 255));
             }
             
             public static final class LinkRestriction {
@@ -46,9 +55,11 @@ public class GUIColors {
         
         public static final GUIColor BACKGROUND = new GUIColor(new Color(255, 255, 255))
                 .inDark(new Color(69, 72, 74));
-        public static final GUIColor REVELATION_ARC_VARIABLE = new GUIColor(new Color(128, 0, 0));
+        public static final GUIColor REVELATION_ARC_VARIABLE = new GUIColor(new Color(128, 0, 0))
+                .inDark(new Color(217, 141, 141));
         
-        public static final GUIColor ALWAYS_OBSERVED = new GUIColor(new Color(128, 0, 0));
+        public static final GUIColor ALWAYS_OBSERVED = new GUIColor(new Color(128, 0, 0))
+                .inDark(new Color(217, 141, 141));
         
         /*
          * The nodes are the same colour in both themes, on purpose: a chance node is yellow wherever it
