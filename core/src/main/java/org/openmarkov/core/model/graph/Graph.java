@@ -378,45 +378,52 @@ public class Graph<T> {
         if (nodes.indexOf(node1) < 0 || nodes.indexOf(node2) < 0) {
             return false;
         }
-        // The links to ignore, indexed by the node the search is standing on. In a directed search
-        // only from --> to can ever be traversed, but in an undirected one the link must be blocked
-        // in both senses; otherwise it would still be walked backwards, from "to" to "from".
-        Map<T, Collection<T>> ignoredNeighbors = new HashMap<>();
-        for (var linkToIgnore : linksToIgnore) {
-            ignoredNeighbors.computeIfAbsent(linkToIgnore.getFrom(), node -> new HashSet<>())
-                            .add(linkToIgnore.getTo());
-            if (!directed) {
-                ignoredNeighbors.computeIfAbsent(linkToIgnore.getTo(), node -> new HashSet<>())
-                                .add(linkToIgnore.getFrom());
-            }
-        }
-        
         int numNodes = nodes.size();
         boolean[] markedNodes = new boolean[numNodes];
         Deque<T> nodesToExpand = new ArrayDeque<>();
-        
+
         // Mark node1 and put it in the list of nodes to be expanded
         nodesToExpand.push(node1);
         markedNodes[nodes.indexOf(node1)] = true;
-        
+
+        // The search walks links, not neighbours. It used to translate the links to ignore into
+        // the neighbours they lead to and then walk the adjacency lists, which are lists of nodes:
+        // ignoring one link therefore ignored the pair of nodes, and any second link joining that
+        // same pair went with it. Two nodes joined both ways were a loop that NoLoops could not
+        // see, because ignoring one of the two links hid the other one as well.
         while (!nodesToExpand.isEmpty()) {
             T expandingNode = nodesToExpand.pop(); // the top of the stack
-            ArrayList<T> neighbors = new ArrayList<>((directed) ? getChildren(expandingNode) : getNeighbors(expandingNode));
-            var nodeLinksToIgnore = ignoredNeighbors.get(expandingNode);
-            if (nodeLinksToIgnore != null) {
-                neighbors.removeIf(nodeLinksToIgnore::contains);
-            }
-            if (neighbors.contains(node2)) {
-                return true; // node2 is in a path from node1
-            }
-            for (T neighborNode : neighbors) {
-                if (!markedNodes[nodes.indexOf(neighborNode)]) {
-                    nodesToExpand.push(neighborNode);
-                    markedNodes[nodes.indexOf(neighborNode)] = true;
+            for (Link<T> link : getLinks(expandingNode)) {
+                if (linksToIgnore.contains(link)) {
+                    continue;
+                }
+                T neighbor = neighborThrough(link, expandingNode, directed);
+                if (neighbor == null) {
+                    continue;
+                }
+                if (neighbor.equals(node2)) {
+                    return true; // node2 is in a path from node1
+                }
+                int neighborIndex = nodes.indexOf(neighbor);
+                if (!markedNodes[neighborIndex]) {
+                    nodesToExpand.push(neighbor);
+                    markedNodes[neighborIndex] = true;
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * The node reached from {@code node} by walking {@code link}, or {@code null} when the link
+     * cannot be walked that way: a directed search only ever goes along a directed link, from its
+     * origin to its destination, whereas an undirected one crosses any link in either sense.
+     */
+    private T neighborThrough(Link<T> link, T node, boolean directed) {
+        if (directed) {
+            return link.isDirected() && link.getFrom().equals(node) ? link.getTo() : null;
+        }
+        return link.getFrom().equals(node) ? link.getTo() : link.getFrom();
     }
     
     /**
