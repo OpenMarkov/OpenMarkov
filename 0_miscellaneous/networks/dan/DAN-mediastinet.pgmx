@@ -1,0 +1,1353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="DAN">
+    <Comment showWhenOpeningNetwork="true"><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Mediastinet was originally an influence diagram. It has been converted 
+      into a decision analysis network (DAN) by removing the total ordering of 
+      decisions and some dummy states, and by declaring always-observed 
+      variables, revelation conditions, and restrictions.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      <b>References</b>
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      M. Luque. <i><a href="http://www.cisiad.uned.es/tesis/thesis-mluque.php">Probabilistic 
+      Graphical Models for Decision Making in Medicine</a></i>. PhD thesis, 
+      UNED, Madrid, 2009.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      M. Luque, F. J. D&#237;ez and C. Disdier. <a href="http://ceur-ws.org/Vol-818/paper11.pdf">A 
+      decision support system for the mediastinal staging of non-small cell 
+      lung cancer</a>. In <i>Proceedings of the 8th Bayesian Modelling 
+      Applications Workshop</i>, (Barcelona, Spain).
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      F. J. D&#237;ez, M. Luque, C. L. K&#246;nig and I. Bermejo. <a href="http://www.cisiad.uned.es/techreports/dans.php">Decision 
+      analysis networks</a>. Technical Report CISIAD-14-01, UNED, Madrid, 2014.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      <b>Description of the problem</b>
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      A doctor has to decide how to treat a patient that suffers from 
+      non-small cell lung cancer. The key to select a treatment is whether 
+      there is metastasis at the mediastinum or not. A CT scan is always 
+      performed. Additionally, the doctor can perform other tests to study the 
+      mediastinum: TBNA, PET, mediastinoscopy (MED), EBUS and/or EUS. The 
+      physician can also decide the order of the tests, with the following 
+      constraints: no test be performed before the TAC; an EBUS or an EUS can 
+      be performed only after a PET. Then the physican has to decide the 
+      treatment. The decision must take into account the morbidity and 
+      economic cost of each test and each treatment, the quality adjusted life 
+      expectancy, the probabilities of survival, and the willingness-to-pay 
+      (lambda).
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      <b>Structure of the network</b>
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      The structure of chance and decision variables reflects that the target 
+      and unknown variable is N2N3, which indicates whether there is 
+      metastasis or not. Chance variables representing the results of tests 
+      have a probabilistic relation with the N2N3 variable and result of the 
+      TAC. We must also note that the results of MED, EBUS and EUS depend on 
+      the result of the PET.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      The structure of utility nodes has been built by using super-value nodes 
+      [Tatman and Shachter, 1990]. It consists of two main parts. The node 
+      Total_Economic_Cost and its ancestors represent the economic cost of the 
+      medical tests and treatments. The node Total_QALE and its ancestors 
+      represent the quality adjusted life expectancy of the patients. Both 
+      parts are summed by weighting the Total_Economic_Cost by the node C2E 
+      (cost to effectiveness), which represents the inverse of the lambda 
+      parameter (willingness to pay) used in cost-effectiveness analysis. The 
+      node Net_Effectiveness represents the global utility.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      The Quality Adjusted Life Expectancy (QALE) in utility nodes is measured 
+      in Quality Adjusted Life Years (QALYs). Costs are in euros.
+    </p>
+  </body>
+</html>
+<!--StartFragment-->]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <AdditionalProperties>
+      <Property name="Version" value="1.0" />
+      <Property name="VisualPrecision" value="0.0" />
+      <Property name="KindOfGraph" value="directed" />
+    </AdditionalProperties>
+    <Variables>
+      <Variable name="N2 N3" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Even though the N factor of TNM classification of lung cancer takes on 
+      four possible values, from N0 to N3, we have modeled it as a binary 
+      variable: we have grouped N0 and N1 into a state (value absent), which 
+      means that the cancer is operable, and N2 and N3 into another state 
+      (value present), which means that it is inoperable.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="326" y="23" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="CT scan" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Result of CT scan.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="634" y="27" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <AlwaysObserved />
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="TBNA" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Result of TBNA.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="196" y="177" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="PET" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Result of PET.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="357" y="177" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="no result" />
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="EBUS" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Result of EBUS.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="480" y="239" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="EUS" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Result of EUS.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="646" y="230" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="MED" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Result of mediastinoscopy.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="866" y="224" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="MED Sv" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This variable represents whether the patient has survived to the 
+      mediastinoscopy.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="995" y="189" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Dec:TBNA" type="finiteStates" role="decision">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Decision about whether to perform the TBNA.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="134" y="93" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Dec:PET" type="finiteStates" role="decision">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Decision about whether to perform the PET.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="289" y="113" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Dec:MED" type="finiteStates" role="decision">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Decision about whether to perform the mediastinoscopy.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="904" y="124" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Treatment" type="finiteStates" role="decision">
+        <Coordinates x="623" y="374" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+        </AdditionalProperties>
+        <States>
+          <State name="palliative" />
+          <State name="chemotherapy" />
+          <State name="thoracotomy" />
+        </States>
+      </Variable>
+      <Variable name="Dec:EBUS" type="finiteStates" role="decision">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Decision about whether to perform the EBUS.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="500" y="153" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Dec:EUS" type="finiteStates" role="decision">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Decision about whether to perform the EUS.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="711" y="142" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Survivors QALE" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This variable represents the quality-adjusted life expectancy of the 
+      survivors to the medical tests (except the mediastinoscopy) and the 
+      treatment.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="553" y="467" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Inmediate Survival" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This variables represents the probability of survival to the treatment.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="783" y="426" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="MED Survival" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This variable represents whether the patient has survived to the 
+      mediastinoscopy.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="1154" y="303" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Net QALE" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This variable represents the quality adjusted life expectancy of the 
+      patient disregarding the morbidities of the medical tests (except the 
+      mediastinoscopy).
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="909" y="505" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="TBNA Morbidity" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Morbidity of TBNA.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="164" y="244" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="MED Morbidity" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Morbidity of mediastinoscopy.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="961" y="322" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="EUS Morbidity" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Morbidity of EUS.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="776" y="314" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="EBUS Morbidity" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Morbidity of EBUS.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="564" y="310" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Total QALE" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Total quality adjusted life expectancy of a patiente.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="804" y="557" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Cost:CT scan" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Economic cost of CT scan.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="80" y="448" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Cost:TBNA" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Economic cost of TBNA.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="89" y="184" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Cost:EBUS" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Economic cost of EBUS.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="528" y="271" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Cost:EUS" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Economic cost of EUS.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="708" y="278" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Cost:MED" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Economic cost of mediastinoscopy.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="915" y="257" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Cost:PET" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Economic cost of PET.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="331" y="240" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Cost:Treatment" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Economic cost of treatment.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="385" y="470" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Total Economic Cost" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Total economic cost of tests and treatments.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="180" y="499" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="C2E" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This variable represents the inverse of lambda, <i>&quot;the willingness to 
+      pay&quot; </i>parameter used in cost-efectiveness analysis). It is used 
+      here to convert the cost into medical effectiveness. The value of lambda 
+      used here has been taken from the Spanish public health system.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="418" y="548" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Weighted Economic Cost" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This variable represents the transformation of the economic cost into a 
+      medical effectiveness scale.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="253" y="554" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Net Effectiveness" type="numeric" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      This variable represents the net effectiveness, that is the combination 
+      (sum) of two components: the medical effectiveness (represented by the 
+      variable Total_QALE) and the economic cost converted into an 
+      effectiveness scale (represented by the variable Weighted_Economic_Cost).
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="534" y="612" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="---" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="N2 N3" />
+        <Variable name="CT scan" />
+      </Link>
+      <Link directed="true">
+        <Variable name="N2 N3" />
+        <Variable name="EBUS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="N2 N3" />
+        <Variable name="EUS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="N2 N3" />
+        <Variable name="MED" />
+      </Link>
+      <Link directed="true">
+        <Variable name="N2 N3" />
+        <Variable name="PET" />
+      </Link>
+      <Link directed="true">
+        <Variable name="N2 N3" />
+        <Variable name="Survivors QALE" />
+      </Link>
+      <Link directed="true">
+        <Variable name="N2 N3" />
+        <Variable name="TBNA" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CT scan" />
+        <Variable name="EBUS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CT scan" />
+        <Variable name="MED" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CT scan" />
+        <Variable name="PET" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CT scan" />
+        <Variable name="TBNA" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CT scan" />
+        <Variable name="EUS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="PET" />
+        <Variable name="EBUS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="PET" />
+        <Variable name="EUS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="PET" />
+        <Variable name="MED" />
+      </Link>
+      <Link directed="true">
+        <Variable name="MED Sv" />
+        <Variable name="MED Morbidity" />
+      </Link>
+      <Link directed="true">
+        <Variable name="MED Sv" />
+        <Variable name="MED Survival" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:TBNA" />
+        <Variable name="Cost:TBNA" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:TBNA" />
+        <Variable name="TBNA" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Dec:TBNA" />
+            <Variable name="TBNA" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:TBNA" />
+        <Variable name="TBNA Morbidity" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:PET" />
+        <Variable name="Cost:PET" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:PET" />
+        <Variable name="PET" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Dec:PET" />
+            <Variable name="PET" />
+          </Variables>
+          <Values>1.0 0.0 0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+          <State name="no" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:PET" />
+        <Variable name="Dec:EBUS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:PET" />
+        <Variable name="Dec:EUS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:PET" />
+        <Variable name="Dec:MED" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:MED" />
+        <Variable name="Cost:MED" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:MED" />
+        <Variable name="MED" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Dec:MED" />
+            <Variable name="MED" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:MED" />
+        <Variable name="MED Sv" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Treatment" />
+        <Variable name="Cost:Treatment" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Treatment" />
+        <Variable name="Inmediate Survival" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Treatment" />
+        <Variable name="Survivors QALE" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:EBUS" />
+        <Variable name="EBUS" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Dec:EBUS" />
+            <Variable name="EBUS" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:EBUS" />
+        <Variable name="Cost:EBUS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:EBUS" />
+        <Variable name="EBUS Morbidity" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:EUS" />
+        <Variable name="EUS" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Dec:EUS" />
+            <Variable name="EUS" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:EUS" />
+        <Variable name="EUS Morbidity" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Dec:EUS" />
+        <Variable name="Cost:EUS" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Survivors QALE" />
+        <Variable name="Net QALE" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Inmediate Survival" />
+        <Variable name="Net QALE" />
+      </Link>
+      <Link directed="true">
+        <Variable name="MED Survival" />
+        <Variable name="Net QALE" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Net QALE" />
+        <Variable name="Total QALE" />
+      </Link>
+      <Link directed="true">
+        <Variable name="TBNA Morbidity" />
+        <Variable name="Total QALE" />
+      </Link>
+      <Link directed="true">
+        <Variable name="MED Morbidity" />
+        <Variable name="Total QALE" />
+      </Link>
+      <Link directed="true">
+        <Variable name="EUS Morbidity" />
+        <Variable name="Total QALE" />
+      </Link>
+      <Link directed="true">
+        <Variable name="EBUS Morbidity" />
+        <Variable name="Total QALE" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Total QALE" />
+        <Variable name="Net Effectiveness" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost:CT scan" />
+        <Variable name="Total Economic Cost" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost:TBNA" />
+        <Variable name="Total Economic Cost" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost:EBUS" />
+        <Variable name="Total Economic Cost" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost:EUS" />
+        <Variable name="Total Economic Cost" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost:MED" />
+        <Variable name="Total Economic Cost" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost:PET" />
+        <Variable name="Total Economic Cost" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Cost:Treatment" />
+        <Variable name="Total Economic Cost" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Total Economic Cost" />
+        <Variable name="Weighted Economic Cost" />
+      </Link>
+      <Link directed="true">
+        <Variable name="C2E" />
+        <Variable name="Weighted Economic Cost" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Weighted Economic Cost" />
+        <Variable name="Net Effectiveness" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="N2 N3" />
+        </Variables>
+        <Values>0.7192982456140351 0.2807017543859649</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="CT scan" />
+          <Variable name="N2 N3" />
+        </Variables>
+        <Values>0.8567567567567568 0.14324324324324322 0.4896551724137931 0.5103448275862069</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="TBNA" />
+          <Variable name="Dec:TBNA" />
+          <Variable name="CT scan" />
+          <Variable name="N2 N3" />
+        </Variables>
+        <Values>0.0 0.0 0.9214285714 0.0785714286 0.0 0.0 0.9043478261 0.0956521739 0.0 0.0 0.98 0.02 0.0 0.0 0.5403225806 0.4596774194</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="PET" />
+          <Variable name="CT scan" />
+          <Variable name="N2 N3" />
+          <Variable name="Dec:PET" />
+        </Variables>
+        <Values>1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.9247311828 0.0752688172 0.0 0.775 0.225 0.0 0.2597402597 0.7402597403 0.0 0.0952380952 0.9047619048</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="EBUS" />
+          <Variable name="PET" />
+          <Variable name="CT scan" />
+          <Variable name="N2 N3" />
+          <Variable name="Dec:EBUS" />
+        </Variables>
+        <Values>0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.9777777778 0.0222222222 0.975 0.025 0.9666666667 0.0333333333 0.9736842105 0.0263157895 0.9756097561 0.0243902439 0.9655172414 0.0344827586 0.1081081081 0.8918918919 0.119047619 0.880952381 0.1081081081 0.8918918919 0.0810810811 0.9189189189 0.1111111111 0.8888888889 0.1212121212 0.8787878788</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="EUS" />
+          <Variable name="PET" />
+          <Variable name="CT scan" />
+          <Variable name="N2 N3" />
+          <Variable name="Dec:EUS" />
+        </Variables>
+        <Values>0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.9230769231 0.0769230769 0.9375 0.0625 0.9259259259 0.0740740741 0.9285714286 0.0714285714 0.9333333333 0.0666666667 0.935483871 0.064516129 0.2380952381 0.7619047619 0.4333333333 0.5666666667 0.4193548387 0.5806451613 0.1428571429 0.8571428571 0.1315789474 0.8684210526 0.1388888889 0.8611111111</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="MED" />
+          <Variable name="Dec:MED" />
+          <Variable name="PET" />
+          <Variable name="CT scan" />
+          <Variable name="N2 N3" />
+        </Variables>
+        <Values>0.0 0.0 0.9444444444 0.0555555556 0.0 0.0 0.9375 0.0625 0.0 0.0 0.9473684211 0.0526315789 0.0 0.0 0.9285714286 0.0714285714 0.0 0.0 0.9411764706 0.0588235294 0.0 0.0 0.95 0.05 0.0 0.0 0.2727272727 0.7272727273 0.0 0.0 0.2 0.8 0.0 0.0 0.2142857143 0.7857142857 0.0 0.0 0.1875 0.8125 0.0 0.0 0.1875 0.8125 0.0 0.0 0.2 0.8</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="MED Sv" />
+          <Variable name="Dec:MED" />
+        </Variables>
+        <Values>0.0 1.0 0.037037037 0.962962963</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Survivors QALE" />
+        <Variables>
+          <Variable name="N2 N3" />
+          <Variable name="Treatment" />
+        </Variables>
+        <Values>1.25 0.5 2.0 0.83 3.0 0.66</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Inmediate Survival" />
+        <Variables>
+          <Variable name="Treatment" />
+        </Variables>
+        <Values>0.9811320754716981 0.9803921568627451 0.9090909090909091</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="MED Survival" />
+        <Variables>
+          <Variable name="MED Sv" />
+        </Variables>
+        <Values>0.0 1.0</Values>
+      </Potential>
+      <Potential type="Product" role="utility">
+        <UtilityVariable name="Net QALE" />
+        <Variables>
+          <Variable name="Inmediate Survival" />
+          <Variable name="MED Survival" />
+          <Variable name="Survivors QALE" />
+        </Variables>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="TBNA Morbidity" />
+        <Variables>
+          <Variable name="Dec:TBNA" />
+        </Variables>
+        <Values>0.0 -1.0E-4</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="MED Morbidity" />
+        <Variables>
+          <Variable name="MED Sv" />
+        </Variables>
+        <Values>0.0 -0.05</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="EUS Morbidity" />
+        <Variables>
+          <Variable name="Dec:EUS" />
+        </Variables>
+        <Values>0.0 -0.03</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="EBUS Morbidity" />
+        <Variables>
+          <Variable name="Dec:EBUS" />
+        </Variables>
+        <Values>0.0 -0.03</Values>
+      </Potential>
+      <Potential type="Sum" role="utility">
+        <UtilityVariable name="Total QALE" />
+        <Variables>
+          <Variable name="EBUS Morbidity" />
+          <Variable name="EUS Morbidity" />
+          <Variable name="MED Morbidity" />
+          <Variable name="Net QALE" />
+          <Variable name="TBNA Morbidity" />
+        </Variables>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost:CT scan" />
+        <Values>670.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost:TBNA" />
+        <Variables>
+          <Variable name="Dec:TBNA" />
+        </Variables>
+        <Values>0.0 80.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost:EBUS" />
+        <Variables>
+          <Variable name="Dec:EBUS" />
+        </Variables>
+        <Values>0.0 620.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost:EUS" />
+        <Variables>
+          <Variable name="Dec:EUS" />
+        </Variables>
+        <Values>0.0 620.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost:MED" />
+        <Variables>
+          <Variable name="Dec:MED" />
+        </Variables>
+        <Values>0.0 1620.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost:PET" />
+        <Variables>
+          <Variable name="Dec:PET" />
+        </Variables>
+        <Values>0.0 2250.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost:Treatment" />
+        <Variables>
+          <Variable name="Treatment" />
+        </Variables>
+        <Values>3000.0 11242.0 19646.0</Values>
+      </Potential>
+      <Potential type="Sum" role="utility">
+        <UtilityVariable name="Total Economic Cost" />
+        <Variables>
+          <Variable name="Cost:CT scan" />
+          <Variable name="Cost:EBUS" />
+          <Variable name="Cost:EUS" />
+          <Variable name="Cost:MED" />
+          <Variable name="Cost:PET" />
+          <Variable name="Cost:TBNA" />
+          <Variable name="Cost:Treatment" />
+        </Variables>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="C2E" />
+        <Values>-3.3333333333333335E-5</Values>
+      </Potential>
+      <Potential type="Product" role="utility">
+        <UtilityVariable name="Weighted Economic Cost" />
+        <Variables>
+          <Variable name="C2E" />
+          <Variable name="Total Economic Cost" />
+        </Variables>
+      </Potential>
+      <Potential type="Sum" role="utility">
+        <UtilityVariable name="Net Effectiveness" />
+        <Variables>
+          <Variable name="Total QALE" />
+          <Variable name="Weighted Economic Cost" />
+        </Variables>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

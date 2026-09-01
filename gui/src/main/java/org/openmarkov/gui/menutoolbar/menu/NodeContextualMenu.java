@@ -12,18 +12,18 @@ import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.graphic.VisualNetwork;
-import org.openmarkov.gui.loader.element.IconBind;
-import org.openmarkov.gui.validator.AbsorbParentsValidator;
-import org.openmarkov.gui.validator.AbsorbNodeValidator;
 import org.openmarkov.gui.graphic.VisualNode;
+import org.openmarkov.gui.loader.element.IconBind;
 import org.openmarkov.gui.localize.LocalizedMenuItem;
 import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 import org.openmarkov.gui.menutoolbar.common.MenuItemNames;
-import org.openmarkov.gui.window.edition.mode.SelectionEditionMode;
+import org.openmarkov.gui.validator.AbsorbNodeValidator;
+import org.openmarkov.gui.validator.AbsorbParentsValidator;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NodesAlignment;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.io.Serial;
 
@@ -151,11 +151,10 @@ public class NodeContextualMenu extends ContextualMenu {
                               .size() > 1 && networkEditorPanel.getWorkingMode() == NetworkEditorPanel.WorkingMode.EDITION) {
             add(getAlignmentMenuItem());
         }
-        
         addSeparator();
-        if (networkEditorPanel.getEditionMode() instanceof SelectionEditionMode selectionEditionMode) {
-            add(getCreateLinkParentMenuItem(selectionEditionMode));
-            add(getCreateLinkChildMenuItem(selectionEditionMode));
+        if (networkEditorPanel.getBaseTool() == NetworkEditorPanel.BaseTool.SELECTION) {
+            add(getCreateLinkParentMenuItem());
+            add(getCreateLinkChildMenuItem());
             addSeparator();
         }
         if (workingMode == NetworkEditorPanel.WorkingMode.EDITION) {
@@ -189,7 +188,7 @@ public class NodeContextualMenu extends ContextualMenu {
             addSeparator();
         }
         
-        if (nodeType==NodeType.DECISION) {
+        if (nodeType == NodeType.DECISION) {
             if (workingMode == NetworkEditorPanel.WorkingMode.EDITION) {
                 add(getImposePolicyMenuItem(this.selectedNode.getNode()));
                 add(getRemovePolicyMenuItem());
@@ -236,31 +235,27 @@ public class NodeContextualMenu extends ContextualMenu {
         return this.alignmentMenuItem;
     }
     
-    private JMenuItem getCreateLinkParentMenuItem(SelectionEditionMode selectionEditionMode) {
+    private JMenuItem getCreateLinkParentMenuItem() {
         var isWorkingMode = networkEditorPanel.getWorkingMode() == NetworkEditorPanel.WorkingMode.EDITION;
         return new JMenuItemBuilder("Create link (parent)")
                 .withIcon(IconBind.LINK_PARENT_ENABLED.icon())
                 .withName("NodeContextualMenuCreateLink")
                 .withActionCommand(ActionCommands.LINK_CREATION)
                 .enabled(isWorkingMode)
-                .onClick(e -> {
-                    selectionEditionMode.startLinkCreation(
-                            new Point2D.Double(this.getRelativeShownLocationX(), this.getRelativeShownLocationY()), VisualNetwork.LinkCreationSourceDirection.PARENT);
-                })
+                .onClick(e -> networkEditorPanel.getEditorPanel().editorInputHandler().startLinkCreation(
+                        new Point2D.Double(this.getRelativeShownLocationX(), this.getRelativeShownLocationY()), VisualNetwork.LinkCreationSourceDirection.PARENT))
                 .build();
     }
     
-    private JMenuItem getCreateLinkChildMenuItem(SelectionEditionMode selectionEditionMode) {
+    private JMenuItem getCreateLinkChildMenuItem() {
         var isWorkingMode = networkEditorPanel.getWorkingMode() == NetworkEditorPanel.WorkingMode.EDITION;
         return new JMenuItemBuilder("Create link (child)")
                 .withIcon(IconBind.LINK_CHILD_ENABLED.icon())
                 .withName("NodeContextualMenuCreateLink")
                 .withActionCommand(ActionCommands.LINK_CREATION)
                 .enabled(isWorkingMode)
-                .onClick(e -> {
-                    selectionEditionMode.startLinkCreation(
-                            new Point2D.Double(this.getRelativeShownLocationX(), this.getRelativeShownLocationY()), VisualNetwork.LinkCreationSourceDirection.CHILD);
-                })
+                .onClick(e -> networkEditorPanel.getEditorPanel().editorInputHandler().startLinkCreation(
+                        new Point2D.Double(this.getRelativeShownLocationX(), this.getRelativeShownLocationY()), VisualNetwork.LinkCreationSourceDirection.CHILD))
                 .build();
     }
     
@@ -555,9 +550,13 @@ public class NodeContextualMenu extends ContextualMenu {
             case ActionCommands.NODE_PROPERTIES -> propertiesMenuItem;
             case ActionCommands.EDIT_POTENTIAL -> relationMenuItem;
             case ActionCommands.DECISION_EDIT_POLICY ->
-                    selectedNode.getNode().getNodeType()==NodeType.DECISION ? !selectedNode.getNode().getPotentials().isEmpty() ? imposePolicyMenuItem : null : null;
+                    selectedNode.getNode().getNodeType() == NodeType.DECISION ? !selectedNode.getNode()
+                                                                                             .getPotentials()
+                                                                                             .isEmpty() ? imposePolicyMenuItem : null : null;
             case ActionCommands.DECISION_IMPOSE_POLICY ->
-                    selectedNode.getNode().getNodeType()==NodeType.DECISION ? selectedNode.getNode().getPotentials().isEmpty() ? imposePolicyMenuItem : null : null;
+                    selectedNode.getNode().getNodeType() == NodeType.DECISION ? selectedNode.getNode()
+                                                                                            .getPotentials()
+                                                                                            .isEmpty() ? imposePolicyMenuItem : null : null;
             case ActionCommands.DECISION_REMOVE_POLICY -> removePolicyMenuItem;
             case ActionCommands.EVENT_EDIT_TIME_TO_EVENT -> editTimeToEventMenuItem;
             case ActionCommands.DECISION_SHOW_EXPECTED_UTILITY -> showExpectedUtilityMenuItem;

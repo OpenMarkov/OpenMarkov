@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClassLocalizations>
+    <Localization class="org.openmarkov.gui.exception.AlreadyExistingAgentException"
+                  value="There already is an agent by name {agentName}."/>
     <Localization class="org.openmarkov.gui.action.AddFindingEdit"
                   value="Add {finding} on {evidenceCase} on {visualNode}. Previous finding was {previousFinding}"/>
     <Localization class="org.openmarkov.gui.action.AugmentedPotentialValueEdit"

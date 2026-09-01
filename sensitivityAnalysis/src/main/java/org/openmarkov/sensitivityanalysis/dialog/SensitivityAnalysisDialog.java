@@ -61,6 +61,9 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
      * Main panel of JFrame
      */
     private JPanel mainPanel;
+
+    /** The one on screen: the scenario is refreshed on it before each analysis. */
+    private ScopePanel scopePanel;
     
     /**
      * Network name panel
@@ -418,7 +421,10 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
      * @return scope panel
      */
     public ScopePanel getScopePanel() {
-        return new ScopePanel(controller);
+        if (scopePanel == null) {
+            scopePanel = new ScopePanel(controller);
+        }
+        return scopePanel;
     }
     
     /**
@@ -512,6 +518,12 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
     }
     
     protected void doOkClick() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotSupportedOperationException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, ConstraintViolatedException {
+        // This dialog stays open between analyses, so the user may have set evidence in the network
+        // since the scenario was built. Both are read again before they are mixed.
+        controller.readPreResolutionEvidenceFromNetwork();
+        if (scopePanel != null) {
+            scopePanel.refreshScenarioFromEvidence();
+        }
         if (!controller.getConfiguration().isDeterministic()) {
             controller.getSensitivityAnalysisModel()
                       .setNumberOfIterationsSimulations(Integer.parseInt(numSimulationsTextField.getText()));

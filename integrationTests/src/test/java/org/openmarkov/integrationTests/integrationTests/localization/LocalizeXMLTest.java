@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.localize.spi.LocalizeResourcesProvider;
-import org.openmarkov.integrationTests.IntegrationTest;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -30,7 +29,9 @@ public class LocalizeXMLTest {
     void keysArentRepeated() {
         var keysToProviders = new HashMap<String, ArrayList<LocalizedStringDescription>>();
         StringDatabase.getBundleProviders()
-                      .filter(provider -> provider.getClass().getModule() != IntegrationTest.class.getModule())
+                      .filter(provider -> !provider.getClass()
+                                                   .getSimpleName()
+                                                   .startsWith("org.openmarkov.integrationTests"))
                       .forEach(provider ->
                                        provider.getBundlesMap(Locale.ENGLISH)
                                                .forEach((bundleName, bundle) -> bundle.getKeys().forEach(key -> {
@@ -47,9 +48,7 @@ public class LocalizeXMLTest {
                                           .map(repetitions -> {
                                               String repeatedKey = repetitions.get(0).key;
                                               var repetitionsLocations = repetitions.stream()
-                                                                                    .map(repetition -> "\t- " + repetition.bundleName + "_en.xml of " + repetition.provider.getClass()
-                                                                                                                                                                           .getModule()
-                                                                                                                                                                           .getName())
+                                                                                    .map(repetition -> "\t- " + repetition.bundleName + "_en.xml")
                                                                                     .collect(Collectors.joining(System.lineSeparator()));
                                               return "'" + repeatedKey + "' is localized in multiple bundles: " + System.lineSeparator() + repetitionsLocations;
                                           })

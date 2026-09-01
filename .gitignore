@@ -18,13 +18,13 @@ buildNumber.properties
 /integrationTests/src/main/resources/clone_of_probmodelxml_networks/
 /integrationTests/src/main/resources/clone_of_probmodelxml_networks_cache.json
 
-# This allows to share run configurations in IDEA IDE's.
-# !/.idea
-# /.idea/*
-# !/.idea/runConfigurations/
+# Discommenting the following 3 lines allow to share run configurations in IDEA IDE's. The 4th line has to be
+# re-commented again for that matter.
+!/.idea
+/.idea/*
+!/.idea/runConfigurations/
+#/.idea/
 
-
-/.idea/
 /OpenMarkov.jar
 
 # Networks written at the root of integrationTests by the round-trip tests, which convert
@@ -39,3 +39,5 @@ buildNumber.properties
 # Claude Code
 /CLAUDE.md
 /scripts/
+/full/src/main/resources/META-INF/MANIFEST.MF
+/0_miscellaneous/installer/

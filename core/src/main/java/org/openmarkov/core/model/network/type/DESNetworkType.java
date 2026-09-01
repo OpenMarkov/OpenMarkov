@@ -19,7 +19,7 @@ import org.openmarkov.core.model.network.type.plugin.NetworkTypeInfo;
  * @version 1.1 -cmyago - 31/21/2019 -constrains changed to allow self loops in event nodes
  */
 @NetworkTypeInfo(name = "DESNet", visualName = "DESNet")
-public class DESNetworkType extends NetworkType {
+public final class DESNetworkType extends NetworkType {
 	// Eager, like the other thirteen types: class initialization makes the one
 	// instance unique and safe. The lazy unsynchronized version could hand two
 	// different instances to two threads, and network types are compared by

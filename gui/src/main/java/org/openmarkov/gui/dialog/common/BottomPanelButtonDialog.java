@@ -7,10 +7,22 @@
 
 package org.openmarkov.gui.dialog.common;
 
-import javax.swing.*;
-import java.awt.*;
+import org.openmarkov.gui.util.GUIUtils;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Window;
 import java.io.Serial;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * This class implements a dialog that has a horizontal button panel in the
@@ -59,7 +71,7 @@ public class BottomPanelButtonDialog extends DialogBase {
      *
      * @return a new components panel.
      */
-    protected final JPanel getComponentsPanel() {
+    public final JPanel getComponentsPanel() {
         return this.componentsPanel;
     }
     
@@ -69,21 +81,38 @@ public class BottomPanelButtonDialog extends DialogBase {
      *
      * @param button button that will be added to the panel.
      */
-    protected final void addButtonToButtonsPanel(JButton button) {
+    public final void addButtonToButtonsPanel(JButton button) {
         this.buttonsPanel.remove(button);
         this.buttonsPanel.add(button);
+        reassignButtonsToKeys();
     }
     
-    protected final void addButtonToButtonsPanel(JButton button, int index) {
+    public void addButtonToButtonsPanel(JButton button, int index) {
         this.buttonsPanel.remove(button);
         this.buttonsPanel.add(button, index);
+        reassignButtonsToKeys();
     }
     
-    protected final void removeButtonFromButtonsPanel(JButton button) {
+    public final void removeButtonFromButtonsPanel(JButton button) {
         if(button==null) {
             return;
         }
         this.buttonsPanel.remove(button);
+        reassignButtonsToKeys();
+    }
+    
+    public final void reassignButtonsToKeys() {
+        var buttons = new ArrayList<>(this.getButtons().toList());
+        Collections.reverse(buttons);
+        GUIUtils.assignButtonsToKeys((JComponent) this.getContentPane(), buttons, _ -> {
+            if (this.getCancelButton() instanceof JButton cancelButton) {
+                cancelButton.doClick();
+            }
+        });
+    }
+    
+    public final Stream<JButton> getButtons() {
+        return Arrays.stream(this.buttonsPanel.getComponents()).map(JButton.class::cast);
     }
     
     @Override public void setCancelButton(JButton cancelButton) {

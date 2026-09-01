@@ -28,9 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 class OptionsAreCopiedWholeTest {
 
 	/**
-	 * The copy constructor listed the fields by hand and left three out. The one that carries most
-	 * weight is {@code psa}: it says whether a probabilistic sensitivity analysis is being run, and
-	 * the discrete-event simulation reads it in three places.
+	 * Including {@code psa}, which says whether a probabilistic sensitivity analysis is being run and
+	 * which the discrete-event simulation reads in three places.
 	 */
 	@Test
 	void theMonteCarloOptionsKeepEveryFieldWhenCopied() {
@@ -76,11 +75,7 @@ class OptionsAreCopiedWholeTest {
 				() -> assertEquals(true, clone.isSum()));
 	}
 
-	/**
-	 * One constructor set the network and the simulation variable and left the three sub-options
-	 * null; the copy constructor then handed a null to {@code MulticriteriaOptions}, which asked it
-	 * for its type.
-	 */
+	/** Whichever constructor built them, the sub-options are there for the copy to carry. */
 	@Test
 	void optionsBuiltFromANetworkCanBeCopied() {
 		InferenceOptions original = new InferenceOptions(new ProbNet(), new Variable("index", 3));
@@ -103,6 +98,33 @@ class OptionsAreCopiedWholeTest {
 
 		assertAll(() -> assertSame(probNet, copy.probNet),
 				() -> assertSame(simulationIndex, copy.simulationIndexVariable));
+	}
+
+	/** {@code iciAwareVE} switches the factorized projection of canonical models on. */
+	@Test
+	void theCopyKeepsTheIciAwareSwitch() {
+		InferenceOptions original = new InferenceOptions();
+		original.setIciAwareVE(true);
+		original.setIciMinParentsToFactorize(2);
+
+		InferenceOptions copy = new InferenceOptions(original);
+
+		assertAll(() -> assertEquals(true, copy.isIciAwareVE()),
+				() -> assertEquals(2, copy.getIciMinParentsToFactorize()));
+	}
+
+	/** {@code ProbNet.copy()} is how inference prunes a network, so the options must survive it. */
+	@Test
+	void theShallowCopyOfANetworkCarriesItsOptions() {
+		ProbNet network = new ProbNet();
+		network.getInferenceOptions().setIciAwareVE(true);
+		Variable simulationIndex = new Variable("index", 3);
+		network.getInferenceOptions().simulationIndexVariable = simulationIndex;
+
+		ProbNet copy = network.copy();
+
+		assertAll(() -> assertEquals(true, copy.getInferenceOptions().isIciAwareVE()),
+				() -> assertSame(simulationIndex, copy.getInferenceOptions().simulationIndexVariable));
 	}
 
 	/** The sub-options must be copies, not the very same objects the original holds. */

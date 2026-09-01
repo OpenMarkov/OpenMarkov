@@ -9,7 +9,6 @@ package org.openmarkov.gui.dialog.common;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -22,12 +21,11 @@ import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
-import org.openmarkov.gui.exception.NotEnoughMemoryException;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Arrays;
 
 
 public class TablePotentialPanelTest extends TablePotentialPanel {
@@ -35,7 +33,7 @@ public class TablePotentialPanelTest extends TablePotentialPanel {
 	private static ProbNet probNet;
     
     public TablePotentialPanelTest() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
-		super(probNet.getNode("E"));
+		super(probNet.getNode("E"), null);
 	}
 
 	@BeforeAll public static void setUp() {

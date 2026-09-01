@@ -1,0 +1,1507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="POMDP">
+    <Comment showWhenOpeningNetwork="true"><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      <b>POMDP for the coffee robot</b>
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      Model built by Jessy Hoey and encoded in the SPUDD format:
+    </p>
+    <p style="margin-top: 0">
+      <a href="https://cs.uwaterloo.ca/~jhoey/research/spudd/">https://cs.uwaterloo.ca/~jhoey/research/spudd</a>.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      It is included with the source code of Pascal Poupart&#8217;s software 
+      Symbolic Perseus:
+    </p>
+    <p style="margin-top: 0">
+      <a href="http://www.cs.uwaterloo.ca/ ~ ppoupart/software.html">http://www.cs.uwaterloo.ca/~ppoupart/software.html</a>.
+    </p>
+    <p style="margin-top: 0">
+      A direct link for this example is <a href="http://www.cs.uwaterloo.ca/~ppoupart/software/symbolicPerseus/problems/coffee/coffee3po.txt">http://www.cs.uwaterloo.ca/~ppoupart/software/symbolicPerseus/problems/coffee/coffee3po.txt</a>.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      Encoded in ProbModelXML by F. J. D&#237;ez in April 2010.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      <b>References:</b>
+    </p>
+    <p style="margin-top: 0">
+      J. Hoey, R. St-Aubin, A. Hu, C. Boutilier.
+    </p>
+    <p style="margin-top: 0">
+      SPUDD: Stochastic planning using decision diagrams.
+    </p>
+    <p style="margin-top: 0">
+      In <i>Proceedings of the 15th Conference on Uncertainty in Artificial 
+      Intelligence (UAI&#8217;99)</i>, Morgan Kaufmann, San Francisco, CA, 
+      pages 279&#8211;288.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      M. Arias, F. J. D&#237;ez, M. A. Palacios-Alonso, M. Yebra, J. Fern&#225;ndez.
+    </p>
+    <p style="margin-top: 0">
+      POMDPs in OpenMarkov and ProbModelXML
+    </p>
+    <p style="margin-top: 0">
+      <i>Seventh Annual Workshop on Multiagent Sequential Decision-Making 
+      Under Uncertainty</i> (MSDM-2012), Valencia, Spain, 2012.
+    </p>
+  </body>
+</html>]]></Comment>
+    <Variables>
+      <Variable name="User has coffee" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="182" y="45" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Robot is wet" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="185" y="152" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="dry" />
+          <State name="sprinkled" />
+          <State name="drenched" />
+        </States>
+      </Variable>
+      <Variable name="Robot has coffee" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="184" y="98" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Robot has umbrella" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="187" y="268" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Robot's location" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="185" y="329" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="shop" />
+          <State name="office" />
+        </States>
+      </Variable>
+      <Variable name="Raining outside" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="184" y="208" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="light" />
+          <State name="heavy" />
+        </States>
+      </Variable>
+      <Variable name="Battery state" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="189" y="392" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="dead" />
+          <State name="low" />
+          <State name="high" />
+        </States>
+      </Variable>
+      <Variable name="User has coffee" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="703" y="45" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Robot is wet" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="697" y="147" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="dry" />
+          <State name="sprinkled" />
+          <State name="drenched" />
+        </States>
+      </Variable>
+      <Variable name="Robot has coffee" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="707" y="98" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Raining outside" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="707" y="206" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="light" />
+          <State name="heavy" />
+        </States>
+      </Variable>
+      <Variable name="Robot has umbrella" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="715" y="265" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Robot's location" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="705" y="339" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="shop" />
+          <State name="office" />
+        </States>
+      </Variable>
+      <Variable name="Battery state" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="701" y="392" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="dead" />
+          <State name="low" />
+          <State name="high" />
+        </States>
+      </Variable>
+      <Variable name="Charge observed" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="907" y="426" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="zero" />
+          <State name="one" />
+          <State name="two" />
+        </States>
+      </Variable>
+      <Variable name="Wet pavement" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="922" y="236" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="dry" />
+          <State name="wet" />
+        </States>
+      </Variable>
+      <Variable name="Action" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="350" y="452" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="nothing" />
+          <State name="measurewet" />
+          <State name="move" />
+          <State name="deliver coffee" />
+          <State name="get umbrella" />
+          <State name="buy carefully" />
+          <State name="buy fast" />
+          <State name="recharge" />
+          <State name="dry off" />
+        </States>
+      </Variable>
+      <Variable name="Action" timeSlice="1" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="933" y="486" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Reward for coffee" timeSlice="0" type="numeric" role="utility" isInput="false">
+        <Coordinates x="552" y="482" />
+        <Unit />
+        <Precision>0.0</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="Cost of being wet" timeSlice="0" type="numeric" role="utility" isInput="false">
+        <Coordinates x="508" y="527" />
+        <Unit />
+        <Precision>0.0</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="Cost of action" timeSlice="0" type="numeric" role="utility" isInput="false">
+        <Coordinates x="329" y="513" />
+        <Unit />
+        <Precision>0.0</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="User has coffee" timeSlice="0" />
+        <Variable name="User has coffee" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="User has coffee" timeSlice="0" />
+        <Variable name="Reward for coffee" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot is wet" timeSlice="0" />
+        <Variable name="Robot is wet" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot is wet" timeSlice="0" />
+        <Variable name="Cost of being wet" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot has coffee" timeSlice="0" />
+        <Variable name="User has coffee" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot has coffee" timeSlice="0" />
+        <Variable name="Robot is wet" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot has coffee" timeSlice="0" />
+        <Variable name="Robot has coffee" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot has umbrella" timeSlice="0" />
+        <Variable name="Robot is wet" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot has umbrella" timeSlice="0" />
+        <Variable name="Robot has umbrella" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot's location" timeSlice="0" />
+        <Variable name="User has coffee" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot's location" timeSlice="0" />
+        <Variable name="Robot has coffee" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot's location" timeSlice="0" />
+        <Variable name="Robot has umbrella" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot's location" timeSlice="0" />
+        <Variable name="Robot's location" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot's location" timeSlice="0" />
+        <Variable name="Battery state" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Robot's location" timeSlice="0" />
+        <Variable name="Cost of action" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Raining outside" timeSlice="0" />
+        <Variable name="Robot is wet" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Raining outside" timeSlice="0" />
+        <Variable name="Raining outside" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Battery state" timeSlice="0" />
+        <Variable name="Robot's location" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Battery state" timeSlice="0" />
+        <Variable name="Battery state" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Raining outside" timeSlice="1" />
+        <Variable name="Wet pavement" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Battery state" timeSlice="1" />
+        <Variable name="Charge observed" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Charge observed" timeSlice="1" />
+        <Variable name="Action" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Wet pavement" timeSlice="1" />
+        <Variable name="Action" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="User has coffee" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Robot is wet" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Robot has coffee" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Robot has umbrella" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Robot's location" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Charge observed" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Wet pavement" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action" timeSlice="0" />
+        <Variable name="Cost of action" timeSlice="0" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="User has coffee" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot is wet" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0 0.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot has coffee" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot has umbrella" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot's location" timeSlice="0" />
+        </Variables>
+        <Values>0.0 1.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Raining outside" timeSlice="0" />
+        </Variables>
+        <Values>0.3333333333 0.3333333333 0.3333333333</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Battery state" timeSlice="0" />
+        </Variables>
+        <Values>0.0 0.0 1.0</Values>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="User has coffee" timeSlice="1" />
+          <Variable name="User has coffee" timeSlice="0" />
+          <Variable name="Robot has coffee" timeSlice="0" />
+          <Variable name="Robot's location" timeSlice="0" />
+          <Variable name="Action" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="move" />
+              <State name="buy carefully" />
+              <State name="recharge" />
+              <State name="nothing" />
+              <State name="get umbrella" />
+              <State name="dry off" />
+              <State name="measurewet" />
+              <State name="buy fast" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="User has coffee" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="User has coffee" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="User has coffee" timeSlice="1" />
+                    </Variables>
+                    <Values>0.1 0.9</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="deliver coffee" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="User has coffee" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="User has coffee" timeSlice="1" />
+                    </Variables>
+                    <Values>0.9 0.1</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <TopVariable name="Robot has coffee" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="no" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="User has coffee" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="yes" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <TopVariable name="Robot's location" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="office" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="User has coffee" timeSlice="1" />
+                                </Variables>
+                                <Values>0.2 0.8</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="shop" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="User has coffee" timeSlice="1" />
+                                </Variables>
+                                <Values>1.0 0.0</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot is wet" timeSlice="1" />
+          <Variable name="Robot is wet" timeSlice="0" />
+          <Variable name="Robot has coffee" timeSlice="0" />
+          <Variable name="Raining outside" timeSlice="0" />
+          <Variable name="Robot has umbrella" timeSlice="0" />
+          <Variable name="Action" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="deliver coffee" />
+              <State name="recharge" />
+              <State name="nothing" />
+              <State name="get umbrella" />
+              <State name="measurewet" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Robot is wet" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="dry" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot is wet" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="sprinkled" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot is wet" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 1.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="drenched" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot is wet" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States />
+            <Potential type="Tree/ADD">
+              <TopVariable name="Robot is wet" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="drenched" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot is wet" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="sprinkled" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <TopVariable name="Raining outside" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="heavy" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <TopVariable name="Robot has umbrella" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="yes" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="Robot is wet" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.9 0.1</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="no" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="Robot is wet" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.1 0.9</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States />
+                        <Potential type="Tree/ADD">
+                          <TopVariable name="Robot has umbrella" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="yes" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="Robot is wet" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.95 0.05</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="no" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="Robot is wet" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.7 0.3</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot is wet" timeSlice="1" />
+                          </Variables>
+                          <Values>0.1 0.9 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States />
+                  <Potential type="Tree/ADD">
+                    <TopVariable name="Raining outside" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="heavy" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <TopVariable name="Robot has umbrella" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="yes" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="Robot is wet" timeSlice="1" />
+                                </Variables>
+                                <Values>0.8 0.1 0.1</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="no" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="Robot is wet" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.1 0.9</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States />
+                        <Potential type="Tree/ADD">
+                          <TopVariable name="Robot has umbrella" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="yes" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="Robot is wet" timeSlice="1" />
+                                </Variables>
+                                <Values>0.95 0.05 0.0</Values>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="no" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="Robot is wet" timeSlice="1" />
+                                </Variables>
+                                <Values>0.9 0.1 0.0</Values>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot is wet" timeSlice="1" />
+                          </Variables>
+                          <Values>0.9 0.1 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot has coffee" timeSlice="1" />
+          <Variable name="Robot has coffee" timeSlice="0" />
+          <Variable name="Robot's location" timeSlice="0" />
+          <Variable name="Action" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="nothing" />
+              <State name="measurewet" />
+              <State name="move" />
+              <State name="get umbrella" />
+              <State name="recharge" />
+              <State name="dry off" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Robot has coffee" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot has coffee" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot has coffee" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="deliver coffee" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Robot has coffee" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot has coffee" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <TopVariable name="Robot's location" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="shop" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot has coffee" timeSlice="1" />
+                          </Variables>
+                          <Values>0.2 0.8</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="office" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot has coffee" timeSlice="1" />
+                          </Variables>
+                          <Values>0.9 0.1</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="buy carefully" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Robot has coffee" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <TopVariable name="Robot's location" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="shop" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot has coffee" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 1.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="office" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot has coffee" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot has coffee" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="buy fast" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Robot has coffee" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <TopVariable name="Robot's location" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="shop" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot has coffee" timeSlice="1" />
+                          </Variables>
+                          <Values>0.1 0.9</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="office" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot has coffee" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot has coffee" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Raining outside" timeSlice="1" />
+          <Variable name="Raining outside" timeSlice="0" />
+        </Variables>
+        <Values>0.9 0.1 0.0 0.1 0.8 0.1 0.0 0.1 0.9</Values>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot has umbrella" timeSlice="1" />
+          <Variable name="Robot has umbrella" timeSlice="0" />
+          <Variable name="Robot's location" timeSlice="0" />
+          <Variable name="Action" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="nothing" />
+              <State name="measurewet" />
+              <State name="move" />
+              <State name="deliver coffee" />
+              <State name="buy carefully" />
+              <State name="buy fast" />
+              <State name="recharge" />
+              <State name="dry off" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Robot has umbrella" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot has umbrella" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot has umbrella" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="get umbrella" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Robot has umbrella" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <TopVariable name="Robot's location" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="shop" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot has umbrella" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="office" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot has umbrella" timeSlice="1" />
+                          </Variables>
+                          <Values>0.1 0.9</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot has umbrella" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Robot's location" timeSlice="1" />
+          <Variable name="Robot's location" timeSlice="0" />
+          <Variable name="Battery state" timeSlice="0" />
+          <Variable name="Action" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="nothing" />
+              <State name="measurewet" />
+              <State name="deliver coffee" />
+              <State name="get umbrella" />
+              <State name="buy carefully" />
+              <State name="buy fast" />
+              <State name="recharge" />
+              <State name="dry off" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Robot's location" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="shop" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot's location" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="office" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot's location" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="move" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Battery state" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="dead" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <TopVariable name="Robot's location" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="shop" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot's location" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="office" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="Robot's location" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 1.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="low" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot's location" timeSlice="1" />
+                      <Variable name="Robot's location" timeSlice="0" />
+                    </Variables>
+                    <Values>0.1 0.9 0.9 0.1</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="high" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Robot's location" timeSlice="1" />
+                      <Variable name="Robot's location" timeSlice="0" />
+                    </Variables>
+                    <Values>0.1 0.9 0.9 0.1</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Battery state" timeSlice="1" />
+          <Variable name="Robot's location" timeSlice="0" />
+          <Variable name="Battery state" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Battery state" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="dead" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Battery state" timeSlice="1" />
+              </Variables>
+              <Values>1.0 0.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="low" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Battery state" timeSlice="1" />
+              </Variables>
+              <Values>0.2 0.8 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="high" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Battery state" timeSlice="1" />
+              </Variables>
+              <Values>0.0 0.01 0.99</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Charge observed" timeSlice="1" />
+          <Variable name="Battery state" timeSlice="1" />
+          <Variable name="Action" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="nothing" />
+              <State name="measurewet" />
+              <State name="move" />
+              <State name="deliver coffee" />
+              <State name="get umbrella" />
+              <State name="buy carefully" />
+              <State name="buy fast" />
+              <State name="recharge" />
+              <State name="dry off" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Battery state" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="dead" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Charge observed" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="low" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Charge observed" timeSlice="1" />
+                    </Variables>
+                    <Values>0.1 0.9 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="high" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Charge observed" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 0.2 0.8</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Wet pavement" timeSlice="1" />
+          <Variable name="Action" timeSlice="0" />
+          <Variable name="Raining outside" timeSlice="1" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="nothing" />
+              <State name="move" />
+              <State name="deliver coffee" />
+              <State name="get umbrella" />
+              <State name="buy carefully" />
+              <State name="buy fast" />
+              <State name="recharge" />
+              <State name="dry off" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Wet pavement" timeSlice="1" />
+              </Variables>
+              <Values>0.5 0.5</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="measurewet" />
+            </States>
+            <Potential type="Tree/ADD">
+              <TopVariable name="Raining outside" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Wet pavement" timeSlice="1" />
+                    </Variables>
+                    <Values>0.8 0.2</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="light" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Wet pavement" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="heavy" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Wet pavement" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 1.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Reward for coffee" timeSlice="0" />
+        <Variables>
+          <Variable name="User has coffee" timeSlice="0" />
+        </Variables>
+        <Values>0.0 5.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of being wet" timeSlice="0" />
+        <Variables>
+          <Variable name="Robot is wet" timeSlice="0" />
+        </Variables>
+        <Values>0.0 0.0 -3.0</Values>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <UtilityVariable name="Cost of action" timeSlice="0" />
+        <Variables>
+          <Variable name="Action" timeSlice="0" />
+          <Variable name="Robot's location" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Action" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="nothing" />
+              <State name="measurewet" />
+              <State name="deliver coffee" />
+              <State name="recharge" />
+              <State name="dry off" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="Cost of action" timeSlice="0" />
+              <Values>0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="move" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="Cost of action" timeSlice="0" />
+              <Variables>
+                <Variable name="Robot's location" timeSlice="0" />
+              </Variables>
+              <Values>0.1 0.2</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="get umbrella" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="Cost of action" timeSlice="0" />
+              <Variables>
+                <Variable name="Robot's location" timeSlice="0" />
+              </Variables>
+              <Values>0.0 1.6</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="buy carefully" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="Cost of action" timeSlice="0" />
+              <Variables>
+                <Variable name="Robot's location" timeSlice="0" />
+              </Variables>
+              <Values>0.3 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="buy fast" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="Cost of action" timeSlice="0" />
+              <Variables>
+                <Variable name="Robot's location" timeSlice="0" />
+              </Variables>
+              <Values>0.1 0.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties />
+  </ProbNet>
+</ProbModelXML>

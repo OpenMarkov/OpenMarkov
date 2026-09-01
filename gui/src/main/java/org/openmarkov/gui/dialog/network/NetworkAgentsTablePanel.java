@@ -14,12 +14,15 @@ import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.StringWithProperties;
 import org.openmarkov.gui.action.NetworkAgentEdit;
+import org.openmarkov.gui.exception.AlreadyExistingAgentException;
 
-import javax.swing.*;
 import javax.swing.event.TableModelEvent;
+import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Table panel for editing the list of agents defined in a network, supporting
@@ -36,64 +39,69 @@ import java.util.List;
     public NetworkAgentsTablePanel(String[] newColumns, ProbNet probNet) {
         super(newColumns, new Object[0][0], "a");
         this.probNet = probNet;
-        
     }
     
     @Override public void tableChanged(TableModelEvent tableEvent) {
-        int column = tableEvent.getColumn();
-        int row = tableEvent.getLastRow();
         if (tableEvent.getType() == TableModelEvent.UPDATE) {
-            String agentName = (String) dataTable[row][0];
-            String newName = (String) ((AdvancedPropertiesTableModel) tableEvent.getSource()).
-                    getValueAt(row, column);
-            dataTable[row][0] = newName;
-            if (agentName != newName) {
-                NetworkAgentEdit networkAgentEdit =
-                        new NetworkAgentEdit(probNet, StateAction.RENAME, agentName, dataTable);
-                try {
-                    networkAgentEdit.executeEdit();
-                    edits.add(networkAgentEdit);
-                } catch (DoEditException e) {
-                    throw new UnrecoverableException(e);
-                }
-                setData(dataTable);
+            int column = tableEvent.getColumn();
+            int row = tableEvent.getLastRow();
+            if (column == -1 || row == -1) {
+                return;
+            }
+            
+            String originalAgentName = probNet.getAgents().get(row).string;
+            String newName = (String) ((TableModel) tableEvent.getSource()).getValueAt(row, column);
+            var agentsNames = new HashSet<>(probNet.getAgents()
+                                                   .stream()
+                                                   .map(StringWithProperties::getString)
+                                                   .collect(Collectors.toSet()));
+            agentsNames.remove(originalAgentName);
+            if (agentsNames.contains(newName)) {
+                throw new UnrecoverableException(new AlreadyExistingAgentException(newName));
+            }
+            Object[][] dataTable = agentsArray();
+            NetworkAgentEdit networkAgentEdit =
+                    new NetworkAgentEdit(probNet, StateAction.RENAME, originalAgentName, dataTable);
+            try {
+                networkAgentEdit.executeEdit();
+                edits.add(networkAgentEdit);
+            } catch (DoEditException e) {
+                throw new UnrecoverableException(e);
+            }
+            setDataFromAdvancedProperties(probNet.getAgents());
+            try {
                 valuesTable.setRowSelectionInterval(row, row);
+            } catch (IllegalArgumentException _) {
+            
             }
         }
     }
     
-    @Override protected void actionPerformedAddValue(ActionEvent e) throws DoEditException {
-        
-        String option = JOptionPane.showInputDialog(this, stringDatabase.getString("AddAgent.Text"),
-                                                    stringDatabase.getString("AddAgent.Title"), JOptionPane.QUESTION_MESSAGE);
-        
-        if (option != null) {
-            int newIndex = valuesTable.getRowCount();
-            
-            NetworkAgentEdit networkAgentEdit = new NetworkAgentEdit(probNet, StateAction.ADD, option, null);
-            //doEdit
-            networkAgentEdit.executeEdit();
-            edits.add(networkAgentEdit);
-
-			
-			/*getTableModel().insertRow(newIndex, new Object[] {getKeyString(newIndex), option });
-			valuesTable.getSelectionModel().setSelectionInterval(newIndex, newIndex);*/
-            
-            //StringsWithProperties agents = probNet.getAgents();
-            //setDataFromNetworkAgents(agents);
-            List<StringWithProperties> agents = probNet.getAgents();
-            setDataFromAdvancedProperties(agents);
-            // getTableModel().insertRow(newIndex, new Object[] {getKeyString(newIndex), option });
-            valuesTable.setRowSelectionInterval(newIndex, newIndex);
-            
-            dataTable = new Object[valuesTable.getRowCount()][1];
-            for (int i = 0; i < valuesTable.getRowCount(); i++) {
-                dataTable[i][0] = valuesTable.getValueAt(i, 1, e.getSource());
-            }
-			/*getTableModel().insertRow(newIndex, new Object[] {getKeyString(newIndex), option });
-			//valuesTable.getSelectionModel().setSelectionInterval(newIndex, newIndex);
-			valuesTable.setValueAt(option, newIndex, 1);*/
+    private Object[][] agentsArray() {
+        List<Object[]> arr = new ArrayList<>();
+        for (var row : valuesTable.getModel().getDataVector()) {
+            arr.add(new Object[]{row.get(1)});
         }
+        return arr.stream().toArray(Object[][]::new);
+    }
+    
+    @Override protected void actionPerformedAddValue(ActionEvent e) throws DoEditException {
+        var existingAgents = probNet.getAgents().stream().map(agent -> agent.string).collect(Collectors.toSet());
+        int prependedIndex = 1;
+        while (existingAgents.contains("Agent " + prependedIndex)) {
+            prependedIndex++;
+        }
+        String option = "Agent " + prependedIndex;
+        
+        int newIndex = valuesTable.getRowCount();
+        
+        NetworkAgentEdit networkAgentEdit = new NetworkAgentEdit(probNet, StateAction.ADD, option, null);
+        //doEdit
+        networkAgentEdit.executeEdit();
+        edits.add(networkAgentEdit);
+        
+        setDataFromAdvancedProperties(probNet.getAgents());
+        valuesTable.setRowSelectionInterval(newIndex, newIndex);
     }
     
     @Override protected void actionPerformedRemoveValue(ActionEvent e) throws DoEditException {
@@ -103,56 +111,39 @@ import java.util.List;
         networkAgentEdit.executeEdit();
         edits.add(networkAgentEdit);
         //StringsWithProperties agents = probNet.getAgents();
-        List<StringWithProperties> agents = probNet.getAgents();
-        setDataFromAdvancedProperties(agents);
+        setDataFromAdvancedProperties(probNet.getAgents());
         valuesTable.setRowSelectionInterval(selectedRow, selectedRow);
-        //dataTable = new Object [agents.getNames().size()][1];
-        if (agents != null) {
-            dataTable = new Object[agents.size()][1];
-            for (int i = 0; i < valuesTable.getRowCount(); i++) {
-                dataTable[i][0] = valuesTable.getValueAt(i, 1, e.getSource());
-            }
-        }
+    }
+    
+    
+    public static <T> void swap(T[] arr, int index1, int index2) {
+        T temp = arr[index1];
+        arr[index1] = arr[index2];
+        arr[index2] = temp;
     }
     
     @Override protected void actionPerformedUpValue(ActionEvent e) throws DoEditException {
         int selectedRow = valuesTable.getSelectedRow();
-        Object swap = dataTable[selectedRow][0];
-        dataTable[selectedRow][0] = dataTable[selectedRow - 1][0];
-        dataTable[selectedRow - 1][0] = swap;
+        var agents = agentsArray();
+        swap(agents, selectedRow, selectedRow - 1);
         
-        NetworkAgentEdit networkAgentEdit = new NetworkAgentEdit(probNet, StateAction.UP, "", dataTable);
+        NetworkAgentEdit networkAgentEdit = new NetworkAgentEdit(probNet, StateAction.UP, "", agents);
         networkAgentEdit.executeEdit();
         edits.add(networkAgentEdit);
-        setData(dataTable);
-			/*swap = valuesTable.getValueAt(selectedRow, 1);
-			valuesTable.setValueAt(
-				valuesTable.getValueAt(selectedRow - 1, 1), selectedRow, 1);
-			valuesTable.setValueAt(swap, selectedRow - 1, 1);*/
+        setDataFromAdvancedProperties(probNet.getAgents());
         valuesTable.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
-        for (int i = 0; i < valuesTable.getRowCount(); i++) {
-            dataTable[i][0] = valuesTable.getValueAt(i, 1, e.getSource());
-        }
-        
     }
     
     @Override protected void actionPerformedDownValue(ActionEvent e) throws DoEditException {
         int selectedRow = valuesTable.getSelectedRow();
-        Object swap = dataTable[selectedRow][0];
-        dataTable[selectedRow][0] = dataTable[selectedRow + 1][0];
-        dataTable[selectedRow + 1][0] = swap;
-        NetworkAgentEdit networkAgentEdit = new NetworkAgentEdit(probNet, StateAction.DOWN, "", dataTable);
+        var agents = agentsArray();
+        swap(agents, selectedRow, selectedRow + 1);
+        
+        NetworkAgentEdit networkAgentEdit = new NetworkAgentEdit(probNet, StateAction.DOWN, "", agents);
         networkAgentEdit.executeEdit();
         edits.add(networkAgentEdit);
-        setData(dataTable);
-			/*swap = valuesTable.getValueAt(selectedRow, 1);
-			valuesTable.setValueAt(
-				valuesTable.getValueAt(selectedRow + 1, 1), selectedRow, 1);
-			valuesTable.setValueAt(swap, selectedRow + 1, 1);*/
+        setDataFromAdvancedProperties(probNet.getAgents());
         valuesTable.setRowSelectionInterval(selectedRow + 1, selectedRow + 1);
-        for (int i = 0; i < valuesTable.getRowCount(); i++) {
-            dataTable[i][0] = valuesTable.getValueAt(i, 1, e.getSource());
-        }
     }
     
 }

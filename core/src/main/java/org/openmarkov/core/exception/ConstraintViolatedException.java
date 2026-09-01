@@ -573,6 +573,19 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         private final String utilityNodes;
     }
 
+    /**
+     * The network already has its one utility node, so the edit under way would give it a second one.
+     */
+    public static class NetworkAlreadyHasAUtilityNode extends ConstraintViolatedException {
+
+        public NetworkAlreadyHasAUtilityNode(PNConstraint constraint, Node utilityNode) {
+            super(constraint);
+            this.utilityNode = utilityNode;
+        }
+
+        private final Node utilityNode;
+    }
+
     public static class UtilityNodeHasNoPotentials extends ConstraintViolatedException {
         
         public UtilityNodeHasNoPotentials(ProperUtilityPotentials constraint, Node utilityNode) {

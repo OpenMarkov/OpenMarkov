@@ -7,24 +7,23 @@
 
 package org.openmarkov.gui.dialog.common;
 
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.gui.action.OtherPropertyEdit;
+import org.openmarkov.gui.component.OMTableModel;
+
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-
-import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.gui.action.OtherPropertyEdit;
-import org.openmarkov.core.model.network.Node;
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.gui.component.OMTableModel;
 
 
 /**
@@ -61,6 +60,7 @@ public class PrefixedOtherPropertiesTablePanel extends KeyTablePanel implements 
      * this a default constructor with no construction parameters
      */
     public PrefixedOtherPropertiesTablePanel() {
+        super(null, null, false, false, false, true);
         keyPrefix = "";
         initialize();
     }
@@ -75,7 +75,7 @@ public class PrefixedOtherPropertiesTablePanel extends KeyTablePanel implements 
      */
     public PrefixedOtherPropertiesTablePanel(String[] newColumns, Object[][] noKeyData, String newKeyPrefix,
                                              boolean firstColumnHidden) {// , ElementObservable notifier) {
-        super(newColumns, new Object[0][0], true, true);// , notifier);
+        super(newColumns, new Object[0][0], true, true, false, true);// , notifier);
         keyPrefix = newKeyPrefix;
         initialize();
         getValuesTable().setFirstColumnHidden(firstColumnHidden);
@@ -96,7 +96,7 @@ public class PrefixedOtherPropertiesTablePanel extends KeyTablePanel implements 
      */
     public PrefixedOtherPropertiesTablePanel(String[] newColumns, Object[][] noKeyData, String newKeyPrefix,
                                              boolean firstColumnHidden, Node node) {// , ElementObservable notifier) {
-        super(newColumns, new Object[0][0], true, true);// , notifier);
+        super(newColumns, new Object[0][0], true, true, false, true);// , notifier);
         this.node = node;
         keyPrefix = newKeyPrefix;
         initialize();
@@ -120,7 +120,7 @@ public class PrefixedOtherPropertiesTablePanel extends KeyTablePanel implements 
      */
     public PrefixedOtherPropertiesTablePanel(String[] newColumns, Object[][] noKeyData, String newKeyPrefix,
                                              boolean firstColumnHidden, ProbNet probNet) {// , ElementObservable notifier) {
-        super(newColumns, new Object[0][0], true, true);// , notifier);
+        super(newColumns, new Object[0][0], true, true, false, true);// , notifier);
         this.probNet = probNet;
         keyPrefix = newKeyPrefix;
         initialize();

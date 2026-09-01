@@ -61,12 +61,7 @@ public class ConstraintManager {
             boolean isMandatoryConstraint = getDefaultBehavior(constraintClass) == ConstraintBehavior.YES;
             boolean isOptionalConstraintToUse = includeOptionals && getDefaultBehavior(constraintClass) == ConstraintBehavior.OPTIONAL;
             if (isMandatoryConstraint || isOptionalConstraintToUse) {
-                try {
-                    constraints.add(constraintClass.getDeclaredConstructor().newInstance());
-                } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
-                         InvocationTargetException e) {
-                    throw new UnreachableException(e);
-                }
+                addIfInstantiable(constraints, constraintClass);
             }
         }
 
@@ -81,12 +76,7 @@ public class ConstraintManager {
                 boolean alreadyPresent = constraints.stream()
                                                     .anyMatch(constraint -> constraint.getClass() == constraintClass);
                 if (!alreadyPresent) {
-                    try {
-                        constraints.add(constraintClass.getDeclaredConstructor().newInstance());
-                    } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
-                             InvocationTargetException e) {
-                        throw new UnreachableException(e);
-                    }
+                    addIfInstantiable(constraints, constraintClass);
                 }
             } else if (overwrittenConstraints.get(constraintClass) == ConstraintBehavior.NO) {
                 constraints.removeIf(constraint -> constraint.getClass() == constraintClass);
@@ -94,6 +84,21 @@ public class ConstraintManager {
         }
         return constraints;
 
+    }
+
+    /**
+     * Adds a new instance of the constraint to the list, unless it has no no-argument constructor:
+     * a constraint that keeps data inside is created by whoever knows the data.
+     */
+    private static void addIfInstantiable(ArrayList<PNConstraint> constraints,
+            Class<? extends PNConstraint> constraintClass) {
+        try {
+            constraints.add(constraintClass.getDeclaredConstructor().newInstance());
+        } catch (NoSuchMethodException builtByItsCallerInstead) {
+            // Nothing to add here.
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new UnreachableException(e);
+        }
     }
 
     public final ArrayList<PNConstraint> buildConstraintList(NetworkType type) {

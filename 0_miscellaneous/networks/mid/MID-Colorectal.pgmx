@@ -1,0 +1,2503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="MID">
+    <Comment showWhenOpeningNetwork="false"><![CDATA[<<Double click to add/modify comment>>]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="Cost" unit="€" />
+      <Criterion name="Effectiveness" unit="QALY" />
+    </DecisionCriteria>
+    <TimeUnit unit="YEAR" Value="1.0" />
+    <AdditionalProperties />
+    <Variables>
+      <Variable name="Do FOBT" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="442" y="331" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Time since last FOB test" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="539" y="201" />
+        <States>
+          <State name="never done" />
+          <State name="1 yr" />
+          <State name="2+ yr" />
+        </States>
+      </Variable>
+      <Variable name="FOB test result" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="222" y="426" />
+        <States>
+          <State name="not done" />
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="OC death" timeSlice="0" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Death due to other causes. In this model (surprisingly) it does not 
+      depend on age nor on gender.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="549" y="70" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Age" timeSlice="0" type="numeric" role="chance">
+        <Coordinates x="327" y="40" />
+        <Unit />
+        <Precision>1.0</Precision>
+        <Thresholds>
+          <Threshold value="0.0" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="Age" timeSlice="1" type="numeric" role="chance">
+        <Coordinates x="695" y="40" />
+        <Unit />
+        <Precision>1.0</Precision>
+        <Thresholds>
+          <Threshold value="0.0" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="Colonoscopy result" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="627" y="592" />
+        <States>
+          <State name="not done" />
+          <State name="negative" />
+          <State name="low-risk adenoma" />
+          <State name="high-risk adenoma" />
+          <State name="cancer" />
+        </States>
+      </Variable>
+      <Variable name="Do colonoscopy" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="337" y="498" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="CRC stage" timeSlice="0" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Metastasis due to colorectal cancer. We do not take into account 
+      metastases due to other causes.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="741" y="332" />
+        <States>
+          <State name="none" />
+          <State name="stage I" />
+          <State name="stage II" />
+          <State name="stage III" />
+          <State name="stage IV" />
+        </States>
+      </Variable>
+      <Variable name="State" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="227" y="131" />
+        <States>
+          <State name="normal epithelium" />
+          <State name="small adenoma" />
+          <State name="large adenoma" />
+          <State name="pre-clinical CRC" />
+          <State name="f-up normal epithelium" />
+          <State name="f-up after low-risk adenoma" />
+          <State name="f-up after high-risk adenoma" />
+          <State name="f-up CRC" />
+          <State name="dead" />
+        </States>
+      </Variable>
+      <Variable name="State" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="700" y="131" />
+        <States>
+          <State name="normal epithelium" />
+          <State name="small adenoma" />
+          <State name="large adenoma" />
+          <State name="pre-clinical CRC" />
+          <State name="f-up normal epithelium" />
+          <State name="f-up after low-risk adenoma" />
+          <State name="f-up after high-risk adenoma" />
+          <State name="f-up CRC" />
+          <State name="dead" />
+        </States>
+      </Variable>
+      <Variable name="Time since colonoscopy" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="142" y="564" />
+        <States>
+          <State name="never done" />
+          <State name="1 yr" />
+          <State name="2 yr" />
+          <State name="3 yr" />
+          <State name="4 yr" />
+          <State name="5 yr" />
+          <State name="6 yr" />
+          <State name="7 yr" />
+          <State name="8 yr" />
+          <State name="9 yr" />
+          <State name="10+ yr" />
+        </States>
+      </Variable>
+      <Variable name="Time since colonoscopy" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="173" y="638" />
+        <States>
+          <State name="never done" />
+          <State name="1 yr" />
+          <State name="2 yr" />
+          <State name="3 yr" />
+          <State name="4 yr" />
+          <State name="5 yr" />
+          <State name="6 yr" />
+          <State name="7 yr" />
+          <State name="8 yr" />
+          <State name="9 yr" />
+          <State name="10+ yr" />
+        </States>
+      </Variable>
+      <Variable name="CRC stage" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="924" y="333" />
+        <States>
+          <State name="none" />
+          <State name="stage I" />
+          <State name="stage II" />
+          <State name="stage III" />
+          <State name="stage IV" />
+        </States>
+      </Variable>
+      <Variable name="Symptoms" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="580" y="444" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="CRC death" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="876" y="379" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="QoL" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="849" y="452" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Effectiveness" />
+      </Variable>
+      <Variable name="Compliance" timeSlice="0" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Whether a patient referred to colonoscopy undergoes it.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="98" y="498" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Participation" timeSlice="0" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Whether a person participates in the screening programme.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="131" y="222" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="C: FOBT" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="520" y="381" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Cost" />
+      </Variable>
+      <Variable name="C: Colonoscopy" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="347" y="600" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Cost" />
+      </Variable>
+      <Variable name="C: Polypectomy" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="831" y="594" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Cost" />
+      </Variable>
+      <Variable name="C: Invitation" type="numeric" role="utility">
+        <Coordinates x="88" y="370" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Cost" />
+      </Variable>
+      <Variable name="Screening policy" type="finiteStates" role="decision">
+        <Coordinates x="95" y="276" />
+        <States>
+          <State name="ImChem - start at 60" />
+          <State name="ImChem - start at 50" />
+          <State name="No screening" />
+        </States>
+      </Variable>
+      <Variable name="Time since last FOB test" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="891" y="202" />
+        <States>
+          <State name="never done" />
+          <State name="1 yr" />
+          <State name="2+ yr" />
+        </States>
+      </Variable>
+      <Variable name="C: Treatment" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="797" y="528" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Cost" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Do FOBT" timeSlice="0" />
+        <Variable name="FOB test result" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do FOBT" timeSlice="0" />
+        <Variable name="C: FOBT" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do FOBT" timeSlice="0" />
+        <Variable name="Time since last FOB test" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Time since last FOB test" timeSlice="0" />
+        <Variable name="Do FOBT" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Time since last FOB test" timeSlice="0" />
+        <Variable name="Time since last FOB test" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="FOB test result" timeSlice="0" />
+        <Variable name="Do colonoscopy" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="OC death" timeSlice="0" />
+        <Variable name="State" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age" timeSlice="0" />
+        <Variable name="Age" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age" timeSlice="0" />
+        <Variable name="Do FOBT" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age" timeSlice="0" />
+        <Variable name="OC death" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Colonoscopy result" timeSlice="0" />
+        <Variable name="State" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Colonoscopy result" timeSlice="0" />
+        <Variable name="C: Polypectomy" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do colonoscopy" timeSlice="0" />
+        <Variable name="Colonoscopy result" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do colonoscopy" timeSlice="0" />
+        <Variable name="Time since colonoscopy" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do colonoscopy" timeSlice="0" />
+        <Variable name="C: Colonoscopy" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CRC stage" timeSlice="0" />
+        <Variable name="CRC stage" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CRC stage" timeSlice="0" />
+        <Variable name="Symptoms" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CRC stage" timeSlice="0" />
+        <Variable name="CRC death" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CRC stage" timeSlice="0" />
+        <Variable name="QoL" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CRC stage" timeSlice="0" />
+        <Variable name="C: Treatment" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="State" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="FOB test result" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="Do FOBT" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="Colonoscopy result" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="Do colonoscopy" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="QoL" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="C: Treatment" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="1" />
+        <Variable name="CRC stage" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Time since colonoscopy" timeSlice="0" />
+        <Variable name="Time since colonoscopy" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Time since colonoscopy" timeSlice="0" />
+        <Variable name="Do colonoscopy" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptoms" timeSlice="0" />
+        <Variable name="Do colonoscopy" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="CRC death" timeSlice="0" />
+        <Variable name="State" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Compliance" timeSlice="0" />
+        <Variable name="Do colonoscopy" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Participation" timeSlice="0" />
+        <Variable name="Do FOBT" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Screening policy" />
+        <Variable name="Do FOBT" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Screening policy" />
+        <Variable name="C: Invitation" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Do FOBT" timeSlice="0" />
+          <Variable name="Time since last FOB test" timeSlice="0" />
+          <Variable name="Age" timeSlice="0" />
+          <Variable name="State" timeSlice="0" />
+          <Variable name="Participation" timeSlice="0" />
+          <Variable name="Screening policy" />
+        </Variables>
+        <TopVariable name="Screening policy" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="No screening" />
+            </States>
+            <Potential type="Delta">
+              <Variables>
+                <Variable name="Do FOBT" timeSlice="0" />
+              </Variables>
+              <State>no</State>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="ImChem - start at 50" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Do FOBT" timeSlice="0" />
+                <Variable name="Time since last FOB test" timeSlice="0" />
+                <Variable name="Age" timeSlice="0" />
+                <Variable name="State" timeSlice="0" />
+                <Variable name="Participation" timeSlice="0" />
+                <Variable name="Screening policy" />
+              </Variables>
+              <TopVariable name="Age" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <Thresholds>
+                    <Threshold value="0.0" belongsTo="right" />
+                    <Threshold value="50.0" belongsTo="right" />
+                  </Thresholds>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Do FOBT" timeSlice="0" />
+                    </Variables>
+                    <State>no</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <Thresholds>
+                    <Threshold value="50.0" belongsTo="right" />
+                    <Threshold value="70.0" belongsTo="right" />
+                  </Thresholds>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Do FOBT" timeSlice="0" />
+                      <Variable name="Time since last FOB test" timeSlice="0" />
+                      <Variable name="Age" timeSlice="0" />
+                      <Variable name="State" timeSlice="0" />
+                      <Variable name="Participation" timeSlice="0" />
+                      <Variable name="Screening policy" />
+                    </Variables>
+                    <TopVariable name="State" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="f-up normal epithelium" />
+                          <State name="f-up after low-risk adenoma" />
+                          <State name="f-up after high-risk adenoma" />
+                          <State name="f-up CRC" />
+                          <State name="dead" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Do FOBT" timeSlice="0" />
+                          </Variables>
+                          <State>no</State>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="normal epithelium" />
+                          <State name="small adenoma" />
+                          <State name="large adenoma" />
+                          <State name="pre-clinical CRC" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="Do FOBT" timeSlice="0" />
+                            <Variable name="Time since last FOB test" timeSlice="0" />
+                            <Variable name="Age" timeSlice="0" />
+                            <Variable name="State" timeSlice="0" />
+                            <Variable name="Participation" timeSlice="0" />
+                            <Variable name="Screening policy" />
+                          </Variables>
+                          <TopVariable name="Time since last FOB test" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="never done" />
+                                <State name="2+ yr" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="Do FOBT" timeSlice="0" />
+                                  <Variable name="Time since last FOB test" timeSlice="0" />
+                                  <Variable name="Age" timeSlice="0" />
+                                  <Variable name="State" timeSlice="0" />
+                                  <Variable name="Participation" timeSlice="0" />
+                                  <Variable name="Screening policy" />
+                                </Variables>
+                                <TopVariable name="Participation" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="yes" />
+                                    </States>
+                                    <Potential type="Delta">
+                                      <Variables>
+                                        <Variable name="Do FOBT" timeSlice="0" />
+                                      </Variables>
+                                      <State>yes</State>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="no" />
+                                    </States>
+                                    <Potential type="Delta">
+                                      <Variables>
+                                        <Variable name="Do FOBT" timeSlice="0" />
+                                      </Variables>
+                                      <State>no</State>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="1 yr" />
+                              </States>
+                              <Potential type="Delta">
+                                <Variables>
+                                  <Variable name="Do FOBT" timeSlice="0" />
+                                </Variables>
+                                <State>no</State>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <Thresholds>
+                    <Threshold value="70.0" belongsTo="right" />
+                    <Threshold value="Infinity" belongsTo="right" />
+                  </Thresholds>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Do FOBT" timeSlice="0" />
+                    </Variables>
+                    <State>no</State>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="ImChem - start at 60" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Do FOBT" timeSlice="0" />
+                <Variable name="Time since last FOB test" timeSlice="0" />
+                <Variable name="Age" timeSlice="0" />
+                <Variable name="State" timeSlice="0" />
+                <Variable name="Participation" timeSlice="0" />
+                <Variable name="Screening policy" />
+              </Variables>
+              <TopVariable name="Age" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <Thresholds>
+                    <Threshold value="0.0" belongsTo="right" />
+                    <Threshold value="60.0" belongsTo="right" />
+                  </Thresholds>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Do FOBT" timeSlice="0" />
+                    </Variables>
+                    <State>no</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <Thresholds>
+                    <Threshold value="60.0" belongsTo="right" />
+                    <Threshold value="70.0" belongsTo="right" />
+                  </Thresholds>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Do FOBT" timeSlice="0" />
+                      <Variable name="Time since last FOB test" timeSlice="0" />
+                      <Variable name="Age" timeSlice="0" />
+                      <Variable name="State" timeSlice="0" />
+                      <Variable name="Participation" timeSlice="0" />
+                      <Variable name="Screening policy" />
+                    </Variables>
+                    <TopVariable name="State" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="f-up normal epithelium" />
+                          <State name="f-up after low-risk adenoma" />
+                          <State name="f-up after high-risk adenoma" />
+                          <State name="f-up CRC" />
+                          <State name="dead" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Do FOBT" timeSlice="0" />
+                          </Variables>
+                          <State>no</State>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="normal epithelium" />
+                          <State name="small adenoma" />
+                          <State name="large adenoma" />
+                          <State name="pre-clinical CRC" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="Do FOBT" timeSlice="0" />
+                            <Variable name="Time since last FOB test" timeSlice="0" />
+                            <Variable name="Age" timeSlice="0" />
+                            <Variable name="State" timeSlice="0" />
+                            <Variable name="Participation" timeSlice="0" />
+                            <Variable name="Screening policy" />
+                          </Variables>
+                          <TopVariable name="Time since last FOB test" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="never done" />
+                                <State name="2+ yr" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="Do FOBT" timeSlice="0" />
+                                  <Variable name="Time since last FOB test" timeSlice="0" />
+                                  <Variable name="Age" timeSlice="0" />
+                                  <Variable name="State" timeSlice="0" />
+                                  <Variable name="Participation" timeSlice="0" />
+                                  <Variable name="Screening policy" />
+                                </Variables>
+                                <TopVariable name="Participation" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="yes" />
+                                    </States>
+                                    <Potential type="Delta">
+                                      <Variables>
+                                        <Variable name="Do FOBT" timeSlice="0" />
+                                      </Variables>
+                                      <State>yes</State>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="no" />
+                                    </States>
+                                    <Potential type="Delta">
+                                      <Variables>
+                                        <Variable name="Do FOBT" timeSlice="0" />
+                                      </Variables>
+                                      <State>no</State>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="1 yr" />
+                              </States>
+                              <Potential type="Delta">
+                                <Variables>
+                                  <Variable name="Do FOBT" timeSlice="0" />
+                                </Variables>
+                                <State>no</State>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <Thresholds>
+                    <Threshold value="70.0" belongsTo="right" />
+                    <Threshold value="Infinity" belongsTo="right" />
+                  </Thresholds>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Do FOBT" timeSlice="0" />
+                    </Variables>
+                    <State>no</State>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Time since last FOB test" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="FOB test result" timeSlice="0" />
+          <Variable name="Do FOBT" timeSlice="0" />
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Do FOBT" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="no" />
+            </States>
+            <Potential type="Delta">
+              <Variables>
+                <Variable name="FOB test result" timeSlice="0" />
+              </Variables>
+              <State>not done</State>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="yes" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="FOB test result" timeSlice="0" />
+                <Variable name="Do FOBT" timeSlice="0" />
+                <Variable name="State" timeSlice="0" />
+              </Variables>
+              <TopVariable name="State" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="small adenoma" />
+                    <State name="large adenoma" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="FOB test result" timeSlice="0" />
+                    </Variables>
+                    <Values>0.0 0.718 0.28200000000000003</Values>
+                    <UncertainValues>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Beta">71.8 28.2</Value>
+                      <Value distribution="Complement">1.0</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="pre-clinical CRC" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="FOB test result" timeSlice="0" />
+                    </Variables>
+                    <Values>0.0 0.31200000000000006 0.688</Values>
+                    <UncertainValues>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Complement">1.0</Value>
+                      <Value distribution="Beta">68.8 31.2</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="normal epithelium" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="FOB test result" timeSlice="0" />
+                    </Variables>
+                    <Values>0.0 0.9440000000000001 0.055999999999999946</Values>
+                    <UncertainValues>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Beta">94.4 5.6</Value>
+                      <Value distribution="Complement">1.0</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="f-up normal epithelium" />
+                    <State name="f-up after low-risk adenoma" />
+                    <State name="f-up after high-risk adenoma" />
+                    <State name="f-up CRC" />
+                    <State name="dead" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="FOB test result" timeSlice="0" />
+                    </Variables>
+                    <State>not done</State>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="OC death" timeSlice="0" />
+          <Variable name="Age" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Age" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <Thresholds>
+              <Threshold value="0.0" belongsTo="right" />
+              <Threshold value="30.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.99954967 4.5033E-4</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="30.0" belongsTo="right" />
+              <Threshold value="35.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.99954967 4.5033E-4</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="35.0" belongsTo="right" />
+              <Threshold value="40.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.99931175 6.8825E-4</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="40.0" belongsTo="right" />
+              <Threshold value="45.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.99877739 0.00122261</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="45.0" belongsTo="right" />
+              <Threshold value="50.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.99797517 0.00202483</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="50.0" belongsTo="right" />
+              <Threshold value="55.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.9967972 0.0032028</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="55.0" belongsTo="right" />
+              <Threshold value="60.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.99529321 0.00470679</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="60.0" belongsTo="right" />
+              <Threshold value="65.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.99325989 0.00674011</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="65.0" belongsTo="right" />
+              <Threshold value="70.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.98996966 0.01003034</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="70.0" belongsTo="right" />
+              <Threshold value="75.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.98342192 0.01657808</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="75.0" belongsTo="right" />
+              <Threshold value="80.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.97064283 0.02935717</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="80.0" belongsTo="right" />
+              <Threshold value="85.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.94530215 0.05469785</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="85.0" belongsTo="right" />
+              <Threshold value="90.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.89762167 0.10237833</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="90.0" belongsTo="right" />
+              <Threshold value="95.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.8231418 0.1768582</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="95.0" belongsTo="right" />
+              <Threshold value="Infinity" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="OC death" timeSlice="0" />
+              </Variables>
+              <Values>0.70285327 0.29714673</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="CycleLengthShift" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age" timeSlice="1" />
+          <Variable name="Age" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Colonoscopy result" timeSlice="0" />
+          <Variable name="Do colonoscopy" timeSlice="0" />
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Do colonoscopy" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="no" />
+            </States>
+            <Potential type="Delta">
+              <Variables>
+                <Variable name="Colonoscopy result" timeSlice="0" />
+              </Variables>
+              <State>not done</State>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="yes" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Colonoscopy result" timeSlice="0" />
+                <Variable name="Do colonoscopy" timeSlice="0" />
+                <Variable name="State" timeSlice="0" />
+              </Variables>
+              <TopVariable name="State" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="f-up CRC" />
+                    <State name="dead" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Colonoscopy result" timeSlice="0" />
+                    </Variables>
+                    <State>not done</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="normal epithelium" />
+                    <State name="f-up normal epithelium" />
+                    <State name="f-up after low-risk adenoma" />
+                    <State name="f-up after high-risk adenoma" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Colonoscopy result" timeSlice="0" />
+                    </Variables>
+                    <State>negative</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="pre-clinical CRC" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Colonoscopy result" timeSlice="0" />
+                    </Variables>
+                    <Values>0.0 0.052999999999999936 0.0 0.0 0.9470000000000001</Values>
+                    <UncertainValues>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Complement">1.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Beta">94.7 5.3</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="large adenoma" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Colonoscopy result" timeSlice="0" />
+                    </Variables>
+                    <Values>0.0 0.071 0.0 0.929 0.0</Values>
+                    <UncertainValues>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Complement">1.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Beta">92.9 7.1</Value>
+                      <Value distribution="Exact">0.0</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="small adenoma" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="Colonoscopy result" timeSlice="0" />
+                    </Variables>
+                    <Values>0.0 0.133 0.867 0.0 0.0</Values>
+                    <UncertainValues>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Complement">1.0</Value>
+                      <Value distribution="Beta">86.7 13.3</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Do colonoscopy" timeSlice="0" />
+          <Variable name="FOB test result" timeSlice="0" />
+          <Variable name="State" timeSlice="0" />
+          <Variable name="Time since colonoscopy" timeSlice="0" />
+          <Variable name="Symptoms" timeSlice="0" />
+          <Variable name="Compliance" timeSlice="0" />
+        </Variables>
+        <TopVariable name="State" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="f-up CRC" />
+              <State name="dead" />
+            </States>
+            <Potential type="Delta">
+              <Variables>
+                <Variable name="Do colonoscopy" timeSlice="0" />
+              </Variables>
+              <State>no</State>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="f-up after high-risk adenoma" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Do colonoscopy" timeSlice="0" />
+                <Variable name="FOB test result" timeSlice="0" />
+                <Variable name="State" timeSlice="0" />
+                <Variable name="Time since colonoscopy" timeSlice="0" />
+                <Variable name="Symptoms" timeSlice="0" />
+                <Variable name="Compliance" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Time since colonoscopy" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="1 yr" />
+                    <State name="2 yr" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Do colonoscopy" timeSlice="0" />
+                    </Variables>
+                    <State>no</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="never done" />
+                    <State name="3 yr" />
+                    <State name="4 yr" />
+                    <State name="5 yr" />
+                    <State name="6 yr" />
+                    <State name="7 yr" />
+                    <State name="8 yr" />
+                    <State name="9 yr" />
+                    <State name="10+ yr" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Do colonoscopy" timeSlice="0" />
+                      <Variable name="FOB test result" timeSlice="0" />
+                      <Variable name="State" timeSlice="0" />
+                      <Variable name="Time since colonoscopy" timeSlice="0" />
+                      <Variable name="Symptoms" timeSlice="0" />
+                      <Variable name="Compliance" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Compliance" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="yes" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Do colonoscopy" timeSlice="0" />
+                          </Variables>
+                          <State>yes</State>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Do colonoscopy" timeSlice="0" />
+                          </Variables>
+                          <State>no</State>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="f-up after low-risk adenoma" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Do colonoscopy" timeSlice="0" />
+                <Variable name="FOB test result" timeSlice="0" />
+                <Variable name="State" timeSlice="0" />
+                <Variable name="Time since colonoscopy" timeSlice="0" />
+                <Variable name="Symptoms" timeSlice="0" />
+                <Variable name="Compliance" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Time since colonoscopy" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="1 yr" />
+                    <State name="2 yr" />
+                    <State name="3 yr" />
+                    <State name="4 yr" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Do colonoscopy" timeSlice="0" />
+                    </Variables>
+                    <State>no</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="never done" />
+                    <State name="5 yr" />
+                    <State name="6 yr" />
+                    <State name="7 yr" />
+                    <State name="8 yr" />
+                    <State name="9 yr" />
+                    <State name="10+ yr" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Do colonoscopy" timeSlice="0" />
+                      <Variable name="FOB test result" timeSlice="0" />
+                      <Variable name="State" timeSlice="0" />
+                      <Variable name="Time since colonoscopy" timeSlice="0" />
+                      <Variable name="Symptoms" timeSlice="0" />
+                      <Variable name="Compliance" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Compliance" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="yes" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Do colonoscopy" timeSlice="0" />
+                          </Variables>
+                          <State>yes</State>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Do colonoscopy" timeSlice="0" />
+                          </Variables>
+                          <State>no</State>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="f-up normal epithelium" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Do colonoscopy" timeSlice="0" />
+                <Variable name="FOB test result" timeSlice="0" />
+                <Variable name="State" timeSlice="0" />
+                <Variable name="Time since colonoscopy" timeSlice="0" />
+                <Variable name="Symptoms" timeSlice="0" />
+                <Variable name="Compliance" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Time since colonoscopy" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="1 yr" />
+                    <State name="2 yr" />
+                    <State name="3 yr" />
+                    <State name="4 yr" />
+                    <State name="5 yr" />
+                    <State name="6 yr" />
+                    <State name="7 yr" />
+                    <State name="8 yr" />
+                    <State name="9 yr" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Do colonoscopy" timeSlice="0" />
+                    </Variables>
+                    <State>no</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="never done" />
+                    <State name="10+ yr" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Do colonoscopy" timeSlice="0" />
+                      <Variable name="FOB test result" timeSlice="0" />
+                      <Variable name="State" timeSlice="0" />
+                      <Variable name="Time since colonoscopy" timeSlice="0" />
+                      <Variable name="Symptoms" timeSlice="0" />
+                      <Variable name="Compliance" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Compliance" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="yes" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Do colonoscopy" timeSlice="0" />
+                          </Variables>
+                          <State>yes</State>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Do colonoscopy" timeSlice="0" />
+                          </Variables>
+                          <State>no</State>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="normal epithelium" />
+              <State name="small adenoma" />
+              <State name="large adenoma" />
+              <State name="pre-clinical CRC" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Do colonoscopy" timeSlice="0" />
+                <Variable name="FOB test result" timeSlice="0" />
+                <Variable name="State" timeSlice="0" />
+                <Variable name="Time since colonoscopy" timeSlice="0" />
+                <Variable name="Symptoms" timeSlice="0" />
+                <Variable name="Compliance" timeSlice="0" />
+              </Variables>
+              <TopVariable name="FOB test result" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="not done" />
+                    <State name="negative" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="Do colonoscopy" timeSlice="0" />
+                      <Variable name="FOB test result" timeSlice="0" />
+                      <Variable name="State" timeSlice="0" />
+                      <Variable name="Time since colonoscopy" timeSlice="0" />
+                      <Variable name="Symptoms" timeSlice="0" />
+                      <Variable name="Compliance" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Symptoms" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="yes" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Do colonoscopy" timeSlice="0" />
+                          </Variables>
+                          <State>yes</State>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="Do colonoscopy" timeSlice="0" />
+                          </Variables>
+                          <State>no</State>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="positive" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Do colonoscopy" timeSlice="0" />
+                    </Variables>
+                    <State>yes</State>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="CRC stage" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="State" timeSlice="1" />
+          <Variable name="OC death" timeSlice="0" />
+          <Variable name="Colonoscopy result" timeSlice="0" />
+          <Variable name="State" timeSlice="0" />
+          <Variable name="CRC death" timeSlice="0" />
+        </Variables>
+        <TopVariable name="OC death" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="yes" />
+            </States>
+            <Potential type="Delta">
+              <Variables>
+                <Variable name="State" timeSlice="1" />
+              </Variables>
+              <State>dead</State>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="no" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="State" timeSlice="1" />
+                <Variable name="OC death" timeSlice="0" />
+                <Variable name="Colonoscopy result" timeSlice="0" />
+                <Variable name="State" timeSlice="0" />
+                <Variable name="CRC death" timeSlice="0" />
+              </Variables>
+              <TopVariable name="State" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="dead" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                    </Variables>
+                    <State>dead</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="f-up after high-risk adenoma" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 0.06 0.0 0.0 0.0 0.0 0.94 0.0 0.0</Values>
+                    <UncertainValues>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Complement">1.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Beta">94.0 6.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="f-up after low-risk adenoma" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 0.050000000000000044 0.0 0.0 0.0 0.95 0.0 0.0 0.0</Values>
+                    <UncertainValues>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Complement">1.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Beta">95.0 5.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="pre-clinical CRC" />
+                    <State name="f-up CRC" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                      <Variable name="OC death" timeSlice="0" />
+                      <Variable name="Colonoscopy result" timeSlice="0" />
+                      <Variable name="State" timeSlice="0" />
+                      <Variable name="CRC death" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="CRC death" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="present" />
+                        </States>
+                        <Potential type="Delta">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                          </Variables>
+                          <State>dead</State>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="absent" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                            <Variable name="OC death" timeSlice="0" />
+                            <Variable name="Colonoscopy result" timeSlice="0" />
+                            <Variable name="State" timeSlice="0" />
+                            <Variable name="CRC death" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="State" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="f-up CRC" />
+                              </States>
+                              <Potential type="Delta">
+                                <Variables>
+                                  <Variable name="State" timeSlice="1" />
+                                </Variables>
+                                <State>f-up CRC</State>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="pre-clinical CRC" />
+                              </States>
+                              <Potential type="Tree/ADD">
+                                <Variables>
+                                  <Variable name="State" timeSlice="1" />
+                                  <Variable name="OC death" timeSlice="0" />
+                                  <Variable name="Colonoscopy result" timeSlice="0" />
+                                  <Variable name="State" timeSlice="0" />
+                                  <Variable name="CRC death" timeSlice="0" />
+                                </Variables>
+                                <TopVariable name="Colonoscopy result" timeSlice="0" />
+                                <Branches>
+                                  <Branch>
+                                    <States>
+                                      <State name="not done" />
+                                      <State name="negative" />
+                                      <State name="low-risk adenoma" />
+                                      <State name="high-risk adenoma" />
+                                    </States>
+                                    <Potential type="Delta">
+                                      <Variables>
+                                        <Variable name="State" timeSlice="1" />
+                                      </Variables>
+                                      <State>pre-clinical CRC</State>
+                                    </Potential>
+                                  </Branch>
+                                  <Branch>
+                                    <States>
+                                      <State name="cancer" />
+                                    </States>
+                                    <Potential type="Delta">
+                                      <Variables>
+                                        <Variable name="State" timeSlice="1" />
+                                      </Variables>
+                                      <State>f-up CRC</State>
+                                    </Potential>
+                                  </Branch>
+                                </Branches>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="large adenoma" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                      <Variable name="OC death" timeSlice="0" />
+                      <Variable name="Colonoscopy result" timeSlice="0" />
+                      <Variable name="State" timeSlice="0" />
+                      <Variable name="CRC death" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Colonoscopy result" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="not done" />
+                          <State name="negative" />
+                          <State name="low-risk adenoma" />
+                          <State name="cancer" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.0 0.9674 0.0326 0.0 0.0 0.0 0.0 0.0</Values>
+                          <UncertainValues>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Beta">96.74 3.26</Value>
+                            <Value distribution="Complement">1.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                          </UncertainValues>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="high-risk adenoma" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.25 0.0 0.0 0.0 0.0 0.75 0.0 0.0</Values>
+                          <UncertainValues>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Complement">1.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Beta">75.0 25.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                          </UncertainValues>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="small adenoma" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                      <Variable name="OC death" timeSlice="0" />
+                      <Variable name="Colonoscopy result" timeSlice="0" />
+                      <Variable name="State" timeSlice="0" />
+                      <Variable name="CRC death" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Colonoscopy result" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="not done" />
+                          <State name="negative" />
+                          <State name="high-risk adenoma" />
+                          <State name="cancer" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.9788 0.0212 0.0 0.0 0.0 0.0 0.0 0.0</Values>
+                          <UncertainValues>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Beta">97.88 2.12</Value>
+                            <Value distribution="Complement">1.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                          </UncertainValues>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="low-risk adenoma" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.18 0.0 0.0 0.0 0.82 0.0 0.0 0.0</Values>
+                          <UncertainValues>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Complement">1.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Beta">82.0 18.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                          </UncertainValues>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="normal epithelium" />
+                    <State name="f-up normal epithelium" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                      <Variable name="OC death" timeSlice="0" />
+                      <Variable name="Colonoscopy result" timeSlice="0" />
+                      <Variable name="State" timeSlice="0" />
+                      <Variable name="CRC death" timeSlice="0" />
+                    </Variables>
+                    <TopVariable name="Colonoscopy result" timeSlice="0" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="negative" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.016 0.0 0.0 0.984 0.0 0.0 0.0 0.0</Values>
+                          <UncertainValues>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Complement">1.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Beta">98.4 1.6</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                            <Value distribution="Exact">0.0</Value>
+                          </UncertainValues>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="not done" />
+                          <State name="low-risk adenoma" />
+                          <State name="high-risk adenoma" />
+                          <State name="cancer" />
+                        </States>
+                        <Potential type="Tree/ADD">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                            <Variable name="OC death" timeSlice="0" />
+                            <Variable name="Colonoscopy result" timeSlice="0" />
+                            <Variable name="State" timeSlice="0" />
+                            <Variable name="CRC death" timeSlice="0" />
+                          </Variables>
+                          <TopVariable name="State" timeSlice="0" />
+                          <Branches>
+                            <Branch>
+                              <States>
+                                <State name="f-up normal epithelium" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="State" timeSlice="1" />
+                                </Variables>
+                                <Values>0.0 0.016 0.0 0.0 0.9839999999999999 0.0 0.0 0.0 0.0</Values>
+                                <UncertainValues>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Beta">1.6 98.4</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Complement">1.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                </UncertainValues>
+                              </Potential>
+                            </Branch>
+                            <Branch>
+                              <States>
+                                <State name="normal epithelium" />
+                              </States>
+                              <Potential type="Table">
+                                <Variables>
+                                  <Variable name="State" timeSlice="1" />
+                                </Variables>
+                                <Values>0.9839999999999999 0.016 0.0 0.0 0.0 0.0 0.0 0.0 0.0</Values>
+                                <UncertainValues>
+                                  <Value distribution="Complement">1.0</Value>
+                                  <Value distribution="Beta">1.6 98.4</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                  <Value distribution="Exact">0.0</Value>
+                                </UncertainValues>
+                              </Potential>
+                            </Branch>
+                          </Branches>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Time since colonoscopy" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Time since colonoscopy" timeSlice="1" />
+          <Variable name="Do colonoscopy" timeSlice="0" />
+          <Variable name="Time since colonoscopy" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Do colonoscopy" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="yes" />
+            </States>
+            <Potential type="Delta">
+              <Variables>
+                <Variable name="Time since colonoscopy" timeSlice="1" />
+              </Variables>
+              <State>1 yr</State>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="no" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Time since colonoscopy" timeSlice="1" />
+                <Variable name="Time since colonoscopy" timeSlice="0" />
+              </Variables>
+              <Values>1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="CRC stage" timeSlice="1" />
+          <Variable name="CRC stage" timeSlice="0" />
+          <Variable name="State" timeSlice="1" />
+        </Variables>
+        <TopVariable name="CRC stage" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="none" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="CRC stage" timeSlice="1" />
+                <Variable name="CRC stage" timeSlice="0" />
+                <Variable name="State" timeSlice="1" />
+              </Variables>
+              <TopVariable name="State" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="normal epithelium" />
+                    <State name="small adenoma" />
+                    <State name="large adenoma" />
+                    <State name="f-up normal epithelium" />
+                    <State name="f-up after low-risk adenoma" />
+                    <State name="f-up after high-risk adenoma" />
+                    <State name="dead" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="CRC stage" timeSlice="1" />
+                    </Variables>
+                    <State>none</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="pre-clinical CRC" />
+                    <State name="f-up CRC" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="CRC stage" timeSlice="1" />
+                    </Variables>
+                    <State>stage I</State>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="stage I" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="CRC stage" timeSlice="1" />
+              </Variables>
+              <Values>0.0 0.4171 0.5829 0.0 0.0</Values>
+              <UncertainValues>
+                <Value distribution="Exact">0.0</Value>
+                <Value distribution="Complement">1.0</Value>
+                <Value distribution="Beta">58.29 41.71</Value>
+                <Value distribution="Exact">0.0</Value>
+                <Value distribution="Exact">0.0</Value>
+              </UncertainValues>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="stage II" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="CRC stage" timeSlice="1" />
+              </Variables>
+              <Values>0.0 0.0 0.34450000000000003 0.6555 0.0</Values>
+              <UncertainValues>
+                <Value distribution="Exact">0.0</Value>
+                <Value distribution="Exact">0.0</Value>
+                <Value distribution="Complement">1.0</Value>
+                <Value distribution="Beta">65.55 34.45</Value>
+                <Value distribution="Exact">0.0</Value>
+              </UncertainValues>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="stage III" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="CRC stage" timeSlice="1" />
+              </Variables>
+              <Values>0.0 0.0 0.0 0.1352 0.8648</Values>
+              <UncertainValues>
+                <Value distribution="Exact">0.0</Value>
+                <Value distribution="Exact">0.0</Value>
+                <Value distribution="Exact">0.0</Value>
+                <Value distribution="Complement">1.0</Value>
+                <Value distribution="Beta">86.48 13.52</Value>
+              </UncertainValues>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="stage IV" />
+            </States>
+            <Potential type="Delta">
+              <Variables>
+                <Variable name="CRC stage" timeSlice="1" />
+              </Variables>
+              <State>stage IV</State>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptoms" timeSlice="0" />
+          <Variable name="CRC stage" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0 0.93 0.07 0.68 0.32 0.51 0.49 0.146 0.854</Values>
+        <UncertainValues>
+          <Value />
+          <Value />
+          <Value distribution="Beta">93.0 7.0</Value>
+          <Value distribution="Complement">1.0</Value>
+          <Value distribution="Beta">68.0 32.0</Value>
+          <Value distribution="Complement">1.0</Value>
+          <Value distribution="Beta">51.0 49.0</Value>
+          <Value distribution="Complement">1.0</Value>
+          <Value distribution="Beta">14.6 85.4</Value>
+          <Value distribution="Complement">1.0</Value>
+        </UncertainValues>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="CRC death" timeSlice="0" />
+          <Variable name="CRC stage" timeSlice="0" />
+        </Variables>
+        <Values>1.0 0.0 1.0 0.0 0.99 0.01 0.9398 0.0602 0.6133 0.3867</Values>
+        <UncertainValues>
+          <Value />
+          <Value />
+          <Value />
+          <Value />
+          <Value distribution="Beta">99.0 1.0</Value>
+          <Value distribution="Complement">1.0</Value>
+          <Value distribution="Beta">93.98 6.02</Value>
+          <Value distribution="Complement">1.0</Value>
+          <Value distribution="Beta">61.33 38.67</Value>
+          <Value distribution="Complement">1.0</Value>
+        </UncertainValues>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <UtilityVariable name="QoL" timeSlice="0" />
+        <Variables>
+          <Variable name="CRC stage" timeSlice="0" />
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <TopVariable name="State" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="normal epithelium" />
+              <State name="small adenoma" />
+              <State name="large adenoma" />
+              <State name="pre-clinical CRC" />
+              <State name="f-up normal epithelium" />
+              <State name="f-up after low-risk adenoma" />
+              <State name="f-up after high-risk adenoma" />
+              <State name="f-up CRC" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="QoL" timeSlice="0" />
+              <Variables>
+                <Variable name="CRC stage" timeSlice="0" />
+              </Variables>
+              <Values>0.91 0.74 0.7 0.5 0.25</Values>
+              <UncertainValues>
+                <Value distribution="Beta">91.0 9.0</Value>
+                <Value distribution="Beta">74.0 26.0</Value>
+                <Value distribution="Beta">70.0 30.0</Value>
+                <Value distribution="Beta">50.0 50.0</Value>
+                <Value distribution="Beta">25.0 75.0</Value>
+              </UncertainValues>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="dead" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="QoL" timeSlice="0" />
+              <Values>0.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Compliance" timeSlice="0" />
+        </Variables>
+        <Values>0.0018 0.9982</Values>
+        <UncertainValues>
+          <Value distribution="Complement">1.0</Value>
+          <Value distribution="Beta">99.82 0.18</Value>
+        </UncertainValues>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Participation" timeSlice="0" />
+        </Variables>
+        <Values>0.4109 0.5891</Values>
+        <UncertainValues>
+          <Value distribution="Complement">1.0</Value>
+          <Value distribution="Beta">58.91 41.09</Value>
+        </UncertainValues>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="C: FOBT" timeSlice="0" />
+        <Variables>
+          <Variable name="Do FOBT" timeSlice="0" />
+        </Variables>
+        <Values>0.0 4.42</Values>
+        <UncertainValues>
+          <Value />
+          <Value distribution="Gamma-mv">4.42 0.442</Value>
+        </UncertainValues>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="C: Colonoscopy" timeSlice="0" />
+        <Variables>
+          <Variable name="Do colonoscopy" timeSlice="0" />
+        </Variables>
+        <Values>0.0 248.0</Values>
+        <UncertainValues>
+          <Value />
+          <Value distribution="Gamma-mv">248.0 24.8</Value>
+        </UncertainValues>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <UtilityVariable name="C: Polypectomy" timeSlice="0" />
+        <Variables>
+          <Variable name="Colonoscopy result" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Colonoscopy result" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="low-risk adenoma" />
+              <State name="high-risk adenoma" />
+              <State name="cancer" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="C: Polypectomy" timeSlice="0" />
+              <Values>341.00000000000006</Values>
+              <UncertainValues>
+                <Value distribution="Gamma-mv">341.0 34.1</Value>
+              </UncertainValues>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="not done" />
+              <State name="negative" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="C: Polypectomy" timeSlice="0" />
+              <Values>0.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <UtilityVariable name="C: Invitation" />
+        <Variables>
+          <Variable name="Screening policy" />
+        </Variables>
+        <TopVariable name="Screening policy" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="ImChem - start at 60" />
+              <State name="ImChem - start at 50" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="C: Invitation" />
+              <Values>0.65</Values>
+              <UncertainValues>
+                <Value distribution="Gamma-mv">0.65 0.065</Value>
+              </UncertainValues>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="No screening" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="C: Invitation" />
+              <Values>0.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Time since last FOB test" timeSlice="1" />
+          <Variable name="Do FOBT" timeSlice="0" />
+          <Variable name="Time since last FOB test" timeSlice="0" />
+        </Variables>
+        <TopVariable name="Do FOBT" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="yes" />
+            </States>
+            <Potential type="Delta">
+              <Variables>
+                <Variable name="Time since last FOB test" timeSlice="1" />
+              </Variables>
+              <State>1 yr</State>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="no" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="Time since last FOB test" timeSlice="1" />
+                <Variable name="Time since last FOB test" timeSlice="0" />
+              </Variables>
+              <TopVariable name="Time since last FOB test" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="2+ yr" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Time since last FOB test" timeSlice="1" />
+                    </Variables>
+                    <State>2+ yr</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="1 yr" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Time since last FOB test" timeSlice="1" />
+                    </Variables>
+                    <State>2+ yr</State>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="never done" />
+                  </States>
+                  <Potential type="Delta">
+                    <Variables>
+                      <Variable name="Time since last FOB test" timeSlice="1" />
+                    </Variables>
+                    <State>never done</State>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Tree/ADD" role="utility">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    Based on the paper &quot;Estimaci&#243;n del coste hospitalario del c&#225;ncer 
+    colorrectal en Cataluna&quot; (Corral et. al 2015)
+  </body>
+</html>]]></Comment>
+        <UtilityVariable name="C: Treatment" timeSlice="0" />
+        <Variables>
+          <Variable name="CRC stage" timeSlice="0" />
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <TopVariable name="State" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="normal epithelium" />
+              <State name="small adenoma" />
+              <State name="large adenoma" />
+              <State name="pre-clinical CRC" />
+              <State name="f-up normal epithelium" />
+              <State name="f-up after low-risk adenoma" />
+              <State name="f-up after high-risk adenoma" />
+              <State name="dead" />
+            </States>
+            <Potential type="Table">
+              <UtilityVariable name="C: Treatment" timeSlice="0" />
+              <Values>0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="f-up CRC" />
+            </States>
+            <Potential type="Tree/ADD">
+              <UtilityVariable name="C: Treatment" timeSlice="0" />
+              <Variables>
+                <Variable name="CRC stage" timeSlice="0" />
+                <Variable name="State" timeSlice="0" />
+              </Variables>
+              <TopVariable name="CRC stage" timeSlice="0" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="none" />
+                  </States>
+                  <Potential type="Table">
+                    <UtilityVariable name="C: Treatment" timeSlice="0" />
+                    <Values>6572.999999999999</Values>
+                    <UncertainValues>
+                      <Value distribution="Gamma-mv">6573.0 657.3</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="stage I" />
+                  </States>
+                  <Potential type="Table">
+                    <UtilityVariable name="C: Treatment" timeSlice="0" />
+                    <Values>20298.0</Values>
+                    <UncertainValues>
+                      <Value distribution="Gamma-mv">20298.0 2029.8</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="stage II" />
+                  </States>
+                  <Potential type="Table">
+                    <UtilityVariable name="C: Treatment" timeSlice="0" />
+                    <Values>28251.0</Values>
+                    <UncertainValues>
+                      <Value distribution="Gamma-mv">28251.0 2825.1</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="stage III" />
+                  </States>
+                  <Potential type="Table">
+                    <UtilityVariable name="C: Treatment" timeSlice="0" />
+                    <Values>36894.00000000001</Values>
+                    <UncertainValues>
+                      <Value distribution="Gamma-mv">36894.0 3689.4</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="stage IV" />
+                  </States>
+                  <Potential type="Table">
+                    <UtilityVariable name="C: Treatment" timeSlice="0" />
+                    <Values>27001.0</Values>
+                    <UncertainValues>
+                      <Value distribution="Gamma-mv">27001.0 2700.1</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>COST_EFFECTIVENESS</SelectedAnalysisType>
+      <Unicriterion>
+        <Unit>QALY</Unit>
+        <Scales>
+          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Effectiveness" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Effectiveness" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="Cost" Value="Cost" />
+          <CE_Criterion Criterion="Effectiveness" Value="Effectiveness" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+    <TemporalOptions>
+      <Slices>70</Slices>
+      <Transition>BEGINNING</Transition>
+      <DiscountRates>
+        <DiscountRate Criterion="Cost" value="0.03" unit="YEAR" />
+        <DiscountRate Criterion="Effectiveness" value="0.03" unit="YEAR" />
+      </DiscountRates>
+    </TemporalOptions>
+  </InferenceOptions>
+  <Evidence>
+    <EvidenceCase>
+      <Finding variable="State [0]" state="normal epithelium" />
+      <Finding variable="Age [0]" numericValue="30.0" />
+      <Finding variable="CRC stage [0]" state="none" />
+      <Finding variable="Time since colonoscopy [0]" state="never done" />
+      <Finding variable="Time since last FOB test [0]" state="never done" />
+    </EvidenceCase>
+  </Evidence>
+</ProbModelXML>

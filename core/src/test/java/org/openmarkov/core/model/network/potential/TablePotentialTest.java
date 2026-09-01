@@ -11,7 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.State;
@@ -26,6 +28,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author manuel
@@ -103,7 +106,8 @@ public class TablePotentialTest {
      * @param actual
      * @param expected Checks if two potentials are equal
      */
-    public static void checkEqualPotentials(TablePotential actual, TablePotential expected, double maxError) {
+    public static void checkEqualPotentials(TablePotential actual, TablePotential expected, double maxError)
+            throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         
         int numConfigurationsActual = actual.getTableSize();
         assertEquals(numConfigurationsActual, expected.getTableSize());
@@ -455,5 +459,31 @@ public class TablePotentialTest {
     @Test public void testGetInitialPosition() {
         assertEquals(0, tablePotential1.getInitialPosition());
     }
-    
+
+    @Test public void constructorRejectsATableShorterThanTheVariablesImply() {
+        List<Variable> twoBinaryVariables = List.of(
+                new Variable("V1", new State[]{new State("no"), new State("yes")}),
+                new Variable("V2", new State[]{new State("no"), new State("yes")}));
+        assertThrows(InvalidArgumentException.class, () ->
+                new TablePotential(twoBinaryVariables, PotentialRole.CONDITIONAL_PROBABILITY,
+                        new double[]{0.1, 0.9}));
+    }
+
+    @Test public void constructorRejectsATableLongerThanTheVariablesImply() {
+        List<Variable> oneBinaryVariable = List.of(
+                new Variable("V1", new State[]{new State("no"), new State("yes")}));
+        assertThrows(InvalidArgumentException.class, () ->
+                new TablePotential(oneBinaryVariable, PotentialRole.CONDITIONAL_PROBABILITY,
+                        new double[]{0.1, 0.9, 0.5}));
+    }
+
+    @Test public void computeTableSizeRejectsAProductOfStatesBeyondTheIntegerRange() {
+        // 65536 * 65536 = 2^32, which does not fit in an int.
+        List<Variable> hugeVariables = List.of(new Variable("H1", 65536), new Variable("H2", 65536));
+        assertThrows(InvalidArgumentException.class, () ->
+                TablePotential.computeTableSize(hugeVariables));
+        assertThrows(InvalidArgumentException.class, () ->
+                new TablePotential(hugeVariables, PotentialRole.CONDITIONAL_PROBABILITY));
+    }
+
 }

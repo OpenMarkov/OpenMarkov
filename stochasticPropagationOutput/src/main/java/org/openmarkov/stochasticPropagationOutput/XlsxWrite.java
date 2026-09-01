@@ -14,7 +14,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.logging.OpenMarkovLogger;
@@ -26,8 +28,8 @@ import org.openmarkov.gui.dialog.ExceptionDialog;
 import org.openmarkov.inference.algorithm.likelihoodWeighting.StochasticPropagation;
 import org.openmarkov.stochasticPropagationOutput.exception.EmptyCaseDatabaseException;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JOptionPane;
+import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -180,7 +182,7 @@ public class XlsxWrite implements Runnable {
         // Chance node
         XSSFCellStyle chanceNode = (XSSFCellStyle) workbook.createCellStyle();
         
-        chanceNode.setFillForegroundColor(new XSSFColor(GUIColors.Network.ChanceNode.BACKGROUND.getUnthemedColor(), null));
+        chanceNode.setFillForegroundColor(new XSSFColor(GUIColors.Network.ChanceNode.BACKGROUND.getNoTheme(), null));
         chanceNode.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         chanceNode.setFont(bigArial);
 
@@ -199,7 +201,7 @@ public class XlsxWrite implements Runnable {
         // Node with finding
         XSSFCellStyle findingNode = (XSSFCellStyle) workbook.createCellStyle();
         
-        findingNode.setFillForegroundColor(new XSSFColor(GUIColors.Network.ChanceNode.BACKGROUND_ON_PRE_RESOLUTION_FINDING.getUnthemedColor(), null));
+        findingNode.setFillForegroundColor(new XSSFColor(GUIColors.Network.ChanceNode.BACKGROUND_ON_PRE_RESOLUTION_FINDING.getNoTheme(), null));
         findingNode.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         findingNode.setFont(bigWhiteArial);
 

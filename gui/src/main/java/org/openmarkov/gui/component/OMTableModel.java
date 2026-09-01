@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 public class OMTableModel extends DefaultTableModel {
     
-    public final boolean firstColumnIsHeader;
+    public boolean firstColumnIsHeader;
     
     public OMTableModel(Object[][] body, Object[] head, boolean firstColumnIsHeader) {
         super(body, head);
@@ -71,10 +71,13 @@ public class OMTableModel extends DefaultTableModel {
         return OMTableModel.construct(false, Stream.empty());
     }
     
-    List<Class<?>> speciallyHandledClasses = java.util.List.of(Boolean.class, Integer.class, Double.class, String.class);
+    private static final List<Class<?>> SPECIALLY_HANDLED_CLASSES = java.util.List.of(Boolean.class, Integer.class, Double.class, String.class);
     
     @Override public Class<?> getColumnClass(int columnIndex) {
         Class<?> columnClass = super.getColumnClass(columnIndex);
+        if (columnIndex >= this.getColumnCount()) {
+            return columnClass;
+        }
         Object firstValue = IntStream.range(0, this.getRowCount())
                                      .mapToObj(i -> this.getValueAt(i, columnIndex))
                                      .filter(Objects::nonNull)
@@ -82,12 +85,28 @@ public class OMTableModel extends DefaultTableModel {
                                      .orElse(null);
         if (firstValue != null) {
             var valueClass = firstValue.getClass();
-            for (var clazz : speciallyHandledClasses) {
+            for (var clazz : SPECIALLY_HANDLED_CLASSES) {
                 if (clazz.isAssignableFrom(valueClass)) {
                     return clazz;
                 }
             }
         }
         return columnClass;
+    }
+    
+    public Vector getColumnIdentifiers() {
+        return this.columnIdentifiers;
+    }
+    
+    public void copyFromModel(OMTableModel baseModel) {
+        Vector<String> columnHeaders = new Vector<>();
+        if (baseModel.firstColumnIsHeader) {
+            for (int i = 0; i < baseModel.getColumnCount(); i++) {
+                columnHeaders.add(baseModel.getColumnName(i));
+            }
+        }
+        Vector<Vector> data = new Vector<>(baseModel.getDataVector());
+        this.setDataVector(data, columnHeaders);
+        this.firstColumnIsHeader = baseModel.firstColumnIsHeader;
     }
 }

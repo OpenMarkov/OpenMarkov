@@ -61,7 +61,7 @@ public class PCAlgorithmTest {
 
 	@Tag(TestSpeed.FAST)
     @Test
-	public void testABCE() throws org.openmarkov.core.exception.CannotNormalizePotentialException, EmptyDatabaseException, java.io.FileNotFoundException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+	public void testABCE() throws org.openmarkov.core.exception.CannotNormalizePotentialException, EmptyDatabaseException, org.openmarkov.core.exception.ParsingSourceException, java.io.FileNotFoundException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		CSVDataBaseIO csvReader = new CSVDataBaseIO();
 		CaseDatabase ABCEDatabase = csvReader.load(new File(getClass().getResource(bnABCEFilename).getFile()));
 		ProbNet learnedNet = new ProbNet();
@@ -160,7 +160,7 @@ public class PCAlgorithmTest {
 	 * the structure this one is about.
 	 */
 	@Test
-	public void testLearnTestDataBase() throws org.openmarkov.core.exception.CannotNormalizePotentialException, EmptyDatabaseException, java.io.FileNotFoundException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+	public void testLearnTestDataBase() throws org.openmarkov.core.exception.CannotNormalizePotentialException, EmptyDatabaseException, org.openmarkov.core.exception.ParsingSourceException, java.io.FileNotFoundException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		// This database used to be read from Elvira's .dbc format, whose reader is not exported by
 		// the io module and is no longer maintained. It was converted once, with OpenMarkov's own
 		// code, to the CSV the other four databases of this class already use. The conversion was
@@ -224,7 +224,7 @@ public class PCAlgorithmTest {
 	 */
 	@Test
 	public void theDependenceBetweenBAndDCancelsOutWhichIsWhyPCCannotRecoverTheGeneratingStructure()
-			throws java.io.FileNotFoundException, EmptyDatabaseException {
+			throws java.io.FileNotFoundException, EmptyDatabaseException, org.openmarkov.core.exception.ParsingSourceException {
 		CaseDatabase database = new CSVDataBaseIO()
 				.load(new File(getClass().getResource(learnTestDatabaseFilename).getFile()));
 		ProbNet net = new ProbNet();
@@ -248,7 +248,7 @@ public class PCAlgorithmTest {
 
 	@Tag(TestSpeed.MEDIUM)
     @Test
-	public void testAsia10k() throws org.openmarkov.core.exception.CannotNormalizePotentialException, EmptyDatabaseException, java.io.FileNotFoundException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+	public void testAsia10k() throws org.openmarkov.core.exception.CannotNormalizePotentialException, EmptyDatabaseException, org.openmarkov.core.exception.ParsingSourceException, java.io.FileNotFoundException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		CSVDataBaseIO csvReader = new CSVDataBaseIO();
 		CaseDatabase asiaDatabase = csvReader.load(new File(getClass().getResource(asiaDatabaseFilename).getFile()));
 		ProbNet learnedNet = new ProbNet();
@@ -356,7 +356,7 @@ public class PCAlgorithmTest {
 	
 	@Tag(TestSpeed.SLOW)
     @Test
-	public void testAlarm500() throws org.openmarkov.core.exception.CannotNormalizePotentialException, ProbNetParserException, EmptyDatabaseException, IOException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+	public void testAlarm500() throws org.openmarkov.core.exception.CannotNormalizePotentialException, ProbNetParserException, EmptyDatabaseException, org.openmarkov.core.exception.ParsingSourceException, IOException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 
 		CSVDataBaseIO csvReader = new CSVDataBaseIO();
 		CaseDatabase alarmDatabase = csvReader.load(new File(getClass().getResource(alarmDatabaseFilename).getFile()));
@@ -380,7 +380,7 @@ public class PCAlgorithmTest {
 	}
 
 	//@Test
-	public void testAlarm10k() throws org.openmarkov.core.exception.CannotNormalizePotentialException, ProbNetParserException, EmptyDatabaseException, IOException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+	public void testAlarm10k() throws org.openmarkov.core.exception.CannotNormalizePotentialException, ProbNetParserException, EmptyDatabaseException, org.openmarkov.core.exception.ParsingSourceException, IOException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 
 		CSVDataBaseIO csvReader = new CSVDataBaseIO();
 		CaseDatabase alarm10kDatabase = csvReader.load(new File(getClass().getResource(alarm10kDatabaseFilename).getFile()));

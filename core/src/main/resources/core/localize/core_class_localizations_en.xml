@@ -91,6 +91,8 @@
                   value="Raw set of type to {originalVariableType}"/>
     <Localization class="org.openmarkov.core.exception.CannotNormalizePotentialException"
                   value="All the values are 0.0 in potential {potential}"/>
+    <Localization class="org.openmarkov.core.exception.CannotNormalizePotentialException$AllValuesForAParentsConfigurationAreZero"
+                  value="All the values for a configuration of the parents are 0.0 in potential {potential}"/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException"
                   value="Could not met the constraint: {constraint}"/>
     <Localization
@@ -135,6 +137,8 @@
                   value="This kind of network cannot have link restrictions; the link from {parentVariable} to {childVariable} has a restrictions potential."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkCanHaveOnlyOneUtilityNode"
                   value="This kind of network can have only one utility node, but it has {numUtilityNodes}: {utilityNodes}."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkAlreadyHasAUtilityNode"
+                  value="This kind of network can have only one utility node, and it already has {utilityNode}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkHasNoUtilityNodes"
                   value="Network {probNet} must have at least one utility node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NoSuperValueNodeAllowed"
@@ -206,6 +210,8 @@
     <Localization class="org.openmarkov.core.exception.DoEditException$NodeIsNull"
                   value="No node is selected, try selecting a node from the {probNet}"/>
     <Localization class="org.openmarkov.core.exception.EmptyDatabaseException" value="Dataset from {source} is empty."/>
+    <Localization class="org.openmarkov.core.exception.ParsingSourceException$RepeatedVariableNames"
+                  value="Dataset from {source} has more than one column named {variableName}. A case could not say which of them it means, so the dataset cannot be read. Give each column a different name."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$EvidenceIsIncompatibleWithOther"
                   value="The new evidence {newFinding} is not compatible with an old evidente: {oldFinding}"/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$FindingVariableIsMissingAState"

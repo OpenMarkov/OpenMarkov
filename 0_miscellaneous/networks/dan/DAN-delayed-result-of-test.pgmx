@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="DAN">
+    <Comment showWhenOpeningNetwork="true"><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      In this problem, if we order the test now, its result will be known 
+      tomorrow. Therefore, the first variable, <i>Do test?</i>, reveals <i>Result 
+      of test</i> but not immediately; when making the second decision, <i>Therapy 
+      today</i>, the <i>Result of test</i> is still unknown. For this reason, 
+      we have added a revelation arc from the second decision to <i>Result of 
+      test</i>. Similarly, <i>Symptom tomorrow</i> is observed spontaneously, 
+      but only after the first two decisions have been made. For this reason, 
+      we have added a revelation arc from the second decision to <i>Symptom 
+      tomorrow</i>. A more elegant solution would be to use a multi-stage DAN; 
+      the &quot;tomorrow&quot; variables, including <i>Result of test</i>, 
+      would be placed in the second stage. <i>Symptom tomorrow</i> would be 
+      marked as <i>Always observed</i>, but it will be known only for the 
+      decisions in the second and posterior stages.
+    </p>
+  </body>
+</html>]]></Comment>
+    <Variables>
+      <Variable name="Disease" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="385" y="47" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Result of test" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="405" y="251" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Symptom today" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="160" y="93" />
+        <Unit />
+        <AlwaysObserved />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Symptom tomorrow" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="606" y="103" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Do test?" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="160" y="175" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Therapy today" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="160" y="304" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Therapy tomorrow" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="606" y="304" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="QoL today" type="numeric" role="utility" isInput="false">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Today's quality of life
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="279" y="141" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="QoL tomorrow" type="numeric" role="utility" isInput="false">
+        <Coordinates x="732" y="154" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="Cost of therapy (today)" type="numeric" role="utility" isInput="false">
+        <Coordinates x="160" y="383" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="Cost of therapy (tomorrow)" type="numeric" role="utility" isInput="false">
+        <Coordinates x="606" y="383" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="Cost of test" type="numeric" role="utility" isInput="false">
+        <Coordinates x="80" y="228" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of test" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Symptom today" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Symptom tomorrow" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Result of test" />
+        <Variable name="Therapy tomorrow" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom today" />
+        <Variable name="QoL today" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom tomorrow" />
+        <Variable name="Therapy tomorrow" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Symptom tomorrow" />
+        <Variable name="QoL tomorrow" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Result of test" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Do test?" />
+            <Variable name="Result of test" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Therapy today" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test?" />
+        <Variable name="Cost of test" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy today" />
+        <Variable name="Cost of therapy (today)" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy today" />
+        <Variable name="Result of test" />
+        <RevelationCondition>
+          <State name="yes" />
+          <State name="no" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy today" />
+        <Variable name="Symptom tomorrow" />
+        <RevelationCondition>
+          <State name="yes" />
+          <State name="no" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy tomorrow" />
+        <Variable name="Cost of therapy (tomorrow)" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.86 0.14</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Result of test" />
+          <Variable name="Therapy today" />
+          <Variable name="Disease" />
+          <Variable name="Do test?" />
+        </Variables>
+        <Values>0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.997 0.003 0.997 0.003 0.03 0.97 0.03 0.97</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptom today" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.999 0.001 0.15 0.85</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Symptom tomorrow" />
+          <Variable name="Disease" />
+          <Variable name="Therapy today" />
+        </Variables>
+        <Values>0.999 0.001 0.15 0.85 0.999 0.001 0.15 0.85</Values>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="QoL today" />
+        <Variables>
+          <Variable name="Symptom today" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="QoL tomorrow" />
+        <Variables>
+          <Variable name="Symptom tomorrow" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="Cost of therapy (today)" />
+        <Variables>
+          <Variable name="Therapy today" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="Cost of therapy (tomorrow)" />
+        <Variables>
+          <Variable name="Therapy tomorrow" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="Cost of test" />
+        <Variables>
+          <Variable name="Do test?" />
+        </Variables>
+      </Potential>
+    </Potentials>
+    <AdditionalProperties />
+  </ProbNet>
+</ProbModelXML>

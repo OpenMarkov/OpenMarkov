@@ -103,8 +103,13 @@ public final class ProbNetPotentialQueries {
             throws NonProjectablePotentialException {
         List<Potential> originalPotentials = probNet.getSortedPotentials();
         List<TablePotential> projectedPotentials = new ArrayList<>();
+        // A copy of the network's own options, so a switch set on the network reaches every
+        // projection; a network without options contributes the defaults.
+        InferenceOptions inferenceOptions = probNet.getInferenceOptions() == null
+                ? new InferenceOptions(probNet, null)
+                : new InferenceOptions(probNet.getInferenceOptions());
+        inferenceOptions.probNet = probNet;
         for (Potential potential : originalPotentials) {
-            InferenceOptions inferenceOptions = new InferenceOptions(probNet, null);
             // addAll, not add: a potential may contribute more than one factor. All of them do
             // contribute exactly one today - that is the default in Potential - so this changes
             // nothing yet. It is what lets a canonical model hand over its factorization instead of

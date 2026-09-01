@@ -18,10 +18,11 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.canonical.ICIPotential;
 import org.openmarkov.gui.dialog.common.CPTablePanel;
 import org.openmarkov.gui.dialog.common.ICIPotentialsTablePanel;
-import org.openmarkov.gui.exception.NotEnoughMemoryException;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JScrollPane;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -112,7 +113,7 @@ public class ICIOptionListenerAssistant implements ItemListener {
             ArrayList<Potential> potentials = new ArrayList<Potential>();
             potentials.add(tablePotential);
             iciNode.setPotentials(potentials);
-            this.cpTablePanel = new CPTablePanel(iciNode);
+            this.cpTablePanel = new CPTablePanel(iciNode, null);
             var cptValuesTablePanel = cpTablePanel.getValuesTable();
             ICIPotentialsTablePanel iciPotentialTablePanel = (ICIPotentialsTablePanel) parentPanel;
             this.iciValuesTablePanel = iciPotentialTablePanel.getValuesTableScrollPane();

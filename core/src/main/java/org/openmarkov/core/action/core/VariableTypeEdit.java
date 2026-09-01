@@ -127,7 +127,7 @@ public class VariableTypeEdit extends MultiStepEdit {
                         node.getPotentials().getFirst().getPotentialRole()
                 );
                 
-                node.setPotentials(new ArrayList<>(List.of(uniformPotential)));
+                stepExecuter.execute(new RawSetPotentialEdit(node, uniformPotential));
                 if (this.updatePotential) {
                     VariableTypeEdit.setUniformPotentialToNode(node, stepExecuter);
                 }

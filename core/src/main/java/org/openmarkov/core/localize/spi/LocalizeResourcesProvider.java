@@ -272,8 +272,7 @@ public interface LocalizeResourcesProvider extends ResourceBundleProvider {
         URL localizationResourcesURL = this.getClass().getResource(this.getRootOfResources() + "/localize");
         String localizationSuffix = "_" + locale.getLanguage() + ".xml";
         if (localizationResourcesURL == null) {
-            OpenMarkovLogger.LOGGER.warn("There is no localize folder in the directory " + this.getRootOfResources()
-                                                 + " of module " + this.getClass().getModule().getName());
+            OpenMarkovLogger.LOGGER.warn("There is no localize folder in the directory " + this.getRootOfResources());
             return Map.of();
         }
         boolean isJarFile = localizationResourcesURL.toString()

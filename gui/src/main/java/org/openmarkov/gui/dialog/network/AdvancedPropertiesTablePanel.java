@@ -10,16 +10,17 @@ package org.openmarkov.gui.dialog.network;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.model.network.Criterion;
-import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.StringWithProperties;
+import org.openmarkov.gui.component.OMTableModel;
 import org.openmarkov.gui.dialog.common.KeyTablePanel;
 
-import javax.swing.*;
+import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,23 +30,17 @@ import java.util.List;
 @SuppressWarnings("serial") public class AdvancedPropertiesTablePanel extends KeyTablePanel
         implements TableModelListener, PNEditListener {
     
-    protected Object[][] dataTable;
-	private String keyPrefix;
-	private AdvancedPropertiesTableModel advancedPropertiestableModel;
+    protected String keyPrefix;
 	/**
 	 * Each time an agent has been edited the corresponding edit would be stored
 	 */
 	private final List<PNEdit> edits = new ArrayList<PNEdit>();
-
-	public AdvancedPropertiesTablePanel(String[] newColumns, ProbNet probNet) {
-		this(newColumns, new Object[0][0], "a");
-	}
-
-	public AdvancedPropertiesTablePanel(String[] newColumns, Object[][] noKeyData, String newKeyPrefix) {
-		super(newColumns, new Object[0][0], true, true, true);
+    
+    public AdvancedPropertiesTablePanel(String[] newColumns, Object[][] noKeyData, String newKeyPrefix) {
+        super(newColumns, new Object[0][0], true, true, true, true);
 		initialize();
 		setData(noKeyData);
-		defineTableLookAndFeel();            // define specific listeners
+        //defineTableLookAndFeel();            // define specific listeners
 		//defineTableSpecificListeners();
 		//getTableModel().addTableModelListener(this);
 	}
@@ -56,22 +51,24 @@ import java.util.List;
 	 * @param newData new data for the table without the key column.
 	 */
 	@Override public void setData(Object[][] newData) {
-
 		if (newData != null) {
 			//dataTable = newData;
 			data = fillDataKeys(newData);
 			//tableModel = new DefaultTableModel(data, columns);
-			advancedPropertiestableModel = new AdvancedPropertiesTableModel(data, columns);
+            tableModel = new OMTableModel(data, columns, true);
 			//valuesTable.setModel(tableModel);
-			valuesTable.setModel(advancedPropertiestableModel);
-			valuesTable.getModel().addTableModelListener(this);
+            boolean equals = valuesTable.getModel().getDataVector().equals(tableModel.getDataVector());
+            if (!equals) {
+                valuesTable.setModelData(tableModel);
+            }
+            if (Arrays.stream(valuesTable.getModel().getTableModelListeners())
+                      .noneMatch(tableModelListener -> tableModelListener == this)) {
+                valuesTable.getModel().addTableModelListener(this);
+            }
 			this.defineTableLookAndFeel();
 		}
 	}
 
-	public void setDataTable(Object[][] dataTable) {
-		this.dataTable = dataTable;
-	}
 
 	protected void defineTableLookAndFeel() {
 
@@ -161,7 +158,6 @@ import java.util.List;
             tableData = new Object[0][0];
         }
         setData(tableData);
-        
     }
 
 	/**

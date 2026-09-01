@@ -64,17 +64,6 @@ public class ChanceVariableElimination {
 				}
 			}
 
-			List<Variable> orderedVariables = new ArrayList<>();
-			orderedVariables.add(variableToDelete);
-			for (Variable variable : conditionalProbability.getVariables()) {
-				if (variable != variableToDelete) {
-					orderedVariables.add(variable);
-				}
-			}
-            if (!conditionalProbability.getVariables().isEmpty()) {
-				conditionalProbability = conditionalProbability.reorder(orderedVariables);
-			}
-
 			// eliminate the chance variable as in the unicriterion case
 			for (Potential utilityPotential : utilityPotentialsByCriterion) {
 				if (utilityPotential instanceof GTablePotential gUtility) {

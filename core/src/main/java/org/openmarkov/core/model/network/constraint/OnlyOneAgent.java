@@ -34,7 +34,8 @@ import java.util.List;
 			}
 		}
 		ProbNet pn = (ProbNet) probNet;
-		if (pn.getAgents() != null) {
+		// Removing every agent leaves an empty list, not a null one: a network without agents.
+		if (pn.getAgents() != null && !pn.getAgents().isEmpty()) {
             constraintChecker.addException(new ConstraintViolatedException.OnlyOneAgentAllowedInNetwork(this, pn));
 		}
 	}

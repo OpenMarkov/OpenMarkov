@@ -8,7 +8,7 @@
 package org.openmarkov.integrationTests.inference.util;
 
 
-import bitbucket.NetsRepository;
+import networks.Networks;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.potential.Potential;
@@ -29,7 +29,7 @@ public class Util {
 	 * @return <code>List</code> of <code>ProbNet</code>s
 	 */
     public static List<ProbNet> readProbNetsDB(NetworkType networkType) {
-        List<URL> bayesianNetworksURLList = NetsRepository.getNetworks(networkType);
+        List<URL> bayesianNetworksURLList = Networks.getNetworks(networkType).toList();
 		PGMXReader reader = new PGMXReader();
 		List<ProbNet> probNetsDB = new ArrayList<ProbNet>();
 		List<String> wrongNetworksNames = new ArrayList<String>();

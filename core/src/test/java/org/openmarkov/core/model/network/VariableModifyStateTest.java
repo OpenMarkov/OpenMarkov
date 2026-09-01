@@ -264,7 +264,7 @@ public class VariableModifyStateTest {
         Node nodeB = net.addNode(b, NodeType.CHANCE);
         net.addLink(node, nodeB, true);
         TablePotential pBgA = new TablePotential(List.of(b, variable), PotentialRole.CONDITIONAL_PROBABILITY,
-                new double[]{0.9, 0.1, 0.8, 0.2});
+                new double[]{0.9, 0.1, 0.8, 0.2, 0.7, 0.3});
         nodeB.setPotentials(List.of(pBgA));
 
         // Modify parent variable by adding a state.

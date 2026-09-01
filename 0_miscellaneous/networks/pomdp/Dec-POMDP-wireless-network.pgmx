@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="DEC_POMDP">
+    <Comment showWhenOpeningNetwork="true"><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Dec-POMDP for a wireless network.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      <b>Reference: </b>
+    </p>
+    <p style="margin-top: 0">
+      J. Pajarinen and J. Peltonen.
+    </p>
+    <p style="margin-top: 0">
+      <a href="http://ijcai.org/papers11/Papers/IJCAI11-064.pdf">Efficient 
+      Planning for Factored Infinite-Horizon DEC-POMDPs</a>.
+    </p>
+    <p style="margin-top: 0">
+      In: <i>Proceedings of the Twenty-Second International Joint Conference 
+      on Artificial Intelligence (IJCAI-11)</i>. Barcelona, Spain, 2011.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      Encoded in ProbModelXML by F. J. D&#237;ez in June 2012.
+    </p>
+  </body>
+</html>]]></Comment>
+    <Agents>
+      <Agent name="A" />
+      <Agent name="B" />
+    </Agents>
+    <Variables>
+      <Variable name="Queue A" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="130" y="56" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Queue B" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="126" y="375" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Insertion A" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="293" y="263" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Insertion B" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="293" y="333" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Observation A" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="276" y="120" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Observation B" timeSlice="0" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="270" y="429" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Observation A" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="724" y="128" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Queue B" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="534" y="433" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Insertion A" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="719" y="263" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Queue A" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="530" y="107" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Observation B" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="711" y="450" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Insertion B" timeSlice="1" type="finiteStates" role="chance" isInput="false">
+        <Coordinates x="719" y="333" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Action A" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="310" y="175" />
+        <Unit />
+        <Agent name="A" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Action B" timeSlice="0" type="finiteStates" role="decision" isInput="false">
+        <Coordinates x="307" y="508" />
+        <Unit />
+        <Agent name="B" />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Reward A" timeSlice="0" type="numeric" role="utility" isInput="false">
+        <Coordinates x="130" y="156" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+      <Variable name="Reward B" timeSlice="0" type="numeric" role="utility" isInput="false">
+        <Coordinates x="126" y="479" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <States>
+          <State name="" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Queue A" timeSlice="0" />
+        <Variable name="Observation A" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Queue A" timeSlice="0" />
+        <Variable name="Reward A" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Queue A" timeSlice="0" />
+        <Variable name="Queue A" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Queue B" timeSlice="0" />
+        <Variable name="Reward B" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Queue B" timeSlice="0" />
+        <Variable name="Observation B" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Queue B" timeSlice="0" />
+        <Variable name="Queue B" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Insertion A" timeSlice="0" />
+        <Variable name="Insertion A" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Insertion A" timeSlice="0" />
+        <Variable name="Queue A" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Insertion B" timeSlice="0" />
+        <Variable name="Insertion B" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Insertion B" timeSlice="0" />
+        <Variable name="Queue B" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Observation A" timeSlice="0" />
+        <Variable name="Action A" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Observation B" timeSlice="0" />
+        <Variable name="Action B" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Queue B" timeSlice="1" />
+        <Variable name="Observation B" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Queue A" timeSlice="1" />
+        <Variable name="Observation A" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action A" timeSlice="0" />
+        <Variable name="Observation A" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action A" timeSlice="0" />
+        <Variable name="Observation B" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action B" timeSlice="0" />
+        <Variable name="Observation B" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Action B" timeSlice="0" />
+        <Variable name="Observation A" timeSlice="1" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Queue A" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Queue B" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Insertion A" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Insertion B" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Observation A" timeSlice="0" />
+          <Variable name="Queue A" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Observation B" timeSlice="0" />
+          <Variable name="Queue B" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Observation A" timeSlice="1" />
+          <Variable name="Queue A" timeSlice="1" />
+          <Variable name="Action A" timeSlice="0" />
+          <Variable name="Action B" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Queue B" timeSlice="1" />
+          <Variable name="Queue B" timeSlice="0" />
+          <Variable name="Insertion B" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Insertion A" timeSlice="1" />
+          <Variable name="Insertion A" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Queue A" timeSlice="1" />
+          <Variable name="Queue A" timeSlice="0" />
+          <Variable name="Insertion A" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Observation B" timeSlice="1" />
+          <Variable name="Queue B" timeSlice="1" />
+          <Variable name="Action B" timeSlice="0" />
+          <Variable name="Action A" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Insertion B" timeSlice="1" />
+          <Variable name="Insertion B" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="Reward A" timeSlice="0" />
+        <Variables>
+          <Variable name="Queue A" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="utility">
+        <UtilityVariable name="Reward B" timeSlice="0" />
+        <Variables>
+          <Variable name="Queue B" timeSlice="0" />
+        </Variables>
+      </Potential>
+    </Potentials>
+    <Agents />
+    <AdditionalProperties />
+  </ProbNet>
+</ProbModelXML>

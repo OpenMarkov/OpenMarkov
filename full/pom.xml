@@ -16,7 +16,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm-ss</maven.build.timestamp.format>
         <!-- The version the installers show to the user. It is kept apart from ${project.version}
              because jpackage rejects any version carrying a suffix such as -SNAPSHOT. -->
-        <installer.app.version>1.0</installer.app.version>
+        <installer.app.version>0.3</installer.app.version>
         <!-- Every installer format jpackage produces is tied to the operating system it runs on:
              msi and exe exist only on Windows, deb and rpm only on Linux. The Installer profile
              therefore skips them all by default, and each detect-* profile below turns off the
@@ -98,6 +98,28 @@
             </plugin>
         </plugins>
     </reporting>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.7.1</version>
+                <executions>
+                    <execution>
+                        <id>download-licenses</id>
+                        <goals>
+                            <goal>download-licenses</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <licensesOutputDirectory>src/main/resources/third-party-licenses</licensesOutputDirectory>
+                    <licensesOutputFile>src/main/resources/third-party-licenses/licenses.xml</licensesOutputFile>
+                    <connectTimeout>750</connectTimeout>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <profiles>
         <profile>
             <id>detect-windows</id>
@@ -203,7 +225,9 @@
                                         <argument>--type</argument>
                                         <argument>msi</argument>
                                         <argument>--dest</argument>
-                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>
+                                            ${maven.multiModuleProjectDirectory}/0_miscellaneous/installer/${maven.build.timestamp}
+                                        </argument>
                                         <argument>--name</argument>
                                         <argument>OpenMarkov</argument>
                                         <argument>--app-version</argument>
@@ -253,7 +277,9 @@
                                         <argument>--type</argument>
                                         <argument>exe</argument>
                                         <argument>--dest</argument>
-                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>
+                                            ${maven.multiModuleProjectDirectory}/0_miscellaneous/installer/${maven.build.timestamp}
+                                        </argument>
                                         <argument>--name</argument>
                                         <argument>OpenMarkov</argument>
                                         <argument>--app-version</argument>
@@ -303,7 +329,9 @@
                                         <argument>--type</argument>
                                         <argument>app-image</argument>
                                         <argument>--dest</argument>
-                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>
+                                            ${maven.multiModuleProjectDirectory}/0_miscellaneous/installer/${maven.build.timestamp}
+                                        </argument>
                                         <argument>--name</argument>
                                         <argument>OpenMarkov</argument>
                                         <argument>--app-version</argument>
@@ -348,7 +376,9 @@
                                         <argument>--type</argument>
                                         <argument>deb</argument>
                                         <argument>--dest</argument>
-                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>
+                                            ${maven.multiModuleProjectDirectory}/0_miscellaneous/installer/${maven.build.timestamp}
+                                        </argument>
                                         <argument>--name</argument>
                                         <argument>OpenMarkov</argument>
                                         <argument>--app-version</argument>
@@ -407,7 +437,9 @@
                                         <argument>--type</argument>
                                         <argument>rpm</argument>
                                         <argument>--dest</argument>
-                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>
+                                            ${maven.multiModuleProjectDirectory}/0_miscellaneous/installer/${maven.build.timestamp}
+                                        </argument>
                                         <argument>--name</argument>
                                         <argument>OpenMarkov</argument>
                                         <argument>--app-version</argument>
@@ -476,7 +508,9 @@
                                         <argument>--type</argument>
                                         <argument>dmg</argument>
                                         <argument>--dest</argument>
-                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>
+                                            ${maven.multiModuleProjectDirectory}/0_miscellaneous/installer/${maven.build.timestamp}
+                                        </argument>
                                         <argument>--name</argument>
                                         <argument>OpenMarkov</argument>
                                         <argument>--app-version</argument>
@@ -528,7 +562,9 @@
                                         <argument>--type</argument>
                                         <argument>pkg</argument>
                                         <argument>--dest</argument>
-                                        <argument>${project.build.directory}/installer</argument>
+                                        <argument>
+                                            ${maven.multiModuleProjectDirectory}/0_miscellaneous/installer/${maven.build.timestamp}
+                                        </argument>
                                         <argument>--name</argument>
                                         <argument>OpenMarkov</argument>
                                         <argument>--app-version</argument>

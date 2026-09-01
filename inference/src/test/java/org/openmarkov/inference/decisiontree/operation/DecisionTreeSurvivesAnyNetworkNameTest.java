@@ -21,15 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * While building the tree, each subnetwork is renamed after the finding that produced it, starting
- * from the network's own name with the last five characters chopped off — which assumes every
- * network is called something ending in {@code .pgmx}.
- *
- * <p>Measured against the previous code: a network with no name threw
- * {@code NullPointerException} and a name shorter than the extension threw
- * {@code StringIndexOutOfBoundsException}. Neither is exotic — every network built in memory has no
- * name, which is why the older tests of this package had to christen theirs {@code simple-id.pgmx}
- * before they could get past it. Any other name simply lost its last five characters without a
- * word: {@code Untitled}, which is what a network not yet saved is called, became {@code Unt}.
+ * from the network's own name. These tests pin that any of the four names a network can have — none,
+ * one shorter than an extension, one without extension, one with another format's extension — comes
+ * through whole and without a file extension of its own.
  *
  * @author Manuel Arias
  */
@@ -59,7 +53,7 @@ class DecisionTreeSurvivesAnyNetworkNameTest {
 		assertDoesNotThrow(() -> subnetworkNames(null));
 	}
 
-	/** Shorter than the five characters the old code chopped off. */
+	/** Shorter than an extension. */
 	@Test
 	void aNameShorterThanTheExtensionDoesNotBringTheTreeDown() {
 		assertDoesNotThrow(() -> subnetworkNames("id"));
@@ -73,21 +67,32 @@ class DecisionTreeSurvivesAnyNetworkNameTest {
 
 	/** A network read from a file of one of the other formats the application understands. */
 	@Test
-	void aNameWithAnotherExtensionIsKeptWhole() throws Exception {
-		assertNamesStartWith(subnetworkNames("diabetes.elv"), "diabetes.elv");
+	void aNameWithAnotherExtensionLosesIt() throws Exception {
+		assertNamesStartWith(renamedSubnetworkNames("diabetes.elv"), "diabetes-");
+	}
+
+	@Test
+	void theUsualNameLosesItsExtensionToo() throws Exception {
+		assertNamesStartWith(renamedSubnetworkNames("diabetes.pgmx"), "diabetes-");
 	}
 
 	/**
-	 * The usual name loses its extension once, and only once: the subnetwork names get one appended,
-	 * and starting from the whole name would leave them ending in two.
+	 * The subnetworks only ever live in memory, so their names are not file names and none of the four
+	 * starting points may leave them looking like one.
 	 */
 	@Test
-	void theUsualNameLosesItsExtensionExactlyOnce() throws Exception {
-		List<String> names = subnetworkNames("diabetes.pgmx");
+	void noSubnetworkNameGetsAFileExtension() throws Exception {
+		for (String networkName : List.of("Untitled", "id", "diabetes.elv", "diabetes.pgmx")) {
+			List<String> names = renamedSubnetworkNames(networkName);
 
-		assertNamesStartWith(names, "diabetes");
-		assertFalse(names.stream().anyMatch(name -> name.endsWith(".pgmx.pgmx")),
-				"A subnetwork name ends in two extensions: " + names);
+			assertFalse(names.stream().anyMatch(name -> name.endsWith(".pgmx") || name.endsWith(".elv")),
+					"Starting from \"" + networkName + "\", a subnetwork name carries an extension: " + names);
+		}
+	}
+
+	/** The subnetworks the tree renamed after a finding, which are the ones built from the name. */
+	private static List<String> renamedSubnetworkNames(String networkName) throws Exception {
+		return subnetworkNames(networkName).stream().filter(name -> name.contains("=")).toList();
 	}
 
 	private static void assertNamesStartWith(List<String> names, String expectedPrefix) {

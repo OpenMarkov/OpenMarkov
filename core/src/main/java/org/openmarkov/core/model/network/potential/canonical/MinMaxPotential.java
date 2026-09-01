@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.Potential;
@@ -150,7 +151,42 @@ public abstract class MinMaxPotential extends ICIPotential {
     public Variable getPseudoVariable() {
         return pseudoVariable;
     }
-    
+
+    /**
+     * With {@code iciAwareVE} on, hands the elimination the factors of this model instead of its
+     * table, each one projected onto the evidence, so the parents never meet in a single potential.
+     * Falls back to the table when the model has fewer parents than the configured minimum, or when
+     * the network has utility nodes, whose projection looks potentials up by their conditioned
+     * variable and would not find a factorization.
+     */
+    @Override public List<TablePotential> tableProjectToFactors(EvidenceCase evidenceCase,
+            InferenceOptions inferenceOptions, List<TablePotential> alreadyProjectedPotentials)
+            throws NonProjectablePotentialException {
+        if (!factorizationApplies(inferenceOptions)) {
+            return super.tableProjectToFactors(evidenceCase, inferenceOptions, alreadyProjectedPotentials);
+        }
+        List<TablePotential> factors = buildFactorization();
+        if (evidenceCase == null || evidenceCase.isEmpty()) {
+            return factors;
+        }
+        List<TablePotential> projectedFactors = new ArrayList<>(factors.size());
+        for (TablePotential factor : factors) {
+            projectedFactors.add(factor.tableProject(evidenceCase, inferenceOptions));
+        }
+        return projectedFactors;
+    }
+
+    private boolean factorizationApplies(InferenceOptions inferenceOptions) {
+        if (inferenceOptions == null || !inferenceOptions.isIciAwareVE()) {
+            return false;
+        }
+        if (variables.size() - 1 < inferenceOptions.getIciMinParentsToFactorize()) {
+            return false;
+        }
+        ProbNet network = inferenceOptions.probNet;
+        return network != null && network.getNumNodes(NodeType.UTILITY) == 0;
+    }
+
     /**
      * Builds the factors this model breaks into: the accrued potential of each link, the accrued
      * potential of the leak, and the delta. Note what it returns - the FINISHED factorization, not the

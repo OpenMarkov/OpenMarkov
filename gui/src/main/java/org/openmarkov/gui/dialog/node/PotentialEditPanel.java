@@ -267,7 +267,7 @@ public class PotentialEditPanel extends JPanel {
      */
     private PotentialPanel getPotentialPanel() {
         if (this.potentialPanel == null) {
-            this.potentialPanel = PotentialPanelManager.getInstance().createPotentialPanel(this.node);
+            this.potentialPanel = PotentialPanelManager.getInstance().createPotentialPanel(this.node, this);
             this.potentialPanel.setReadOnly(this.readOnly);
         }
         return this.potentialPanel;
@@ -511,15 +511,18 @@ public class PotentialEditPanel extends JPanel {
             newPotential = this.instanciatePotential(potentialType, currentPotential.getVariables());
         }
         this.setPotentialInNode(newPotential);
-        
+        reloadPotentialPanel();
+        for (var action : this.onPotentialTypeChanges) {
+            action.run();
+        }
+    }
+    
+    public void reloadPotentialPanel() {
         this.updatePotentialPanel();
         this.add(this.getPotentialPanel(), BorderLayout.CENTER);
         this.updateUI();
         this.repaint();
         this.repaint();
-        for (var action : this.onPotentialTypeChanges) {
-            action.run();
-        }
     }
     
     void onPotentialTypeChanges(Runnable action) {

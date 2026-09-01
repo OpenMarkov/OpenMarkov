@@ -33,16 +33,19 @@ public class InferenceOptions {
 	private MulticriteriaOptions multiCriteriaOptions;
 
 	private TemporalOptions temporalOptions;
-	
+
 	private MonteCarloOptions monteCarloOptions;
-	
+
+	private boolean iciAwareVE;
+
+	/** Below four parents the expanded table of a MAX/MIN model is not bigger than its factors. */
+	public static final int DEFAULT_ICI_MIN_PARENTS_TO_FACTORIZE = 4;
+
+	private int iciMinParentsToFactorize = DEFAULT_ICI_MIN_PARENTS_TO_FACTORIZE;
+
 	// Constructor
 
-	/**
-	 * The three sub-options start from their default values, as in {@link #InferenceOptions()}. They
-	 * used to be left null here, so copying options built with this constructor threw a
-	 * {@code NullPointerException} inside {@code MulticriteriaOptions(null)}.
-	 */
+	/** The three sub-options start from their default values, as in {@link #InferenceOptions()}. */
 	public InferenceOptions(ProbNet probNet, Variable simulationIndexVariable) {
 		this();
 		this.probNet = probNet;
@@ -55,16 +58,15 @@ public class InferenceOptions {
 		this.monteCarloOptions = new MonteCarloOptions();
 	}
 
-	/**
-	 * The network and the simulation index variable travel too. Leaving them behind made a copy of a
-	 * network come back with options that no longer say which network they belong to.
-	 */
+	/** The copy carries the network and the simulation index variable too. */
 	public InferenceOptions(InferenceOptions inferenceOptions) {
 		this.probNet = inferenceOptions.probNet;
 		this.simulationIndexVariable = inferenceOptions.simulationIndexVariable;
 		this.multiCriteriaOptions = new MulticriteriaOptions(inferenceOptions.getMultiCriteriaOptions());
 		this.temporalOptions = new TemporalOptions(inferenceOptions.getTemporalOptions());
 		this.setMonteCarloOptions(new MonteCarloOptions(inferenceOptions.getMonteCarloOptions()));
+		this.iciAwareVE = inferenceOptions.iciAwareVE;
+		this.iciMinParentsToFactorize = inferenceOptions.iciMinParentsToFactorize;
 	}
 
 	public MulticriteriaOptions getMultiCriteriaOptions() {
@@ -109,9 +111,30 @@ public class InferenceOptions {
 	public MonteCarloOptions getMonteCarloOptions() {
 		return monteCarloOptions;
 	}
-	
+
 	public void setMonteCarloOptions(MonteCarloOptions monteCarloOptions) {
 		this.monteCarloOptions = monteCarloOptions;
 	}
-	
+
+	/**
+	 * Whether variable elimination keeps the factorization of ICI models instead of expanding
+	 * each one to its conditional probability table. Off by default.
+	 */
+	public boolean isIciAwareVE() {
+		return iciAwareVE;
+	}
+
+	public void setIciAwareVE(boolean iciAwareVE) {
+		this.iciAwareVE = iciAwareVE;
+	}
+
+	/** An ICI model with fewer parents than this projects as its table even when {@link #isIciAwareVE()}. */
+	public int getIciMinParentsToFactorize() {
+		return iciMinParentsToFactorize;
+	}
+
+	public void setIciMinParentsToFactorize(int iciMinParentsToFactorize) {
+		this.iciMinParentsToFactorize = iciMinParentsToFactorize;
+	}
+
 }

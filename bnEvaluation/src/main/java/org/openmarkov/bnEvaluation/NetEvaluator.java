@@ -288,7 +288,8 @@ public class NetEvaluator {
      * Builds the evidence case for the given row of the dataset, including only
      * the variables that satisfy {@code include}.
      */
-    private EvidenceCase buildEvidenceCase(int caseIndex, Predicate<Variable> include) {
+    private EvidenceCase buildEvidenceCase(int caseIndex, Predicate<Variable> include)
+            throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         int[][] cases = caseDatabase.getCases();
         List<Variable> caseVariables = caseDatabase.getVariables();
         List<Finding> findings = new ArrayList<>(caseVariables.size());

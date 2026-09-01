@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network.potential;
 
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Variable;
 
@@ -152,11 +153,17 @@ public abstract class AbstractIndexedPotential extends Potential {
      *
      * @param variables List of variables.
      * @return Product of the number of states of all variables.
+     * @throws InvalidArgumentException if the product exceeds {@code Integer.MAX_VALUE}.
      */
     public static int computeTableSize(List<Variable> variables) {
         int tableSize = 1;
         for (Variable variable : variables) {
-            tableSize *= variable.getNumStates();
+            try {
+                tableSize = Math.multiplyExact(tableSize, variable.getNumStates());
+            } catch (ArithmeticException e) {
+                throw new InvalidArgumentException("variables",
+                        "the product of their numbers of states exceeds the maximum table size, 2^31 - 1");
+            }
         }
         return tableSize;
     }

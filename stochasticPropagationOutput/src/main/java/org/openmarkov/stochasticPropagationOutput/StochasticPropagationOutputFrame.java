@@ -16,6 +16,8 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.gui.configuration.UserPreferences;
+import org.openmarkov.gui.dialog.common.CommonOptions;
+import org.openmarkov.gui.dialog.common.OptionDialog;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.gui.exception.NoNetOpenedException;
 import org.openmarkov.gui.window.MainGUI;
@@ -34,7 +36,6 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -252,18 +253,17 @@ public class StochasticPropagationOutputFrame extends JDialog implements ActionL
             public void approveSelection() {
                 File f = getSelectedFile();
                 if (f.exists() && getDialogType() == SAVE_DIALOG) {
-                    int result = JOptionPane.showConfirmDialog(this, stringDatabase.getString("Warnings.Overwrite"),
-                                                               stringDatabase.getString("Warnings.OverwriteTitle"), JOptionPane.YES_NO_CANCEL_OPTION);
-                    switch (result) {
-                        case JOptionPane.YES_OPTION:
-                            super.approveSelection();
-                            return;
-                        case JOptionPane.NO_OPTION, JOptionPane.CLOSED_OPTION:
-                            return;
-                        case JOptionPane.CANCEL_OPTION:
-                            cancelSelection();
-                            return;
+                    OptionDialog<CommonOptions.YesNoCancel> dialog = new OptionDialog<>(MainGUI.INSTANCE,
+                                                                                        stringDatabase.getString("Warnings.OverwriteTitle"),
+                                                                                        stringDatabase.getString("Warnings.Overwrite"),
+                                                                                        CommonOptions.YesNoCancel.class);
+                    switch (dialog.request(CommonOptions.YesNoCancel.CANCEL)) {
+                        case YES -> super.approveSelection();
+                        case NO -> {
+                        }
+                        case CANCEL -> cancelSelection();
                     }
+                    return;
                 }
                 super.approveSelection();
             }

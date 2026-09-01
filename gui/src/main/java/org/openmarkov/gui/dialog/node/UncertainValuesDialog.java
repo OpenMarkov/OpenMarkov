@@ -9,8 +9,8 @@ package org.openmarkov.gui.dialog.node;
 
 import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.modelUncertainty.BetaFunction;
@@ -32,9 +32,14 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.TableWithEvents;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.exception.FamilyDistributionRuleBrokenException;
-import org.openmarkov.core.localize.StringDatabase;
 
-import javax.swing.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ToolTipManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -42,7 +47,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -163,7 +170,6 @@ public class UncertainValuesDialog extends OkCancelDialog {
         variable = potential.getVariable(0);
         //
         setTitle(getConfigurationDescription(variable, isChanceVariable, configuration));
-        
         posBase = getPositionBaseUncertainValue(potential, configuration);
         setResizable(true);
         JPanel componentsPanel = getComponentsPanel();
@@ -420,7 +426,7 @@ public class UncertainValuesDialog extends OkCancelDialog {
         }
         
         List<String> allowedDistributionTypes = ProbDensFunctionManager.getUniqueInstance()
-                                                                       .getValidProbDensFunctions(isChanceVariable);
+                                                                       .getValidProbDensFunctionsAsString(isChanceVariable);
         State[] states = variable.getStates();
         int numStates = states.length;
         Object[][] initialData = new Object[numStates][columnNames.length];
@@ -762,7 +768,7 @@ public class UncertainValuesDialog extends OkCancelDialog {
                 String distributionType = distributionTableModel.getValueAt(selectedRow, DISTRIBUTION_COLUMN_INDEX)
                                                                 .toString();
                 DistributionParameterDialog parameterDialog = new DistributionParameterDialog(getOwner(),
-                                                                                              distributionType);
+                                                                                              distributionType, null);
                 if (!distributionTypes.get(selectedRow).equals(distributionType)) {
                     parameterDialog.setVisible(true);
                     if (parameterDialog.getSelectedOption() == ChosenOption.Ok) {

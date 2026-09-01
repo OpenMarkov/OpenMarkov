@@ -18,6 +18,7 @@ import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Vector;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
@@ -114,6 +115,14 @@ public class StickyColumnsTablePane extends JScrollPane {
         this.setCorner(JScrollPane.UPPER_LEFT_CORNER, null);
     }
     
+    public void setModelData(OMTableModel baseModel) {
+        if (this.model == null) {
+            this.setModel(baseModel);
+            return;
+        }
+        this.model.copyFromModel(baseModel);
+    }
+    
     public void setModel(OMTableModel baseModel) {
         if (this.model != null) {
             this.model.removeTableModelListener(this.onModelChange);
@@ -146,7 +155,7 @@ public class StickyColumnsTablePane extends JScrollPane {
         int firstRow = tableModelEvent.getFirstRow();
         int lastRow = tableModelEvent.getLastRow();
         var source = (OMTableModel) tableModelEvent.getSource();
-        var sourceKind = this.getSourceKind(source);
+        var sourceKind = Optional.ofNullable(this.getSourceKind(source)).orElse(Source.MAIN);
         this.tableModelListenersAreEnabled = false;
         if (firstRow == TableModelEvent.HEADER_ROW) {
             switch (sourceKind) {
@@ -158,10 +167,13 @@ public class StickyColumnsTablePane extends JScrollPane {
                         this.scrollableTableModel.removeRow(0);
                     }
                     for (var vector : this.model.getDataVector()) {
+                        this.stickyTableModel.setColumnIdentifiers(new Vector<>(this.model.getColumnIdentifiers()
+                                                                                          .subList(0, frozenColumns)));
                         this.stickyTableModel.addRow(new Vector<>(vector.subList(0, this.frozenColumns)));
+                        this.scrollableTableModel.setColumnIdentifiers(new Vector<>(this.model.getColumnIdentifiers()
+                                                                                              .subList(this.frozenColumns, this.getColumnCount())));
                         this.scrollableTableModel.addRow(new Vector<>(vector.subList(this.frozenColumns, this.getColumnCount())));
                     }
-                    ;
                 }
                 case STICKY -> {
                     throw new UnsupportedOperationException();
@@ -273,7 +285,7 @@ public class StickyColumnsTablePane extends JScrollPane {
         if (source == this.stickyTableModel || source == this.stickyTable) {
             return Source.STICKY;
         }
-        return null;
+        return Source.MAIN;
     }
     
     private @NotNull Source getSourceKindOf(@Nullable Object source) {

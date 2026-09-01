@@ -3,34 +3,64 @@ package org.openmarkov.gui.window.edition.networkEditorPanel;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.core.AddNodeEdit;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.NotSupportedOperationException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.model.network.Criterion;
+import org.openmarkov.core.model.network.DefaultStates;
+import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Point2D;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.Util;
+import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.gui.action.MoveNodeEdit;
 import org.openmarkov.gui.configuration.KeyTracker;
 import org.openmarkov.gui.dialog.node.NodeTypeInfo;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.exception.PreResolutionNodeInInferenceException;
-import org.openmarkov.gui.graphic.*;
+import org.openmarkov.gui.graphic.VisualElement;
+import org.openmarkov.gui.graphic.VisualLink;
+import org.openmarkov.gui.graphic.VisualNetwork;
+import org.openmarkov.gui.graphic.VisualNode;
+import org.openmarkov.gui.graphic.VisualState;
 import org.openmarkov.gui.loader.element.CursorLoader;
 import org.openmarkov.gui.menutoolbar.menu.ContextualMenu;
 import org.openmarkov.gui.menutoolbar.menu.ContextualMenuFactory;
+import org.openmarkov.gui.util.GUIDefaultStates;
 import org.openmarkov.gui.util.GUIUtils;
-import org.openmarkov.gui.window.edition.mode.NodeEditionMode;
-import org.openmarkov.gui.window.edition.mode.SelectionState;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * Handles all mouse and keyboard input for the {@link NetworkEditorPanel},
  * delegating to the current {@link EditionMode} and managing contextual menus.
  */
-class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListener, FocusListener {
+public class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListener, FocusListener {
 
     private final NetworkEditorPanel networkEditorPanel;
 
@@ -89,7 +119,7 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
         if (e.getClickCount() == 1 && this.networkEditorPanel.getBaseTool() == NetworkEditorPanel.BaseTool.NODE
                 && SwingUtilities.isLeftMouseButton(e) && GUIUtils.noMouseModifiers(e) && networkEditorPanel.getVisualNetwork().getElementInPosition(this.cursorPosition, g) == null
         ) {
-            NodeEditionMode.createNode(this.networkEditorPanel.getProbNet(), this.networkEditorPanel.getPreferredNodeToCreate(), this.cursorPosition, networkEditorPanel);
+            createNode(this.networkEditorPanel.getProbNet(), this.networkEditorPanel.getPreferredNodeToCreate(), this.cursorPosition, networkEditorPanel);
             this.lastLeftClickProducedANode = true;
             return;
         }
@@ -167,7 +197,7 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
                 } else {
                     node = this.networkEditorPanel.getVisualNetwork().whatNodeInPosition(this.cursorPosition, g);
                     if (node == null) {
-                        NodeEditionMode.createNode(this.networkEditorPanel.getProbNet(), NodeType.CHANCE, this.cursorPosition, networkEditorPanel);
+                        createNode(this.networkEditorPanel.getProbNet(), NodeType.CHANCE, this.cursorPosition, networkEditorPanel);
                         node = this.networkEditorPanel.getVisualNetwork()
                                 .whatNodeInPosition(this.cursorPosition, g);
                         this.lastLeftClickProducedANode = true;
@@ -465,6 +495,9 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
             }
         }
         this.networkEditorPanel.repaint();
+        if (keyCode == KeyEvent.VK_ALT) {
+            e.consume();
+        }
     }
 
     private void onReleases(int keyCode) {
@@ -649,5 +682,55 @@ class EditorInputHandler implements MouseListener, MouseMotionListener, KeyListe
                 .map(menuFactory -> menuFactory.getContextualMenu(selectedElement, panel))
                 .orElse(null);
     }
-
+    
+    public static void createNode(ProbNet currentNetwork, NodeType nodeType, Point2D.Double position, NetworkEditorPanel networkEditorPanel) {
+        HashSet<String> existingNames = new HashSet<>();
+        for (Node node : currentNetwork.getNodes()) {
+            String name = node.getName();
+            if (name.contains("[")) {
+                existingNames.add(name.substring(0, name.indexOf(" [")));
+            } else {
+                existingNames.add(node.getName());
+            }
+        }
+        String nodeName = Util.getNextNodeName(nodeType, existingNames);
+        State[] states = DefaultStates.getStatesNodeType(nodeType, currentNetwork.getDefaultStates());
+        for (int i = 0; i < states.length; i++) {
+            states[i] = new State(GUIDefaultStates.getString(states[i].getName()));
+        }
+        Variable variable = new Variable(nodeName, states);
+        if (currentNetwork.onlyTemporal()) {
+            // default value
+            variable.setBaseName(nodeName);
+            variable.setTimeSlice(0);
+        }
+        List<Criterion> decisionCriteria = currentNetwork.getDecisionCriteria();
+        if (nodeType == NodeType.UTILITY && decisionCriteria != null) {
+            variable.setDecisionCriterion(decisionCriteria.getFirst());
+        }
+        try {
+            currentNetwork.getPNESupport().setWithUndo(true);
+            currentNetwork.getPNESupport().openNewSubEditHistory();
+            PNEdit addNodeEdit = new AddNodeEdit(currentNetwork, variable, nodeType, position);
+            addNodeEdit.executeEdit();
+            var visualNode = networkEditorPanel.getVisualNetwork()
+                                               .getAllNodes()
+                                               .stream()
+                                               .filter(node -> node.getNode().getVariable() == variable)
+                                               .findFirst()
+                                               .get();
+            var visualNodeShape = visualNode.getShape((Graphics2D) networkEditorPanel.getGraphics());
+            visualNode.setTemporalCoordinateX(visualNode.getTemporalPosition().x - (visualNodeShape.getBounds2D()
+                                                                                                   .getWidth() / 2));
+            visualNode.setTemporalCoordinateY(visualNode.getTemporalPosition().y - (visualNodeShape.getBounds2D()
+                                                                                                   .getHeight() / 2));
+            new MoveNodeEdit(List.of(visualNode)).executeEdit();
+            currentNetwork.getPNESupport().closeSubEditHistory();
+        } catch (DoEditException e) {
+            throw new UnreachableException(e);
+        }
+        
+        networkEditorPanel.adjustPanelDimension();
+        networkEditorPanel.repaint();
+    }
 }

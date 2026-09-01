@@ -150,6 +150,7 @@ public class NodeStateEdit extends PNEdit {
     }
     
     @Override protected void doEdit() {
+        saveLinkRestrictionsAndRevelations(node);
         node.getVariable().modifyState(node, stateAction, this.indexState, newName);
     }
 
@@ -234,37 +235,33 @@ public class NodeStateEdit extends PNEdit {
 
 
     
-    /****
-     * This method resets the link restriction and revelation conditions of the
-     * links of the node
+    /**
+     * Saves the link restrictions and revelation conditions of the links of the node, which
+     * modifying its states clears, so that {@link #undo()} can put them back.
      *
      * @param node Node
      */
-    private void resetLink(Node node) {
-        
+    private void saveLinkRestrictionsAndRevelations(Node node) {
+
         for (Link<Node> link : node.getLinks()) {
             if (link.hasRestrictions()) {
                 double[] lastPotential = ((TablePotential) link.getRestrictionsPotential()).getValues().clone();
                 linkRestrictionMap.put(link, lastPotential);
-                link.setRestrictionsPotential(null);
-                
             }
         }
-        
+
         for (Node child : node.getChildren()) {
             Link<Node> link = probNet.getLink(node, child, true);
             if (LinkOperations.hasRevealingConditions(link)) {
                 VariableType varType = link.getFrom().getVariable().getVariableType();
                 if (varType == VariableType.NUMERIC) {
                     this.revelationConditionMap.put(link, link.getRevealingIntervals());
-                    link.setRevealingIntervals(new ArrayList<PartitionedInterval>());
                 } else {
                     this.revelationConditionMap.put(link, link.getRevealingStates());
-                    link.setRevealingStates(new ArrayList<State>());
                 }
             }
         }
-        
+
     }
     
     public int getIndexState() {

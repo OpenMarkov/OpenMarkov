@@ -7,24 +7,27 @@
 
 package org.openmarkov.gui.dialog.network;
 
-import org.openmarkov.core.action.base.PNEdit;
+import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.action.core.DecisionCriteriaEdit;
 import org.openmarkov.core.action.core.DecisionCriterionUnitEdit;
-import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.gui.component.OMTableModel;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
-import org.openmarkov.core.localize.StringDatabase;
 
-import javax.swing.*;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 /**
  * Table panel for editing the decision criteria (e.g. cost, effectiveness) of a network,
@@ -56,53 +59,28 @@ import java.util.List;
         if (tableEvent.getType() != TableModelEvent.UPDATE) {
             return;
         }
-        PNEdit criteriaEdit = null;
-        String oldCriterionName = null;
-        String oldUnitName = null;
-        switch (column) {
-            case 1 -> {
-                oldCriterionName = (String) dataTable[row][column - 1];
-                oldUnitName = (String) dataTable[row][column];
-                String newCriterionName = (String) ((AdvancedPropertiesTableModel) tableEvent.getSource())
-                        .getValueAt(row, column);
-                dataTable[row][column - 1] = newCriterionName;
-                if (oldCriterionName != newCriterionName) {
-                    criteriaEdit = new DecisionCriteriaEdit(probNet, StateAction.RENAME,
-                                                            probNet.getDecisionCriteria().get(row), newCriterionName);
+        try {
+            switch (column) {
+                case 1 -> {
+                    String newCriterionName = (String) ((OMTableModel) tableEvent.getSource())
+                            .getValueAt(row, column);
+                    new DecisionCriteriaEdit(probNet, StateAction.RENAME,
+                                             probNet.getDecisionCriteria().get(row), newCriterionName).executeEdit();
+                    
+                }
+                case 2 -> {
+                    String oldCriterionName = (String) ((OMTableModel) tableEvent.getSource())
+                            .getValueAt(row, column - 1);
+                    String newUnitName = (String) ((OMTableModel) tableEvent.getSource())
+                            .getValueAt(row, column);
+                    new DecisionCriterionUnitEdit(probNet, oldCriterionName, newUnitName).executeEdit();
+                }
+                default -> {
                 }
             }
-            case 2 -> {
-                oldCriterionName = (String) dataTable[row][column - 2];
-                oldUnitName = (String) dataTable[row][column - 1];
-                String newUnitName = (String) ((AdvancedPropertiesTableModel) tableEvent.getSource())
-                        .getValueAt(row, column);
-                dataTable[row][column - 1] = newUnitName;
-                if (oldUnitName != newUnitName) {
-                    criteriaEdit = new DecisionCriterionUnitEdit(probNet, oldCriterionName, newUnitName);
-                }
-            }
-            default -> {
-            }
+        } catch (DoEditException ex) {
+            throw new UnrecoverableException(ex);
         }
-        if (criteriaEdit != null) {
-            try {
-                criteriaEdit.executeEdit();
-            } catch (DoEditException e) {
-                switch (column) {
-                    case 1 -> {
-                        dataTable[row][column - 1] = oldCriterionName;
-                        this.valuesTable.setValueAt(oldCriterionName, row, column - 1, tableEvent.getSource());
-                    }
-                    case 2 -> {
-                        dataTable[row][column - 1] = oldUnitName;
-                        this.valuesTable.setValueAt(oldUnitName, row, column - 1, tableEvent.getSource());
-                    }
-                }
-                throw new UnrecoverableException(e);
-            }
-        }
-        setData(dataTable);
-        valuesTable.setRowSelectionInterval(row, row);
     }
     
     @Override protected void actionPerformedAddValue(ActionEvent e) throws DoEditException {
@@ -111,118 +89,40 @@ import java.util.List;
         if (option == null) {
             return;
         }
-        int newIndex = valuesTable.getRowCount();
         DecisionCriteriaEdit criteriaEdit
                 = new DecisionCriteriaEdit(probNet, StateAction.ADD, new Criterion(option), null);
         criteriaEdit.executeEdit();
-        //edits.add(criteriaEdit);
         
-        /*
-         * getTableModel().insertRow(newIndex, new Object[]
-         * {getKeyString(newIndex), option });
-         * valuesTable.getSelectionModel().setSelectionInterval(newIndex,
-         * newIndex);
-         */
-        
-        // StringsWithProperties agents = probNet.getAgents();
-        // setDataFromNetworkAgents(agents);
-        List<Criterion> criteria = probNet.getDecisionCriteria();
-        setDataFromCriteria(criteria);
-        // getTableModel().insertRow(newIndex, new Object[]
-        // {getKeyString(newIndex), option });
+        setDataFromCriteria(probNet.getDecisionCriteria());
+        int newIndex = valuesTable.getRowCount() - 1;
         valuesTable.setRowSelectionInterval(newIndex, newIndex);
-        
-        dataTable = new Object[valuesTable.getRowCount()][2];
-        for (int i = 0; i < valuesTable.getRowCount(); i++) {
-            dataTable[i][0] = valuesTable.getValueAt(i, 1, null);
-            dataTable[i][1] = valuesTable.getValueAt(i, 2, null);
-        }
-        /*
-         * getTableModel().insertRow(newIndex, new Object[]
-         * {getKeyString(newIndex), option });
-         * //valuesTable.getSelectionModel().setSelectionInterval(newIndex,
-         * newIndex); valuesTable.setValueAt(option, newIndex, 1);
-         */
     }
     
     @Override protected void actionPerformedRemoveValue(ActionEvent e) throws DoEditException {
         int selectedRow = valuesTable.getSelectedRow();
-        String criteriaName = (String) valuesTable.getValueAt(selectedRow, 1, null);
-        
         DecisionCriteriaEdit criteriaEdit = new DecisionCriteriaEdit(probNet, StateAction.REMOVE,
                                                                      probNet.getDecisionCriteria()
                                                                             .get(selectedRow), null);
         criteriaEdit.executeEdit();
-        //edits.add(criteriaEdit);
-        // StringsWithProperties agents = probNet.getAgents();
-        List<Criterion> criterias = probNet.getDecisionCriteria();
-        setDataFromCriteria(criterias);
-        valuesTable.setRowSelectionInterval(selectedRow, selectedRow);
-        // dataTable = new Object [agents.getNames().size()][1];
-        if (criterias != null) {
-            dataTable = new Object[criterias.size()][2];
-            for (int i = 0; i < valuesTable.getRowCount(); i++) {
-                dataTable[i][0] = valuesTable.getValueAt(i, 1, null);
-                dataTable[i][1] = valuesTable.getValueAt(i, 2, null);
-            }
-        }
+        setDataFromCriteria(probNet.getDecisionCriteria());
     }
     
     @Override protected void actionPerformedUpValue(ActionEvent e) throws DoEditException {
         int selectedRow = valuesTable.getSelectedRow();
-        Object swapName = dataTable[selectedRow][0];
-        dataTable[selectedRow][0] = dataTable[selectedRow - 1][0];
-        dataTable[selectedRow - 1][0] = swapName;
-        
-        Object swapUnit = dataTable[selectedRow][1];
-        dataTable[selectedRow][1] = dataTable[selectedRow - 1][1];
-        dataTable[selectedRow - 1][1] = swapUnit;
-        
         DecisionCriteriaEdit criteriaEdit = new DecisionCriteriaEdit(probNet, StateAction.UP,
                                                                      probNet.getDecisionCriteria()
                                                                             .get(selectedRow), null);
         criteriaEdit.executeEdit();
-        //edits.add(criteriaEdit);
-        setData(dataTable);
-        /*
-         * swap = valuesTable.getValueAt(selectedRow, 1);
-         * valuesTable.setValueAt( valuesTable.getValueAt(selectedRow - 1,
-         * 1), selectedRow, 1); valuesTable.setValueAt(swap, selectedRow -
-         * 1, 1);
-         */
-        valuesTable.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
-        for (int i = 0; i < valuesTable.getRowCount(); i++) {
-            dataTable[i][0] = valuesTable.getValueAt(i, 1, null);
-            dataTable[i][1] = valuesTable.getValueAt(i, 2, null);
-        }
-        
+        setDataFromCriteria(probNet.getDecisionCriteria());
     }
     
     @Override protected void actionPerformedDownValue(ActionEvent e) throws DoEditException {
         int selectedRow = valuesTable.getSelectedRow();
-        Object swapName = dataTable[selectedRow][0];
-        dataTable[selectedRow][0] = dataTable[selectedRow + 1][0];
-        dataTable[selectedRow + 1][0] = swapName;
-        Object swapUnit = dataTable[selectedRow][1];
-        dataTable[selectedRow][1] = dataTable[selectedRow + 1][1];
-        dataTable[selectedRow + 1][1] = swapUnit;
         DecisionCriteriaEdit criteriaEdit = new DecisionCriteriaEdit(probNet, StateAction.DOWN,
                                                                      probNet.getDecisionCriteria()
                                                                             .get(selectedRow), null);
         criteriaEdit.executeEdit();
-        //edits.add(criteriaEdit);
-        setData(dataTable);
-        /*
-         * swap = valuesTable.getValueAt(selectedRow, 1);
-         * valuesTable.setValueAt( valuesTable.getValueAt(selectedRow + 1,
-         * 1), selectedRow, 1); valuesTable.setValueAt(swap, selectedRow +
-         * 1, 1);
-         */
-        valuesTable.setRowSelectionInterval(selectedRow + 1, selectedRow + 1);
-        for (int i = 0; i < valuesTable.getRowCount(); i++) {
-            dataTable[i][0] = valuesTable.getValueAt(i, 1, null);
-            dataTable[i][1] = valuesTable.getValueAt(i, 2, null);
-        }
+        setDataFromCriteria(probNet.getDecisionCriteria());
     }
     
     /*
@@ -239,7 +139,6 @@ import java.util.List;
         if (valuesTable.getRowCount() == 2) {
             removeValueButton.setEnabled(true);
         }
-        
     }
     
     /**
@@ -287,7 +186,6 @@ import java.util.List;
                 
                 @Override public void actionPerformed(ActionEvent e) {
                     StandardCriteriaDialog dialog = new StandardCriteriaDialog(owner, probNet);
-                    
                     if (dialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
                         setDataFromCriteria(probNet.getDecisionCriteria());
                     }

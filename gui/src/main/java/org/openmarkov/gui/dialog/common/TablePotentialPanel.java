@@ -33,12 +33,14 @@ import org.openmarkov.gui.component.ValuesTableCellRenderer;
 import org.openmarkov.gui.component.ValuesTableModel;
 import org.openmarkov.gui.component.ValuesTableOptimalPolicyCellRenderer;
 import org.openmarkov.gui.component.ValuesTableWithLinkRestrictionCellRenderer;
+import org.openmarkov.gui.dialog.node.PotentialEditPanel;
 import org.openmarkov.gui.dialog.node.UncertainValuesDialog;
 import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 import org.openmarkov.gui.menutoolbar.menu.UncertaintyContextualMenu;
 import org.openmarkov.gui.util.GUIUtils;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellRenderer;
@@ -144,6 +146,9 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
         this.valuesTable.setFirstEditableRow(firstEditableRow);
     }
     
+    
+    private JComponent owner;
+    
     /**
      * Constructor used by CPTablePanel
      * This method creates, initialises, and displays a ValuesTable object for the first potential of the node
@@ -157,8 +162,9 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      * @param node : node whose first potential is a TablePotential or a TableDeltaPotential
      *             Adaptation from TableDeltaPotential
      */
-    public TablePotentialPanel(Node node) throws ThereIsNoPotentialsInNodeException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    public TablePotentialPanel(Node node, JComponent owner) throws ThereIsNoPotentialsInNodeException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         super();
+        this.owner = owner;
         this.tablePotentialsPanelOperations = new PotentialsTablePanelOperations();
         this.node = node;
         // This panel displays the first potential of the node
@@ -697,6 +703,9 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
             });
             getValuesTable().repaint();
             this.getTableModel().setNotEditablePositions(getNotEditablePositions());
+        }
+        if (owner instanceof PotentialEditPanel potentialEditPanel) {
+            potentialEditPanel.reloadPotentialPanel();
         }
         
     }

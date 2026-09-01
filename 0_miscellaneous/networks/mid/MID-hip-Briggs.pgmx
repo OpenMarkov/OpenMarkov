@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="MID">
+    <Comment showWhenOpeningNetwork="true"><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      MID for analyzing the cost-effectiveness of a new type of hip 
+      prosthesis.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      Reference:
+    </p>
+    <p style="margin-top: 0">
+      Briggs A, Sculpher M, Dawson J, Fitzpatrick R, Murray D, Malchau H.
+    </p>
+    <p style="margin-top: 0">
+      The use of probabilistic decision models in technology assessment: the 
+      case of total hip replacement.
+    </p>
+    <p style="margin-top: 0">
+      <i>Appl Health Econ Health Policy</i>. 2004;3:79-89.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      An MS Excel version of this model was included as an exercise in:
+    </p>
+    <p style="margin-top: 0">
+      Briggs A, Claxton K, Sculpher M.
+    </p>
+    <p style="margin-top: 0">
+      <i>Decision Modelling for Health Economic Evaluation.</i>
+    </p>
+    <p style="margin-top: 0">
+      Oxford University Press, 2006
+    </p>
+    <p style="margin-top: 0">
+      <a href="http://www.herc.ox.ac.uk/pubs/books/material_modelling">http://www.herc.ox.ac.uk/pubs/books/material_modelling</a>, 
+      exercise 5.7, or
+    </p>
+    <p style="margin-top: 0">
+      <a href="http://www.herc.ox.ac.uk/pubs/books/decision/Ex57sol">http://www.herc.ox.ac.uk/pubs/books/decision/Ex57sol</a>.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      MID built by I&#241;igo Bermejo and F. Javier D&#237;ez in July 2013.
+    </p>
+    <p style="margin-top: 0">
+      Revised: 24 January 2014.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      Open the properties dialog of each node to obtain additional 
+      information. See also the chapter on MIDs in <a href="http://www.openmarkov.org/docs/tutorial">OpenMarkov's 
+      tutorial</a>.
+    </p>
+  </body>
+</html>]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="cost" unit="£" />
+      <Criterion name="effectiveness" unit="QALY" />
+    </DecisionCriteria>
+    <TimeUnit unit="YEAR" Value="1.0" />
+    <AdditionalProperties />
+    <Variables>
+      <Variable name="State" timeSlice="0" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      The initial state is <i>primary THR</i> (total hip replacement) for all 
+      patients. At the beginning of cycle 1 all the patients transit to <i>successful 
+      THR</i>, except in case of death. Later, if the prosthesis fails, the 
+      patient will be in state <i>revision THR</i> for one cycle (in which the 
+      prosthesis is replaced) and then transit to <i>successful revised</i>, 
+      except in case of death.
+    </p>
+  </body>
+</html>
+<!--StartFragment-->
+<!--StartFragment-->]]></Comment>
+        <Coordinates x="268" y="236" />
+        <States>
+          <State name="dead" />
+          <State name="successful revised" />
+          <State name="revision THR" />
+          <State name="successful primary" />
+          <State name="primary THR" />
+        </States>
+      </Variable>
+      <Variable name="Age" timeSlice="0" type="numeric" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Age at the first cycle. It is the same as the age at entry.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="324" y="122" />
+        <Unit />
+        <Precision>1.0</Precision>
+        <Thresholds>
+          <Threshold value="35.0" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="Age" timeSlice="1" type="numeric" role="chance">
+        <Coordinates x="617" y="122" />
+        <Unit />
+        <Precision>1.0</Precision>
+        <Thresholds>
+          <Threshold value="0.0" belongsTo="right" />
+          <Threshold value="Infinity" belongsTo="right" />
+        </Thresholds>
+      </Variable>
+      <Variable name="State" timeSlice="1" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="759" y="236" />
+        <States>
+          <State name="dead" />
+          <State name="successful revised" />
+          <State name="revision THR" />
+          <State name="successful primary" />
+          <State name="primary THR" />
+        </States>
+      </Variable>
+      <Variable name="Sex" type="finiteStates" role="chance">
+        <Coordinates x="375" y="50" />
+        <States>
+          <State name="female" />
+          <State name="male" />
+        </States>
+      </Variable>
+      <Variable name="Death OC" timeSlice="1" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Death due to other causes than hip replacement.
+    </p>
+  </body>
+</html>
+<!--StartFragment-->]]></Comment>
+        <Coordinates x="653" y="187" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Failure" timeSlice="1" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Failure of the prosthesis.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="483" y="279" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Death THR" timeSlice="1" type="finiteStates" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Death due to THR (total hip replacement).
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="474" y="329" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Age at entry" type="numeric" role="chance">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Age of the patient when entering the model, i.e., when the hip is 
+      replaced by a prosthesis.
+    </p>
+    <p style="margin-top: 0">
+      
+    </p>
+    <p style="margin-top: 0">
+      The Delta probability potential associated to this node implies that the 
+      patient (in the reference case) is 60 years when entering the model.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="139" y="73" />
+        <Unit />
+        <Precision>1.0</Precision>
+        <Thresholds>
+          <Threshold value="40.0" belongsTo="right" />
+          <Threshold value="90.0" belongsTo="left" />
+        </Thresholds>
+      </Variable>
+      <Variable name="Prosthesis type" type="finiteStates" role="decision">
+        <Coordinates x="162" y="164" />
+        <States>
+          <State name="Standard" />
+          <State name="NP1" />
+        </States>
+      </Variable>
+      <Variable name="Cost" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="325" y="380" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="cost" />
+      </Variable>
+      <Variable name="QoL" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="213" y="379" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="effectiveness" />
+      </Variable>
+      <Variable name="Prosthesis cost" type="numeric" role="utility">
+        <Coordinates x="113" y="271" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="cost" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="QoL" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="Cost" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="State" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="State" timeSlice="0" />
+        <Variable name="Death THR" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age" timeSlice="0" />
+        <Variable name="Age" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age" timeSlice="1" />
+        <Variable name="Death OC" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Sex" />
+        <Variable name="Death OC" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Sex" />
+        <Variable name="Failure" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Death OC" timeSlice="1" />
+        <Variable name="State" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Failure" timeSlice="1" />
+        <Variable name="State" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Death THR" timeSlice="1" />
+        <Variable name="State" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age at entry" />
+        <Variable name="Failure" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Age at entry" />
+        <Variable name="Age" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Prosthesis type" />
+        <Variable name="Failure" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Prosthesis type" />
+        <Variable name="Prosthesis cost" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <Values>0.0 0.0 0.0 0.0 1.0</Values>
+      </Potential>
+      <Potential type="Linear combination" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age" timeSlice="0" />
+          <Variable name="Age at entry" />
+        </Variables>
+        <Coefficients>0.0 1.0</Coefficients>
+        <Covariates>
+          <Covariate>Constant</Covariate>
+          <Covariate>Age at entry</Covariate>
+        </Covariates>
+      </Potential>
+      <Potential type="CycleLengthShift" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age" timeSlice="1" />
+          <Variable name="Age" timeSlice="0" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    See the comment to node <i>State [0]</i> to understand this potential. The 
+    Excel model assumes when the prosthesis is replaced (states <i>primary THR</i> 
+    and <i>revision THR</i>) that the patient cannot die because of other 
+    causes than THR. It also assumes that when the prosthesis fails, the 
+    patient cannot die in that cycle. If we discarded these hypotheses, we 
+    might place the nodes <i>Death THR</i> and <i>Death OC</i> in higher 
+    positions, thus obtaining a more compact tree. However, the purpose of 
+    this MID is not to improve the Excel model, but to reproduce its results.
+  </body>
+</html>]]></Comment>
+        <Variables>
+          <Variable name="State" timeSlice="1" />
+          <Variable name="State" timeSlice="0" />
+          <Variable name="Death THR" timeSlice="1" />
+          <Variable name="Failure" timeSlice="1" />
+          <Variable name="Death OC" timeSlice="1" />
+        </Variables>
+        <TopVariable name="State" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="primary THR" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="State" timeSlice="1" />
+                <Variable name="Death THR" timeSlice="1" />
+              </Variables>
+              <TopVariable name="Death THR" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 0.0 0.0 1.0 0.0</Values>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="successful primary" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="State" timeSlice="1" />
+                <Variable name="Failure" timeSlice="1" />
+              </Variables>
+              <TopVariable name="Failure" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 0.0 1.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                      <Variable name="Death OC" timeSlice="1" />
+                    </Variables>
+                    <TopVariable name="Death OC" timeSlice="1" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="yes" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 0.0 0.0 1.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="revision THR" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="State" timeSlice="1" />
+                <Variable name="Death THR" timeSlice="1" />
+              </Variables>
+              <TopVariable name="Death THR" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Tree/ADD">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                      <Variable name="Death OC" timeSlice="1" />
+                    </Variables>
+                    <TopVariable name="Death OC" timeSlice="1" />
+                    <Branches>
+                      <Branch>
+                        <States>
+                          <State name="yes" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                          </Variables>
+                          <Values>1.0 0.0 0.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                      <Branch>
+                        <States>
+                          <State name="no" />
+                        </States>
+                        <Potential type="Table">
+                          <Variables>
+                            <Variable name="State" timeSlice="1" />
+                          </Variables>
+                          <Values>0.0 1.0 0.0 0.0 0.0</Values>
+                        </Potential>
+                      </Branch>
+                    </Branches>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="successful revised" />
+            </States>
+            <Potential type="Tree/ADD">
+              <Variables>
+                <Variable name="State" timeSlice="1" />
+                <Variable name="Death OC" timeSlice="1" />
+              </Variables>
+              <TopVariable name="Death OC" timeSlice="1" />
+              <Branches>
+                <Branch>
+                  <States>
+                    <State name="yes" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                    </Variables>
+                    <Values>1.0 0.0 0.0 0.0 0.0</Values>
+                  </Potential>
+                </Branch>
+                <Branch>
+                  <States>
+                    <State name="no" />
+                  </States>
+                  <Potential type="Table">
+                    <Variables>
+                      <Variable name="State" timeSlice="1" />
+                    </Variables>
+                    <Values>0.0 0.96 0.04 0.0 0.0</Values>
+                    <UncertainValues>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Complement">0.96</Value>
+                      <Value distribution="Beta">4.0 96.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                      <Value distribution="Exact">0.0</Value>
+                    </UncertainValues>
+                  </Potential>
+                </Branch>
+              </Branches>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="dead" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="State" timeSlice="1" />
+              </Variables>
+              <Values>1.0 0.0 0.0 0.0 0.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Sex" />
+        </Variables>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Variables>
+          <Variable name="Death OC" timeSlice="1" />
+          <Variable name="Age" timeSlice="1" />
+          <Variable name="Sex" />
+        </Variables>
+        <TopVariable name="Age" timeSlice="1" />
+        <Branches>
+          <Branch>
+            <Thresholds>
+              <Threshold value="35.0" belongsTo="right" />
+              <Threshold value="45.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death OC" timeSlice="1" />
+                <Variable name="Sex" />
+              </Variables>
+              <Values>0.99901 9.9E-4 0.99849 0.00151</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="45.0" belongsTo="right" />
+              <Threshold value="55.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death OC" timeSlice="1" />
+                <Variable name="Sex" />
+              </Variables>
+              <Values>0.9974 0.0026 0.99607 0.00393</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="55.0" belongsTo="right" />
+              <Threshold value="65.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death OC" timeSlice="1" />
+                <Variable name="Sex" />
+              </Variables>
+              <Values>0.9933 0.0067 0.9891 0.0109</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="65.0" belongsTo="right" />
+              <Threshold value="75.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death OC" timeSlice="1" />
+                <Variable name="Sex" />
+              </Variables>
+              <Values>0.9807 0.0193 0.9684 0.0316</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="75.0" belongsTo="right" />
+              <Threshold value="85.0" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death OC" timeSlice="1" />
+                <Variable name="Sex" />
+              </Variables>
+              <Values>0.9465 0.0535 0.9199 0.0801</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <Thresholds>
+              <Threshold value="85.0" belongsTo="right" />
+              <Threshold value="Infinity" belongsTo="right" />
+            </Thresholds>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death OC" timeSlice="1" />
+                <Variable name="Sex" />
+              </Variables>
+              <Values>0.8452 0.1548 0.8121 0.1879</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Hazard (Weibull)" role="conditionalProbability">
+        <Variables>
+          <Variable name="Failure" timeSlice="1" />
+          <Variable name="Age at entry" />
+          <Variable name="Sex" />
+          <Variable name="Prosthesis type" />
+        </Variables>
+        <Coefficients>0.3740968 -5.490935 -0.0367 0.7685 -1.344474</Coefficients>
+        <Covariates>
+          <Covariate>Gamma</Covariate>
+          <Covariate>Constant</Covariate>
+          <Covariate>Age at entry</Covariate>
+          <Covariate>Sex</Covariate>
+          <Covariate>Prosthesis type</Covariate>
+        </Covariates>
+        <CovarianceMatrix>0.00225151199001 -0.005691 0.043219083664 2.8E-8 -7.83E-4 2.715660544E-5 5.1E-6 -0.007247 3.3E-5 0.011895392356 2.59E-4 -6.42E-4 -1.11E-4 1.84E-4 0.14636860414225</CovarianceMatrix>
+      </Potential>
+      <Potential type="Tree/ADD" role="conditionalProbability">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    In the Excel model the probability of death is the same for primary THR as 
+    for revision THR. Nevertheless, they are implemented as two different 
+    parameters. In our model we might have joined both branches of the tree 
+    into a sigle one, but that would have caused a very slight difference in 
+    sensitivity analysis.
+  </body>
+</html>]]></Comment>
+        <Variables>
+          <Variable name="Death THR" timeSlice="1" />
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <TopVariable name="State" timeSlice="0" />
+        <Branches>
+          <Branch>
+            <States>
+              <State name="primary THR" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death THR" timeSlice="1" />
+              </Variables>
+              <Values>0.98 0.02</Values>
+              <UncertainValues>
+                <Value distribution="Complement">0.98</Value>
+                <Value distribution="Beta">2.0 98.0</Value>
+              </UncertainValues>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="successful primary" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death THR" timeSlice="1" />
+              </Variables>
+              <Values>1.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="revision THR" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death THR" timeSlice="1" />
+              </Variables>
+              <Values>0.98 0.02</Values>
+              <UncertainValues>
+                <Value distribution="Complement">0.98</Value>
+                <Value distribution="Beta">2.0 98.0</Value>
+              </UncertainValues>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="successful revised" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death THR" timeSlice="1" />
+              </Variables>
+              <Values>1.0 0.0</Values>
+            </Potential>
+          </Branch>
+          <Branch>
+            <States>
+              <State name="dead" />
+            </States>
+            <Potential type="Table">
+              <Variables>
+                <Variable name="Death THR" timeSlice="1" />
+              </Variables>
+              <Values>1.0 0.0</Values>
+            </Potential>
+          </Branch>
+        </Branches>
+      </Potential>
+      <Potential type="Delta" role="conditionalProbability">
+        <Variables>
+          <Variable name="Age at entry" />
+        </Variables>
+        <NumericValue>60.0</NumericValue>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost" timeSlice="0" />
+        <Variables>
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <Values>0.0 0.0 5294.0 0.0 0.0</Values>
+        <UncertainValues>
+          <Value />
+          <Value />
+          <Value distribution="Gamma-mv">5294.0 1487.0</Value>
+          <Value />
+          <Value />
+        </UncertainValues>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="QoL" timeSlice="0" />
+        <Variables>
+          <Variable name="State" timeSlice="0" />
+        </Variables>
+        <Values>0.0 0.7499784835183751 0.3000043042 0.8500035544181418 0.0</Values>
+        <UncertainValues>
+          <Value />
+          <Value distribution="Beta">87.14 29.05</Value>
+          <Value distribution="Beta">69.7 162.63</Value>
+          <Value distribution="Beta">119.57 21.1</Value>
+          <Value />
+        </UncertainValues>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Prosthesis cost" />
+        <Variables>
+          <Variable name="Prosthesis type" />
+        </Variables>
+        <Values>394.0 579.0</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>COST_EFFECTIVENESS</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="cost" Value="1.0" />
+          <Scale Criterion="effectiveness" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="cost" Value="1.0" />
+          <Scale Criterion="effectiveness" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="cost" Value="Cost" />
+          <CE_Criterion Criterion="effectiveness" Value="Effectiveness" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+    <TemporalOptions>
+      <Slices>60</Slices>
+      <Transition>BEGINNING</Transition>
+      <DiscountRates>
+        <DiscountRate Criterion="cost" value="0.06" unit="YEAR" />
+        <DiscountRate Criterion="effectiveness" value="0.015" unit="YEAR" />
+      </DiscountRates>
+    </TemporalOptions>
+  </InferenceOptions>
+  <Evidence>
+    <EvidenceCase>
+      <Finding variable="Sex" state="female" />
+    </EvidenceCase>
+  </Evidence>
+</ProbModelXML>

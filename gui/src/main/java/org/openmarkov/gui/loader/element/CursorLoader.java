@@ -12,7 +12,13 @@ import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.java.initialization.Lazy;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -90,7 +96,8 @@ public class CursorLoader {
             return null;
         }
         Dimension size = cursorSizeFor(tk, image);
-        return tk.createCustomCursor(resize(image, size), centreOf(size), cursorName);
+        Cursor customCursor = tk.createCustomCursor(resize(image, size), new Point(0, 0) /*centreOf(size)*/, cursorName);
+        return customCursor;
     }
 
     /**

@@ -23,10 +23,6 @@ import java.util.List;
  * <p>
  * This is an upper bound only: a network with no utility node at all satisfies it. Demanding at
  * least one is what {@link UtilityNodes} and {@link ProperUtilityPotentials} do.
- * <p>
- * The body was a {@code TODO} stub, so the constraint announced a guarantee it did not impose.
- * Nobody noticed while asking a network type for its optional constraints failed outright; now that
- * it works, whoever asks receives this one.
  */
 @Constraint(name = "OnlyOneUtilityNode", defaultBehavior = ConstraintBehavior.OPTIONAL) public class OnlyOneUtilityNode
 		extends PNConstraint {

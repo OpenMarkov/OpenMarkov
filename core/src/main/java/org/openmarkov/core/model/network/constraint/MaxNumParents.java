@@ -12,19 +12,14 @@ import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.model.network.GraphNetwork;
 import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.constraint.annotation.Constraint;
 
 /**
- * Limits how many parents a node may have. Used while learning a network: the number of
- * parameters of a conditional probability table grows exponentially with the number of
- * parents, so bounding it trades a little bias for much less variance in the estimates.
- *
- * <p>This constraint is deliberately <em>not</em> annotated with
- * {@link org.openmarkov.core.model.network.constraint.annotation.Constraint}. That annotation
- * makes {@link ConstraintManager} build the constraint by reflection through its no-argument
- * constructor, and this one cannot have such a constructor: the bound has to come from the
- * caller. Whoever needs it creates it explicitly, as
- * {@code probNet.addConstraint(new MaxNumParents(k))}.
+ * Limits how many parents a node may have. The bound comes from the caller, so this constraint is
+ * created explicitly — {@code probNet.addConstraint(new MaxNumParents(k))} — and not by
+ * {@link ConstraintManager}.
  */
+@Constraint(name = "MaxNumParents", defaultBehavior = ConstraintBehavior.OPTIONAL)
 public class MaxNumParents extends PNConstraint {
     
     private final int maxNumParents;

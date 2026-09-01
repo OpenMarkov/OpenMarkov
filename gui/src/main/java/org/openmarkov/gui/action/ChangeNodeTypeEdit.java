@@ -1,6 +1,7 @@
 package org.openmarkov.gui.action;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.action.base.MultiStepEdit;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.core.SetPotentialEdit;
@@ -11,6 +12,7 @@ import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.constraint.OnlyOneUtilityNode;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 
@@ -27,8 +29,25 @@ public class ChangeNodeTypeEdit extends MultiStepEdit {
         this.node = node;
         this.newNodeType = newNodeType;
     }
-    
-    
+
+    @Override public void checkConstraintsWillBeMet(ConstraintChecker constraintChecker) {
+        if (probNet.getConstraintOfClass(OnlyOneUtilityNode.class) instanceof OnlyOneUtilityNode constraint) {
+            if (this.newNodeType == NodeType.UTILITY) {
+                for (Node utilityNode : probNet.getNodes(NodeType.UTILITY)) {
+                    if (utilityNode != this.node) {
+                        constraintChecker.addException(
+                                new ConstraintViolatedException.NetworkAlreadyHasAUtilityNode(constraint, utilityNode));
+                        break;
+                    }
+                }
+            }
+        }
+        super.checkConstraintsWillBeMet(constraintChecker);
+    }
+
+    @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException {
+
+
     @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException, ThereIsNoPotentialsInNodeException {
         stepExecuter.execute(new SetNodeTypeEdit(this.node, this.newNodeType));
         VariableType[] availableVariableTypes = VariableType.of(this.newNodeType);
@@ -64,6 +83,8 @@ public class ChangeNodeTypeEdit extends MultiStepEdit {
             try {
                 this.probNet.checkConstraints();
             } catch (ConstraintViolatedException e) {
+                // A step that fails is not written down, so nothing else undoes this one.
+                this.node.setNodeType(this.oldNodeType);
                 throw new DoEditException.CannotDoEditException(e, this);
             }
         }

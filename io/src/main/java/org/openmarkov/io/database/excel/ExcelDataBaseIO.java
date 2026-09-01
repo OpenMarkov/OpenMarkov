@@ -16,6 +16,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.*;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.EmptyDatabaseException;
+import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
@@ -61,7 +62,8 @@ import java.util.List;
      *                     correct.
      */
     @Override @SuppressWarnings({"unchecked", "static-access"})
-    public @NotNull CaseDatabase load(File file) throws IOException, EmptyDatabaseException {
+    public @NotNull CaseDatabase load(File file)
+            throws IOException, EmptyDatabaseException, ParsingSourceException.RepeatedVariableNames {
         //create a FileInputStream object to read the data
         FileInputStream fs = new FileInputStream(file);
         try (
@@ -156,7 +158,7 @@ import java.util.List;
             }
             probNet.setAdditionalProperties(ioNet);
             
-            return new CaseDatabase(probNet.getVariables(), cases);
+            return CaseDatabaseReader.withDistinctVariableNames(file, new CaseDatabase(probNet.getVariables(), cases));
         }
     }
     

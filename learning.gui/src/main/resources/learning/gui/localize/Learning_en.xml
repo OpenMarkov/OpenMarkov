@@ -27,6 +27,8 @@
         <AllowLinkRemoval value="Allow link removal"/>
         <Alpha>
             <Error value="A numeric value between 0 and 1 must be introduced for the alpha parameter."/>
+            <SmoothingAdvice
+                    value="Some configuration of the parents never appears in the dataset. Learn with an alpha parameter greater than zero."/>
             <Tooltip
                     value="Alpha parameter used during the structural learning.&#10;Its value must be inside the interval [0, 1].&#10;A value of 1 corresponds to the Laplace correction.&#10;A value of 0 implies using no correction.&#10;"/>
         </Alpha>

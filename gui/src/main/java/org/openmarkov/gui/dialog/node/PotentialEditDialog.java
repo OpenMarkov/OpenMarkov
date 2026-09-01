@@ -7,13 +7,17 @@
 
 package org.openmarkov.gui.dialog.node;
 
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.core.model.network.*;
-import org.openmarkov.gui.dialog.common.*;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.PolicyType;
+import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.exception.BinomialPotentialWrongValueException;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -71,7 +75,7 @@ public class PotentialEditDialog extends OkCancelDialog {
         // Set default title
         this.setTitle(getBaseTitle() +": "+this.node.getName());
         this.setMinimumSize(new Dimension(600, 100));
-        this.setSize(1000, 400);
+        this.setSize(1000, 500);
         this.setLocationRelativeTo(this.getOwner());
     }
     

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class BitbucketApi {
+class BitbucketApi {
     record BitbucketFileRef(List<String> relativePath, String commitHash, URL href) implements Serializable {
     }
     

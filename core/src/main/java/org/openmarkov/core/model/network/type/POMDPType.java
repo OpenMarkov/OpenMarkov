@@ -13,7 +13,7 @@ import org.openmarkov.core.model.network.constraint.OnlyTemporalVariables;
 import org.openmarkov.core.model.network.type.plugin.NetworkTypeInfo;
 
 @NetworkTypeInfo(name = "POMDP", visualName = "POMDP")
-public class POMDPType extends NetworkType {
+public sealed class POMDPType extends NetworkType permits DECPOMDPType {
     private static final POMDPType INSTANCE = new POMDPType();
 
 	// Constructor

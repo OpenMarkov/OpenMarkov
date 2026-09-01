@@ -29,7 +29,7 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
     public PiecewiseExponentialTablePanel(Object[][] data) {
         //KeyTablePanel always consider that the first column of Key Table is hidden.
         //The method can be overridden but KeyTable always considers the first column as not editable
-        super(new String[]{"Hidden", "Time", "Probability"}, data, true, true, true);
+        super(new String[]{"Hidden", "Time", "Probability"}, data, true, true, true, true);
         Object[][] newData = new Object[data.length][3];
 //        for (int i = 0;  i< data.length ; i++) {
 //            Object[] dataRow= data[i];

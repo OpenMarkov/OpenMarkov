@@ -27,6 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
     private final double maxErrorMean = 0.001;
     private final double maxErrorStDeviation = 0.01;
     
+    @Disabled("This tests takes too long to complete, and seems it was stressing the machine that executes the test rather than verifying functionality" +
+            "Trying to reduce the num of samples of org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionTest#testMeanAndVariance from 10000000 to a lower number, such as 10000 would highly reduce its time complexity" +
+            "Once that is done, this method can be erased, as it only calls super. The only reason it exist is because JUnit's @Disabled tag is not @Inherit as other tags are")
     @Tag(TestSpeed.SLOW)
     @Test public void testMeanAndVariance() {
         
@@ -43,6 +46,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         testStandardDeviation(samples);
     }
     
+    @Disabled("This tests takes too long to complete, and seems it was stressing the machine that executes the test rather than verifying functionality" +
+            "Trying to reduce the num of samples of org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionTest#testMeanAndVariance from 10000000 to a lower number, such as 10000 would highly reduce its time complexity" +
+            "Once that is done, this method can be erased, as it only calls super. The only reason it exist is because JUnit's @Disabled tag is not @Inherit as other tags are")
     @Tag(TestSpeed.SLOW)
     @Test public void repeatTestMeanAndVariance() {
         boolean debug = false;

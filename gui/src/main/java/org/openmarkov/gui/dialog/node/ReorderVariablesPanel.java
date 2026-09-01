@@ -20,11 +20,10 @@ import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
 import org.openmarkov.gui.component.OMTableModel;
 import org.openmarkov.gui.dialog.common.KeyTablePanel;
 
-import javax.swing.*;
+import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ import java.util.List;
 	private final List<PNEdit> edits = new ArrayList<PNEdit>();
 
 	public ReorderVariablesPanel(Node node) {
-		super(new String[] { "Variable name" }, getData(node), true, false);
+        super(new String[]{"Variable name"}, getData(node), true, false, false, false);
 		initialize();
 		getAddValueButton().setVisible(false);
 		getRemoveValueButton().setVisible(false);
@@ -48,6 +47,7 @@ import java.util.List;
 		// dataTable = newData;
 		tableModel = new OMTableModel(data, columns, true);
 		// valuesTable.setModel(tableModel);
+        valuesTable.setFirstColumnHidden(false);
 		valuesTable.setModifiable(false);
 		valuesTable.setModel(tableModel);
 		tableModel.addTableModelListener(this);

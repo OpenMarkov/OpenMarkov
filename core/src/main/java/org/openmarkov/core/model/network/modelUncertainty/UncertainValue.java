@@ -19,16 +19,16 @@ import java.util.Random;
  * @version 1.0
  * @since OpenMarkov 1.0
  */
-public class UncertainValue {
+public final class UncertainValue {
 	// Attributes
 	/**
 	 * Probability density function.
 	 */
-	protected ProbDensFunction probDensFunction;
+    private ProbDensFunction probDensFunction;
 	/**
 	 * Name of the parameter.
 	 */
-	protected String name;
+    private String name;
 
 	public UncertainValue(double value) {
 		name = null;

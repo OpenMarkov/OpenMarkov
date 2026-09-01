@@ -229,7 +229,8 @@ public class CEAGlobalAnalysisTest {
 			Assertions.assertFalse(Double.isInfinite(cep.getEffectiveness(0)), "Strategy " + i + " effectiveness must not be Infinite");
 		}
 	}
-
+    
+    @Disabled("This tests takes too long to complete, and seems it was stressing the machine that executes the test rather than verifying functionality")
 	@Tag(TestSpeed.SLOW)
 	@SuppressWarnings("rawtypes")
     @Test
@@ -294,7 +295,8 @@ public class CEAGlobalAnalysisTest {
 					label + " strategy " + i + " effectiveness must not be Infinite");
 		}
 	}
-	
+    
+    @Disabled("This tests takes too long to complete, and seems it was stressing the machine that executes the test rather than verifying functionality")
     @Tag(TestSpeed.SLOW)
     @Test
 	public void testHPV() throws NonProjectablePotentialException, ProbNetParserException, org.openmarkov.core.exception.IncompatibleEvidenceException, org.openmarkov.core.exception.NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, IOException {

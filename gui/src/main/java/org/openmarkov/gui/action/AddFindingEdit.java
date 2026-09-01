@@ -35,13 +35,11 @@ public class AddFindingEdit extends PNEdit {
     }
     
     @Override
-    protected void doEdit() throws DoEditException.CannotDoEditException {
-        try {
-            evidenceCase.addFinding(finding);
-            visualNode.setPreResolutionFinding(true);
-        } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther e) {
-            throw new DoEditException.CannotDoEditException(e, this);
-        }
+    protected void doEdit() {
+        // The variable may already carry the finding that undo restored, so the new one replaces
+        // it instead of being added beside it.
+        evidenceCase.changeFinding(finding);
+        visualNode.setPreResolutionFinding(true);
     }
     
     @Override

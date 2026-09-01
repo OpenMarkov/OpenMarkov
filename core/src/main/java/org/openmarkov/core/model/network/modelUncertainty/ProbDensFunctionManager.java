@@ -75,7 +75,7 @@ public class ProbDensFunctionManager {
     }
     
     //For Univariate
-    public List<String> getValidProbDensFunctions() {
+    public List<String> getValidProbDensFunctionsAsString() {
         List<String> validFunctions = new ArrayList<>(probDensFunctions.keySet());
         return validFunctions;
     }
@@ -117,7 +117,7 @@ public class ProbDensFunctionManager {
     }
     
     
-    public List<String> getValidProbDensFunctions(boolean isChance) {
+    public List<String> getValidProbDensFunctionsAsString(boolean isChance) {
         List<String> validFunctions = new ArrayList<>();
         for (String functionName : probDensFunctions.keySet()) {
             Class<?> functionClass = probDensFunctions.get(functionName);
@@ -128,6 +128,23 @@ public class ProbDensFunctionManager {
         }
         return validFunctions;
     }
+    
+    public List<Class<? extends ProbDensFunction>> getValidProbDensFunctions(boolean isChance) {
+        List<Class<? extends ProbDensFunction>> validFunctions = new ArrayList<>();
+        for (var functionClass : probDensFunctions.values()) {
+            ProbDensFunctionType annotation = functionClass.getAnnotation(ProbDensFunctionType.class);
+            if ((annotation.isValidForNumeric() && !isChance) || (annotation.isValidForProbabilities() && isChance)) {
+                validFunctions.add(functionClass);
+            }
+        }
+        return validFunctions;
+    }
+    
+    public ProbDensFunctionType info(Class<? extends ProbDensFunction> probDensFunctionClass) {
+        return probDensFunctionClass.getAnnotation(ProbDensFunctionType.class);
+    }
+    
+    
     
     public List<String> getDESValidProbDensFunctions() {
         List<String> validFunctions = new ArrayList<>();

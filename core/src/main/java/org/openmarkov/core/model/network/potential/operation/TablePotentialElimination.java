@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network.potential.operation;
 
+import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
@@ -42,22 +43,54 @@ final class TablePotentialElimination {
     static TablePotential multiplyAndMarginalize(Collection<TablePotential> tablePotentials,
                                                  List<Variable> variablesToKeep,
                                                  List<Variable> variablesToEliminate) {
+        // Each eliminated variable roots its own contingent strategy tree, so when the inputs
+        // carry trees, several variables are eliminated one at a time.
+        if (variablesToEliminate.size() > 1 && anyCarriesStrategyTrees(tablePotentials)) {
+            Collection<TablePotential> remaining = tablePotentials;
+            TablePotential partial = null;
+            for (int i = 0; i < variablesToEliminate.size(); i++) {
+                List<Variable> stillToKeep = new ArrayList<>(variablesToKeep);
+                stillToKeep.addAll(variablesToEliminate.subList(i + 1, variablesToEliminate.size()));
+                partial = multiplyAndMarginalize(remaining, stillToKeep, List.of(variablesToEliminate.get(i)));
+                remaining = List.of(partial);
+            }
+            return partial;
+        }
+
+        Criterion criterion = TablePotentialArithmetic.findFirstNonNullCriterion(new ArrayList<>(tablePotentials));
         double constantFactor = 1.0;
+        StrategyTree treeOfTheConstants = null;
         List<TablePotential> nonConstantPotentials = new ArrayList<>();
         for (TablePotential potential : tablePotentials) {
             if (potential.getNumVariables() != 0) {
                 nonConstantPotentials.add(potential);
             } else {
                 constantFactor *= potential.getValues()[potential.getInitialPosition()];
+                StrategyTree constantTree = firstTreeOf(potential);
+                if (constantTree != null) {
+                    // concatenate() writes into its receiver, so the receiver is cloned first.
+                    treeOfTheConstants = (treeOfTheConstants == null) ? constantTree
+                            : treeOfTheConstants.clone().concatenate(constantTree);
+                }
             }
         }
 
         int numNonConstantPotentials = nonConstantPotentials.size();
 
         if (numNonConstantPotentials == 0) {
-            TablePotential resultingPotential = new TablePotential(variablesToKeep,
-                    TablePotentialArithmetic.getRole(tablePotentials));
+            TablePotential resultingPotential;
+            if (treeOfTheConstants == null) {
+                resultingPotential = new TablePotential(variablesToKeep,
+                        TablePotentialArithmetic.getRole(tablePotentials));
+            } else {
+                StrategicTablePotential strategic = new StrategicTablePotential(variablesToKeep,
+                        TablePotentialArithmetic.getRole(tablePotentials));
+                strategic.strategyTrees = new StrategyTree[strategic.getValues().length];
+                Arrays.fill(strategic.strategyTrees, treeOfTheConstants);
+                resultingPotential = strategic;
+            }
             resultingPotential.getValues()[0] = constantFactor;
+            resultingPotential.setCriterion(criterion);
             return resultingPotential;
         }
 
@@ -87,6 +120,23 @@ final class TablePotentialElimination {
             eliminationSize *= variable.getNumStates();
         }
 
+        // The trees of each carrier, or null in the position of a potential without them. The
+        // gate of a configuration is the product of the potentials that carry no tree - the
+        // probability part - and decides which states of the eliminated variable are possible.
+        StrategyTree[][] carrierTrees = new StrategyTree[numNonConstantPotentials][];
+        boolean thereAreTrees = treeOfTheConstants != null;
+        for (int i = 0; i < numNonConstantPotentials; i++) {
+            if (nonConstantPotentials.get(i) instanceof StrategicTablePotential strategic
+                    && strategic.strategyTrees != null) {
+                carrierTrees[i] = strategic.strategyTrees;
+                thereAreTrees = true;
+            }
+        }
+        Variable eliminatedVariable = variablesToEliminate.isEmpty() ? null : variablesToEliminate.get(0);
+        double[] gates = thereAreTrees ? new double[eliminationSize] : null;
+        StrategyTree[] configurationTrees = thereAreTrees ? new StrategyTree[eliminationSize] : null;
+        StrategyTree[] resultTrees = thereAreTrees ? new StrategyTree[resultSize] : null;
+
         double multiplicationResult;
         double accumulator;
         int increasedVariable = 0;
@@ -97,6 +147,10 @@ final class TablePotentialElimination {
                 multiplicationResult *= tables[i][currentPositions[i]];
             }
             accumulator = multiplicationResult;
+            if (thereAreTrees) {
+                gates[0] = gateAt(constantFactor, tables, currentPositions, carrierTrees);
+                configurationTrees[0] = treeAt(currentPositions, carrierTrees);
+            }
 
             for (int innerIteration = 1; innerIteration < eliminationSize; innerIteration++) {
                 increasedVariable = AuxiliaryOperations.findNextConfigurationAndIndexIncreasedVariable(
@@ -112,6 +166,10 @@ final class TablePotentialElimination {
                 }
 
                 accumulator += multiplicationResult;
+                if (thereAreTrees) {
+                    gates[innerIteration] = gateAt(constantFactor, tables, currentPositions, carrierTrees);
+                    configurationTrees[innerIteration] = treeAt(currentPositions, carrierTrees);
+                }
             }
 
             if (outerIteration < resultSize - 1) {
@@ -124,9 +182,73 @@ final class TablePotentialElimination {
             }
 
             resultValues[outerIteration] = accumulator;
+            if (thereAreTrees) {
+                StrategyTree cellTree = (eliminatedVariable == null) ? configurationTrees[0]
+                        : StrategyTree.averageOfInterventions(eliminatedVariable, gates, configurationTrees);
+                if (treeOfTheConstants != null) {
+                    cellTree = (cellTree == null) ? treeOfTheConstants
+                            : cellTree.clone().concatenate(treeOfTheConstants);
+                }
+                resultTrees[outerIteration] = cellTree;
+            }
         }
 
-        return new TablePotential(variablesToKeep, TablePotentialArithmetic.getRole(tablePotentials), resultValues);
+        TablePotential result;
+        if (thereAreTrees) {
+            StrategicTablePotential strategic = new StrategicTablePotential(variablesToKeep,
+                    TablePotentialArithmetic.getRole(tablePotentials), resultValues);
+            strategic.strategyTrees = resultTrees;
+            result = strategic;
+        } else {
+            result = new TablePotential(variablesToKeep, TablePotentialArithmetic.getRole(tablePotentials),
+                    resultValues);
+        }
+        result.setCriterion(criterion);
+        return result;
+    }
+
+    /**
+     * Product of the potentials that carry no strategy tree at this configuration.
+     */
+    private static double gateAt(double constantFactor, double[][] tables, int[] positions,
+                                 StrategyTree[][] carrierTrees) {
+        double gate = constantFactor;
+        for (int i = 0; i < tables.length; i++) {
+            if (carrierTrees[i] == null) {
+                gate *= tables[i][positions[i]];
+            }
+        }
+        return gate;
+    }
+
+    /**
+     * The trees of the carriers at this configuration, combined on a copy.
+     */
+    private static StrategyTree treeAt(int[] positions, StrategyTree[][] carrierTrees) {
+        StrategyTree combined = null;
+        for (int i = 0; i < carrierTrees.length; i++) {
+            if (carrierTrees[i] != null) {
+                StrategyTree tree = carrierTrees[i][positions[i]];
+                if (tree != null) {
+                    combined = (combined == null) ? tree : combined.clone().concatenate(tree);
+                }
+            }
+        }
+        return combined;
+    }
+
+    private static boolean anyCarriesStrategyTrees(Collection<TablePotential> potentials) {
+        for (TablePotential potential : potentials) {
+            if (potential instanceof StrategicTablePotential strategic && strategic.strategyTrees != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static StrategyTree firstTreeOf(TablePotential potential) {
+        return (potential instanceof StrategicTablePotential strategic && strategic.strategyTrees != null
+                && strategic.strategyTrees.length > 0) ? strategic.strategyTrees[0] : null;
     }
 
     /**
@@ -152,14 +274,21 @@ final class TablePotentialElimination {
             return result;
         }
 
-        List<Variable> allVariables = probPotential.getVariables();
+        // The configuration walk increments the first variable of allVariables fastest,
+        // so the variable to eliminate goes first, wherever the operands carry it.
+        List<Variable> allVariables = new ArrayList<>();
+        allVariables.add(variableToEliminate);
+        for (Variable variable : probPotential.getVariables()) {
+            if (!allVariables.contains(variable)) {
+                allVariables.add(variable);
+            }
+        }
         for (Variable variable : utilityPotential.getVariables()) {
             if (!allVariables.contains(variable)) {
                 allVariables.add(variable);
             }
         }
-        List<Variable> variablesToKeep = new ArrayList<>(allVariables);
-        variablesToKeep.remove(variableToEliminate);
+        List<Variable> variablesToKeep = new ArrayList<>(allVariables.subList(1, allVariables.size()));
 
         boolean thereAreInterventions = utilityPotential instanceof StrategicTablePotential;
         StrategicTablePotential strategicUtil    = thereAreInterventions ? (StrategicTablePotential) utilityPotential : null;

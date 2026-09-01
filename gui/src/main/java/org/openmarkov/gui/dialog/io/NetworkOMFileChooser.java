@@ -13,6 +13,8 @@ import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.core.io.format.annotation.FormatManager;
 import org.openmarkov.gui.configuration.UserPreferences;
+import org.openmarkov.gui.dialog.common.CommonOptions;
+import org.openmarkov.gui.dialog.common.OptionDialog;
 import org.openmarkov.io.elvira.ElviraParser;
 import org.openmarkov.io.elvira.ElviraWriter;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
@@ -22,7 +24,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.Component;
@@ -58,7 +60,7 @@ public class NetworkOMFileChooser extends OMFileChooser {
                     addChoosableFileFilter(new FileFilterByExtension<>(readerClass, List.of(FormatManager.info(readerClass)
                                                                                                          .extensions()), description));
                 });
-
+        
         File currentDirectory = null;
         if (isOpening) {
             currentDirectory = UserPreferences.LATEST_OPEN_DIRECTORY.get();
@@ -78,28 +80,22 @@ public class NetworkOMFileChooser extends OMFileChooser {
                         this.setFileFilter(fileFilterByExtension);
                         break;
                     }
-                    ;
                 }
             }
         }
-
+        
         setCurrentDirectory(currentDirectory);
     }
-
+    
     public NetworkOMFileChooser() {
         this(false, true);
     }
-
+    
     @Override
     public int showOpenDialog(Component parent) {
         int result = super.showOpenDialog(parent);
         if (result == JFileChooser.APPROVE_OPTION) {
             UserPreferences.LATEST_OPEN_DIRECTORY.set(getSelectedFile());
-            /*
-             * OpenMarkovPreferences.set (OpenMarkovPreferences.LAST_OPENED_FORMAT,
-             * ((FileFilterBasic) getFileFilter ()).getFilterExtension (),
-             * OpenMarkovPreferences.OPENMARKOV_FORMATS);
-             */
             try {
                 UserPreferences.LATEST_NETWORK_FORMAT.set(getPgmxFileFormat());
             } catch (SAXException | IOException e) {
@@ -108,17 +104,12 @@ public class NetworkOMFileChooser extends OMFileChooser {
         }
         return result;
     }
-
+    
     @Override
     public int showSaveDialog(Component parent) {
         int result = super.showSaveDialog(parent);
         if (result == JFileChooser.APPROVE_OPTION) {
             UserPreferences.LATEST_OPEN_DIRECTORY.set(getSelectedFile());
-            /*
-             * OpenMarkovPreferences.set (OpenMarkovPreferences.LAST_OPENED_FORMAT,
-             * ((FileFilterBasic) getFileFilter ()).getFilterExtension (),
-             * OpenMarkovPreferences.OPENMARKOV_FORMATS);
-             */
             if (getFileFilter() instanceof FileFilterByExtension fileFilterByExtension) {
                 var writerClass = (Class<? extends ProbNetWriter>) fileFilterByExtension.getFormatInfo();
                 Class<? extends ProbNetReader> readerClass = null;
@@ -135,32 +126,34 @@ public class NetworkOMFileChooser extends OMFileChooser {
         }
         return result;
     }
-
+    
     @Override
     public void approveSelection() {
         if (getDialogType() == SAVE_DIALOG) {
             File selectedFile = getSelectedFile();
             if ((selectedFile != null) && selectedFile.exists()) {
-                int response = JOptionPane.showConfirmDialog(this, "The file " + selectedFile.getName()
-                        + " already exists. Do you want to replace the existing file?", "Ovewrite file",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                if (response != JOptionPane.YES_OPTION)
+                OptionDialog<CommonOptions.YesNo> dialog = new OptionDialog<>(SwingUtilities.windowForComponent(this),
+                                                                              "Ovewrite file",
+                                                                              "The file " + selectedFile.getName() + " already exists. Do you want to replace the existing file?", CommonOptions.YesNo.class);
+                var option = dialog.request(CommonOptions.YesNo.NO);
+                if (option != CommonOptions.YesNo.YES) {
                     return;
+                }
             }
         }
         super.approveSelection();
     }
-
+    
     /**
      * Extracts the version of a pgmx file and concatenate it to the String
      * "OpenMarkov" for having the description of the file
      *
      * @return the format OpenMarkov.version of a pgmx file
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException  if an I/O error occurs
      * @throws SAXException if an XML parsing error occurs
      */
-
+    
     public String getPgmxFileFormat() throws SAXException, IOException {
         try {
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(getSelectedFile());

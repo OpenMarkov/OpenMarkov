@@ -44,6 +44,14 @@ public class PotentialChangeEdit extends PNEdit {
         }
         node.addPotential(newPotential);
     }
+
+    @Override public void undo() {
+        super.undo();
+        node.removePotential(newPotential);
+        if (oldPotential != null) {
+            node.addPotential(oldPotential);
+        }
+    }
     
     
     /**

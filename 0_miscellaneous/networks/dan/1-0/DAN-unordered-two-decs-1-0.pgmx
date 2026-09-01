@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="1.0.0">
+  <ProbNet type="DAN">
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <Variables>
+      <Variable name="Y" type="finiteStates" role="chance">
+        <Coordinates x="580" y="248" />
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="X" type="finiteStates" role="chance">
+        <Coordinates x="295" y="249" />
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="D" type="finiteStates" role="decision">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Whether to do the blood test or not.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="295" y="122" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="E" type="finiteStates" role="decision">
+        <Comment><![CDATA[<html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0">
+      Whether to do the urine test or not.
+    </p>
+  </body>
+</html>]]></Comment>
+        <Coordinates x="580" y="125" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="U" type="numeric" role="utility">
+        <Coordinates x="441" y="410" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Y" />
+        <Variable name="U" />
+      </Link>
+      <Link directed="true">
+        <Variable name="X" />
+        <Variable name="U" />
+      </Link>
+      <Link directed="true">
+        <Variable name="D" />
+        <Variable name="X" />
+        <RevelationCondition>
+          <State name="yes" />
+          <State name="no" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="D" />
+        <Variable name="U" />
+      </Link>
+      <Link directed="true">
+        <Variable name="E" />
+        <Variable name="Y" />
+        <RevelationCondition>
+          <State name="yes" />
+          <State name="no" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="E" />
+        <Variable name="U" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="Y" />
+          <Variable name="E" />
+        </Variables>
+        <Values>0.9 0.1 0.1 0.9</Values>
+      </Potential>
+      <Potential type="ProbTable">
+        <Variables>
+          <Variable name="X" />
+          <Variable name="D" />
+        </Variables>
+        <Values>0.6 0.4 0.4 0.6</Values>
+      </Potential>
+      <Potential type="UnivariateDistr" distribution="Exact">
+        <Variables>
+          <Variable name="U" />
+          <Variable name="E" />
+          <Variable name="D" />
+          <Variable name="Y" />
+          <Variable name="X" />
+        </Variables>
+        <Values>0.0 10.0 10.0 10.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 10.0 10.0 10.0</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

@@ -236,6 +236,22 @@ public class DiscretePotentialOperationsRegressionTest {
     }
 
     @Test
+    public void normalizeThrowsWhenOneColumnSumsZeroAndLeavesThePotentialUntouched() {
+        // P(B|A): the column for a0 is normalizable, the column for a1 is all zeros.
+        TablePotential potential = new TablePotential(List.of(b, a), PotentialRole.CONDITIONAL_PROBABILITY,
+                new double[]{0.9, 0.1, 0.0, 0.0});
+
+        CannotNormalizePotentialException exception = assertThrows(CannotNormalizePotentialException.class,
+                () -> DiscretePotentialOperations.normalize(potential));
+
+        assertInstanceOf(CannotNormalizePotentialException.AllValuesForAParentsConfigurationAreZero.class, exception);
+        assertTrue(exception.getExceptionMessage().contains("configuration of the parents"),
+                "The localized message of the subclass must resolve");
+        assertArrayEquals(new double[]{0.9, 0.1, 0.0, 0.0}, potential.getValues(),
+                "Throwing must not leave the potential half normalized");
+    }
+
+    @Test
     public void normalizeAlreadyNormalizedIsIdentity() throws CannotNormalizePotentialException {
         TablePotential result = DiscretePotentialOperations.normalize(pA);
         // P(A) sums to 1 already; each value should be the same.
@@ -407,6 +423,38 @@ public class DiscretePotentialOperationsRegressionTest {
 
         assertEquals(2.0, result.getValues()[0], 1e-6);
         assertEquals(4.0, result.getValues()[1], 1e-6);
+    }
+
+    @Test
+    public void multiplyAndMarginalizeEliminatesAVariableThatIsNotFirstInTheProbPotential() {
+        // P(B|A) carries its variables as [B, A]; eliminate A, which is in second place.
+        TablePotential utility = new TablePotential(List.of(a), PotentialRole.UNSPECIFIED,
+                new double[]{10.0, 30.0}); // U(a0)=10, U(a1)=30
+
+        TablePotential result = DiscretePotentialOperations.multiplyAndMarginalize(pBgA, utility, a);
+
+        // U'(b) = Σ_A P(b|A)·U(A):  b0: 0.9*10 + 0.3*30 = 18,  b1: 0.1*10 + 0.7*30 = 22
+        assertEquals(List.of(b), result.getVariables());
+        assertEquals(18.0, result.getValues()[0], DELTA);
+        assertEquals(22.0, result.getValues()[1], DELTA);
+    }
+
+    @Test
+    public void multiplyAndMarginalizeHandlesUtilityVariablesAbsentFromTheProbPotential() {
+        Variable c = new Variable("C", new State[]{new State("c0"), new State("c1")});
+        // U(A, C), variables [A, C] with A fastest.
+        TablePotential utility = new TablePotential(List.of(a, c), PotentialRole.UNSPECIFIED,
+                new double[]{1.0, 5.0, 3.0, 4.0});
+
+        TablePotential result = DiscretePotentialOperations.multiplyAndMarginalize(pBgA, utility, a);
+
+        // U'(b,c) = Σ_A P(b|A)·U(A,c); result variables [B, C], B fastest.
+        assertEquals(List.of(b, c), result.getVariables());
+        double[] values = result.getValues();
+        assertEquals(0.9 * 1.0 + 0.3 * 5.0, values[0], DELTA); // b0,c0
+        assertEquals(0.1 * 1.0 + 0.7 * 5.0, values[1], DELTA); // b1,c0
+        assertEquals(0.9 * 3.0 + 0.3 * 4.0, values[2], DELTA); // b0,c1
+        assertEquals(0.1 * 3.0 + 0.7 * 4.0, values[3], DELTA); // b1,c1
     }
 
     @Test
