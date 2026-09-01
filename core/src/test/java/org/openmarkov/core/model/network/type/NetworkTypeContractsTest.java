@@ -7,11 +7,16 @@
 package org.openmarkov.core.model.network.type;
 
 import org.junit.jupiter.api.Test;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.constraint.UtilityNodes;
 import org.openmarkov.core.model.network.type.plugin.NetworkTypeUtils;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The contracts the whole subpackage leans on: every type is a singleton whose
@@ -79,5 +84,39 @@ class NetworkTypeContractsTest {
     @Test
     void theMarkovDANTypeIsNotLabelledBayesian() {
         assertEquals("Markov DAN", MarkovDANType.getUniqueInstance().toString());
+    }
+
+    /**
+     * A network of any type can be created empty. The constructor used to check
+     * the constraints of the type on the network it was still building, and an
+     * MDP demands a utility node, so an empty MDP was rejected by its own type.
+     * What the caller saw was not even that: the rollback left the type unset,
+     * and composing the message of the rejection printed the network, so the
+     * failure arrived as a NullPointerException from {@code toString}.
+     */
+    @Test
+    void everyTypeCanBeCreatedEmpty() {
+        for (Class<? extends NetworkType> typeClass : NetworkTypeUtils.NETWORK_TYPE_CLASSES) {
+            NetworkType type = NetworkTypeUtils.safeInstanciate(typeClass);
+
+            ProbNet network = assertDoesNotThrow(() -> new ProbNet(type),
+                    "an empty " + typeClass.getSimpleName() + " must be possible to create");
+            assertSame(type, network.getNetworkType(),
+                    typeClass.getSimpleName() + " must keep the type it was created with");
+        }
+    }
+
+    /**
+     * Not checking at construction time does not mean not checking: the
+     * constraints of the type are installed, so the network knows what it is
+     * still missing and every later edit is checked against them.
+     */
+    @Test
+    void anEmptyMDPSaysThatItStillNeedsAUtilityNode() {
+        ProbNet mdp = new ProbNet(MDPType.getUniqueInstance());
+
+        assertFalse(mdp.checkProbNet(), "an empty MDP does not satisfy its constraints yet");
+        assertTrue(mdp.getUnsatisfiedConstraints().stream().anyMatch(constraint -> constraint instanceof UtilityNodes),
+                "an empty MDP must report that it has no utility node");
     }
 }

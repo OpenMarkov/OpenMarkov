@@ -13,7 +13,6 @@ import org.openmarkov.core.action.base.PNESupport;
 import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.model.graph.Graph;
@@ -103,13 +102,13 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
     /**
      * Creates a probabilistic network of the given type.
      *
-     * <p>The {@link ConstraintViolatedException} thrown by {@link #setNetworkType} is
-     * caught here because a freshly created, empty network always satisfies every
-     * constraint imposed by any built-in {@link NetworkType}. If it were ever
-     * thrown it would indicate a programming error, hence it is re-wrapped as
-     * {@link UnreachableException} — which preserves the original cause and
-     * stack trace — rather than propagating a checked exception that callers
-     * cannot meaningfully handle at construction time.
+     * <p>The constraints of the type are installed but not checked. A network is
+     * born empty and is filled in afterwards, so there is nothing to check yet,
+     * and some types demand content that an empty network cannot have: an MDP
+     * requires a utility node, so checking here made it impossible to create an
+     * empty one. Every later edit is checked as usual, and
+     * {@link #getUnsatisfiedConstraints()} reports what the network is still
+     * missing.
      *
      * @param networkType the type that defines which constraints apply to this network
      */
@@ -118,10 +117,9 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
         this.constraints = new TreeSet<>();
         this.nodeDepot = new NodeTypeDepot();
         this.constantPotentials = new CopyOnWriteArrayList<>();
-        try {
-            this.setNetworkType(networkType);
-        } catch (ConstraintViolatedException e) {
-            throw new UnreachableException(e);
+        this.networkType = networkType;
+        for (PNConstraint constraint : ConstraintManager.getUniqueInstance().buildConstraintList(networkType)) {
+            addConstraint(constraint);
         }
     }
     
