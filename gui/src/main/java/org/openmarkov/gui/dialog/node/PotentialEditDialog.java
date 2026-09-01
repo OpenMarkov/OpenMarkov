@@ -8,6 +8,7 @@
 package org.openmarkov.gui.dialog.node;
 
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;

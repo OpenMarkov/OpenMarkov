@@ -45,9 +45,6 @@ public class ChangeNodeTypeEdit extends MultiStepEdit {
         super.checkConstraintsWillBeMet(constraintChecker);
     }
 
-    @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException {
-
-
     @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException, ThereIsNoPotentialsInNodeException {
         stepExecuter.execute(new SetNodeTypeEdit(this.node, this.newNodeType));
         VariableType[] availableVariableTypes = VariableType.of(this.newNodeType);
