@@ -6,7 +6,6 @@
  */
 package org.openmarkov.core.model.network.modelUncertainty;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.testTags.TestSpeed;
@@ -20,48 +19,41 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author manolo
  */
-@Disabled public abstract class FamilyDistributionTest {
+public abstract class FamilyDistributionTest {
     
     private FamilyDistribution family;
     
     private final double maxErrorMean = 0.001;
     private final double maxErrorStDeviation = 0.01;
     
-    @Disabled("This tests takes too long to complete, and seems it was stressing the machine that executes the test rather than verifying functionality" +
-            "Trying to reduce the num of samples of org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionTest#testMeanAndVariance from 10000000 to a lower number, such as 10000 would highly reduce its time complexity" +
-            "Once that is done, this method can be erased, as it only calls super. The only reason it exist is because JUnit's @Disabled tag is not @Inherit as other tags are")
-    @Tag(TestSpeed.SLOW)
+    /**
+     * Samples drawn to estimate the mean and the standard deviation of each
+     * component. See {@link ProbDensFunctionTest} for how this figure relates
+     * to the tolerances below.
+     */
+    private static final int SAMPLE_COUNT = 100_000;
+
+    /**
+     * The generator is seeded explicitly so that a failure always reproduces.
+     */
+    private static final long SEED = 20260901L;
+
+    @Tag(TestSpeed.MEDIUM)
     @Test public void testMeanAndVariance() {
-        
-        int numSamples = 1000000;
+
         Random randomGenerator = new XORShiftRandom();
+        randomGenerator.setSeed(SEED);
         List<UncertainValue> list = initializeListUncertainValues();
         family = newFamilyDistribution(list);
-        
+
         List<double[]> samples = new ArrayList<>();
-        for (int i = 0; i < numSamples; i++) {
+        for (int i = 0; i < SAMPLE_COUNT; i++) {
             samples.add(family.getSample(randomGenerator));
         }
         testMean(samples);
         testStandardDeviation(samples);
     }
-    
-    @Disabled("This tests takes too long to complete, and seems it was stressing the machine that executes the test rather than verifying functionality" +
-            "Trying to reduce the num of samples of org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionTest#testMeanAndVariance from 10000000 to a lower number, such as 10000 would highly reduce its time complexity" +
-            "Once that is done, this method can be erased, as it only calls super. The only reason it exist is because JUnit's @Disabled tag is not @Inherit as other tags are")
-    @Tag(TestSpeed.SLOW)
-    @Test public void repeatTestMeanAndVariance() {
-        boolean debug = false;
-        int numRepetitions = debug ? 10 : 1;
-        
-        for (int iRepetition = 0; iRepetition < numRepetitions; iRepetition++) {
-            testMeanAndVariance();
-            if (debug) {
-                System.out.println("iRepetition= " + iRepetition);
-            }
-        }
-    }
-    
+
     public abstract FamilyDistribution newFamilyDistribution(List<UncertainValue> list);
     
     /**

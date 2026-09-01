@@ -6,7 +6,6 @@
  */
 package org.openmarkov.core.model.network.modelUncertainty;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.testTags.TestSpeed;
@@ -20,66 +19,74 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 /**
  * @author manolo
  */
-@Disabled public abstract class ProbDensFunctionTest {
-    
+public abstract class ProbDensFunctionTest {
+
+    /**
+     * Samples drawn to estimate the mean, the standard deviation and the tail
+     * masses. The estimators converge as 1/sqrt(SAMPLE_COUNT), so this figure
+     * fixes how tight the tolerances below can be: the standard error of the
+     * sample mean is one hundredth of a standard deviation, and maxErrorMean
+     * leaves a margin of six of those standard errors.
+     */
+    private static final int SAMPLE_COUNT = 100_000;
+
+    /**
+     * The generator is seeded explicitly so that a failure always reproduces.
+     * Sampling error is real but bounded, and a test that draws a different
+     * sample on every run reports that bound as an intermittent failure.
+     */
+    private static final long SEED = 20260901L;
+
+    /**
+     * Central probability mass whose interval is checked by
+     * {@link #testQuantileFunction(double[])}.
+     */
+    private static final double QUANTILE_PROBABILITY = 0.65;
+
     protected final double maxErrorMean = 0.01;
     ProbDensFunction pdf;
     private final double maxErrorStDeviation = 0.01;
+
+    /**
+     * Tolerance for the mass observed beyond each end of the quantile interval.
+     * It is an absolute tolerance on a probability, so unlike the mean and the
+     * standard deviation it must not be scaled by {@link #getFactorError()}.
+     */
     private final double maxErrorQuantile = 0.01;
-    
+
     public abstract ProbDensFunction newProbDensFunctionInstance();
-    
-    @Disabled("This tests takes too long to complete, and seems it was stressing the machine that executes the test rather than verifying functionality" +
-            "Trying to reduce the num of samples of org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionTest#testMeanAndVariance from 10000000 to a lower number, such as 10000 would highly reduce its time complexity")
-    @Tag(TestSpeed.SLOW)
+
+    @Tag(TestSpeed.MEDIUM)
     @Test public void testMeanAndVariance() {
-        int numSamples = 10000000;
         Random randomGenerator = new XORShiftRandom();
+        randomGenerator.setSeed(SEED);
         pdf = newProbDensFunctionInstance();
         pdf.setParameters(initializeParams());
-        
-        double[] samples = new double[numSamples];
-        for (int i = 0; i < numSamples; i++) {
+
+        double[] samples = new double[SAMPLE_COUNT];
+        for (int i = 0; i < SAMPLE_COUNT; i++) {
             samples[i] = pdf.getSample(randomGenerator);
         }
         testMean(samples);
         testStandardDeviation(samples);
         testQuantileFunction(samples);
     }
-    
-    @Disabled("This tests takes too long to complete, and seems it was stressing the machine that executes the test rather than verifying functionality" +
-            "Trying to reduce the num of samples of org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionTest#testMeanAndVariance from 10000000 to a lower number, such as 10000 would highly reduce its time complexity")
-    @Tag(TestSpeed.SLOW)
-    @Test public void repeatTestMeanAndVariance() {
-        boolean debug = false;
-        
-        int numRepetitions = debug ? 10 : 1;
-        
-        for (int iRepetition = 0; iRepetition < numRepetitions; iRepetition++) {
-            testMeanAndVariance();
-            if (debug) {
-                System.out.println("iRepetition= " + iRepetition);
-            }
-        }
-    }
-    
+
     @Test public void copyProbDensFuncion() {
         ProbDensFunction probDensFunction = newProbDensFunctionInstance();
         ProbDensFunction copyProbDensFunction = probDensFunction.copy();
-        
+
         assertNotSame(probDensFunction, copyProbDensFunction);
     }
-    
+
     public void testQuantileFunction(double[] samples) {
-        RangeFunction pGenerator = new RangeFunction(0.6, 0.7);
-        double p = pGenerator.getSample(new XORShiftRandom());
         int numSamplesLowestExtreme = 0;
         int numSamplesUpperExtreme = 0;
-        
-        DomainInterval interval = pdf.getInterval(p);
+
+        DomainInterval interval = pdf.getInterval(QUANTILE_PROBABILITY);
         double min = interval.min();
         double max = interval.max();
-        
+
         for (double sample : samples) {
             if (sample < min) {
                 numSamplesLowestExtreme++;
@@ -87,12 +94,12 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
                 numSamplesUpperExtreme++;
             }
         }
-        double extremeProbMass = (1.0 - p) / 2.0;
+        double extremeProbMass = (1.0 - QUANTILE_PROBABILITY) / 2.0;
         double numSamples = samples.length;
-        assertMeanTest(numSamplesLowestExtreme / numSamples, extremeProbMass, maxErrorQuantile);
-        assertMeanTest(numSamplesUpperExtreme / numSamples, extremeProbMass, maxErrorQuantile);
+        assertEquals(numSamplesLowestExtreme / numSamples, extremeProbMass, maxErrorQuantile);
+        assertEquals(numSamplesUpperExtreme / numSamples, extremeProbMass, maxErrorQuantile);
     }
-    
+
     /**
      * @param samples
      */
@@ -100,20 +107,20 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
         double variance = Tools.varianceSample(samples);
         assertMeanTest(Math.sqrt(variance), pdf.getStandardDeviation(), maxErrorStDeviation);
     }
-    
+
     /**
      * @return
      */
     protected double getFactorError() {
         return 2.0 * pdf.getStandardDeviation();
     }
-    
+
     public void testMean(double[] samples) {
-        
+
         double mean = Tools.meanSample(samples);
         assertMeanTest(mean, pdf.getMean(), maxErrorMean);
     }
-    
+
     /**
      * @param samplesMean true if the difference between two means is lower than
      *                    maxError
@@ -123,10 +130,10 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
     public void assertMeanTest(double samplesMean, double pdfMean, double maxError) {
         assertEquals(samplesMean, pdfMean, getFactorError() * maxError);
     }
-    
+
     /**
      * @return
      */
     public abstract double[] initializeParams();
-    
+
 }
