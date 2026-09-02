@@ -2,7 +2,6 @@ package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Node;
@@ -84,7 +83,7 @@ public class IncrementPotential extends Potential implements DESSimulablePotenti
 	 * internal counter, so successive calls yield consecutive integer values.</p>
 	 */
 	@Override
-	public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws OpenMarkovException {
+	public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) {
 	//14/08/2022 refactored for nuisance variable. Changed for starting in 0;
 		//14/08/2022 Check; currently value is stored here and in DES record
 		return ++incrementedValue;

@@ -1,10 +1,15 @@
 package org.openmarkov.inference.DES;
 
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.inference.MonteCarloOptions;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.Criterion;
+import org.openmarkov.core.model.network.EqualCriterion;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
 import org.openmarkov.core.model.network.potential.DistributionTablePotential;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
@@ -13,7 +18,9 @@ import org.openmarkov.core.model.network.potential.TransitionTablePotential;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.inference.DES.exception.OnlyDESNetsAllowedException;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.ProgressMonitor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +102,7 @@ public class DESInference {
     List<TablePotential> tablePotentials = null;
     
     //Constructor
-    public DESInference(ProbNet probNet, ProgressMonitor simulationProgressMonitor) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, IOException {
+    public DESInference(ProbNet probNet, ProgressMonitor simulationProgressMonitor) throws OpenMarkovException, IOException {
         long start = System.currentTimeMillis();
         try {
             if (!initialize(probNet))
@@ -196,7 +203,7 @@ public class DESInference {
      *
      * @param probNet network to be simulated
      */
-    public DESInference(ProbNet probNet, ProgressMonitor simulationProgressMonitor, boolean psa) throws IOException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    public DESInference(ProbNet probNet, ProgressMonitor simulationProgressMonitor, boolean psa) throws IOException, OpenMarkovException {
 
 
 //      System.out.println("Calling " + DistributionTablePotential.calling);
@@ -245,7 +252,7 @@ public class DESInference {
      *
      * @return true if the series has been successfully simulated
      */
-    private boolean simulateOneSeries(ProgressMonitor simulationProgressMonitor, int series) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    private boolean simulateOneSeries(ProgressMonitor simulationProgressMonitor, int series) throws OpenMarkovException {
         forAllRandomProviders(DESRandomProvider::setRandomGenerator);
         dataFromFile.resetData();
         for (int individual = 0; individual < monteCarloOptions.getNumSimulations(); individual++) {
@@ -292,7 +299,7 @@ public class DESInference {
      *
      * @return the simulation results
      */
-    private CriteriaValues evaluateIndividual(Finding decisionFinding, int dataIndex) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    private CriteriaValues evaluateIndividual(Finding decisionFinding, int dataIndex) throws OpenMarkovException {
 //
 
 //Result of the simulation

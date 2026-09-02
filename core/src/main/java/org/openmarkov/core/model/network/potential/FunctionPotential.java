@@ -9,10 +9,15 @@ package org.openmarkov.core.model.network.potential;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.InferenceOptions;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 
 import java.util.ArrayList;
@@ -91,20 +96,13 @@ public class FunctionPotential extends GLMPotential implements DESSimulablePoten
     }
     
     @Override
-    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents)  {
+    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws NonProjectablePotentialException.CannotEvaluate, NonProjectablePotentialException.CannotResolveVariable {
         List<Variable> parentVariables = parents.getVariables();
         Map<Variable, String> variablesMap = new HashMap<>();
-        double result =0;
-        for (Variable parentVariable:parentVariables){
-            variablesMap.put(parentVariable, ""+parents.getFinding(parentVariable).getNumericalValue());
+        for (Variable parentVariable : parentVariables) {
+            variablesMap.put(parentVariable, "" + parents.getFinding(parentVariable).getNumericalValue());
         }
-        try {
-            result = Double.parseDouble(this.covariates[0].evaluateWith(variablesMap));
-        } catch (NonProjectablePotentialException.CannotEvaluate |
-                 NonProjectablePotentialException.CannotResolveVariable e) {
-            throw new UnrecoverableException(e);
-        }
-        return  result;
+        return Double.parseDouble(this.covariates[0].evaluateWith(variablesMap));
     }
     
     /**

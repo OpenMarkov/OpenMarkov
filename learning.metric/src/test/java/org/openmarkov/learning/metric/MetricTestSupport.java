@@ -4,6 +4,8 @@ import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
 import org.openmarkov.core.action.base.linkEdits.InvertLinkEdit;
 import org.openmarkov.core.action.base.linkEdits.RemoveLinkEdit;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -28,61 +30,61 @@ import java.util.function.Supplier;
  * hand-computed magic numbers are needed and any metric can be checked uniformly.
  */
 public final class MetricTestSupport {
-
+    
     private MetricTestSupport() {
     }
-
+    
     public static final int A = 0;
     public static final int B = 1;
     public static final int C = 2;
-
+    
     public static final List<Variable> VARIABLES = List.of(
             new Variable("A", 2), new Variable("B", 3), new Variable("C", 2));
-
+    
     public static final int[][] CASES = {
-            { 0, 0, 0 }, { 0, 0, 1 }, { 0, 1, 0 }, { 0, 1, 1 },
-            { 1, 1, 0 }, { 1, 1, 1 }, { 1, 2, 0 }, { 1, 2, 1 },
-            { 0, 0, 0 }, { 1, 2, 1 }, { 0, 1, 0 }, { 1, 1, 1 }
+            {0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {0, 1, 1},
+            {1, 1, 0}, {1, 1, 1}, {1, 2, 0}, {1, 2, 1},
+            {0, 0, 0}, {1, 2, 1}, {0, 1, 0}, {1, 1, 1}
     };
-
+    
     public static final double TOL = 1e-6;
-
+    
     public static CaseDatabase database() {
         return new CaseDatabase(new ArrayList<>(VARIABLES), CASES);
     }
-
+    
     /** Builds a fresh net over the reference variables with the given directed links. */
     public static ProbNet netWith(int[][] links) {
-        try {
-            ProbNet net = new ProbNet();
-            for (Variable v : VARIABLES) {
-                net.addNode(v, NodeType.CHANCE);
-            }
-            for (int[] link : links) {
-                new AddLinkEdit(net, VARIABLES.get(link[0]), VARIABLES.get(link[1]), true).executeEdit();
-            }
-            return net;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        ProbNet net = new ProbNet();
+        for (Variable v : VARIABLES) {
+            net.addNode(v, NodeType.CHANCE);
         }
+        for (int[] link : links) {
+            try {
+                new AddLinkEdit(net, VARIABLES.get(link[0]), VARIABLES.get(link[1]), true).executeEdit();
+            } catch (DoEditException e) {
+                throw new UnreachableException(e);
+            }
+        }
+        return net;
     }
-
+    
     /** Total score of the given structure, computed from scratch. */
     public static double fullScore(Supplier<? extends Metric> factory, int[][] links) {
         Metric metric = factory.get();
         metric.init(netWith(links), database());
         return metric.getScore();
     }
-
+    
     /** Incremental delta reported by the metric for {@code edit} applied to {@code baseLinks}. */
     private static double incrementalDelta(Supplier<? extends Metric> factory, int[][] baseLinks, PNEdit edit,
-            ProbNet base) {
+                                           ProbNet base) {
         Metric metric = factory.get();
         metric.init(base, database());
         metric.getScore(); // populate cachedNodeScores / dimensions before asking for a delta
         return metric.score(edit);
     }
-
+    
     /**
      * Returns a description of every add/remove/invert whose incremental delta disagrees
      * with the full recompute, over all ordered variable pairs; empty when the metric's
@@ -96,16 +98,16 @@ public final class MetricTestSupport {
                 if (i == j) {
                     continue;
                 }
-                check(factory, mismatches, "add", new int[][] {}, new int[][] { { i, j } }, i, j);
-                check(factory, mismatches, "remove", new int[][] { { i, j } }, new int[][] {}, i, j);
-                check(factory, mismatches, "invert", new int[][] { { i, j } }, new int[][] { { j, i } }, i, j);
+                check(factory, mismatches, "add", new int[][]{}, new int[][]{{i, j}}, i, j);
+                check(factory, mismatches, "remove", new int[][]{{i, j}}, new int[][]{}, i, j);
+                check(factory, mismatches, "invert", new int[][]{{i, j}}, new int[][]{{j, i}}, i, j);
             }
         }
         return mismatches;
     }
-
+    
     private static void check(Supplier<? extends Metric> factory, List<String> mismatches, String kind,
-            int[][] baseLinks, int[][] resultLinks, int i, int j) {
+                              int[][] baseLinks, int[][] resultLinks, int i, int j) {
         ProbNet base = netWith(baseLinks);
         Variable from = VARIABLES.get(i);
         Variable to = VARIABLES.get(j);
@@ -118,7 +120,7 @@ public final class MetricTestSupport {
         double expected = fullScore(factory, resultLinks) - fullScore(factory, baseLinks);
         if (Math.abs(incremental - expected) > TOL) {
             mismatches.add(String.format("%s %s->%s: incremental=%.6f recompute=%.6f",
-                    kind, from.getName(), to.getName(), incremental, expected));
+                                         kind, from.getName(), to.getName(), incremental, expected));
         }
     }
 }

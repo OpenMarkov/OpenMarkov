@@ -123,22 +123,18 @@ public class EventRecord extends DESRecord {
         }
 
     }
-
-
-    public void setVariableValue(Configuration configuration, double clock) {
+    
+    
+    public void setVariableValue(Configuration configuration, double clock) throws OpenMarkovException {
 //        super.setVariableValue(configuration);
 //        timeOfOccurrence =variableValue + clock;
-        try {
-            //24/10/2023; considering an indeterminate number of random numbers to sample the potential
+        
+        //24/10/2023; considering an indeterminate number of random numbers to sample the potential
 //            variableValue = recordPotential.sampleConditionedVariable(desRandomProvider.getRandomNumber(), configuration);
             variableValue = recordPotential.sampleConditionedVariable(desRandomProvider.getRandomNumbers(recordPotential.numRandomNumbersNeeded()), configuration);
             timeOfOccurrence =variableValue + clock;
             variableValue = timeOfOccurrence;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
 
     }
 

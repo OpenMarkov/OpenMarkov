@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
+import org.openmarkov.core.exception.ThereIsNoTimeVariableInWeibullHazardPotential;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -33,7 +34,8 @@ import java.util.Map;
  * parameterized by a shape parameter (gamma) and covariates. Used in cost-effectiveness
  * and temporal Bayesian network models.
  */
-@PotentialType(names = "Hazard (Weibull)") public class WeibullHazardPotential extends GLMPotential implements DESSimulablePotential {
+@PotentialType(names = "Hazard (Weibull)")
+public class WeibullHazardPotential extends GLMPotential implements DESSimulablePotential {
     
     protected static final VariableExpression[] MANDATORY_COVARIATES = new VariableExpression[]{
             VariableExpression.Common.GAMMA,
@@ -266,21 +268,22 @@ import java.util.Map;
      * @throws RuntimeException if this potential has no time variable, as the hazard cannot be computed
      */
     @Override
-    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) {
-
-        if (timeVariable == null) throw new RuntimeException("Weibull Hazard potential has no time variable; hazard cannot be computed");
-        double[] coefficients =getCoefficients();
+    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws ThereIsNoTimeVariableInWeibullHazardPotential {
+        if (timeVariable == null) {
+            throw new ThereIsNoTimeVariableInWeibullHazardPotential(this);
+        }
+        double[] coefficients = getCoefficients();
         // The shape parameter is stored as its logarithm, in the position the covariates declare
         // for gamma; the rest of the class (getGamma, tableProject) reads it the same way.
         int gammaIndex = getGammaIndex(covariates);
         if (gammaIndex == -1) {
             throw new InvalidArgumentException("covariates", "no covariate declares the shape parameter gamma");
         }
-        double gamma =Math.exp(coefficients[gammaIndex]);
+        double gamma = Math.exp(coefficients[gammaIndex]);
         // Sampling takes the scale parameter from a parent variable named Lambda, by convention.
-        Variable variableLambda =variables.stream().filter(variable -> variable.getName().equals("Lambda")).findFirst()
-                .orElseThrow(() -> new InvalidArgumentException("Lambda",
-                        "sampling a Weibull hazard takes the scale parameter from a parent variable named Lambda, and this potential has none"));
+        Variable variableLambda = variables.stream().filter(variable -> "Lambda".equals(variable.getName())).findFirst()
+                                           .orElseThrow(() -> new InvalidArgumentException("Lambda",
+                                                                                           "sampling a Weibull hazard takes the scale parameter from a parent variable named Lambda, and this potential has none"));
         Finding lambdaFinding = parents.getFinding(variableLambda);
         if (lambdaFinding == null) {
             throw new InvalidArgumentException("Lambda", "the evidence carries no value for the variable Lambda");
@@ -288,14 +291,13 @@ import java.util.Map;
         double lambda = lambdaFinding.getNumericalValue();
         double timeVariableValue = parents.getFinding(timeVariable).getNumericalValue();
         //hazard; for one year cycle; FIXME has to be revised
-        double transitionProbability = 1 - Math.exp(lambda*(Math.pow(timeVariableValue-1,gamma) -Math.pow(timeVariableValue,gamma) ));
+        double transitionProbability = 1 - Math.exp(lambda * (Math.pow(timeVariableValue - 1, gamma) - Math.pow(timeVariableValue, gamma)));
 //		System.out.println("Weibull Hazard: timeVariableValue "+ timeVariableValue +" transitionProbability "+ transitionProbability + " randomNumber " + randomNumbers[0]);
-        if (randomNumbers[0]< transitionProbability) {
+        if (randomNumbers[0] < transitionProbability) {
 //			System.out.println("Weibull Hazard: state corresponding to 1: " + variables.get(0).getStateName(1));
             return 1;
             
-        }
-        else
+        } else
             return 0;
     }
     
@@ -375,7 +377,7 @@ import java.util.Map;
     public Potential reorder(List<Variable> newOrderOfVariables) {
         return copy();
     }
-
+    
     /** Expression-based potential; variable-name-based, not index-based; returns a copy. */
     @Override
     public Potential reorder(Variable variable, State[] newOrder) {

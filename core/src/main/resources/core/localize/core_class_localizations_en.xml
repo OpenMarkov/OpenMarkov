@@ -11,6 +11,10 @@
                   value="Orient link from {variableFrom} to {variableTo}. Is directed? {isDirected}"/>
     <Localization class="org.openmarkov.core.action.base.linkEdits.RemoveLinkEdit"
                   value="Remove link from {variableFrom} to {variableTo}. Is directed? {isDirected}"/>
+    <Localization class="org.openmarkov.core.exception.ThereIsNoTimeVariableInWeibullHazardPotential"
+                  value="This potential has no time variable, and therefore hazard cannot be computed"/>
+    <Localization class="org.openmarkov.core.exception.ThereMustBeJustOneEventInConfiguration"
+                  value="There must be exactly 1 event in parents configuration, but there is {eventsAmount}."/>
     <Localization class="org.openmarkov.core.action.core.AbsorbNodeEdit" value="Absorb node {absorbedNode}"/>
     <Localization class="org.openmarkov.core.action.core.AbsorbParentsEdit" value="Absorb parents {node}"/>
     <Localization class="org.openmarkov.core.action.core.AddNodeEdit"

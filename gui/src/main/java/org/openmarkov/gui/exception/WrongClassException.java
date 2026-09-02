@@ -1,10 +1,10 @@
 package org.openmarkov.gui.exception;
 
-import org.openmarkov.core.exception.IBundledOpenMarkovException;
+import org.openmarkov.core.exception.OpenMarkovException;
 
-//TODO: This should probably be a UnrecheableException instead of being wrapped on it when used.
-public class WrongClassException extends RuntimeException implements IBundledOpenMarkovException {
+public class WrongClassException extends OpenMarkovException {
     public WrongClassException(Class<?> expectedClass, Class<?> foundClass) {
+        super();
         this.expectedClass = expectedClass;
         this.foundClass = foundClass;
     }

@@ -14,6 +14,7 @@ import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
@@ -448,7 +449,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
             new Thread(() -> {
                 try {
                     new org.openmarkov.inference.DES.DESInference(probNet, simulationProgressMonitor);
-                } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther | IOException e) {
+                } catch (IOException | OpenMarkovException e) {
                     throw new UnrecoverableException(e);
                 }
             }).start();

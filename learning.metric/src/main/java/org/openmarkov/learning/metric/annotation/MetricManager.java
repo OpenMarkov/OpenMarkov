@@ -8,10 +8,12 @@
 package org.openmarkov.learning.metric.annotation;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.learning.metric.Metric;
 import org.openmarkov.plugin.PluginSearch;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -82,8 +84,9 @@ public class MetricManager {
     public Metric createInstance(String name) {
         try {
             return getMetricByName(name).getDeclaredConstructor().newInstance();
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Cannot instantiate metric: " + name, e);
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException |
+                 NoSuchMethodException e) {
+            throw new UnreachableException(e);
         }
     }
 
@@ -101,8 +104,9 @@ public class MetricManager {
                 }
             }
             return metricClass.getDeclaredConstructor().newInstance();
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Cannot instantiate metric: " + name, e);
+        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException |
+                 IllegalAccessException e) {
+            throw new UnreachableException(e);
         }
     }
 

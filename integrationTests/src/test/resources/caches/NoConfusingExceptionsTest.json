@@ -162,6 +162,8 @@
     "ThereIsMoreThanOneConditioningVariable",
     "ThereIsNoNodeInDataException",
     "ThereIsNoPotentialsInNodeException",
+    "ThereIsNoTimeVariableInWeibullHazardPotential",
+    "ThereMustBeJustOneEventInConfiguration",
     "ThetaValueIsWrong",
     "TopVariableNotInDomain",
     "TreeADDWithoutPotentialOrReferenfe",

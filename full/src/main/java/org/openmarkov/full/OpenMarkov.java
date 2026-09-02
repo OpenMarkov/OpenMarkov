@@ -102,8 +102,8 @@ public class OpenMarkov {
                     } catch (AlreadyLockedException ex) {
                         try {
                             Thread.sleep(100);
-                        } catch (InterruptedException exc) {
-                            throw new RuntimeException(exc);
+                        } catch (InterruptedException _) {
+
                         }
                     }
                 }
@@ -181,8 +181,8 @@ public class OpenMarkov {
         while (!appLoaded.get()) {
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            } catch (InterruptedException _) {
+
             }
         }
         var childWindowsOfMainGUI = new ArrayList<Window>();

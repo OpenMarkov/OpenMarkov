@@ -178,7 +178,7 @@ public class TableWithFunctions extends TablePotential {
 	 * @return the value of the functions with the function stored in the position given by configuration and with the
 	 * values of numericConfiguration
 	 */
-	public double getEvaluatedFunctionValue(EvidenceCase configuration, EvidenceCase numericConfiguration){
+	public double getEvaluatedFunctionValue(EvidenceCase configuration, EvidenceCase numericConfiguration) throws NonProjectablePotentialException.CannotEvaluate, NonProjectablePotentialException.CannotResolveVariable {
 		String functionValue= getFunctionValue(configuration);
 		FunctionPotential functionPotential =new FunctionPotential(numericConfiguration.getVariables(), getPotentialRole(), new VariableExpression(numericConfiguration.getVariables(), functionValue));
         return functionPotential.sampleConditionedVariable(new double[]{0}, numericConfiguration);

@@ -2,7 +2,6 @@ package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Node;
@@ -140,7 +139,7 @@ public class ExternalPotential extends Potential implements DESSimulablePotentia
 	 * produced, since the value is meant to be supplied from an external source.
 	 */
 	@Override
-	public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws OpenMarkovException {
+	public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) {
 		return Double.MAX_VALUE;
 	}
 }

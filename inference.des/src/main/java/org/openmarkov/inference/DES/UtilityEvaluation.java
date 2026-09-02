@@ -1,9 +1,15 @@
 package org.openmarkov.inference.DES;
 
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.Configuration;
+import org.openmarkov.core.model.network.Criterion;
+import org.openmarkov.core.model.network.EqualCriterion;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.Variable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,21 +47,18 @@ public class UtilityEvaluation extends GenericEvaluation<UtilityRecord> {
     }
 
     @Override
-    public void startSimulation(Finding decisionFinding) {
+    public void startSimulation(Finding decisionFinding) throws OpenMarkovException {
         desRecordHashMap.values().forEach(UtilityRecord::clear);
         this.decisionFinding = decisionFinding;
         updateOrphanNodes();
         previousEvaluationTime = 0;
-
-
     }
 
     /**
      * Update orphan UTILITY nodes
      */
-    void updateOrphanNodes() {
-        orphanRecords.forEach(utilityRecord -> {
-            try {
+    void updateOrphanNodes() throws OpenMarkovException {
+        for (var utilityRecord : orphanRecords) {
                 Configuration configuration = new Configuration();
                 if (utilityRecord.hasDecisionParent()) {
                     configuration.addFinding(decisionFinding);
@@ -65,12 +68,7 @@ public class UtilityEvaluation extends GenericEvaluation<UtilityRecord> {
                     configuration.addFinding(parentVariable, desInference.getChanceEvaluation().getDESRecord(chanceParent).getVariableValue());
                 }
                 utilityRecord.setVariableValue(configuration);
-
-            } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther e) {
-                throw new UnrecoverableException(e);
-            }
-
-        });
+        }
     }
 
     /**
@@ -79,34 +77,28 @@ public class UtilityEvaluation extends GenericEvaluation<UtilityRecord> {
      * @param eventHappened - Event happened data
      */
     @Override
-    void update(EventRecord eventHappened) {
+    void update(EventRecord eventHappened) throws OpenMarkovException {
         Collection<UtilityRecord> utilityDescendants = eventHappened.getUtilityDescendants();
-        utilityDescendants.forEach(utilityRecord -> {
-//                utilityRecord.setVariableValue(null);
-                    try {
-                        Configuration configuration = new Configuration();
-                        //FIXME duplicate code.
-                        if (utilityRecord.hasDecisionParent()) {
-                            configuration.addFinding(decisionFinding);
-                        }
-                        //18/03/2023 FIXME When to add an event parent?
-                        if ((eventHappened != null) && (utilityRecord.getRecordNode().isParent(eventHappened.getRecordNode()))) {
-                            configuration.addFinding(eventHappened.getRecordVariable(),eventHappened.getVariableValue());
-                        }
-
-                        for (Node chanceParent : utilityRecord.getParentsByType(NodeType.CHANCE)) {
-                            Variable parentVariable = chanceParent.getVariable();
-                            configuration.addFinding(parentVariable, desInference.getChanceEvaluation().getDESRecord(chanceParent).getVariableValue());
-                        }
-                        utilityRecord.setVariableValue(configuration);
-
-                    } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther e) {
-                        throw new UnrecoverableException(e);
-                    }
-
-                }
-
-        );
+        for (var utilityRecord : utilityDescendants) {
+            //                utilityRecord.setVariableValue(null);
+            Configuration configuration = new Configuration();
+            //FIXME duplicate code.
+            if (utilityRecord.hasDecisionParent()) {
+                configuration.addFinding(decisionFinding);
+            }
+            //18/03/2023 FIXME When to add an event parent?
+            if ((eventHappened != null) && (utilityRecord.getRecordNode().isParent(eventHappened.getRecordNode()))) {
+                configuration.addFinding(eventHappened.getRecordVariable(), eventHappened.getVariableValue());
+            }
+            
+            for (Node chanceParent : utilityRecord.getParentsByType(NodeType.CHANCE)) {
+                Variable parentVariable = chanceParent.getVariable();
+                configuration.addFinding(parentVariable, desInference.getChanceEvaluation()
+                                                                     .getDESRecord(chanceParent)
+                                                                     .getVariableValue());
+            }
+            utilityRecord.setVariableValue(configuration);
+        }
         desInference.getDesLogTextWriter().logUtilityUpdate(utilityDescendants);
     }
 

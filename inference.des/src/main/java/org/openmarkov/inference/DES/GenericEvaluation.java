@@ -1,6 +1,5 @@
 package org.openmarkov.inference.DES;
 
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.network.Finding;
@@ -91,7 +90,7 @@ public abstract class GenericEvaluation<T extends DESRecord> {
      *
      * @param decisionFinding
      */
-    void startSimulation(Finding decisionFinding) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    void startSimulation(Finding decisionFinding) throws OpenMarkovException {
         desRecordHashMap.values().forEach(T::clear);
         this.decisionFinding = decisionFinding;
     }
@@ -115,7 +114,7 @@ public abstract class GenericEvaluation<T extends DESRecord> {
      *
      * @param eventHappened - Event happened data
      */
-    abstract void update(EventRecord eventHappened) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther;
+    abstract void update(EventRecord eventHappened) throws OpenMarkovException;
 
     /**
      * HashMap when any node is matches with its DESRecord
