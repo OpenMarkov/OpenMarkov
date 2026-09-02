@@ -40,7 +40,7 @@ org.openmarkov.learning.metric.bayesian
 org.openmarkov.learning.metric.bd  
 org.openmarkov.learning.metric.entropy  
 org.openmarkov.learning.metric.k2  
-org.openmarkov.learning.metric.mdlm  
+org.openmarkov.learning.metric.mdl
 org.openmarkov.plugin  
 org.openmarkov.stochasticpropagationoutput  
 org.openmarkov.utilityCalculator

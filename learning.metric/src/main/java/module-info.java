@@ -10,7 +10,7 @@ open module org.openmarkov.learning.metric {
     exports org.openmarkov.learning.metric.bde;
     exports org.openmarkov.learning.metric.entropy;
     exports org.openmarkov.learning.metric.k2;
-    exports org.openmarkov.learning.metric.mdlm;
+    exports org.openmarkov.learning.metric.mdl;
     exports org.openmarkov.learning.metric;
     exports org.openmarkov.learning.metric.annotation;
     exports org.openmarkov.learning.metric.util;

@@ -13,7 +13,7 @@ import org.openmarkov.learning.metric.bayesian.BayesianMetric;
 import org.openmarkov.learning.metric.bde.BDeMetric;
 import org.openmarkov.learning.metric.entropy.EntropyMetric;
 import org.openmarkov.learning.metric.k2.K2Metric;
-import org.openmarkov.learning.metric.mdlm.MDLMetric;
+import org.openmarkov.learning.metric.mdl.MDLMetric;
 
 /**
  * Evaluation measure types supported by the BN evaluation module.

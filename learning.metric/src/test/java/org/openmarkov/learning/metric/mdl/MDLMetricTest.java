@@ -5,7 +5,7 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package org.openmarkov.learning.metric.mdlm;
+package org.openmarkov.learning.metric.mdl;
 
 import org.junit.jupiter.api.Test;
 import org.openmarkov.learning.metric.MetricTestSupport;
