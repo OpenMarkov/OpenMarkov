@@ -41,7 +41,8 @@ import java.util.stream.Collectors;
  * conditioned variables.
  */
 @PotentialType(names = "UnivariateDistr")
-public class UnivariateDistrPotential extends TableWithEvents implements DESSimulablePotential {
+public class UnivariateDistrPotential extends TableWithEvents
+        implements DESSimulablePotential, UncertaintyCarrier {
     
     public static final String PSEUDO_VARIABLE = "pseudoVariableDistributionName";
     private static final VariableExpression INITIALIZATION_VALUE = new VariableExpression(Collections.emptyList(), "1");
@@ -418,11 +419,11 @@ public class UnivariateDistrPotential extends TableWithEvents implements DESSimu
         this.getVariables().set(0, childVariable);
     }
     
-    public UncertainValue[] getUncertainValues() {
+    @Override public UncertainValue[] getUncertainValues() {
         return getDistributionTable().getUncertainValues();
     }
     
-    public void setUncertainValues(UncertainValue[] uncertainValues) {
+    @Override public void setUncertainValues(UncertainValue[] uncertainValues) {
         getDistributionTable().setUncertainValues(uncertainValues);
     }
     

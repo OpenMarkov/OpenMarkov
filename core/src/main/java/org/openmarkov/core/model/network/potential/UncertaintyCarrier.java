@@ -18,11 +18,10 @@ import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
  * analysis (PSA), where each parameter is treated as a random variable with a known
  * distribution rather than a fixed point estimate.</p>
  *
- * <p>Only {@link UncertainTablePotential} (and its subclass {@code AugmentedProbTable})
- * implement this interface.  Plain {@link TablePotential} objects never carry uncertainty
- * distributions, so they do not implement this interface.  This eliminates the
- * {@code if (uncertainValues != null)} guards that previously appeared throughout the
- * operation classes.</p>
+ * <p>A potential implements this interface when it can carry that uncertainty, whether it stores
+ * the array itself or delegates it to a table it holds inside.  One that never carries it does not
+ * implement the interface, which is what removes the {@code if (uncertainValues != null)} guards
+ * from the operation classes.</p>
  *
  * @author Manuel Arias
  * @see StrategyCarrier
