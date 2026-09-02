@@ -455,6 +455,31 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
         }
     }
     
+    /** Compares, besides what {@link Potential} compares, the top variable and the branches in order. */
+    @Override public boolean equals(Object other) {
+        if (!super.equals(other)) {
+            return false;
+        }
+        TreeADDPotential tree = (TreeADDPotential) other;
+        if (topVariable != tree.topVariable || branches.size() != tree.branches.size()) {
+            return false;
+        }
+        for (int i = 0; i < branches.size(); i++) {
+            if (!sameBranch(branches.get(i), tree.branches.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Two branches say the same when they cover the same states or interval and hold the same potential. */
+    private static boolean sameBranch(TreeADDBranch one, TreeADDBranch other) {
+        return Objects.equals(one.getStates(), other.getStates())
+                && Objects.equals(one.getLowerBound(), other.getLowerBound())
+                && Objects.equals(one.getUpperBound(), other.getUpperBound())
+                && Objects.equals(one.getPotential(), other.getPotential());
+    }
+
     @Override public Potential copy() {
         return new TreeADDPotential(this);
     }
