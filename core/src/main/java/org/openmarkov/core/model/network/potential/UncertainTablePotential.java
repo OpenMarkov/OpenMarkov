@@ -50,12 +50,23 @@ public class UncertainTablePotential extends TablePotential implements Uncertain
     /**
      * Copy constructor.
      * Required by {@link Potential#deepCopy} (reflection-based).
-     * Performs a <em>shallow</em> copy of {@code uncertainValues};
-     * {@link #deepCopy} performs the full clone.
+     * The copy carries its own uncertain values, as it carries its own numbers.
      */
     public UncertainTablePotential(UncertainTablePotential source) {
         super(source);
-        this.uncertainValues = source.uncertainValues;   // deepCopy will replace this with a deep clone
+        this.uncertainValues = copyOf(source.uncertainValues);
+    }
+
+    /** A copy of the array and of each uncertain value in it, because both are edited in place. */
+    private static UncertainValue[] copyOf(UncertainValue[] uncertainValues) {
+        if (uncertainValues == null) {
+            return null;
+        }
+        UncertainValue[] copy = new UncertainValue[uncertainValues.length];
+        for (int i = 0; i < uncertainValues.length; i++) {
+            copy[i] = (uncertainValues[i] == null) ? null : uncertainValues[i].copy();
+        }
+        return copy;
     }
 
     // -----------------------------------------------------------------------
@@ -78,8 +89,7 @@ public class UncertainTablePotential extends TablePotential implements Uncertain
 
     /**
      * {@inheritDoc}
-     * <p>The returned copy is an {@code UncertainTablePotential} that shares (shallow-copies)
-     * the {@code uncertainValues} array of this potential.
+     * <p>The returned copy is an {@code UncertainTablePotential} with its own uncertain values.
      */
     @Override
     public Potential copy() {

@@ -28,7 +28,8 @@ import java.util.List;
  *
  * @author Manuel Arias
  */
-@PotentialType(names = "Exact") public class ExactDistrPotential extends Potential implements DESSimulablePotential {
+@PotentialType(names = "Exact") public class ExactDistrPotential extends Potential
+        implements DESSimulablePotential, UncertaintyCarrier {
     
     
     // Attributes
@@ -132,11 +133,11 @@ import java.util.List;
         this.getVariables().set(0, childVariable);
     }
     
-    public UncertainValue[] getUncertainValues() {
+    @Override public UncertainValue[] getUncertainValues() {
         return tablePotential.getUncertainValues();
     }
     
-    public void setUncertainValues(UncertainValue[] uncertainValues) {
+    @Override public void setUncertainValues(UncertainValue[] uncertainValues) {
         tablePotential.setUncertainValues(uncertainValues);
     }
     

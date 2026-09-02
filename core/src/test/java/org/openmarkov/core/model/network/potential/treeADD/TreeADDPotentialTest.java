@@ -294,4 +294,37 @@ public class TreeADDPotentialTest {
         assertEquals(1.0, firstLeaf.getValues()[1], 1e-9, "After reorder: P(Y=absent|X=absent)=1.0");
     }
 
+    /**
+     * Two trees over the same variables that say different things are not equal.
+     */
+    @Test
+    public void testEqualsComparesBranches() {
+        State s0 = new State("absent");
+        State s1 = new State("present");
+        State[] statesAB = {s0, s1};
+
+        Variable varA = new Variable("X", statesAB);
+        Variable varB = new Variable("Y", statesAB);
+        List<Variable> varsBA = List.of(varB, varA);
+
+        TreeADDPotential tree = treeOf(varsBA, varA, s0, s1, varB, new double[]{1.0, 0.0}, new double[]{0.9, 0.1});
+        TreeADDPotential same = treeOf(varsBA, varA, s0, s1, varB, new double[]{1.0, 0.0}, new double[]{0.9, 0.1});
+        TreeADDPotential other = treeOf(varsBA, varA, s0, s1, varB, new double[]{1.0, 0.0}, new double[]{0.5, 0.5});
+
+        assertEquals(tree, same);
+        assertEquals(tree, tree.copy());
+        assertNotEquals(tree, other);
+        assertFalse(List.of(other).contains(tree));
+    }
+
+    private static TreeADDPotential treeOf(List<Variable> variables, Variable topVariable, State first, State second,
+                                           Variable leafVariable, double[] firstValues, double[] secondValues) {
+        PotentialRole role = PotentialRole.CONDITIONAL_PROBABILITY;
+        TreeADDBranch firstBranch = new TreeADDBranch(List.of(first), topVariable,
+                new TablePotential(List.of(leafVariable), role, firstValues), variables);
+        TreeADDBranch secondBranch = new TreeADDBranch(List.of(second), topVariable,
+                new TablePotential(List.of(leafVariable), role, secondValues), variables);
+        return new TreeADDPotential(variables, topVariable, role, List.of(firstBranch, secondBranch));
+    }
+
 }

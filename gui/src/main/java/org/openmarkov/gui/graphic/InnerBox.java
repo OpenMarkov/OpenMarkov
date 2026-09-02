@@ -7,6 +7,7 @@
 
 package org.openmarkov.gui.graphic;
 
+import org.openmarkov.gui.configuration.GUIFonts;
 import javax.swing.*;
 import java.awt.*;
 
@@ -22,7 +23,7 @@ public abstract sealed class InnerBox extends VisualElement permits FSVariableBo
 	/**
 	 * Font type Helvetica, plain, size 11.
 	 */
-	protected static final Font INNERBOX_FONT = new Font("Helvetica", Font.PLAIN, 11);
+	protected static final Font INNERBOX_FONT = GUIFonts.of(Font.PLAIN, 11);
     
     /**
 	 * Internal margin around the Box.

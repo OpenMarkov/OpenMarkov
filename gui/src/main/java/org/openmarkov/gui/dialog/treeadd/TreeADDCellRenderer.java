@@ -8,6 +8,7 @@
 package org.openmarkov.gui.dialog.treeadd;
 
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.gui.configuration.GUIFonts;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.treeadd.Threshold;
@@ -65,7 +66,7 @@ public class TreeADDCellRenderer extends JPanel implements TreeCellRenderer {
         rightLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         setBackground(GUIColors.DecisionTree.BACKGROUND.getColor());
         // TODO: Add a background color attribute
-        textIconFont = new Font("Helvetica", Font.BOLD, 15);
+        textIconFont = GUIFonts.of(Font.BOLD, 15);
         // precisionProxy= new PrecisionProxy(2);
     }
 

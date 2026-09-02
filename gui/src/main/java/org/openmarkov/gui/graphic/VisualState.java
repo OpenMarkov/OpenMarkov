@@ -7,6 +7,7 @@
 
 package org.openmarkov.gui.graphic;
 
+import org.openmarkov.gui.configuration.GUIFonts;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.gui.configuration.GUIColors;
 
@@ -33,7 +34,7 @@ public final class VisualState extends VisualElement {
     /**
      * Font type Helvetica, plain, size 11.
      */
-    protected static final Font STATES_FONT = new Font("Helvetica", Font.PLAIN, 11);
+    protected static final Font STATES_FONT = GUIFonts.of(Font.PLAIN, 11);
     
     /** Factor to multiply a number in the range of (0,1) to draw a bar to obtain its size in pixels. */
     private static final double lengthRelationInBars = 10000.0;

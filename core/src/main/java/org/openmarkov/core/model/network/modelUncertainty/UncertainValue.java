@@ -77,7 +77,7 @@ public final class UncertainValue {
 
 	@Override public String toString() {
         String out = "";
-		if (name != null && name.isEmpty()) {
+		if (hasName()) {
             out += name + ": ";
 		}
         out += probDensFunction.toString();

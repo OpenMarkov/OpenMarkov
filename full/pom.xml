@@ -115,6 +115,7 @@
                 <configuration>
                     <licensesOutputDirectory>src/main/resources/third-party-licenses</licensesOutputDirectory>
                     <licensesOutputFile>src/main/resources/third-party-licenses/licenses.xml</licensesOutputFile>
+                    <licensesConfigFile>src/main/resources/third-party-licenses/licenses.xml</licensesConfigFile>
                     <connectTimeout>750</connectTimeout>
                 </configuration>
             </plugin>

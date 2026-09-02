@@ -26,13 +26,22 @@ public class GUIColors {
         
         public static final class Link{
             
-            public static final GUIColor FOREGOUND = new GUIColor(new Color(0, 0, 0));
+            /** Black on the light canvas; on the dark one it would sit at 2.3:1, so it is lightened there. */
+            public static final GUIColor FOREGOUND = new GUIColor(new Color(0, 0, 0))
+                    .inDark(new Color(227, 227, 227));
             
             public static final class Creation{
-                public static final GUIColor FOREGROUND_ON_SELECTS_NOTHING = new GUIColor(new Color(178, 178, 178));
-                public static final GUIColor FOREGROUND_ON_SELECTS_FAILURE = new GUIColor(new Color(255, 0, 0));
+                // The line that follows the pointer while a link is being drawn. Each colour keeps its
+                // meaning in both themes: grey for nothing under the pointer, red for a target that
+                // cannot take the link, blue for one that can.
+                public static final GUIColor FOREGROUND_ON_SELECTS_NOTHING = new GUIColor(new Color(148, 148, 148))
+                        .inDark(new Color(178, 178, 178));
+                public static final GUIColor FOREGROUND_ON_SELECTS_FAILURE = new GUIColor(new Color(255, 0, 0))
+                        .inDark(new Color(255, 143, 143));
+                // The dark variant used to be darker than the light one, which is the wrong way round: on
+                // the dark canvas it sat at 1.3:1.
                 public static final GUIColor FOREGROUND_ON_SELECTS_SUCCESS = new GUIColor(new Color(0, 25, 209))
-                        .inDark(new Color(0, 21, 174));
+                        .inDark(new Color(178, 188, 255));
             }
             
             public static final class LinkRestriction {
@@ -46,45 +55,64 @@ public class GUIColors {
         
         public static final GUIColor BACKGROUND = new GUIColor(new Color(255, 255, 255))
                 .inDark(new Color(69, 72, 74));
-        public static final GUIColor REVELATION_ARC_VARIABLE = new GUIColor(new Color(128, 0, 0));
+        public static final GUIColor REVELATION_ARC_VARIABLE = new GUIColor(new Color(128, 0, 0))
+                .inDark(new Color(217, 141, 141));
         
-        public static final GUIColor ALWAYS_OBSERVED = new GUIColor(new Color(128, 0, 0));
+        public static final GUIColor ALWAYS_OBSERVED = new GUIColor(new Color(128, 0, 0))
+                .inDark(new Color(217, 141, 141));
         
+        /*
+         * The nodes are the same colour in both themes, on purpose: a chance node is yellow wherever it
+         * is drawn. What changes with the theme is what is drawn on the canvas around them - the links -
+         * because the canvas itself changes.
+         *
+         * Each type has one outline, and it is the hue of its own fill at 30% lightness and 70%
+         * saturation. That keeps the outline saying which type the node is while clearing 3:1 against
+         * both the canvas and the lighter fills of its type. The outlines used to be lighter than the
+         * fills they surrounded: the outline of a utility node sat at 1.9:1 against the white canvas, so
+         * the node had barely any outline at all, and the outline of a chance node with pre-resolution
+         * evidence sat at 1.0:1 against its own fill, so it was not there.
+         *
+         * The text is black on every fill. On a light fill black is the highest contrast there is, and
+         * every fill here is light enough that it beats white by a wide margin.
+         */
         public static final class ChanceNode {
-            public static final GUIColor BACKGROUND = new GUIColor(new Color(251, 231, 153));
-            public static final GUIColor FOREGROUND = new GUIColor(new Color(184, 153, 29));
+            public static final GUIColor BACKGROUND = new GUIColor(new Color(251, 242, 153));
+            public static final GUIColor FOREGROUND = new GUIColor(new Color(130, 120, 23));
             public static final GUIColor TEXT = new GUIColor(new Color(0, 0, 0));
             
-            public static final GUIColor BACKGROUND_ON_PRE_RESOLUTION_FINDING = new GUIColor(new Color(208, 185, 87));
-            public static final GUIColor BACKGROUND_ON_POST_RESOLUTION_FINDING = new GUIColor(new Color(233, 210, 122));
+            public static final GUIColor BACKGROUND_ON_PRE_RESOLUTION_FINDING = new GUIColor(new Color(197, 146, 95));
+            public static final GUIColor BACKGROUND_ON_POST_RESOLUTION_FINDING = new GUIColor(new Color(225, 198, 143));
         }
         
         public static final class DecisionNode {
-            public static final GUIColor BACKGROUND = new GUIColor(new Color(206, 223, 250));
-            public static final GUIColor FOREGROUND = new GUIColor(new Color(33, 91, 196));
+            public static final GUIColor BACKGROUND = new GUIColor(new Color(205, 222, 249));
+            public static final GUIColor FOREGROUND = new GUIColor(new Color(23, 64, 130));
             public static final GUIColor TEXT = new GUIColor(new Color(0, 0, 0));
             
-            public static final GUIColor BACKGROUND_ON_POLICY = new GUIColor(new Color(112, 142, 184));
-            public static final GUIColor BACKGROUND_ON_PRE_RESOLUTION_FINDING = new GUIColor(new Color(128, 128, 128));
-            public static final GUIColor BACKGROUND_ON_POST_RESOLUTION_FINDING = new GUIColor(new Color(192, 192, 192));
+            public static final GUIColor BACKGROUND_ON_POLICY = new GUIColor(new Color(89, 151, 253));
+            // These two were the only greys left of the old palette, one grey for two different states.
+            // They are now the blue of the decision node, at the same two steps the chance node takes.
+            public static final GUIColor BACKGROUND_ON_PRE_RESOLUTION_FINDING = new GUIColor(new Color(95, 134, 197));
+            public static final GUIColor BACKGROUND_ON_POST_RESOLUTION_FINDING = new GUIColor(new Color(143, 175, 225));
             
         }
         
         public static final class UtilityNode {
-            public static final GUIColor BACKGROUND = new GUIColor(new Color(220, 240, 197));
-            public static final GUIColor BACKGROUND_WITH_EVENT = new GUIColor(new Color(93, 155, 49));
-            public static final GUIColor FOREGROUND = new GUIColor(new Color(131, 210, 84));
+            public static final GUIColor BACKGROUND = new GUIColor(new Color(208, 230, 178));
+            public static final GUIColor BACKGROUND_WITH_EVENT = new GUIColor(new Color(91, 177, 43));
+            public static final GUIColor FOREGROUND = new GUIColor(new Color(85, 130, 23));
             public static final GUIColor TEXT = new GUIColor(new Color(0, 0, 0));
         }
         
         public static final class EventNode {
-            public static final GUIColor BACKGROUND = new GUIColor(new Color(233, 170, 114));
+            public static final GUIColor BACKGROUND = new GUIColor(new Color(255, 184, 97));
             public static final GUIColor BACKGROUND_TERMINAL = new GUIColor(new Color(230, 126, 0));
             public static final GUIColor BACKGROUND_INITIAL = new GUIColor(new Color(230, 126, 0));
             
-            public static final GUIColor FOREGROUND = new GUIColor(new Color(226, 130, 45));
-            public static final GUIColor FOREGROUND_TERMINAL = new GUIColor(new Color(160, 95, 17));
-            public static final GUIColor FOREGROUND_INITIAL = new GUIColor(new Color(160, 95, 17));
+            public static final GUIColor FOREGROUND = new GUIColor(new Color(130, 82, 23));
+            public static final GUIColor FOREGROUND_TERMINAL = new GUIColor(new Color(130, 82, 23));
+            public static final GUIColor FOREGROUND_INITIAL = new GUIColor(new Color(130, 82, 23));
             public static final GUIColor TEXT = new GUIColor(new Color(0, 0, 0));
         }
         

@@ -102,6 +102,20 @@ public class NoLoopsTest {
     }
 
     /**
+     * The shortest loop there is: two nodes joined both ways. It went unnoticed because the search
+     * underneath was asked to ignore the link being judged and ignored the pair of nodes instead,
+     * so the way back through the second link was hidden along with it. A diamond was reported
+     * correctly all the same, which is why this went unseen for so long: the two links that close
+     * it join different pairs of nodes.
+     */
+    @Tag(TestSpeed.SLOW)
+    @Test public void twoNodesJoinedBothWaysAreALoop() {
+        directedNet.addLink(directedNet.getVariable("B"), directedNet.getVariable("A"), true);
+
+        assertFalse(noLoops.isMetBy(directedNet));
+    }
+
+    /**
      * A node linked to itself is a closed path, so it counts as a loop — as it did before. Whether a
      * network may have one at all is the business of another constraint, {@code NoSelfLoop}.
      */

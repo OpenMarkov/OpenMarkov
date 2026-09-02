@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network.potential.treeadd;
 
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
@@ -39,8 +40,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.SequencedMap;
 import java.util.Set;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -347,7 +351,7 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
     public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials) throws NonProjectablePotentialException {
         TablePotential projected;
         if (topVariable.getVariableType() != VariableType.NUMERIC) {
-            Map<TreeADDBranch, TablePotential> potentialsToBlend = new HashMap<>();
+            SequencedMap<TreeADDBranch, TablePotential> potentialsToBlend = new LinkedHashMap<>();
             List<TreeADDBranch> branches = this.getBranches();
             for (TreeADDBranch branch : branches) {
                 potentialsToBlend.put(branch, branch.getPotential()
@@ -451,6 +455,31 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
         }
     }
     
+    /** Compares, besides what {@link Potential} compares, the top variable and the branches in order. */
+    @Override public boolean equals(Object other) {
+        if (!super.equals(other)) {
+            return false;
+        }
+        TreeADDPotential tree = (TreeADDPotential) other;
+        if (topVariable != tree.topVariable || branches.size() != tree.branches.size()) {
+            return false;
+        }
+        for (int i = 0; i < branches.size(); i++) {
+            if (!sameBranch(branches.get(i), tree.branches.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Two branches say the same when they cover the same states or interval and hold the same potential. */
+    private static boolean sameBranch(TreeADDBranch one, TreeADDBranch other) {
+        return Objects.equals(one.getStates(), other.getStates())
+                && Objects.equals(one.getLowerBound(), other.getLowerBound())
+                && Objects.equals(one.getUpperBound(), other.getUpperBound())
+                && Objects.equals(one.getPotential(), other.getPotential());
+    }
+
     @Override public Potential copy() {
         return new TreeADDPotential(this);
     }
@@ -613,20 +642,49 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
         return newFindings;
     }
     
-    private TablePotential blendPotentials(Variable topVariable, Map<TreeADDBranch, TablePotential> branchPotentials,
+    /** Two criteria are the same one when they are named the same; {@code Criterion} has no equality of its own. */
+    private static boolean isSameCriterion(Criterion one, Criterion other) {
+        if (one == null || other == null) {
+            return one == other;
+        }
+        return Objects.equals(one.getCriterionName(), other.getCriterionName());
+    }
+
+    /**
+     * @param branchPotentials the projection of each branch, in the order of the branches of the
+     *                         tree. The order matters and is therefore part of the type: it decides
+     *                         the order of the variables of the result, the role the result is
+     *                         given, and which criterion it carries. It used to arrive in a
+     *                         {@code HashMap} keyed by the branches, and {@code TreeADDBranch}
+     *                         defines no {@code hashCode}, so the walk went in the order of the
+     *                         addresses in memory and those three answers changed from one run of
+     *                         the program to the next.
+     */
+    private TablePotential blendPotentials(Variable topVariable,
+                                           SequencedMap<TreeADDBranch, TablePotential> branchPotentials,
                                            EvidenceCase evidence) {
         List<TablePotential> potentials = new ArrayList<>();
         // branchStateIndex contains in it's i-th position the index of the
         // potential in potentials that is relevant for topVariable's i-th state
         int[] branchStateIndex = new int[topVariable.getNumStates()];
         Criterion criterion = null;
-        for (TreeADDBranch branch : branchPotentials.keySet()) {
-            
-            // Get the criterion
-            if (branchPotentials.get(branch).isAdditive()) {
-                criterion = branchPotentials.get(branch).getCriterion();
+        for (Map.Entry<TreeADDBranch, TablePotential> branchPotential : branchPotentials.entrySet()) {
+            TreeADDBranch branch = branchPotential.getKey();
+            TablePotential potential = branchPotential.getValue();
+
+            // The criterion of the first additive branch. Branches that disagree are a fault of the
+            // model rather than of this operation, so they are reported and the first one stands.
+            if (potential.isAdditive()) {
+                if (criterion == null) {
+                    criterion = potential.getCriterion();
+                } else if (!isSameCriterion(criterion, potential.getCriterion())) {
+                    LogManager.getLogger(TreeADDPotential.class)
+                              .warn("Branches of the tree of {} carry different criteria, {} and {}; the first one is "
+                                              + "the criterion of the result", topVariable.getName(),
+                                      criterion.getCriterionName(), potential.getCriterion().getCriterionName());
+                }
             }
-            potentials.add(branchPotentials.get(branch));
+            potentials.add(potential);
             for (State branchState : branch.getBranchStates()) {
                 int stateIndex = topVariable.getStateIndex(branchState);
                 branchStateIndex[stateIndex] = potentials.size() - 1;

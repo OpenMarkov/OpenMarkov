@@ -7,6 +7,7 @@
 
 package org.openmarkov.gui.graphic;
 
+import org.openmarkov.gui.configuration.GUIFonts;
 import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.gui.configuration.GUIColors;
 
@@ -25,7 +26,7 @@ public non-sealed class NumericVariableBox extends InnerBox {
     /**
      * Font type Helvetica, plain, size 9.
      */
-    protected static final Font SCALE_FONT = new Font("Helvetica", Font.PLAIN, 9);
+    protected static final Font SCALE_FONT = GUIFonts.of(Font.PLAIN, 9);
     
     /**
      * Vertical separation between the line for value and

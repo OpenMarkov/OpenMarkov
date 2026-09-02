@@ -204,6 +204,17 @@ public class GraphTest {
         assertFalse(graph.existsPath(nodeC, nodeA, false, Collections.singletonList(linkAB)));
     }
 
+    @Test public void ignoringOneLinkLeavesASecondLinkBetweenTheSameTwoNodesStanding() {
+        // Two nodes joined both ways are joined by two different links. Ignoring one of them must
+        // leave the other one to walk. The search used to turn the links to ignore into the
+        // neighbours they lead to and then walk the adjacency lists, which hold nodes, so ignoring
+        // one link ignored the pair of nodes and took every link between them away at once.
+        graph.addLink(nodeB, nodeA, true); // on top of the A --> B that the graph already has
+        Link<String> linkAB = graph.getLink(nodeA, nodeB, true);
+
+        assertTrue(graph.existsPath(nodeA, nodeB, false, Collections.singletonList(linkAB)));
+    }
+
     @Test public void removingANodeWithAnUndirectedSelfLoopCleansItsOtherSiblings() {
         // S9: a self-loop makes the node its own sibling, so removing it used to modify the very
         // list being traversed, cutting the traversal short and leaving C pointing at a node that
