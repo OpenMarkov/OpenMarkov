@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -363,7 +363,7 @@ final class TablePotentialArithmetic {
      */
     static List<TablePotential> sumByCriterion(List<TablePotential> utilityPotentials) {
         // create the set of criteria
-        Set<Criterion> criteria = new HashSet<>();
+        Set<Criterion> criteria = new LinkedHashSet<>();
         for (TablePotential potential : utilityPotentials) {
             criteria.add(potential.getCriterion());
         }
