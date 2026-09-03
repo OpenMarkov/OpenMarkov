@@ -355,7 +355,7 @@ public class BasicOperations {
         // Create elimination order adding chance nodes
         List<List<Variable>> partialOrder = new ArrayList<>();
         List<Node> chanceNodes = probNet.getNodes(NodeType.CHANCE);
-        HashSet<Variable> chanceVariables = new HashSet<>();
+        Set<Variable> chanceVariables = new LinkedHashSet<>();
         for (Node chanceNode : chanceNodes) {
             chanceVariables.add(chanceNode.getVariable());
         }
