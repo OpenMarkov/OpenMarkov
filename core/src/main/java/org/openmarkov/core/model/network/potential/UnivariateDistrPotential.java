@@ -129,6 +129,11 @@ public class UnivariateDistrPotential extends TableWithEvents
 
         setProbDensFunctionClass(potential.getProbDensFunctionClass());
         setDistributionTable((AugmentedProbTable) (potential.getDistributionTable()).copy());
+        // setProbDensFunctionClass built a pseudo variable for this copy, so the table it just took
+        // from the original has to be written on that one and not on the original's.
+        List<Variable> distributionTableVariables = new ArrayList<>(getDistributionTable().getVariables());
+        distributionTableVariables.set(0, pseudoVariableDistribution);
+        getDistributionTable().setVariables(distributionTableVariables);
         
         this.impossibleConfigurations = CloneUtils.safeClone(potential.impossibleConfigurations);
         this.tableVariables = new ArrayList<>(potential.tableVariables);
