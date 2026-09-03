@@ -1,5 +1,6 @@
 package org.openmarkov.integrationTests;
 
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.integrationTests.staticAnalysis.NoConfusingExceptionsTest;
 
 import java.io.File;
@@ -20,7 +21,7 @@ public class Resources {
                                   .replace("target/test-classes", "src/test/resources"))
                           .toFile();
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new UnreachableException(e);
         }
     }
     

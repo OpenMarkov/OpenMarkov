@@ -7,9 +7,12 @@
 
 package org.openmarkov.gui.dialog.treeadd;
 
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.InvalidArgumentException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Node;
-import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
@@ -24,12 +27,25 @@ import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.node.PotentialEditDialog;
-import org.openmarkov.gui.exception.*;
+import org.openmarkov.gui.exception.ChangeDomainOfTreeADDIsNotAllowedException;
+import org.openmarkov.gui.exception.InvalidLimitInTreeADDException;
+import org.openmarkov.gui.exception.RemovingAllStatesIsNotAllowedException;
+import org.openmarkov.gui.exception.TriedToSplitIntervalOutsideBoundsException;
+import org.openmarkov.gui.exception.UnexpectedMenuActionException;
+import org.openmarkov.gui.exception.WrongClassException;
+import org.openmarkov.gui.exception.WrongRoleException;
 import org.openmarkov.gui.localize.LocalizedMenuItem;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.util.GUIUtils;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTree;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeWillExpandListener;
@@ -415,7 +431,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         }
     }
     
-    private void changeInterval(ActionEvent ae, TreeADDBranch branch, TreePath path) {
+    private void changeInterval(ActionEvent ae, TreeADDBranch branch, TreePath path) throws ChangeDomainOfTreeADDIsNotAllowedException {
         
         TreePath parentPath = path.getParentPath();
         TreeADDPotential parentTreeADD = (TreeADDPotential) parentPath.getLastPathComponent();

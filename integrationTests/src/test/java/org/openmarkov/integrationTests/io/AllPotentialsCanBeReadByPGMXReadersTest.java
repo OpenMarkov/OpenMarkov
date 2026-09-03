@@ -1,17 +1,17 @@
 package org.openmarkov.integrationTests.io;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.network.potential.AugmentedProbTable;
 import org.openmarkov.core.model.network.potential.FunctionPotentialOld;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.Potential;
-import org.openmarkov.core.model.network.potential.TableWithEvents;
-import org.openmarkov.core.model.network.potential.TableWithFunctions;
 import org.openmarkov.core.model.network.potential.StrategicTablePotential;
 import org.openmarkov.core.model.network.potential.StrategyTree;
+import org.openmarkov.core.model.network.potential.TableWithEvents;
+import org.openmarkov.core.model.network.potential.TableWithFunctions;
 import org.openmarkov.core.model.network.potential.UncertainTablePotential;
 import org.openmarkov.core.model.network.potential.canonical.MaxPotential;
 import org.openmarkov.core.model.network.potential.canonical.MinPotential;
@@ -108,7 +108,7 @@ class AllPotentialsCanBeReadByPGMXReadersTest {
                 reader = readerClass.getDeclaredConstructor().newInstance();
             } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
                      InvocationTargetException e) {
-                throw new RuntimeException(e);
+                throw new UnreachableException(e);
             }
             boolean requiresToReadAllPotentials = !AllPotentialsCanBeReadByPGMXReadersTest.READERS_THAT_CAN_MISS_POTENTIAL_READER_METHODS.contains(readerClass);
             return PluginSearch.init()

@@ -1,5 +1,7 @@
 package org.openmarkov.gui.configuration;
 
+import org.openmarkov.core.exception.UnrecoverableException;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,7 +29,7 @@ public final class JavaSerializationUtils {
         try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
             return (T) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new UnrecoverableException(e);
         }
     }
     
@@ -47,7 +49,7 @@ public final class JavaSerializationUtils {
             byte[] objectBytes = bos.toByteArray();
             return Base64.getEncoder().encodeToString(objectBytes);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UnrecoverableException(e);
         }
     }
     

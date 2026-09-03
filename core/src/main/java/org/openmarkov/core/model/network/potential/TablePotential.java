@@ -136,17 +136,6 @@ public class TablePotential extends AbstractIndexedPotential
                         .noneMatch(type -> type != VariableType.FINITE_STATES && type != VariableType.DISCRETIZED);
     }
 
-    // TODO This method is not used. undertainValues is not used. Remove the method or the parameter.
-    
-    /**
-     * @param uncertainValues List of uncertain values
-     *
-     * @return true if the uncertain values are correct
-     */
-    public static boolean checkUncertainTable(List<UncertainValue> uncertainValues) {
-        return true;
-    }
-    
     /**
      * Remove a variable of the potential
      *

@@ -442,7 +442,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
             new Thread(() -> {
                 try {
                     new org.openmarkov.inference.DES.DESInference(probNet, simulationProgressMonitor);
-                } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther | IOException e) {
+                } catch (IOException | OpenMarkovException e) {
                     throw new UnrecoverableException(e);
                 }
             }).start();

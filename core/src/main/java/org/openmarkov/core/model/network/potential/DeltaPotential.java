@@ -22,7 +22,10 @@ import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A deterministic potential that assigns probability 1 to a single state (for finite-states
@@ -31,7 +34,8 @@ import java.util.*;
  *
  * @author Manuel Arias
  */
-@PotentialType(names = "Delta") public class DeltaPotential extends Potential implements Projectable, Scalable, DESSimulablePotential {
+@PotentialType(names = "Delta")
+public class DeltaPotential extends Potential implements Projectable, Scalable, DESSimulablePotential {
     
     // state and stateIndex are used for finite states variables
     private State state = null;
@@ -140,11 +144,11 @@ import java.util.*;
     public Potential project(EvidenceCase evidenceCase) {
         throw new NotSupportedOperationException();
     }
-
+    
     @Override public Potential copy() {
         return new DeltaPotential(this);
     }
-
+    
     public State getState() {
         return state;
     }
@@ -183,7 +187,7 @@ import java.util.*;
     @Override public void scalePotential(double scale) {
         this.numericValue *= scale;
     }
-
+    
     /** Implements {@link Scalable#scale(double)}; delegates to {@link #scalePotential(double)}. */
     @Override public void scale(double factor) {
         scalePotential(factor);
@@ -218,7 +222,7 @@ import java.util.*;
         copy.properties.putAll(this.properties);
         return copy;
     }
-
+    
     /**
      * Returns a copy of this potential reflecting the new state order of
      * {@code variable}. If {@code variable} is the conditioned variable (a
@@ -252,9 +256,9 @@ import java.util.*;
     @Override
     public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) {
         return switch (getConditionedVariable().getVariableType()) {
-            case FINITE_STATES-> stateIndex;
+            case FINITE_STATES -> this.stateIndex;
             case DISCRETIZED -> Double.NaN;
-            case NUMERIC, EVENT-> numericValue;
+            case NUMERIC, EVENT -> this.numericValue;
         };
     }
     

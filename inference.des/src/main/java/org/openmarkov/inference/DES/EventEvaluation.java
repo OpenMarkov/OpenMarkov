@@ -2,7 +2,11 @@ package org.openmarkov.inference.DES;
 
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.OpenMarkovException;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.Configuration;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +56,7 @@ public class EventEvaluation extends GenericEvaluation<EventRecord> {
     }
 
     @Override
-    void startSimulation(Finding decisionFinding) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    void startSimulation(Finding decisionFinding) throws OpenMarkovException {
         super.startSimulation(decisionFinding);
         queue = new ArrayList<>();
         //13/03/2023 - removing the necessity of an initial event.
@@ -69,7 +73,7 @@ public class EventEvaluation extends GenericEvaluation<EventRecord> {
      * @param eventHappened - Event happened data
      */
     @Override
-    void update(EventRecord eventHappened) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    void update(EventRecord eventHappened) throws OpenMarkovException {
 
         //Calculating TTE
         //
@@ -78,7 +82,6 @@ public class EventEvaluation extends GenericEvaluation<EventRecord> {
         for (EventRecord eventRecord : eventHappened.getEventChildren().stream().filter(eventRecord -> !eventRecord.equals(eventHappened)).collect(Collectors.toList())) {
 //FIXME deal with Configurations
             updateChildEvent(eventHappened, eventRecord);
-
         }
         if (eventHappened.getEventChildren().contains(eventHappened))
             updateChildEvent(eventHappened, eventHappened);
@@ -89,11 +92,11 @@ public class EventEvaluation extends GenericEvaluation<EventRecord> {
         }
 
     }
-
-    private void updateChildEvent(EventRecord eventHappened, EventRecord eventRecord) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    
+    private void updateChildEvent(EventRecord eventHappened, EventRecord eventRecord) throws OpenMarkovException {
         Configuration configuration = new Configuration();
-        try {
-            //26/10/2023; the findings in the events now have its variableValue
+        
+        //26/10/2023; the findings in the events now have its variableValue
             configuration.addFinding(eventHappened.getRecordVariable(), eventHappened.getVariableValue());
             //Compute tte
             if (eventRecord.hasDecisionParent()) {
@@ -119,11 +122,8 @@ public class EventEvaluation extends GenericEvaluation<EventRecord> {
                 //Log the event
                 desInference.getDesLogTextWriter().logScheduledEvent(eventRecord);
             }
-
-        } catch (OpenMarkovException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        
+        
     }
 
     //13/03/2023 - removing the necessity of an initial event.

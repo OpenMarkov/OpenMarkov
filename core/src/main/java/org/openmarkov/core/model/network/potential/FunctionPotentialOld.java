@@ -10,7 +10,6 @@ import net.sourceforge.jeval.EvaluationException;
 import net.sourceforge.jeval.Evaluator;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.expression.ReferencedExpression;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.InferenceOptions;
@@ -270,13 +269,10 @@ As FunctionPotential is not projectable I leave the default behaviour
     }
     
     @Override
-    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws OpenMarkovException {
+    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws NonProjectablePotentialException.CannotEvaluate, NonProjectablePotentialException.CannotResolveVariable {
         List<Variable> parentVariables = parents.getVariables();
-        
         Map<Variable, String> variablesMap = new HashMap();
-        
         for (Variable parentVariable : parentVariables) {
-            int index = variables.indexOf(parentVariable);
             variablesMap.put(parentVariable, "" + parents.getFinding(parentVariable).getNumericalValue());
         }
         return Double.parseDouble(this.covariates[0].evaluateWith(variablesMap));

@@ -3,7 +3,6 @@ package org.openmarkov.core.model.network.potential;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.Configuration;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -100,7 +99,7 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
             tableVariables.add(events);
         }
     }
-
+    
     /**
      * Copy constructor. Everything this potential holds beyond the variables it shares with any
      * other one: the table, whether the values are given by functions and the table of functions
@@ -270,15 +269,15 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     public void setImpossibleConfigurations(ArrayList<Configuration> impossibleConfigurations) {
         this.impossibleConfigurations = impossibleConfigurations;
     }
-
+    
     public void setHasImpossibleConfigurations(boolean hasImpossibleConfigurations) {
         this.hasImpossibleConfigurations = hasImpossibleConfigurations;
     }
-
+    
     public boolean hasImpossibleConfigurations() {
         return hasImpossibleConfigurations;
     }
-
+    
     //TODO
     @Override public void setComment(String comment) {
         super.setComment(comment);
@@ -432,7 +431,7 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     @Override public Potential copy() {
         return new TableWithEvents(this);
     }
-
+    
     /**
      * {@inheritDoc}
      *
@@ -465,6 +464,7 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     }
     
     //03/01/2023; added after merge because it was added to Potential as an abstract method
+    
     /**
      * Not supported by this potential: always returns {@code null}.
      */
@@ -472,8 +472,9 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     public Potential reorder(List<Variable> newOrderOfVariables) {
         return null;
     }
-
+    
     //03/01/2023; added after merge because it was added to Potential as an abstract method
+    
     /**
      * Not supported by this potential: always returns {@code null}.
      */
@@ -481,14 +482,14 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     public Potential reorder(Variable variable, State[] newOrder) {
         return null;
     }
-
+    
     /**
      * Not implemented for this potential: always returns {@link Double#NaN}.
      */
     @Override
-    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws OpenMarkovException {
+    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         return Double.NaN;
     }
-
+    
 }
 

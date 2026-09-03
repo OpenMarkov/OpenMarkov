@@ -1,8 +1,13 @@
 package org.openmarkov.inference.DES;
 
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.OpenMarkovException;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.Configuration;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,9 +46,9 @@ public class ChanceEvaluation extends GenericEvaluation<ChanceRecord> {
             chanceRecord.setChanceRecordParents(this);
         });
     }
-
-
-   void startSimulation(Finding decisionFinding, int dataIndex) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    
+    
+    void startSimulation(Finding decisionFinding, int dataIndex) throws OpenMarkovException {
        startSimulation(decisionFinding);
        //Simulate initial Chance nodes (those which does not have an event ancestor)
        //Data From File
@@ -55,7 +60,7 @@ public class ChanceEvaluation extends GenericEvaluation<ChanceRecord> {
     /**
      * Calculates values Chance nodes which have no Event ancestor
      */
-    private void addValuesOrphanNodes(int dataIndex) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    private void addValuesOrphanNodes(int dataIndex) throws OpenMarkovException {
 
         List<ChanceRecord> remainingOrphan = new ArrayList<>(orphanRecords);
         remainingOrphan.forEach(ChanceRecord::resetEvaluationStatus);
@@ -90,7 +95,7 @@ public class ChanceEvaluation extends GenericEvaluation<ChanceRecord> {
      * @param eventHappened - Event happened data
      */
     @Override
-    void update(EventRecord eventHappened) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    void update(EventRecord eventHappened) throws OpenMarkovException {
         //TODO Impossible Configuration missing - Change to Infinity??
         List<ChanceRecord> remainingDescendants = new ArrayList<>(eventHappened.getChanceDescendants());
         //If the code commented below is necessary something is going wrong
@@ -115,7 +120,7 @@ public class ChanceEvaluation extends GenericEvaluation<ChanceRecord> {
      * @param nodeToComputeRecord node whose variable value is computed using a potential not a file
      * @param eventHappened       event for which the value of chanceNode variable is computed
      */
-    private void computeChanceValue(ChanceRecord nodeToComputeRecord, EventRecord eventHappened) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    private void computeChanceValue(ChanceRecord nodeToComputeRecord, EventRecord eventHappened) throws OpenMarkovException {
 
 //        if (nodeToComputeRecord.isFromFile()) {
 //            return;

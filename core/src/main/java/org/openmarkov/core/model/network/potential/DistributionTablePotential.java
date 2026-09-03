@@ -1,15 +1,21 @@
 package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.InferenceOptions;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.Configuration;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.modelUncertainty.ParametrizedFunction.ParametrizedFunctionManager;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionWithKnownInverseCDF;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
-import org.openmarkov.core.model.network.type.DESNetworkType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -252,7 +258,7 @@ public class DistributionTablePotential extends Potential implements DESSimulabl
     //14/08/2022 changed for nuisance variable
     //14/08/2022 FIXME revise functions use
     @Override
-    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws OpenMarkovException {
+    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
 
         //Extract FINITE_STATES and EVENT Variables and convert to the format of a TableWithEvents to find the position in the table
         EvidenceCase stateConfiguration = tableWithEvents.convert(parents);
@@ -285,7 +291,9 @@ public class DistributionTablePotential extends Potential implements DESSimulabl
             distribution = ParametrizedFunctionManager.getUniqueInstance().getParametrizedClass(distributionName, parametrizationName).getDeclaredConstructor().newInstance();
 //            distribution = ParametrizedFunctionManager.getUniqueInstance().getParametrizedClass(distributionName, parametrizationName).newInstance();
             distribution.setParameters(paramValues);
-        } catch (InstantiationException | IllegalAccessException |InvocationTargetException | NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 NonProjectablePotentialException.CannotEvaluate |
+                 NonProjectablePotentialException.CannotResolveVariable e) {
             throw new UnrecoverableException(e);
         }
         //11/12/2022 I need to control the randomNumber sequence in order to avoid nuisance variance

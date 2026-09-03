@@ -8,8 +8,8 @@
 package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -489,7 +489,7 @@ public class UnivariateDistrPotential extends TableWithEvents
     }
     
     @Override
-    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws OpenMarkovException {
+    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         return distributionTable.sampleConditionedVariable(randomNumbers, convert(parents));
     }
     
