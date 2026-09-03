@@ -304,11 +304,7 @@ final class TablePotentialMaximization {
      */
     static Object[] multiplyAndMaximize(List<? extends Potential> potentialsVariable,
                                         Variable variableToMaximize) {
-        HashSet<Variable> addedVariables = new HashSet<>();
-        for (Potential potential : potentialsVariable) {
-            addedVariables.addAll(potential.getVariables());
-        }
-        List<Variable> variablesToKeep = new ArrayList<>(addedVariables);
+        List<Variable> variablesToKeep = AuxiliaryOperations.getUnionVariables(potentialsVariable);
         variablesToKeep.remove(variableToMaximize);
         return multiplyAndMaximize(potentialsVariable, variablesToKeep, variableToMaximize);
     }
@@ -319,11 +315,7 @@ final class TablePotentialMaximization {
      */
     static TablePotential[] multiplyAndMaximizeUniformly(List<TablePotential> potentialsVariable,
                                                           Variable variableToMaximize) {
-        HashSet<Variable> addedVariables = new HashSet<>();
-        for (TablePotential potential : potentialsVariable) {
-            addedVariables.addAll(potential.getVariables());
-        }
-        List<Variable> variablesToKeep = new ArrayList<>(addedVariables);
+        List<Variable> variablesToKeep = AuxiliaryOperations.getUnionVariables(potentialsVariable);
         variablesToKeep.remove(variableToMaximize);
         return multiplyAndMaximizeUniformly(potentialsVariable, variablesToKeep, variableToMaximize);
     }
