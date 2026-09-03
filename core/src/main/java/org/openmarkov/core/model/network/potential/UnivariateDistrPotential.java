@@ -353,10 +353,6 @@ public class UnivariateDistrPotential extends TableWithEvents
         throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
     }
     
-    @Override public UnivariateDistrPotential project(EvidenceCase evidenceCase) {
-        return null;
-    }
-    
     @Override
     public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> alreadyProjectedPotentials) throws NonProjectablePotentialException.PotentialCannotBeConvertedToATable {
         throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
