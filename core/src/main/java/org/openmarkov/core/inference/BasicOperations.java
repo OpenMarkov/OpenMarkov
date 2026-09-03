@@ -8,6 +8,7 @@
 package org.openmarkov.core.inference;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.graph.Link;
@@ -432,6 +433,7 @@ public class BasicOperations {
         Deque<Variable> decisions = new ArrayDeque<>();
         do {
             List<Node> nodes = idCopy.getNodes();
+            int removed = 0;
             for (Node node : nodes) {
                 if (idCopy.getNumChildren(node) == 0) {
                     if (node.getNodeType() == NodeType.DECISION) {
@@ -439,7 +441,15 @@ public class BasicOperations {
                         numDecisions--;
                     }
                     idCopy.removeNode(node);
+                    removed++;
                 }
+            }
+            // A decision is still to be placed and nothing came off, so every node left has a
+            // child and there is a cycle among them: peeling the network from the outside
+            // would go round for ever.
+            if (removed == 0 && numDecisions > 0) {
+                throw new InvalidArgumentException("idCopy",
+                        "the decisions cannot be ordered because the network has a cycle");
             }
         } while (numDecisions > 0);
         return decisions;
