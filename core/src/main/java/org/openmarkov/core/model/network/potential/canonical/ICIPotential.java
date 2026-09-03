@@ -9,6 +9,7 @@ package org.openmarkov.core.model.network.potential.canonical;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.UnrecoverableException;
@@ -604,8 +605,27 @@ public abstract class ICIPotential extends Potential implements Projectable {
      * If it is a parent variable, the {@code j} (parent-state) dimension of that parent's
      * noisy-parameter entry is permuted.
      */
+    /**
+     * The conditioned variable has a reason: the function that combines the influences is a
+     * maximum or a minimum over the indices of its states, so putting them in another order
+     * would change the distribution instead of renaming it.
+     */
+    @Override public @Nullable String whyStatesCannotBeReordered(Variable variable) {
+        if (variable != variables.getFirst()) {
+            return null;
+        }
+        return "the states of " + variable.getName() + " cannot be put in another order while it"
+                + " carries a " + getClass().getSimpleName() + ", because that model combines the"
+                + " influences of its parents with a maximum or a minimum over the indices of"
+                + " those states, so its meaning depends on the order of its states";
+    }
+
     @Override
     public Potential reorder(Variable variable, State[] newOrder) {
+        String why = whyStatesCannotBeReordered(variable);
+        if (why != null) {
+            throw new NotSupportedOperationException(why);
+        }
         ICIPotential copy = (ICIPotential) copy();
         Variable conditioned = variables.getFirst();
         int numCondStates = conditioned.getNumStates();

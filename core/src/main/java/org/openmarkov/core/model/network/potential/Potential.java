@@ -848,4 +848,13 @@ public abstract class Potential implements Localizable {
     public Potential reorder(Variable variable, State[] newOrder) {
         throw new UnsupportedOperationException(getClass().getSimpleName() + " is not reorderable");
     }
+
+    /**
+     * Why the states of {@code variable} cannot be put in another order in this potential, or
+     * {@code null} when they can. The reason is written here once and used both by
+     * {@link #reorder(Variable, State[])} and by whoever asks before reordering anything.
+     */
+    public @Nullable String whyStatesCannotBeReordered(Variable variable) {
+        return null;
+    }
 }
