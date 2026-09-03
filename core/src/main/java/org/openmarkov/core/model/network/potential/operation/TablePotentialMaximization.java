@@ -43,7 +43,7 @@ final class TablePotentialMaximization {
     @SuppressWarnings("unchecked")
     static Object[] multiplyAndMaximize(List<? extends Potential> tablePotentials,
                                         List<Variable> fSVariablesToKeep, Variable fSVariableToMaximize) {
-        List<TablePotential> potentials = (ArrayList<TablePotential>) tablePotentials;
+        List<TablePotential> potentials = (List<TablePotential>) tablePotentials;
         List<Variable> variablesToKeep = fSVariablesToKeep;
 
         PotentialRole role = TablePotentialArithmetic.getRole(tablePotentials);
