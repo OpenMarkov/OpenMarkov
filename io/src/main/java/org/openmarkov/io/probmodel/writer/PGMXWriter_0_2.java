@@ -81,6 +81,7 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
         root.setAttribute(XMLAttributes.FORMAT_VERSION.toString(), formatVersion);
         writeXMLProbNet(probNet, root);
         writeInferenceOptions(probNet, root);
+        writePolicies(probNet, root);
         writeEvidence(probNet, evidences, root);
         writeVariableType(probNet, root);
         writeDefaultStates(probNet,root);
@@ -689,17 +690,51 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
         // HashMap of declared TablePotentials
         List<Potential> potentials = probNet.getPotentials();
         for (Potential potential : potentials) {
-            Variable potentialVariable = potential.getVariable(0);
-            // Do not write here policies
-            if ((probNet.getNode(potentialVariable).getNodeType() != NodeType.DECISION)
-                    && (potential.getPotentialRole() != PotentialRole.POLICY)) {
-                Element potentialElement = new Element(XMLTags.POTENTIAL.toString());
-                getPotential(probNet, potential, potentialElement);
-                setPotentialRole(potentialElement, potential); // PGMX 0.2 difference with the next version: potential role is written in the potential.
-                potentialsElement.addContent(potentialElement);
+            // The policies go in their own element, written by writePolicies.
+            if (!isPolicy(probNet, potential)) {
+                potentialsElement.addContent(getPotentialElement(probNet, potential));
             }
         }
         probNetElement.addContent(potentialsElement);
+    }
+    
+    /**
+     * @return whether the potential is the policy imposed on a decision, which is written in
+     * the Policies element and not among the potentials of the network.
+     */
+    protected static boolean isPolicy(ProbNet probNet, Potential potential) {
+        if (potential.getNumVariables() == 0) {
+            return false;
+        }
+        return probNet.getNode(potential.getVariable(0)).getNodeType() == NodeType.DECISION
+                || potential.getPotentialRole() == PotentialRole.POLICY;
+    }
+    
+    /**
+     * Writes the policies imposed on the decisions in their own element, next to the network,
+     * which is where the reader looks for them.
+     */
+    protected void writePolicies(ProbNet probNet, Element root) {
+        Element policiesElement = new Element(XMLTags.POLICIES.toString());
+        for (Potential potential : probNet.getPotentials()) {
+            if (isPolicy(probNet, potential)) {
+                policiesElement.addContent(getPotentialElement(probNet, potential));
+            }
+        }
+        if (!policiesElement.getChildren().isEmpty()) {
+            root.addContent(policiesElement);
+        }
+    }
+    
+    /**
+     * Builds the XML element of one potential. PGMX 0.2 difference with the next version:
+     * potential role is written in the potential.
+     */
+    protected Element getPotentialElement(ProbNet probNet, Potential potential) {
+        Element potentialElement = new Element(XMLTags.POTENTIAL.toString());
+        getPotential(probNet, potential, potentialElement);
+        setPotentialRole(potentialElement, potential);
+        return potentialElement;
     }
     
     /**

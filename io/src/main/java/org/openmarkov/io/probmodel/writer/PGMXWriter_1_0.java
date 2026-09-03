@@ -144,22 +144,21 @@ public class PGMXWriter_1_0 extends PGMXWriter_0_2 {
             // Constant potentials (no domain variables) can appear after eliminating
             // all variables of a utility/probability factor; they have no associated
             // node and cannot be filtered by node type.
-            if (potential.getNumVariables() == 0) {
-                Element potentialElement = new Element(XMLTags.POTENTIAL.toString());
-                getPotential(probNet, potential, potentialElement);
-                potentialsElement.addContent(potentialElement);
-                continue;
-            }
-            Variable potentialVariable = potential.getVariable(0);
-            // Do not write here policies
-            if ((probNet.getNode(potentialVariable).getNodeType() != NodeType.DECISION)
-                    && (potential.getPotentialRole() != PotentialRole.POLICY)) {
-                Element potentialElement = new Element(XMLTags.POTENTIAL.toString());
-                getPotential(probNet, potential, potentialElement);
-                potentialsElement.addContent(potentialElement);
+            // The policies go in their own element, written by writePolicies.
+            if (!isPolicy(probNet, potential)) {
+                potentialsElement.addContent(getPotentialElement(probNet, potential));
             }
         }
         probNetElement.addContent(potentialsElement);
+    }
+    
+    /**
+     * Builds the XML element of one potential. Version 1.0 does not write the potential role.
+     */
+    @Override protected Element getPotentialElement(ProbNet probNet, Potential potential) {
+        Element potentialElement = new Element(XMLTags.POTENTIAL.toString());
+        getPotential(probNet, potential, potentialElement);
+        return potentialElement;
     }
     
     /**
