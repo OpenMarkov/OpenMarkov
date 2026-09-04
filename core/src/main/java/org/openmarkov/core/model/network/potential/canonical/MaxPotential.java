@@ -164,13 +164,14 @@ import java.util.List;
         
         for (int i = 1; i < variables.size(); i++) {
             double[] noisyParameters = this.getNoisyParameters(variables.get(i));
-            newICIPotential.setNoisyParameters(variables.get(i), noisyParameters);
+            newICIPotential.setNoisyParameters(variables.get(i), noisyParameters.clone());
         }
         Variable conditionedVariable = variables.get(0);
         double[] noisyParameters = ICIPotential.initializeNoisyParameters(conditionedVariable, newVariable);
         newICIPotential.setNoisyParameters(newVariable, noisyParameters);
         
-        newICIPotential.setLeakyParameters(getLeakyParameters());
+        newICIPotential.setLeakyParameters(getLeakyParameters().clone());
+        newICIPotential.copyAttributesFrom(this);
         return newICIPotential;
     }
     
@@ -186,11 +187,14 @@ import java.util.List;
         
         for (int i = 1; i < newVariables.size(); i++) {
             double[] noisyParameters = this.getNoisyParameters(newVariables.get(i));
-            newICIPotential.setNoisyParameters(newVariables.get(i), noisyParameters);
+            newICIPotential.setNoisyParameters(newVariables.get(i), noisyParameters.clone());
         }
-        newICIPotential.setLeakyParameters(getLeakyParameters());
+        newICIPotential.setLeakyParameters(getLeakyParameters().clone());
+        newICIPotential.copyAttributesFrom(this);
         if (newVariables.size() == 1) {
-            return new UniformPotential(newVariables, newICIPotential.role);
+            UniformPotential uniform = new UniformPotential(newVariables, newICIPotential.role);
+            uniform.copyAttributesFrom(this);
+            return uniform;
         }
         return newICIPotential;
     }
