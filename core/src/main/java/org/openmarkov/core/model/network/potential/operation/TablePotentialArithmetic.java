@@ -326,9 +326,7 @@ final class TablePotentialArithmetic {
         } else {
             result = new TablePotential(resultVariables, getRole(tablePotentials), resultValues);
         }
-        if (!potentials.isEmpty()) {
-            result.setCriterion(potentials.getFirst().getCriterion());
-        }
+        result.setCriterion(findFirstNonNullCriterion(tablePotentials));
 
         return result;
     }
