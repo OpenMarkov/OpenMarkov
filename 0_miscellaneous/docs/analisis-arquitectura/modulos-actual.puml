@@ -1,0 +1,98 @@
+@startuml
+' Grafo real de dependencias entre módulos Maven (pom.xml de cada módulo, agosto 2026).
+' Para no enmarañar el dibujo, las flechas de full y bnEvaluation hacia cada plugin
+' se dibujan hacia el grupo; el detalle exacto está en el informe.
+skinparam componentStyle uml2
+skinparam shadowing false
+skinparam defaultFontName sans-serif
+
+rectangle "Aplicación" {
+    [full] as full
+}
+
+rectangle "Plugins de análisis (encima de gui)" as plugins {
+    [costEffectiveness] as costEff
+    [sensitivityAnalysis] as sensAn
+    [stochasticPropagationOutput] as spo
+    [dbGenerator] as dbGen
+    [bnEvaluation] as bnEval
+    [learning.gui] as lgui
+}
+
+rectangle "Presentación" {
+    [gui] as gui
+}
+
+rectangle "Motor (sin interfaz gráfica... en teoría)" as motor {
+    [inference] as inference
+    [inference.des] as des #FFCCCC
+    [io] as io #FFF2CC
+    [learning.algorithm] as lalg
+    [learning.metric] as lmet
+    [learning.core] as lcore
+}
+
+rectangle "Base" {
+    [core] as core
+}
+
+rectangle "Hojas aisladas" {
+    [resttemplate] as rest #EEEEEE
+    [integrationTests] as itests #EEEEEE
+    [annotationProcessing] as annproc #EEEEEE
+}
+
+full --> plugins : los seis\n(y gui, io, inference,\nlearning.algorithm, learning.metric)
+costEff --> gui
+sensAn --> gui
+spo --> gui
+dbGen --> gui
+dbGen --> io
+bnEval --> gui
+bnEval --> lgui : y learning.core,\nlearning.algorithm,\nlearning.metric
+lgui --> gui
+lgui --> lcore
+lgui --> lalg
+lgui --> lmet
+
+gui --> inference
+gui --> io
+gui -[#red,bold]-> des : gui depende de un módulo\nque contiene ventanas Swing
+
+inference --> core
+des --> core
+io --> core
+lalg --> lcore
+lalg --> lmet
+lalg --> inference
+lmet --> lcore
+lcore --> core
+
+rest --> core
+itests --> full : (y de los otros 13\nmódulos internos)
+
+note right of des #FFCCCC
+  inference.des mezcla motor de simulación,
+  diálogos Swing, JFreeChart y exportación a
+  Excel por debajo de la capa de presentación.
+  Nombre JPMS fuera de convención: "inference.DES".
+end note
+
+note right of io #FFF2CC
+  El contrato de E/S (@FormatType,
+  ProbNetReader/Writer) vive aquí, en
+  paquetes org.openmarkov.core.io.*:
+  nombre de core, módulo io.
+end note
+
+note bottom of core
+  core requiere java.desktop (restos Swing en dos
+  potenciales y una edición) y org.apache.poi sin uso.
+  Todos los módulos heredan ~30 bibliotecas del pom raíz.
+end note
+
+note bottom of annproc
+  Fuera del reactor (comentado
+  en el pom raíz desde hace tiempo).
+end note
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+title sum() de potenciales estratégicos: la suma escribe dentro de sus sumandos
+
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam ParticipantPadding 15
+
+participant "MaxOutVariable\n(evaluación de un DI)" as MOV
+participant "TablePotentialArithmetic\n.sum(...)" as SUM
+participant "árbol A\n(de U1, posición p)" as A
+participant "árbol B\n(de U2, posición p)" as B
+
+MOV -> SUM : sum([U1, U2])
+activate SUM
+
+SUM -> SUM : resultStrategyTree = A\n(la **referencia**, no una copia)
+note right of SUM #FFE0E0
+  TablePotentialArithmetic.java:290-294
+  resultStrategyTree = strategyTrees[iPot][pos]
+end note
+
+SUM -> A : A.concatenate(B)
+activate A
+note right of A #FFE0E0
+  StrategyTree.java:490-503
+  concatenate **modifica A en el sitio**:
+  recorre sus ramas y les cuelga B.
+  Devuelve `this`, no un árbol nuevo.
+end note
+A -> A : branch.setPotential(B)
+A --> SUM : this (== A, ya modificado)
+deactivate A
+
+SUM --> MOV : resultado con A en la posición p
+deactivate SUM
+
+note over MOV, B #FFE0E0
+  **Consecuencia.** U1 —uno de los sumandos, que
+  el llamador sigue teniendo— ya no contiene A:
+  contiene A+B. Si A es el mismo objeto en varias
+  posiciones de la tabla (lo es: averageOfInterventions
+  y optimalInterventionTakingAllOptimal reutilizan
+  árboles), B se le cuelga una vez por posición.
+
+  La misma escritura ocurre en la línea 313, donde
+  además el valor devuelto se descarta.
+end note
+@enduml

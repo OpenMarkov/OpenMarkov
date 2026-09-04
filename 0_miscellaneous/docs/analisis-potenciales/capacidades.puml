@@ -1,0 +1,85 @@
+@startuml
+title Las interfaces de capacidad y los métodos que venían a sustituir
+
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor White
+  BorderColor #555555
+  ArrowColor #555555
+}
+
+abstract class Potential #FFF3CD {
+  + tableProject(...) : TablePotential
+  .. lanza NonProjectablePotentialException ..
+  + reorder(List<Variable>) : Potential
+  + reorder(Variable, State[]) : Potential
+  .. lanzan UnsupportedOperationException ..
+  + scalePotential(double) : void
+  .. lanza UnsupportedOperationException ..
+  + isUncertain() : boolean --> false
+}
+
+class TablePotential #E8F4FD {
+  + getUncertainValues() --> null
+  + setUncertainValues(uv) --> lanza si uv != null
+  + hasInterventions() --> false
+  + hasInterventionForDecision(v) --> false
+}
+
+package "Interfaces de capacidad (creadas para eliminar esos métodos)" #EAF7EA {
+  interface Projectable {
+    tableProject(EvidenceCase, InferenceOptions)
+  }
+  interface Reorderable {
+    reorder(List<Variable>)
+  }
+  interface Scalable {
+    scale(double)
+  }
+  interface UncertaintyCarrier {
+    getUncertainValues()
+    setUncertainValues(UncertainValue[])
+  }
+  interface StrategyCarrier {
+    getStrategyTrees()
+    hasInterventions()
+  }
+  interface CEUtilityPotential
+}
+
+Potential <|-- TablePotential
+
+TablePotential ..|> Projectable
+TablePotential ..|> Reorderable
+TablePotential ..|> Scalable
+TablePotential ..|> CEUtilityPotential
+UncertainTablePotential ..|> UncertaintyCarrier
+StrategicTablePotential ..|> StrategyCarrier
+
+class UncertainTablePotential #E8F4FD
+class StrategicTablePotential #E8F4FD
+TablePotential <|-- UncertainTablePotential
+TablePotential <|-- StrategicTablePotential
+
+note as N1 #FFE0E0
+  **Las dos vías conviven.**
+  Ningún sitio del código hace
+  `instanceof Projectable`,
+  `instanceof Reorderable`,
+  `instanceof Scalable` ni
+  `instanceof UncertaintyCarrier`.
+  Todo el código llama a los métodos
+  de `Potential` y captura (o no) la
+  excepción. Las interfaces son, hoy,
+  documentación ejecutable.
+
+  Sólo dos se usan de verdad:
+  `StrategyCarrier` (una conversión de tipo en
+  VEEvaluation.java:114) y
+  `CEUtilityPotential` (una cota
+  genérica en VariableEliminationCore).
+end note
+
+N1 .. Projectable
+@enduml

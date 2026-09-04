@@ -1,0 +1,60 @@
+@startuml optional-nunca-entra
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor #444444
+  LifeLineBorderColor #888888
+  ParticipantBorderColor #666666
+  ParticipantBackgroundColor #FAFAFA
+}
+
+title Por qué «sólo un nodo de utilidad» no llega a defender a nadie
+
+participant "ProbNet\n(nueva o leída)" as Net
+participant "ConstraintManager" as Man
+participant "InfluenceDiagramType" as Tipo
+actor Usuario
+participant "ChangeNodeTypeEdit" as Edit
+
+Net -> Man : buildConstraintList(tipo)
+note right of Man
+  El único camino de producción.
+  El segundo argumento,
+  <b>includeOptionals, vale false</b>.
+end note
+Man -> Man : recorre las restricciones descubiertas
+note right #FFE0E0
+  OnlyOneUtilityNode está anotada
+  como OPTIONAL, así que
+  <b>no entra en la lista</b>.
+end note
+Man -> Tipo : getOverwrittenConstraints()
+Tipo --> Man : {OnlyChanceNodes: NO, …}
+note right of Tipo #FFE0E0
+  Ningún tipo de red sube
+  OnlyOneUtilityNode a YES.
+end note
+Man --> Net : lista <b>sin</b> OnlyOneUtilityNode
+
+== más tarde ==
+
+Usuario -> Edit : convertir este nodo en de utilidad
+Edit -> Edit : checkConstraintsWillBeMet()
+Edit -> Net : getConstraintOfClass(OnlyOneUtilityNode.class)
+Net --> Edit : <b>null</b>
+note right of Edit #FFE0E0
+  El if no entra. La comprobación
+  que se escribió para esto
+  <b>no se ejecuta nunca</b>.
+end note
+Edit --> Usuario : adelante
+
+note over Net, Edit
+  La prueba que cubre esto pasa porque hace
+  <b>probNet.addConstraint(new OnlyOneUtilityNode())</b> a mano.
+  Ninguna red del producto lo hace.
+
+  Le ocurre lo mismo a otras nueve restricciones OPTIONAL.
+end note
+
+@enduml

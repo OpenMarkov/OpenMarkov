@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="InfluenceDiagram">
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <Properties />
+    <Variables>
+      <Variable name="Disease" type="finiteStates" role="chance">
+        <Coordinates x="120" y="60" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Test result" type="finiteStates" role="chance">
+        <Coordinates x="120" y="170" />
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="320" y="170" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="U" type="numeric" role="utility">
+        <Coordinates x="320" y="290" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Test result" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Test result" />
+        <Variable name="Therapy" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="U" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="U" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.86 0.14</Values>
+        <UncertainValues>
+          <Value distribution="Complement">1.0</Value>
+          <Value distribution="Beta" name="prevalence">14.0 86.0</Value>
+        </UncertainValues>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Test result" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.9 0.1 0.2 0.8</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <UtilityVariable name="U" />
+        <Variables>
+          <Variable name="Therapy" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>10.0 8.0 2.0 9.0</Values>
+        <UncertainValues>
+          <Value />
+          <Value distribution="Triangular" name="utilTherapyWhenHealthy">7.0 9.0 8.0</Value>
+          <Value />
+          <Value distribution="Triangular" name="utilTherapyWhenIll">8.0 10.0 9.0</Value>
+        </UncertainValues>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

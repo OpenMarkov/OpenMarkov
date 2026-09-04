@@ -1,0 +1,47 @@
+@startuml embudo-evidencia-imposible
+skinparam defaultFontName Sans
+skinparam shadowing false
+skinparam ArrowColor #444444
+skinparam rectangle {
+  BackgroundColor #F8F8F8
+  BorderColor #888888
+}
+skinparam rectangle<<gesto>> {
+  BackgroundColor #E8F0FE
+}
+skinparam rectangle<<malo>> {
+  BackgroundColor #FDECEA
+}
+skinparam rectangle<<regular>> {
+  BackgroundColor #FFF4E5
+}
+skinparam rectangle<<silencio>> {
+  BackgroundColor #EEEEEE
+}
+
+title El mismo error de usuario, tratamientos distintos segun el gesto
+
+rectangle "Doble clic en un estado\n(modo inferencia)" <<gesto>> as G1
+rectangle "Quitar un hallazgo" <<gesto>> as G2
+rectangle "Dialogo de anadir hallazgo /\nentrar en inferencia /\nnavegar casos / opciones" <<gesto>> as G3
+rectangle "Propagacion estocastica" <<gesto>> as G4
+rectangle "Evolucion temporal\n(variables numericas)" <<gesto>> as G5
+rectangle "Evaluar una red DAN\nno evaluable" <<gesto>> as G6
+
+rectangle "La inferencia detecta\nevidencia imposible\n(posterior a ceros, pesos a cero,\nhallazgos contradictorios)" as DET
+
+rectangle "UnreachableException\n«error que el desarrollador\nno previo»" <<malo>> as UNR
+rectangle "UnrecoverableException\ndialogo de error generico\n(sin mensaje propio)" <<regular>> as REC
+rectangle "Ni dialogo ni aviso:\nceros / curvas sin normalizar" <<silencio>> as SIL
+
+G1 --> DET
+G2 --> DET
+G3 --> DET
+G4 --> DET
+G5 --> DET
+G6 --> DET
+
+DET --> UNR : EditorInputHandler:240\nEvidenceManager:170\nMIDTemporalEvolution:278
+DET --> REC : MainPanelListenerAssistant:139\nEvidenceManager:634-741\nStochasticPropagationOutputFrame:203
+DET --> SIL : DANConditionalSymmetricInference:43\nMIDTemporalEvolution:612 (normalizacion muerta)
+@enduml

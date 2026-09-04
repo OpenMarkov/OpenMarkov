@@ -1,0 +1,61 @@
+@startuml
+' Cada regla de red vive escrita dos veces: una en la restricción (red completa)
+' y otra dentro de cada edición que podría violarla.
+skinparam shadowing false
+skinparam defaultFontName sans-serif
+
+package "Hoy: dos copias de cada regla" #FFF8F8 {
+    abstract class PNConstraint {
+        + checkProbNet(red) : boolean
+    }
+    class NoCycle {
+        + checkProbNet(red)
+    }
+    abstract class PNEdit {
+        + executeEdit()
+        + checkConstraintsWillBeMet() «vacío por defecto»
+    }
+    class AddLinkEdit {
+        + checkConstraintsWillBeMet()
+    }
+    class ConstraintManager <<singleton>> {
+        descubre @Constraint vía ClassGraph
+    }
+
+    PNConstraint <|-- NoCycle
+    PNEdit <|-- AddLinkEdit
+    ConstraintManager ..> PNConstraint : solo alimenta\ncheckProbNet
+    AddLinkEdit -[#red,bold]-> NoCycle : reescribe la regla de ciclos\ny otras 14 restricciones,\nen línea (líneas 68-187)
+
+    note bottom of AddLinkEdit #FFCCCC
+        17 subclases de PNEdit reescriben a mano
+        las reglas de las restricciones. Una
+        restricción nueva descubierta como plugin
+        NO se impone sobre las ediciones: hay que
+        editar cada PNEdit afectado.
+    end note
+    note bottom of PNConstraint
+        ProbNet.addConstraint registra además cada
+        restricción como oyente de ediciones...
+        pero la interfaz de oyente no tiene veto y
+        ninguna subclase lo usa: registro inerte.
+    end note
+}
+
+package "Propuesta: un único punto de imposición" #F8FFF8 {
+    abstract class "PNConstraint'" as PNC2 {
+        + checkProbNet(red) : boolean
+        + checkEdit(edición) «por defecto delega\nen checkProbNet»
+    }
+    abstract class "PNEdit'" as PNE2 {
+        + executeEdit() «recorre las restricciones\nde la red y llama a checkEdit»
+    }
+    PNE2 --> PNC2 : para cada restricción\nde probNet.getConstraints()
+    note bottom of PNC2 #CCFFCC
+        Cada regla vive una sola vez. Una restricción
+        plugin queda impuesta en los dos niveles
+        (red completa y edición) sin tocar ninguna
+        edición existente.
+    end note
+}
+@enduml

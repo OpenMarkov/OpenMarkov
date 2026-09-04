@@ -1,0 +1,37 @@
+@startuml
+title Todo resultado de una operación reserva y rellena una tabla que después tira
+
+skinparam shadowing false
+skinparam activity {
+  BackgroundColor White
+  BorderColor #555555
+  ArrowColor #555555
+  DiamondBackgroundColor White
+}
+
+start
+
+:multiply, sum, multiplyAndMarginalize o merge han calculado\n**resultValues**, un array de N dobles con el resultado ya completo;
+
+:new TablePotential(variables, role, resultValues)\n<i>TablePotential.java:71-74</i>;
+
+partition "this(variables, role): el constructor de dos argumentos" {
+  :values = new double de tamaño N\nla máquina virtual lo pone a cero: N escrituras;
+  #FFE0E0:setUniform()  <i>TablePotential.java:475-522</i>\nDentro hay **dos** Arrays.fill(values, value) consecutivos\npara el mismo caso: la línea 511 y la 520, dentro del\n"if (setValue)" final. 2N escrituras más;
+}
+
+#FFE0E0:this.values = table\nEl array recién reservado y rellenado tres veces queda para\nel recolector de basura sin haberse leído nunca;
+
+stop
+
+note right
+  **Coste por operación:** N*8 bytes de basura y, para los
+  papeles de probabilidad, unas 3N escrituras inútiles;
+  para las utilidades, sólo la reserva. N es el tamaño de
+  la tabla, exponencial en el número de variables del factor.
+
+  **Arreglo:** un constructor que no pase por el de
+  dos argumentos, y quitar el relleno duplicado de
+  setUniform. Ver la sección 6.1.
+end note
+@enduml

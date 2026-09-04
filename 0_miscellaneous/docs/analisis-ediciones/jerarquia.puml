@@ -1,0 +1,117 @@
+@startuml jerarquia
+skinparam backgroundColor #FFFFFF
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam ArrowColor #444444
+skinparam class {
+  BorderColor #666666
+  BackgroundColor #FAFAFA
+  FontSize 12
+}
+hide empty members
+
+title La jerarquía de PNEdit tal como está hoy
+
+abstract class PNEdit <<abstract>> {
+  # probNet : ProbNet
+  - belongsToACompoundEdit : boolean
+  - typicalRedo : boolean
+  --
+  + executeEdit() <<final>>
+  # {abstract} doEdit()
+  + checkConstraintsWillBeMet(c) : <b>cuerpo vacío</b>
+  + undo() : <b>cuerpo vacío</b>
+  + redo() : llama a doEdit()
+}
+
+abstract class MultiEdit <<sealed>> {
+  + {abstract} getEdits() : Stream<PNEdit>
+  # doEdit() : ejecuta las sub-ediciones
+  + checkConstraintsWillBeMet(c) : recorre las sub-ediciones
+  + undo()/redo() <<final>>
+}
+
+abstract class CompoundPNEdit {
+  - edits : Lazy<ArrayList<PNEdit>>
+  # {abstract} generateEdits()
+}
+
+class ListPNEdit {
+  - edits : List<PNEdit>
+}
+
+abstract class MultiStepEdit {
+  - edits : ArrayList<PNEdit>
+  # {abstract} doMultiStepEdit(ejecutor)
+  + checkConstraintsWillBeMet(c) : <b>ANULADA a vacío</b>
+}
+
+abstract class BaseLinkEdit <<sealed>> {
+  # variableFrom, variableTo
+  # isDirected
+  + {abstract} getUndoEdit() : BaseLinkEdit
+}
+
+package "core.action.core (39 clases)" as CORE {
+  class AddNodeEdit
+  class RemoveNodeEdit
+  class NodeStateEdit
+  class SetPotentialEdit
+  class PotentialChangeEdit
+  class "…" as CoreResto
+}
+
+package "gui.action (22 clases)" as GUI {
+  class MoveNodeEdit
+  class TablePotentialValueEdit
+  class ICITablePotentialValueEdit
+  class "…" as GuiResto
+}
+
+package "compuestas" as COMP {
+  class CRemoveNodeEdit
+  class AbsorbParentsEdit
+  class RemoveSelectedEdit
+  class COrientLinksEdit
+  class MultiAddLinkEdit
+  class PasteEdit
+  class VariableTypeEdit
+  class ChangeNodeTypeEdit
+}
+
+package "sobre enlaces" as ENL {
+  class AddLinkEdit
+  class RemoveLinkEdit
+  class InvertLinkEdit
+  class InvertLinkAndUpdatePotentialsEdit
+  class OrientLinkEdit
+}
+
+PNEdit <|-- MultiEdit
+PNEdit <|-- BaseLinkEdit
+MultiEdit <|-- CompoundPNEdit
+MultiEdit <|-- ListPNEdit
+MultiEdit <|-- MultiStepEdit
+
+PNEdit <|-- CORE
+PNEdit <|-- GUI
+CompoundPNEdit <|-- COMP
+MultiStepEdit <|-- COMP
+BaseLinkEdit <|-- ENL
+
+note right of PNEdit
+  <b>undo() con cuerpo vacío</b> es la raíz
+  de casi todos los defectos: olvidarse
+  de deshacer no da ningún error, ni al
+  compilar ni al ejecutar.
+end note
+
+note bottom of MultiStepEdit
+  Anula la comprobación de restricciones
+  a un cuerpo vacío. Sus descendientes
+  (Pegar, Cambiar tipo de variable,
+  Cambiar tipo de nodo) no pueden
+  comprobar nada por adelantado.
+end note
+
+@enduml

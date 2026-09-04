@@ -1,0 +1,104 @@
+@startuml piezas
+skinparam backgroundColor #FFFFFF
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam ArrowColor #444444
+skinparam class {
+  BorderColor #666666
+  BackgroundColor #FAFAFA
+  FontSize 12
+}
+hide empty members
+
+title Las piezas del sistema de restricciones
+
+class "@Constraint" as ANOT <<annotation>> {
+  name() : String
+  defaultBehavior() : ConstraintBehavior
+}
+
+note right of ANOT #FFE0E0
+  <b>name() no lo lee nadie.</b>
+  Las otras anotaciones de complemento
+  (inferencia, potenciales, métricas)
+  la usan como clave de registro;
+  ésta no. Ha derivado en 6 de las 37
+  clases, con dos erratas incluidas
+  ("Ony…", "…Constrain").
+end note
+
+enum ConstraintBehavior {
+  YES
+  NO
+  OPTIONAL
+}
+
+note bottom of ConstraintBehavior #FFE0E0
+  <b>OPTIONAL significa «nunca activa».</b>
+  En producción sólo se llama a
+  buildConstraintList(tipo), que pasa
+  includeOptionals = false.
+end note
+
+abstract class PNConstraint {
+  + {abstract} checkProbNet(red, checker)
+  + isMetBy(red) : boolean
+  + compareTo(otra) : por nombre de clase
+  + equals(o) : <b>lanza NPE si o es null</b>
+}
+
+interface PNEditListener {
+  beforeEditExecutes(e)
+  afterEditExecutes(e)
+  …
+}
+
+note right of PNEditListener #FFE0E0
+  PNConstraint lo implementa y
+  ProbNet lo registra como oyente,
+  pero <b>ninguna de las 37 clases</b>
+  <b>implementa ningún método.</b>
+  Registro inerte.
+end note
+
+class ConstraintManager <<singleton>> {
+  - defaultConstraintBehaviors : HashMap
+  + buildConstraintList(tipo, conOpcionales)
+  - addIfInstantiable(lista, clase)
+}
+
+note bottom of ConstraintManager #FFE0E0
+  addIfInstantiable <b>salta en silencio</b>
+  las clases sin constructor vacío,
+  aunque PNConstraint lo declare
+  obligatorio con @ImplementationRequirements.
+end note
+
+abstract class NetworkType {
+  + getOverwrittenConstraints() : Map
+  + isApplicableConstraint(c)
+}
+
+class ProbNet {
+  - constraints : <b>TreeSet</b><PNConstraint>
+  + addConstraint(c)
+  + checkProbNet() : boolean
+  + setNetworkType(t)
+}
+
+note bottom of ProbNet
+  Un TreeSet ordenado por nombre de clase:
+  <b>una restricción por clase</b>. Por eso
+  getConstraintsOfClass(), que devuelve un
+  Stream, tiene siempre 0 o 1 elemento.
+end note
+
+ANOT ..> PNConstraint : marca
+PNConstraint ..|> PNEditListener
+PNConstraint --> ConstraintBehavior
+ConstraintManager --> PNConstraint : descubre con ClassGraph
+ConstraintManager --> NetworkType : consulta las anulaciones
+ProbNet --> ConstraintManager : pide su lista
+ProbNet *-- PNConstraint
+
+@enduml

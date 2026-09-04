@@ -1,0 +1,84 @@
+@startuml propuesta
+skinparam backgroundColor #FFFFFF
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam ArrowColor #444444
+skinparam class {
+  BorderColor #666666
+  BackgroundColor #FAFAFA
+  FontSize 12
+}
+hide empty members
+
+title La propuesta: una regla, un sitio, dos preguntas
+
+abstract class PNConstraint {
+  + {abstract} checkProbNet(red, checker)
+  + <b>checkEdit(edición, checker)</b>
+  <i>por defecto: no dice nada</i>
+  --
+  + isMetBy(red)
+}
+
+note right of PNConstraint
+  <b>Dos preguntas, una clase.</b>
+  «¿está mal esta red?» y
+  «¿la estropearía esta acción?»
+  las contesta quien conoce la regla.
+
+  Una restricción nueva queda impuesta
+  en los dos niveles sin tocar ninguna
+  edición: eso es lo que la arquitectura
+  de complementos prometía.
+end note
+
+class NoCycle {
+  + checkProbNet(red, c)
+  + checkEdit(edición, c)
+  <i>reconoce AddLinkEdit,</i>
+  <i>InvertLinkEdit, …</i>
+}
+
+class NoUtilityParent {
+  + checkProbNet(red, c)
+  + checkEdit(edición, c)
+}
+
+abstract class PNEdit {
+  + executeEdit() <<final>>
+  <i>recorre las restricciones</i>
+  <i>de la red y les pregunta</i>
+  --
+  # {abstract} doEdit()
+}
+
+note bottom of PNEdit #E8F5E9
+  Las ediciones dejan de nombrar
+  restricciones concretas.
+  <b>AddLinkEdit pierde 120 líneas</b>
+  y con ellas la posibilidad de que
+  su copia de la regla diverja de
+  la original —que es justo lo que
+  le ha pasado a NoUtilityParent.
+end note
+
+class ENTRADAS <<puntos de entrada>> {
+  el lector de .pgmx
+  el módulo resttemplate
+  el aprendizaje
+  <i>hoy no comprueban nada</i>
+}
+
+note bottom of ENTRADAS #E8F5E9
+  Con checkProbNet() vivo y llamado
+  al terminar de leer, una red
+  inválida se detecta al abrirla
+  y no al guardarla.
+end note
+
+PNConstraint <|-- NoCycle
+PNConstraint <|-- NoUtilityParent
+PNEdit ..> PNConstraint : <b>pregunta a todas</b>
+ENTRADAS ..> PNConstraint : checkProbNet()
+
+@enduml

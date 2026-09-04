@@ -1,0 +1,72 @@
+@startuml
+title Diseño objetivo del ciclo de edición: F3 devuelve la regla a la restricción; F4 hace obligatoria la reversión
+
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor White
+  BorderColor #555555
+  ArrowColor #555555
+}
+skinparam noteBackgroundColor #FFFDF0
+
+abstract class PNConstraint {
+  +checkProbNet(red, comprobador)
+  +<b>checkEdit(edicion, comprobador)</b> {nuevo, F3}
+  ..
+  deja de implementar PNEditListener (F3.4)
+}
+
+abstract class PNEdit {
+  +executeEdit() <<final>>
+  --
+  1. para cada restricción de la red:\n   restricción.checkEdit(this, comprobador)
+  2. si hay violaciones: excepción, sin tocar la red
+  3. deshacer = doEdit() devuelve la reversión (F4)
+  4. si doEdit() lanza a medias: se revierte lo aplicado
+  5. entra en el historial
+  --
+  -typicalRedo {desaparece con F4}
+}
+
+class "NoCycle, NoUtilityParent, ..." as Reglas {
+  su regla, escrita una sola vez
+}
+
+class AddLinkEdit {
+  de 324 líneas a ~120:
+  pierde las 15 restricciones
+  copiadas a mano
+}
+
+class StepExecuter {
+  execute(edicion):
+  <b>apunta antes de ejecutar</b> (F3.4)
+  así la reversión del padre
+  alcanza al paso que falla
+}
+
+PNConstraint <|-- Reglas
+PNEdit <|-- AddLinkEdit
+PNEdit ..> PNConstraint : recorre las\nrestricciones de la red
+
+note right of PNConstraint
+  Con checkEdit aquí:
+  - una restricción nueva descubierta como
+    complemento queda impuesta también
+    sobre las ediciones (cierra D2 y R1-R2)
+  - las divergencias del tipo NoUtilityParent
+    dejan de poder escribirse
+  - los validadores de la ventana sobran, y con
+    ellos el hueco de resttemplate y aprendizaje
+end note
+
+note right of PNEdit
+  El paso 3 (F4) es la decisión de equipo:
+  elimina de raíz D1 (undo vacío heredado),
+  D5 (dónde se fotografía el estado),
+  D6 (typicalRedo) y la familia de G1-G2:
+  una edición sin reversión no compila.
+  Requiere la prueba genérica de F0.1 en verde.
+end note
+@enduml

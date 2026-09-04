@@ -1,0 +1,38 @@
+@startuml deshacer
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam rectangle {
+  BorderColor #666666
+  FontSize 12
+}
+skinparam ArrowColor #444444
+
+title Quién cumple el contrato de deshacer, y quién no
+
+rectangle "PNEdit.undo()\n<b>cuerpo vacío</b>" as BASE #FFF4CC
+
+rectangle "Lo anulan y funciona\n(unas 60 clases)" as OK #E8F5E9 {
+  card "AddNodeEdit, RemoveNodeEdit,\nAddLinkEdit, RemoveLinkEdit,\nMoveNodeEdit, NodeCommentEdit,\nUncertainValuesEdit…" as cok
+}
+
+rectangle "No lo anulan:\ndeshacer no hace nada" as MAL #FFCDD2 {
+  card "<b>PotentialChangeEdit</b>\n └ TablePotentialValueEdit\n └ AugmentedPotentialValueEdit\n<b>EventTablePotentialValueEdit</b>\nRemovePotentialsEdit (nunca se usa)\nRemoveMarkovNetNodeEdit (sólo inferencia)" as cmal
+}
+
+rectangle "Lo anulan, pero\ndeshacen mal" as REG #FFE0B2 {
+  card "<b>AbsorbNodeEdit</b>: restaura con null\n<b>NodeStateEdit</b>: pierde restricciones\n<b>VariableTypeEdit</b>: deja un potencial\n<b>ChangeNetworkTypeEdit</b>: pierde agentes\n<b>ICITablePotentialValueEdit</b>: dos entradas\n<b>AddLinkEdit</b>: pierde restricciones de enlace" as creg
+}
+
+BASE --> OK
+BASE --> MAL
+BASE --> REG
+
+note bottom of MAL
+  <b>TablePotentialValueEdit</b> es la edición
+  de cada celda de una tabla de probabilidad:
+  la acción más frecuente de todo el programa.
+  Deshacer no la revierte, y rehacer después
+  lanza una excepción.
+end note
+
+@enduml

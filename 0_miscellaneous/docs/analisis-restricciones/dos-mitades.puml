@@ -1,0 +1,45 @@
+@startuml dos-mitades
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam rectangle {
+  BorderColor #666666
+  FontSize 12
+}
+skinparam ArrowColor #444444
+
+title Las dos mitades del diseño, y cuál de ellas defiende de verdad
+
+rectangle "MITAD 1 — la completa\n<b>PNConstraint.checkProbNet()</b>" as M1 #E8F5E9 {
+  card "Las 37 restricciones la implementan.\nUna regla, un sitio.\nSe descubre sola con @Constraint." as c1
+  card "<b>Se ejecuta desde 4 sitios en todo el producto:</b>\n· InvertLinkEdit — tras mutar\n· ChangeNodeTypeEdit — tras mutar\n· PasteEdit — tras mutar\n· InferenceAlgorithm — con otras restricciones" as c2 #FFCDD2
+}
+
+rectangle "MITAD 2 — la incompleta\n<b>PNEdit.checkConstraintsWillBeMet()</b>" as M2 #FFF4CC {
+  card "17 ediciones la rellenan a mano,\nnombrando clases concretas.\nAddLinkEdit conoce 15 restricciones.\n5 restricciones no las mira nadie." as c3
+  card "<b>Se ejecuta siempre, antes de cada edición.</b>\nEs la que de hecho defiende el modelo." as c4 #E8F5E9
+}
+
+rectangle "Lo que NO comprueba nada" as NADA #FFCDD2 {
+  card "abrir un fichero .pgmx\nel módulo resttemplate\nlos algoritmos de aprendizaje\nimportar de Elvira, XMLBIF, Amua" as c5
+}
+
+M1 -down-> NADA
+M2 -down-> NADA
+
+note bottom of NADA
+  Ninguno pasa por una edición, y ninguno llama a checkProbNet().
+  Una red leída de fichero <b>nunca se valida contra sus propias restricciones.</b>
+end note
+
+note right of M2 #FFF4CC
+  <b>La ironía del diseño.</b>
+  La mitad que está bien hecha
+  —centralizada, completa, descubierta
+  como complemento— es la que casi
+  no se ejecuta.
+  La mitad que se ejecuta siempre
+  es la copiada a mano, y es la
+  incompleta.
+end note
+
+@enduml
