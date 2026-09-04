@@ -529,7 +529,25 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
 
 **De la revisión de septiembre — revientan en casos concretos:**
 
-- [ ] **RP16** El potencial de ajuste comprueba en su constructor que las variables tengan tres estados, o deja de suponerlo en la función de combinación y en la fuga por omisión.
+- [x] **RP16** El potencial de ajuste comprueba en su constructor que las variables tengan tres estados, o deja de suponerlo en la función de combinación y en la fuga por omisión.
+
+    **Hecho** el 4 de septiembre de 2026, commit `c8fdf7a`, **comprobando en el constructor**.
+
+    **Medido antes de arreglarlo.** La rutina que construye la regla de combinación avanza de tres en tres y escribe tres casillas en cada parada, sobre una tabla dimensionada con el número real de valores. Con variables de dos valores muere al escribir en la casilla ocho de una tabla de ocho; con cuatro, en la sesenta y cuatro de una de sesenta y cuatro. Con tres, bien. La primera consulta de probabilidad muere igual, porque pasa por ahí.
+
+    La fuga por omisión pone toda la probabilidad en la casilla que ocupa la mitad del array. Con tres valores esa es la del medio, que es lo que el modelo quiere; con dos le toca al segundo y con cuatro al tercero, y en ninguno de los dos hay un medio.
+
+    **Por qué se comprobó en vez de abrir el modelo.** La comprobación de la clase **ya exigía** tres valores, y la ventana la consulta, así que desde la interfaz no se puede crear uno mal. Quien la salta es el lector de ficheros, que construye el potencial directamente. Es decir, la regla ya estaba escrita y lo que faltaba era hacerla valer también por esa puerta. Abrir el modelo a cualquier número de valores iría contra lo que la clase declara de sí misma y obligaría a decidir antes qué significa el modelo con un número par, que es una pregunta del modelo y no del código.
+
+    **Un matiz que salió al discutirlo.** La línea de la fuga, `leakyParameters[numStates / 2]`, **ya vale para cualquier número impar**: ese dos es un divisor para encontrar el medio, no un número de valores. Con cinco devuelve la casilla dos, que es la del medio. Lo que sí quedaría atado al tres si algún día se quisieran cinco es la regla de combinación, que escribe exactamente tres casillas por parada, y los tamaños de parámetros de **RP17**.
+
+    **Lo que cambia para el usuario.** Abrir un fichero con un modelo de ajuste sobre variables de otro número de valores se niega ahora al leerlo, diciendo qué variable falla, cuántos valores tiene y cuántos hacen falta, en vez de parecer que va bien y morir después con un error interno de índice.
+
+    **Entró también** el `index /= 3` de la regla de combinación, que tenía el tres a pelo al lado de un `index % NUM_STATES` que sí usaba la constante. Ahora los dos usan la constante. No lo pedía el punto; se incluyó porque es la misma suposición escrita dos veces y es lo que haría fallar a medias un cambio futuro del número de valores.
+
+    **Para el porte en C++:** el constructor del modelo de ajuste pasa a rechazar variables cuyo número de valores no sea el declarado por el modelo, con un mensaje que nombra la variable y los dos números; y el número tres deja de estar escrito a pelo dentro de la regla de combinación.
+
+    Prueba de regresión: `TheTuningModelRefusesVariablesThatAreNotOfThreeStatesTest`, cinco casos, en el mismo commit. Retirando el arreglo fallan tres. Batería entera: 2614 pruebas, cero fallos.
 - [ ] **RP17** El mismo potencial acepta arrays del tamaño que fabrica su clase madre, estados del hijo por estados del padre, y no solo de cuatro o nueve.
 - [ ] **RP18** `replaceVariable` reconstruye las variables auxiliares también en la posición cero, limpia la caché y redimensiona la fila de parámetros. Completa lo que **F1-b** arregló para las demás posiciones.
 - [ ] **RP19** Se redefine `replaceNumericVariable` para mantener el mapa de variables auxiliares al día, o se documenta por qué no hace falta.
