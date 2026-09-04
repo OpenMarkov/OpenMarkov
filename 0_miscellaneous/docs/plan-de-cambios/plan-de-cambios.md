@@ -397,7 +397,19 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     **Lo que esto no arregla.** RP20 citaba esta columna de ceros como la entrada fácil a sus dos bucles de muestreo. Esa entrada queda cerrada, pero RP20 sigue en pie: los métodos de asignación siguen sin comprobar que una columna sume uno, así que el usuario puede escribir a mano lo que el valor por omisión ya no escribe.
 
     Prueba de regresión: `DefaultNoisyParametersAreADistributionTest`, cinco casos. Sin el arreglo fallan tres.
-- [ ] **RP5** `setNoisyPotentials` limpia la tabla en caché, clona y comprueba la longitud, como ya hacen sus dos hermanos.
+- [x] **RP5** `setNoisyPotentials` limpia la tabla en caché, clona y comprueba la longitud, como ya hacen sus dos hermanos.
+
+    **Hecho** el 4 de septiembre de 2026, commit `c4deea4`.
+
+    **Medido antes de arreglarlo**, sobre un MAX ruidoso de hijo y padre de dos estados. Se le pregunta una probabilidad, que contesta 0,9 y de paso llena la caché. Se le asignan después unos parámetros que dicen 0,2. Los parámetros quedan cambiados, pero la misma pregunta sigue contestando **0,9**. Y escribir en la tabla del llamador después de asignarla cambia los parámetros del modelo: un 99 puesto fuera aparece dentro.
+
+    **El arreglo.** La asignación pasa ahora por el método que fija los parámetros de un solo padre, que ya limpiaba la caché y ya exigía que la fila midiera los estados del hijo por los del padre. La fila se clona al entrar. Así la regla vive en un sitio y no en dos, que era lo que había permitido que las dos versiones se separaran.
+
+    Se mantiene la comprobación propia de que la variable sea un padre, que va antes y da un mensaje mejor: el método de un solo padre no distingue la variable condicionada de una ajena.
+
+    **Quién lo alcanzaba.** El único llamador es el algoritmo de esperanza-maximización del aprendizaje de parámetros, confirmado buscando en todos los módulos. La batería de `learning.algorithm` pasa con el cambio.
+
+    Prueba de regresión: `LearnedNoisyParametersAreTheOnesAnsweredTest`, cuatro casos. Sin el arreglo fallan tres; el cuarto, el rechazo de un potencial sobre una variable ajena, ya funcionaba y sigue.
 - [ ] **RP6** `sum` toma el criterio como lo toma `multiply`: el primero no nulo de la lista entera, contando las constantes. Es el mismo arreglo que **F1-d** hizo en la marginalización.
 - [ ] **RP7** `multiplyAndMarginalize(prob, util, var)` marginaliza también cuando la probabilidad es una constante. Si se prefiere conservar el atajo, su javadoc deja de prometer lo que no hace y el llamador se protege.
 - [ ] **RP8** Se separan las dos preguntas que hoy comparte `almostEqual`: una comparación relativa y una prueba de cero con tolerancia absoluta. Ya era la recomendación del §5.7 de agosto, y **F2-d** la tiene pendiente.
