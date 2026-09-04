@@ -89,7 +89,7 @@ final class TablePotentialElimination {
                 Arrays.fill(strategic.strategyTrees, treeOfTheConstants);
                 resultingPotential = strategic;
             }
-            resultingPotential.getValues()[0] = constantFactor;
+            Arrays.fill(resultingPotential.getValues(), constantFactor);
             resultingPotential.setCriterion(criterion);
             return resultingPotential;
         }

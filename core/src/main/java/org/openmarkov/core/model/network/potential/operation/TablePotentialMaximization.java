@@ -15,6 +15,7 @@ import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -77,7 +78,7 @@ final class TablePotentialMaximization {
         int numProperPotentials = properPotentials.size();
 
         if (numProperPotentials == 0) {
-            resultingPotential.getValues()[0] = constantFactor;
+            Arrays.fill(resultingPotential.getValues(), constantFactor);
             return new Object[]{resultingPotential, gResult};
         }
 
@@ -196,7 +197,7 @@ final class TablePotentialMaximization {
         int numProperPotentials = properPotentials.size();
 
         if (numProperPotentials == 0) {
-            resultingPotential.getValues()[0] = constantFactor;
+            Arrays.fill(resultingPotential.getValues(), constantFactor);
             return new TablePotential[]{resultingPotential, policy};
         }
 
