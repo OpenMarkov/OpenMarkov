@@ -456,7 +456,19 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     **El arreglo**, de una línea por sitio: se rellena la tabla entera con la constante.
 
     Prueba de regresión: `AllConstantOperandsFillTheWholeTableTest`, un caso por sitio. Sin el arreglo fallan los tres.
-- [ ] **RP10** `maximize` sobre una colección pregunta el criterio al primer potencial y no al resultado recién construido, y recorre la colección una sola vez.
+- [x] **RP10** `maximize` sobre una colección pregunta el criterio al primer potencial y no al resultado recién construido, y recorre la colección una sola vez.
+
+    **Hecho** el 4 de septiembre de 2026, commit `db078d7`, **y en los tres caminos, no en uno**.
+
+    **Medido antes de arreglarlo.** Los tres pierden el criterio: la maximización sobre una colección, la que elimina una variable y la uniforme. La guarda de la primera preguntaba `isAdditive()` al potencial recién construido, y ese método contesta si el criterio no es nulo, así que la respuesta era siempre no. Las otras dos no lo ponían nunca.
+
+    **Por qué entraron las otras dos, que el punto no pedía.** La regla es que el máximo de utilidades es una utilidad, y tiene que valer en todos los sitios donde se maximiza. Además el propio hallazgo dice que la de la colección no la llama nadie, mientras que las otras dos son las que usan la absorción de un nodo y el cálculo de una política: arreglar solo la que nadie alcanza habría dejado fuera lo único que llega al usuario. Es el mismo criterio que en **RP2**.
+
+    De dónde sale el criterio: la de la colección lo toma del primer potencial, y las otras dos del primero que no sea nulo, que es como ya lo toman multiplicar y sumar tras **RP6**.
+
+    **El segundo iterador** también se fue: el primer potencial se leía dos veces, una en crudo y otra reordenado.
+
+    Prueba de regresión: `MaximizingKeepsTheCriterionTest`, cuatro casos. Sin el arreglo fallan tres.
 
 **De la revisión de septiembre — estropean lo que el usuario tenía guardado:**
 
