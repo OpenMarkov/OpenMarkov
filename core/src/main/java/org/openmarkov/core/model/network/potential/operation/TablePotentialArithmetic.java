@@ -64,6 +64,7 @@ final class TablePotentialArithmetic {
      *                        {@code boolean}.
      *
      * @return A {@code TablePotential} as result. //TODO
+     * <p>A list of one is answered with that very potential, not with a copy.
      */
     static TablePotential multiply(List<TablePotential> tablePotentials, boolean reorder) {
         int numPotentials = tablePotentials.size();
@@ -199,6 +200,7 @@ final class TablePotentialArithmetic {
      * @param tablePotentials {@code List} of {@code TablePotential}s.
      *
      * @return {@code TablePotential}
+     * <p>A list of one is answered with that very potential, not with a copy.
      */
     static TablePotential sum(List<TablePotential> tablePotentials) {
         if (tablePotentials == null || tablePotentials.isEmpty()) {

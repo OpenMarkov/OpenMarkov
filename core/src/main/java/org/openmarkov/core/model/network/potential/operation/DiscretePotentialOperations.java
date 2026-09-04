@@ -47,6 +47,7 @@ public final class DiscretePotentialOperations {
      * @param tablePotentials {@code ArrayList} of extends {@code Potential}.
      *
      * @return A {@code TablePotential} as result.
+     * <p>A list of one is answered with that very potential, not with a copy.
      */
     public static TablePotential multiply(List<TablePotential> tablePotentials) {
         return TablePotentialArithmetic.multiply(tablePotentials);
@@ -56,6 +57,7 @@ public final class DiscretePotentialOperations {
      * @param potentials {@code ArrayList} of extends {@code Potential}.
      *
      * @return A {@code TablePotential} as result.
+     * <p>A list of one is answered with that very potential, not with a copy.
      */
     public static TablePotential multiply(TablePotential... potentials) {
         return TablePotentialArithmetic.multiply(potentials);
@@ -67,6 +69,7 @@ public final class DiscretePotentialOperations {
      *                        {@code boolean}.
      *
      * @return A {@code TablePotential} as result. //TODO
+     * <p>A list of one is answered with that very potential, not with a copy.
      */
     public static TablePotential multiply(List<TablePotential> tablePotentials, boolean reorder) {
         return TablePotentialArithmetic.multiply(tablePotentials, reorder);
@@ -76,11 +79,18 @@ public final class DiscretePotentialOperations {
      * @param tablePotentials {@code List} of {@code TablePotential}s.
      *
      * @return {@code TablePotential}
+     * <p>A list of one is answered with that very potential, not with a copy.
      */
     public static TablePotential sum(List<TablePotential> tablePotentials) {
         return TablePotentialArithmetic.sum(tablePotentials);
     }
     
+    /**
+     * @param tablePotentials {@code TablePotential}s to add up.
+     *
+     * @return {@code TablePotential}
+     * <p>A list of one is answered with that very potential, not with a copy.
+     */
     public static TablePotential sum(TablePotential... tablePotentials) {
         return TablePotentialArithmetic.sum(tablePotentials);
     }
