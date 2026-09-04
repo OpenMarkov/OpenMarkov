@@ -483,7 +483,21 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     **Por qué no se usó `imposeOtherDistributionWhenDistributionIsZero`**, que es lo que el punto proponía: esa rutina da toda la probabilidad al **primer** estado, y el primer estado puede ser justo uno de los que la restricción prohíbe. En el escenario medido lo es, así que habría dejado `[1, 0, 0]`: probabilidad uno en el estado prohibido, que es peor que el fallo que se venía a arreglar. Además recorre la tabla entera, y aquí se repara una columna cada vez.
 
     Prueba de regresión: `RestrictingALinkLeavesADistributionTest`, cinco casos, incluidos el hijo de dos estados y el reparto en proporción, que están para que el arreglo no los cambie. Sin él fallan los dos del hijo con más de dos estados.
-- [ ] **RP12** `addVariable` y `removeVariable` de las tres clases canónicas clonan los parámetros y conservan comentario, criterio y propiedades. Lo segundo se arregla llamando al constructor de copia de la clase madre.
+- [x] **RP12** `addVariable` y `removeVariable` de las tres clases canónicas clonan los parámetros y conservan comentario, criterio y propiedades. Lo segundo se arregla llamando al constructor de copia de la clase madre.
+
+    **Hecho** el 4 de septiembre de 2026, commit `eda303b`.
+
+    **Medido antes de arreglarlo**, en las tres familias y en los dos métodos, seis sitios con los dos defectos: el potencial devuelto salía con el comentario vacío, sin criterio y sin propiedades, y compartía con el original la fila de parámetros de cada padre. El `copy` de esas mismas clases conserva las tres cosas, así que la diferencia no era intencionada.
+
+    **Quién llega.** Las tres ediciones de enlace —añadir, quitar e invertir— son las que llaman a estos métodos. Como el escritor guarda el comentario y el lector lo restaura, abrir una red, dibujar un enlace hacia un nodo con modelo canónico y guardar **borraba el comentario para siempre**.
+
+    **El arreglo.** Los seis sitios clonan la fila de cada padre y la de la fuga. Y las tres líneas que copian comentario, criterio y propiedades salieron del constructor de copia de `Potential` a un método propio al que llaman los seis, así que la regla vive en un sitio.
+
+    **Dos decisiones.** El punto proponía llamar al constructor de copia de la clase madre, y no sirve: ese constructor toma la lista de variables del original, y la lista es justo lo que cambia aquí. Por eso el método extraído. Y quedó **público**, no protegido, porque quitar el último padre devuelve un potencial uniforme, que no es subclase de las canónicas y perdía el comentario por ese camino igual.
+
+    De paso se quitó, del comentario que se movió, una frase que contaba lo que el código hacía antes de una corrección anterior.
+
+    Prueba de regresión: `AddingAndRemovingAVariableKeepWhatIsNotNumbersTest`, cuatro casos, uno por familia más uno de escritura cruzada; va en el mismo commit. Retirando el arreglo fallan los cuatro. La batería entera, lanzada a mano: 2602 pruebas, cero fallos.
 - [ ] **RP13** Los métodos que devuelven los parámetros como tabla entregan una copia, o el aprendizaje deja de escribir dentro de ellos. Elegirlo con quien conozca el aprendizaje: copiar cuesta memoria en el camino caliente.
 - [ ] **RP14** Se documenta —o se elimina— que multiplicar o sumar una lista de un elemento devuelve el objeto del llamador. Era la recomendación del §7.2 de agosto, que **F8-f** recoge; lo que añade la revisión es que componerlo con `normalize` ya no es una posibilidad teórica.
 
