@@ -133,8 +133,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
     }
     
     /**
-     * Computes default noisy parameters for all parent variables. Each parent's parameters
-     * are initialized so that the identity mapping holds (state i of parent maps to state i of child).
+     * Computes default noisy parameters for all parent variables.
      *
      * @return a 2D array where each row corresponds to a parent variable's noisy parameters
      */
@@ -149,7 +148,9 @@ public abstract class ICIPotential extends Potential implements Projectable {
     }
     
     /**
-     * Initializes noisy parameters values
+     * Initializes noisy parameters values. Each state of the parent gives all the probability to the
+     * state of the same index of the conditioned variable, and the states of the parent beyond its
+     * last one give it to that last state.
      *
      * @param conditionedVariable Conditioned variable
      * @param parent              Parent variable
@@ -157,11 +158,10 @@ public abstract class ICIPotential extends Potential implements Projectable {
      * @return Array of noisy parameters values
      */
     public static double[] initializeNoisyParameters(Variable conditionedVariable, Variable parent) {
-        double[] probabilities = new double[conditionedVariable.getNumStates() * parent.getNumStates()];
+        int numStatesConditioned = conditionedVariable.getNumStates();
+        double[] probabilities = new double[numStatesConditioned * parent.getNumStates()];
         for (int j = 0; j < parent.getNumStates(); ++j) {
-            for (int k = 0; k < conditionedVariable.getNumStates(); ++k) {
-                probabilities[j * conditionedVariable.getNumStates() + k] = (k == j) ? 1.0 : 0.0;
-            }
+            probabilities[j * numStatesConditioned + Math.min(j, numStatesConditioned - 1)] = 1.0;
         }
         return probabilities;
     }
