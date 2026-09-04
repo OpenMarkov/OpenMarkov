@@ -353,14 +353,13 @@ public abstract class ICIPotential extends Potential implements Projectable {
     public void setNoisyPotentials(List<TablePotential> noisyPotentials) {
         for (TablePotential noisyPotential : noisyPotentials) {
             Variable parent = noisyPotential.getVariable(1);
-            int position = variables.indexOf(parent);
-            if (position < 1) {
+            if (variables.indexOf(parent) < 1) {
                 throw new UnrecoverableException(new InvalidArgumentException(
                         "The potential over " + noisyPotential.getVariable(0).getName() + " and " + parent
                                 .getName() + " cannot carry noisy parameters of " + getConditionedVariable()
                                 .getName() + ": " + parent.getName() + " is not one of its parents"));
             }
-            noisyParameters[position - 1] = noisyPotential.getValues();
+            setNoisyParameters(parent, noisyPotential.getValues().clone());
         }
     }
     
