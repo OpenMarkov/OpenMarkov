@@ -498,7 +498,23 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     De paso se quitó, del comentario que se movió, una frase que contaba lo que el código hacía antes de una corrección anterior.
 
     Prueba de regresión: `AddingAndRemovingAVariableKeepWhatIsNotNumbersTest`, cuatro casos, uno por familia más uno de escritura cruzada; va en el mismo commit. Retirando el arreglo fallan los cuatro. La batería entera, lanzada a mano: 2602 pruebas, cero fallos.
-- [ ] **RP13** Los métodos que devuelven los parámetros como tabla entregan una copia, o el aprendizaje deja de escribir dentro de ellos. Elegirlo con quien conozca el aprendizaje: copiar cuesta memoria en el camino caliente.
+- [x] **RP13** Los métodos que devuelven los parámetros como tabla entregan una copia, o el aprendizaje deja de escribir dentro de ellos. Elegirlo con quien conozca el aprendizaje: copiar cuesta memoria en el camino caliente.
+
+    **Hecho** el 4 de septiembre de 2026, commit `bf28f28`, copiando a la salida.
+
+    **Corrección al propio hallazgo, y a la primera explicación que se dio de él.** El hallazgo decía que el aprendizaje reescribe «los parámetros guardados de esa red», y al ir a comprobarlo la primera lectura del camino lo desmintió: la red modelo del diálogo de aprendizaje se carga **de un fichero** que se elige allí mismo, así que lo reescrito era un objeto interno que se tira al cerrar. Sin consecuencia para nadie.
+
+    **Pero el camino existe, y es otro.** El diálogo tiene un segundo botón que toma como red modelo **la que está abierta en la ventana**. Con esa opción y con «partir de la red modelo», la copia que hace el aprendizaje es superficial y comparte el objeto del potencial con la red de la pantalla.
+
+    **Medido ejecutando esa cadena entera** (sin diálogo, por las mismas llamadas): red con un MAX ruidoso cuyos parámetros valen `[0,8; 0,2; 0,3; 0,7]`, esa red como modelo, «partir de la red modelo», algoritmo de esperanza-maximización. Al terminar, los parámetros **de la red de la pantalla** valen prácticamente `[1; 0; 0; 1]`. Hizo falta que los datos informaran: con los parámetros por omisión y sin observar el hijo, no se escribe nada distinto y no se ve el fallo.
+
+    **El arreglo.** Los dos métodos construyen ahora la tabla sobre una copia. El aprendizaje trabaja sobre las suyas e instala el resultado al final con el método que ya llamaba, que es el diseño que este cambio deja correcto.
+
+    **La decisión que el punto dejaba abierta** era copiar a la salida o que el aprendizaje clonara al recibir, y advertía del coste en memoria del camino caliente. Ese coste resultó no serlo: el mismo método que entrega las tablas ya construye la función f, que crece exponencialmente con el número de padres. Con 2 padres la copia añade 10 números sobre 16; con 8, 34 sobre 1024; con 17, 70 sobre 524.288. Se eligió copiar a la salida porque además protege a cualquier llamador futuro y no solo al aprendizaje.
+
+    **Queda abierto** si el aprendizaje debe tratar modelos canónicos: ver **F8-h**.
+
+    Prueba de regresión: `TheParametersHandedOutAreCopiesTest`, cuatro casos, en el mismo commit. Sin el arreglo fallan tres. Las once pruebas del aprendizaje pasan y aprende lo mismo. La batería entera, a mano: 2606 pruebas, cero fallos.
 - [ ] **RP14** Se documenta —o se elimina— que multiplicar o sumar una lista de un elemento devuelve el objeto del llamador. Era la recomendación del §7.2 de agosto, que **F8-f** recoge; lo que añade la revisión es que componerlo con `normalize` ya no es una posibilidad teórica.
 
 **De la revisión de septiembre — revientan en casos concretos:**
@@ -603,6 +619,7 @@ El criterio del proyecto —la rapidez no se sacrifica— juega aquí a favor: t
 - [ ] **F8-e (arquitectura §1, §8b).** Decidir qué es `resttemplate`: hoy es un andamiaje de ejemplo («Hello, World!»). Si va en serio, depende de F6-b (un `core` sin escritorio) y F6-e (lectura sobre flujos).
 - [ ] **F8-f (potenciales §7.1, §7.2, §7.4; arquitectura §8e).** Contratos por escrito: los cuatro métodos de operaciones que pueden devolver su argumento, `normalize` que muta, el contrato único de `addVariable`/`removeVariable`, y una sola definición de «tiene intervenciones». Congelar el crecimiento de la biblioteca interna `org.openmarkov.java` (regla: mirar JDK y Commons antes de añadir) y estudiar qué parte de los 47 paquetes exportados por `core` es de verdad API.
 - [ ] **F8-g (arquitectura §3, nota).** Si algún día se quiere encapsulación real en ejecución, el camino es `ServiceLoader`; mientras tanto, dejar escrito que el sistema de módulos de Java se usa como declaración de dependencias.
+- [ ] **F8-h (de RP13).** Decidir si el aprendizaje de parámetros debe tratar los modelos canónicos. Hoy tiene una rama que lo hace: pone una variable auxiliar por padre, una de fuga y la función f en el hijo, aprende las tablas pequeñas y las reinstala al terminar. Funciona y tiene pruebas. Lo que no consta es que el equipo la quiera: Manuel señaló el 4-09-2026 que, que él sepa, el aprendizaje no aprende modelos canónicos. Las dos salidas son documentarla como capacidad o retirarla. **Decisión de equipo**, y no depende de RP13, que ya está arreglado por su cuenta. Nota aparte del coste: la función f que esa rama construye crece exponencialmente con el número de padres, así que con muchos padres la rama no escala; eso ya lo miden las pruebas del aprendizaje con modelos canónicos.
 
 **Se deja fuera a propósito** (con conocimiento de causa, no por olvido): la herencia de `StrategyTree` sobre `TreeADDPotential` (potenciales §7.7) — es una decisión estructural antigua cuyo arreglo no lo exige nada de lo anterior una vez que F1-a elimina la mutación; y cualquier rediseño grande de la jerarquía de potenciales más allá de F8-a/F8-b, porque el criterio de rendimiento del proyecto pide tocar ese código con guantes y con el banco F0-c delante.
 
