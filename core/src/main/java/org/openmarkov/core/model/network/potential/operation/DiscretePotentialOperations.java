@@ -33,10 +33,15 @@ import java.util.List;
 public final class DiscretePotentialOperations {
     
     /**
-     * Round error used to compare two numbers. If they differ in less than
-     * {@code maxRoundErrorAllowed} they will be considered equals.
+     * Round error allowed when comparing two numbers, as a fraction of what is compared.
      */
     public static final double maxRoundErrorAllowed = 1.0E-8;
+    
+    /**
+     * Largest absolute value still taken for zero. A fraction cannot serve here: no fraction of
+     * zero tells one number from another.
+     */
+    public static final double maxDeviationFromZero = 1.0E-15;
     
     /**
      * @param tablePotentials {@code ArrayList} of extends {@code Potential}.
@@ -351,7 +356,7 @@ public final class DiscretePotentialOperations {
     static boolean thereAreRelevantUtilities(TablePotential outputUtilityPotential) {
         boolean thereAreRelevantUtilities = false;
         for (int i = 0; i < outputUtilityPotential.getValues().length; i++) {
-            if (!almostEqual(outputUtilityPotential.getValues()[i], 0.0)) {
+            if (!isZero(outputUtilityPotential.getValues()[i])) {
                 thereAreRelevantUtilities = true;
                 break;
             }
@@ -373,15 +378,26 @@ public final class DiscretePotentialOperations {
     }
     
     /**
-     * Compares two numbers
+     * Compares two numbers, each one as good a reference as the other.
      *
      * @param a {@code double}
      * @param b {@code double}
      *
-     * @return {@code true} when a and b are close.
+     * @return {@code true} when a and b differ by less than {@code maxRoundErrorAllowed} of the
+     * larger of the two.
      */
     public static boolean almostEqual(double a, double b) {
-        return (Math.abs(b - a) <= maxRoundErrorAllowed * Math.abs(a));
+        return Math.abs(b - a) <= maxRoundErrorAllowed * Math.max(Math.abs(a), Math.abs(b));
+    }
+    
+    /**
+     * @param value {@code double}
+     *
+     * @return {@code true} when the value is zero or differs from it by no more than
+     * {@code maxDeviationFromZero}.
+     */
+    public static boolean isZero(double value) {
+        return Math.abs(value) <= maxDeviationFromZero;
     }
     
     public static TablePotential createZeroUtilityPotential(ProbNet dan) {
