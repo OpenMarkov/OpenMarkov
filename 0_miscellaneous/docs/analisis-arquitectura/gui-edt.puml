@@ -1,0 +1,42 @@
+@startuml
+' Camino de la propagación de evidencia: todo el cómputo ocurre en el hilo de
+' eventos de Swing (EDT), que queda congelado sin progreso ni cancelación.
+skinparam shadowing false
+skinparam defaultFontName sans-serif
+
+actor Usuario
+participant "EDT (hilo de\neventos de Swing)" as EDT
+participant MainPanelListenerAssistant as MPLA
+participant EvidenceManager as EM
+participant "VEPropagation\n(módulo inference)" as VE
+
+Usuario -> EDT : clic "propagar evidencia"
+activate EDT
+EDT -> MPLA : actionPerformed
+MPLA -> EM : doPropagation
+EM -> VE : new VEPropagation(red)\n«copia la red, ignora el\nregistro de plugins»
+EM -> VE : getPosteriorValues()
+note right #FFCCCC
+    Eliminación de variables completa
+    dentro del EDT. Con redes grandes
+    (CPCS: 422 nodos) la interfaz entera
+    queda congelada; no hay barra de
+    progreso ni botón de cancelar.
+    El código captura OutOfMemoryError:
+    él mismo espera quedarse sin memoria.
+end note
+VE --> EM : resultados
+EM --> EDT : pintar
+deactivate EDT
+
+note over EDT, VE #F8FFF8
+    Propuesta: un único servicio de "tarea larga de GUI" (SwingWorker,
+    como ya hace SplashScreenLoader) por el que pasen los tres caminos
+    pesados: propagar evidencia, entrar en modo inferencia y abrir/guardar
+    redes. Progreso y cancelación se implementan una vez, no cuatro.
+    Hoy conviven cuatro mecanismos ad hoc: nada (propagación),
+    wait/notify sobre MIDTemporalEvolution.class (evolución temporal),
+    un campo de progreso que nadie lee (VECEPSA) y un
+    javax.swing.ProgressMonitor exigido en el constructor (DESInference).
+end note
+@enduml

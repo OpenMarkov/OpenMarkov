@@ -9,6 +9,7 @@ package org.openmarkov.core.model.network;
 
 import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
@@ -198,12 +199,29 @@ public final class VariableStateOperations {
 
     private static void reorderStatesInNodeAndChildren(Node node, Variable variable,
                                                        State[] newStates) {
+        // Every potential is asked first and none is installed until all of them have answered,
+        // so a potential that refuses leaves the network as it was instead of half changed.
+        refuseIfAnyPotentialCannotBeReordered(node, variable);
         setPotentialAfterReorderingFirstPotential(node, variable, newStates);
         for (Node child : node.getChildren()) {
             setPotentialAfterReorderingFirstPotential(child, variable, newStates);
         }
         variable.setStates(newStates);
         resetLink(node);
+    }
+
+    /** @throws NotSupportedOperationException if the node or one of its children refuses. */
+    private static void refuseIfAnyPotentialCannotBeReordered(Node node, Variable variable) {
+        List<Node> affected = new ArrayList<>(node.getChildren());
+        affected.add(node);
+        for (Node auxNode : affected) {
+            for (Potential potential : auxNode.getPotentials()) {
+                String why = potential.whyStatesCannotBeReordered(variable);
+                if (why != null) {
+                    throw new NotSupportedOperationException(why);
+                }
+            }
+        }
     }
 
     private static void setPotentialAfterReorderingFirstPotential(Node auxNode, Variable variable,

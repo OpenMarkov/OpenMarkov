@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -227,7 +228,7 @@ public class RolloutElimination extends EliminationHeuristic {
     private final ProbNet graphCopy;
 
     /** Maps each remaining variable to its node in {@code graphCopy}. */
-    private final HashMap<Variable, Node> variablesNodes;
+    private final LinkedHashMap<Variable, Node> variablesNodes;
 
     // -------------------------------------------------------------------------
     // Constructors
@@ -268,7 +269,7 @@ public class RolloutElimination extends EliminationHeuristic {
         this.costFunction = costFunction;
         this.criterion    = criterion;
         this.graphCopy    = probNet.copy();
-        this.variablesNodes = new HashMap<>();
+        this.variablesNodes = new LinkedHashMap<>();
         for (Node node : graphCopy.getNodes()) {
             variablesNodes.put(node.getVariable(), node);
         }

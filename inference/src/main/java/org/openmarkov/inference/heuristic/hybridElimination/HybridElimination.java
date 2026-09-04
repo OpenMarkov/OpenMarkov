@@ -69,7 +69,7 @@ public class HybridElimination extends EliminationHeuristic {
      * cardinalities of the variables stored in the nodes.
      */
     public static long cliqueSize(Collection<Node> collection) {
-        int result = 1;
+        long result = 1;
         for (Node node : collection) {
             result *= node.getVariable().getNumStates();
         }

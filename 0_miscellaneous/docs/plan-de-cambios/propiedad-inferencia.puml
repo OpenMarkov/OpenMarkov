@@ -1,0 +1,54 @@
+@startuml
+title Qué comparte hoy una «copia» de red, y el contrato objetivo (F5)
+
+skinparam shadowing false
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor #555555
+}
+skinparam ArrowColor #555555
+skinparam defaultTextAlignment left
+
+rectangle "Red del usuario\n(la que edita la ventana)" as ORIG #FFFFFF
+rectangle "«Copia» del algoritmo\nProbNet.copy()" as COPIA #FFFFFF
+
+rectangle "Variables y potenciales\n(estructura pesada)" as PESADO #E9FFE9
+rectangle "InferenceOptions\n(objeto pequeño de opciones)" as OPT #FFE9E9
+rectangle "Oyentes de ediciones\n(PNESupport.listeners)" as LIS #FFE9E9
+
+ORIG --> PESADO
+COPIA --> PESADO
+ORIG --> OPT
+COPIA --> OPT
+ORIG --> LIS
+COPIA --> LIS
+
+note bottom of PESADO
+  **Compartido y debe seguir así**: copiar las
+  tablas costaría más que la propia inferencia.
+  Lo que falta es escribirlo en el contrato.
+end note
+
+note bottom of OPT
+  **Compartido hoy, copiado en el objetivo.**
+  VEPropagation escribe en estas opciones al
+  construirse y el cambio llega a la red del
+  usuario (VEPropagation.java:83-87).
+  Copiarlas cuesta nada: es un objeto pequeño.
+end note
+
+note bottom of LIS
+  **Transferido hoy, no transferido en el objetivo.**
+  Una edición sobre la copia notifica a los oyentes
+  del original (ProbNetCopier.java:56); el traspaso
+  pasa a ser una operación aparte y consciente.
+end note
+
+note as HILOS #FFF3D9
+  **Y en paralelo (análisis probabilístico de sensibilidad):**
+  hoy todas las tareas Simulation escriben sobre la misma red
+  y el fallo se «arregla» reintentando con la mitad de hilos
+  (VECEPSA.java:63-82). Objetivo: una copia por hilo y
+  retirar el reintento.
+end note
+@enduml

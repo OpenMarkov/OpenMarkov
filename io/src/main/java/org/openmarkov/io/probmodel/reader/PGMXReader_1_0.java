@@ -154,11 +154,13 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         
         List<Variable> vDistributionTable = new ArrayList<>(potential.getFiniteStatesVariables());
         vDistributionTable.addFirst(potential.getPseudoVariableDistribution());
-        potential.getAugmentedProbTable().setValues(table);
         if (xmlPotential.getChild(XMLTags.FUNCTIONS.toString()) != null) {
             potential.setDistributionTable(
                     getAugmentedProbTable(xmlPotential, xmlRole, vDistributionTable, variables));
         }
+        // After the table read from <Functions>, so that the numbers land on the table the
+        // potential keeps and not on the one just replaced.
+        potential.getAugmentedProbTable().setValues(table);
         
         return potential;
     }

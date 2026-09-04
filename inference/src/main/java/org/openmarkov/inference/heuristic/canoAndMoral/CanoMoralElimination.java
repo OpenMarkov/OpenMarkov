@@ -16,7 +16,7 @@ import org.openmarkov.core.model.network.Variable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -47,7 +47,7 @@ public class CanoMoralElimination extends EliminationHeuristic {
         graph = probNet.copy();
         listOfSetsOfNodes = new ArrayList<Set<Node>>();
         for (Collection<Variable> listOfVariables : variablesToEliminate) {
-            Set<Node> nodes = new HashSet<Node>();
+            Set<Node> nodes = new LinkedHashSet<Node>();
             listOfSetsOfNodes.add(nodes);
             for (Variable variable : listOfVariables) {
                 nodes.add(graph.getNode(variable));
@@ -104,8 +104,8 @@ public class CanoMoralElimination extends EliminationHeuristic {
      * @return The heuristic metric <i>S(i)</i>. {@code long}.
      */
     private long createdCliqueSize(Node toDeleteNode) {
-        Set<Node> neighbors = new HashSet<Node>(toDeleteNode.getNeighbors());
-        HashSet<Node> allNodes = new HashSet<Node>(graph.getNodes());
+        Set<Node> neighbors = new LinkedHashSet<Node>(toDeleteNode.getNeighbors());
+        Set<Node> allNodes = new LinkedHashSet<Node>(graph.getNodes());
         allNodes.remove(toDeleteNode);
         return getCliqueSize(getMaxClique(neighbors, allNodes));
     }
@@ -119,13 +119,13 @@ public class CanoMoralElimination extends EliminationHeuristic {
      */
     private static Set<Node> getMaxClique(Set<Node> seed, Set<Node> allNodes) {
         // 1. Get seed neighbors
-        Set<Node> neighbors = new HashSet<Node>();
+        Set<Node> neighbors = new LinkedHashSet<Node>();
         for (Node node : seed) {
             neighbors.addAll(node.getNeighbors());
         }
         
         // 2. Remove nodes outside allNodes and nodes in seed
-        Set<Node> toDelete = new HashSet<Node>(seed);
+        Set<Node> toDelete = new LinkedHashSet<Node>(seed);
         for (Node node : neighbors) {
             if (!allNodes.contains(node)) {
                 toDelete.add(node);
@@ -134,9 +134,9 @@ public class CanoMoralElimination extends EliminationHeuristic {
         neighbors.removeAll(toDelete);
         
         // 3. Get nodes in neighbors whose neighbors contains all the nodes in seed
-        Set<Node> candidates = new HashSet<Node>();
+        Set<Node> candidates = new LinkedHashSet<Node>();
         for (Node node : neighbors) {
-            Set<Node> nodeNeighbors = new HashSet<Node>(node.getNeighbors());
+            Set<Node> nodeNeighbors = new LinkedHashSet<Node>(node.getNeighbors());
             nodeNeighbors.add(node);
             if (nodeNeighbors.containsAll(seed)) {
                 candidates.add(node);
@@ -147,7 +147,7 @@ public class CanoMoralElimination extends EliminationHeuristic {
         Set<Node> maxClique = seed;
         long maxCliqueSize = getCliqueSize(seed);
         for (Node node : candidates) {
-            Set<Node> expandedSeed = new HashSet<Node>(seed);
+            Set<Node> expandedSeed = new LinkedHashSet<Node>(seed);
             expandedSeed.add(node);
             Set<Node> maxCliqueCandidate = getMaxClique(expandedSeed, allNodes);
             long maxCliqueCandidateSize = getCliqueSize(maxCliqueCandidate);
@@ -190,7 +190,7 @@ public class CanoMoralElimination extends EliminationHeuristic {
         List<Node> neighbors = centerNode.getNeighbors();
         List<Set<Node>> candidateCliques = new ArrayList<Set<Node>>();
         for (Node neighborNode : neighbors) {
-            Set<Node> neighborSet = new HashSet<Node>();
+            Set<Node> neighborSet = new LinkedHashSet<Node>();
             neighborSet.add(centerNode);
             neighborSet.add(neighborNode);
             candidateCliques.add(neighborSet);
@@ -198,7 +198,7 @@ public class CanoMoralElimination extends EliminationHeuristic {
         
         // 2. Get the maximal clique per each candidate
         // Set in which the maximal clique will be searched:
-        Set<Node> allNodes = new HashSet<Node>(neighbors);
+        Set<Node> allNodes = new LinkedHashSet<Node>(neighbors);
         allNodes.add(centerNode);
         
         // Set of maximal cliques

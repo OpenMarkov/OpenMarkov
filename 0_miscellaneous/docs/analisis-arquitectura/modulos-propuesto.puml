@@ -1,0 +1,63 @@
+@startuml
+' Estado objetivo propuesto para las anomalías del grafo de módulos.
+' Solo cambia lo marcado en verde; el resto del grafo se conserva.
+skinparam componentStyle uml2
+skinparam shadowing false
+skinparam defaultFontName sans-serif
+
+rectangle "Aplicación" {
+    [full] as full
+}
+
+rectangle "Plugins de análisis (encima de gui)" {
+    [costEffectiveness, sensitivityAnalysis,\ndbGenerator, bnEvaluation, spo, learning.gui] as plugins
+    [des.gui  «nuevo: ventanas de la\nsimulación de eventos discretos»] as desgui #CCFFCC
+}
+
+rectangle "Presentación" {
+    [gui] as gui
+}
+
+rectangle "Motor (sin escritorio, verificable con jdeps)" {
+    [inference] as inference
+    [inference.des  «solo el motor:\nsin Swing, JFreeChart ni POI»] as des #CCFFCC
+    [io  «solo implementaciones de formatos»] as io
+    [learning.*] as learning
+}
+
+rectangle "Base" {
+    [core  «sin requires java.desktop;\n+ contrato de E/S: @FormatType,\nProbNetReader/Writer, excepciones»] as core #CCFFCC
+}
+
+rectangle "Servicios" {
+    [resttemplate  «puede ofrecer E/S e\ninferencia sin arrastrar escritorio»] as rest #CCFFCC
+}
+
+full --> gui
+full --> plugins
+full --> desgui
+plugins --> gui
+desgui --> gui
+desgui --> des
+gui --> inference
+gui --> io
+inference --> core
+des --> core
+io --> core : implementa el\ncontrato de core
+learning --> core
+rest --> core
+rest ..> io : ahora posible:\nformatos sin GUI
+rest ..> inference : ahora posible:\ninferencia sin GUI
+
+note bottom of core #CCFFCC
+    Cambios clave:
+    1. Los paquetes org.openmarkov.core.io.* (anotación @FormatType,
+       interfaces lector/escritor, excepciones de E/S) se mueven a core:
+       un formato nuevo depende del contrato, no del módulo io entero.
+    2. core deja de requerir java.desktop y org.apache.poi:
+       cualquier regresión de acoplamiento pasa a ser error de compilación.
+    3. Cada módulo declara en su pom SOLO las bibliotecas que usa
+       (el raíz pasa a dependencyManagement): las capas quedan
+       escritas y vigiladas por Maven, no solo por convención.
+end note
+@enduml

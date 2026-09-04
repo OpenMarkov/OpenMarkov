@@ -1,0 +1,74 @@
+@startuml propuesta
+skinparam backgroundColor #FFFFFF
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam ArrowColor #444444
+skinparam class {
+  BorderColor #666666
+  BackgroundColor #FAFAFA
+  FontSize 12
+}
+hide empty members
+
+title El diseño propuesto: deshacer obligatorio y reglas en un solo sitio
+
+abstract class PNEdit <<abstract>> {
+  + executeEdit() <<final>>
+  # {abstract} doEdit() : <b>Undo</b>
+  + checkConstraintsWillBeMet(c)
+}
+
+interface Undo <<functional>> {
+  + undo()
+}
+
+note right of PNEdit
+  <b>doEdit() devuelve cómo deshacerse.</b>
+  No se puede escribir una edición sin
+  decir cómo se revierte: el compilador
+  lo exige. Desaparece el undo() vacío
+  y desaparece el redo() «típico».
+end note
+
+class ReversibleNet {
+  + setPotential(nodo, p) : Undo
+  + addLink(a, b, dir) : Undo
+  + removeNode(nodo) : Undo
+  + setNodeType(nodo, t) : Undo
+}
+
+note right of ReversibleNet
+  Cada mutación de la red devuelve
+  su propia reversión. Las ediciones
+  ya no fotografían el estado a mano,
+  que es de donde salen los campos
+  nunca asignados.
+end note
+
+abstract class MultiEdit {
+  # doEdit() : Undo
+  <i>revierte lo ya hecho</i>
+  <i>si un paso falla</i>
+}
+
+interface PNConstraint {
+  + checkProbNet(red, c)
+  + <b>checkEdit(edición, c)</b>
+}
+
+note bottom of PNConstraint
+  <b>La regla vuelve a la restricción.</b>
+  NoCycle sabe si un enlace crearía un
+  ciclo; AddLinkEdit no tiene por qué
+  saberlo. Añadir una restricción nueva
+  deja de obligar a tocar las ediciones,
+  y los validadores de la ventana
+  sobran.
+end note
+
+PNEdit ..> Undo : doEdit() devuelve
+PNEdit ..> ReversibleNet : muta a través de
+PNEdit <|-- MultiEdit
+PNEdit ..> PNConstraint : se deja comprobar por
+
+@enduml

@@ -1,0 +1,71 @@
+@startuml
+' El recorrido del descubrimiento de plugins y los cuatro puntos donde se rompe la promesa
+' de "añade una clase anotada y aparece sola".
+skinparam shadowing false
+skinparam defaultFontName sans-serif
+
+package "core — framework de plugins" {
+    class PluginLoader <<package-private>> {
+        - LOADED_CLASSES : HashMap estático (no reiniciable)
+        - CLASS_LOADER = getSystemClassLoader()
+        + pluginsStream(categoría)
+    }
+    class PluginSearch {
+        + init(anotación, claseBase)
+    }
+    note right of PluginLoader #FFCCCC
+        (1) Solo clasifica como plugin las clases
+        cuyo paquete empieza por "org.openmarkov".
+        Un plugin de terceros con su propio paquete
+        es invisible, sin error ni aviso.
+    end note
+}
+
+package "Registros (managers)" {
+    class InferenceManager {
+        - PREFERRED = "VariableElimination"
+        - APPROXIMATE = "LikelihoodWeighting"
+    }
+    class FormatManager <<singleton estático>>
+    class ConstraintManager <<singleton>>
+    class ToolPluginManager <<singleton estático>>
+    note bottom of InferenceManager #FFCCCC
+        (2) core elige por cadena de texto dos
+        plugins concretos del módulo inference,
+        al que no puede ver. Si el nombre no casa:
+        primer algoritmo por orden alfabético,
+        sin ninguna señal.
+    end note
+    note bottom of FormatManager #FFCCCC
+        (3) Políticas de error distintas por manager:
+        FormatManager y ToolPluginManager caen enteros
+        si un plugin falla (UnreachableException en
+        inicializador estático); ConstraintManager
+        omite en silencio; InferenceManager aísla y
+        registra (la política correcta, solo aquí).
+    end note
+}
+
+package "gui — donde se decide de verdad" {
+    class EvidenceManager
+    class InferenceHandler
+    class NetworkEditorPanel
+    note bottom of EvidenceManager #FFCCCC
+        (4) La GUI ignora el registro: construye
+        "new VEPropagation(...)", VEEvaluation,
+        DANDecomposition... a mano en cinco clases.
+        Registrar un algoritmo nuevo como plugin
+        no cambia nada en la aplicación.
+    end note
+}
+
+PluginSearch --> PluginLoader
+InferenceManager --> PluginSearch
+FormatManager --> PluginSearch
+ConstraintManager --> PluginSearch
+ToolPluginManager --> PluginSearch
+EvidenceManager ..> InferenceManager : consulta solo si\nhay algoritmo (74-81)
+EvidenceManager -[#red,bold]-> "inference::VEPropagation" : new (555-564)
+InferenceHandler -[#red,bold]-> "inference::VEOptimalIntervention" : new
+NetworkEditorPanel -[#red,bold]-> "inference::VEEvaluation" : new
+@enduml

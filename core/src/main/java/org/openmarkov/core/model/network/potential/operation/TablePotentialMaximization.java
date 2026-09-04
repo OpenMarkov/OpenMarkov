@@ -32,6 +32,16 @@ final class TablePotentialMaximization {
     }
 
     /**
+     * How far apart two candidates may be and still count as the same. The allowed round error
+     * is a fraction of what is being compared, so a column of small products is not flattened
+     * into a tie by a fixed threshold.
+     */
+    private static double roundErrorOf(double one, double other) {
+        return DiscretePotentialOperations.maxRoundErrorAllowed
+                * Math.max(Math.abs(one), Math.abs(other));
+    }
+
+    /**
      * Multiplies {@code tablePotentials} and maximizes out
      * {@code fSVariableToMaximize}, keeping {@code fSVariablesToKeep}.
      *
@@ -43,7 +53,7 @@ final class TablePotentialMaximization {
     @SuppressWarnings("unchecked")
     static Object[] multiplyAndMaximize(List<? extends Potential> tablePotentials,
                                         List<Variable> fSVariablesToKeep, Variable fSVariableToMaximize) {
-        List<TablePotential> potentials = (ArrayList<TablePotential>) tablePotentials;
+        List<TablePotential> potentials = (List<TablePotential>) tablePotentials;
         List<Variable> variablesToKeep = fSVariablesToKeep;
 
         PotentialRole role = TablePotentialArithmetic.getRole(tablePotentials);
@@ -123,14 +133,12 @@ final class TablePotentialMaximization {
                     multiplicationResult = multiplicationResult * tables[i][currentPositions[i]];
                 }
 
-                if (multiplicationResult > (maxValue + DiscretePotentialOperations.maxRoundErrorAllowed)) {
+                double tolerance = roundErrorOf(multiplicationResult, maxValue);
+                if (multiplicationResult > maxValue + tolerance) {
                     choice.setValue(innerIteration);
                     maxValue = multiplicationResult;
-                } else {
-                    if ((multiplicationResult < (maxValue + DiscretePotentialOperations.maxRoundErrorAllowed))
-                            && (multiplicationResult >= (maxValue - DiscretePotentialOperations.maxRoundErrorAllowed))) {
-                        choice.addValue(innerIteration);
-                    }
+                } else if (multiplicationResult >= maxValue - tolerance) {
+                    choice.addValue(innerIteration);
                 }
             }
 
@@ -249,7 +257,8 @@ final class TablePotentialMaximization {
                 }
 
                 double diffWithAccumulator = multiplicationResult - accumulator;
-                if (diffWithAccumulator > DiscretePotentialOperations.maxRoundErrorAllowed) {
+                double tolerance = roundErrorOf(multiplicationResult, accumulator);
+                if (diffWithAccumulator > tolerance) {
                     statesTies = new ArrayList<>();
                     statesTies.add(innerIteration);
                     accumulator = multiplicationResult;
@@ -257,7 +266,7 @@ final class TablePotentialMaximization {
                     positionTies[numTies] = currentPositions[0];
                     numTies++;
                 } else {
-                    if (Math.abs(diffWithAccumulator) < DiscretePotentialOperations.maxRoundErrorAllowed) {
+                    if (Math.abs(diffWithAccumulator) < tolerance) {
                         statesTies.add(innerIteration);
                         positionTies[numTies] = currentPositions[0];
                         numTies++;
@@ -304,11 +313,7 @@ final class TablePotentialMaximization {
      */
     static Object[] multiplyAndMaximize(List<? extends Potential> potentialsVariable,
                                         Variable variableToMaximize) {
-        HashSet<Variable> addedVariables = new HashSet<>();
-        for (Potential potential : potentialsVariable) {
-            addedVariables.addAll(potential.getVariables());
-        }
-        List<Variable> variablesToKeep = new ArrayList<>(addedVariables);
+        List<Variable> variablesToKeep = AuxiliaryOperations.getUnionVariables(potentialsVariable);
         variablesToKeep.remove(variableToMaximize);
         return multiplyAndMaximize(potentialsVariable, variablesToKeep, variableToMaximize);
     }
@@ -319,11 +324,7 @@ final class TablePotentialMaximization {
      */
     static TablePotential[] multiplyAndMaximizeUniformly(List<TablePotential> potentialsVariable,
                                                           Variable variableToMaximize) {
-        HashSet<Variable> addedVariables = new HashSet<>();
-        for (TablePotential potential : potentialsVariable) {
-            addedVariables.addAll(potential.getVariables());
-        }
-        List<Variable> variablesToKeep = new ArrayList<>(addedVariables);
+        List<Variable> variablesToKeep = AuxiliaryOperations.getUnionVariables(potentialsVariable);
         variablesToKeep.remove(variableToMaximize);
         return multiplyAndMaximizeUniformly(potentialsVariable, variablesToKeep, variableToMaximize);
     }

@@ -1,0 +1,49 @@
+@startuml
+title De los hallazgos de los cuatro informes a las seis causas, y de las causas a las fases del plan
+
+left to right direction
+skinparam shadowing false
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor #555555
+}
+skinparam ArrowColor #555555
+skinparam defaultTextAlignment left
+
+rectangle "**Causa 1 — Cada regla vive en varios sitios**\nRestricciones escritas dos y tres veces\n(arquitectura §5, ediciones D2, restricciones R1-R2)\nDivergencias ya ocurridas: NoUtilityParent,\nValidState, NoBackwardLink" as C1 #FFE9E9
+
+rectangle "**Causa 2 — Los contratos no obligan**\nundo() y checkConstraintsWillBeMet() vacíos (D1)\nProtocolo typicalRedo en seis variantes (D6)\nConstructores y validate por reflexión sin test (arq. §3)\nInterfaces de capacidad sin un solo uso (pot. §2)\nTask sin ciclo de vida (arq. §6)" as C2 #FFF3D9
+
+rectangle "**Causa 3 — Propiedad compartida sin contrato**\nLa copia superficial comparte opciones y oyentes (arq. §6)\nsum() escribe dentro de sus sumandos (pot. §5.1)\nHilos del análisis de sensibilidad sobre una misma red\ntableProject puede devolver this; normalize muta" as C3 #E9F1FF
+
+rectangle "**Causa 4 — El error se traga en silencio**\nAbrir un fichero no comprueba nada (restr. R1)\nOPTIONAL significa «nunca activa» (restr. R3)\nAlgoritmo de reserva sin aviso; colisiones de registro (arq. §3)\nnormalize produce NaN; deepCopy inserta null" as C4 #E9FFE9
+
+rectangle "**Causa 5 — Piezas a medio camino o muertas**\nGuardado de restricciones roto en dos mitades que se anulan (R7)\ninitialPosition abandonado a medias (pot. §7.3)\nAPI de plugins muerta; código muerto en ediciones,\nrestricciones y operaciones" as C5 #F3E9FF
+
+rectangle "**Causa 6 — Trabajo que no hace falta, en el sitio más caro**\nCada operación reserva y rellena una tabla que tira (pot. §6.1)\nsum separa constantes comparando tablas enteras (pot. §6.2)\nEl orden de eliminación depende del hash de la máquina (pot. §7.5)" as C6 #FDEFE8
+
+rectangle "**F0** Red de seguridad\n(pruebas que destapan y protegen)" as F0 #FFFFFF
+rectangle "**F1** Corrección: lo que hoy\npierde o corrompe datos" as F1 #FFFFFF
+rectangle "**F2** Rendimiento del camino\ncaliente y reproducibilidad" as F2 #FFFFFF
+rectangle "**F3** Un dueño por regla:\ncheckEdit + comprobar al leer" as F3 #FFFFFF
+rectangle "**F4** El ciclo de edición\nse vuelve obligatorio" as F4 #FFFFFF
+rectangle "**F5** Propiedad de la red\nen la inferencia" as F5 #FFFFFF
+rectangle "**F6** Lo declarado vuelve a ser\nlo efectivo (módulos y plugins)" as F6 #FFFFFF
+rectangle "**F7** La interfaz usa\nla arquitectura" as F7 #FFFFFF
+rectangle "**F8** Decisiones pendientes\ny limpieza" as F8 #FFFFFF
+
+C1 --> F3
+C1 --> F1
+C2 --> F0
+C2 --> F4
+C2 --> F6
+C3 --> F1
+C3 --> F5
+C4 --> F1
+C4 --> F3
+C4 --> F6
+C5 --> F8
+C2 --> F7
+C6 --> F2
+C6 --> F0
+@enduml

@@ -8,6 +8,8 @@
 package org.openmarkov.core.action.core;
 
 import org.openmarkov.core.action.base.ConstraintChecker;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.constraint.ValidState;
@@ -149,9 +151,15 @@ public class NodeStateEdit extends PNEdit {
         }
     }
     
-    @Override protected void doEdit() {
+    @Override protected void doEdit() throws DoEditException {
         saveLinkRestrictionsAndRevelations(node);
-        node.getVariable().modifyState(node, stateAction, this.indexState, newName);
+        try {
+            node.getVariable().modifyState(node, stateAction, this.indexState, newName);
+        } catch (NotSupportedOperationException refused) {
+            // A potential whose meaning depends on the order of the states refuses before
+            // anything is changed; the window shows the reason it gives.
+            throw new DoEditException.CannotDoEditException(refused, this);
+        }
     }
 
     @SuppressWarnings("unchecked")

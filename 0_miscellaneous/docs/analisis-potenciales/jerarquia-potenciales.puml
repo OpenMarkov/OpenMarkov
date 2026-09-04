@@ -1,0 +1,129 @@
+@startuml
+title Jerarquía de potenciales: las cuatro familias con estructura, y el resto
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam class {
+  BackgroundColor White
+  BorderColor #555555
+  ArrowColor #555555
+}
+skinparam packageStyle rectangle
+skinparam nodesep 12
+skinparam ranksep 22
+hide members
+
+abstract class Potential <<abstract>> #FFF3CD
+
+package "Tablas indexadas" #E8F4FD {
+  abstract class AbstractIndexedPotential <<abstract>>
+  class TablePotential
+  class GTablePotential<E>
+  class UncertainTablePotential
+  class StrategicTablePotential
+  class TableWithFunctions
+  class AugmentedProbTable
+}
+
+package "Canónicos (ICI)" #EAF7EA {
+  abstract class ICIPotential <<abstract>>
+  abstract class MinMaxPotential <<abstract>>
+  class MaxPotential
+  class MinPotential
+  class TuningPotential
+}
+
+package "Árboles" #FDEFE8 {
+  class TreeADDPotential
+  class StrategyTree
+  class SDAGStrategyTree
+}
+
+package "Paramétricos (GLM)" #F3E8FD {
+  abstract class GLMPotential <<abstract>>
+  class LinearCombinationPotential
+  class ExponentialPotential
+  class WeibullHazardPotential
+  class ExponentialHazardPotential
+  class FunctionPotential
+  class FunctionPotentialOld
+}
+
+package "Eventos (DES)" #FDF6E8 {
+  class TableWithEvents
+  class UnivariateDistrPotential
+  class TransitionTablePotential
+}
+
+class "19 subclases directas de Potential" as Hojas #F0F0F0 {
+  UniformPotential
+  SumPotential
+  ProductPotential
+  SameAsPrevious
+  ConditionalGaussianPotential
+  DiscretizedCauchyPotential
+  AugmentedProbTablePotential
+  DistributionTablePotential
+  ExactDistrPotential
+  DeltaPotential
+  IncrementPotential
+  IndicatorPotential
+  ExternalPotential
+  PiecewiseExponentialPotential
+  BinomialPotential
+  CycleLengthShift
+  TreeWithEventsPotential
+  TreeWithExcludedEventsPotential
+  StrategyTree (vía TreeADD)
+}
+show Hojas members
+
+Potential <|-- AbstractIndexedPotential
+AbstractIndexedPotential <|-- TablePotential
+AbstractIndexedPotential <|-- GTablePotential
+TablePotential <|-- UncertainTablePotential
+TablePotential <|-- StrategicTablePotential
+TablePotential <|-- TableWithFunctions
+UncertainTablePotential <|-- AugmentedProbTable
+
+Potential <|-- ICIPotential
+ICIPotential <|-- MinMaxPotential
+ICIPotential <|-- TuningPotential
+MinMaxPotential <|-- MaxPotential
+MinMaxPotential <|-- MinPotential
+
+Potential <|-- TreeADDPotential
+TreeADDPotential <|-- StrategyTree
+StrategyTree <|-- SDAGStrategyTree
+
+Potential <|-- GLMPotential
+GLMPotential <|-- LinearCombinationPotential
+GLMPotential <|-- ExponentialPotential
+GLMPotential <|-- WeibullHazardPotential
+GLMPotential <|-- FunctionPotential
+GLMPotential <|-- FunctionPotentialOld
+WeibullHazardPotential <|-- ExponentialHazardPotential
+
+Potential <|-- TableWithEvents
+TableWithEvents <|-- UnivariateDistrPotential
+TableWithEvents <|-- TransitionTablePotential
+
+Potential <|-- Hojas
+
+note right of TablePotential
+  Toda la aritmética del sistema
+  (multiply, sum, marginalize,
+  maximize) opera sólo sobre esta
+  clase. Los demás potenciales
+  entran en la inferencia
+  convirtiéndose en una de éstas.
+end note
+
+note bottom of StrategyTree
+  Un árbol de estrategia (la política óptima
+  de un diagrama de influencia) hereda de
+  potencial para reutilizar la maquinaria de
+  árbol, no porque represente una
+  distribución. Ver la sección 7.7.
+end note
+@enduml

@@ -1,0 +1,75 @@
+@startuml
+' El nucleo del modelo de dominio: ProbNet concentra responsabilidades y el ciclo
+' ProbNet <-> Node <-> Potential se mantiene por convención de llamada, no por diseño.
+skinparam shadowing false
+skinparam defaultFontName sans-serif
+
+class ProbNet {
+    1385 líneas, ~119 métodos públicos
+    --
+    - graph : Graph<Node>
+    - nodeDepot : NodeTypeDepot
+    - constraints : TreeSet<PNConstraint>
+    - pNESupport : PNESupport
+    - constantPotentials : List<Potential>
+    - metadata : NetworkMetadata
+    --
+    + updateVariable(antigua) «reindexa el depósito»
+}
+
+class Node {
+    786 líneas, ~64 métodos públicos
+    --
+    - probNet : ProbNet «final»
+    - variable : Variable
+    - potentials : List<Potential>
+    --
+    + setVariable(v) «debe acordarse de llamar\na probNet.updateVariable»
+    + setNodeType(t) «toca probNet.nodeDepot\ndirectamente»
+}
+
+class Variable {
+    700 líneas
+}
+
+abstract class Potential {
+    851 líneas, ~50 subclases
+    --
+    + shift(ProbNet, intervalo)
+    + createDirectedLinks(ProbNet)
+    + deepCopy(ProbNet) «reflexión sobre el\nconstructor de copia; variables no resueltas\nse insertan como null sin aviso»
+}
+
+class PNESupport {
+    historial deshacer/rehacer
+    + networkIsModified «estado de documento\nde la GUI dentro del modelo»
+}
+
+class NodeTypeDepot {
+    indexa por identidad de Variable
+}
+
+ProbNet *--> "1" NodeTypeDepot
+ProbNet *--> "1" PNESupport
+ProbNet *--> "0..*" Potential : constantes
+ProbNet --> "1" "Graph<Node>"
+"Graph<Node>" --> "0..*" Node
+Node -[#red,bold]-> ProbNet : referencia final;\ntoda navegación delega
+Node --> "1" Variable
+Node --> "0..*" Potential
+Potential --> "0..*" Variable
+Potential -[#red,bold]-> ProbNet : shift, deepCopy,\ncreateDirectedLinks
+
+note bottom of Node #FFCCCC
+    hashCode se congela en el constructor,
+    pero equals compara nodeType, que
+    setNodeType muta: igualdad y hash
+    divergen tras cambiar el tipo.
+end note
+
+note right of ProbNet
+    La consistencia grafo + depósito +
+    variable se sincroniza a mano desde
+    tres clases. Ninguna la posee.
+end note
+@enduml

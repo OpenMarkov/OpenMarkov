@@ -1,0 +1,54 @@
+@startuml fallo-a-medias
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor #444444
+  LifeLineBorderColor #888888
+  ParticipantBorderColor #666666
+  ParticipantBackgroundColor #FAFAFA
+  GroupBackgroundColor #EEEEEE
+}
+
+title Cambiar el tipo de un nodo cuando la red no lo permite
+
+actor Usuario
+participant "ChangeNodeTypeEdit\n(MultiStepEdit)" as Padre
+participant "StepExecuter" as Ejec
+participant "SetNodeTypeEdit" as Hija
+participant "ProbNet" as Net
+
+Usuario -> Padre : executeEdit()
+Padre -> Padre : checkConstraintsWillBeMet()
+note right
+  Sólo mira OnlyOneUtilityNode.
+  El super() al final resuelve al
+  cuerpo vacío de MultiStepEdit:
+  <b>no comprueba nada más</b>.
+end note
+
+Padre -> Padre : doEdit()
+Padre -> Ejec : execute(SetNodeTypeEdit)
+Ejec -> Hija : executeEdit()
+Hija -> Net : setNodeType(nuevo tipo)
+note right of Net #FFE0E0 : la red <b>ya está cambiada</b>
+Hija -> Net : checkConstraints()
+Net --> Hija : ConstraintViolatedException
+Hija --> Ejec : CannotDoEditException
+
+note over Ejec #FFE0E0
+  execute() añade a la lista de
+  ejecutadas <b>después</b> de volver.
+  Como la hija ha lanzado,
+  <b>no entra en la lista.</b>
+end note
+
+Ejec --> Padre : CannotDoEditException
+Padre -> Padre : deshace las ejecutadas…
+note right #FFE0E0
+  …que no incluyen a SetNodeTypeEdit.
+  <b>El nodo se queda con el tipo nuevo</b>
+  aunque la operación haya fallado.
+end note
+Padre --> Usuario : mensaje de error
+
+@enduml

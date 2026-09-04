@@ -1,0 +1,91 @@
+@startuml
+title Las operaciones sobre tablas: fachada, implementación y estado de uso
+
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor White
+  BorderColor #555555
+  ArrowColor #555555
+}
+
+class PotentialOperations #F0F0F0 {
+  comprueba tipos
+  y delega
+}
+
+class DiscretePotentialOperations #FFF3CD {
+  fachada pública
+  36 métodos, ninguno con cuerpo
+  almostEqual(a, b)
+  maxRoundErrorAllowed = 1e-8
+}
+
+package "Implementación (paquete-privada)" #E8F4FD {
+  class TablePotentialArithmetic {
+    multiply(...)
+    sum(...)
+    divide(...)
+    evaluateFunctionPotential(...)
+  }
+  class TablePotentialElimination {
+    multiplyAndMarginalize(...)
+    marginalize(...)
+  }
+  class TablePotentialMaximization {
+    multiplyAndMaximize(...)
+    maximize(...)
+  }
+  class TablePotentialMerge {
+    merge(...)
+    orderPotentialsByTotalOrder(...)
+  }
+  class TablePotentialTransform {
+    normalize(...)
+    projectOutVariable(...)
+    matrixPotential(...)
+  }
+  class TablePotentialFactory
+  class AuxiliaryOperations {
+    getAccumulatedOffsets(...)
+    getUnionVariables(...)
+    findNextConfiguration...(...)
+  }
+}
+
+package "Operaciones de eliminación de variable" #EAF7EA {
+  abstract class Marginalization
+  class SumOutVariable
+  class MaxOutVariable
+}
+
+PotentialOperations --> DiscretePotentialOperations
+DiscretePotentialOperations --> TablePotentialArithmetic
+DiscretePotentialOperations --> TablePotentialElimination
+DiscretePotentialOperations --> TablePotentialMaximization
+DiscretePotentialOperations --> TablePotentialMerge
+DiscretePotentialOperations --> TablePotentialTransform
+DiscretePotentialOperations --> TablePotentialFactory
+DiscretePotentialOperations --> AuxiliaryOperations
+
+Marginalization <|-- SumOutVariable
+SumOutVariable --> DiscretePotentialOperations
+MaxOutVariable --> DiscretePotentialOperations
+
+note right of TablePotentialMerge #FFE0E0
+  `orderPotentialsByTotalOrder`
+  no tiene ningún llamador
+  fuera del paquete. Ver §5.7.
+end note
+
+note bottom of TablePotentialMaximization #FFE0E0
+  `multiplyAndMaximizeUniformly`
+  (dos sobrecargas, 170 líneas)
+  no tiene ningún llamador.
+end note
+
+note bottom of TablePotentialTransform #FFE0E0
+  `matrixPotential`
+  no tiene ningún llamador.
+end note
+@enduml

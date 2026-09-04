@@ -1,0 +1,42 @@
+@startuml cobertura
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam rectangle {
+  BorderColor #666666
+  FontSize 11
+}
+
+title Las 37 restricciones, según dónde se imponen
+
+rectangle "**Red y edición** — 31\n<i>el caso sano</i>" as A #E8F5E9 {
+  card "DistinctLinks, DistinctVariableNames, MaxNumParents,\nNoAlwaysObservedDescendantOfDecision, NoBackwardLink,\nNoCycle, NoEmptyName, NoEventNodes, NoLoops,\nNoMixedParents, NoMultipleLinks, NoSelfLoop,\nNoSuperValueNode, NoUtilityParent, OnlyAtemporalVariables,\nOnlyChanceNodes, OnlyContinuousVariables, OnlyDirectedLinks,\nOnlyDiscreteVariables, OnlyFiniteStatesVariables,\nOnlyNumericVariables, OnlyOneAgent, OnlyOneOrphanInitialEvent,\nOnlyOneUtilityNode, OnlySelfLoopsWithEventAndChanceNodes,\nOnlyTemporalVariables, OnlyUndirectedLinks,\nProperUtilityPotentials, ValidCriterionName,\nValidName, ValidState" as ca
+}
+
+rectangle "**Sólo la red** — 4\n<i>ninguna edición las mira</i>" as B #FFF4CC {
+  card "AllChanceVariablesHaveChancePotentials\nNoLinkRestriction\nNoRevelationArc\nUtilityNodes" as cb
+}
+
+rectangle "**Sólo la edición** — 1\n<i>checkProbNet() vacío a propósito</i>" as C #FFF4CC {
+  card "ModelNetworkConstraint" as cc
+}
+
+rectangle "**Ninguna de las dos** — 1" as D #FFCDD2 {
+  card "OnlyUnlabeledLinks\n<i>checkProbNet() es un TODO vacío,</i>\n<i>y no la mira ninguna edición</i>" as cd
+}
+
+rectangle "Y por encima de todo esto:\n**nunca llegan a estar dentro de ninguna red** — 10" as E #FFCDD2 {
+  card "<b>Sin la anotación @Constraint — 2</b>\nValidName, ValidState\nNodeStateEdit pide ValidState y siempre recibe null" as ce1
+  card "<b>OPTIONAL que nadie activa — 8</b>\nNoLoops, NoMixedParents, NoSuperValueNode,\nOnlyFiniteStatesVariables, OnlyNumericVariables,\nOnlyOneUtilityNode, ProperUtilityPotentials,\nOnlyUnlabeledLinks" as ce2
+}
+
+D -[hidden]right- C
+C -[hidden]right- B
+B -[hidden]right- A
+A -[hidden]down- E
+
+note bottom of E
+  Estas 10 aparecen también en los cuadros de arriba: el reparto de arriba
+  dice <b>dónde se comprobarían</b>; éste dice que <b>no llegan a comprobarse</b>.
+end note
+
+@enduml

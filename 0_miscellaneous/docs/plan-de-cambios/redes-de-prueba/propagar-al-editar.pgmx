@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="BayesianNetwork">
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <Properties />
+    <Variables>
+      <Variable name="Cause" type="finiteStates" role="chance">
+        <Coordinates x="160" y="80" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Effect" type="finiteStates" role="chance">
+        <Coordinates x="160" y="220" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Cause" />
+        <Variable name="Effect" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Cause" />
+        </Variables>
+        <Values>0.5 0.5</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Effect" />
+          <Variable name="Cause" />
+        </Variables>
+        <Values>1.0 0.0 0.5 0.5</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+</ProbModelXML>

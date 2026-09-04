@@ -1,0 +1,43 @@
+@startuml
+title Orden de las fases: qué protege a qué y qué desbloquea a qué
+
+skinparam shadowing false
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor #555555
+}
+skinparam ArrowColor #555555
+skinparam defaultTextAlignment left
+
+rectangle "**F0 — Red de seguridad** (días)\nPrueba de ida y vuelta del deshacer (67 ediciones)\nPrueba de cobertura de restricciones\nBanco de referencia de las operaciones" as F0 #E9FFE9
+
+rectangle "**F1 — Corrección** (días)\n16 arreglos locales e independientes" as F1 #FFE9E9
+rectangle "**F2 — Rendimiento** (días)\nConstructor sin derroche, sum sin equals" as F2 #FFE9E9
+
+rectangle "**F3 — Un dueño por regla** (semanas)\ncheckEdit en PNConstraint\ncomprobar la red al leerla\ndecidir OPTIONAL" as F3 #FFF3D9
+
+rectangle "**F4 — Contrato de edición obligatorio** (semanas)\ndoEdit devuelve su reversión\n(decisión de equipo)" as F4 #FFF3D9
+
+rectangle "**F5 — Propiedad en inferencia** (días-semanas)\nla copia copia opciones y no transfiere oyentes\nuna red por hilo; progreso en el contrato" as F5 #E9F1FF
+
+rectangle "**F6 — Declarado = efectivo** (semanas)\ndependencias por módulo; plugins con\npolítica única y avisos; E/S abierta" as F6 #E9F1FF
+
+rectangle "**F7 — La interfaz usa la arquitectura** (a planificar)\nfábrica de tareas; tarea larga única;\nNetworkDocument; ediciones puras a core" as F7 #F3E9FF
+
+rectangle "**F8 — Decisiones y limpieza** (independiente)\ninterfaces de capacidad; initialPosition;\ncódigo muerto; resttemplate" as F8 #F3E9FF
+
+F0 -down-> F1 : destapa G1-G4 y G6\ny los protege
+F0 -down-> F2 : el banco vigila que la\nvelocidad no retroceda
+F1 -down-> F3 : con los datos a salvo,\nel cambio de fondo
+F3 -down-> F4 : las ediciones ya adelgazadas\nse migran una sola vez
+F0 -right-> F4 : sin la prueba genérica,\nF4 no es viable
+F5 -down-> F7 : el progreso/cancelación\nlo usa la tarea larga
+F6 -down-> F7 : la fábrica de tareas usa el\nregistro ya saneado
+F3 -down-> F7 : los validadores de la\nventana sobran
+
+note bottom of F8
+  Puede avanzar en paralelo en cualquier momento.
+  Cada punto es una decisión explícita del equipo,
+  no un arreglo.
+end note
+@enduml

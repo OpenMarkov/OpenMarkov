@@ -1,0 +1,65 @@
+@startuml ciclo-de-vida
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor #444444
+  LifeLineBorderColor #888888
+  ParticipantBorderColor #666666
+  ParticipantBackgroundColor #FAFAFA
+}
+
+title Lo que hace executeEdit(), y los dos huecos que deja
+
+actor Usuario
+participant "Panel de la\ninterfaz" as GUI
+participant "una PNEdit" as Edit
+participant "ConstraintChecker" as Check
+participant "ProbNet" as Net
+participant "PNESupport" as Sup
+participant "EditsHistory" as Hist
+
+Usuario -> GUI : una acción\n(arrastrar, teclear, menú)
+GUI -> Edit : new …Edit(…)
+note right of Edit
+  Muchas ediciones hacen aquí
+  todo el trabajo: fotografían el
+  estado, y algunas hasta calculan
+  el resultado.
+end note
+GUI -> Edit : executeEdit()
+
+group Comprobación previa
+  Edit -> Check : checkConstraintsWillBeMet
+  Check -> Net : ¿tienes esta restricción?
+  Check --> Edit : lista de violaciones
+  alt hay violaciones
+    Edit -> Sup : onEditViolatesConstraints
+    Edit --> GUI : CannotDoEditException
+  end
+end
+
+group Ejecución
+  Edit -> Sup : beforeEditExecutes
+  Edit -> Edit : doEdit()
+  Edit -> Net : muta la red
+  note right of Net #FFE0E0
+    <b>Hueco 1.</b> Si doEdit() falla
+    <i>después</i> de haber mutado, nadie
+    revierte lo ya hecho. La red se
+    queda a medias.
+  end note
+end
+
+group Registro
+  Edit -> Hist : addEdit(this)
+  note right of Hist #FFE0E0
+    <b>Hueco 2.</b> Se registra sin
+    comprobar que la edición sepa
+    deshacerse. Si no anula undo(),
+    queda en la pila una entrada
+    que no hace nada.
+  end note
+  Edit -> Sup : afterEditExecutes
+end
+
+@enduml

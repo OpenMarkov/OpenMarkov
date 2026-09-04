@@ -1,0 +1,47 @@
+@startuml reglas-en-tres-sitios
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam rectangle {
+  BorderColor #666666
+  BackgroundColor #FAFAFA
+}
+skinparam ArrowColor #444444
+
+title Dónde vive la misma regla: tres sitios, ninguno completo
+
+rectangle "La regla\n«sin ciclos» (NoCycle)" as REGLA #FFF4CC
+
+rectangle "1. La restricción\nNoCycle.checkProbNet()" as R1 {
+  card "Mira la red <b>entera</b>.\nSabe decir si la red está mal,\nno si una acción la estropearía." as c1
+}
+
+rectangle "2. Cada edición\ncheckConstraintsWillBeMet()" as R2 {
+  card "AddLinkEdit la repite\nInvertLinkEdit la repite\nInvertLinkAndUpdate… <b>no la repite</b>\nMultiStepEdit <b>la anula</b>" as c2
+}
+
+rectangle "3. Validadores de\nla interfaz gráfica" as R3 {
+  card "LinkRestrictionValidator\nRevelationArcValidator\nAlwaysObservedPropertyValidator\n<b>Sólo se aplican desde la ventana</b>" as c3
+}
+
+REGLA --> R1
+REGLA --> R2
+REGLA --> R3
+
+rectangle "Quien no pasa por la ventana" as FUERA #FFE0E0 {
+  card "el módulo resttemplate\nlos algoritmos de aprendizaje\nlos lectores de fichero" as c4
+}
+
+R3 ..> FUERA : <b>no les alcanza</b>
+
+note bottom of R2
+  <b>AddLinkEdit</b> nombra a mano <b>15</b> clases de restricción.
+  Añadir una restricción nueva obliga a tocar las ediciones,
+  justo lo que la arquitectura de complementos prometía evitar.
+
+  De las 37 restricciones que existen, <b>5</b> no las comprueba
+  ninguna edición: AllChanceVariablesHaveChancePotentials,
+  NoLinkRestriction, NoRevelationArc, OnlyUnlabeledLinks
+  y UtilityNodes.
+end note
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+' Lo que de verdad comparte una "copia" de red (ProbNet.copy() -> ProbNetCopier.shallowCopy)
+' y por qué la inferencia escribe sobre la red del llamante.
+skinparam shadowing false
+skinparam defaultFontName sans-serif
+
+object "red original : ProbNet" as orig
+object "copia : ProbNet" as copia
+object ": InferenceOptions" as opts #FFCCCC
+object ": Potential (x N)" as pots #FFF2CC
+object ": Variable (x N)" as vars #FFF2CC
+object "oyentes del original\n(Set de PNEditListener)" as listeners #FFCCCC
+object "VEPropagation" as ve
+
+orig --> opts
+copia --> opts : ¡el mismo objeto!
+orig --> pots
+copia --> pots : compartidos
+orig --> vars
+copia --> vars : compartidas
+orig --> listeners
+copia --> listeners : setListeners(original.getListeners()):\nla copia notifica a los oyentes del\noriginal y pierde su auto-registro
+
+ve --> copia : constructor: probNet = network.copy()
+ve -[#red,bold]-> opts : setMulticriteriaType(UNICRITERION)\nescribe en las opciones de la\nred del llamante
+
+note bottom of opts #FFCCCC
+    ProbNetCopier.shallowCopy, línea 64:
+    "a shallow copy carries the very
+    options of the original".
+    El javadoc de InferenceAlgorithm dice
+    "This is a copy of the ProbNet received":
+    la palabra "copia" promete un aislamiento
+    que no existe.
+end note
+
+note bottom of ve
+    Cada algoritmo se defiende por su cuenta:
+    ClusterPropagation vuelve a copiar tras super();
+    la familia DAN hace su propia copia;
+    UtilityOperations hace deepCopy potencial a
+    potencial. Ningún contrato dice quién posee qué.
+end note
+@enduml

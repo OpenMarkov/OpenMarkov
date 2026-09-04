@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.network.modelUncertainty;
 
 import org.openmarkov.core.exception.InvalidArgumentException;
+import org.openmarkov.core.exception.NotSupportedOperationException;
 
 import java.util.Random;
 
@@ -97,8 +98,13 @@ public class DirichletFunction extends ProbDensFunction {
         return 0;
     }
     
+    /**
+     * @throws NotSupportedOperationException always: one component of a Dirichlet is not a
+     * distribution over a number, so it has no interval.
+     */
     @Override public DomainInterval getInterval(double p) {
-        return null;
+        throw new NotSupportedOperationException(
+                "one component of a Dirichlet is not a distribution over a number, so it has no interval");
     }
     
     private void initializePdfForSampling() {
