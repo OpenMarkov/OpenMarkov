@@ -1,6 +1,6 @@
 # Plan de cambios sobre OpenMarkov
 
-**Rama:** `development`. **Última actualización:** 3 de septiembre de 2026.
+**Rama:** `development`. **Última actualización:** 4 de septiembre de 2026.
 
 Este documento es la lista única de lo que hay que cambiar en OpenMarkov y de lo que ya se ha cambiado.
 Reúne dos clases de trabajo que nacieron por separado:
@@ -382,7 +382,21 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     - **Lo que hace que sea una decisión y no un arreglo.** El factor delta **no es una tabla de probabilidades**: vale uno en la diagonal y **menos uno** en la subdiagonal —la de abajo en el MAX, la de arriba en el MIN—, porque es una diferencia entre acumuladas. Con valores negativos no es una probabilidad, así que ninguno de los dos papeles le corresponde.
     - **Las tres salidas.** Poner los dos como condicionada, que es el cambio pequeño y deja de estropear la tabla del MAX; poner los dos como conjunta, que rompe el MIN igual que hoy está roto el MAX; o dar a ese factor un papel que diga la verdad, del tipo «sin especificar», que es lo correcto de fondo pero obliga a mirar qué hace la aritmética con ese papel en cada operación.
     - **Probado y descartado por ahora.** Se llegó a implementar la primera salida y a escribir su prueba; con ella la batería de `core` pasaba y la prueba, sin el arreglo, fallaba en sus tres casos con `expected: <conditionalProbability> but was: <jointProbability>` y `expected: <1.0> but was: <0.25>`. Todo ello se revirtió al aplazar la decisión.
-- [ ] **RP4** `initializeNoisyParameters` deja de escribir una correspondencia identidad, y la validación del potencial compara los números de estados del hijo y del padre.
+- [x] **RP4** `initializeNoisyParameters` deja de escribir una correspondencia identidad, y la validación del potencial compara los números de estados del hijo y del padre.
+
+    **Hecho** el 4 de septiembre de 2026, commit `e88f0cd`, **la primera mitad; la segunda se descarta con motivo**, abajo.
+
+    **Medido antes de arreglarlo.** Con hijo de dos estados y padre de tres, la fila por omisión es `[1, 0, 0, 1, 0, 0]`: la tercera columna suma cero. La tabla expandida hereda la columna vacía. Pasa igual en el MAX ruidoso y en el MIN ruidoso, porque los dos usan la misma rutina.
+
+    **El arreglo.** Los estados del padre que se salen del hijo dan toda la probabilidad al **último** estado del hijo. La identidad se conserva letra por letra cuando el padre tiene tantos estados como el hijo o menos, así que **ningún modelo válido de hoy cambia de números**: de los cinco casos de la prueba, los dos que comprueban esa conservación pasan también contra el código sin arreglar.
+
+    Se eligió llevar el sobrante al último estado, y no repartirlo por igual, porque el orden de los estados es justo aquello de lo que depende el significado de estos modelos —es lo que dice RP1—. Llevarlo al último estado respeta ese orden en las dos familias: en el MAX el estado más alto es el más intenso y un padre más intenso no puede producir un efecto menor; en el MIN el estado más alto es el neutro y un padre fuera del rango del hijo deja de influir. Repartir por igual metería azar en unos parámetros por omisión que son deterministas y no respetaría ningún orden.
+
+    **La segunda mitad del punto no se hizo, y no por descuido.** Que la validación rechace un padre con más estados que el hijo retiraría un modelo que funciona. La clase acepta esa combinación por diseño: `setNoisyParameters` documenta y exige que la fila mida los estados del hijo por los del padre, y la acumulada trabaja por columnas del tamaño del hijo. Comprobado ejecutándolo, con dos padres y parámetros no triviales sobre un hijo de dos estados: las seis columnas de la tabla suman uno y los dos valores calculados a mano coinciden al dígito. Con la primera mitad arreglada no queda nada que rechazar.
+
+    **Lo que esto no arregla.** RP20 citaba esta columna de ceros como la entrada fácil a sus dos bucles de muestreo. Esa entrada queda cerrada, pero RP20 sigue en pie: los métodos de asignación siguen sin comprobar que una columna sume uno, así que el usuario puede escribir a mano lo que el valor por omisión ya no escribe.
+
+    Prueba de regresión: `DefaultNoisyParametersAreADistributionTest`, cinco casos. Sin el arreglo fallan tres.
 - [ ] **RP5** `setNoisyPotentials` limpia la tabla en caché, clona y comprueba la longitud, como ya hacen sus dos hermanos.
 - [ ] **RP6** `sum` toma el criterio como lo toma `multiply`: el primero no nulo de la lista entera, contando las constantes. Es el mismo arreglo que **F1-d** hizo en la marginalización.
 - [ ] **RP7** `multiplyAndMarginalize(prob, util, var)` marginaliza también cuando la probabilidad es una constante. Si se prefiere conservar el atajo, su javadoc deja de prometer lo que no hace y el llamador se protege.
