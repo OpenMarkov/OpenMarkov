@@ -447,7 +447,15 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     **El umbral, que era la decisión.** Se puso en `1e-15`: por debajo de lo que la maximización de **RP2** midió como valor real (una utilidad de `1e-12`) y por encima de lo que el error de redondeo del `double` deja detrás al sumar. La alternativa era reutilizar la constante de siempre, que vale `1e-8`, y eso archivaría como cero justamente la utilidad que RP2 acaba de rescatar. **Si el equipo prefiere otro número, se cambia en un sitio**, que es para lo que tiene nombre.
 
     Prueba de regresión: `ComparingNumbersAsksOneQuestionAtATimeTest`, cinco casos. No puede fallar contra el código sin arreglar porque nombra un método que allí no existe; lo que sostiene el cambio es lo medido arriba y que la suite entera pasa.
-- [ ] **RP9** La rama de «todo son constantes» rellena todas las casillas, en los tres sitios donde está escrita.
+- [x] **RP9** La rama de «todo son constantes» rellena todas las casillas, en los tres sitios donde está escrita.
+
+    **Hecho** el 4 de septiembre de 2026, commit `f091e01`, en los tres sitios.
+
+    **Medido antes de arreglarlo**, en los tres: marginalizar la constante 0,5 conservando una variable de tres estados devolvía `[0,5; 0,333; 0,333]`. Maximizar y maximizar uniformemente, con los mismos operandos, lo mismo. El 0,333 es el relleno uniforme que el constructor deja y que la rama solo pisaba en la primera casilla.
+
+    **El arreglo**, de una línea por sitio: se rellena la tabla entera con la constante.
+
+    Prueba de regresión: `AllConstantOperandsFillTheWholeTableTest`, un caso por sitio. Sin el arreglo fallan los tres.
 - [ ] **RP10** `maximize` sobre una colección pregunta el criterio al primer potencial y no al resultado recién construido, y recorre la colección una sola vez.
 
 **De la revisión de septiembre — estropean lo que el usuario tenía guardado:**
