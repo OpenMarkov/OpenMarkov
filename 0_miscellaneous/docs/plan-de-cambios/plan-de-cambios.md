@@ -410,7 +410,17 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     **Quién lo alcanzaba.** El único llamador es el algoritmo de esperanza-maximización del aprendizaje de parámetros, confirmado buscando en todos los módulos. La batería de `learning.algorithm` pasa con el cambio.
 
     Prueba de regresión: `LearnedNoisyParametersAreTheOnesAnsweredTest`, cuatro casos. Sin el arreglo fallan tres; el cuarto, el rechazo de un potencial sobre una variable ajena, ya funcionaba y sigue.
-- [ ] **RP6** `sum` toma el criterio como lo toma `multiply`: el primero no nulo de la lista entera, contando las constantes. Es el mismo arreglo que **F1-d** hizo en la marginalización.
+- [x] **RP6** `sum` toma el criterio como lo toma `multiply`: el primero no nulo de la lista entera, contando las constantes. Es el mismo arreglo que **F1-d** hizo en la marginalización.
+
+    **Hecho** el 4 de septiembre de 2026, commit `112ea43`.
+
+    **Medido antes de arreglarlo.** Sumar una utilidad sin criterio y otra con criterio `cost` devolvía criterio nulo, mientras que multiplicar esas dos mismas devolvía `cost`. Sumar dos constantes que las dos llevaban `cost` devolvía 3,8 sin criterio ninguno, que es la forma que sale al terminar de evaluar un diagrama de influencia, cuando lo aditivo que queda ya son escalares.
+
+    **El arreglo**, de una línea: la suma llama al mismo buscador que ya usaba el producto, que recorre la lista entera —constantes incluidas— y se queda con el primer criterio que no sea nulo. Desaparece de paso la guarda que no ponía nada cuando todos los sumandos eran constantes, porque la lista entera nunca está vacía.
+
+    Prueba de regresión: `SumKeepsTheCriterionTest`, cinco casos, uno de ellos comprobando que sumar y multiplicar contestan lo mismo. Sin el arreglo fallan cuatro; el quinto, que no haya criterio cuando ningún sumando lo lleva, pasa igual y está para que el arreglo no invente uno.
+
+    La suite entera pasa con el cambio, que era la duda: la suma la usa toda la inferencia.
 - [ ] **RP7** `multiplyAndMarginalize(prob, util, var)` marginaliza también cuando la probabilidad es una constante. Si se prefiere conservar el atajo, su javadoc deja de prometer lo que no hace y el llamador se protege.
 - [ ] **RP8** Se separan las dos preguntas que hoy comparte `almostEqual`: una comparación relativa y una prueba de cero con tolerancia absoluta. Ya era la recomendación del §5.7 de agosto, y **F2-d** la tiene pendiente.
 - [ ] **RP9** La rama de «todo son constantes» rellena todas las casillas, en los tres sitios donde está escrita.
