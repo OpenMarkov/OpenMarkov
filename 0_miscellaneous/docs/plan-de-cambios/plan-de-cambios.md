@@ -434,7 +434,19 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     Prueba de regresión: `MarginalizingAgainstAConstantRemovesTheVariableTest`, cuatro casos. Sin el arreglo fallan tres; el cuarto es el atajo conservado, que pasa igual de las dos maneras y está para que no se pierda.
 
     La suite entera pasa, incluidas las dos pruebas de siempre.
-- [ ] **RP8** Se separan las dos preguntas que hoy comparte `almostEqual`: una comparación relativa y una prueba de cero con tolerancia absoluta. Ya era la recomendación del §5.7 de agosto, y **F2-d** la tiene pendiente.
+- [x] **RP8** Se separan las dos preguntas que hoy comparte `almostEqual`: una comparación relativa y una prueba de cero con tolerancia absoluta. Ya era la recomendación del §5.7 de agosto, y **F2-d** la tiene pendiente.
+
+    **Hecho** el 4 de septiembre de 2026, commit `e3c7eca`. Con esto se cierra la mitad de **F2-d** que trataba de la comparación; la otra mitad, la de los conjuntos y mapas sin orden, sigue pendiente en la fase 2.
+
+    **Medido antes de arreglarlo.** Comparar `1e-30` con `0,0` daba falso en los dos órdenes, porque la tolerancia era una fracción del primer argumento y una fracción de cero es cero: contra el cero la prueba era exacta por mucho que el número fuera pequeño. Comparar `1e6` con `1e6 + 0,001` daba verdadero, que es lo que una tolerancia relativa tiene que dar, pero el comentario de la constante prometía una diferencia absoluta de una cienmillonésima.
+
+    Sobre la asimetría, un matiz que conviene dejar dicho: es real en la fórmula, pero con una tolerancia de una cienmillonésima los dos lados solo se separan justo en el filo, así que no se encontró ningún par de números de los que aparecen en la práctica en que el orden cambiara la respuesta.
+
+    **El arreglo.** La comparación mide ahora contra el mayor de los dos números, así que los dos valen igual de referencia. Y la pregunta del cero tiene método propio, con umbral propio, que por fuerza es absoluto. Sus dos llamadores —la búsqueda de una utilidad que no sea cero y la búsqueda de una columna de ceros— preguntan ya por él. El comentario de la constante dice ahora que es una fracción.
+
+    **El umbral, que era la decisión.** Se puso en `1e-15`: por debajo de lo que la maximización de **RP2** midió como valor real (una utilidad de `1e-12`) y por encima de lo que el error de redondeo del `double` deja detrás al sumar. La alternativa era reutilizar la constante de siempre, que vale `1e-8`, y eso archivaría como cero justamente la utilidad que RP2 acaba de rescatar. **Si el equipo prefiere otro número, se cambia en un sitio**, que es para lo que tiene nombre.
+
+    Prueba de regresión: `ComparingNumbersAsksOneQuestionAtATimeTest`, cinco casos. No puede fallar contra el código sin arreglar porque nombra un método que allí no existe; lo que sostiene el cambio es lo medido arriba y que la suite entera pasa.
 - [ ] **RP9** La rama de «todo son constantes» rellena todas las casillas, en los tres sitios donde está escrita.
 - [ ] **RP10** `maximize` sobre una colección pregunta el criterio al primer potencial y no al resultado recién construido, y recorre la colección una sola vez.
 
