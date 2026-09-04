@@ -253,7 +253,8 @@ final class TablePotentialElimination {
 
     /**
      * Multiplies a probability potential and a utility potential, then
-     * marginalizes out {@code variableToEliminate}.
+     * marginalizes out {@code variableToEliminate}. A probability with no variables only scales the
+     * utility, and the variable is summed out of it when the utility carries it.
      *
      * @param probPotential       probability potential
      * @param utilityPotential    utility potential
@@ -262,7 +263,8 @@ final class TablePotentialElimination {
      */
     static TablePotential multiplyAndMarginalize(TablePotential probPotential, TablePotential utilityPotential,
                                                  Variable variableToEliminate) {
-        if (probPotential.getVariables().isEmpty()) {
+        if (probPotential.getVariables().isEmpty()
+                && !utilityPotential.getVariables().contains(variableToEliminate)) {
             double prob = probPotential.getValues()[0];
             if (prob == 1) {
                 return utilityPotential;
