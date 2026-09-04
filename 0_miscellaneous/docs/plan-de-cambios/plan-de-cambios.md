@@ -421,7 +421,19 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     Prueba de regresión: `SumKeepsTheCriterionTest`, cinco casos, uno de ellos comprobando que sumar y multiplicar contestan lo mismo. Sin el arreglo fallan cuatro; el quinto, que no haya criterio cuando ningún sumando lo lleva, pasa igual y está para que el arreglo no invente uno.
 
     La suite entera pasa con el cambio, que era la duda: la suma la usa toda la inferencia.
-- [ ] **RP7** `multiplyAndMarginalize(prob, util, var)` marginaliza también cuando la probabilidad es una constante. Si se prefiere conservar el atajo, su javadoc deja de prometer lo que no hace y el llamador se protege.
+- [x] **RP7** `multiplyAndMarginalize(prob, util, var)` marginaliza también cuando la probabilidad es una constante. Si se prefiere conservar el atajo, su javadoc deja de prometer lo que no hace y el llamador se protege.
+
+    **Hecho** el 4 de septiembre de 2026, commit `fa82797`, **conservando el atajo donde es correcto**.
+
+    **Medido antes de arreglarlo.** Eliminar `B` de una utilidad `[4, 6]` contra la probabilidad unidad devolvía un potencial que seguía teniendo `B` y seguía valiendo `[4, 6]`, y era además el mismo objeto que se había pasado. La misma cuenta por el camino general, con una probabilidad de unos sobre `B`, da el escalar 10.
+
+    **El arreglo.** El atajo se toma ahora solo cuando la utilidad **no** lleva la variable que se elimina. En ese caso no hay nada que sumar y escalar por la constante es la respuesta, que es para lo que estaba escrito y lo que fijan sus dos pruebas de siempre. Cuando la utilidad sí la lleva, se pasa por el camino de siempre, que la suma y escala. El javadoc ya dice lo que hace.
+
+    **La alternativa era quitar el atajo entero**, que es lo que el punto pedía a la letra. No se tomó porque una constante no es una distribución sobre la variable: el camino general multiplicaría por el número de estados una utilidad que no depende de ella, y eso rompe las dos pruebas que fijan ese caso y cambia resultados donde hoy son correctos.
+
+    Prueba de regresión: `MarginalizingAgainstAConstantRemovesTheVariableTest`, cuatro casos. Sin el arreglo fallan tres; el cuarto es el atajo conservado, que pasa igual de las dos maneras y está para que no se pierda.
+
+    La suite entera pasa, incluidas las dos pruebas de siempre.
 - [ ] **RP8** Se separan las dos preguntas que hoy comparte `almostEqual`: una comparación relativa y una prueba de cero con tolerancia absoluta. Ya era la recomendación del §5.7 de agosto, y **F2-d** la tiene pendiente.
 - [ ] **RP9** La rama de «todo son constantes» rellena todas las casillas, en los tres sitios donde está escrita.
 - [ ] **RP10** `maximize` sobre una colección pregunta el criterio al primer potencial y no al resultado recién construido, y recorre la colección una sola vez.
