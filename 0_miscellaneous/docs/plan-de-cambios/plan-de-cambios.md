@@ -472,7 +472,17 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
 
 **De la revisión de septiembre — estropean lo que el usuario tenía guardado:**
 
-- [ ] **RP11** `redistributeProbabilities` usa la rutina general que ya existe en el paquete, que arregla una columna a cero de cualquier número de estados.
+- [x] **RP11** `redistributeProbabilities` usa la rutina general que ya existe en el paquete, que arregla una columna a cero de cualquier número de estados.
+
+    **Hecho** el 4 de septiembre de 2026, commit `fd17916`, **sin usar la rutina general**, por el motivo de abajo.
+
+    **Medido antes de arreglarlo**, por el camino del usuario: hijo de azar de tres estados con la columna `[1, 0, 0]`, restricción registrada sobre el estado 0, y la columna queda en `[0, 0, 0]`. Con dos estados el mismo escenario da `[0, 1]`, que es correcto: por eso solo se veía con tres o más.
+
+    **El arreglo.** Los estados que la restricción sigue permitiendo se reparten la probabilidad a partes iguales, sean los que sean. Con un solo estado permitido eso da uno, que es exactamente lo que hacía la rama de dos estados cuando acertaba. Si no queda ningún estado permitido, la columna se queda a cero, que es lo honesto: la restricción ha dejado esa combinación de padres sin salida y quien normalice después tiene que quejarse.
+
+    **Por qué no se usó `imposeOtherDistributionWhenDistributionIsZero`**, que es lo que el punto proponía: esa rutina da toda la probabilidad al **primer** estado, y el primer estado puede ser justo uno de los que la restricción prohíbe. En el escenario medido lo es, así que habría dejado `[1, 0, 0]`: probabilidad uno en el estado prohibido, que es peor que el fallo que se venía a arreglar. Además recorre la tabla entera, y aquí se repara una columna cada vez.
+
+    Prueba de regresión: `RestrictingALinkLeavesADistributionTest`, cinco casos, incluidos el hijo de dos estados y el reparto en proporción, que están para que el arreglo no los cambie. Sin él fallan los dos del hijo con más de dos estados.
 - [ ] **RP12** `addVariable` y `removeVariable` de las tres clases canónicas clonan los parámetros y conservan comentario, criterio y propiedades. Lo segundo se arregla llamando al constructor de copia de la clase madre.
 - [ ] **RP13** Los métodos que devuelven los parámetros como tabla entregan una copia, o el aprendizaje deja de escribir dentro de ellos. Elegirlo con quien conozca el aprendizaje: copiar cuesta memoria en el camino caliente.
 - [ ] **RP14** Se documenta —o se elimina— que multiplicar o sumar una lista de un elemento devuelve el objeto del llamador. Era la recomendación del §7.2 de agosto, que **F8-f** recoge; lo que añade la revisión es que componerlo con `normalize` ya no es una posibilidad teórica.
