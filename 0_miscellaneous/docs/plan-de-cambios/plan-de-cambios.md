@@ -515,7 +515,17 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     **Queda abierto** si el aprendizaje debe tratar modelos canónicos: ver **F8-h**.
 
     Prueba de regresión: `TheParametersHandedOutAreCopiesTest`, cuatro casos, en el mismo commit. Sin el arreglo fallan tres. Las once pruebas del aprendizaje pasan y aprende lo mismo. La batería entera, a mano: 2606 pruebas, cero fallos.
-- [ ] **RP14** Se documenta —o se elimina— que multiplicar o sumar una lista de un elemento devuelve el objeto del llamador. Era la recomendación del §7.2 de agosto, que **F8-f** recoge; lo que añade la revisión es que componerlo con `normalize` ya no es una posibilidad teórica.
+- [x] **RP14** Se documenta —o se elimina— que multiplicar o sumar una lista de un elemento devuelve el objeto del llamador. Era la recomendación del §7.2 de agosto, que **F8-f** recoge; lo que añade la revisión es que componerlo con `normalize` ya no es una posibilidad teórica.
+
+    **Hecho** el 4 de septiembre de 2026, commit `a6f749d`, **documentándolo**.
+
+    **Medido antes de decidir.** Multiplicar o sumar una lista de un elemento devuelve el potencial que se pasó, no una copia. Componerlo con la normalización, que reescribe el potencial que recibe, edita la entrada: un potencial de `[2; 6]` quedó en `[0,25; 0,75]` después de multiplicar y normalizar el resultado. Dos llamadas documentadas del mismo paquete.
+
+    **Por qué documentar y no quitar el atajo.** El daño está contenido: la propagación trabaja sobre una copia de la red por consulta, así que lo reescrito no es lo que el usuario tiene guardado. Y quitar el atajo obliga a reservar y copiar una tabla del tamaño del potencial cada vez, en el camino que la eliminación de variables recorre por cada variable que elimina.
+
+    **Ese coste no se midió**, a diferencia del de RP13. Queda dicho aquí para que quien retome el punto sepa que la decisión se tomó sin ese número. Si el equipo prefiere quitar el atajo, lo que toca primero es medirlo con el banco de referencia de **F0-c**.
+
+    La frase quedó en los siete sitios por los que se entra: las cinco entradas públicas y los dos métodos donde vive el atajo. Prueba: `AListOfOneIsAnsweredWithItselfTest`, tres casos, que fija lo que la documentación promete para que quien quite el atajo tenga que quitar también esas líneas. No puede fallar contra el código sin cambiar, porque el cambio es la documentación.
 
 **De la revisión de septiembre — revientan en casos concretos:**
 
