@@ -315,7 +315,8 @@ public abstract class ICIPotential extends Potential implements Projectable {
     }
     
     /**
-     * There will be a potential for each link, plus the leak potential
+     * There will be a potential for each link, plus the leak potential. Each one carries its own
+     * copy of the parameters, so writing on it does not reach this potential.
      *
      * @return {@code ArrayList} of {@code TablePotential}.
      */
@@ -326,7 +327,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
         for (Variable parent : zVariables.keySet()) {
             List<Variable> linkVariables = Arrays.asList(zVariables.get(parent), parent);
             noisyPotentials.add(new TablePotential(linkVariables, PotentialRole.CONDITIONAL_PROBABILITY,
-                                                   noisyParameters[variables.indexOf(parent) - 1]));
+                                                   noisyParameters[variables.indexOf(parent) - 1].clone()));
         }
         
         return noisyPotentials;
@@ -389,6 +390,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
     
     /**
      * Returns the leak potential as a table potential with a single variable (the leak variable).
+     * It carries its own copy of the parameters, so writing on it does not reach this potential.
      *
      * @return the leak potential, or {@code null} if no leak parameters are set
      */
@@ -397,7 +399,8 @@ public abstract class ICIPotential extends Potential implements Projectable {
         if (this.leakyParameters != null) {
             ArrayList<Variable> leakVariables = new ArrayList<>();
             leakVariables.add(leakyVariable); // conditioned variable
-            leakyPotential = new TablePotential(leakVariables, PotentialRole.CONDITIONAL_PROBABILITY, leakyParameters);
+            leakyPotential = new TablePotential(leakVariables, PotentialRole.CONDITIONAL_PROBABILITY,
+                                                leakyParameters.clone());
         }
         return leakyPotential;
     }
