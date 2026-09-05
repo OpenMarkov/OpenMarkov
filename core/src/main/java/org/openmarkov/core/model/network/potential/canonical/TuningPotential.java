@@ -93,14 +93,13 @@ public class TuningPotential extends ICIPotential {
     }
     
     /**
-     * Adds a parent to the family with its corresponding parameters
+     * Sets the parameters of a parent, either the whole table -the child's states by the parent's-
+     * or the four numbers it is built from, in this order:
+     * c<sub><i>i</i></sub><sup>++</sup>, c<sub><i>i</i></sub><sup>+-</sup>,
+     * c<sub><i>i</i></sub><sup>-+</sup>, c<sub><i>i</i></sub><sup>--</sup>
      *
      * @param parent     Parent variable
-     * @param parameters the four parameters that define the link in the
-     *                   following order: c<sub><i>i</i></sub><sup>++</sup>,
-     *                   c<sub><i>i</i></sub><sup>+-</sup>,
-     *                   c<sub><i>i</i></sub><sup>-+</sup>,
-     *                   c<sub><i>i</i></sub><sup>--</sup>
+     * @param parameters the whole table, or those four numbers
      */
     // The 3x3 noisy table holds P(Z | X) column by column, one column per state
     // of the parent: x=- (values[0..2]), x=0 (values[3..5]) and x=+ (values[6..8]).
