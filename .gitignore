@@ -39,5 +39,9 @@ buildNumber.properties
 # Claude Code
 /CLAUDE.md
 /scripts/
+
+# Documento de trabajo de la campaña de correcciones: cambia a diario y es de
+# quien lleva la campaña, no del proyecto.
+/0_miscellaneous/docs/plan-de-cambios/plan-de-cambios.md
 /full/src/main/resources/META-INF/MANIFEST.MF
 /0_miscellaneous/installer/
