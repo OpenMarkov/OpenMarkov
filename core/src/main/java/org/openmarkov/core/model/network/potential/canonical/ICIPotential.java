@@ -482,17 +482,29 @@ public abstract class ICIPotential extends Potential implements Projectable {
         return isEqual;
     }
     
+    /**
+     * Replaces one of this model's variables and rebuilds what was named after it: the auxiliary
+     * variables carry the conditioned variable's name and states, so replacing it rebuilds all of
+     * them, and replacing a parent rebuilds only that parent's. The expanded table is dropped in
+     * both cases, since it was computed over the variables that are no longer here.
+     */
     @Override public void replaceVariable(int position, Variable variable) {
         Variable oldVariable = variables.get(position);
         variables.remove(position);
         variables.add(position, variable);
+        expandedPotential = null;
         
-        // if position == 0, it is the conditioned variable, not a noisy one
-        if (position > 0) {
+        if (position == 0) {
+            Map<Variable, Variable> rebuilt = new LinkedHashMap<>();
+            for (Variable parent : zVariables.keySet()) {
+                rebuilt.put(parent, createZVariable(parent, variable));
+            }
+            zVariables = rebuilt;
+            leakyVariable = createLeakyVariable(variable);
+        } else {
             zVariables.remove(oldVariable);
             zVariables.put(variable, createZVariable(variable, variables.getFirst()));
         }
-        
     }
     
     /**
