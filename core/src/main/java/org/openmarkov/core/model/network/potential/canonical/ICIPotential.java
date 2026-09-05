@@ -262,13 +262,27 @@ public abstract class ICIPotential extends Potential implements Projectable {
     }
     
     /**
+     * Answers where the parameters of a parent are kept, or refuses a variable that is not one of
+     * the parents: the conditioned variable is in the list too, and its position gives no row.
+     */
+    private int parametersRowOf(Variable parent) {
+        int position = variables.indexOf(parent);
+        if (position < 1) {
+            throw new UnrecoverableException(new InvalidArgumentException(this, "parent",
+                    parent.getName() + " is not a parent of " + getConditionedVariable().getName()
+                            + " in this ICI family"));
+        }
+        return position - 1;
+    }
+    
+    /**
      * Returns the noisy parameters for the given parent variable.
      *
      * @param variable the parent variable
      * @return the noisy parameter array for that parent
      */
     public double[] getNoisyParameters(Variable variable) {
-        return noisyParameters[variables.indexOf(variable) - 1];
+        return noisyParameters[parametersRowOf(variable)];
     }
     
     /**
@@ -278,17 +292,15 @@ public abstract class ICIPotential extends Potential implements Projectable {
      * @param parameters the noisy parameters. The length of the array must be the multiplication of the parent's and child's state number
      */
     public void setNoisyParameters(Variable parent, double[] parameters) {
+        int row = parametersRowOf(parent);
         if (parameters.length != variables.getFirst().getNumStates() * parent.getNumStates()) {
             throw new UnrecoverableException(new InvalidArgumentException(Arrays.stream(parameters)
                     .boxed()
                     .toList(), "parameters", "The length of the array must be the multiplication of the parent's and child's state number "
                     + variables.getFirst().getNumStates() * parent.getNumStates() + " and is " + parameters.length));
         }
-        if (!getVariables().contains(parent)) {
-            throw new UnrecoverableException(new InvalidArgumentException(this, "potential", "There is no variable " + parent.getName() + " in this ICI family."));
-        }
         expandedPotential = null;
-        noisyParameters[variables.indexOf(parent) - 1] = parameters;
+        noisyParameters[row] = parameters;
     }
     
     /**
@@ -446,7 +458,8 @@ public abstract class ICIPotential extends Potential implements Projectable {
     }
     
     @Override public boolean equals(Object arg0) {
-        boolean isEqual = super.equals(arg0) && arg0 instanceof ICIPotential;
+        boolean isEqual = super.equals(arg0) && arg0 instanceof ICIPotential
+                && modelType == ((ICIPotential) arg0).modelType;
         if (isEqual) {
             ICIPotential otherPotential = (ICIPotential) arg0;
             for (int j = 1; j < variables.size(); ++j) {
