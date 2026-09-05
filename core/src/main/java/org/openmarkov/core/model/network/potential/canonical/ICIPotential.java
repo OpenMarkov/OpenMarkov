@@ -508,6 +508,23 @@ public abstract class ICIPotential extends Potential implements Projectable {
     }
     
     /**
+     * Puts the discretized version of a parent in its place. It goes through
+     * {@link #replaceVariable}, which rebuilds the auxiliary variable of that parent: the map that
+     * holds them is keyed by the parent, so leaving the numeric one as the key loses its parameters.
+     */
+    @Override public void replaceNumericVariable(Variable convertedParentVariable) {
+        int position = -1;
+        for (int i = 0; i < variables.size(); ++i) {
+            if (variables.get(i).getName().equals(convertedParentVariable.getName())) {
+                position = i;
+            }
+        }
+        if (position != -1) {
+            replaceVariable(position, convertedParentVariable);
+        }
+    }
+    
+    /**
      * Creates analogous Z variable for the parent variable
      *
      * @param parent Parent variable
