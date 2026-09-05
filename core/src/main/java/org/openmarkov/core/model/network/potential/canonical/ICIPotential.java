@@ -563,7 +563,8 @@ public abstract class ICIPotential extends Potential implements Projectable {
             int sampleIndex = 0;
             double randomPick = randomGenerator.nextDouble();
             double accumulatedProbability = probabilities[index + sampleIndex];
-            while (accumulatedProbability < randomPick) {
+            // Stay inside the column of this parent's state even if it adds up to less than one.
+            while (accumulatedProbability < randomPick && sampleIndex < childNumStates - 1) {
                 ++sampleIndex;
                 accumulatedProbability += probabilities[index + sampleIndex];
             }
@@ -574,7 +575,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
         int sampleIndex = 0;
         double randomPick = randomGenerator.nextDouble();
         double accumulatedProbability = leakyParameters[sampleIndex];
-        while (accumulatedProbability < randomPick) {
+        while (accumulatedProbability < randomPick && sampleIndex < leakyParameters.length - 1) {
             ++sampleIndex;
             accumulatedProbability += leakyParameters[sampleIndex];
         }
