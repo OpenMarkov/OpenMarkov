@@ -41,7 +41,22 @@ public class TuningPotential extends ICIPotential {
      * @param variables List of variables
      */
     public TuningPotential(List<Variable> variables) {
-        super(ICIModelType.TUNING, variables);
+        super(ICIModelType.TUNING, checkedVariables(variables));
+    }
+    
+    /**
+     * Answers the variables, or refuses them if any has a number of states other than the one this
+     * model is written for.
+     */
+    private static List<Variable> checkedVariables(List<Variable> variables) {
+        for (Variable variable : variables) {
+            if (variable.getNumStates() != NUM_STATES) {
+                throw new UnrecoverableException(new InvalidArgumentException(variable, "variables",
+                        "the tuning model needs variables of " + NUM_STATES + " states, and "
+                                + variable.getName() + " has " + variable.getNumStates()));
+            }
+        }
+        return variables;
     }
     
     /**
@@ -139,7 +154,7 @@ public class TuningPotential extends ICIPotential {
                 // netNumIncr = -1 if v-, netNumIncr = 0 if v0, netNumIncr = 1
                 // if v+
                 netNumIncr += (index % NUM_STATES) - 1;
-                index /= 3;
+                index /= NUM_STATES;
             }
             // tuning function
             tablePotential.getValues()[i] = (netNumIncr < 0) ? 1.0 : 0.0;
@@ -166,13 +181,14 @@ public class TuningPotential extends ICIPotential {
         
         for (int i = 1; i < variables.size(); i++) {
             double[] noisyParameters = this.getNoisyParameters(variables.get(i));
-            newICIPotential.setNoisyParameters(variables.get(i), noisyParameters);
+            newICIPotential.setNoisyParameters(variables.get(i), noisyParameters.clone());
         }
         Variable conditionedVariable = variables.get(0);
         double[] noisyParameters = ICIPotential.initializeNoisyParameters(conditionedVariable, newVariable);
         newICIPotential.setNoisyParameters(newVariable, noisyParameters);
         
-        newICIPotential.setLeakyParameters(getLeakyParameters());
+        newICIPotential.setLeakyParameters(getLeakyParameters().clone());
+        newICIPotential.copyAttributesFrom(this);
         return newICIPotential;
     }
     
@@ -188,11 +204,14 @@ public class TuningPotential extends ICIPotential {
         
         for (int i = 1; i < newVariables.size(); i++) {
             double[] noisyParameters = this.getNoisyParameters(newVariables.get(i));
-            newICIPotential.setNoisyParameters(newVariables.get(i), noisyParameters);
+            newICIPotential.setNoisyParameters(newVariables.get(i), noisyParameters.clone());
         }
-        newICIPotential.setLeakyParameters(getLeakyParameters());
+        newICIPotential.setLeakyParameters(getLeakyParameters().clone());
+        newICIPotential.copyAttributesFrom(this);
         if (newVariables.size() == 1) {
-            return new UniformPotential(newVariables, newICIPotential.role);
+            UniformPotential uniform = new UniformPotential(newVariables, newICIPotential.role);
+            uniform.copyAttributesFrom(this);
+            return uniform;
         }
         return newICIPotential;
     }

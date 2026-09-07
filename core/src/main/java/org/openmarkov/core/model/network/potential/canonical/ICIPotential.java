@@ -133,8 +133,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
     }
     
     /**
-     * Computes default noisy parameters for all parent variables. Each parent's parameters
-     * are initialized so that the identity mapping holds (state i of parent maps to state i of child).
+     * Computes default noisy parameters for all parent variables.
      *
      * @return a 2D array where each row corresponds to a parent variable's noisy parameters
      */
@@ -149,7 +148,9 @@ public abstract class ICIPotential extends Potential implements Projectable {
     }
     
     /**
-     * Initializes noisy parameters values
+     * Initializes noisy parameters values. Each state of the parent gives all the probability to the
+     * state of the same index of the conditioned variable, and the states of the parent beyond its
+     * last one give it to that last state.
      *
      * @param conditionedVariable Conditioned variable
      * @param parent              Parent variable
@@ -157,11 +158,10 @@ public abstract class ICIPotential extends Potential implements Projectable {
      * @return Array of noisy parameters values
      */
     public static double[] initializeNoisyParameters(Variable conditionedVariable, Variable parent) {
-        double[] probabilities = new double[conditionedVariable.getNumStates() * parent.getNumStates()];
+        int numStatesConditioned = conditionedVariable.getNumStates();
+        double[] probabilities = new double[numStatesConditioned * parent.getNumStates()];
         for (int j = 0; j < parent.getNumStates(); ++j) {
-            for (int k = 0; k < conditionedVariable.getNumStates(); ++k) {
-                probabilities[j * conditionedVariable.getNumStates() + k] = (k == j) ? 1.0 : 0.0;
-            }
+            probabilities[j * numStatesConditioned + Math.min(j, numStatesConditioned - 1)] = 1.0;
         }
         return probabilities;
     }
@@ -315,7 +315,8 @@ public abstract class ICIPotential extends Potential implements Projectable {
     }
     
     /**
-     * There will be a potential for each link, plus the leak potential
+     * There will be a potential for each link, plus the leak potential. Each one carries its own
+     * copy of the parameters, so writing on it does not reach this potential.
      *
      * @return {@code ArrayList} of {@code TablePotential}.
      */
@@ -326,7 +327,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
         for (Variable parent : zVariables.keySet()) {
             List<Variable> linkVariables = Arrays.asList(zVariables.get(parent), parent);
             noisyPotentials.add(new TablePotential(linkVariables, PotentialRole.CONDITIONAL_PROBABILITY,
-                                                   noisyParameters[variables.indexOf(parent) - 1]));
+                                                   noisyParameters[variables.indexOf(parent) - 1].clone()));
         }
         
         return noisyPotentials;
@@ -353,14 +354,13 @@ public abstract class ICIPotential extends Potential implements Projectable {
     public void setNoisyPotentials(List<TablePotential> noisyPotentials) {
         for (TablePotential noisyPotential : noisyPotentials) {
             Variable parent = noisyPotential.getVariable(1);
-            int position = variables.indexOf(parent);
-            if (position < 1) {
+            if (variables.indexOf(parent) < 1) {
                 throw new UnrecoverableException(new InvalidArgumentException(
                         "The potential over " + noisyPotential.getVariable(0).getName() + " and " + parent
                                 .getName() + " cannot carry noisy parameters of " + getConditionedVariable()
                                 .getName() + ": " + parent.getName() + " is not one of its parents"));
             }
-            noisyParameters[position - 1] = noisyPotential.getValues();
+            setNoisyParameters(parent, noisyPotential.getValues().clone());
         }
     }
     
@@ -390,6 +390,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
     
     /**
      * Returns the leak potential as a table potential with a single variable (the leak variable).
+     * It carries its own copy of the parameters, so writing on it does not reach this potential.
      *
      * @return the leak potential, or {@code null} if no leak parameters are set
      */
@@ -398,7 +399,8 @@ public abstract class ICIPotential extends Potential implements Projectable {
         if (this.leakyParameters != null) {
             ArrayList<Variable> leakVariables = new ArrayList<>();
             leakVariables.add(leakyVariable); // conditioned variable
-            leakyPotential = new TablePotential(leakVariables, PotentialRole.CONDITIONAL_PROBABILITY, leakyParameters);
+            leakyPotential = new TablePotential(leakVariables, PotentialRole.CONDITIONAL_PROBABILITY,
+                                                leakyParameters.clone());
         }
         return leakyPotential;
     }

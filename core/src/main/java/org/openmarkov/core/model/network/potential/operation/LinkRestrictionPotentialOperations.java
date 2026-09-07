@@ -187,17 +187,12 @@ public class LinkRestrictionPotentialOperations {
 						potential.setValue(nodeVariables, singleState, oldValue / sum);
 					}
 				}
-			} else {
-				if (states == 2) {
-					for (int i = 0; i < states; i++) {
-						singleState[varIndex] = i;
-						if (modifiableStateList.contains(i)) {
-							potential.setValue(nodeVariables, singleState, 1);
-						}
-					}
-
+			} else if (!modifiableStateList.isEmpty()) {
+				double share = 1.0 / modifiableStateList.size();
+				for (int i : modifiableStateList) {
+					singleState[varIndex] = i;
+					potential.setValue(nodeVariables, singleState, share);
 				}
-
 			}
 		}
 

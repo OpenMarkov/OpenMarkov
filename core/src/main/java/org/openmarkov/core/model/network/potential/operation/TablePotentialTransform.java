@@ -124,7 +124,7 @@ final class TablePotentialTransform {
             boolean allZeros = true;
             int startConfiguration = numConfiguration;
             for (int j = 0; j < numStatesFirstVariable; j++) {
-                allZeros &= DiscretePotentialOperations.almostEqual(0.0, xNewPotential.getValues()[startConfiguration++]);
+                allZeros &= DiscretePotentialOperations.isZero(xNewPotential.getValues()[startConfiguration++]);
             }
             if (allZeros) {
                 startConfiguration = numConfiguration;

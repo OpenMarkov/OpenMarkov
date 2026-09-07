@@ -15,6 +15,7 @@ import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -59,6 +60,7 @@ final class TablePotentialMaximization {
         PotentialRole role = TablePotentialArithmetic.getRole(tablePotentials);
 
         TablePotential resultingPotential = new TablePotential(variablesToKeep, role);
+        resultingPotential.setCriterion(TablePotentialArithmetic.findFirstNonNullCriterion(potentials));
         GTablePotential<Choice> gResult = new GTablePotential<>(variablesToKeep, role);
         int numStates = fSVariableToMaximize.getNumStates();
         int[] statesChoosed;
@@ -77,7 +79,7 @@ final class TablePotentialMaximization {
         int numProperPotentials = properPotentials.size();
 
         if (numProperPotentials == 0) {
-            resultingPotential.getValues()[0] = constantFactor;
+            Arrays.fill(resultingPotential.getValues(), constantFactor);
             return new Object[]{resultingPotential, gResult};
         }
 
@@ -176,6 +178,7 @@ final class TablePotentialMaximization {
                 : PotentialRole.CONDITIONAL_PROBABILITY;
 
         TablePotential resultingPotential = new TablePotential(variablesToKeep, roleResult);
+        resultingPotential.setCriterion(TablePotentialArithmetic.findFirstNonNullCriterion(potentials));
 
         List<Variable> variablesPolicy = new ArrayList<>();
         variablesPolicy.add(variableToMaximize);
@@ -196,7 +199,7 @@ final class TablePotentialMaximization {
         int numProperPotentials = properPotentials.size();
 
         if (numProperPotentials == 0) {
-            resultingPotential.getValues()[0] = constantFactor;
+            Arrays.fill(resultingPotential.getValues(), constantFactor);
             return new TablePotential[]{resultingPotential, policy};
         }
 
@@ -356,7 +359,7 @@ final class TablePotentialMaximization {
                 result = null;
             } else {
                 Iterator<TablePotential> iterPotentials = potentials.iterator();
-                TablePotential potFirst = potentials.iterator().next();
+                TablePotential potFirst = iterPotentials.next();
                 List<Variable> variablesFirst = potFirst.getVariables();
                 setPot = new HashSet<>();
                 setPot.add(potFirst);
@@ -374,9 +377,7 @@ final class TablePotentialMaximization {
                 }
 
                 result = new TablePotential(variablesFirst, potFirst.getPotentialRole(), newValues);
-                if (result.isAdditive()) {
-                    result.setCriterion(potFirst.getCriterion());
-                }
+                result.setCriterion(potFirst.getCriterion());
             }
         }
         return result;

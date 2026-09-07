@@ -1,6 +1,6 @@
 # Plan de cambios sobre OpenMarkov
 
-**Rama:** `development`. **Última actualización:** 3 de septiembre de 2026.
+**Rama:** `development`. **Última actualización:** 4 de septiembre de 2026.
 
 Este documento es la lista única de lo que hay que cambiar en OpenMarkov y de lo que ya se ha cambiado.
 Reúne dos clases de trabajo que nacieron por separado:
@@ -382,24 +382,172 @@ Cada punto es pequeño, no depende de los demás y lleva su prueba. Orden intern
     - **Lo que hace que sea una decisión y no un arreglo.** El factor delta **no es una tabla de probabilidades**: vale uno en la diagonal y **menos uno** en la subdiagonal —la de abajo en el MAX, la de arriba en el MIN—, porque es una diferencia entre acumuladas. Con valores negativos no es una probabilidad, así que ninguno de los dos papeles le corresponde.
     - **Las tres salidas.** Poner los dos como condicionada, que es el cambio pequeño y deja de estropear la tabla del MAX; poner los dos como conjunta, que rompe el MIN igual que hoy está roto el MAX; o dar a ese factor un papel que diga la verdad, del tipo «sin especificar», que es lo correcto de fondo pero obliga a mirar qué hace la aritmética con ese papel en cada operación.
     - **Probado y descartado por ahora.** Se llegó a implementar la primera salida y a escribir su prueba; con ella la batería de `core` pasaba y la prueba, sin el arreglo, fallaba en sus tres casos con `expected: <conditionalProbability> but was: <jointProbability>` y `expected: <1.0> but was: <0.25>`. Todo ello se revirtió al aplazar la decisión.
-- [ ] **RP4** `initializeNoisyParameters` deja de escribir una correspondencia identidad, y la validación del potencial compara los números de estados del hijo y del padre.
-- [ ] **RP5** `setNoisyPotentials` limpia la tabla en caché, clona y comprueba la longitud, como ya hacen sus dos hermanos.
-- [ ] **RP6** `sum` toma el criterio como lo toma `multiply`: el primero no nulo de la lista entera, contando las constantes. Es el mismo arreglo que **F1-d** hizo en la marginalización.
-- [ ] **RP7** `multiplyAndMarginalize(prob, util, var)` marginaliza también cuando la probabilidad es una constante. Si se prefiere conservar el atajo, su javadoc deja de prometer lo que no hace y el llamador se protege.
-- [ ] **RP8** Se separan las dos preguntas que hoy comparte `almostEqual`: una comparación relativa y una prueba de cero con tolerancia absoluta. Ya era la recomendación del §5.7 de agosto, y **F2-d** la tiene pendiente.
-- [ ] **RP9** La rama de «todo son constantes» rellena todas las casillas, en los tres sitios donde está escrita.
-- [ ] **RP10** `maximize` sobre una colección pregunta el criterio al primer potencial y no al resultado recién construido, y recorre la colección una sola vez.
+- [x] **RP4** `initializeNoisyParameters` deja de escribir una correspondencia identidad, y la validación del potencial compara los números de estados del hijo y del padre.
+
+    **Hecho** el 4 de septiembre de 2026, commit `e88f0cd`, **la primera mitad; la segunda se descarta con motivo**, abajo.
+
+    **Medido antes de arreglarlo.** Con hijo de dos estados y padre de tres, la fila por omisión es `[1, 0, 0, 1, 0, 0]`: la tercera columna suma cero. La tabla expandida hereda la columna vacía. Pasa igual en el MAX ruidoso y en el MIN ruidoso, porque los dos usan la misma rutina.
+
+    **El arreglo.** Los estados del padre que se salen del hijo dan toda la probabilidad al **último** estado del hijo. La identidad se conserva letra por letra cuando el padre tiene tantos estados como el hijo o menos, así que **ningún modelo válido de hoy cambia de números**: de los cinco casos de la prueba, los dos que comprueban esa conservación pasan también contra el código sin arreglar.
+
+    Se eligió llevar el sobrante al último estado, y no repartirlo por igual, porque el orden de los estados es justo aquello de lo que depende el significado de estos modelos —es lo que dice RP1—. Llevarlo al último estado respeta ese orden en las dos familias: en el MAX el estado más alto es el más intenso y un padre más intenso no puede producir un efecto menor; en el MIN el estado más alto es el neutro y un padre fuera del rango del hijo deja de influir. Repartir por igual metería azar en unos parámetros por omisión que son deterministas y no respetaría ningún orden.
+
+    **La segunda mitad del punto no se hizo, y no por descuido.** Que la validación rechace un padre con más estados que el hijo retiraría un modelo que funciona. La clase acepta esa combinación por diseño: `setNoisyParameters` documenta y exige que la fila mida los estados del hijo por los del padre, y la acumulada trabaja por columnas del tamaño del hijo. Comprobado ejecutándolo, con dos padres y parámetros no triviales sobre un hijo de dos estados: las seis columnas de la tabla suman uno y los dos valores calculados a mano coinciden al dígito. Con la primera mitad arreglada no queda nada que rechazar.
+
+    **Lo que esto no arregla.** RP20 citaba esta columna de ceros como la entrada fácil a sus dos bucles de muestreo. Esa entrada queda cerrada, pero RP20 sigue en pie: los métodos de asignación siguen sin comprobar que una columna sume uno, así que el usuario puede escribir a mano lo que el valor por omisión ya no escribe.
+
+    Prueba de regresión: `DefaultNoisyParametersAreADistributionTest`, cinco casos. Sin el arreglo fallan tres.
+- [x] **RP5** `setNoisyPotentials` limpia la tabla en caché, clona y comprueba la longitud, como ya hacen sus dos hermanos.
+
+    **Hecho** el 4 de septiembre de 2026, commit `c4deea4`.
+
+    **Medido antes de arreglarlo**, sobre un MAX ruidoso de hijo y padre de dos estados. Se le pregunta una probabilidad, que contesta 0,9 y de paso llena la caché. Se le asignan después unos parámetros que dicen 0,2. Los parámetros quedan cambiados, pero la misma pregunta sigue contestando **0,9**. Y escribir en la tabla del llamador después de asignarla cambia los parámetros del modelo: un 99 puesto fuera aparece dentro.
+
+    **El arreglo.** La asignación pasa ahora por el método que fija los parámetros de un solo padre, que ya limpiaba la caché y ya exigía que la fila midiera los estados del hijo por los del padre. La fila se clona al entrar. Así la regla vive en un sitio y no en dos, que era lo que había permitido que las dos versiones se separaran.
+
+    Se mantiene la comprobación propia de que la variable sea un padre, que va antes y da un mensaje mejor: el método de un solo padre no distingue la variable condicionada de una ajena.
+
+    **Quién lo alcanzaba.** El único llamador es el algoritmo de esperanza-maximización del aprendizaje de parámetros, confirmado buscando en todos los módulos. La batería de `learning.algorithm` pasa con el cambio.
+
+    Prueba de regresión: `LearnedNoisyParametersAreTheOnesAnsweredTest`, cuatro casos. Sin el arreglo fallan tres; el cuarto, el rechazo de un potencial sobre una variable ajena, ya funcionaba y sigue.
+- [x] **RP6** `sum` toma el criterio como lo toma `multiply`: el primero no nulo de la lista entera, contando las constantes. Es el mismo arreglo que **F1-d** hizo en la marginalización.
+
+    **Hecho** el 4 de septiembre de 2026, commit `112ea43`.
+
+    **Medido antes de arreglarlo.** Sumar una utilidad sin criterio y otra con criterio `cost` devolvía criterio nulo, mientras que multiplicar esas dos mismas devolvía `cost`. Sumar dos constantes que las dos llevaban `cost` devolvía 3,8 sin criterio ninguno, que es la forma que sale al terminar de evaluar un diagrama de influencia, cuando lo aditivo que queda ya son escalares.
+
+    **El arreglo**, de una línea: la suma llama al mismo buscador que ya usaba el producto, que recorre la lista entera —constantes incluidas— y se queda con el primer criterio que no sea nulo. Desaparece de paso la guarda que no ponía nada cuando todos los sumandos eran constantes, porque la lista entera nunca está vacía.
+
+    Prueba de regresión: `SumKeepsTheCriterionTest`, cinco casos, uno de ellos comprobando que sumar y multiplicar contestan lo mismo. Sin el arreglo fallan cuatro; el quinto, que no haya criterio cuando ningún sumando lo lleva, pasa igual y está para que el arreglo no invente uno.
+
+    La suite entera pasa con el cambio, que era la duda: la suma la usa toda la inferencia.
+- [x] **RP7** `multiplyAndMarginalize(prob, util, var)` marginaliza también cuando la probabilidad es una constante. Si se prefiere conservar el atajo, su javadoc deja de prometer lo que no hace y el llamador se protege.
+
+    **Hecho** el 4 de septiembre de 2026, commit `fa82797`, **conservando el atajo donde es correcto**.
+
+    **Medido antes de arreglarlo.** Eliminar `B` de una utilidad `[4, 6]` contra la probabilidad unidad devolvía un potencial que seguía teniendo `B` y seguía valiendo `[4, 6]`, y era además el mismo objeto que se había pasado. La misma cuenta por el camino general, con una probabilidad de unos sobre `B`, da el escalar 10.
+
+    **El arreglo.** El atajo se toma ahora solo cuando la utilidad **no** lleva la variable que se elimina. En ese caso no hay nada que sumar y escalar por la constante es la respuesta, que es para lo que estaba escrito y lo que fijan sus dos pruebas de siempre. Cuando la utilidad sí la lleva, se pasa por el camino de siempre, que la suma y escala. El javadoc ya dice lo que hace.
+
+    **La alternativa era quitar el atajo entero**, que es lo que el punto pedía a la letra. No se tomó porque una constante no es una distribución sobre la variable: el camino general multiplicaría por el número de estados una utilidad que no depende de ella, y eso rompe las dos pruebas que fijan ese caso y cambia resultados donde hoy son correctos.
+
+    Prueba de regresión: `MarginalizingAgainstAConstantRemovesTheVariableTest`, cuatro casos. Sin el arreglo fallan tres; el cuarto es el atajo conservado, que pasa igual de las dos maneras y está para que no se pierda.
+
+    La suite entera pasa, incluidas las dos pruebas de siempre.
+- [x] **RP8** Se separan las dos preguntas que hoy comparte `almostEqual`: una comparación relativa y una prueba de cero con tolerancia absoluta. Ya era la recomendación del §5.7 de agosto, y **F2-d** la tiene pendiente.
+
+    **Hecho** el 4 de septiembre de 2026, commit `e3c7eca`. Con esto se cierra la mitad de **F2-d** que trataba de la comparación; la otra mitad, la de los conjuntos y mapas sin orden, sigue pendiente en la fase 2.
+
+    **Medido antes de arreglarlo.** Comparar `1e-30` con `0,0` daba falso en los dos órdenes, porque la tolerancia era una fracción del primer argumento y una fracción de cero es cero: contra el cero la prueba era exacta por mucho que el número fuera pequeño. Comparar `1e6` con `1e6 + 0,001` daba verdadero, que es lo que una tolerancia relativa tiene que dar, pero el comentario de la constante prometía una diferencia absoluta de una cienmillonésima.
+
+    Sobre la asimetría, un matiz que conviene dejar dicho: es real en la fórmula, pero con una tolerancia de una cienmillonésima los dos lados solo se separan justo en el filo, así que no se encontró ningún par de números de los que aparecen en la práctica en que el orden cambiara la respuesta.
+
+    **El arreglo.** La comparación mide ahora contra el mayor de los dos números, así que los dos valen igual de referencia. Y la pregunta del cero tiene método propio, con umbral propio, que por fuerza es absoluto. Sus dos llamadores —la búsqueda de una utilidad que no sea cero y la búsqueda de una columna de ceros— preguntan ya por él. El comentario de la constante dice ahora que es una fracción.
+
+    **El umbral, que era la decisión.** Se puso en `1e-15`: por debajo de lo que la maximización de **RP2** midió como valor real (una utilidad de `1e-12`) y por encima de lo que el error de redondeo del `double` deja detrás al sumar. La alternativa era reutilizar la constante de siempre, que vale `1e-8`, y eso archivaría como cero justamente la utilidad que RP2 acaba de rescatar. **Si el equipo prefiere otro número, se cambia en un sitio**, que es para lo que tiene nombre.
+
+    Prueba de regresión: `ComparingNumbersAsksOneQuestionAtATimeTest`, cinco casos. No puede fallar contra el código sin arreglar porque nombra un método que allí no existe; lo que sostiene el cambio es lo medido arriba y que la suite entera pasa.
+- [x] **RP9** La rama de «todo son constantes» rellena todas las casillas, en los tres sitios donde está escrita.
+
+    **Hecho** el 4 de septiembre de 2026, commit `f091e01`, en los tres sitios.
+
+    **Medido antes de arreglarlo**, en los tres: marginalizar la constante 0,5 conservando una variable de tres estados devolvía `[0,5; 0,333; 0,333]`. Maximizar y maximizar uniformemente, con los mismos operandos, lo mismo. El 0,333 es el relleno uniforme que el constructor deja y que la rama solo pisaba en la primera casilla.
+
+    **El arreglo**, de una línea por sitio: se rellena la tabla entera con la constante.
+
+    Prueba de regresión: `AllConstantOperandsFillTheWholeTableTest`, un caso por sitio. Sin el arreglo fallan los tres.
+- [x] **RP10** `maximize` sobre una colección pregunta el criterio al primer potencial y no al resultado recién construido, y recorre la colección una sola vez.
+
+    **Hecho** el 4 de septiembre de 2026, commit `db078d7`, **y en los tres caminos, no en uno**.
+
+    **Medido antes de arreglarlo.** Los tres pierden el criterio: la maximización sobre una colección, la que elimina una variable y la uniforme. La guarda de la primera preguntaba `isAdditive()` al potencial recién construido, y ese método contesta si el criterio no es nulo, así que la respuesta era siempre no. Las otras dos no lo ponían nunca.
+
+    **Por qué entraron las otras dos, que el punto no pedía.** La regla es que el máximo de utilidades es una utilidad, y tiene que valer en todos los sitios donde se maximiza. Además el propio hallazgo dice que la de la colección no la llama nadie, mientras que las otras dos son las que usan la absorción de un nodo y el cálculo de una política: arreglar solo la que nadie alcanza habría dejado fuera lo único que llega al usuario. Es el mismo criterio que en **RP2**.
+
+    De dónde sale el criterio: la de la colección lo toma del primer potencial, y las otras dos del primero que no sea nulo, que es como ya lo toman multiplicar y sumar tras **RP6**.
+
+    **El segundo iterador** también se fue: el primer potencial se leía dos veces, una en crudo y otra reordenado.
+
+    Prueba de regresión: `MaximizingKeepsTheCriterionTest`, cuatro casos. Sin el arreglo fallan tres.
 
 **De la revisión de septiembre — estropean lo que el usuario tenía guardado:**
 
-- [ ] **RP11** `redistributeProbabilities` usa la rutina general que ya existe en el paquete, que arregla una columna a cero de cualquier número de estados.
-- [ ] **RP12** `addVariable` y `removeVariable` de las tres clases canónicas clonan los parámetros y conservan comentario, criterio y propiedades. Lo segundo se arregla llamando al constructor de copia de la clase madre.
-- [ ] **RP13** Los métodos que devuelven los parámetros como tabla entregan una copia, o el aprendizaje deja de escribir dentro de ellos. Elegirlo con quien conozca el aprendizaje: copiar cuesta memoria en el camino caliente.
-- [ ] **RP14** Se documenta —o se elimina— que multiplicar o sumar una lista de un elemento devuelve el objeto del llamador. Era la recomendación del §7.2 de agosto, que **F8-f** recoge; lo que añade la revisión es que componerlo con `normalize` ya no es una posibilidad teórica.
+- [x] **RP11** `redistributeProbabilities` usa la rutina general que ya existe en el paquete, que arregla una columna a cero de cualquier número de estados.
+
+    **Hecho** el 4 de septiembre de 2026, commit `fd17916`, **sin usar la rutina general**, por el motivo de abajo.
+
+    **Medido antes de arreglarlo**, por el camino del usuario: hijo de azar de tres estados con la columna `[1, 0, 0]`, restricción registrada sobre el estado 0, y la columna queda en `[0, 0, 0]`. Con dos estados el mismo escenario da `[0, 1]`, que es correcto: por eso solo se veía con tres o más.
+
+    **El arreglo.** Los estados que la restricción sigue permitiendo se reparten la probabilidad a partes iguales, sean los que sean. Con un solo estado permitido eso da uno, que es exactamente lo que hacía la rama de dos estados cuando acertaba. Si no queda ningún estado permitido, la columna se queda a cero, que es lo honesto: la restricción ha dejado esa combinación de padres sin salida y quien normalice después tiene que quejarse.
+
+    **Por qué no se usó `imposeOtherDistributionWhenDistributionIsZero`**, que es lo que el punto proponía: esa rutina da toda la probabilidad al **primer** estado, y el primer estado puede ser justo uno de los que la restricción prohíbe. En el escenario medido lo es, así que habría dejado `[1, 0, 0]`: probabilidad uno en el estado prohibido, que es peor que el fallo que se venía a arreglar. Además recorre la tabla entera, y aquí se repara una columna cada vez.
+
+    Prueba de regresión: `RestrictingALinkLeavesADistributionTest`, cinco casos, incluidos el hijo de dos estados y el reparto en proporción, que están para que el arreglo no los cambie. Sin él fallan los dos del hijo con más de dos estados.
+- [x] **RP12** `addVariable` y `removeVariable` de las tres clases canónicas clonan los parámetros y conservan comentario, criterio y propiedades. Lo segundo se arregla llamando al constructor de copia de la clase madre.
+
+    **Hecho** el 4 de septiembre de 2026, commit `eda303b`.
+
+    **Medido antes de arreglarlo**, en las tres familias y en los dos métodos, seis sitios con los dos defectos: el potencial devuelto salía con el comentario vacío, sin criterio y sin propiedades, y compartía con el original la fila de parámetros de cada padre. El `copy` de esas mismas clases conserva las tres cosas, así que la diferencia no era intencionada.
+
+    **Quién llega.** Las tres ediciones de enlace —añadir, quitar e invertir— son las que llaman a estos métodos. Como el escritor guarda el comentario y el lector lo restaura, abrir una red, dibujar un enlace hacia un nodo con modelo canónico y guardar **borraba el comentario para siempre**.
+
+    **El arreglo.** Los seis sitios clonan la fila de cada padre y la de la fuga. Y las tres líneas que copian comentario, criterio y propiedades salieron del constructor de copia de `Potential` a un método propio al que llaman los seis, así que la regla vive en un sitio.
+
+    **Dos decisiones.** El punto proponía llamar al constructor de copia de la clase madre, y no sirve: ese constructor toma la lista de variables del original, y la lista es justo lo que cambia aquí. Por eso el método extraído. Y quedó **público**, no protegido, porque quitar el último padre devuelve un potencial uniforme, que no es subclase de las canónicas y perdía el comentario por ese camino igual.
+
+    De paso se quitó, del comentario que se movió, una frase que contaba lo que el código hacía antes de una corrección anterior.
+
+    Prueba de regresión: `AddingAndRemovingAVariableKeepWhatIsNotNumbersTest`, cuatro casos, uno por familia más uno de escritura cruzada; va en el mismo commit. Retirando el arreglo fallan los cuatro. La batería entera, lanzada a mano: 2602 pruebas, cero fallos.
+- [x] **RP13** Los métodos que devuelven los parámetros como tabla entregan una copia, o el aprendizaje deja de escribir dentro de ellos. Elegirlo con quien conozca el aprendizaje: copiar cuesta memoria en el camino caliente.
+
+    **Hecho** el 4 de septiembre de 2026, commit `bf28f28`, copiando a la salida.
+
+    **Corrección al propio hallazgo, y a la primera explicación que se dio de él.** El hallazgo decía que el aprendizaje reescribe «los parámetros guardados de esa red», y al ir a comprobarlo la primera lectura del camino lo desmintió: la red modelo del diálogo de aprendizaje se carga **de un fichero** que se elige allí mismo, así que lo reescrito era un objeto interno que se tira al cerrar. Sin consecuencia para nadie.
+
+    **Pero el camino existe, y es otro.** El diálogo tiene un segundo botón que toma como red modelo **la que está abierta en la ventana**. Con esa opción y con «partir de la red modelo», la copia que hace el aprendizaje es superficial y comparte el objeto del potencial con la red de la pantalla.
+
+    **Medido ejecutando esa cadena entera** (sin diálogo, por las mismas llamadas): red con un MAX ruidoso cuyos parámetros valen `[0,8; 0,2; 0,3; 0,7]`, esa red como modelo, «partir de la red modelo», algoritmo de esperanza-maximización. Al terminar, los parámetros **de la red de la pantalla** valen prácticamente `[1; 0; 0; 1]`. Hizo falta que los datos informaran: con los parámetros por omisión y sin observar el hijo, no se escribe nada distinto y no se ve el fallo.
+
+    **El arreglo.** Los dos métodos construyen ahora la tabla sobre una copia. El aprendizaje trabaja sobre las suyas e instala el resultado al final con el método que ya llamaba, que es el diseño que este cambio deja correcto.
+
+    **La decisión que el punto dejaba abierta** era copiar a la salida o que el aprendizaje clonara al recibir, y advertía del coste en memoria del camino caliente. Ese coste resultó no serlo: el mismo método que entrega las tablas ya construye la función f, que crece exponencialmente con el número de padres. Con 2 padres la copia añade 10 números sobre 16; con 8, 34 sobre 1024; con 17, 70 sobre 524.288. Se eligió copiar a la salida porque además protege a cualquier llamador futuro y no solo al aprendizaje.
+
+    **Queda abierto** si el aprendizaje debe tratar modelos canónicos: ver **F8-h**.
+
+    Prueba de regresión: `TheParametersHandedOutAreCopiesTest`, cuatro casos, en el mismo commit. Sin el arreglo fallan tres. Las once pruebas del aprendizaje pasan y aprende lo mismo. La batería entera, a mano: 2606 pruebas, cero fallos.
+- [x] **RP14** Se documenta —o se elimina— que multiplicar o sumar una lista de un elemento devuelve el objeto del llamador. Era la recomendación del §7.2 de agosto, que **F8-f** recoge; lo que añade la revisión es que componerlo con `normalize` ya no es una posibilidad teórica.
+
+    **Hecho** el 4 de septiembre de 2026, commit `a6f749d`, **documentándolo**.
+
+    **Medido antes de decidir.** Multiplicar o sumar una lista de un elemento devuelve el potencial que se pasó, no una copia. Componerlo con la normalización, que reescribe el potencial que recibe, edita la entrada: un potencial de `[2; 6]` quedó en `[0,25; 0,75]` después de multiplicar y normalizar el resultado. Dos llamadas documentadas del mismo paquete.
+
+    **Por qué documentar y no quitar el atajo.** El daño está contenido: la propagación trabaja sobre una copia de la red por consulta, así que lo reescrito no es lo que el usuario tiene guardado. Y quitar el atajo obliga a reservar y copiar una tabla del tamaño del potencial cada vez, en el camino que la eliminación de variables recorre por cada variable que elimina.
+
+    **Ese coste no se midió**, a diferencia del de RP13. Queda dicho aquí para que quien retome el punto sepa que la decisión se tomó sin ese número. Si el equipo prefiere quitar el atajo, lo que toca primero es medirlo con el banco de referencia de **F0-c**.
+
+    La frase quedó en los siete sitios por los que se entra: las cinco entradas públicas y los dos métodos donde vive el atajo. Prueba: `AListOfOneIsAnsweredWithItselfTest`, tres casos, que fija lo que la documentación promete para que quien quite el atajo tenga que quitar también esas líneas. No puede fallar contra el código sin cambiar, porque el cambio es la documentación.
 
 **De la revisión de septiembre — revientan en casos concretos:**
 
-- [ ] **RP16** El potencial de ajuste comprueba en su constructor que las variables tengan tres estados, o deja de suponerlo en la función de combinación y en la fuga por omisión.
+- [x] **RP16** El potencial de ajuste comprueba en su constructor que las variables tengan tres estados, o deja de suponerlo en la función de combinación y en la fuga por omisión.
+
+    **Hecho** el 4 de septiembre de 2026, commit `c8fdf7a`, **comprobando en el constructor**.
+
+    **Medido antes de arreglarlo.** La rutina que construye la regla de combinación avanza de tres en tres y escribe tres casillas en cada parada, sobre una tabla dimensionada con el número real de valores. Con variables de dos valores muere al escribir en la casilla ocho de una tabla de ocho; con cuatro, en la sesenta y cuatro de una de sesenta y cuatro. Con tres, bien. La primera consulta de probabilidad muere igual, porque pasa por ahí.
+
+    La fuga por omisión pone toda la probabilidad en la casilla que ocupa la mitad del array. Con tres valores esa es la del medio, que es lo que el modelo quiere; con dos le toca al segundo y con cuatro al tercero, y en ninguno de los dos hay un medio.
+
+    **Por qué se comprobó en vez de abrir el modelo.** La comprobación de la clase **ya exigía** tres valores, y la ventana la consulta, así que desde la interfaz no se puede crear uno mal. Quien la salta es el lector de ficheros, que construye el potencial directamente. Es decir, la regla ya estaba escrita y lo que faltaba era hacerla valer también por esa puerta. Abrir el modelo a cualquier número de valores iría contra lo que la clase declara de sí misma y obligaría a decidir antes qué significa el modelo con un número par, que es una pregunta del modelo y no del código.
+
+    **Un matiz que salió al discutirlo.** La línea de la fuga, `leakyParameters[numStates / 2]`, **ya vale para cualquier número impar**: ese dos es un divisor para encontrar el medio, no un número de valores. Con cinco devuelve la casilla dos, que es la del medio. Lo que sí quedaría atado al tres si algún día se quisieran cinco es la regla de combinación, que escribe exactamente tres casillas por parada, y los tamaños de parámetros de **RP17**.
+
+    **Lo que cambia para el usuario.** Abrir un fichero con un modelo de ajuste sobre variables de otro número de valores se niega ahora al leerlo, diciendo qué variable falla, cuántos valores tiene y cuántos hacen falta, en vez de parecer que va bien y morir después con un error interno de índice.
+
+    **Entró también** el `index /= 3` de la regla de combinación, que tenía el tres a pelo al lado de un `index % NUM_STATES` que sí usaba la constante. Ahora los dos usan la constante. No lo pedía el punto; se incluyó porque es la misma suposición escrita dos veces y es lo que haría fallar a medias un cambio futuro del número de valores.
+
+    **Para el porte en C++:** el constructor del modelo de ajuste pasa a rechazar variables cuyo número de valores no sea el declarado por el modelo, con un mensaje que nombra la variable y los dos números; y el número tres deja de estar escrito a pelo dentro de la regla de combinación.
+
+    Prueba de regresión: `TheTuningModelRefusesVariablesThatAreNotOfThreeStatesTest`, cinco casos, en el mismo commit. Retirando el arreglo fallan tres. Batería entera: 2614 pruebas, cero fallos.
 - [ ] **RP17** El mismo potencial acepta arrays del tamaño que fabrica su clase madre, estados del hijo por estados del padre, y no solo de cuatro o nueve.
 - [ ] **RP18** `replaceVariable` reconstruye las variables auxiliares también en la posición cero, limpia la caché y redimensiona la fila de parámetros. Completa lo que **F1-b** arregló para las demás posiciones.
 - [ ] **RP19** Se redefine `replaceNumericVariable` para mantener el mapa de variables auxiliares al día, o se documenta por qué no hace falta.
@@ -499,6 +647,7 @@ El criterio del proyecto —la rapidez no se sacrifica— juega aquí a favor: t
 - [ ] **F8-e (arquitectura §1, §8b).** Decidir qué es `resttemplate`: hoy es un andamiaje de ejemplo («Hello, World!»). Si va en serio, depende de F6-b (un `core` sin escritorio) y F6-e (lectura sobre flujos).
 - [ ] **F8-f (potenciales §7.1, §7.2, §7.4; arquitectura §8e).** Contratos por escrito: los cuatro métodos de operaciones que pueden devolver su argumento, `normalize` que muta, el contrato único de `addVariable`/`removeVariable`, y una sola definición de «tiene intervenciones». Congelar el crecimiento de la biblioteca interna `org.openmarkov.java` (regla: mirar JDK y Commons antes de añadir) y estudiar qué parte de los 47 paquetes exportados por `core` es de verdad API.
 - [ ] **F8-g (arquitectura §3, nota).** Si algún día se quiere encapsulación real en ejecución, el camino es `ServiceLoader`; mientras tanto, dejar escrito que el sistema de módulos de Java se usa como declaración de dependencias.
+- [ ] **F8-h (de RP13).** Decidir si el aprendizaje de parámetros debe tratar los modelos canónicos. Hoy tiene una rama que lo hace: pone una variable auxiliar por padre, una de fuga y la función f en el hijo, aprende las tablas pequeñas y las reinstala al terminar. Funciona y tiene pruebas. Lo que no consta es que el equipo la quiera: Manuel señaló el 4-09-2026 que, que él sepa, el aprendizaje no aprende modelos canónicos. Las dos salidas son documentarla como capacidad o retirarla. **Decisión de equipo**, y no depende de RP13, que ya está arreglado por su cuenta. Nota aparte del coste: la función f que esa rama construye crece exponencialmente con el número de padres, así que con muchos padres la rama no escala; eso ya lo miden las pruebas del aprendizaje con modelos canónicos.
 
 **Se deja fuera a propósito** (con conocimiento de causa, no por olvido): la herencia de `StrategyTree` sobre `TreeADDPotential` (potenciales §7.7) — es una decisión estructural antigua cuyo arreglo no lo exige nada de lo anterior una vez que F1-a elimina la mutación; y cualquier rediseño grande de la jerarquía de potenciales más allá de F8-a/F8-b, porque el criterio de rendimiento del proyecto pide tocar ese código con guantes y con el banco F0-c delante.
 
