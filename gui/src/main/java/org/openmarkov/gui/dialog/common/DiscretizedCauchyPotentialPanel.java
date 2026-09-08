@@ -4,20 +4,21 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.action.core.PotentialChangeEdit;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.gui.dialog.node.PotentialEditDialog;
-import org.openmarkov.gui.exception.BinomialPotentialWrongValueException;
-import org.openmarkov.gui.exception.NotEnoughMemoryException;
-import org.openmarkov.gui.util.GUIUtils;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.potential.DiscretizedCauchyPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.gui.dialog.node.PotentialEditDialog;
+import org.openmarkov.gui.exception.BinomialPotentialWrongValueException;
+import org.openmarkov.java.swing.ComponentUtilities;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
 
 /**
  * Panel for editing a {@link DiscretizedCauchyPotential}, providing buttons to
@@ -61,7 +62,7 @@ public class DiscretizedCauchyPotentialPanel extends PotentialPanel implements P
     }
     
     private void editMedianPotential() {
-        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), medianDummyNode, isReadOnly());
+        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), medianDummyNode, isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?
         } else {
@@ -70,7 +71,7 @@ public class DiscretizedCauchyPotentialPanel extends PotentialPanel implements P
     }
     
     private void editScalePotential() {
-        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), scaleDummyNode, isReadOnly());
+        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), scaleDummyNode, isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?
         } else {

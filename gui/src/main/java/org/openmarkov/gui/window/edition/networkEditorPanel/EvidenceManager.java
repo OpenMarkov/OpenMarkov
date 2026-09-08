@@ -1,25 +1,46 @@
 package org.openmarkov.gui.window.edition.networkEditorPanel;
 
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.NotSupportedOperationException;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.inference.InferenceAlgorithm;
 import org.openmarkov.core.inference.annotation.InferenceManager;
 import org.openmarkov.core.inference.tasks.Propagation;
-import org.openmarkov.core.inference.tasks.TaskUtilities;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.UtilityFunctionComputer;
+import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.action.AddFindingEdit;
 import org.openmarkov.gui.action.RemoveFindingEdit;
 import org.openmarkov.gui.dialog.node.AddFindingDialog;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.exception.PreResolutionNodeInInferenceException;
-import org.openmarkov.gui.graphic.*;
-import org.openmarkov.gui.util.GUIUtils;
+import org.openmarkov.gui.graphic.FSVariableBox;
+import org.openmarkov.gui.graphic.InnerBox;
+import org.openmarkov.gui.graphic.NumericVariableBox;
+import org.openmarkov.gui.graphic.VisualNode;
+import org.openmarkov.gui.graphic.VisualState;
 import org.openmarkov.gui.window.MainPanelMenuAssistant;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEPropagation;
 import org.openmarkov.java.initialization.Lazy;
+import org.openmarkov.java.swing.ComponentUtilities;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -111,8 +132,8 @@ public class EvidenceManager {
         EvidenceCase currentEvidence = (this.networkEditorPanel.getNetworkEditorPanel().getWorkingMode() == NetworkEditorPanel.WorkingMode.INFERENCE) ?
                 this.getCurrentEvidenceCase() : this.preResolutionEvidence;
         Finding finding = currentEvidence.getFinding(node.getNode().getVariable());
-        new AddFindingDialog(GUIUtils.getOwner(this.networkEditorPanel), node.getNode()
-                                                                             .getProbNet(), node.getNode()
+        new AddFindingDialog(ComponentUtilities.getOwner(this.networkEditorPanel), node.getNode()
+                                                                                       .getProbNet(), node.getNode()
                                                                                                 .getVariable(), node, finding, this.networkEditorPanel).requestValues();
         this.networkEditorPanel.repaint();
         this.networkEditorPanel.getVisualNetwork().setSelectedAllNodes(false);

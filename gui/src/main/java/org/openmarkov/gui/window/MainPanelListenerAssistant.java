@@ -43,6 +43,7 @@ import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.util.PropertyNames;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.gui.window.settings.SettingsDialog;
+import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.JButton;
 import javax.swing.ProgressMonitor;
@@ -255,7 +256,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
                     if (!link.hasRestrictions()) {
                         LinkOperations.initializesRestrictionsPotential(link);
                     }
-                    new LinkRestrictionEditDialog(GUIUtils.getOwner(networkPanel.getEditorPanel()), link).requestValues();
+                    new LinkRestrictionEditDialog(ComponentUtilities.getOwner(networkPanel.getEditorPanel()), link).requestValues();
                     link.tryResetRestrictionsPotential();
                     networkPanel.getEditorPanel().repaint();
                 }
@@ -266,7 +267,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
             case ActionCommands.LINK_REVELATIONARC_PROPERTIES -> {
                 NetworkEditorPanel networkPanel = getCurrentNetworkEditorPanel();
                 Link<Node> link = networkPanel.getEditorPanel().getVisualNetwork().getLastSelectedLink().getLink();
-                Window owner = GUIUtils.getOwner(networkPanel.getEditorPanel());
+                Window owner = ComponentUtilities.getOwner(networkPanel.getEditorPanel());
                 new RevelationArcEditDialog(owner, link).requestValues();
             }
             
@@ -326,7 +327,8 @@ public class MainPanelListenerAssistant extends WindowAdapter
             }
             case ActionCommands.CONFIGURATION ->
                     GUIUtils.executeUIAction(editAndViewHandler::showUserConfigurationDialog);
-            case ActionCommands.OPEN_SETTINGS -> GUIUtils.showDialog(new SettingsDialog(this.mainPanel.getMainFrame()));
+            case ActionCommands.OPEN_SETTINGS ->
+                    ComponentUtilities.showDialog(new SettingsDialog(this.mainPanel.getMainFrame()));
             case ActionCommands.HELP_CHANGE_LANGUAGE -> editAndViewHandler.showLanguageChangeDialog();
             case ActionCommands.HELP_SHORTCUTS -> editAndViewHandler.showShortcuts();
             case ActionCommands.HELP_ABOUT -> editAndViewHandler.showAbout();

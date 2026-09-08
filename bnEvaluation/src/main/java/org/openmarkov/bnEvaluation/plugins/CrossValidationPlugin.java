@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.openmarkov.bnEvaluation.dialog.CrossValidationDialog;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
-import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.java.initialization.Lazy;
+import org.openmarkov.java.swing.ComponentUtilities;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
 
 /**
  * @author mvillar
@@ -32,7 +32,7 @@ public class CrossValidationPlugin implements ToolPlugin {
     
     @Override public JMenuItem toMenuItem() {
         return new JMenuItemBuilder("Cross-validation")
-                .onClick(() -> GUIUtils.showDialog(CROSS_VALIDATION_DIALOG.get()))
+                .onClick(() -> ComponentUtilities.showDialog(CROSS_VALIDATION_DIALOG.get()))
                 .build();
     }
     

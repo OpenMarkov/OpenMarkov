@@ -11,12 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import org.openmarkov.bnEvaluation.dialog.BNEvaluationDialog;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
-import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.MainGUI;
-import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.java.initialization.Lazy;
+import org.openmarkov.java.swing.ComponentUtilities;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
 
 /**
  * @author evillar
@@ -39,7 +38,7 @@ public class BNEvaluationPlugin implements ToolPlugin {
         return new JMenuItemBuilder("Bayesian network evaluation")
                 .onClick(() -> {
                     BNEvaluationPlugin.BN_EVALUATION_DIALOG.get().reload();
-                    GUIUtils.showDialog(BNEvaluationPlugin.BN_EVALUATION_DIALOG.get());
+                    ComponentUtilities.showDialog(BNEvaluationPlugin.BN_EVALUATION_DIALOG.get());
                 })
                 .build();
     }

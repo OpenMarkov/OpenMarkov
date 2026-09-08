@@ -3,7 +3,6 @@ package org.openmarkov.gui.dialog.common;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.JButton;
@@ -62,7 +61,7 @@ public final class OptionDialog<Option extends OptionDialog.ToOptionsDialog> ext
         var buttons = new ArrayList<>(
                 ComponentUtilities.findComponents(OptionDialog.this, JButton.class, _ -> true).toList());
         Collections.reverse(buttons);
-        GUIUtils.assignButtonsToKeys((JComponent) this.getContentPane(), buttons, _ -> {
+        ComponentUtilities.assignButtonsToKeys((JComponent) this.getContentPane(), buttons, _ -> {
             this.selectedOption = Optional.empty();
             this.dispose();
         });
@@ -72,13 +71,13 @@ public final class OptionDialog<Option extends OptionDialog.ToOptionsDialog> ext
     
     public @Nullable Option request() {
         this.selectedOption = Optional.empty();
-        GUIUtils.showDialog(this);
+        ComponentUtilities.showDialog(this);
         return this.selectedOption.orElse(null);
     }
     
     public @NotNull Option request(@NotNull Option defaultOnClose) {
         this.selectedOption = Optional.empty();
-        GUIUtils.showDialog(this);
+        ComponentUtilities.showDialog(this);
         return this.selectedOption.orElse(defaultOnClose);
     }
     

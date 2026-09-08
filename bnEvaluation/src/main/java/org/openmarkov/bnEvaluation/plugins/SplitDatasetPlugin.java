@@ -1,15 +1,14 @@
 package org.openmarkov.bnEvaluation.plugins;
 
 import org.jetbrains.annotations.NotNull;
-import org.openmarkov.bnEvaluation.dialog.DataPreprocessingDialog;
 import org.openmarkov.bnEvaluation.dialog.SplitDatasetDialog;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
-import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.java.initialization.Lazy;
+import org.openmarkov.java.swing.ComponentUtilities;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
 
 /**
  * @author mvillar
@@ -33,7 +32,7 @@ public class SplitDatasetPlugin implements ToolPlugin {
     
     @Override public JMenuItem toMenuItem() {
         return new JMenuItemBuilder("Split Dataset")
-                .onClick(() -> GUIUtils.showDialog(SPLIT_DATASET_DIALOG.get()))
+                .onClick(() -> ComponentUtilities.showDialog(SPLIT_DATASET_DIALOG.get()))
                 .build();
     }
 }

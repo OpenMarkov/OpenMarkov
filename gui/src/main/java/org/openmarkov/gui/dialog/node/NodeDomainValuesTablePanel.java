@@ -28,7 +28,7 @@ import org.openmarkov.gui.component.DiscretizeTablePanel;
 import org.openmarkov.gui.dialog.common.CommentHTMLScrollPane;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.util.GUIDefaultStates;
-import org.openmarkov.gui.util.GUIUtils;
+import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -1080,7 +1080,7 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
     }
     
     private void actionPerformedStandardDomain(ActionEvent arg0) throws DoEditException {
-        StandardDomainsDialog standardDomainDialog = new StandardDomainsDialog(GUIUtils.getOwner(this));
+        StandardDomainsDialog standardDomainDialog = new StandardDomainsDialog(ComponentUtilities.getOwner(this));
         // @ 2014/11/18. Issue 145.
         // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
         // Propagation of the domain in related variables in temporal models

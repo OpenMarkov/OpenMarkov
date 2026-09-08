@@ -10,7 +10,7 @@ package org.openmarkov.gui.dialog.common;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.loader.element.IconBind;
-import org.openmarkov.gui.util.GUIUtils;
+import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -90,7 +90,7 @@ public class OkCancelDialog extends BottomPanelButtonDialog {
             this.dispose();
         });
         this.setCancelButton(jButtonCancel);
-        GUIUtils.assignButtonsToKeys((JComponent) this.getContentPane(), List.of(jButtonOK, jButtonCancel), _ -> {
+        ComponentUtilities.assignButtonsToKeys((JComponent) this.getContentPane(), List.of(jButtonOK, jButtonCancel), _ -> {
             jButtonCancel.doClick();
         });
         this.pack();
