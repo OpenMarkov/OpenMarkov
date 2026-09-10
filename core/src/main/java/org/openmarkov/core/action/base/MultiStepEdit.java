@@ -8,7 +8,7 @@
 package org.openmarkov.core.action.base;
 
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.ProbNet;
 
@@ -46,7 +46,7 @@ import java.util.stream.Stream;
                 editToUndo.undo();
             }
             throw e;
-        } catch (ThereIsNoPotentialsInNodeException e) {
+        } catch (ThereIsNoPotentialInNodeException e) {
             for (PNEdit editToUndo : stepExecuter.executedEdits.reversed()) {
                 editToUndo.undo();
             }
@@ -54,7 +54,7 @@ import java.util.stream.Stream;
         }
     }
     
-    protected abstract void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException, ThereIsNoPotentialsInNodeException;
+    protected abstract void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException, ThereIsNoPotentialInNodeException;
     
     public static class StepExecuter {
         

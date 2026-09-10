@@ -134,8 +134,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         setOptionEnabled(ActionCommands.CHANGE_TO_EDITION_MODE, false);
         setOptionEnabled(ActionCommands.EDITION_MODE_PREFIX, false);
         setOptionEnabled(ActionCommands.EVENT_CREATION, false);
-        setOptionEnabled(ActionCommands.MC_SIMULATE_NETWORK, false);
-        
+
         setOptionEnabled(ActionCommands.NODE_EXPANSION, false);
         setOptionEnabled(ActionCommands.NODE_CONTRACTION, false);
         setOptionEnabled(ActionCommands.NODE_ADD_FINDING, false);

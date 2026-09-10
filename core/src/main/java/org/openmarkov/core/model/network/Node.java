@@ -9,7 +9,7 @@ package org.openmarkov.core.model.network;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.potential.Potential;
@@ -293,10 +293,9 @@ public class Node implements Cloneable, ClassLocalizable {
     /**
      * @return the first potential, or {@code null} if no potentials are assigned
      */
-    public Potential getPotential() throws ThereIsNoPotentialsInNodeException {
-        if (potentials.isEmpty()) {
-            throw new ThereIsNoPotentialsInNodeException(this);
-        }
+    public Potential getPotential(){
+        if (potentials.isEmpty())
+            return null;
         return getPotentials().getFirst();
 
     }

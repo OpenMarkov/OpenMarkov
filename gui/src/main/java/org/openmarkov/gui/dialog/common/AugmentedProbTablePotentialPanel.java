@@ -8,7 +8,7 @@
 package org.openmarkov.gui.dialog.common;
 
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Variable;
@@ -89,7 +89,7 @@ public class AugmentedProbTablePotentialPanel extends TablePotentialPanel {
      *
      * @param node : node whose first potential is a AugmentedProbTablePotential
      */
-    public AugmentedProbTablePotentialPanel(Node node) throws ThereIsNoPotentialsInNodeException {
+    public AugmentedProbTablePotentialPanel(Node node) throws ThereIsNoPotentialInNodeException {
         super();
         this.tablePotentialsPanelOperations = new PotentialsTablePanelOperations();
         this.node = node;
@@ -160,7 +160,7 @@ public class AugmentedProbTablePotentialPanel extends TablePotentialPanel {
      *
      * @author carmenyago
      */
-    @Override public void setData() throws ThereIsNoPotentialsInNodeException {
+    @Override public void setData() throws ThereIsNoPotentialInNodeException {
         
         // true
         hasLinkRestriction = LinkRestrictionPotentialOperations.hasLinkRestriction(node);

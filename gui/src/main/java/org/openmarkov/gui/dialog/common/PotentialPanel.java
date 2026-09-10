@@ -9,7 +9,7 @@ package org.openmarkov.gui.dialog.common;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.ImplementationRequirements;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.RequiredConstructor;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.gui.exception.BinomialPotentialWrongValueException;
 
@@ -40,7 +40,7 @@ import java.util.List;
 	 *
 	 * @param node the node whose potential data should be displayed
 	 */
-    public abstract void setData(Node node) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException;
+    public abstract void setData(Node node) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException;
 
 	/**
 	 * Modify the node according to the changes entered by the user in the panel

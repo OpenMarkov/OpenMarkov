@@ -10,7 +10,7 @@ package org.openmarkov.core.inference;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.graph.Link;
@@ -152,7 +152,7 @@ public class BasicOperations {
         terminalNumericVariables.forEach(v -> {
             try {
                 absorbAllIntermediateNumericNodes(network, v, evidence, processed);
-            } catch (ThereIsNoPotentialsInNodeException e) {
+            } catch (ThereIsNoPotentialInNodeException e) {
                 throw new UnrecoverableException(e);
             }
         });
@@ -161,7 +161,7 @@ public class BasicOperations {
     }
     
     private static void absorbAllIntermediateNumericNodes(ProbNet network, Variable variable, EvidenceCase evidence,
-                                                          Set<Variable> processed) throws ThereIsNoPotentialsInNodeException {
+                                                          Set<Variable> processed) throws ThereIsNoPotentialInNodeException {
         
         Node node = network.getNode(variable);
         List<Node> parents = node.getParents();
@@ -188,7 +188,7 @@ public class BasicOperations {
     }
     
     
-    public static void absorbParents(ProbNet network, Node node, EvidenceCase evidence) throws ThereIsNoPotentialsInNodeException {
+    public static void absorbParents(ProbNet network, Node node, EvidenceCase evidence) throws ThereIsNoPotentialInNodeException {
         List<Node> parents = network.getParents(node);
         
         Variable nodeVariable = node.getVariable();

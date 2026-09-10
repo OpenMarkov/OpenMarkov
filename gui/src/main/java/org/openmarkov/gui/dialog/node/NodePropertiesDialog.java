@@ -8,7 +8,6 @@
 package org.openmarkov.gui.dialog.node;
 
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.action.core.RemovePolicyEdit;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -60,7 +59,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
      *                               false, an existing network is being modified.
      * @param readOnly               if true, values inside the dialog will not be editable
      */
-    public NodePropertiesDialog(Window owner, NetworkEditorPanel nodeNetworkEditorPanel, VisualNode visualNode, boolean newNode, boolean readOnly) throws ThereIsNoPotentialsInNodeException {
+    public NodePropertiesDialog(Window owner, NetworkEditorPanel nodeNetworkEditorPanel, VisualNode visualNode, boolean newNode, boolean readOnly) throws ThereIsNoPotentialInNodeException {
         super(owner);
         this.nodeNetworkEditorPanel = nodeNetworkEditorPanel;
         this.visualNode = visualNode;
@@ -117,7 +116,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
      *
      * @param node object from where load the information.
      */
-    private void setFieldsFromProperties(Node node) throws ThereIsNoPotentialsInNodeException {
+    private void setFieldsFromProperties(Node node) throws ThereIsNoPotentialInNodeException {
         this.node = node;
         this.setTitle(this.stringDatabase.getString("NodePropertiesDialog.Title") + ": " + node.getName());
         this.nodeDefinitionPanel.setNodeProperties(node);
@@ -147,7 +146,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
     /**
      * This method configures the dialog box.
      */
-    protected void reinitialize() throws ThereIsNoPotentialsInNodeException {
+    protected void reinitialize() throws ThereIsNoPotentialInNodeException {
         this.tabbedPane = null;
         this.nodeDefinitionPanel = null;
         this.nodeDomainValuesTablePanel = null;
@@ -217,7 +216,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
         this.editOrViewPotentialButton.addActionListener(_ -> {
             try {
                 new PotentialEditDialog(this, this.node, this.readOnly).setVisible(true);
-            } catch (ThereIsNoPotentialsInNodeException e) {
+            } catch (ThereIsNoPotentialInNodeException e) {
                 throw new UnrecoverableException(e);
             }
             this.updatePotentialTabTitleAndButton();
@@ -228,7 +227,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
             this.denyPotentialEditChanges();
             try {
                 this.handleChangeTab();
-            } catch (ThereIsNoPotentialsInNodeException e) {
+            } catch (ThereIsNoPotentialInNodeException e) {
                 throw new UnrecoverableException(e);
             }
             this.repaint();
@@ -237,7 +236,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
         this.tabbedPane.addChangeListener(_ -> {
             try {
                 this.handleChangeTab();
-            } catch (ThereIsNoPotentialsInNodeException e) {
+            } catch (ThereIsNoPotentialInNodeException e) {
                 throw new UnrecoverableException(e);
             }
         });
@@ -245,7 +244,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
         this.updatePotentialTabTitleAndButton();
     }
     
-    private void handleChangeTab() throws ThereIsNoPotentialsInNodeException {
+    private void handleChangeTab() throws ThereIsNoPotentialInNodeException {
         this.editOrViewPotentialButton.setVisible(this.panelForPotentialEdit != this.tabbedPane.getSelectedComponent());
         if (this.panelForPotentialEdit == this.tabbedPane.getSelectedComponent()) {
             this.panelForPotentialEdit.removeAll();
@@ -305,7 +304,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
     }
     
     
-    private void acceptPotentialEditChanges(boolean canIgnoreException) throws ThereIsNoPotentialsInNodeException {
+    private void acceptPotentialEditChanges(boolean canIgnoreException) throws ThereIsNoPotentialInNodeException {
         if (this.panelForPotentialEdit == null || this.panelForPotentialEdit.getComponents().length == 0) {
             return;
         }
@@ -397,7 +396,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
      * This method carries out the actions when the user press the Cancel button
      * before hide the dialog.
      */
-    @Override protected void doCancelClickBeforeHide() throws ThereIsNoPotentialsInNodeException {
+    @Override protected void doCancelClickBeforeHide() throws ThereIsNoPotentialInNodeException {
         this.acceptPotentialEditChanges(true);
         this.node.getProbNet().getPNESupport().cancelLastSubEditHistory();
     }
@@ -409,7 +408,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
      * @return OK_BUTTON if the user has pressed the 'Ok' button or
      * CANCEL_BUTTON if the user has pressed the 'Cancel' button.
      */
-    public ChosenOption requestProperties() throws ThereIsNoPotentialsInNodeException {
+    public ChosenOption requestProperties() throws ThereIsNoPotentialInNodeException {
         this.setFieldsFromProperties(this.node);
         this.setVisible(true);
         return this.getSelectedOption();
@@ -421,7 +420,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
      *
      * @return true if all the fields are correct.
      */
-    @Override protected boolean doOkClickBeforeHide() throws ConstraintViolatedException, ThereIsNoPotentialsInNodeException {
+    @Override protected boolean doOkClickBeforeHide() throws ConstraintViolatedException, ThereIsNoPotentialInNodeException {
         // If the is user is editing a cell, stop the edition to save the data
         this.nodeDomainValuesTablePanel.getDiscretizedStatesPanel().stopCellEditing();
         this.acceptPotentialEditChanges(false);
@@ -508,7 +507,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
     private void onActionTriggeredInPotential() {
         try {
             NodePropertiesDialog.this.cancelEditPotentialButton.setEnabled(getPotentialEditPanel()!=null && getPotentialEditPanel().potentialHasChanged() && NodePropertiesDialog.this.nodeNetworkEditorPanel.getWorkingMode() == NetworkEditorPanel.WorkingMode.EDITION);
-        } catch (ThereIsNoPotentialsInNodeException e) {
+        } catch (ThereIsNoPotentialInNodeException e) {
             throw new UnrecoverableException(e);
         }
     }

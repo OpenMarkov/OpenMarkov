@@ -71,7 +71,7 @@ public final class CrossValidationController {
      */
     public static MeasuresSet run(Request request) throws IncompatibleEvidenceException,
             ConstraintViolatedException, NonProjectablePotentialException,
-            NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
+            NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         return run(request, LearningEvaluator.ProgressListener.NONE);
     }
 
@@ -86,7 +86,7 @@ public final class CrossValidationController {
     public static MeasuresSet run(Request request, LearningEvaluator.ProgressListener progressListener)
             throws IncompatibleEvidenceException, ConstraintViolatedException,
             NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork,
-            CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
+            CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         SplitSetManager splitSetManager = request.reproducible()
                 ? new SplitSetManager(request.database(), request.seed())
                 : new SplitSetManager(request.database());

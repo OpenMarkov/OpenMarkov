@@ -8,8 +8,7 @@ package org.openmarkov.gui.dialog.common;
 
 import org.openmarkov.core.action.core.PotentialChangeEdit;
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
-import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Variable;
@@ -53,7 +52,7 @@ public class FunctionPotentialPanel extends PotentialPanel {
     private Node node = null;
     private FunctionPotential potential = null;
     
-    public FunctionPotentialPanel(Node node) throws ThereIsNoPotentialsInNodeException {
+    public FunctionPotentialPanel(Node node) throws ThereIsNoPotentialInNodeException {
         super();
         initComponents();
         setData(node);
@@ -85,7 +84,7 @@ public class FunctionPotentialPanel extends PotentialPanel {
         return functionTextArea;
     }
     
-    @Override public void setData(Node node) throws ThereIsNoPotentialsInNodeException {
+    @Override public void setData(Node node) throws ThereIsNoPotentialInNodeException {
         this.node = node;
         var firstPotential = this.node.getPotentials().getFirst();
 

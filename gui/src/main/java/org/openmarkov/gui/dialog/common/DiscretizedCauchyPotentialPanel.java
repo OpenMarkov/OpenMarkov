@@ -7,7 +7,6 @@ import org.openmarkov.core.action.core.PotentialChangeEdit;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.gui.dialog.node.PotentialEditDialog;
 import org.openmarkov.gui.exception.BinomialPotentialWrongValueException;
-import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Node;
@@ -51,7 +50,7 @@ public class DiscretizedCauchyPotentialPanel extends PotentialPanel implements P
         editMedianButton.addActionListener(e -> {
             try {
                 editMedianPotential();
-            } catch (ThereIsNoPotentialsInNodeException ex) {
+            } catch (ThereIsNoPotentialInNodeException ex) {
                 throw new UnrecoverableException(ex);
             }
         });
@@ -59,7 +58,7 @@ public class DiscretizedCauchyPotentialPanel extends PotentialPanel implements P
         editScaleButton.addActionListener(e -> {
             try {
                 editScalePotential();
-            } catch (ThereIsNoPotentialsInNodeException ex) {
+            } catch (ThereIsNoPotentialInNodeException ex) {
                 throw new UnrecoverableException(ex);
             }
         });
@@ -68,7 +67,7 @@ public class DiscretizedCauchyPotentialPanel extends PotentialPanel implements P
         add(buttonPanel, BorderLayout.PAGE_START);
     }
     
-    private void editMedianPotential() throws ThereIsNoPotentialsInNodeException {
+    private void editMedianPotential() throws ThereIsNoPotentialInNodeException {
         PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), medianDummyNode, isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?
@@ -77,7 +76,7 @@ public class DiscretizedCauchyPotentialPanel extends PotentialPanel implements P
         }
     }
     
-    private void editScalePotential() throws ThereIsNoPotentialsInNodeException {
+    private void editScalePotential() throws ThereIsNoPotentialInNodeException {
         PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), scaleDummyNode, isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?

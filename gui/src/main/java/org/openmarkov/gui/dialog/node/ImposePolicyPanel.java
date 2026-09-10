@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.PolicyType;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 public class ImposePolicyPanel extends PotentialEditPanel {
     
-    public ImposePolicyPanel(Node node, boolean readOnly, boolean potentialInitializesOnEditHistory) throws ThereIsNoPotentialsInNodeException {
+    public ImposePolicyPanel(Node node, boolean readOnly, boolean potentialInitializesOnEditHistory) throws ThereIsNoPotentialInNodeException {
         super(node, readOnly, potentialInitializesOnEditHistory);
     }
     
@@ -37,7 +37,7 @@ public class ImposePolicyPanel extends PotentialEditPanel {
             variables.addFirst(node.getVariable());
             try {
                 new ImposePolicyEdit(node, new TablePotential(variables, PotentialRole.POLICY)).executeEdit();
-            } catch (DoEditException | ThereIsNoPotentialsInNodeException e) {
+            } catch (DoEditException | ThereIsNoPotentialInNodeException e) {
                 throw new UnrecoverableException(e);
             }
         }

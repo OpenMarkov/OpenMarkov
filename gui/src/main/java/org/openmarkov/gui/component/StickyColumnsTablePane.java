@@ -2,8 +2,6 @@ package org.openmarkov.gui.component;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.java.swing.ComponentUtilities;
 

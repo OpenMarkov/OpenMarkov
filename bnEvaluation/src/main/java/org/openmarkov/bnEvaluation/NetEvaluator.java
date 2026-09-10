@@ -57,7 +57,7 @@ public class NetEvaluator {
      */
     public MeasuresSet runEvaluator() throws IncompatibleEvidenceException, ConstraintViolatedException,
             NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork,
-            CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
+            CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         verifyStateCorrespondence();
         MeasureMatrix measureMatrix = measuresSet.getMeasureMatrix();
         if (measureMatrix != null) {
@@ -119,7 +119,7 @@ public class NetEvaluator {
 
     private void populateConfusionMatrix(MeasureMatrix measureMatrix)
             throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException,
-            NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
+            NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         String varName = measureMatrix.getVarName();
         double[][] probStates = posteriorsForClassVariable(varName);
         int[] realStates = realStates(varName);
@@ -230,7 +230,7 @@ public class NetEvaluator {
      */
     private double[][] posteriorsForClassVariable(String classVarName)
             throws IncompatibleEvidenceException, ConstraintViolatedException, NonProjectablePotentialException,
-            NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
+            NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         Variable classVar = caseDatabase.getVariable(classVarName);
         if (classVar == null) {
             throw new IllegalArgumentException(
@@ -325,7 +325,7 @@ public class NetEvaluator {
     private double[] posteriorOfClassVariable(EvidenceCase evidence, Variable netClassVar)
             throws IncompatibleEvidenceException, ConstraintViolatedException,
             NotEvaluableNetworkException.NotApplicableNetwork, NonProjectablePotentialException,
-            CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
+            CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         Propagation propagation = new VEPropagation(probNet);
         propagation.setVariablesOfInterest(List.of(netClassVar));
         propagation.setPreResolutionEvidence(evidence);

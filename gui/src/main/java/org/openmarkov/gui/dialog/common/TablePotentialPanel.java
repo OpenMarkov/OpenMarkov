@@ -12,7 +12,7 @@ import org.openmarkov.core.action.core.UncertainValuesRemoveEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -162,7 +162,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      * @param node : node whose first potential is a TablePotential or a TableDeltaPotential
      *             Adaptation from TableDeltaPotential
      */
-    public TablePotentialPanel(Node node, JComponent owner) throws ThereIsNoPotentialsInNodeException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+    public TablePotentialPanel(Node node, JComponent owner) throws ThereIsNoPotentialInNodeException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         super();
         this.owner = owner;
         this.tablePotentialsPanelOperations = new PotentialsTablePanelOperations();
@@ -242,7 +242,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      * UNCLEAR--&gt; Called in PotentialEditDialog.showFields(Node)
      */
     @Override
-    public void setData(Node node) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
+    public void setData(Node node) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException {
         this.node = node;
         setData();
     }
@@ -267,7 +267,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      */
     // Using node sets in variable node
     // What to do with the exception
-    public void setData() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
+    public void setData() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException {
         
         // true
         hasLinkRestriction = LinkRestrictionPotentialOperations.hasLinkRestriction(node);
@@ -315,7 +315,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      * @return Boolean array that represents the columns (true = the column has
      * an uncertainty, false = the column has not an uncertainty). This array only contains the data columns
      */
-    protected boolean[] getUncertaintyInColumns() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
+    protected boolean[] getUncertaintyInColumns() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException {
         
         int size = valuesTable.getColumnCount();
         
@@ -348,7 +348,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      *
      * @return the table data to be set
      */
-    protected Object[][] convertListPotentialsToTableFormat() throws ThereIsNoPotentialsInNodeException {
+    protected Object[][] convertListPotentialsToTableFormat() throws ThereIsNoPotentialInNodeException {
         Object[][] values;
         
         // Empty array values[number_of_rows][number_of_colums]
@@ -381,7 +381,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      * Continuous variables have only one state
      * tableSize is always greater than 0
      */
-    protected Object[][] createEmptyTable() throws ThereIsNoPotentialsInNodeException {
+    protected Object[][] createEmptyTable() throws ThereIsNoPotentialInNodeException {
         node.getPotential();
         int numColumns = 1; // Variables column
         
@@ -522,7 +522,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
                 int potentialIndex;
                 try {
                     potentialIndex = tablePotentialsPanelOperations.getPotentialIndex(i, j, node);
-                } catch (ThereIsNoPotentialsInNodeException e) {
+                } catch (ThereIsNoPotentialInNodeException e) {
                     throw new UnreachableException(e);
                 }
                 double value = roundedValues[potentialIndex];
@@ -594,7 +594,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      *
      *
      */
-    protected Object[][] getNotEditablePositions() throws ThereIsNoPotentialsInNodeException {
+    protected Object[][] getNotEditablePositions() throws ThereIsNoPotentialInNodeException {
         Object[][] notEditablePositions = createEmptyTable();
         //Bug #162 Applying restriction to utility Nodes
         //if (!isTableDeltaPotential && hasLinkRestriction){
@@ -633,7 +633,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      *
      * @return An evidence case object
      */
-    protected EvidenceCase getConfiguration(int col) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
+    protected EvidenceCase getConfiguration(int col) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException {
         
         List<Variable> parents = variables.subList(1, potential.getNumVariables());
         
@@ -672,14 +672,14 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      *
      * @return Evidence case
      */
-    public final EvidenceCase getEvidenceCaseFromSelectedColumn() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
+    public final EvidenceCase getEvidenceCaseFromSelectedColumn() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException {
         return getConfiguration(selectedColumn);
     }
     
     /**
      * Creates and shows the UncertainValuesDialog object
      */
-    public void showUncertaintyDialog() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException, DoEditException, NonProjectablePotentialException {
+    public void showUncertaintyDialog() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException, DoEditException, NonProjectablePotentialException {
         // Generates the evidence based on the column
         // selected on the JTable object
         evidenceCase = getEvidenceCaseFromSelectedColumn();
@@ -771,14 +771,14 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
             try {
                 showUncertaintyDialog();
             } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther |
-                     ThereIsNoPotentialsInNodeException | DoEditException | NonProjectablePotentialException ex) {
+                     ThereIsNoPotentialInNodeException | DoEditException | NonProjectablePotentialException ex) {
                 throw new UnrecoverableException(ex);
             }
         } else if (actionCommand.equals(ActionCommands.UNCERTAINTY_REMOVE.getCommandName())) {
             try {
                 removeUncertainty();
             } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther |
-                     ThereIsNoPotentialsInNodeException | NonProjectablePotentialException | DoEditException ex) {
+                     ThereIsNoPotentialInNodeException | NonProjectablePotentialException | DoEditException ex) {
                 throw new UnrecoverableException(ex);
             }
         }
@@ -787,7 +787,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
     /**
      * Method for removing the uncertain values for a certain configuration
      */
-    public void removeUncertainty() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException, DoEditException, NonProjectablePotentialException {
+    public void removeUncertainty() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException, DoEditException, NonProjectablePotentialException {
         evidenceCase = getEvidenceCaseFromSelectedColumn();
         UncertainValuesRemoveEdit uncertEdit = new UncertainValuesRemoveEdit(node, evidenceCase);
         uncertEdit.executeEdit();
@@ -805,7 +805,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      * Method for update the options showed in the contextual menu
      * revised--&gt;not changed
      */
-    protected void updateContextualMenuOptions() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
+    protected void updateContextualMenuOptions() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException {
         if (!node.getPotentials().isEmpty() && node.getPotentials().getFirst() instanceof TablePotential tablePotential) {
             boolean hasUncertainty = tablePotential.hasUncertainty(getEvidenceCaseFromSelectedColumn());
             if (hasUncertainty) {
@@ -843,7 +843,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
             if (hasUncertainty) {
                 showUncertaintyDialog();
             }
-        } catch (ThereIsNoPotentialsInNodeException e) {
+        } catch (ThereIsNoPotentialInNodeException e) {
             throw new UnreachableException(e);
         } catch (DoEditException | NonProjectablePotentialException e) {
             throw new UnrecoverableException(e);
@@ -942,7 +942,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
                                 try {
                                     updateContextualMenuOptions();
                                 } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther |
-                                         ThereIsNoPotentialsInNodeException ex) {
+                                         ThereIsNoPotentialInNodeException ex) {
                                     throw new UnrecoverableException(ex);
                                 } finally {
                                     getUncertaintyContextualMenu().show(valuesTable, e.getX(), e.getY());
@@ -1002,7 +1002,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
                 try {
                     uncertaintyInColumns = getUncertaintyInColumns();
                 } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther |
-                         ThereIsNoPotentialsInNodeException e) {
+                         ThereIsNoPotentialInNodeException e) {
                     throw new UnrecoverableException(e);
                 }
                 setCellRenderers(uncertaintyInColumns);

@@ -196,12 +196,12 @@ public class StochasticPropagationOutputFrame extends JDialog implements ActionL
             onActionRequest();
         } catch (IncompatibleEvidenceException | ConstraintViolatedException |
                  NotEvaluableNetworkException.NotApplicableNetwork | NonProjectablePotentialException |
-                 CannotNormalizePotentialException | ThereIsNoPotentialsInNodeException e) {
+                 CannotNormalizePotentialException | ThereIsNoPotentialInNodeException e) {
             throw new UnrecoverableException(e);
         }
     } // end of actionPerformed
     
-    private void onActionRequest() throws IncompatibleEvidenceException, ConstraintViolatedException, NotEvaluableNetworkException.NotApplicableNetwork, NonProjectablePotentialException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
+    private void onActionRequest() throws IncompatibleEvidenceException, ConstraintViolatedException, NotEvaluableNetworkException.NotApplicableNetwork, NonProjectablePotentialException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         ButtonModel algorithmButton = algorithms.getSelection();
         ClusterPropagation exactAlgorithm;
         algorithmName = algorithmButton.getActionCommand();

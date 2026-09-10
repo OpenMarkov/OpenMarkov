@@ -11,7 +11,7 @@ import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.action.core.UncertainValuesEdit;
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
@@ -195,7 +195,7 @@ public class ValuesTable extends KeyTable implements PNEditListener {
                     .executeEdit();
         } catch (DoEditException e) {
             throw new UnrecoverableException(e);
-        } catch (ThereIsNoPotentialsInNodeException e) {
+        } catch (ThereIsNoPotentialInNodeException e) {
             throw new UnreachableException(e);
         }
         

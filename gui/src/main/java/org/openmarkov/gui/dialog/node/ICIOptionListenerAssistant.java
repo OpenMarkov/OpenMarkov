@@ -10,7 +10,7 @@ package org.openmarkov.gui.dialog.node;
 
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.potential.Potential;
@@ -67,7 +67,7 @@ public class ICIOptionListenerAssistant implements ItemListener {
             try {
                 itemStateChangedTPC(e);
             } catch (NonProjectablePotentialException | IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther |
-                     ThereIsNoPotentialsInNodeException ex) {
+                     ThereIsNoPotentialInNodeException ex) {
                 throw new UnrecoverableException(ex);
             }
         }
@@ -98,7 +98,7 @@ public class ICIOptionListenerAssistant implements ItemListener {
         }
     }
     
-    private void itemStateChangedTPC(ItemEvent e) throws NonProjectablePotentialException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
+    private void itemStateChangedTPC(ItemEvent e) throws NonProjectablePotentialException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException {
         if (e.getStateChange() == ItemEvent.DESELECTED) {
             // has been deselected tpc
             previousModel = TPC;

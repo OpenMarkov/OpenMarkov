@@ -9,7 +9,7 @@ package org.openmarkov.gui.component;
 
 //import java.util.ArrayList;
 
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Util;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
@@ -45,7 +45,7 @@ public class PotentialsTablePanelOperations {
 	 * <p>
 	 * @param node node who "owns" the table
 	 */
-    public int calculateLastEditableRow(Node node) throws ThereIsNoPotentialsInNodeException {
+    public int calculateLastEditableRow(Node node) throws ThereIsNoPotentialInNodeException {
         Potential potential = node.getPotential();
         if (PotentialsTablePanelOperations.getIsExactDistrPotential(potential)) {
 			return potential.getNumVariables() - 1;
@@ -64,7 +64,7 @@ public class PotentialsTablePanelOperations {
 		// potential.getClass().getName().equals("org.openmarkov.core.model.network.potential.ExactDistrPotential");
 	}
     
-    public int getPotentialIndex(int row, int column, Node node) throws ThereIsNoPotentialsInNodeException {
+    public int getPotentialIndex(int row, int column, Node node) throws ThereIsNoPotentialInNodeException {
 		// First of all we get the start index of the column
 		int potentialIndex = PotentialsTablePanelOperations.getPotentialStartIndexOfColumn(column, node);
 		// We get the last editable row in the JTable
@@ -141,7 +141,7 @@ public class PotentialsTablePanelOperations {
 	 * @param node   - the node with the potential
 	 * @return index of the potential.
 	 */
-    public static int getPotentialStartIndexOfColumn(int column, Node node) throws ThereIsNoPotentialsInNodeException {
+    public static int getPotentialStartIndexOfColumn(int column, Node node) throws ThereIsNoPotentialInNodeException {
 		/*
 		 * This code is here and in getPotentialIndex because this method is used not only in  getPotentialIndex
 		 * but in org.openmarkov.gui.action.TablePotentialValueEdit

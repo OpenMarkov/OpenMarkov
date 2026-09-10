@@ -8,7 +8,7 @@
 package org.openmarkov.gui.dialog.common;
 
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.gui.component.ValuesTable;
 
@@ -28,7 +28,7 @@ import javax.swing.JComponent;
 	 */
 	private boolean modifiable;
 	
-	public CPTablePanel(Node node, JComponent owner) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
+	public CPTablePanel(Node node, JComponent owner) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException {
 		super(node, owner);
 		modifiable = false;
 	}

@@ -10,7 +10,7 @@ package org.openmarkov.gui.dialog.common;
 import org.openmarkov.core.action.core.RemovePolicyEdit;
 import org.openmarkov.core.action.core.SetPotentialEdit;
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.PolicyType;
@@ -152,7 +152,7 @@ import java.awt.event.ItemListener;
             if (e.getItem().equals(getJRadioButtonOptimalType())) {
                 itemStateChangedOptimalType(e);
             }
-        } catch (DoEditException | ThereIsNoPotentialsInNodeException ex) {
+        } catch (DoEditException | ThereIsNoPotentialInNodeException ex) {
             throw new UnrecoverableException(ex);
         }
     }
@@ -168,7 +168,7 @@ import java.awt.event.ItemListener;
          */
     }
     
-    private void itemStateChangedOptimalType(ItemEvent e) throws DoEditException, ThereIsNoPotentialsInNodeException {
+    private void itemStateChangedOptimalType(ItemEvent e) throws DoEditException, ThereIsNoPotentialInNodeException {
         if (e.getStateChange() == ItemEvent.DESELECTED) {
             // optionDeselected = comboBox.getSelectedIndex();
             previousPolicy = PolicyType.OPTIMAL;
@@ -183,7 +183,7 @@ import java.awt.event.ItemListener;
         }
     }
     
-    private void itemStateChangedProbabilisticType(ItemEvent e) throws DoEditException, ThereIsNoPotentialsInNodeException {
+    private void itemStateChangedProbabilisticType(ItemEvent e) throws DoEditException, ThereIsNoPotentialInNodeException {
         if (e.getStateChange() == ItemEvent.DESELECTED) {
             // optionDeselected = comboBox.getSelectedIndex();
             previousPolicy = PolicyType.PROBABILISTIC;

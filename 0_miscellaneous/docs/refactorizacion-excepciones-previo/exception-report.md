@@ -80,7 +80,7 @@ El archivo fuente de cada excepción contiene un comentario `TODO` indicando que
 | `IntervalsAreNotEvenException` | "Does this really happen in the GUI?" |
 | `IntervalsAreNotMultipleOf3Exception` | "Does this really happen in the GUI?" |
 | `NonProjectablePotentialException.CannotEvaluate` | "Only used once and wrapped into UnreacheableException" |
-| `ThereIsNoPotentialsInNodeException` | "Caught and rethrown as unchecked" |
+| `ThereIsNoPotentialInNodeException` | "Caught and rethrown as unchecked" |
 
 Esto indica que una porción mayoritaria del sistema de excepciones checked **no aporta valor**: el caller no puede recuperarse de ellas, y simplemente las envuelve en `UnreacheableException` o las muestra en un diálogo.
 

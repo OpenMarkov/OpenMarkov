@@ -149,20 +149,19 @@ public class MainPanelListenerAssistant extends WindowAdapter
                     inferenceHandler.toggleWorkingMode();
                 } catch (NotEnoughMemoryException | IncompatibleEvidenceException | ConstraintViolatedException |
                          RuntimeException | NotEvaluableNetworkException | NonProjectablePotentialException |
-                         CannotNormalizePotentialException | ThereIsNoPotentialsInNodeException ex) {
+                         CannotNormalizePotentialException | ThereIsNoPotentialInNodeException ex) {
                     try {
                         inferenceHandler.setWorkingMode(initialWorkingMode, initialWorkingMode);
                     } catch (NotEvaluableNetworkException | NonProjectablePotentialException |
                              NotEnoughMemoryException | IncompatibleEvidenceException | ConstraintViolatedException |
                              CannotNormalizePotentialException exc) {
                         throw new UnreachableException(exc);
-                    } catch (ThereIsNoPotentialsInNodeException exception) {
+                    } catch (ThereIsNoPotentialInNodeException exception) {
                         throw new UnrecoverableException(exception);
                     }
                     throw new UnrecoverableException(ex);
                 }
             }
-            case ActionCommands.MC_SIMULATE_NETWORK -> monteCarloSimulation();
             case ActionCommands.SET_NEW_EXPANSION_THRESHOLD ->
                     inferenceHandler.setNewExpansionThreshold((Double) e.getSource());
             case ActionCommands.CREATE_NEW_EVIDENCE_CASE ->
@@ -298,24 +297,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
                                             .getProbNet(), newVariable, selectedNode.getNodeType(), position).executeEdit();
             });
             case ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC -> {
-                if (getCurrentNetworkEditorPanel().getProbNet().getNetworkType() instanceof DESNetworkType){
-                    monteCarloSimulation();
-                    break;
-                }
-                try {
-                    Method ceMethod = Class.forName("org.openmarkov.costEffectiveness.CostEffectivenessPlugin")
-                                           .getDeclaredMethod("onClick");
-                    ceMethod.setAccessible(true);
-                    ceMethod.invoke(null);
-                } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException ex) {
-                    throw new UnreachableException(ex);
-                } catch (InvocationTargetException ex) {
-                    switch (ex.getCause()) {
-                        case RuntimeException exc -> throw exc;
-                        case Exception exc -> throw new UnrecoverableException(exc);
-                        case null, default -> throw new UnreachableException(ex);
-                    }
-                }
+                GUIUtils.executeUIAction(() -> inferenceHandler.showCostEffectivenessDeterministic(getCurrentNetworkEditorPanel()));
             }
             case ActionCommands.CONFIGURATION ->
                     GUIUtils.executeUIAction(editAndViewHandler::showUserConfigurationDialog);
@@ -423,31 +405,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
      * This method performs N Monte Carlo simulations
      *
      */
-    protected void monteCarloSimulation() {
-        boolean performInference = true;
-        // mainPanel.selecMonteCarloButton(false);
-        
-        InferenceOptionsDialog dialog = new InferenceOptionsDialog(getCurrentNetworkEditorPanel().getProbNet(), SwingUtilities.getWindowAncestor(mainPanel), MulticriteriaOptions.Type.COST_EFFECTIVENESS);
-        ProbNet probNet = getCurrentNetworkEditorPanel().getProbNet();
-        // Show multicriteria dialog if the probnet has at least two criteria and have utility nodes
-        if (dialog.getSelectedOption() == OkCancelDialog.ChosenOption.Cancel) {
-            performInference = false;
-        }
-        
-        if (performInference) {
-            
-            
-            ProgressMonitor simulationProgressMonitor = new ProgressMonitor(SwingUtilities.getWindowAncestor(mainPanel), "Running simulation", null, 0, 0);
-            
-            new Thread(() -> {
-                try {
-                    new org.openmarkov.inference.DES.DESInference(probNet, simulationProgressMonitor);
-                } catch (IOException | OpenMarkovException e) {
-                    throw new UnrecoverableException(e);
-                }
-            }).start();
-        }
-    }
+
     //
     
     

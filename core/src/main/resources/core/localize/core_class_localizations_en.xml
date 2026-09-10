@@ -301,8 +301,8 @@
                   value="{originException}"/>
     <Localization class="org.openmarkov.core.exception.PotentialOperationException$DifferentSizesInPotentialsAndStates"
                   value="Found {variable.getNumStates} states in variable {variable.getName}, but there are {potentials.size} instead of {variable.getNumStates}."/>
-    <Localization class="org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException"
-                  value="Node {node} has no potentials, while at least one is expected."/>
+    <Localization class="org.openmarkov.core.exception.ThereIsNoPotentialInNodeException"
+                  value="Node {nodeName} has no potentials, while at least one is expected."/>
     <Localization
             class="org.openmarkov.core.exception.UnexpectedInferenceException$ThereIsMoreThanOneConditioningVariable"
             value="There is more than one conditioning variables in the potential table ({tablePotential.getNumVariables} variables)."/>

@@ -8,7 +8,7 @@
 package org.openmarkov.gui.dialog.common;
 
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
@@ -76,7 +76,7 @@ public class UnivariateDistrPotentialPanel extends TablePotentialPanel {
      *
      * @author carmenyago : adaptation to TableDeltaPotential
      */
-    public UnivariateDistrPotentialPanel(Node node) throws ThereIsNoPotentialsInNodeException {
+    public UnivariateDistrPotentialPanel(Node node) throws ThereIsNoPotentialInNodeException {
         super();
         
         this.tablePotentialsPanelOperations = new PotentialsTablePanelOperations();
@@ -132,7 +132,7 @@ public class UnivariateDistrPotentialPanel extends TablePotentialPanel {
         return tableModel;
     }
     
-    @Override public void setData() throws ThereIsNoPotentialsInNodeException {
+    @Override public void setData() throws ThereIsNoPotentialInNodeException {
         
         // true
         hasLinkRestriction = LinkRestrictionPotentialOperations.hasLinkRestriction(node);
@@ -277,7 +277,7 @@ public class UnivariateDistrPotentialPanel extends TablePotentialPanel {
      * @author carmenyago
      */
     @Override protected EvidenceCase getConfiguration(int col)
-            throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialsInNodeException {
+            throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ThereIsNoPotentialInNodeException {
         
         List<Variable> parents = variables.subList(1, getPotential().getNumVariables());
         

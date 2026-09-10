@@ -6,7 +6,7 @@
  */
 package org.openmarkov.gui.dialog.common;
 
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.GTablePotential;
@@ -38,13 +38,13 @@ public class GTablePotentialPanel extends PotentialPanel {
 		setLayout(new BorderLayout());
 		try {
 			setData(node);
-		} catch (ThereIsNoPotentialsInNodeException e) {
+		} catch (ThereIsNoPotentialInNodeException e) {
 			add(new JLabel("No potential available."), BorderLayout.CENTER);
 		}
 	}
 
 	@Override
-	public void setData(Node node) throws ThereIsNoPotentialsInNodeException {
+	public void setData(Node node) throws ThereIsNoPotentialInNodeException {
 		removeAll();
 
 		Potential potential = node.getPotential();

@@ -12,7 +12,6 @@ import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.menutoolbar.toolbar.InferenceToolBar;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
-import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -68,7 +67,7 @@ public class PropagationOptionsDialogListener implements ActionListener {
                             } catch (NotEvaluableNetworkException | NonProjectablePotentialException |
                                      NotEnoughMemoryException | IncompatibleEvidenceException |
                                      ConstraintViolatedException | CannotNormalizePotentialException |
-                                     ThereIsNoPotentialsInNodeException e) {
+									 ThereIsNoPotentialInNodeException e) {
                                 throw new UnrecoverableException(e);
                             }
                             networkEditorPanel.updateAllVisualStates("", caseIndex);

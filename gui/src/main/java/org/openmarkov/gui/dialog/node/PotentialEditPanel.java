@@ -16,7 +16,7 @@ import org.openmarkov.core.action.core.SetPotentialVariablesEdit;
 import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.localize.StringDatabase;
@@ -141,7 +141,7 @@ public class PotentialEditPanel extends JPanel {
     /**
      * Creates the dialog.
      */
-    public PotentialEditPanel(Node node, boolean readOnly, boolean potentialInitializesOnEditHistory) throws ThereIsNoPotentialsInNodeException {
+    public PotentialEditPanel(Node node, boolean readOnly, boolean potentialInitializesOnEditHistory) throws ThereIsNoPotentialInNodeException {
         this.readOnly = readOnly;
         this.node = node;
         this.onPotentialTypeChanges = new ArrayList<>();
@@ -176,7 +176,7 @@ public class PotentialEditPanel extends JPanel {
      * Sets up the panel where all components, except the buttons of the buttons
      * panel, will be appear.
      */
-    private void configureComponentsPanel() throws ThereIsNoPotentialsInNodeException {
+    private void configureComponentsPanel() throws ThereIsNoPotentialInNodeException {
         this.setLayout(new BorderLayout(5, 5));
         // getComponentsPanel().setSize(294, 29);
         this.setMaximumSize(new Dimension(180, 40));
@@ -225,9 +225,11 @@ public class PotentialEditPanel extends JPanel {
     /**
      * @return ComboBox with the types of families of relation to be used
      */
-    private JComboBox<Class<? extends Potential>> getPotentialTypeJCombobox() throws ThereIsNoPotentialsInNodeException {
+    private JComboBox<Class<? extends Potential>> getPotentialTypeJCombobox() throws ThereIsNoPotentialInNodeException {
         if (this.potentialTypeComboBox == null) {
-            Class<? extends Potential> potentialClass = this.node.getPotentials().getFirst().getClass();
+            if (node.getPotential() == null)
+                node.setPotential(PotentialUtils.generateDefaultPotential(node));
+            Class<? extends Potential> potentialClass = this.node.getPotential().getClass();
             List<Class<? extends Potential>> filteredPotentialNames = new ArrayList<>(PotentialUtils.getFilteredPotentialClasses(this.node));
             filteredPotentialNames.removeIf(availablePotentialClass -> !ClassUtils.isConcrete(availablePotentialClass));
             if (!filteredPotentialNames.contains(potentialClass)) {
@@ -242,7 +244,7 @@ public class PotentialEditPanel extends JPanel {
             this.potentialTypeComboBox.addActionListener(evt -> {
                 try {
                     this.potentialTypeChanged();
-                } catch (ThereIsNoPotentialsInNodeException e) {
+                } catch (ThereIsNoPotentialInNodeException e) {
                     throw new UnrecoverableException(e);
                 }
             });
@@ -256,7 +258,7 @@ public class PotentialEditPanel extends JPanel {
      *
      * @param enable To indicate if the Potential Type combobox should be enabled
      */
-    public void setEnabledPotentialTypeCombobox(boolean enable) throws ThereIsNoPotentialsInNodeException {
+    public void setEnabledPotentialTypeCombobox(boolean enable) throws ThereIsNoPotentialInNodeException {
         this.getPotentialTypeJCombobox().setEnabled(enable);
     }
     
@@ -277,7 +279,7 @@ public class PotentialEditPanel extends JPanel {
      * @return The panel that indicates the type of the table (and perhaps the
      * type of policy (optimal or imposed))
      */
-    private JPanel getPotentialTypePanel() throws ThereIsNoPotentialsInNodeException {
+    private JPanel getPotentialTypePanel() throws ThereIsNoPotentialInNodeException {
         if (this.potentialTypePanel == null) {
             this.potentialTypePanel = new JPanel();
             this.potentialTypePanel.setLayout(new FlowLayout());
@@ -480,7 +482,7 @@ public class PotentialEditPanel extends JPanel {
         return this.pnlPolicyType;
     }
     
-    private void potentialTypeChanged() throws ThereIsNoPotentialsInNodeException {
+    private void potentialTypeChanged() throws ThereIsNoPotentialInNodeException {
         Class<? extends Potential> potentialType = (Class<? extends Potential>) this.potentialTypeComboBox.getSelectedItem();
         Potential newPotential = null;
         var currentPotential = this.node.getPotential();
@@ -494,8 +496,7 @@ public class PotentialEditPanel extends JPanel {
         }
         if (newPotential == null && potentialType == TablePotential.class) {
             try {
-                newPotential = this.node.getPotentials()
-                                        .getFirst()
+                newPotential = this.node.getPotential()
                                         .tableProject(new EvidenceCase(), new InferenceOptions());
             } catch (NonProjectablePotentialException e) {
             }
@@ -530,7 +531,7 @@ public class PotentialEditPanel extends JPanel {
     }
     
     
-    public boolean commitChanges() throws BinomialPotentialWrongValueException.ThetaValueIsWrong, BinomialPotentialWrongValueException.NValuesIsWrong, DoEditException, ThereIsNoPotentialsInNodeException {
+    public boolean commitChanges() throws BinomialPotentialWrongValueException.ThetaValueIsWrong, BinomialPotentialWrongValueException.NValuesIsWrong, DoEditException, ThereIsNoPotentialInNodeException {
         if (this.readOnly) {
             return false;
         }
@@ -556,7 +557,7 @@ public class PotentialEditPanel extends JPanel {
         return true;
     }
     
-    boolean potentialHasChanged() throws ThereIsNoPotentialsInNodeException {
+    boolean potentialHasChanged() throws ThereIsNoPotentialInNodeException {
         Potential newPotential = this.node.getPotential();
         boolean potentialsAreDifferent = !ReflectionEquality.areEquals(this.originalPotential, newPotential);
         OpenMarkovLogger.LOGGER.trace("Potentials are different " + potentialsAreDifferent);
@@ -613,7 +614,7 @@ public class PotentialEditPanel extends JPanel {
     /**
      * Shows and activates the options related to decision policy
      */
-    void setEnabledDecisionOptions() throws ThereIsNoPotentialsInNodeException {
+    void setEnabledDecisionOptions() throws ThereIsNoPotentialInNodeException {
         switch (this.node.getPolicyType()) {
             case OPTIMAL, DETERMINISTIC -> this.getPotentialTypeJCombobox().setEnabled(false);
             case PROBABILISTIC -> {
@@ -657,8 +658,9 @@ public class PotentialEditPanel extends JPanel {
             return false;
         }
         
-        Potential potential = this.node.getPotentials().getFirst();
-        int numPotentialVariables = potential.getNumVariables();
+        Potential potential = this.node.getPotential();
+
+        int numPotentialVariables = (potential == null) ? 0 : potential.getNumVariables();
         
         return (numPotentialVariables > 2) && this.getPotentialPanel() instanceof ProbabilityTablePanel;
     }
@@ -668,7 +670,7 @@ public class PotentialEditPanel extends JPanel {
     }
     
     private Potential instanciatePotential(Class<? extends Potential> potentialType, List<Variable> variables) {
-        Potential currentPotential = this.node.getPotentials().getFirst();
+        Potential currentPotential = this.node.getPotential();
         assert potentialType != null;
         if (potentialType == CycleLengthShift.class) {
             return PotentialUtils.instanciateSafely(potentialType, variables, currentPotential.getPotentialRole(),

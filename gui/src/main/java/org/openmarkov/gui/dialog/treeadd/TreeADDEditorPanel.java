@@ -8,7 +8,7 @@
 package org.openmarkov.gui.dialog.treeadd;
 
 import org.openmarkov.core.exception.InvalidArgumentException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
@@ -387,7 +387,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
             case ActionCommands.EDIT_POTENTIAL -> {
                 try {
                     editPotential(ae, (TreeADDBranch) node, path);
-                } catch (ThereIsNoPotentialsInNodeException e) {
+                } catch (ThereIsNoPotentialInNodeException e) {
                     throw new UnrecoverableException(e);
                 }
             }
@@ -1190,7 +1190,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
      * @param branch the branch
      * @param path the path
      */
-    private void editPotential(ActionEvent ae, TreeADDBranch branch, TreePath path) throws ThereIsNoPotentialsInNodeException {
+    private void editPotential(ActionEvent ae, TreeADDBranch branch, TreePath path) throws ThereIsNoPotentialInNodeException {
         TreePath parentPath = path.getParentPath();
         TreeADDPotential parentTreeADD = (TreeADDPotential) parentPath.getLastPathComponent();
         Potential potential = branch.getPotential();

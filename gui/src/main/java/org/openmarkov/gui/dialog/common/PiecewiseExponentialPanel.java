@@ -2,8 +2,7 @@ package org.openmarkov.gui.dialog.common;
 
 import org.openmarkov.core.action.core.PotentialChangeEdit;
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
@@ -57,7 +56,7 @@ public class PiecewiseExponentialPanel
      * Otherwise an Exact distribution is displayed.
      * @param node - event node which contains the DistributionTablePotential
      */
-    public PiecewiseExponentialPanel(Node node) throws ThereIsNoPotentialsInNodeException {
+    public PiecewiseExponentialPanel(Node node) throws ThereIsNoPotentialInNodeException {
         super();
         this.node = node;
 

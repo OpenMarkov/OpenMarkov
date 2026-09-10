@@ -8,7 +8,7 @@
 package org.openmarkov.gui.dialog.node;
 
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -39,7 +39,7 @@ public class PotentialEditDialog extends OkCancelDialog {
     protected final Node node;
     protected final boolean readOnly;
     
-    public PotentialEditDialog(Window owner, Node node, boolean readOnly) throws ThereIsNoPotentialsInNodeException {
+    public PotentialEditDialog(Window owner, Node node, boolean readOnly) throws ThereIsNoPotentialInNodeException {
         super(owner);
         this.node = node;
         this.readOnly = readOnly;
@@ -67,7 +67,7 @@ public class PotentialEditDialog extends OkCancelDialog {
         });
     }
     
-    protected void initialize() throws ThereIsNoPotentialsInNodeException {
+    protected void initialize() throws ThereIsNoPotentialInNodeException {
         this.potentialEditPanel = this.generatePotentialEditPanel(node, readOnly);
         this.getComponentsPanel().setLayout(new BorderLayout());
         this.getComponentsPanel().add(this.potentialEditPanel, BorderLayout.CENTER);
@@ -92,7 +92,7 @@ public class PotentialEditDialog extends OkCancelDialog {
      * @return An integer indicating the button clicked by the user when closing
      * this dialog
      */
-    public ChosenOption requestValues() throws ThereIsNoPotentialsInNodeException {
+    public ChosenOption requestValues() throws ThereIsNoPotentialInNodeException {
         // Shows the potentials' options table
         if (this.node.getNodeType() == NodeType.DECISION && this.node.getPolicyType() == PolicyType.OPTIMAL && this.readOnly) {
             this.potentialEditPanel.setEnabledDecisionOptions();
@@ -101,13 +101,13 @@ public class PotentialEditDialog extends OkCancelDialog {
         return this.getSelectedOption();
     }
     
-    PotentialEditPanel generatePotentialEditPanel(Node node, boolean readOnly) throws ThereIsNoPotentialsInNodeException {
+    PotentialEditPanel generatePotentialEditPanel(Node node, boolean readOnly) throws ThereIsNoPotentialInNodeException {
         return new PotentialEditPanel(node, readOnly, true);
     }
     
     
     @Override
-    protected boolean doOkClickBeforeHide() throws BinomialPotentialWrongValueException.ThetaValueIsWrong, BinomialPotentialWrongValueException.NValuesIsWrong, DoEditException, ThereIsNoPotentialsInNodeException {
+    protected boolean doOkClickBeforeHide() throws BinomialPotentialWrongValueException.ThetaValueIsWrong, BinomialPotentialWrongValueException.NValuesIsWrong, DoEditException, ThereIsNoPotentialInNodeException {
         this.potentialEditPanel.commitChanges();
         return true;
     }

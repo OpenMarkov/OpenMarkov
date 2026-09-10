@@ -10,12 +10,11 @@ package org.openmarkov.gui.window;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.TemporalNetOperations;
+import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.potential.StrategyCarrier;
 import org.openmarkov.core.model.network.potential.StrategyTree;
+import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.gui.dialog.PropagationOptionsDialog;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
@@ -30,8 +29,11 @@ import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluat
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluation.DANEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEOptimalIntervention;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 /**
@@ -53,7 +55,8 @@ class InferenceHandler {
 
     // ── Working mode ──────────────────────────────────────────────
     
-    void toggleWorkingMode() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
+    void toggleWorkingMode() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
+       emptyPotentialChecker();
         NetworkEditorPanel.WorkingMode currentWorkingMode = getCurrentNetworkEditorPanel().getWorkingMode();
         NetworkEditorPanel.WorkingMode newWorkingMode = switch (currentWorkingMode) {
             case EDITION -> NetworkEditorPanel.WorkingMode.INFERENCE;
@@ -62,7 +65,7 @@ class InferenceHandler {
         setWorkingMode(currentWorkingMode, newWorkingMode);
     }
     
-    void setWorkingMode(NetworkEditorPanel.WorkingMode currentWorkingMode, NetworkEditorPanel.WorkingMode newWorkingMode) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
+    void setWorkingMode(NetworkEditorPanel.WorkingMode currentWorkingMode, NetworkEditorPanel.WorkingMode newWorkingMode) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         boolean performInference = true;
         boolean isTemporal;
         boolean isMulticriteria = false;
@@ -125,7 +128,7 @@ class InferenceHandler {
 
     // ── Evidence cases ────────────────────────────────────────────
     
-    void evidenceCasesNavigationOption(String command) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialsInNodeException {
+    void evidenceCasesNavigationOption(String command) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         switch (command) {
             case "CREATE_NEW_EVIDENCE_CASE" -> getCurrentNetworkEditorPanel().createNewEvidenceCase();
             case "GO_TO_FIRST_EVIDENCE_CASE" -> getCurrentNetworkEditorPanel().goToFirstEvidenceCase();
@@ -155,7 +158,8 @@ class InferenceHandler {
 
     // ── Network expansion ─────────────────────────────────────────
 
-    void expandNetwork(ProbNet probNet, EvidenceCase preResolutionEvidence) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException {
+    void expandNetwork(ProbNet probNet, EvidenceCase preResolutionEvidence) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, ThereIsNoPotentialInNodeException {
+        emptyPotentialChecker();
         NetworkEditorPanel networkPanelMID = getCurrentNetworkEditorPanel();
         String path = (new File(networkPanelMID.getNetworkFile())).getParent();
         InferenceOptionsDialog costEffectivenessDialog = new InferenceOptionsDialog(probNet,
@@ -184,7 +188,8 @@ class InferenceHandler {
 
     // ── Decision tree & optimal strategy ──────────────────────────
 
-    void showDecisionTree(NetworkEditorPanel networkPanel) throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates, NotEnoughMemoryException {
+    void showDecisionTree(NetworkEditorPanel networkPanel) throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates, NotEnoughMemoryException, ThereIsNoPotentialInNodeException {
+        emptyPotentialChecker();
         try {
             InferenceOptionsDialog costEffectivenessDialog = new InferenceOptionsDialog(networkPanel.getProbNet(),
                     GUIUtils.getOwner(mainPanel),null);
@@ -198,7 +203,8 @@ class InferenceHandler {
         }
     }
 
-    void showOptimalStrategy(NetworkEditorPanel networkPanel) throws IncompatibleEvidenceException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, PotentialOperationException.DifferentSizesInPotentialsAndStates {
+    void showOptimalStrategy(NetworkEditorPanel networkPanel) throws IncompatibleEvidenceException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, PotentialOperationException.DifferentSizesInPotentialsAndStates, ThereIsNoPotentialInNodeException {
+        emptyPotentialChecker();
         if (networkPanel.getModified()) {
             // Network was modified after last inference — would need re-evaluation
         }
@@ -236,9 +242,65 @@ class InferenceHandler {
         }
     }
 
+    void showCostEffectivenessDeterministic(NetworkEditorPanel networkPanel) throws ThereIsNoPotentialInNodeException {
+        emptyPotentialChecker();
+
+        if (getCurrentNetworkEditorPanel().getProbNet().getNetworkType() instanceof DESNetworkType){
+            monteCarloSimulation();
+            return;
+        }
+
+        try {
+            Method ceMethod = Class.forName("org.openmarkov.costEffectiveness.CostEffectivenessPlugin")
+                    .getDeclaredMethod("onClick");
+            ceMethod.setAccessible(true);
+            ceMethod.invoke(null);
+        } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException ex) {
+            throw new UnreachableException(ex);
+        } catch (InvocationTargetException ex) {
+            switch (ex.getCause()) {
+                case RuntimeException exc -> throw exc;
+                case Exception exc -> throw new UnrecoverableException(exc);
+                case null, default -> throw new UnreachableException(ex);
+            }
+        }
+    }
+
     // ── Helpers ───────────────────────────────────────────────────
 
     private NetworkEditorPanel getCurrentNetworkEditorPanel() {
         return mainPanel.getMainPanelMenuAssistant().getCurrentNetworkEditorPanel();
+    }
+    protected void monteCarloSimulation() {
+        boolean performInference = true;
+
+        InferenceOptionsDialog dialog = new InferenceOptionsDialog(getCurrentNetworkEditorPanel().getProbNet(), SwingUtilities.getWindowAncestor(mainPanel), MulticriteriaOptions.Type.COST_EFFECTIVENESS);
+        ProbNet probNet = getCurrentNetworkEditorPanel().getProbNet();
+        // Show multicriteria dialog if the probnet has at least two criteria and have utility nodes
+        if (dialog.getSelectedOption() == OkCancelDialog.ChosenOption.Cancel) {
+            performInference = false;
+        }
+
+        if (performInference) {
+
+
+            ProgressMonitor simulationProgressMonitor = new ProgressMonitor(SwingUtilities.getWindowAncestor(mainPanel), "Running simulation", null, 0, 0);
+
+            new Thread(() -> {
+                try {
+                    new org.openmarkov.inference.DES.DESInference(probNet, simulationProgressMonitor);
+                } catch (IOException | OpenMarkovException e) {
+                    throw new UnrecoverableException(e);
+                }
+            }).start();
+        }
+    }
+
+    private void emptyPotentialChecker() throws ThereIsNoPotentialInNodeException {
+        getCurrentNetworkEditorPanel().getProbNet().getNodes();
+        for (Node node : getCurrentNetworkEditorPanel().getProbNet().getNodes()) {
+            if (node.getPotential() == null && node.getNodeType() != NodeType.DECISION)
+                throw new ThereIsNoPotentialInNodeException(node.getName());
+        }
     }
 }

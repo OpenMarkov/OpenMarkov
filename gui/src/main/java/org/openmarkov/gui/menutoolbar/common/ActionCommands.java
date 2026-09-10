@@ -114,7 +114,6 @@ public enum ActionCommands {
      * pressing the button in the standard tool bar
      * (switching from Edition to Inference mode or vice versa).
      */
-    MC_SIMULATE_NETWORK("MCSimulateNetwork"),
     /** Action invoked when the user wants to change the Expansion Threshold. */
     SET_NEW_EXPANSION_THRESHOLD("SetNewExpansionThreshold"),
     /** Action invoked when the user wants to create a new evidence case. */

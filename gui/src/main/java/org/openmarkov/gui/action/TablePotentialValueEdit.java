@@ -8,7 +8,7 @@
 package org.openmarkov.gui.action;
 
 import org.openmarkov.core.action.core.PotentialChangeEdit;
-import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
@@ -97,7 +97,7 @@ public class TablePotentialValueEdit extends PotentialChangeEdit {
      *                             cmyago added the new initialisation of getExactDistrPotential
      */
     public TablePotentialValueEdit(Node node, Double newValue, int row, int col, LinkedList<Integer> priorityList,
-                                   Object[][] notEditablePositions) throws ThereIsNoPotentialsInNodeException {
+                                   Object[][] notEditablePositions) throws ThereIsNoPotentialInNodeException {
         super(node, null, null);
         this.node = node;
         Potential potential = node.getPotential();
@@ -240,7 +240,7 @@ public class TablePotentialValueEdit extends PotentialChangeEdit {
         try {
             int lastRow = tablePotentialsPanelOperations.calculateLastEditableRow(node);
             return lastRow - position % tablePotential.getDimensions()[0];
-        } catch (ThereIsNoPotentialsInNodeException e) {
+        } catch (ThereIsNoPotentialInNodeException e) {
             throw new UnreachableException(e);
         }
     }

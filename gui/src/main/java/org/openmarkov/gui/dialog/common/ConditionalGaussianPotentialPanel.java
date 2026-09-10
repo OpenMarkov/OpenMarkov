@@ -20,7 +20,6 @@ import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.dialog.node.PotentialEditDialog;
 import org.openmarkov.gui.exception.BinomialPotentialWrongValueException;
-import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.util.GUIUtils;
 
 import javax.swing.*;
@@ -59,7 +58,7 @@ public class ConditionalGaussianPotentialPanel
         editMeanButton.addActionListener(e -> {
             try {
                 editMeanPotential();
-            } catch (ThereIsNoPotentialsInNodeException ex) {
+            } catch (ThereIsNoPotentialInNodeException ex) {
                 throw new UnrecoverableException(ex);
             }
         });
@@ -67,7 +66,7 @@ public class ConditionalGaussianPotentialPanel
         editVarianceButton.addActionListener(e -> {
             try {
                 editVariancePotential();
-            } catch (ThereIsNoPotentialsInNodeException ex) {
+            } catch (ThereIsNoPotentialInNodeException ex) {
                 throw new UnrecoverableException(ex);
             }
         });
@@ -76,7 +75,7 @@ public class ConditionalGaussianPotentialPanel
         add(buttonPanel, BorderLayout.PAGE_START);
     }
     
-    private void editMeanPotential() throws ThereIsNoPotentialsInNodeException {
+    private void editMeanPotential() throws ThereIsNoPotentialInNodeException {
         PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), meanDummyNode,
                                                                           isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
@@ -96,7 +95,7 @@ public class ConditionalGaussianPotentialPanel
         }
     }
     
-    private void editVariancePotential() throws ThereIsNoPotentialsInNodeException {
+    private void editVariancePotential() throws ThereIsNoPotentialInNodeException {
         PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), varianceDummyNode,
                                                                           isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
