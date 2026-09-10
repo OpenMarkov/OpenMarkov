@@ -14,9 +14,11 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.potential.DiscretizedCauchyPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.java.swing.ComponentUtilities;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
 
 /**
  * Panel for editing a {@link DiscretizedCauchyPotential}, providing buttons to
@@ -68,7 +70,7 @@ public class DiscretizedCauchyPotentialPanel extends PotentialPanel implements P
     }
     
     private void editMedianPotential() throws ThereIsNoPotentialInNodeException {
-        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), medianDummyNode, isReadOnly());
+        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), medianDummyNode, isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?
         } else {
@@ -77,7 +79,7 @@ public class DiscretizedCauchyPotentialPanel extends PotentialPanel implements P
     }
     
     private void editScalePotential() throws ThereIsNoPotentialInNodeException {
-        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), scaleDummyNode, isReadOnly());
+        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), scaleDummyNode, isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?
         } else {

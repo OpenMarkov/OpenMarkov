@@ -6,16 +6,16 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
-import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
-import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
+import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileFilter;
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class SaveProbnetImagePlugin implements ToolPlugin {
     private static void action() throws IOException {
         String title = StringDatabase.getUniqueInstance().getString("SaveNetworkImage");
         SaveProbnetImagePlugin.SAVE_IMAGE_FILE_CHOOSER.setDialogTitle(title);
-        if (SaveProbnetImagePlugin.SAVE_IMAGE_FILE_CHOOSER.showSaveDialog(GUIUtils.getOwner(MainGUI.INSTANCE.mainPanel)) != JFileChooser.APPROVE_OPTION) {
+        if (SaveProbnetImagePlugin.SAVE_IMAGE_FILE_CHOOSER.showSaveDialog(ComponentUtilities.getOwner(MainGUI.INSTANCE.mainPanel)) != JFileChooser.APPROVE_OPTION) {
             return;
         }
         var file = SaveProbnetImagePlugin.SAVE_IMAGE_FILE_CHOOSER.getSelectedFile();

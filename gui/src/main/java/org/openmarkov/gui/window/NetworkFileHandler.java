@@ -40,8 +40,8 @@ import org.openmarkov.gui.dialog.io.URLNetworkChooserDialog;
 import org.openmarkov.gui.dialog.network.NetworkPropertiesDialog;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
-import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
+import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -78,7 +78,7 @@ public class NetworkFileHandler {
     public void createNewNetwork() {
         ProbNet newNetwork = new ProbNet();
         newNetwork.setName("New network");
-        NetworkPropertiesDialog dialogProperties = new NetworkPropertiesDialog(GUIUtils.getOwner(mainPanel), newNetwork, false);
+        NetworkPropertiesDialog dialogProperties = new NetworkPropertiesDialog(ComponentUtilities.getOwner(mainPanel), newNetwork, false);
         if (dialogProperties.showProperties() != OkCancelDialog.ChosenOption.Ok) {
             return;
         }
@@ -181,12 +181,14 @@ public class NetworkFileHandler {
         };
         var networksMatchingThisOne = mainPanel.getNetworkEditors()
                                                .stream()
-                                               .filter(editor -> editor.getNetworkFile().equals(networkFile))
+                                               .filter(editor -> networkFile.equals(editor.getNetworkFile()))
                                                .toList();
-        if (!networksMatchingThisOne.isEmpty()) {
+        var anyOfTheNetworksIsModified = networksMatchingThisOne.stream().anyMatch(NetworkEditorPanel::getModified);
+        
+        if (!networksMatchingThisOne.isEmpty() && anyOfTheNetworksIsModified) {
             OptionDialog<CommonOptions.YesNo> dialog = new OptionDialog<>(MainGUI.INSTANCE,
                                                                           "Network already opened",
-                                                                          "The network " + networkFile + " is already open, do you want to reload it?",
+                                                                          "<html>The network " + networkFile + " is already open, do you want to reload it?<br><br>This will cause you to lose all of your changes done to the network.</html>",
                                                                           CommonOptions.YesNo.class);
             if (dialog.request(CommonOptions.YesNo.NO) != CommonOptions.YesNo.YES) {
                 return;
@@ -227,7 +229,7 @@ public class NetworkFileHandler {
         commentPane.setCommentHTMLTextPaneText(probNet.getComment());
         commentPane.setPreferredSize(new Dimension(500, 300));
         JOptionPane networkMessagePane = new JOptionPane(commentPane, JOptionPane.INFORMATION_MESSAGE);
-        JDialog networkMessageDialog = networkMessagePane.createDialog(GUIUtils.getOwner(mainPanel),
+        JDialog networkMessageDialog = networkMessagePane.createDialog(ComponentUtilities.getOwner(mainPanel),
                                                                        stringDatabase.getString("NetworkCommentWindow.Title"));
         networkMessageDialog.setResizable(true);
         networkMessageDialog.setMinimumSize(new Dimension(500, 300));
@@ -400,7 +402,7 @@ public class NetworkFileHandler {
         evidenceOMFileChooser.setDialogTitle(stringDatabase.getString("LoadEvidence.Title"));
         String lastFileFilter = UserPreferences.LATEST_LOADED_EVIDENCE_FORMAT.get();
         evidenceOMFileChooser.setFileFilter(lastFileFilter);
-        if ((evidenceOMFileChooser.showOpenDialog(GUIUtils.getOwner(mainPanel)) == JFileChooser.APPROVE_OPTION)) {
+        if ((evidenceOMFileChooser.showOpenDialog(ComponentUtilities.getOwner(mainPanel)) == JFileChooser.APPROVE_OPTION)) {
             System.out.println("Load evidence file " + evidenceOMFileChooser.getSelectedFile().getAbsolutePath());
             CaseDatabaseManager caseDbManager = new CaseDatabaseManager();
             CaseDatabaseReader caseDbReader;
@@ -443,7 +445,7 @@ public class NetworkFileHandler {
         String suggestedFileName = currentNetworkEditorPanel.getProbNet().getName();
         omFileChooser.setSelectedFile(new File(suggestedFileName));
         omFileChooser.setAcceptAllFileFilterUsed(false);
-        if (omFileChooser.showSaveDialog(GUIUtils.getOwner(mainPanel)) == JFileChooser.APPROVE_OPTION) {
+        if (omFileChooser.showSaveDialog(ComponentUtilities.getOwner(mainPanel)) == JFileChooser.APPROVE_OPTION) {
             System.out.println("Save evidence file " + omFileChooser.getSelectedFile().getAbsolutePath());
         }
     }
@@ -454,14 +456,14 @@ public class NetworkFileHandler {
         NetworkOMFileChooser fileChooser = new NetworkOMFileChooser();
         fileChooser.setDialogTitle(stringDatabase.getString("OpenNetwork.Title"));
         String fileName = null;
-        if (fileChooser.showOpenDialog(GUIUtils.getOwner(mainPanel)) == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showOpenDialog(ComponentUtilities.getOwner(mainPanel)) == JFileChooser.APPROVE_OPTION) {
             fileName = fileChooser.getSelectedFile().getAbsolutePath();
         }
         return fileName;
     }
     
     private URL requestURLFileToOpen() {
-        URLNetworkChooserDialog urlNetworkChooserDialog = new URLNetworkChooserDialog(GUIUtils.getOwner(mainPanel));
+        URLNetworkChooserDialog urlNetworkChooserDialog = new URLNetworkChooserDialog(ComponentUtilities.getOwner(mainPanel));
         if (urlNetworkChooserDialog.requestNetworkURL() == OkCancelDialog.ChosenOption.Ok) {
             return urlNetworkChooserDialog.getNetworkURL();
         }
@@ -492,7 +494,7 @@ public class NetworkFileHandler {
         ArrayList<Object> fileNameAndFormat = new ArrayList<>();
         String filename = null;
         FileFilterByExtension<?> fileFormat = null;
-        if (fileChooser.showSaveDialog(GUIUtils.getOwner(mainPanel)) == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showSaveDialog(ComponentUtilities.getOwner(mainPanel)) == JFileChooser.APPROVE_OPTION) {
             filename = fileChooser.getSelectedFile().getAbsolutePath();
             fileFormat = (FileFilterByExtension<?>) fileChooser.getFileFilter();
         }

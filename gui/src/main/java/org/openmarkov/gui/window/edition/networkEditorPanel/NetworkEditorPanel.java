@@ -1,9 +1,11 @@
-package org.openmarkov.gui.window.edition.networkEditorPanel;/*
+/*
  * Copyright (c) CISIAD, UNED, Spain,  2019. Licensed under the GPLv3 licence
  * Unless required by applicable law or agreed to in writing,
  * this code is distributed on an "AS IS" basis,
  * WITHOUT WARRANTIES OF ANY KIND.
  */
+
+package org.openmarkov.gui.window.edition.networkEditorPanel;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -60,6 +62,7 @@ import org.openmarkov.inference.algorithm.variableElimination.tasks.VEEvaluation
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEExpectedUtilityDecision;
 import org.openmarkov.java.initialization.Lazy;
 import org.openmarkov.java.io.InputStreamUtils;
+import org.openmarkov.java.swing.ComponentUtilities;
 import org.openmarkov.java.swing.PointUtils;
 
 import javax.swing.JDialog;
@@ -415,10 +418,11 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      *
      * @param selectedNode the selected node
      * @param newNode      the new node
+     *
      * @return the result
      */
     boolean changeNodeProperties(VisualNode selectedNode, boolean newNode) throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
-        boolean userAcceptedChanges = NetworkEditorPanel.requestNodePropertiesToUser2(GUIUtils.getOwner(this), this, selectedNode, newNode);
+        boolean userAcceptedChanges = NetworkEditorPanel.requestNodePropertiesToUser2(ComponentUtilities.getOwner(this), this, selectedNode, newNode);
         if (userAcceptedChanges) {
             this.adjustPanelDimension();
             selectedNode.updateNumCases(this.evidenceManager.getPostResolutionEvidence().size());
@@ -438,7 +442,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
 
     public void showPotentialDialog(boolean readOnly) throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         Node node = this.visualNetwork.getLastSelectedNode().getNode();
-        if (this.requestPotentialValues(GUIUtils.getOwner(this), node, readOnly)) {
+        if (this.requestPotentialValues(ComponentUtilities.getOwner(this), node, readOnly)) {
             // if the user has selected the ok button when closing the dialog
             this.readjustAndRepaint();
             this.evidenceManager.removeNodeEvidenceInAllCases(node);
@@ -454,6 +458,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      *                           and where changes will be saved.
      * @param newNode            specifies if the node whose additionalProperties are going
      *                           to be edited is new.
+     *
      * @return true, if the user save the changes on node; otherwise, false.
      */
     private static boolean requestNodePropertiesToUser2(Window owner, NetworkEditorPanel networkEditorPanel, VisualNode node, boolean newNode) throws ThereIsNoPotentialInNodeException {
@@ -503,7 +508,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      */
     public void changeNetworkProperties() {
         // TODO be careful with local pNESupport and extern pNESupport
-        Window owner = GUIUtils.getOwner(this);
+        Window owner = ComponentUtilities.getOwner(this);
         NetworkPropertiesDialog dialogProperties = new NetworkPropertiesDialog(owner, this.visualNetwork.getProbNet(), this.workingMode != WorkingMode.EDITION);
         dialogProperties.showProperties();
     }
@@ -513,7 +518,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      */
     public void imposePolicyInNode() throws ThereIsNoPotentialInNodeException {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
-        NetworkEditorPanel.requestImposePolicyValues(GUIUtils.getOwner(this), visualNode.getNode());
+        NetworkEditorPanel.requestImposePolicyValues(ComponentUtilities.getOwner(this), visualNode.getNode());
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
     }
@@ -523,7 +528,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      */
     public void editNodePolicy() throws ThereIsNoPotentialInNodeException {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
-        NetworkEditorPanel.requestImposePolicyValues(GUIUtils.getOwner(this), visualNode.getNode());
+        NetworkEditorPanel.requestImposePolicyValues(ComponentUtilities.getOwner(this), visualNode.getNode());
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
     }
@@ -560,7 +565,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         Potential expectedUtility = veExpectedUtilityDecision.getExpectedUtility();
         Node dummyNode = new Node(new ProbNet(), node.getVariable(), node.getNodeType());
         dummyNode.setPotential(expectedUtility);
-        PotentialEditDialog expectedUtilityDialog = new PotentialEditDialog(GUIUtils.getOwner(this), dummyNode, true);
+        PotentialEditDialog expectedUtilityDialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), dummyNode, true);
         expectedUtilityDialog.setTitle("ExpectedUtilityDialog.Title");
         expectedUtilityDialog.requestValues();
         this.visualNetwork.setSelectedAllNodes(false);
@@ -587,7 +592,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
             dummyProbNet.addLink(variable, conditionedVariable, true);
         }
         PotentialEditDialog optimalPolicyDialog =
-                new PotentialEditDialog(GUIUtils.getOwner(this), dummyNode, true);
+                new PotentialEditDialog(ComponentUtilities.getOwner(this), dummyNode, true);
         optimalPolicyDialog.setTitle("OptimalPolicyDialog.Title");
         optimalPolicyDialog.requestValues();
         this.visualNetwork.setSelectedAllNodes(false);
@@ -688,12 +693,12 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         List<VisualNode> selectedNode = this.visualNetwork.getSelectedNodes();
         if (selectedNode.size() == 1) {
             VisualNode node = this.visualNetwork.getLastSelectedNode();
-            new TemporalEvolutionDialog(GUIUtils.getOwner(this), node.getNode(), this.evidenceManager.getPreResolutionEvidence());
+            new TemporalEvolutionDialog(ComponentUtilities.getOwner(this), node.getNode(), this.evidenceManager.getPreResolutionEvidence());
             this.visualNetwork.setSelectedAllNodes(false);
             this.repaint();
             // TODO - Change code
         } else if (selectedNode.isEmpty()) {
-            new TemporalEvolutionDialog(GUIUtils.getOwner(this), this
+            new TemporalEvolutionDialog(ComponentUtilities.getOwner(this), this
                     .getProbNet(), this.evidenceManager.getPreResolutionEvidence());
         }
     }

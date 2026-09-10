@@ -21,6 +21,7 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.dialog.node.PotentialEditDialog;
 import org.openmarkov.gui.exception.BinomialPotentialWrongValueException;
 import org.openmarkov.gui.util.GUIUtils;
+import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,7 +77,7 @@ public class ConditionalGaussianPotentialPanel
     }
     
     private void editMeanPotential() throws ThereIsNoPotentialInNodeException {
-        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), meanDummyNode,
+        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), meanDummyNode,
                                                                           isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?
@@ -96,7 +97,7 @@ public class ConditionalGaussianPotentialPanel
     }
     
     private void editVariancePotential() throws ThereIsNoPotentialInNodeException {
-        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), varianceDummyNode,
+        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), varianceDummyNode,
                                                                           isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?

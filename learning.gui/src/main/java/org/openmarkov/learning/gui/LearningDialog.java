@@ -46,6 +46,7 @@ import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.java.function.PriorityComparator;
+import org.openmarkov.java.swing.ComponentUtilities;
 import org.openmarkov.learning.algorithm.naivebayes.NaiveBayesAlgorithm;
 import org.openmarkov.learning.algorithm.nbderived.fanb.ForestAugmentedNBAlgorithm;
 import org.openmarkov.learning.algorithm.nbderived.kdb.KDBAlgorithm;
@@ -624,7 +625,6 @@ public class LearningDialog extends JDialog {
         discretizePanel.setLayout(new GridLayout(0, 1, 0, 20));
         numIntervalsPanel.setLayout(new GridLayout(0, 1, 0, 20));
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-        setLocationRelativeTo(null);
 
         ButtonGroup variablesButtonGroup = new ButtonGroup();
         variablesButtonGroup.add(allVariablesRadioButton);
@@ -635,7 +635,7 @@ public class LearningDialog extends JDialog {
         resetCaseDatabaseFile();
         pack();
         setMinimumSize(new Dimension(620, 522));
-
+        ComponentUtilities.centerDialogToParent(this);
         // Initial focus on the "Open" button so the user can pick a database
         // immediately by pressing Enter or Space.
         addWindowListener(new WindowAdapter() {
