@@ -383,9 +383,8 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                                 .getNetworkType() instanceof InfluenceDiagramType || currentProbNet
                                 .getNetworkType() instanceof DecisionAnalysisNetworkType
                 ) && currentProbNet.getDecisionCriteria() != null && currentProbNet.getDecisionCriteria().size() > 1;
-                setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC, canPerformCE);
+                setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC, (canPerformCE || currentProbNet.getNetworkType() instanceof DESNetworkType));
                 setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_SENSITIVITY, canPerformCE);
-                setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC, currentProbNet.getNetworkType() instanceof DESNetworkType);
             }
             case INFERENCE -> {
                 setOptionEnabled(ActionCommands.CREATE_NEW_EVIDENCE_CASE, true);
@@ -731,11 +730,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         setOptionEnabled(ActionCommands.TEMPORAL_EVOLUTION_ACTION, canTemporalEvolution);
         setOptionEnabled(ActionCommands.NEXT_SLICE_NODE, canCreateNextSliceNode);
     }
-    
-    // TODO OOPN start
-    
-    // TODO OOPN end
-    
+
     @Override public void afterEditExecutes(PNEdit edit) {
         NetworkEditorPanel currentNetworkEditorPanel = getCurrentNetworkEditorPanel();
         if (currentNetworkEditorPanel == null) return;
