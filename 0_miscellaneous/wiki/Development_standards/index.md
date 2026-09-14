@@ -35,7 +35,7 @@ OpenMarkov also has some functionalities to take into account in every class (th
 modifying other classes):
 
 * [Logger](Logger.md).
-* [OpenMarkov exceptions](OpenMarkov_exceptions.md).
+* [Error handling](error_handling.md).
 * [Testing in OpenMarkov](Testing.md).
 
 [//]: # (Sections to create: Localization)

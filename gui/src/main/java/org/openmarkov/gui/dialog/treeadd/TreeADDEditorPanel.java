@@ -34,7 +34,7 @@ import org.openmarkov.gui.exception.UnexpectedMenuActionException;
 import org.openmarkov.gui.exception.WrongClassException;
 import org.openmarkov.gui.exception.WrongRoleException;
 import org.openmarkov.gui.localize.LocalizedMenuItem;
-import org.openmarkov.gui.util.GUIUtils;
+import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -430,7 +430,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         
         TreePath parentPath = path.getParentPath();
         TreeADDPotential parentTreeADD = (TreeADDPotential) parentPath.getLastPathComponent();
-        ChangeIntervalDialog dialog = new ChangeIntervalDialog(GUIUtils.getOwner(this), branch);
+        ChangeIntervalDialog dialog = new ChangeIntervalDialog(ComponentUtilities.getOwner(this), branch);
         TreeADDModel model = (TreeADDModel) jTree.getModel();
         boolean minBelongsToLeft = false;
         boolean maxBelongsToLeft = false;
@@ -628,7 +628,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
     private void splitInterval(ActionEvent ae, TreeADDBranch branch, TreePath path) throws InvalidLimitInTreeADDException, TriedToSplitIntervalOutsideBoundsException {
         TreePath parentPath = path.getParentPath();
         TreeADDPotential parentTreeADD = (TreeADDPotential) parentPath.getLastPathComponent();
-        SplitIntervalDialog dialog = new SplitIntervalDialog(GUIUtils.getOwner(this));
+        SplitIntervalDialog dialog = new SplitIntervalDialog(ComponentUtilities.getOwner(this));
         TreeADDModel model = (TreeADDModel) jTree.getModel();
         if (dialog.requestValues() != OkCancelDialog.ChosenOption.Ok) {
             return;
@@ -763,7 +763,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
     
     private void addVariablesToPotential(ActionEvent ae, TreeADDBranch branch, TreePath path) {
         TreeADDPotential parentTreeADD = (TreeADDPotential) path.getParentPath().getLastPathComponent();
-        AddVariablesDialog dialog = new AddVariablesDialog(GUIUtils.getOwner(this), branch, parentTreeADD);
+        AddVariablesDialog dialog = new AddVariablesDialog(ComponentUtilities.getOwner(this), branch, parentTreeADD);
         TreeADDModel model = (TreeADDModel) jTree.getModel();
         if (dialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             AddVariablesCheckBoxPanel panel = dialog.getJPanelVariables();
@@ -793,7 +793,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
     
     private void removeVariablesFromPotential(ActionEvent ae, TreeADDBranch branch, TreePath path) {
         TreeADDPotential parentTreeADD = (TreeADDPotential) path.getParentPath().getLastPathComponent();
-        RemoveVariablesDialog dialog = new RemoveVariablesDialog(GUIUtils.getOwner(this), branch, parentTreeADD);
+        RemoveVariablesDialog dialog = new RemoveVariablesDialog(ComponentUtilities.getOwner(this), branch, parentTreeADD);
         TreeADDModel model = (TreeADDModel) jTree.getModel();
         if (dialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             List<JCheckBox> checkBoxes = ((RemoveVariablesCheckBoxPanel) dialog.getJPanelVariables()).getCheckBoxes();
@@ -837,7 +837,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
             throw new UnreachableException(new WrongClassException(TreeADDBranch.class, branch == null ? null : branch.getClass()));
         }
         TreeADDPotential parentTreeADD = (TreeADDPotential) path.getParentPath().getLastPathComponent();
-        RemoveStatesDialog dialog = new RemoveStatesDialog(GUIUtils.getOwner(this), branch, parentTreeADD);
+        RemoveStatesDialog dialog = new RemoveStatesDialog(ComponentUtilities.getOwner(this), branch, parentTreeADD);
         TreeADDModel model = (TreeADDModel) jTree.getModel();
         if (dialog.requestValues() != OkCancelDialog.ChosenOption.Ok) {
             return;
@@ -906,7 +906,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         TreeADDPotential parentTreeADD = (TreeADDPotential) parentPath.getLastPathComponent();
         // BranchStatesCheckBoxPanel checkBoxPanel = new
         // BranchStatesCheckBoxPanel(treeADDBranch, parentTreeADD);
-        AddStatesToBranchDialog dialog = new AddStatesToBranchDialog(GUIUtils.getOwner(this), branch, parentTreeADD);
+        AddStatesToBranchDialog dialog = new AddStatesToBranchDialog(ComponentUtilities.getOwner(this), branch, parentTreeADD);
         TreeADDModel model = (TreeADDModel) jTree.getModel();
         // This must be a treeADD
         if (dialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
@@ -1209,7 +1209,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
             dummyProbNet.getNode(variable).setPotentials(originalPotentials);
             dummyProbNet.addLink(variable, conditionedVariable, true);
         }
-        PotentialEditDialog dialog = new PotentialEditDialog(GUIUtils.getOwner(this), dummy, false);
+        PotentialEditDialog dialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), dummy, false);
         if (dialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             Potential retPotential = dummy.getPotentials().get(0);
             // There is not utilityVariable any more
@@ -1271,7 +1271,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
      * @param path the path
      */
     private void setReference(ActionEvent ae, TreeADDBranch branch, TreePath path) {
-        SetReferenceDialog dialog = new SetReferenceDialog(GUIUtils.getOwner(this), branch, rootTreeADDPotential);
+        SetReferenceDialog dialog = new SetReferenceDialog(ComponentUtilities.getOwner(this), branch, rootTreeADDPotential);
         dialog.setVisible(true);
         if (dialog.getSelectedOption() == OkCancelDialog.ChosenOption.Ok) {
             TreeADDModel model = (TreeADDModel) jTree.getModel();

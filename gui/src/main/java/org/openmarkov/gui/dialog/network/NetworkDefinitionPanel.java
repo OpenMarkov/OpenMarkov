@@ -9,7 +9,10 @@ package org.openmarkov.gui.dialog.network;
 
 import org.openmarkov.core.action.core.ChangeNetworkTypeEdit;
 import org.openmarkov.core.action.core.NetworkCommentEdit;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.model.network.type.NetworkType;
@@ -17,11 +20,19 @@ import org.openmarkov.core.model.network.type.plugin.NetworkTypeUtils;
 import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.dialog.CommentListener;
 import org.openmarkov.gui.dialog.common.CommentHTMLScrollPane;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.java.classUtils.ClassUtils;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.LayoutStyle;
+import java.awt.Dimension;
 import java.text.MessageFormat;
 
 /**
@@ -225,7 +236,7 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
         }
         return jTextAreaLabelNetworkDefinitionComment;
     }
-
+    
     /**
      * The column to the left of the comment: what the box holds, and the way to change it. The
      * button replaces the instruction that the label used to carry, which told the user to
@@ -250,7 +261,7 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
         }
         return commentHeaderPanel;
     }
-
+    
     /**
      * initialises the button that opens the comment editor
      *
@@ -267,7 +278,7 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
         }
         return jButtonEditComment;
     }
-
+    
     /**
      * initialises the getCommentHTMLScrollPaneForNetworkDefinition
      *
@@ -348,6 +359,7 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
     }
     
     private void networkTypeChanged() throws DoEditException {
+        var previousNetworkType = probNet.getNetworkType();
         Class<? extends NetworkType> itemSelected = (Class<? extends NetworkType>) jComboBoxNetworkTypes.getSelectedItem();
         if (itemSelected == null) {
             return;
@@ -370,8 +382,7 @@ public class NetworkDefinitionPanel extends JPanel implements CommentListener {
             parent.update();
             //parent.getNetworkAdvancedPanel().update(probNet); SUSTITUIDA POR 342
         } catch (DoEditException.CannotDoEditException e) {
-            // TODO maintain comboBox with the current probNet
-            // TODO temporal change in exception management
+            this.jComboBoxNetworkTypes.setSelectedItem(previousNetworkType.getClass());
             throw e;
         }
         

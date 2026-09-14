@@ -21,11 +21,11 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @EnabledIf(value = "org.openmarkov.full.AllLicensesAreVisited#isAfterReviewDate",
-        disabledReason = "Review of licenses is postponed until 07/09/2026")
+        disabledReason = "Review of licenses is postponed until 15/09/2026")
 public class AllLicensesAreVisited {
     
     private static boolean isAfterReviewDate() {
-        var date = LocalDateTime.of(2026, 9, 7, 0, 0, 0);
+        var date = LocalDateTime.of(2026, 9, 15, 0, 0, 0);
         return LocalDateTime.now().isAfter(date);
     }
     

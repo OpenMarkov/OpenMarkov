@@ -31,10 +31,10 @@ import org.openmarkov.gui.productTour.tour.TourManager;
 import org.openmarkov.gui.productTour.tour.action.UserActionRequester;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
 import org.openmarkov.gui.toolplugin.ToolPluginManager;
-import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
+import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -411,7 +411,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
                                       
                                       LicenseDialog dialog = new LicenseDialog(MainGUI.INSTANCE, omLicenseList.getFirst(), null);
                                       dialog.setTitle("OpenMarkov's license");
-                                      GUIUtils.showDialog(dialog);
+                                      ComponentUtilities.showDialog(dialog);
                                   })
                                   .build());
         
@@ -433,7 +433,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
                                                                                                                                        .indexOf(license) : 0;
                                                                                   String title = holder.descriptor() + (!holderHasMultipleLicenses ? "" : " - License " + (licenseIndex + 1));
                                                                                   return new JMenuItemBuilder(title)
-                                                                                          .onClick(_ -> GUIUtils.showDialog(new LicenseDialog(MainGUI.INSTANCE, license, licenses)))
+                                                                                          .onClick(_ -> ComponentUtilities.showDialog(new LicenseDialog(MainGUI.INSTANCE, license, licenses)))
                                                                                           .build();
                                                                               });
             this.helpMenu.add(new JMenuItemBuilder("Third-party licenses").withItems(licenseMenuItems).build());
@@ -577,7 +577,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
                         Math.clamp(height, 200, 800)
                 );
                 this.setSize(size);
-                GUIUtils.centerDialogToParent(this);
+                ComponentUtilities.centerDialogToParent(this);
             });
             
             boolean holderHasMultipleLicenses = this.displayedLicense.holder().licenses().size() > 1;

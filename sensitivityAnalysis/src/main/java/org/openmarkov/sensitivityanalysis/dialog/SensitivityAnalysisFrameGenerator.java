@@ -11,11 +11,11 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
-import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.MainGUI;
+import org.openmarkov.java.swing.ComponentUtilities;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisController;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 /**
  * Main {@code JFrame} class for the project
@@ -34,7 +34,7 @@ public class SensitivityAnalysisFrameGenerator {
     public static @Nullable SensitivityAnalysisDialog create(JFrame owner) {
         SensitivityAnalysisController controller = new SensitivityAnalysisController(owner);
         InferenceOptionsDialog inferenceOptionsDialog = new InferenceOptionsDialog(controller.getProbNet(),
-                                                                                   GUIUtils.getOwner(MainGUI.INSTANCE.mainPanel), null);
+                                                                                   ComponentUtilities.getOwner(MainGUI.INSTANCE.mainPanel), null);
         if (inferenceOptionsDialog.getSelectedOption() == OkCancelDialog.ChosenOption.Ok) {
             controller.getConfiguration().setIsUnicriterion(
                     inferenceOptionsDialog.getMulticriteriaOptions()

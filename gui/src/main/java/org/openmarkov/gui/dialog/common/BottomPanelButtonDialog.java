@@ -7,7 +7,7 @@
 
 package org.openmarkov.gui.dialog.common;
 
-import org.openmarkov.gui.util.GUIUtils;
+import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -104,7 +104,7 @@ public class BottomPanelButtonDialog extends DialogBase {
     public final void reassignButtonsToKeys() {
         var buttons = new ArrayList<>(this.getButtons().toList());
         Collections.reverse(buttons);
-        GUIUtils.assignButtonsToKeys((JComponent) this.getContentPane(), buttons, _ -> {
+        ComponentUtilities.assignButtonsToKeys((JComponent) this.getContentPane(), buttons, _ -> {
             if (this.getCancelButton() instanceof JButton cancelButton) {
                 cancelButton.doClick();
             }

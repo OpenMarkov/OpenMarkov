@@ -24,6 +24,7 @@ import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.java.collectionsUtils.streamUtils.StreamUtils;
 import org.openmarkov.java.langUtils.SwitchUtils;
+import org.openmarkov.java.swing.ComponentUtilities;
 import org.openmarkov.java.swing.SimplifiedGridBagConstraint;
 
 import javax.swing.BorderFactory;
@@ -169,7 +170,7 @@ public final class SettingsDialog extends JDialog {
                 UserPreferences.UI_SCALE.set(uiScaleSpinner.getCurrentValue());
             });
             gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, uiScaleLabel, helpToolTip))
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, uiScaleLabel, helpToolTip))
                    .weighty(0)
                    .weightx(0)
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
@@ -207,7 +208,7 @@ public final class SettingsDialog extends JDialog {
                 }
             });
             gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, themeLabel, themeToolTip))
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, themeLabel, themeToolTip))
                    .weighty(0)
                    .weightx(0)
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
@@ -236,12 +237,12 @@ public final class SettingsDialog extends JDialog {
                     }
                 }));
                 optionsLayout.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                             .add(GUIUtils.joinComponents(FlowLayout.LEADING, startUpActionCheckBox, startUpActionHelpToolTip));
+                             .add(ComponentUtilities.joinComponents(FlowLayout.LEADING, startUpActionCheckBox, startUpActionHelpToolTip));
             }
             
             
             gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, restoreDimensionsLabel, helpToolTip))
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, restoreDimensionsLabel, helpToolTip))
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(optionsPanel);
         }
@@ -266,7 +267,7 @@ public final class SettingsDialog extends JDialog {
             addToRecentsCheckBox.addItemListener(e -> UserPreferences.UPDATE_RECENTS_ON_OPEN_NETWORK.set(addToRecentsCheckBox.isSelected()));
             
             gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, addToRecentsLabel, helpToolTip))
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, addToRecentsLabel, helpToolTip))
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(addToRecentsCheckBox);
         }
@@ -313,7 +314,7 @@ public final class SettingsDialog extends JDialog {
             });
             reloadDomains.run();
             gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, restoreDimensionsLabel, helpToolTip))
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, restoreDimensionsLabel, helpToolTip))
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(new JScrollPane(customDomainArea));
         }
@@ -361,7 +362,7 @@ public final class SettingsDialog extends JDialog {
             });
             
             gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, createBackupLabel, toolTip))
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, createBackupLabel, toolTip))
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(createBackupButton);
         }
@@ -420,7 +421,7 @@ public final class SettingsDialog extends JDialog {
             });
             
             gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, restoreBackupLabel, toolTip))
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, restoreBackupLabel, toolTip))
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(restoreBackupButton);
         }
@@ -463,7 +464,7 @@ public final class SettingsDialog extends JDialog {
             });
             
             gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                   .add(GUIUtils.joinComponents(FlowLayout.CENTER, restoreBackupLabel, toolTip))
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, restoreBackupLabel, toolTip))
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(restoreBackupButton);
         }
@@ -498,15 +499,15 @@ public final class SettingsDialog extends JDialog {
                                selectedPreferences.add(userPreference);
                            }
                            gridPanel.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
-                                    .add(GUIUtils.joinComponents(FlowLayout.LEFT, checkbox, GUIUtils.generateTooltipElement(userPreference.backupInfo()
-                                                                                                                                          .preferenceDescription())));
+                                    .add(ComponentUtilities.joinComponents(FlowLayout.LEFT, checkbox, GUIUtils.generateTooltipElement(userPreference.backupInfo()
+                                                                                                                                                    .preferenceDescription())));
                        });
         preferenceChooser.getOKButton().setEnabled(!selectedPreferences.isEmpty());
         gridbag.addCorrectionGlue();
         preferenceChooser.add(new JScrollPane(preferencesPanel), BorderLayout.NORTH);
         preferenceChooser.pack();
         preferenceChooser.setMaximumSize(new Dimension(300, 400));
-        GUIUtils.showDialog(preferenceChooser);
+        ComponentUtilities.showDialog(preferenceChooser);
         return preferenceChooser.getSelectedOption();
     }
     

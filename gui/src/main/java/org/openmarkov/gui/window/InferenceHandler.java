@@ -29,12 +29,12 @@ import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
 import org.openmarkov.gui.dialog.network.OptimalStrategyDialog;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.menutoolbar.common.ActionCommands;
-import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.decisiontree.DecisionTreeEditor;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluation.DANDecompositionIntoSymmetricDANsEvaluation;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluation.DANEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEOptimalIntervention;
+import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.SwingUtilities;
 import java.io.File;
@@ -82,7 +82,7 @@ class InferenceHandler {
         boolean requiredInferenceOptions = isTemporal || isMulticriteria;
 
         if (currentWorkingMode == NetworkEditorPanel.WorkingMode.EDITION && requiredInferenceOptions) {
-            InferenceOptionsDialog dialog = new InferenceOptionsDialog(probNet, GUIUtils.getOwner(mainPanel), MulticriteriaOptions.Type.UNICRITERION);
+            InferenceOptionsDialog dialog = new InferenceOptionsDialog(probNet, ComponentUtilities.getOwner(mainPanel), MulticriteriaOptions.Type.UNICRITERION);
 
             if (dialog.getSelectedOption() == OkCancelDialog.ChosenOption.Cancel) {
                 newWorkingMode = NetworkEditorPanel.WorkingMode.EDITION;
@@ -148,7 +148,7 @@ class InferenceHandler {
 
     void setPropagationOptions() {
         NetworkEditorPanel networkPanel = getCurrentNetworkEditorPanel();
-        new PropagationOptionsDialog(GUIUtils.getOwner(networkPanel.getEditorPanel()), networkPanel.getEditorPanel(),
+        new PropagationOptionsDialog(ComponentUtilities.getOwner(networkPanel.getEditorPanel()), networkPanel.getEditorPanel(),
                                      networkPanel.getMainPanel().getInferenceToolBar())
                 .setVisible(true);
         mainPanel.getMainPanelMenuAssistant().updatePropagateEvidenceButton();
@@ -156,7 +156,7 @@ class InferenceHandler {
 
     void setInferenceOptions(NetworkEditorPanel networkPanel) {
         InferenceOptionsDialog dialog = new InferenceOptionsDialog(networkPanel.getProbNet(),
-                                                                   GUIUtils.getOwner(mainPanel), null);
+                                                                   ComponentUtilities.getOwner(mainPanel), null);
     }
 
     // ── Network expansion ─────────────────────────────────────────
@@ -165,7 +165,7 @@ class InferenceHandler {
         NetworkEditorPanel networkPanelMID = getCurrentNetworkEditorPanel();
         String path = (new File(networkPanelMID.getNetworkFile())).getParent();
         InferenceOptionsDialog costEffectivenessDialog = new InferenceOptionsDialog(probNet,
-                                                                                    GUIUtils.getOwner(mainPanel), null);
+                                                                                    ComponentUtilities.getOwner(mainPanel), null);
         costEffectivenessDialog.getMulticriteriaPanel().setEnabled(false);
         if (costEffectivenessDialog.getSelectedOption() == OkCancelDialog.ChosenOption.Cancel) {
             return;
@@ -193,7 +193,7 @@ class InferenceHandler {
     void showDecisionTree(NetworkEditorPanel networkPanel) throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates, NotEnoughMemoryException {
         try {
             InferenceOptionsDialog costEffectivenessDialog = new InferenceOptionsDialog(networkPanel.getProbNet(),
-                    GUIUtils.getOwner(mainPanel),null);
+                                                                                        ComponentUtilities.getOwner(mainPanel), null);
             
             DecisionTreeEditor decisionTree = new DecisionTreeEditor(networkPanel);
             mainPanel.addCloseableTab("Decision tree for " + networkPanel.getProbNet().getName(), decisionTree);
@@ -217,7 +217,7 @@ class InferenceHandler {
                                                                                                       .getPreResolutionEvidence());
             StrategyTree strategyTree = ((StrategyCarrier) eval.getUtility()).getStrategyTrees()[0];
             strategyTree.pruneAndGraftNode("OD");
-            OptimalStrategyDialog optimalStrategyDialog = new OptimalStrategyDialog(GUIUtils.getOwner(mainPanel),
+            OptimalStrategyDialog optimalStrategyDialog = new OptimalStrategyDialog(ComponentUtilities.getOwner(mainPanel),
                                                                                     probNet, strategyTree);
             optimalStrategyDialog.setVisible(true);
         } else {
@@ -233,7 +233,7 @@ class InferenceHandler {
             }
 
             try {
-                OptimalStrategyDialog optimalStrategyDialog = new OptimalStrategyDialog(GUIUtils.getOwner(mainPanel),
+                OptimalStrategyDialog optimalStrategyDialog = new OptimalStrategyDialog(ComponentUtilities.getOwner(mainPanel),
                                                                                         probNet, veOptimalStrategy);
                 optimalStrategyDialog.setVisible(true);
             } catch (NonProjectablePotentialException e) {

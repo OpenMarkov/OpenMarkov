@@ -11,7 +11,8 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.action.core.PotentialChangeEdit;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
@@ -20,11 +21,11 @@ import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.dialog.node.PotentialEditDialog;
 import org.openmarkov.gui.exception.BinomialPotentialWrongValueException;
-import org.openmarkov.gui.exception.NotEnoughMemoryException;
-import org.openmarkov.gui.util.GUIUtils;
+import org.openmarkov.java.swing.ComponentUtilities;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
 
 
 /**
@@ -69,7 +70,7 @@ public class ConditionalGaussianPotentialPanel
     }
     
     private void editMeanPotential() {
-        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), meanDummyNode,
+        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), meanDummyNode,
                                                                           isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?
@@ -89,7 +90,7 @@ public class ConditionalGaussianPotentialPanel
     }
     
     private void editVariancePotential() {
-        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(GUIUtils.getOwner(this), varianceDummyNode,
+        PotentialEditDialog potentialEditDialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), varianceDummyNode,
                                                                           isReadOnly());
         if (potentialEditDialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
             // TODO: Do nothing?
