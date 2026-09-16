@@ -12,6 +12,7 @@ import org.openmarkov.gui.configuration.GUIColors;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -175,9 +176,13 @@ public class SelectionRectangle {
 	 * otherwise, false.
 	 */
     public boolean containsNode(VisualNode visualNode, Graphics2D g) {
-        return rectangleSelection.contains(visualNode.getShape(g).getBounds2D());
+		return containsShape(visualNode.getShape(g));
 	}
-
+	
+	public boolean containsShape(Shape shape) {
+		return rectangleSelection.contains(shape.getBounds2D());
+	}
+	
 	/**
 	 * Tests if the selection rectangle contains a certain rectangle.
 	 *
