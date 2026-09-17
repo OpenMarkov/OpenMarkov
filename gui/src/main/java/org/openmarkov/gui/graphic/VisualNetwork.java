@@ -30,10 +30,14 @@ import org.openmarkov.gui.window.edition.EditorPanelClipboardAssistant;
 import org.openmarkov.gui.window.edition.SelectedContent;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -361,7 +365,7 @@ public class VisualNetwork implements PNEditListener {
         
         while ((nodeFound == null) && (index < length)) {
             VisualNode node = this.visualNodes.get(index++);
-            if (node.pointIsInsideShape(position, g)) {
+            if (node.pointIsInsideShape(position, this.networkEditorPanel)) {
                 nodeFound = node;
             }
         }
@@ -386,9 +390,9 @@ public class VisualNetwork implements PNEditListener {
         int nodesLength = this.visualNodes.size();
         while ((innerBoxFound == null) && (index < nodesLength)) {
             VisualNode node = this.visualNodes.get(index++);
-            if (node.pointIsInsideShape(position, g)) {
+            if (node.pointIsInsideShape(position, this.networkEditorPanel)) {
                 InnerBox innerBox = node.getInnerBox();
-                if (innerBox.pointIsInsideShape(position, g)) {
+                if (innerBox.pointIsInsideShape(position, this.networkEditorPanel)) {
                     innerBoxFound = innerBox;
                 }
             }
@@ -407,11 +411,11 @@ public class VisualNetwork implements PNEditListener {
      */
     public @Nullable VisualState whatStateInPosition(Point2D.Double position, Graphics2D g) {
         for (VisualNode node : this.visualNodes) {
-            if (node.pointIsInsideShape(position, g) && node.getInnerBox() instanceof FSVariableBox fsVariableBox) {
+            if (node.pointIsInsideShape(position, this.networkEditorPanel) && node.getInnerBox() instanceof FSVariableBox fsVariableBox) {
                 int numStates = node.getInnerBox().getNumStates();
                 for (int i = 0; i < numStates; i++) {
                     VisualState state = fsVariableBox.getVisualState(i);
-                    if (state.pointIsInsideShape(position, g)) {
+                    if (state.pointIsInsideShape(position, this.networkEditorPanel)) {
                         return state;
                     }
                 }
@@ -435,7 +439,7 @@ public class VisualNetwork implements PNEditListener {
         int length = this.visualLinks.size();
         while (index < length) {
             VisualLink link = this.visualLinks.get(index++);
-            if (link.pointIsInsideShape(position, g)) {
+            if (link.pointIsInsideShape(position, this.networkEditorPanel)) {
                 return link;
             }
         }
@@ -652,7 +656,6 @@ public class VisualNetwork implements PNEditListener {
      * @param g
      */
     private void selectElementsInsideSelection(SelectionRectangle selection, Graphics2D g) {
-        
         setSelectedAllNodes(false);
         setSelectedAllLinks(false);
         // Select nodes
@@ -664,6 +667,12 @@ public class VisualNetwork implements PNEditListener {
             }
         }
         // Select links
+        for (VisualLink link : this.visualLinks) {
+            if (selection.containsShape(link.getShape(g))) {
+                setSelectionOfElement(link, true);
+            }
+        }
+        // Select links of nodes
         for (VisualLink selectedLink : getLinksOfNodes(selectedVisualNodes, true)) {
             setSelectionOfElement(selectedLink, true);
         }
@@ -897,7 +906,6 @@ public class VisualNetwork implements PNEditListener {
     public void addToSelection(Point2D.Double cursorPosition, Graphics2D g) {
         VisualNode node;
         VisualLink link;
-        
         if ((node = whatNodeInPosition(cursorPosition, g)) != null) {
             setSelectedNode(node, !node.isSelected());
         } else if ((link = whatLinkInPosition(cursorPosition, g)) != null) {
@@ -941,11 +949,11 @@ public class VisualNetwork implements PNEditListener {
     public enum LinkCreationSourceDirection {
         PARENT, CHILD;
     }
-
+    
     public boolean isLinkCreation() {
         return !this.newLinks.isEmpty();
     }
-
+    
     /**
      * Starts link creation
      *
@@ -957,7 +965,7 @@ public class VisualNetwork implements PNEditListener {
         if (isLinkCreation()) {
             return;
         }
-        if(!preserveLinkSourceDirection){
+        if (!preserveLinkSourceDirection) {
             newLinksSourceDirection = linkSourceDirection;
         }
         selectedNodes.stream().map(node -> {
@@ -1011,9 +1019,11 @@ public class VisualNetwork implements PNEditListener {
                 //Do not update positions
             }
             var addLinkEdit = addLinks.stream()
-                                      .filter(switch (this.newLinksSourceDirection){
-                                          case PARENT -> (Predicate<AddLinkEdit>) linkEdit ->  linkEdit.getNodeFrom() == newLink.source.getNode();
-                                          case CHILD -> (Predicate<AddLinkEdit>)linkEdit ->  linkEdit.getNodeTo() == newLink.source.getNode();
+                                      .filter(switch (this.newLinksSourceDirection) {
+                                          case PARENT ->
+                                                  (Predicate<AddLinkEdit>) linkEdit -> linkEdit.getNodeFrom() == newLink.source.getNode();
+                                          case CHILD ->
+                                                  (Predicate<AddLinkEdit>) linkEdit -> linkEdit.getNodeTo() == newLink.source.getNode();
                                       })
                                       .findFirst()
                                       .orElse(null);
@@ -1039,7 +1049,7 @@ public class VisualNetwork implements PNEditListener {
         }
         try {
             MultiAddLinkEdit multiAddLinkEdit = generateMultiAddLinkInCreation(newLinkDestination);
-            if(multiAddLinkEdit.getEdits().findFirst().isPresent()){
+            if (multiAddLinkEdit.getEdits().findFirst().isPresent()) {
                 multiAddLinkEdit.executeEdit();
             }
         } catch (DoEditException e) {
@@ -1064,7 +1074,7 @@ public class VisualNetwork implements PNEditListener {
         var multiAddLinkEdit = new MultiAddLinkEdit(this.probNet, switch (this.newLinksSourceDirection) {
             case PARENT -> sources;
             case CHILD -> destinations;
-        }, switch (this.newLinksSourceDirection){
+        }, switch (this.newLinksSourceDirection) {
             case PARENT -> destinations;
             case CHILD -> sources;
         }, true);
@@ -1072,7 +1082,7 @@ public class VisualNetwork implements PNEditListener {
     }
     
     public void toggleLinkCreationSource(Point2D.Double point) {
-        this.newLinksSourceDirection = switch (this.newLinksSourceDirection){
+        this.newLinksSourceDirection = switch (this.newLinksSourceDirection) {
             case PARENT -> LinkCreationSourceDirection.CHILD;
             case CHILD -> LinkCreationSourceDirection.PARENT;
         };
@@ -1140,7 +1150,9 @@ public class VisualNetwork implements PNEditListener {
         List<Node> selectedNodes = this
                 .getSelectedNodes().stream().map(VisualNode::getNode).toList();
         List<Link<Node>> selectedLinks = this
-                .getSelectedLinks().stream().map(VisualLink::getLink).toList();
+                .getSelectedLinks().stream().map(VisualLink::getLink)
+                .filter(link -> selectedNodes.contains(link.getFrom()) && selectedNodes.contains(link.getTo()))
+                .toList();
         SelectedContent copiedContent = new SelectedContent(selectedNodes, selectedLinks);
         if (!copiedContent.isEmpty()) {
             clipboardAssistant.copyToClipboard(copiedContent);

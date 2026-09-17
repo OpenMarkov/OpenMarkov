@@ -775,11 +775,12 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         double[] bounds = this.visualNetwork.getNetworkBounds((Graphics2D) this.getGraphics());
         this.currentWidth = Math.min(NetworkEditorPanel.MAX_WIDTH, bounds[1]);
         this.currentHeight = Math.min(NetworkEditorPanel.MAX_HEIGHT, bounds[3]);
+        int width = (int) (Math.round(this.getNewWidth()) + NetworkEditorPanel.EXTRA_PIXELS_SPACE_ON_RIGHT_SIDE * zoomManager.getZoom());
+        int height = (int) (Math.round(this.getNewHeight()) + NetworkEditorPanel.EXTRA_PIXELS_SPACE_ON_BOTTOM_SIDE * zoomManager.getZoom());
         Dimension newDimension = new Dimension(
-                (int) Math.round(this.getNewWidth()) + NetworkEditorPanel.EXTRA_PIXELS_SPACE_ON_RIGHT_SIDE,
-                (int) Math.round(this.getNewHeight()) + NetworkEditorPanel.EXTRA_PIXELS_SPACE_ON_BOTTOM_SIDE
+                Math.max(width, scrollPanel.getViewport().getWidth()),
+                Math.max(height, scrollPanel.getViewport().getHeight())
         );
-        
         this.setPreferredSize(newDimension);
         this.setSize(newDimension);
     }

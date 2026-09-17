@@ -15,8 +15,13 @@ import org.openmarkov.gui.graphics.TextBox;
 import org.openmarkov.gui.window.decisiontree.DecisionTreeEditor;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -55,7 +60,17 @@ public abstract sealed class EditorPanel extends JPanel permits DecisionTreeEdit
         });
         this.addMouseWheelListener(e -> {
             if (e.isControlDown()) {
-                this.setZoom(this.getZoom() + EditorPanel.ZOOM_SPEED_ON_WHEEL * (-e.getWheelRotation()));
+                double oldZoom = this.getZoom();
+                double newZoom = this.getZoom() + EditorPanel.ZOOM_SPEED_ON_WHEEL * (-e.getWheelRotation());
+                
+                JScrollBar horizontalScrollBar = this.scrollPanel.getHorizontalScrollBar();
+                JScrollBar verticalScrollBar = this.scrollPanel.getVerticalScrollBar();
+                
+                
+                this.setZoom(newZoom);
+                double scaleChange = newZoom / oldZoom;
+                horizontalScrollBar.setValue((int) (e.getX() * scaleChange) - (e.getX() - horizontalScrollBar.getValue()));
+                verticalScrollBar.setValue((int) (e.getY() * scaleChange) - (e.getY() - verticalScrollBar.getValue()));
             } else {
                 this.getParent().dispatchEvent(e);
             }
