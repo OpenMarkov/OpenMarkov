@@ -509,7 +509,7 @@ public class LinkRestrictionPotentialOperations {
 	public static void setPotentialWithRestrictions(Node node, Potential newPotential) {
 		List<Potential> potentials = new ArrayList<>();
 		potentials.add(newPotential);
-		node.setPotentials(potentials);
+ 		node.setPotentials(potentials);
 		// update potential with link restriction
 		if (newPotential instanceof TablePotential && node.getNodeType() != NodeType.DECISION) {
 			Potential restricted = updatePotentialByLinkRestrictions(node);

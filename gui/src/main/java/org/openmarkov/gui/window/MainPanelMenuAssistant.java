@@ -256,7 +256,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                             hasUncertainty = true;
                         }
                     } else {
-                        if (potential.isUncertain()) {
+                        if (potential != null && potential.isUncertain()) {
                             hasUncertainty = true;
                         }
                     }

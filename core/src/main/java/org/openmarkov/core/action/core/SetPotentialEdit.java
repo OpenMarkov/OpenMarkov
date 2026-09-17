@@ -52,7 +52,7 @@ public class SetPotentialEdit extends PNEdit {
         this.node = node;
         // If node is a decision node it may have no potential assigned yet.
         if (!node.getPotentials().isEmpty()) {
-            lastPotential = node.getPotentials().getFirst();
+            lastPotential = node.getPotential();
         } else {
             lastPotential = null;
         }

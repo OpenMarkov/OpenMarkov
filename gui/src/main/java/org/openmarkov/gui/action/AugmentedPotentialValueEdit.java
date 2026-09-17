@@ -99,7 +99,7 @@ import static org.openmarkov.core.expression.VariableExpression.Common.COMPLEMEN
         boolean isAugmentedProbTablePotential = false;
         
         this.node = node;
-        oldPotential = node.getPotentials().get(0);
+        oldPotential = node.getPotential();
         if (oldPotential instanceof AugmentedProbTablePotential oldAugmentedPotential) {
             oldAugmentedProbTablePotential = oldAugmentedPotential;
             newAugmentedProbTablePotential = new AugmentedProbTablePotential(oldAugmentedProbTablePotential);

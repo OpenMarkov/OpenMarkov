@@ -162,7 +162,7 @@ public class PotentialEditPanel extends JPanel {
             this.initializePotential();
         }
         List<Potential> potentials = this.node.getPotentials();
-        if (!potentials.isEmpty() && potentials.getFirst().getComment() != null && !potentials.getFirst().getComment()
+        if (!potentials.isEmpty() && potentials.getFirst() != null && potentials.getFirst().getComment() != null && !potentials.getFirst().getComment()
                                                                                               .isEmpty()) {
             this.getCommentPane().setCommentHTMLTextPaneText(potentials.getFirst().getComment());
         }
@@ -227,8 +227,11 @@ public class PotentialEditPanel extends JPanel {
      */
     private JComboBox<Class<? extends Potential>> getPotentialTypeJCombobox() throws ThereIsNoPotentialInNodeException {
         if (this.potentialTypeComboBox == null) {
-            if (node.getPotential() == null)
-                node.setPotential(PotentialUtils.generateDefaultPotential(node));
+            if (node.getPotential() == null){
+                //node.setPotential(PotentialUtils.generateDefaultPotential(node));
+                //this.instanciatePotential(PotentialUtils.generateDefaultPotential(node));
+                setPotentialInNode(PotentialUtils.generateDefaultPotential(node));
+            }
             Class<? extends Potential> potentialClass = this.node.getPotential().getClass();
             List<Class<? extends Potential>> filteredPotentialNames = new ArrayList<>(PotentialUtils.getFilteredPotentialClasses(this.node));
             filteredPotentialNames.removeIf(availablePotentialClass -> !ClassUtils.isConcrete(availablePotentialClass));
@@ -706,6 +709,8 @@ public class PotentialEditPanel extends JPanel {
     protected void removePotentialOnClose(@Nullable Potential originalPotential) {
         if (originalPotential != null) {
             LinkRestrictionPotentialOperations.setPotentialWithRestrictions(this.node, originalPotential);
+        }else{
+            node.clearPotentials();
         }
     }
     

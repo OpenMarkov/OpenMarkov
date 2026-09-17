@@ -155,10 +155,6 @@ public class PotentialUtils {
             case EVENT -> new DeltaPotential(variableAndParents, PotentialRole.CONDITIONAL_PROBABILITY, 0.02);
         };
     }
-    @Nullable public static Potential generateUniformPotential(ProbNet probNet, Variable variable) {
-        final ArrayList<Variable> variableAndParents = PotentialOperations.variableAndParents(probNet, variable);
-        return new UniformPotential(variableAndParents, PotentialRole.CONDITIONAL_PROBABILITY);
-    }
     
     @Nullable public static Potential generateDefaultPotential(Node node) {
         return PotentialUtils.generateDefaultPotential(node.getProbNet(), node.getVariable(), node.getNodeType());
