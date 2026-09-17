@@ -4,11 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.openmarkov.core.exception.CannotNormalizePotentialException;
-import org.openmarkov.core.exception.ConstraintViolatedException;
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.*;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.ProbNet;
@@ -72,7 +68,7 @@ public class StorageTest {
     @Tag(TestSpeed.SLOW)
     @Test
     public void testGetDataToPrint()
-            throws IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NonProjectablePotentialException, ConstraintViolatedException, CannotNormalizePotentialException {
+            throws IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NonProjectablePotentialException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
 
         AlgorithmName algorithmName;
         for (int i = 0; i < 2; i++) {

@@ -161,7 +161,7 @@
     "ThereIsALoop",
     "ThereIsMoreThanOneConditioningVariable",
     "ThereIsNoNodeInDataException",
-    "ThereIsNoPotentialsInNodeException",
+    "ThereIsNoPotentialInNodeException",
     "ThereIsNoTimeVariableInWeibullHazardPotential",
     "ThereMustBeJustOneEventInConfiguration",
     "ThetaValueIsWrong",
