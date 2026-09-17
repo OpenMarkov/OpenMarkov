@@ -8,8 +8,9 @@
 package org.openmarkov.core.model.network;
 
 import org.openmarkov.core.action.base.StateAction;
-import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.exception.NotSupportedOperationException;
+import org.openmarkov.core.exception.ThereIsNoPotentialsInNodeException;
+import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
@@ -227,8 +228,12 @@ public final class VariableStateOperations {
     private static void setPotentialAfterReorderingFirstPotential(Node auxNode, Variable variable,
                                                                   State[] newStates) {
         if (auxNode.getNodeType() == NodeType.CHANCE || auxNode.getNodeType() == NodeType.UTILITY) {
-            Potential oldPotential = auxNode.getPotentials().getFirst();
-            Potential newPotential = oldPotential.reorder(variable, newStates);
+            Potential oldPotential = null;
+            try {
+                oldPotential = auxNode.getFirstPotential();
+            } catch (ThereIsNoPotentialsInNodeException e) {
+            }
+            Potential newPotential = oldPotential != null ? oldPotential.reorder(variable, newStates) : null;
             if (newPotential != null) {
                 auxNode.setPotential(newPotential);
             }

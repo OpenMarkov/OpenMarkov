@@ -8,9 +8,14 @@
 package org.openmarkov.gui.graphic;
 
 import org.openmarkov.core.model.network.Point2D;
+import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.BasicStroke;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -97,14 +102,21 @@ public abstract sealed class VisualElement permits InnerBox, VisualArrow, Visual
 	/**
 	 * Determines if the point is inside the shape.
 	 *
-	 * @param point point to check.
-	 * @param g     graphic object where the shape can be painted.
+	 * @param point              point to check.
+	 * @param networkEditorPanel graphic object where the shape can be painted.
+	 *
 	 * @return true if the point is inside the shape; otherwise, false.
 	 */
-	public boolean pointIsInsideShape(Point2D.Double point, Graphics2D g) {
-		Shape shape = this.drawnBounds==null ? getShape(g):this.drawnBounds;
-		boolean res = shape != null && shape.contains(new java.awt.geom.Point2D.Double(point.x, point.y));
-		return res;
+	public boolean pointIsInsideShape(Point2D.Double point, NetworkEditorPanel networkEditorPanel) {
+		Shape shape = this.drawnBounds == null ? getShape((Graphics2D) networkEditorPanel.getGraphics()) : this.drawnBounds;
+		double x = point.x;
+		double y = point.y;
+		//Nodes are offset
+		if (this instanceof VisualNode) {
+			y -= networkEditorPanel.getScrollPanel().getVerticalScrollBar().getValue();
+			x -= networkEditorPanel.getScrollPanel().getHorizontalScrollBar().getValue();
+		}
+		return shape != null && shape.contains(new java.awt.geom.Point2D.Double(x, y));
     }
 
 	/**

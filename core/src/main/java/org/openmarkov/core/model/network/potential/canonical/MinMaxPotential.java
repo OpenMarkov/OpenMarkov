@@ -61,10 +61,8 @@ public abstract class MinMaxPotential extends ICIPotential {
     public MinMaxPotential(ICIModelType model, List<Variable> variables) {
         // In principle, role will be "conditional probability"
         super(model, variables);
-        Variable conditionedVariable = getConditionedVariable();
-        String pseudoVariableName = "pseudo-" + conditionedVariable.getName();
         // TODO Check no other variable exists with the same name
-        pseudoVariable = new Variable(pseudoVariableName, conditionedVariable.getNumStates());
+        pseudoVariable = createPseudoVariable(getConditionedVariable());
     }
     
     /**
@@ -74,10 +72,8 @@ public abstract class MinMaxPotential extends ICIPotential {
      */
     public MinMaxPotential(MinMaxPotential potential) {
         super(potential);
-        Variable conditionedVariable = getConditionedVariable();
-        String pseudoVariableName = "pseudo-" + conditionedVariable.getName();
         // TODO Check no other variable exists with the same name
-        pseudoVariable = new Variable(pseudoVariableName, conditionedVariable.getNumStates());
+        pseudoVariable = createPseudoVariable(getConditionedVariable());
     }
     
     // Methods
@@ -150,6 +146,24 @@ public abstract class MinMaxPotential extends ICIPotential {
     
     public Variable getPseudoVariable() {
         return pseudoVariable;
+    }
+
+    /**
+     * Builds the pseudo variable of {@code conditionedVariable}: same states, name marked with
+     * "pseudo-".
+     */
+    private static Variable createPseudoVariable(Variable conditionedVariable) {
+        return new Variable("pseudo-" + conditionedVariable.getName(), conditionedVariable.getNumStates());
+    }
+
+    /**
+     * Replacing the conditioned variable rebuilds the pseudo variable, which is named after it.
+     */
+    @Override public void replaceVariable(int position, Variable variable) {
+        super.replaceVariable(position, variable);
+        if (position == 0) {
+            pseudoVariable = createPseudoVariable(variable);
+        }
     }
 
     /**
@@ -229,9 +243,7 @@ public abstract class MinMaxPotential extends ICIPotential {
         // conditioned variable, as both constructors build it. Taking the original's instead, as
         // this line used to, handed the two potentials the same object and undid the fresh one the
         // copy constructor had already made.
-        Variable copiedChild = potential.getConditionedVariable();
-        potential.pseudoVariable = new Variable("pseudo-" + copiedChild.getName(),
-                                                copiedChild.getNumStates());
+        potential.pseudoVariable = createPseudoVariable(potential.getConditionedVariable());
         return potential;
     }
     
