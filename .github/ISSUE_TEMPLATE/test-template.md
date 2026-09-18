@@ -3,6 +3,7 @@ name: Bug Report
 description: File a bug report.
 title: "[Bug]: "
 labels: ["bug", "triage"]
+about: Long description of the template.
 type: bug
 body:
   - type: markdown
