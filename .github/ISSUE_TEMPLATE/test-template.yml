@@ -1,7 +1,6 @@
 ---
 name: Short description.
 description: File a bug report.
-title: ""
 labels: ["Priority - Minor", "Status - Pending review"]
 type: bug
 body:
