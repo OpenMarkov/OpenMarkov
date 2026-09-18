@@ -1,8 +1,8 @@
 ---
 name: Short description.
 description: File a bug report.
-title: "[Bug]: "
-labels: ["bug", "triage"]
+title: ""
+labels: ["Priority - Minor", "Status - Pending review"]
 type: bug
 body:
   - type: markdown
