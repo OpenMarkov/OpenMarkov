@@ -1,9 +1,8 @@
 ---
 name: Short description.
 description: File a bug report.
-labels: ["Priority - Minor", "Status - Pending review"]
+labels: ["Priority - Minor", "Status - Pending review", "priority: Low"]
 type: bug
-priority: Low
 body:
   - type: markdown
     attributes:
