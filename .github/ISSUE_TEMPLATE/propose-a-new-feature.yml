@@ -47,6 +47,18 @@ body:
     validations:
       required: false
 
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: | 
+          Tell us others proposals you have also thought to fix this problem (if any).<br>
+          Images can be drag & dropped here.
+      placeholder: |
+          Example: Instead of adding annotations, since nodes have "Comments", these could be shown visually in the network in the same way as explained for annotations.
+    validations:
+      required: false
+
   - type: upload
     id: files
     attributes:
