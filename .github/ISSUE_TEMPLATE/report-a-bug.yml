@@ -30,14 +30,12 @@ body:
       required: true
 
   - type: textarea
-    id: log-or-stacktrace
+    id: stacktrace
     attributes:
-      label: Log or Stacktrace
+      label: Stacktrace
       render: shell
       description: | 
-          If the bug comes from an unexpected error, a dialog will allow you to copy the stacktrace or log. If you aren't given this option, leave a blank.<br>
-          <br>
-          The log is more useful to us than the stacktrace, but the log might contain sensitive information if you have used any in your session, so you can paste the stacktrace instead.          
+          If the bug comes from an unexpected error, a dialog will allow you to copy the stacktrace or to save the log. If you aren't given this option, leave a blank.<br>     
       placeholder: |
           2026-09-19 13:17:52,749 [org.openmarkov.gui.dialog.OMExceptionHandler#uncaughtException:49] ERROR:
           java.lang.RuntimeException: Error
@@ -77,7 +75,10 @@ body:
     id: files
     attributes:
       label: Upload files
-      description: If possible, add files that help to explain the bug, such as screenshots or network files.
+      description: |
+             If possible, add files that help to explain the bug, such as screenshots or network files.<br>
+             <br>
+             If you saw an error dialog allowing you to save a log, sending it to us could help us further to solve the error, but the log might contain sensitive information, so send it only if you haven't used any senstive information during your session.
     validations:
       required: false
 
