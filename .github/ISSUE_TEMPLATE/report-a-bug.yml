@@ -34,17 +34,18 @@ body:
     attributes:
       label: Log or Stacktrace
       description: | 
-          The log is more useful to us than the stacktrace, but the log might contain sensitive information if you have used any in your session, so you can paste the stacktrace instead.
-          <br>If not applicable, write "Does not apply.".
-          
+          If the bug comes from an unexpected error, a dialog will allow you to copy the stacktrace or log. If you aren't given this option, write "Does not apply.".
+          The log is more useful to us than the stacktrace, but the log might contain sensitive information if you have used any in your session, so you can paste the stacktrace instead.          
       placeholder: |
-          Example: 
-          1. Open the properties for a node.
-          2. Change the name to a new one.
-          3. Click on accept.
-          At this point, you'll see the network, but the node hasn't changed its name.
-    validations:
-      required: true
+          2026-09-19 13:17:52,749 [org.openmarkov.gui.dialog.OMExceptionHandler#uncaughtException:49] ERROR:
+          java.lang.RuntimeException: Error
+          	at org.openmarkov.full@0.3.0-SNAPSHOT/org.openmarkov.full.BreakPointPlugin.lambda$toMenuItem$0(BreakPointPlugin.java:33)
+          	at org.openmarkov.gui@0.3.0-SNAPSHOT/org.openmarkov.gui.componentBuilder.JMenuItemBuilder.lambda$onClick$0(JMenuItemBuilder.java:93)
+          	at org.openmarkov.gui@0.3.0-SNAPSHOT/org.openmarkov.gui.componentBuilder.JMenuItemBuilder.lambda$build$0(JMenuItemBuilder.java:181)
+          	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972)
+          	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2314)
+      validations:
+        required: true
   
   - type: dropdown
     id: os
