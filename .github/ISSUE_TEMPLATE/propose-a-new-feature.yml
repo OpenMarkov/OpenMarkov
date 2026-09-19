@@ -33,7 +33,7 @@ body:
       required: true
 
   - type: textarea
-    id: concept
+    id: need-for-proposal
     attributes:
       label: Why is it needed
       description: | 
