@@ -30,9 +30,9 @@ body:
       required: true
 
   - type: textarea
-    id: stacktrace
+    id: error-stacktrace
     attributes:
-      label: Stacktrace
+      label: Error stacktrace
       render: shell
       description: | 
           If the bug comes from an unexpected error, a dialog will allow you to copy the stacktrace or to save the log. If you aren't given this option, leave a blank.<br>     
