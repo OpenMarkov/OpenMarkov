@@ -1,0 +1,58 @@
+---
+name: Propose a new feature.
+description: Suggest a new feature to be implemented in OpenMarkov.
+labels: ["Priority - Minor", "Status - Pending review", "Feature - Proposal"]
+type: feature
+body:
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: | 
+          What your proposal tries to accomplish?.<br>
+          Images can be drag & dropped here.
+      placeholder: |
+          Example: Being able to add annotations to networks.
+    validations:
+      required: true
+
+  - type: textarea
+    id: concept
+    attributes:
+      label: Proposed concept
+      description: | 
+          Tell us how your proposal would work.<br>
+          Images can be drag & dropped here.
+      placeholder: |
+          Example: 
+          When an user does a right-click on an empty space on a network, they see a new option "Create note".
+          When they click on "Create node", a rectangle appears where they can write an annotation for users to see.
+          A button could also allow to hide/show these notes.
+    validations:
+      required: true
+
+  - type: textarea
+    id: concept
+    attributes:
+      label: Why is it needed
+      description: | 
+          Tell us how this proposal will benefit OpenMarkov. This is not required, but if you can make us see why it is no benefitial, the chances of your proposal being accepted would be increased.<br>
+          Images can be drag & dropped here.
+      placeholder: |
+          Example: 
+          OpenMarkov only allows to see notes when opening a network, node, or a relation, if some information is extremely relevant and should be seen at all times, a user will likely miss it.<br>
+          We are currently developing an educational course about OpenMarkov, and if students were able to see those notes, they would acquire knowledge faster.
+    validations:
+      required: false
+
+  - type: upload
+    id: files
+    attributes:
+      label: Upload files
+      description: |
+             If needed, you can add files that help to explain your proposal here.
+    validations:
+      required: false
+
+---
