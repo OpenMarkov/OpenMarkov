@@ -37,7 +37,7 @@ body:
     attributes:
       label: Why is it needed
       description: | 
-          Tell us how this proposal will benefit OpenMarkov. This is not required, but if you can make us see why it is no benefitial, the chances of your proposal being accepted would be increased.<br>
+          Tell us how this proposal will benefit OpenMarkov. This is not required, but if you can make us see why your proposal is benefitial, the chances of your proposal being accepted would be increased.<br>
           Images can be drag & dropped here.
       placeholder: |
           Example: 
