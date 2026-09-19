@@ -1,0 +1,69 @@
+---
+name: Propose improvements on existing features.
+description: Suggest how a feature can be improved.
+labels: ["Priority - Minor", "Status - Pending review", "Feature - Enhancement"]
+type: feature
+body:
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Problem context
+      description: | 
+          What feature are you trying to make better?.<br>
+          Images can be drag & dropped here.
+      placeholder: |
+          Example: Adding nodes can be done with right-click and then press on "Create node of type X", but this is tedious when I know all of the nodes I want to create before hand.
+    validations:
+      required: true
+
+  - type: textarea
+    id: concept
+    attributes:
+      label: Proposed concept
+      description: | 
+          Tell us how your proposal would work.<br>
+          Images can be drag & dropped here.
+      placeholder: |
+          Example: 
+          A new option by the name "Create nodes from CSV" could be added to the "Edit".
+          When used, a File Chooser would allow me to select CSV files. These CSV files have the name of the nodes in the first column, and their type on the second.
+          Once I select a CSV file, OpenMarkov would show a table with all the nodes to create and their types. Pressing in a "Create" button would add them.
+          Optional: This could also be used to add links.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: | 
+          Tell us others proposals you have also thought to fix this problem (if any).<br>
+          Images can be drag & dropped here.
+      placeholder: |
+          Example: The option "Create nodes from CSV" could also have been just a "Create nodes from table", where OpenMarkov shows a table where the first column is node names, and the second is their type, so I can create all of them from OpenMarkov insteado of a CSV file.
+    validations:
+      required: false
+
+  - type: textarea
+    id: need-for-proposal
+    attributes:
+      label: Why is it needed
+      description: | 
+          Tell us how this proposal will benefit OpenMarkov. This is not required, but if you can make us see why your proposal is benefitial, the chances of your proposal being accepted would be increased.<br>
+          Images can be drag & dropped here.
+      placeholder: |
+          Example: This makes the creation of new networks much easier as users would require much less time to write new networks.          
+    validations:
+      required: false
+
+  - type: upload
+    id: files
+    attributes:
+      label: Upload files
+      description: |
+             If needed, you can add files that help to explain your proposal here.
+    validations:
+      required: false
+
+---
