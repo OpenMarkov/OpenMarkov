@@ -41,7 +41,8 @@ body:
           Images can be drag & dropped here.
       placeholder: |
           Example: 
-          OpenMarkov only allows to see notes when opening a network, node, or a relation, if some information is extremely relevant and should be seen at all times, a user will likely miss it.<br>
+          OpenMarkov only allows to see notes when opening a network, node, or a relation, if some information is extremely relevant and should be seen at all times, a user will likely miss it.
+          
           We are currently developing an educational course about OpenMarkov, and if students were able to see those notes, they would acquire knowledge faster.
     validations:
       required: false
