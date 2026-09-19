@@ -11,8 +11,22 @@ body:
       label: Description
       description: Tell us what happened and what you were expecting to happen.
       placeholder: |
-          Ex: When opening the properties for a node "A" and giving it a new name "Disease",
-          the name remains at the original name ("A"), while it was expected to change to the new name. 
+          Example: When opening the properties for a node "A" and giving it a new name "Disease", the name remains at the original name ("A"), while it was expected to change to the new name. 
+    validations:
+      required: true
+
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps
+      description: Tell us what you did in order to get the bug to happen.
+      placeholder: |
+          Example: 
+          1. Open the properties for a node.
+          2. Change the name to a new one.
+          3. Click on accept.
+          At this point, you'll see the network, but the node hasn't changed its name.
     validations:
       required: true
 
