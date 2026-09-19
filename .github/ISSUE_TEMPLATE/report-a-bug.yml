@@ -20,7 +20,7 @@ body:
   - type: textarea
     id: reproduction-steps
     attributes:
-      label: Steps
+      label: Steps to reproduce the bug
       description: | 
           Tell us what you did in order to get the bug to happen.<br>
           Images can be drag & dropped here.
