@@ -35,6 +35,7 @@ body:
       label: Log or Stacktrace
       description: | 
           If the bug comes from an unexpected error, a dialog will allow you to copy the stacktrace or log. If you aren't given this option, leave a blank.<br>
+          <br>
           The log is more useful to us than the stacktrace, but the log might contain sensitive information if you have used any in your session, so you can paste the stacktrace instead.          
       placeholder: |
           2026-09-19 13:17:52,749 [org.openmarkov.gui.dialog.OMExceptionHandler#uncaughtException:49] ERROR:
