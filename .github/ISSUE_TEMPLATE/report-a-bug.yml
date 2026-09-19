@@ -30,7 +30,7 @@ body:
       required: true
 
   - type: textarea
-    id: reproduction-steps
+    id: log-or-stacktrace
     attributes:
       label: Log or Stacktrace
       description: | 
