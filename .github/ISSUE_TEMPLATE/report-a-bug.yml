@@ -15,7 +15,6 @@ body:
     validations:
       required: true
 
-
   - type: textarea
     id: reproduction-steps
     attributes:
@@ -30,6 +29,23 @@ body:
     validations:
       required: true
 
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Log or Stacktrace
+      description: | 
+          If this bug led to an unexpected error where you are given the change to copy a log or stacktrace.
+          If not applicable, write "Does not apply.".
+          The log is more useful to us than the stacktrace, but the log might contain sensitive information if you have used any in your session, so you can paste the stacktrace instead.
+      placeholder: |
+          Example: 
+          1. Open the properties for a node.
+          2. Change the name to a new one.
+          3. Click on accept.
+          At this point, you'll see the network, but the node hasn't changed its name.
+    validations:
+      required: true
+  
   - type: dropdown
     id: os
     attributes:
@@ -57,6 +73,16 @@ body:
       default: 0
     validations:
       required: true
+
+  - type: upload
+    id: files
+    attributes:
+      label: Upload files
+      description: If possible, add files that help to explain the bug, such as screenshots or network files.
+    validations:
+      required: false
+
+
 
 
   - type: markdown
