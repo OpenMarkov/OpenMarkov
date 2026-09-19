@@ -9,7 +9,9 @@ body:
     id: what-happened
     attributes:
       label: Description
-      description: Tell us what happened and what you were expecting to happen.
+      description: | 
+          Tell us what happened and what you were expecting to happen.<br>
+          Images can be drag & dropped here.
       placeholder: |
           Example: When opening the properties for a node "A" and giving it a new name "Disease", the name remains at the original name ("A"), while it was expected to change to the new name. 
     validations:
@@ -19,7 +21,9 @@ body:
     id: reproduction-steps
     attributes:
       label: Steps
-      description: Tell us what you did in order to get the bug to happen.
+      description: | 
+          Tell us what you did in order to get the bug to happen.<br>
+          Images can be drag & dropped here.
       placeholder: |
           Example: 
           1. Open the properties for a node.
