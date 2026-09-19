@@ -62,7 +62,7 @@ body:
     attributes:
       label: Upload files
       description: |
-             If needed, you can add files that help to explain your proposal here.
+             If you need it, you can add files that help to explain your proposal here.
     validations:
       required: false
 
