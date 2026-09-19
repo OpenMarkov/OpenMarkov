@@ -41,6 +41,13 @@ body:
           2026-09-19 13:17:52,749 [org.openmarkov.gui.dialog.OMExceptionHandler#uncaughtException:49] ERROR:
           java.lang.RuntimeException: Error
           	at org.openmarkov.full@0.3.0-SNAPSHOT/org.openmarkov.full.BreakPointPlugin.lambda$toMenuItem$0(BreakPointPlugin.java:33)
+      value: |
+              <details>
+              <summary>Click to expand full log output</summary>
+              ```text
+              Paste logs here
+              ```
+              </details>
     validations:
       required: false
   
