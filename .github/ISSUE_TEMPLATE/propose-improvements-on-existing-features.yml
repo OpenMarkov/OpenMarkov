@@ -34,18 +34,6 @@ body:
       required: true
 
   - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternatives
-      description: | 
-          Tell us others proposals you have also thought to fix this problem (if any).<br>
-          Images can be drag & dropped here.
-      placeholder: |
-          Example: The option "Create nodes from CSV" could also have been just a "Create nodes from table", where OpenMarkov shows a table where the first column is node names, and the second is their type, so I can create all of them from OpenMarkov insteado of a CSV file.
-    validations:
-      required: false
-
-  - type: textarea
     id: need-for-proposal
     attributes:
       label: Why is it needed
@@ -54,6 +42,18 @@ body:
           Images can be drag & dropped here.
       placeholder: |
           Example: This makes the creation of new networks much easier as users would require much less time to write new networks.          
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: | 
+          Tell us others proposals you have also thought to fix this problem (if any).<br>
+          Images can be drag & dropped here.
+      placeholder: |
+          Example: The option "Create nodes from CSV" could also have been just a "Create nodes from table", where OpenMarkov shows a table where the first column is node names, and the second is their type, so I can create all of them from OpenMarkov insteado of a CSV file.
     validations:
       required: false
 
