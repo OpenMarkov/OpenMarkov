@@ -15,6 +15,7 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 
 import java.util.ArrayList;
@@ -42,13 +43,19 @@ class AbsorbNodeEditTest {
 	void setUp() throws Exception {
 		probNet = new ProbNet(BayesianNetworkType.getUniqueInstance());
 		new AddNodeEdit(probNet, new Variable("A", 2), NodeType.CHANCE, null).executeEdit();
+		new SetPotentialEdit(probNet.getNode(probNet.getVariable("A")), PotentialUtils.generateDefaultPotential(probNet.getNode(probNet.getVariable("A")))).executeEdit();
+
 		new AddNodeEdit(probNet, new Variable("B", 3), NodeType.CHANCE, null).executeEdit();
+		new SetPotentialEdit(probNet.getNode(probNet.getVariable("B")), PotentialUtils.generateDefaultPotential(probNet.getNode(probNet.getVariable("B")))).executeEdit();
+
 		new AddNodeEdit(probNet, new Variable("C", 2), NodeType.CHANCE, null).executeEdit();
+		new SetPotentialEdit(probNet.getNode(probNet.getVariable("C")), PotentialUtils.generateDefaultPotential(probNet.getNode(probNet.getVariable("C")))).executeEdit();
+
 		probNet.addLink(probNet.getVariable("A"), probNet.getVariable("C"), true);
 		probNet.addLink(probNet.getVariable("B"), probNet.getVariable("C"), true);
 
 		childNode = probNet.getNode("C");
-		valuesBefore = ((TablePotential) childNode.getPotentials().getFirst()).getValues().clone();
+		valuesBefore = ((TablePotential) childNode.getPotential()).getValues().clone();
 	}
 
 	@Test

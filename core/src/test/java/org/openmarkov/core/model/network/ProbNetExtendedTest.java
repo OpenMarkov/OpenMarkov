@@ -609,11 +609,12 @@ public class ProbNetExtendedTest {
             Variable v = new Variable("V", 2);
             net.addNodeConsistently(v, NodeType.CHANCE, new Point2D.Double(150.0, 250.0));
 
+
             Node node = net.getNode(v);
             assertNotNull(node);
             assertEquals(150, (int) node.getCoordinateX());
             assertEquals(250, (int) node.getCoordinateY());
-            assertFalse(node.getPotentials().isEmpty());
+            assertTrue(node.getPotentials().isEmpty());
         }
 
         @Test

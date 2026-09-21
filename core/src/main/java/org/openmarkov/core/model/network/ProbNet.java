@@ -789,10 +789,6 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
         if (nodeType == NodeType.DECISION) {
             newNode.setPolicyType(PolicyType.OPTIMAL);
         }
-        /*var defaultPotential = PotentialUtils.generateDefaultPotential(this, variable, nodeType);
-        if (defaultPotential != null) {
-            addPotential(defaultPotential);
-        }*/
         newNode.setCoordinateX((int) cursorPosition.getX());
         newNode.setCoordinateY((int) cursorPosition.getY());
     }

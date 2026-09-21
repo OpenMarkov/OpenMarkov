@@ -61,6 +61,7 @@ import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
 import org.openmarkov.core.model.network.constraint.OnlyNumericVariables;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.model.network.type.DECPOMDPType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
@@ -222,7 +223,7 @@ final class EditUndoCases {
         cases.add(passes(PotentialChangeEdit.class, "changing the potential of a node", () -> {
             ProbNet net = bayesianNetwork();
             Node node = net.getNode("A");
-            return new PotentialChangeEdit(node, node.getPotentials().getFirst(), otherPotentialOf(node));
+            return new PotentialChangeEdit(node, node.getPotential(), otherPotentialOf(node));
         }));
         cases.add(passes(SetPotentialVariablesEdit.class, "reordering the variables of a potential", () -> {
             ProbNet net = bayesianNetwork();
@@ -299,8 +300,14 @@ final class EditUndoCases {
         ProbNet net = new ProbNet(BayesianNetworkType.getUniqueInstance());
         net.setName("undo");
         new AddNodeEdit(net, new Variable("A", 2), NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(net.getVariable("A")), PotentialUtils.generateDefaultPotential(net.getNode(net.getVariable("A")))).executeEdit();
+
         new AddNodeEdit(net, new Variable("B", 3), NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(net.getVariable("B")), PotentialUtils.generateDefaultPotential(net.getNode(net.getVariable("B")))).executeEdit();
+
         new AddNodeEdit(net, new Variable("C", 2), NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(net.getVariable("C")), PotentialUtils.generateDefaultPotential(net.getNode(net.getVariable("C")))).executeEdit();
+
         new AddLinkEdit(net, net.getVariable("A"), net.getVariable("C"), true).executeEdit();
         new AddLinkEdit(net, net.getVariable("B"), net.getVariable("C"), true).executeEdit();
         return net;
@@ -326,8 +333,14 @@ final class EditUndoCases {
         ProbNet net = new ProbNet(InfluenceDiagramType.getUniqueInstance());
         net.setName("undo");
         new AddNodeEdit(net, new Variable("X", 2), NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(net.getVariable("X")), PotentialUtils.generateDefaultPotential(net.getNode(net.getVariable("X")))).executeEdit();
+
         new AddNodeEdit(net, new Variable("U1"), NodeType.UTILITY, null).executeEdit();
+        new SetPotentialEdit(net.getNode(net.getVariable("U1")), PotentialUtils.generateDefaultPotential(net.getNode(net.getVariable("U1")))).executeEdit();
+
         new AddNodeEdit(net, new Variable("U2"), NodeType.UTILITY, null).executeEdit();
+        new SetPotentialEdit(net.getNode(net.getVariable("U2")), PotentialUtils.generateDefaultPotential(net.getNode(net.getVariable("U2")))).executeEdit();
+
         new AddLinkEdit(net, net.getVariable("X"), net.getVariable("U1"), true).executeEdit();
         new AddLinkEdit(net, net.getVariable("X"), net.getVariable("U2"), true).executeEdit();
         tableUtilityOf(net.getNode("U1"), 10.0, 20.0);

@@ -82,7 +82,7 @@ public class SetPotentialEdit extends PNEdit {
     // funcion
     
     @Override protected void doEdit() {
-        LinkRestrictionPotentialOperations.setPotentialWithRestrictions(node,newPotential);
+         LinkRestrictionPotentialOperations.setPotentialWithRestrictions(node,newPotential);
     }
     
     @Override public void undo() {

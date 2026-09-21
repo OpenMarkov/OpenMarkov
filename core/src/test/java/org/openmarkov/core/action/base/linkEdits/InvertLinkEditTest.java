@@ -9,12 +9,14 @@ package org.openmarkov.core.action.base.linkEdits;
 
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.action.core.AddNodeEdit;
+import org.openmarkov.core.action.core.SetPotentialEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,11 +43,13 @@ class InvertLinkEditTest {
         Variable c = new Variable("C", 2);
         Variable d = new Variable("D", 2);
         new AddNodeEdit(net, c, NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(c), PotentialUtils.generateDefaultPotential(net.getNode(c))).executeEdit();
+
         new AddNodeEdit(net, d, NodeType.DECISION, null).executeEdit();
         new AddLinkEdit(net, c, d, true).executeEdit();
 
         Node nodeC = net.getNode(c);
-        Potential cPotentialBefore = nodeC.getPotentials().getFirst();
+        Potential cPotentialBefore = nodeC.getPotential();
         assertThat(nodeC.getPotentials()).hasSize(1);
 
         InvertLinkEdit edit = new InvertLinkEdit(net, c, d, true);

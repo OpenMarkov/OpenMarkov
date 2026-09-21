@@ -67,7 +67,7 @@ public final class NodeAbsorptionHandler {
                 // Potentials to multiply
                 List<TablePotential> utilityAndChance = new ArrayList<>();
                 utilityAndChance.add(potential.getCPT()); //Utility
-                utilityAndChance.add(absorbedNode.getPotentials().getFirst().getCPT()); //Chance
+                utilityAndChance.add(absorbedNode.getPotential().getCPT()); //Chance
 
                 /* Obtain parameters to invoke multiplyAndMarginalize */
                 // All variables from chance parent and utility child potentials

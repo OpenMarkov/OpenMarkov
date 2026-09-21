@@ -10,6 +10,7 @@ package org.openmarkov.core.action.base.linkEdits;
 import net.jqwik.api.*;
 import net.jqwik.api.constraints.IntRange;
 import org.openmarkov.core.action.core.AddNodeEdit;
+import org.openmarkov.core.action.core.SetPotentialEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.*;
@@ -18,6 +19,7 @@ import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.SumPotential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
+import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 
@@ -102,6 +104,9 @@ class RemoveLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = linkedBN(sA, sB);
+        new SetPotentialEdit(g.nodeA(), PotentialUtils.generateDefaultPotential(g.nodeA())).executeEdit();
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
+
         new RemoveLinkEdit(g.net(), g.vA(), g.vB(), true).executeEdit();
         List<Variable> potVars = g.nodeB().getPotentials().getFirst().getVariables();
         assertThat(potVars).doesNotContain(g.vA());
@@ -115,6 +120,8 @@ class RemoveLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = linkedBN(sA, sB);
+        new SetPotentialEdit(g.nodeA(), PotentialUtils.generateDefaultPotential(g.nodeA())).executeEdit();
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
         new RemoveLinkEdit(g.net(), g.vA(), g.vB(), true).executeEdit();
         assertThat(g.nodeB().getPotentials()).hasSize(1);
     }
@@ -159,7 +166,8 @@ class RemoveLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = linkedBN(sA, sB);
-        Potential potBeforeRemove = g.nodeB().getPotentials().getFirst();
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
+        Potential potBeforeRemove = g.nodeB().getPotential();
 
         RemoveLinkEdit edit = new RemoveLinkEdit(g.net(), g.vA(), g.vB(), true);
         edit.executeEdit();
@@ -177,6 +185,9 @@ class RemoveLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = linkedBN(sA, sB);
+        new SetPotentialEdit(g.nodeA(), PotentialUtils.generateDefaultPotential(g.nodeA())).executeEdit();
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
+
         List<Variable> varsBefore =
                 new ArrayList<>(g.nodeB().getPotentials().getFirst().getVariables());
 
@@ -215,11 +226,12 @@ class RemoveLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = linkedBN(sA, sB);
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
         RemoveLinkEdit edit = new RemoveLinkEdit(g.net(), g.vA(), g.vB(), true);
         edit.executeEdit();
         edit.undo();
         edit.redo();
-        List<Variable> potVars = g.nodeB().getPotentials().getFirst().getVariables();
+        List<Variable> potVars = g.nodeB().getPotential().getVariables();
         assertThat(potVars).doesNotContain(g.vA());
     }
 
@@ -234,6 +246,7 @@ class RemoveLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = linkedBN(sA, sB);
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
         RemoveLinkEdit edit = new RemoveLinkEdit(g.net(), g.vA(), g.vB(), true);
         edit.executeEdit();
         edit.undo();
@@ -258,7 +271,11 @@ class RemoveLinkEditPropertyTest {
         Variable vA = new Variable("A", sA);
         Variable vB = new Variable("B", sB);
         new AddNodeEdit(net, vA, NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vA), PotentialUtils.generateDefaultPotential(net.getNode(vA))).executeEdit();
+
         new AddNodeEdit(net, vB, NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vB), PotentialUtils.generateDefaultPotential(net.getNode(vB))).executeEdit();
+
         Node nodeB = net.getNode(vB);
 
         List<Variable> varsOriginal =
@@ -291,8 +308,14 @@ class RemoveLinkEditPropertyTest {
         Variable vNum2 = new Variable("Num2"); // NUMERIC
         Variable vU = new Variable("U");       // NUMERIC → UTILITY node
         new AddNodeEdit(net, vNum1, NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vNum1), PotentialUtils.generateDefaultPotential(net.getNode(vNum1))).executeEdit();
+
         new AddNodeEdit(net, vNum2, NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vNum2), PotentialUtils.generateDefaultPotential(net.getNode(vNum2))).executeEdit();
+
         new AddNodeEdit(net, vU, NodeType.UTILITY, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vU), PotentialUtils.generateDefaultPotential(net.getNode(vU))).executeEdit();
+
         new AddLinkEdit(net, vNum1, vU, true).executeEdit();
         new AddLinkEdit(net, vNum2, vU, true).executeEdit();
 
@@ -321,8 +344,15 @@ class RemoveLinkEditPropertyTest {
         Variable vNum = new Variable("Num");    // NUMERIC
         Variable vU = new Variable("U");        // NUMERIC → UTILITY
         new AddNodeEdit(net, vFS, NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vFS), PotentialUtils.generateDefaultPotential(net.getNode(vFS))).executeEdit();
+
         new AddNodeEdit(net, vNum, NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vNum), PotentialUtils.generateDefaultPotential(net.getNode(vNum))).executeEdit();
+
         new AddNodeEdit(net, vU, NodeType.UTILITY, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vU), PotentialUtils.generateDefaultPotential(net.getNode(vU))).executeEdit();
+
+
         new AddLinkEdit(net, vFS, vU, true).executeEdit();
         new AddLinkEdit(net, vNum, vU, true).executeEdit();
 
@@ -333,7 +363,7 @@ class RemoveLinkEditPropertyTest {
         // but at the moment of doEdit the node has mixed parents
         new RemoveLinkEdit(net, vNum, vU, true).executeEdit();
 
-        Potential newPot = nodeU.getPotentials().getFirst();
+        Potential newPot = nodeU.getPotential();
         assertThat(newPot).isInstanceOf(UniformPotential.class);
         assertThat(newPot.getVariables()).doesNotContain(vNum);
     }
@@ -351,10 +381,11 @@ class RemoveLinkEditPropertyTest {
         Variable vU = new Variable("U");
         new AddNodeEdit(net, vNum, NodeType.CHANCE, null).executeEdit();
         new AddNodeEdit(net, vU, NodeType.UTILITY, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vU), PotentialUtils.generateDefaultPotential(net.getNode(vU))).executeEdit();
         new AddLinkEdit(net, vNum, vU, true).executeEdit();
 
         Node nodeU = net.getNode(vU);
-        Potential potBefore = nodeU.getPotentials().getFirst();
+        Potential potBefore = nodeU.getPotential();
 
         RemoveLinkEdit edit = new RemoveLinkEdit(net, vNum, vU, true);
         edit.executeEdit();

@@ -10,9 +10,11 @@ package org.openmarkov.core.action.base.linkEdits;
 import net.jqwik.api.*;
 import net.jqwik.api.constraints.IntRange;
 import org.openmarkov.core.action.core.AddNodeEdit;
+import org.openmarkov.core.action.core.SetPotentialEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 
@@ -84,8 +86,9 @@ class AddLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = twoNodeBN(sA, sB);
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
         new AddLinkEdit(g.net(), g.vA(), g.vB(), true).executeEdit();
-        List<Variable> potVars = g.nodeB().getPotentials().getFirst().getVariables();
+        List<Variable> potVars = g.nodeB().getPotential().getVariables();
         assertThat(potVars).contains(g.vA());
     }
 
@@ -97,6 +100,8 @@ class AddLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = twoNodeBN(sA, sB);
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
+
         new AddLinkEdit(g.net(), g.vA(), g.vB(), true).executeEdit();
         assertThat(g.nodeB().getPotentials()).hasSize(1);
     }
@@ -129,7 +134,8 @@ class AddLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = twoNodeBN(sA, sB);
-        Potential potentialBeforeEdit = g.nodeB().getPotentials().getFirst();
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
+        Potential potentialBeforeEdit = g.nodeB().getPotential();
 
         AddLinkEdit edit = new AddLinkEdit(g.net(), g.vA(), g.vB(), true);
         edit.executeEdit();
@@ -147,14 +153,16 @@ class AddLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = twoNodeBN(sA, sB);
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
+
         List<Variable> varsBefore =
-                new ArrayList<>(g.nodeB().getPotentials().getFirst().getVariables());
+                new ArrayList<>(g.nodeB().getPotential().getVariables());
 
         AddLinkEdit edit = new AddLinkEdit(g.net(), g.vA(), g.vB(), true);
         edit.executeEdit();
         edit.undo();
 
-        List<Variable> varsAfterUndo = g.nodeB().getPotentials().getFirst().getVariables();
+        List<Variable> varsAfterUndo = g.nodeB().getPotential().getVariables();
         assertThat(varsAfterUndo)
                 .as("after undo, B's potential must not contain A's variable")
                 .doesNotContain(g.vA())
@@ -188,11 +196,12 @@ class AddLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = twoNodeBN(sA, sB);
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
         AddLinkEdit edit = new AddLinkEdit(g.net(), g.vA(), g.vB(), true);
         edit.executeEdit();
         edit.undo();
         edit.redo();
-        List<Variable> potVars = g.nodeB().getPotentials().getFirst().getVariables();
+        List<Variable> potVars = g.nodeB().getPotential().getVariables();
         assertThat(potVars).contains(g.vA());
     }
 
@@ -208,6 +217,7 @@ class AddLinkEditPropertyTest {
             @ForAll @IntRange(min = 2, max = 5) int sA,
             @ForAll @IntRange(min = 2, max = 5) int sB) throws DoEditException {
         var g = twoNodeBN(sA, sB);
+        new SetPotentialEdit(g.nodeB(), PotentialUtils.generateDefaultPotential(g.nodeB())).executeEdit();
         AddLinkEdit edit = new AddLinkEdit(g.net(), g.vA(), g.vB(), true);
         edit.executeEdit();
         edit.undo();
@@ -280,11 +290,16 @@ class AddLinkEditPropertyTest {
         Variable vC = new Variable("C", 2);
         Variable vU = new Variable("U"); // numeric / utility
         new AddNodeEdit(net, vC, NodeType.CHANCE, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vC), PotentialUtils.generateDefaultPotential(net.getNode(vC))).executeEdit();
+
         new AddNodeEdit(net, vU, NodeType.UTILITY, null).executeEdit();
+        new SetPotentialEdit(net.getNode(vU), PotentialUtils.generateDefaultPotential(net.getNode(vU))).executeEdit();
+
+
         Node nodeU = net.getNode(vU);
 
         // Record the variable list of U's potential BEFORE adding the link
-        List<Variable> varsBefore = new ArrayList<>(nodeU.getPotentials().getFirst().getVariables());
+        List<Variable> varsBefore = new ArrayList<>(nodeU.getPotential().getVariables());
 
         AddLinkEdit edit = new AddLinkEdit(net, vC, vU, true);
         edit.executeEdit();
