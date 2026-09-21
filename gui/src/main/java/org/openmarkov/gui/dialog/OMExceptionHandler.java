@@ -2,6 +2,7 @@ package org.openmarkov.gui.dialog;
 
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.java.exceptionUtils.ThrowableUtils;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class OMExceptionHandler implements Thread.UncaughtExceptionHandler {
                 ThrowableUtils.transferStackTrace(last, allThrowables.getLast());
             }
         }
-        throwable.printStackTrace();
+        OpenMarkovLogger.LOGGER.error("", throwable);
         // Exceptions are shown differently depending on their type.
         switch (exceptionType) {
             // If an exception is unexpected (When an exception is runtime or came from an UnreachableException),

@@ -63,6 +63,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Handles all file I/O operations: open, save, close, backup, evidence, and network creation.
@@ -158,7 +159,11 @@ public class NetworkFileHandler {
                 if (sourceFile.file != null) {
                     yield source;
                 }
-                yield new NetworkSource.SourceFile(new File(this.requestNetworkFileToOpen()));
+                String pathname = this.requestNetworkFileToOpen();
+                if (pathname == null) {
+                    yield new NetworkSource.SourceFile(null);
+                }
+                yield new NetworkSource.SourceFile(new File(pathname));
             }
             case NetworkSource.SourceURL sourceURL -> {
                 if (sourceURL.url != null) {
@@ -396,9 +401,11 @@ public class NetworkFileHandler {
         var editors = this.mainPanel.getNetworkEditors();
         if (this.mainPanel.closeAllTabs()) {
             if (UserPreferences.STARTUP_ACTIONS.get().contains(StartupAction.RESTORE_LAST_SESSION)) {
-                UserPreferences.LAST_SESSION_NETWORK_FILES.set(new ArrayList<>(editors.stream()
-                                                                                      .map(NetworkEditorPanel::getNetworkFile)
-                                                                                      .toList()));
+                List<String> nets = editors.stream()
+                                           .map(NetworkEditorPanel::getNetworkFile)
+                                           .filter(Objects::nonNull)
+                                           .toList();
+                UserPreferences.LAST_SESSION_NETWORK_FILES.set(new ArrayList<>(nets));
             }
             System.exit(0);
         }

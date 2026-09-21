@@ -378,6 +378,9 @@
             <Description value="ProbModelXML 1.0"/>
         </OpenMarkov.1.0>
         <!-- CMF -->
+        <Log>
+            <Description value="Log file"/>
+        </Log>
     </FileExtension>
     <LanguageDialog>
         <Title>

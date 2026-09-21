@@ -81,20 +81,20 @@ import java.util.stream.Stream;
  * the former pattern of 53 individual fields + 46 lazy-getter methods.
  */
 public class MainMenu extends JMenuBar implements MenuToolBarBasic {
-
+    
     private static final long serialVersionUID = 8267763502728836096L;
     private static final double UI_SCALE_MAX = 5.0;
     private static final double UI_SCALE_MIN = 0.5;
-
+    
     private final Map<ActionCommands, JComponent> items = new EnumMap<>(ActionCommands.class);
     final HashMap<JComponent, String> defaultText = new HashMap<>();
-
+    
     private final MainPanel mainPanel;
     private final ActionListener listener;
-
+    
     private final ButtonGroup groupEditOptions = new ButtonGroup();
     private final ButtonGroup groupByNameByTitle = new ButtonGroup();
-
+    
     private JMenu fileMenu;
     private JMenu editMenu;
     private JMenu viewMenu;
@@ -102,16 +102,16 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
     private @Nullable JMenu toolsMenu;
     private JMenu helpMenu;
     private JMenu viewNodesMenu;
-
+    
     public MainMenu(MainPanel mainPanel, ActionListener newListener) {
         this.mainPanel = mainPanel;
         this.listener = newListener;
         createAllItems();
         reInitialize();
     }
-
+    
     // ── Public API ──────────────────────────────────────────────────
-
+    
     public void reInitialize() {
         this.toolsMenu = null;
         removeAll();
@@ -125,12 +125,12 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         add(buildToolsMenu());
         add(buildHelpMenu());
     }
-
+    
     public void rechargeFileMenu() {
         this.fileMenu.removeAll();
         this.fileMenu.add(this.items.get(ActionCommands.NEW_NETWORK));
         this.fileMenu.add(this.items.get(ActionCommands.OPEN_NETWORK));
-
+        
         Stream<? extends @NotNull Component> recentNetworkItems;
         if (LastOpenFiles.existLastOpenFiles()) {
             recentNetworkItems = getLastOpenFiles().stream();
@@ -157,15 +157,15 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         this.fileMenu.add(this.items.get(ActionCommands.EXIT_APPLICATION));
         this.fileMenu.repaint();
     }
-
+    
     public void addPropagateNowItem() {
         if (this.inferenceMenu != null) rebuildInferenceMenu(true);
     }
-
+    
     public void removePropagateNowItem() {
         if (this.inferenceMenu != null) rebuildInferenceMenu(false);
     }
-
+    
     public JMenuItem getSwitchWorkingMode() {
         return (JMenuItem) this.items.get(ActionCommands.CHANGE_TO_EDITION_MODE);
     }
@@ -191,9 +191,9 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         JComponent component = getJComponentActionCommand(actionCommand);
         MenuToolBarBasicImpl.setText(component, text);
     }
-
+    
     // ── Item creation (called once) ────────────────────────────────
-
+    
     private void createAllItems() {
         // File
         createItem(MenuItemNames.FILE_NEW_MENUITEM, ActionCommands.NEW_NETWORK, IconBind.NEW_ENABLED, MainMenu.ctrl(KeyEvent.VK_N));
@@ -207,7 +207,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         createItem(MenuItemNames.FILE_LOAD_EVIDENCE_MENUITEM, ActionCommands.LOAD_EVIDENCE);
         createItem(MenuItemNames.FILE_SAVE_EVIDENCE_MENUITEM, ActionCommands.SAVE_EVIDENCE);
         createItem(MenuItemNames.FILE_EXIT_MENUITEM, ActionCommands.EXIT_APPLICATION, null, MainMenu.ctrl(KeyEvent.VK_Q));
-
+        
         // Edit
         createItem(MenuItemNames.EDIT_CUT_MENUITEM, ActionCommands.CLIPBOARD_CUT, IconBind.CUT_ENABLED, MainMenu.ctrl(KeyEvent.VK_X));
         createItem(MenuItemNames.EDIT_COPY_MENUITEM, ActionCommands.CLIPBOARD_COPY, IconBind.COPY_ENABLED, MainMenu.ctrl(KeyEvent.VK_C));
@@ -226,7 +226,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         createItem(MenuItemNames.EDIT_NODERELATION_MENUITEM, ActionCommands.EDIT_POTENTIAL);
         createItem(MenuItemNames.EDIT_LINKPROPERTIES_MENUITEM, ActionCommands.LINK_PROPERTIES);
         createItem(MenuItemNames.EDIT_OPENSETTINGS_MENUITEM, ActionCommands.OPEN_SETTINGS, IconBind.SETTINGS_ENABLED, null);
-
+        
         // Inference
         createItem(MenuItemNames.INFERENCE_SWITCH_TO_EDITION_MODE_MENUITEM, ActionCommands.CHANGE_TO_EDITION_MODE, null, MainMenu.ctrl(KeyEvent.VK_I));
         createItem(MenuItemNames.PROPAGATION_OPTIONS_MENUITEM, ActionCommands.PROPAGATION_OPTIONS);
@@ -241,28 +241,28 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         createItem(MenuItemNames.INFERENCE_EXPAND_NODE_MENUITEM, ActionCommands.NODE_EXPANSION);
         createItem(MenuItemNames.INFERENCE_CONTRACT_NODE_MENUITEM, ActionCommands.NODE_CONTRACTION);
         createItem(MenuItemNames.INFERENCE_REMOVE_ALL_FINDINGS_MENUITEM, ActionCommands.NODE_REMOVE_ALL_FINDINGS);
-
+        
         // View
         createCheckBox(MenuItemNames.VIEW_NODES_BYNAME_MENUITEM, ActionCommands.BYNAME_NODES, null, this.groupByNameByTitle);
         createCheckBox(MenuItemNames.VIEW_NODES_BYTITLE_MENUITEM, ActionCommands.BYTITLE_NODES, null, this.groupByNameByTitle);
-
+        
         // Tools
         createItem(MenuItemNames.CONFIGURATION_MENUITEM, ActionCommands.CONFIGURATION);
-
+        
         // Help
         createItem(MenuItemNames.HELP_SHORTCUTS_MENUITEM, ActionCommands.HELP_SHORTCUTS);
         createItem(MenuItemNames.HELP_ABOUT_MENUITEM, ActionCommands.HELP_ABOUT);
         createItem(MenuItemNames.HELP_CHANGELANGUAGE_MENUITEM, ActionCommands.HELP_CHANGE_LANGUAGE);
     }
-
+    
     // ── Menu builders ──────────────────────────────────────────────
-
+    
     private JMenu buildFileMenu() {
         this.fileMenu = MainMenu.createMenu(MenuItemNames.FILE_MENU);
         rechargeFileMenu();
         return this.fileMenu;
     }
-
+    
     private JMenu buildEditMenu() {
         this.editMenu = MainMenu.createMenu(MenuItemNames.EDIT_MENU);
         this.editMenu.add(this.items.get(ActionCommands.CLIPBOARD_CUT));
@@ -293,7 +293,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         this.editMenu.add(this.items.get(ActionCommands.OPEN_SETTINGS));
         return this.editMenu;
     }
-
+    
     private JMenu buildInferenceMenu() {
         this.inferenceMenu = MainMenu.createMenu(MenuItemNames.INFERENCE_MENU);
         rebuildInferenceMenu(false);
@@ -326,7 +326,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
             this.viewMenu.setName(MenuItemNames.VIEW_MENU);
             this.viewMenu.setText(MenuLocalizer.getLabel(MenuItemNames.VIEW_MENU));
             this.viewMenu.setMnemonic(MenuLocalizer.getMnemonic(MenuItemNames.VIEW_MENU).charAt(0));
-
+            
             LocalizedMenuItem goNextTab = new LocalizedMenuItem(MenuItemNames.VIEW_GO_NEXT_TAB, null,
                                                                 null, MainMenu.ctrlShift(KeyEvent.VK_RIGHT));
             this.viewMenu.add(goNextTab);
@@ -400,9 +400,33 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
             }
             this.helpMenu.add(productToursMenu.build());
         }
+        
+        this.helpMenu.add(new JSeparator());
+        this.helpMenu.add(
+                new JMenuItemBuilder("Report a bug")
+                        .onClick(() -> Desktop.getDesktop()
+                                              .browse(URI.create("https://github.com/OpenMarkov/OpenMarkov/issues/new?template=report-a-bug.yml")))
+                        .withTooltip("Give notice of wrong behavior to let the development team of OpenMarkov to fix it.")
+                        .build()
+        );
+        this.helpMenu.add(
+                new JMenuItemBuilder("Propose a new feature")
+                        .onClick(() -> Desktop.getDesktop()
+                                              .browse(URI.create("https://github.com/OpenMarkov/OpenMarkov/issues/new?template=propose-a-new-feature.yml")))
+                        .withTooltip("Suggest a new feature to be implemented in OpenMarkov.")
+                        .build()
+        );
+        this.helpMenu.add(
+                new JMenuItemBuilder("Propose an improvement")
+                        .onClick(() -> Desktop.getDesktop()
+                                              .browse(URI.create("https://github.com/OpenMarkov/OpenMarkov/issues/new?template=propose-improvements-on-existing-features.yml")))
+                        .withTooltip("Suggest how a feature can be improved.")
+                        .build()
+        );
+        
         this.helpMenu.add(new JSeparator());
         
-        this.helpMenu.add(new JMenuItemBuilder("License")
+        this.helpMenu.add(new JMenuItemBuilder("OpenMarkov license")
                                   .onClick(() -> {
                                       ArrayList<License> omLicenseList = new ArrayList<>();
                                       var OpenMarkovHolder = new LicenseHolder("org.openmarkov", "OpenMarkov", "", omLicenseList);
@@ -438,7 +462,6 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
                                                                               });
             this.helpMenu.add(new JMenuItemBuilder("Third-party licenses").withItems(licenseMenuItems).build());
         }
-        
         return this.helpMenu;
     }
     
@@ -596,8 +619,8 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
             }
         }
     }
-
-
+    
+    
     // ── Action command lookup ──────────────────────────────────────
     
     private JComponent getJComponentActionCommand(String actionCommand) {

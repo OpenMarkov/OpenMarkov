@@ -6,7 +6,7 @@ import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
 import org.openmarkov.gui.window.MainPanel;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
 
 /**
  * Developer tool plugin that provides a menu item whose action is an empty breakpoint,
@@ -27,6 +27,7 @@ public class BreakPointPlugin implements ToolPlugin {
                 .onClick(() -> {
                     ProbNet currentProbNet = MainPanel.getCurrentProbNet();
                     boolean a = true;
+                    throw new RuntimeException("A");
                 })
                 .build();
     }

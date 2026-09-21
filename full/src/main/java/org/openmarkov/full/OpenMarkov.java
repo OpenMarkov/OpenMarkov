@@ -130,7 +130,8 @@ public class OpenMarkov {
             MainGUI.INSTANCE.setVisible(true);
             if (OpenMarkov.STARTED_AS_MAIN_INSTANCE &&
                     UserPreferences.STARTUP_ACTIONS.get().contains(StartupAction.RESTORE_LAST_SESSION)) {
-                for (var lastSessionFile : UserPreferences.LAST_SESSION_NETWORK_FILES.get()) {
+                ArrayList<String> lastOpenFiles = UserPreferences.LAST_SESSION_NETWORK_FILES.get();
+                for (var lastSessionFile : lastOpenFiles) {
                     try {
                         MainGUI.INSTANCE.openNetwork(lastSessionFile);
                     } catch (ProbNetParserException | IOException | NoReaderForFileException | CorruptNetworkFile e) {
