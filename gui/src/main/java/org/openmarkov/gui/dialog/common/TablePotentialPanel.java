@@ -300,7 +300,26 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
         // getNotEditablePositions checked if there is any link restriction
         // which make the correspondent cells no editable and returns an array with the size of the table
         // with the not editable cells set to 1
-        this.getTableModel().setNotEditablePositions(getNotEditablePositions());
+        
+        
+        this.getValuesTable().onScrollableTable(table -> table.getModel().clearEditability());
+        
+        int rowCount = this.getTableModel().getRowCount();
+        
+        for (int column = 0; column < uncertaintyInColumns.length; column++) {
+            if (uncertaintyInColumns[column]) {
+                for (int row = 0; row < rowCount; row++) {
+                    int finalColumn = column;
+                    int finalRow = row;
+                    this.getValuesTable().onScrollableTable(
+                            table -> table.getModel().setEditabilityOfCell(finalRow, finalColumn, false)
+                    );
+                }
+            }
+        }
+        
+        Object[][] notEditablePositions = getNotEditablePositions();
+        this.getTableModel().setNotEditablePositions(notEditablePositions);
         
         // Establish the column width
         valuesTable.fitColumnsWidthToContent();
@@ -698,9 +717,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
                                                                  uncertDialog.isChanceVariable());
         uncertEdit.executeEdit();
         if (selectedColumn > 0) {
-            valuesTable.onTables(omjTable -> {
-                ((ValuesTableCellRenderer) omjTable.getDefaultRenderer(Double.class)).setMark(selectedColumn - 1);
-            });
+            valuesTable.onTables(omjTable -> ((ValuesTableCellRenderer) omjTable.getDefaultRenderer(Double.class)).setMark(selectedColumn - 1));
             getValuesTable().repaint();
             this.getTableModel().setNotEditablePositions(getNotEditablePositions());
         }
@@ -794,9 +811,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
         if (selectedColumn <= 0) {
             return;
         }
-        valuesTable.onTables(omjTable -> {
-            ((ValuesTableCellRenderer) omjTable.getDefaultRenderer(Double.class)).unMark(selectedColumn - 1);
-        });
+        valuesTable.onTables(omjTable -> ((ValuesTableCellRenderer) omjTable.getDefaultRenderer(Double.class)).unMark(selectedColumn - 1));
         getValuesTable().repaint();
         this.getTableModel().setNotEditablePositions(getNotEditablePositions());
     }
