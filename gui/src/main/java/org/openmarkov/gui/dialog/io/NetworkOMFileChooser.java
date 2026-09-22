@@ -13,8 +13,6 @@ import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.core.io.format.annotation.FormatManager;
 import org.openmarkov.gui.configuration.UserPreferences;
-import org.openmarkov.gui.dialog.common.CommonOptions;
-import org.openmarkov.gui.dialog.common.OptionDialog;
 import org.openmarkov.io.elvira.ElviraParser;
 import org.openmarkov.io.elvira.ElviraWriter;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
@@ -24,7 +22,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.swing.JFileChooser;
-import javax.swing.SwingUtilities;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.Component;
@@ -125,23 +122,6 @@ public class NetworkOMFileChooser extends OMFileChooser {
             }
         }
         return result;
-    }
-    
-    @Override
-    public void approveSelection() {
-        if (getDialogType() == SAVE_DIALOG) {
-            File selectedFile = getSelectedFile();
-            if ((selectedFile != null) && selectedFile.exists()) {
-                OptionDialog<CommonOptions.YesNo> dialog = new OptionDialog<>(SwingUtilities.windowForComponent(this),
-                                                                              "Ovewrite file",
-                                                                              "The file " + selectedFile.getName() + " already exists. Do you want to replace the existing file?", CommonOptions.YesNo.class);
-                var option = dialog.request(CommonOptions.YesNo.NO);
-                if (option != CommonOptions.YesNo.YES) {
-                    return;
-                }
-            }
-        }
-        super.approveSelection();
     }
     
     /**

@@ -10,9 +10,14 @@ package org.openmarkov.gui.dialog.io;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Window;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -74,14 +79,12 @@ public class URLNetworkChooserDialog extends OkCancelDialog {
      * This method initialises this instance.
      */
     private void initialize() {
-        Dimension dialogDimension = new Dimension(400, 120);
-        setSize(dialogDimension);
         setTitle(stringDatabase.getString("SelectNetworkURL.Title"));
         configureComponentsPanel();
-        setMinimumSize(dialogDimension);
-        setMaximumSize(dialogDimension);
-        setPreferredSize(dialogDimension);
         pack();
+        setResizable(true);
+        Dimension size = getSize();
+        setMinimumSize(new Dimension(Math.max(size.width, 400), Math.max(size.height, 0)));
     }
     
     /**
@@ -105,7 +108,9 @@ public class URLNetworkChooserDialog extends OkCancelDialog {
             contentsPanel.setBorder(BorderFactory
                                             .createTitledBorder(null, stringDatabase.getString("NetworkURLValues.Title"),
                                                                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null));
-            contentsPanel.add(getURLTextField(), null);
+            JPanel wrapperPanel = new JPanel(new BorderLayout());
+            wrapperPanel.add(getURLTextField(), BorderLayout.NORTH);
+            contentsPanel.add(wrapperPanel);
         }
         return contentsPanel;
     }

@@ -50,7 +50,7 @@ public class TableWithEventsModel extends ValuesTableModel {
 	 * <li>all rows in the header are not editable</li> <li>column with the name of
 	 * the parents and the values are not editable</li></ul>
 	 */
-	public boolean isCellEditable(int row, int col) {
+	@Override public boolean isCellEditable(int row, int col) {
 		if (row < firstEditableRow) {
 			return false;
 		}

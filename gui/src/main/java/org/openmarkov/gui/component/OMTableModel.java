@@ -3,14 +3,17 @@ package org.openmarkov.gui.component;
 import io.github.jorgericovivas.rust_essentials.tuples.Tuple2Record;
 import io.github.jorgericovivas.rust_essentials.tuples.Tuples;
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.java.cloneUtils.CloneUtils;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
+import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -21,6 +24,8 @@ public class OMTableModel extends DefaultTableModel {
     public OMTableModel(Object[][] body, Object[] head, boolean firstColumnIsHeader) {
         super(body, head);
         this.firstColumnIsHeader = firstColumnIsHeader;
+        this.cellEditability = new HashMap<>();
+        this.editabilityChecker = new ArrayList<>();
     }
     
     public @NotNull Tuple2Record<OMTableModel, OMTableModel> split(int columnSplit) {
@@ -108,5 +113,60 @@ public class OMTableModel extends DefaultTableModel {
         Vector<Vector> data = new Vector<>(baseModel.getDataVector());
         this.setDataVector(data, columnHeaders);
         this.firstColumnIsHeader = baseModel.firstColumnIsHeader;
+        this.cellEditability = CloneUtils.safeClone(baseModel.cellEditability);
+        this.editabilityChecker = new ArrayList<>(baseModel.editabilityChecker);
     }
+    
+    
+    private HashMap<Integer, HashMap<Integer, Boolean>> cellEditability;
+    
+    public void setEditabilityOfCell(int row, int column, boolean editable) {
+        if (!cellEditability.containsKey(row)) {
+            cellEditability.put(row, new HashMap<>());
+        }
+        cellEditability.get(row).put(column, editable);
+    }
+    
+    public void removeEditabilityOfCell(int row, int column, boolean editable) {
+        if (!cellEditability.containsKey(row)) {
+            return;
+        }
+        cellEditability.get(row).remove(column, editable);
+    }
+    
+    @Override public boolean isCellEditable(int row, int column) {
+        for (var checker : this.editabilityChecker) {
+            var editability = checker.apply(row, column);
+            if (editability == Editability.EDITABLE) {
+                return true;
+            }
+            if (editability == Editability.NON_EDITABLE) {
+                return false;
+            }
+        }
+        if (this.cellEditability.get(row) instanceof HashMap<Integer, Boolean> rowMap && rowMap.get(column) instanceof Boolean editability) {
+            return editability;
+        }
+        return super.isCellEditable(row, column);
+    }
+    
+    private List<BiFunction<Integer, Integer, Editability>> editabilityChecker;
+    
+    public void addEditabilityChecker(BiFunction<Integer, Integer, Editability> editabilityChecker) {
+        this.editabilityChecker.add(editabilityChecker);
+    }
+    
+    public void removeEditabilityChecker(BiFunction<Integer, Integer, Editability> editabilityChecker) {
+        this.editabilityChecker.remove(editabilityChecker);
+    }
+    
+    public void clearEditability() {
+        this.editabilityChecker.clear();
+        this.cellEditability.clear();
+    }
+    
+    public enum Editability {
+        EDITABLE, NON_EDITABLE, UNSPECIFIED
+    }
+    
 }

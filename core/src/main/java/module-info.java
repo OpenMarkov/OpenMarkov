@@ -18,6 +18,7 @@ open module org.openmarkov.core {
     requires org.apache.poi.poi;
     requires rust.essentials;
     requires java.desktop;
+    requires org.apache.logging.log4j.core;
     
     exports org.openmarkov.core.action.core;
     exports org.openmarkov.core.model.decisiontree;

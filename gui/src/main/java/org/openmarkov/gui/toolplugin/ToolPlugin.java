@@ -8,14 +8,11 @@
 package org.openmarkov.gui.toolplugin;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.ImplementationRequirements;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.RequiredConstructor;
-import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.core.exception.UnrecoverableException;
-import org.openmarkov.gui.window.MainGUI;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 
 @ImplementationRequirements(requiresOneOfTheseConstructors = @RequiredConstructor({}))
 /**
@@ -55,36 +52,6 @@ public interface ToolPlugin {
         EXPORT,
         USER_EXPERIENCE,
         UNCATEGORIZED;
-    }
-    
-    public static @NotNull JMenuItem commonToJMenuItem(CommonToJMenuItem info) {
-        
-        
-        JMenuItem menuItem = new JMenuItem();
-        menuItem.addActionListener(e -> {
-            try {
-                info.onClickAction().accept(MainGUI.INSTANCE.mainPanel.getMainFrame());
-            } catch (UnrecoverableException | UnreachableException ex) {
-                throw ex;
-            } catch (Exception ex) {
-                throw new UnrecoverableException(ex);
-            }
-        });
-        menuItem.setText(info.title());
-        var mnemonic = info.mnemonic();
-        if (mnemonic != null) {
-            menuItem.setMnemonic(mnemonic);
-        }
-        menuItem.setEnabled(info.enabled());
-        return menuItem;
-    }
-    
-    record CommonToJMenuItem(
-            @NotNull String title,
-            @Nullable Character mnemonic,
-            boolean enabled,
-            @NotNull ThrowingConsumer<JFrame, ? extends Exception> onClickAction
-    ) {
     }
     
     @FunctionalInterface

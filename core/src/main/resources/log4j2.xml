@@ -5,6 +5,9 @@
             <PatternLayout disableAnsi="false"
                            pattern="%highlight{%d [%C#%M:%L] %-5level:%n%msg%n%throwable}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=black}"/>
         </Console>
+        <Console name="StringLog" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="true" pattern="%d [%C#%M:%L] %-5level:%n%msg%n%throwable"/>
+        </Console>
         <!--        <File name="MyFile"-->
         <!--              fileName="openmarkov.log"-->
         <!--              immediateFlush="false"-->

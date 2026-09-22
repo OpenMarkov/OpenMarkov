@@ -11,8 +11,11 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.configuration.OperatingSystem;
 import org.openmarkov.gui.configuration.UserPreferences;
+import org.openmarkov.gui.dialog.common.CommonOptions;
+import org.openmarkov.gui.dialog.common.OptionDialog;
 
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
@@ -162,5 +165,21 @@ public class OMFileChooser extends JFileChooser {
         rescanCurrentDirectory();
     }
     
+    @Override
+    public void approveSelection() {
+        if (getDialogType() == SAVE_DIALOG) {
+            File selectedFile = getSelectedFile();
+            if ((selectedFile != null) && selectedFile.exists()) {
+                OptionDialog<CommonOptions.YesNo> dialog = new OptionDialog<>(SwingUtilities.windowForComponent(this),
+                                                                              "Overwrite file",
+                                                                              "The file " + selectedFile.getName() + " already exists. Do you want to replace the existing file?", CommonOptions.YesNo.class);
+                var option = dialog.request(CommonOptions.YesNo.NO);
+                if (option != CommonOptions.YesNo.YES) {
+                    return;
+                }
+            }
+        }
+        super.approveSelection();
+    }
     
 }

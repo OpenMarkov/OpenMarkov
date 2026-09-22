@@ -9,6 +9,7 @@ import org.openmarkov.io.probmodel.reader.PGMXReader;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_1_0;
 
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
@@ -102,6 +103,11 @@ public final class UserPreferences {
     
     public static final UserPreference<String> LATEST_NETWORK_FORMAT = UserPreference
             .of("formats/latest_network_format", () -> OMFileChooser.DEFAULT_FILE_FORMAT, null, new TypeToken<>() {
+            });
+    
+    public static final UserPreference<File> LATEST_LOGS_DIRECTORY = UserPreference
+            .of("formats/latest_logs_directory", () -> FileSystemView.getFileSystemView()
+                                                                     .getHomeDirectory(), null, new TypeToken<>() {
             });
     
     public static final UserPreference<Class<? extends ProbNetWriter>> LATEST_SAVED_NETWORK_WRITER_CLASS = UserPreference
