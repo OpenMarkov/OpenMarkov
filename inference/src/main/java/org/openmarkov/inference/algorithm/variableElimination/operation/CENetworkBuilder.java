@@ -24,8 +24,9 @@ import org.openmarkov.core.model.network.potential.operation.DiscretePotentialOp
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Network-level transformations on {@link ProbNet} for cost-effectiveness analysis.
@@ -140,7 +141,7 @@ public class CENetworkBuilder {
         utilityPotential.setPotentialRole(PotentialRole.UNSPECIFIED);
 
         List<Node> costAndEffectivenessNodes = influenceDiagram.getNodes(NodeType.UTILITY);
-        HashSet<Node> parents = new HashSet<>();
+        Set<Node> parents = new LinkedHashSet<>(); // fixed order of the links
         for (Node node : costAndEffectivenessNodes) {
             parents.addAll(node.getParents());
         }

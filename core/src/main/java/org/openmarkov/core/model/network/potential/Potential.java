@@ -245,7 +245,7 @@ public abstract class Potential implements Localizable {
     public TablePotential getCPT(EvidenceCase evidenceCase)
             throws NonProjectablePotentialException {
         List<TablePotential> potentials = Collections.singletonList(tableProject(evidenceCase, null));
-        HashSet<Variable> variablesToEliminate = new HashSet<>();
+        Set<Variable> variablesToEliminate = new LinkedHashSet<>();
         // Fill it with variables appearing in all potentials except this
         for (TablePotential tablePotential : potentials) {
             variablesToEliminate.addAll(tablePotential.getVariables());

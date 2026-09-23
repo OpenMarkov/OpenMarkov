@@ -201,7 +201,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
     @Override
     public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials) throws NonProjectablePotentialException {
         List<TablePotential> potentials = internalTableProject(evidenceCase, inferenceOptions);
-        HashSet<Variable> variablesToEliminate = new HashSet<>();
+        Set<Variable> variablesToEliminate = new LinkedHashSet<>(); // fixed order: reproducible results
         // Fill it with variables appearing in all potentials except this
         for (TablePotential tablePotential : potentials) {
             variablesToEliminate.addAll(tablePotential.getVariables());
@@ -227,7 +227,7 @@ public abstract class ICIPotential extends Potential implements Projectable {
             //add resulting potential
             potentials.addFirst(DiscretePotentialOperations.multiplyAndMarginalize(relatedPotentials, allVariables));
         }
-        return withConditionedVariableFirst(DiscretePotentialOperations.multiplyAndMarginalize(potentials, variables));
+        return withDeclaredOrder(DiscretePotentialOperations.multiplyAndMarginalize(potentials, variables));
     }
 
     /**
@@ -243,9 +243,16 @@ public abstract class ICIPotential extends Potential implements Projectable {
      * for its conditioned variable got a parent, and — measured on the DAN
      * evaluation that uncovered this — attributed the table to that parent's
      * node, overwriting the parent's own distribution.
+     * <p>
+     * The parents follow in their declared order, so the result does not depend on how the product came out.
      */
-    protected TablePotential withConditionedVariableFirst(TablePotential projected) {
+    protected TablePotential withDeclaredOrder(TablePotential projected) {
         List<Variable> projectedVariables = projected.getVariables();
+        List<Variable> declared = new ArrayList<>(variables);
+        declared.retainAll(projectedVariables);
+        if (declared.size() == projectedVariables.size()) {
+            return declared.equals(projectedVariables) ? projected : (TablePotential) projected.reorder(declared);
+        }
         Variable conditioned = variables.get(0);
         if (projectedVariables.size() < 2 || !projectedVariables.contains(conditioned)
                 || projectedVariables.get(0) == conditioned) {
