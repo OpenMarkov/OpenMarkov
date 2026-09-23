@@ -44,7 +44,8 @@ import org.openmarkov.core.model.network.potential.TablePotential;
             }
         }
 
-        Potential potential = BasicOperations.absorbParentPotentials(nodeVariable,node.getPotential(),parentsPotential,null);
+        Potential potential = BasicOperations.absorbParentPotentials(nodeVariable, node.getPotential(), parentsPotential,
+                parents.stream().map(Node::getVariable).toList(), null);
         for (Node parent : parents) {
             PNEdit newEdit;
             if (parent.getChildren().size() > 1) {

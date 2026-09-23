@@ -43,6 +43,7 @@ public class BasicOperations {
     public static Potential absorbParentPotentials(Variable variable,
                                                    Potential nodePotential,
                                                    ArrayList<TablePotential> parentsPotentials,
+                                                   List<Variable> parentVariables,
                                                    EvidenceCase evidence) {
         // create a TablePotential that will be the table of the new ExactDistrPotential
         TablePotential newTable;
@@ -52,12 +53,11 @@ public class BasicOperations {
             newTable = DiscretePotentialOperations.multiply(parentsPotentials);
         } else {   // FunctionPotential
             try {
-                // To check (probable bug): are these two exceptions really unreachable?
                 newTable = DiscretePotentialOperations.evaluateFunctionPotential(
-                        (FunctionPotential) nodePotential, parentsPotentials, parentsPotentials.get(0).getVariables());
+                        (FunctionPotential) nodePotential, parentsPotentials, parentVariables);
             } catch (NonProjectablePotentialException.CannotEvaluate |
                      NonProjectablePotentialException.CannotResolveVariable e) {
-                throw new UnreachableException(e);
+                throw new UnrecoverableException(e); // a formula the parents cannot satisfy
             }
         }
         // }
@@ -201,7 +201,8 @@ public class BasicOperations {
             }
         }
         
-        Potential potential = absorbParentPotentials(nodeVariable, node.getPotential(), parentsPotential, null);
+        Potential potential = absorbParentPotentials(nodeVariable, node.getPotential(), parentsPotential,
+                                                     parents.stream().map(Node::getVariable).toList(), null);
         
         for (Node parent : parents) {
             network.removeLink(parent.getVariable(), nodeVariable, true);

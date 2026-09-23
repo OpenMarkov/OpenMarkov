@@ -610,12 +610,6 @@ final class TablePotentialArithmetic {
 
         int indexPotentialWithInterventions = potentials.indexOf(potentialWithInterventions);
 
-        List<String> utilityVariablesNames = utilityVariables.stream()
-                                                             .map(Variable::getName)
-                                                             .toList();
-
-        // utilityPotential.
-
         for (int resultPosition = 0; resultPosition < tableSize; resultPosition++) {
             if (thereAreVariables) {
                 incrementedVariable = AuxiliaryOperations.findNextConfigurationAndIndexIncreasedVariable(resultDimension, resultCoordinate, incrementedVariable);
@@ -625,15 +619,8 @@ final class TablePotentialArithmetic {
             // multiply
             for (int iPotential = 0; iPotential < numPotentials; iPotential++) {
                 int potentialsPositionIPotential = potentialsPositions[iPotential];
-                String varNameInExpressionToEvaluate = "U" + (iPotential + 1);
-                // String varNameInExpressionToEvaluate = utilityVariablesNames.get(iPotential);
-                assignment.put(
-                        utilityPotential.getVariables()
-                                        .stream()
-                                        .filter(variable -> variable.getName().equals(varNameInExpressionToEvaluate))
-                                        .findFirst()
-                                        .get()
-                        , "" + tables[iPotential][potentialsPositionIPotential]);
+                // Each table goes to the operand of its parent, not to "U" + position
+                assignment.put(utilityVariables.get(iPotential), "" + tables[iPotential][potentialsPositionIPotential]);
                 // Obtain the intervention
                 if (thereAreInterventions && indexPotentialWithInterventions == iPotential) {
                     strategyTree = inputStrategyTrees[potentialsPositionIPotential];
