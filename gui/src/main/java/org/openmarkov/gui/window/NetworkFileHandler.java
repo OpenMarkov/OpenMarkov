@@ -24,6 +24,7 @@ import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
+import org.openmarkov.core.model.network.potential.ColumnsThatDoNotAddUpToOne;
 import org.openmarkov.gui.configuration.LastOpenFiles;
 import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.UserPreferences;
@@ -45,7 +46,12 @@ import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
@@ -223,9 +229,27 @@ public class NetworkFileHandler {
         }
         System.out.println(stringDatabase.getString("NetworkLoaded.Text"));
         mainPanel.getMainMenu().rechargeFileMenu();
+        List<String> wrongColumns = ColumnsThatDoNotAddUpToOne.in(netReadFrom);
+        if (!wrongColumns.isEmpty()) {
+            this.showColumnsThatDoNotAddUpToOne(netReadFrom, wrongColumns);
+        }
         if (netReadFrom.getShowCommentWhenOpening()) {
             this.showNetworkComment(netReadFrom);
         }
+    }
+    
+    private void showColumnsThatDoNotAddUpToOne(ProbNet probNet, List<String> wrongColumns) {
+        JTextArea columns = new JTextArea(String.join("\n", wrongColumns));
+        columns.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(columns);
+        scrollPane.setPreferredSize(new Dimension(600, 250));
+        JPanel panel = new JPanel(new BorderLayout(0, 8));
+        panel.add(new JLabel(stringDatabase.getFormattedString("ColumnsDoNotAddUpToOne.Text", probNet.getName())),
+                  BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        JOptionPane.showMessageDialog(ComponentUtilities.getOwner(mainPanel), panel,
+                                      stringDatabase.getString("ColumnsDoNotAddUpToOne.Title"),
+                                      JOptionPane.WARNING_MESSAGE);
     }
     
     private void showNetworkComment(ProbNet probNet) {

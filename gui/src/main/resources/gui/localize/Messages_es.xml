@@ -116,6 +116,10 @@
         <Text value="La red &quot;~&quot; ha sido modificada. ¿Desea guardar los cambios?"/>
         <Title value="Guardar red"/>
     </NetworkNotSaved>
+    <ColumnsDoNotAddUpToOne>
+        <Title value="Probabilidades que no suman uno"/>
+        <Text value="Estas columnas de probabilidad de la red &quot;~&quot; no suman uno. El muestreo y el cálculo exacto darán resultados distintos."/>
+    </ColumnsDoNotAddUpToOne>
     <NotEnoughMemoryForExactInference>
         <Title value="Memoria insuficiente para la inferencia exacta"/>
         <Text value="No hay memoria suficiente para llevar a cabo inferencia exacta.&#10; Se utilizará un algoritmo de inferencia aproximada. "/>

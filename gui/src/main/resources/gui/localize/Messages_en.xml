@@ -118,6 +118,10 @@
         <Text value="The network &quot;~&quot; has been modified. Do you want to save the changes?"/>
         <Title value="Save network"/>
     </NetworkNotSaved>
+    <ColumnsDoNotAddUpToOne>
+        <Title value="Probabilities that do not add up to one"/>
+        <Text value="These probability columns of the network &quot;~&quot; do not add up to one. Sampling and exact inference will give different results."/>
+    </ColumnsDoNotAddUpToOne>
     <NotEnoughMemoryForExactInference>
         <Title value="Not enough memory for exact inference"/>
         <Text value="There is not enough memory available "/>

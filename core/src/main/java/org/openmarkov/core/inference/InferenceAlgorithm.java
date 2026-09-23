@@ -17,6 +17,7 @@ import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.inference.tasks.Task;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.potential.ColumnsThatDoNotAddUpToOne;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.type.NetworkType;
@@ -84,6 +85,8 @@ public abstract class InferenceAlgorithm implements Task {
         checkEvaluability();
         checkConsistency();
         this.probNet = network.copy();
+        // Rounding in the file must not make sampling and exact inference disagree
+        ColumnsThatDoNotAddUpToOne.normalizeWithinTolerance(this.probNet);
     }
     
     /**
