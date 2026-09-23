@@ -49,8 +49,8 @@ public class BasicOperations {
         TablePotential newTable;
         if (nodePotential instanceof SumPotential) {
             newTable = DiscretePotentialOperations.sum(parentsPotentials);
-        } else if (nodePotential instanceof ProductPotential) {
-            newTable = DiscretePotentialOperations.multiply(parentsPotentials);
+        } else if (nodePotential instanceof ProductPotential product) {
+            newTable = product.scaled(DiscretePotentialOperations.multiply(parentsPotentials));
         } else if (nodePotential instanceof FunctionPotential) {
             try {
                 newTable = DiscretePotentialOperations.evaluateFunctionPotential(

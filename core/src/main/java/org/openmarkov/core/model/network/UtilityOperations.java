@@ -12,11 +12,27 @@ import org.openmarkov.core.exception.IntervalsAreNotMultipleOf3Exception;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.SumPotential;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UtilityOperations {
+
+	/**
+	 * A sum of utilities leaves a scale or a discount to its parents, but a product, a formula or
+	 * any other combination receives it once, itself. A utility node below one of those, even
+	 * through sums, must not be scaled: its factor is applied there.
+	 */
+	public static boolean getsItsFactorBelow(Node utilityNode) {
+		for (Node child : utilityNode.getChildren()) {
+			if (child.getNodeType() == NodeType.UTILITY
+					&& (!(child.getPotential() instanceof SumPotential) || getsItsFactorBelow(child))) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Transform a multicriteria net into an unicriterion net. All the utility
@@ -30,7 +46,7 @@ public class UtilityOperations {
 
 		for (Node utilityNode : probNet.getNodes(NodeType.UTILITY)) {
 			Criterion decisionCriterion = utilityNode.getVariable().getDecisionCriterion();
-			if (decisionCriterion != null) {
+			if (decisionCriterion != null && !getsItsFactorBelow(utilityNode)) {
                 double scale = decisionCriterion.getUnicriterizationScale();
 				// Get the actual criterion scale
 				List<Potential> utilityPotentials = utilityNode.getPotentials();
@@ -66,7 +82,7 @@ public class UtilityOperations {
 	 */
 	public static void applyCEUtilityScaling(ProbNet probNet) {
 		for (Node utilityNode : probNet.getNodes(NodeType.UTILITY)) {
-			if (utilityNode.getVariable().getDecisionCriterion() != null) {
+			if (utilityNode.getVariable().getDecisionCriterion() != null && !getsItsFactorBelow(utilityNode)) {
 				// Save the actual criterion scale
 				double scale = utilityNode.getVariable().getDecisionCriterion().getCeScale();
 				if (scale != 0) {

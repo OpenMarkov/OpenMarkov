@@ -33,6 +33,9 @@ import java.util.List;
  * @version 1.0
  */
 @PotentialType(names = "Product") public class ProductPotential extends Potential {
+
+    /** A scale or a discount of the product, applied once to it and not to its factors. */
+    private double scale = 1.0;
     
     // Constructor
     
@@ -46,6 +49,11 @@ import java.util.List;
     
     public ProductPotential(ProductPotential potential) {
         super(potential);
+        this.scale = potential.scale;
+    }
+
+    public double getScale() {
+        return scale;
     }
     
     /**
@@ -97,7 +105,17 @@ import java.util.List;
             parentPotentials.add(findPotentialByVariable(parentVariable, projectedPotentials, evidenceCase,
                                                         inferenceOptions));
         }
-        return DiscretePotentialOperations.multiply(parentPotentials);
+        return scaled(DiscretePotentialOperations.multiply(parentPotentials));
+    }
+
+    /** @return the product of the parents times the scale, keeping its criterion and strategy trees */
+    public TablePotential scaled(TablePotential product) {
+        if (scale == 1.0) {
+            return product;
+        }
+        TablePotential factor = new TablePotential(new ArrayList<>(), PotentialRole.CONDITIONAL_PROBABILITY,
+                                                   new double[] { scale });
+        return DiscretePotentialOperations.multiply(List.of(product, factor));
     }
     
     /**
@@ -115,7 +133,7 @@ import java.util.List;
     }
 
     @Override public void scalePotential(double scale) {
-    
+        this.scale *= scale;
     }
     
     @Override public Potential deepCopy(ProbNet copyNet) {

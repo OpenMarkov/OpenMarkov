@@ -366,7 +366,7 @@ public class TemporalNetOperations {
         //For each utility Node, applies the discount of its criterion
         for (Node utilityNode : utilityExpandedNodes) {
             Variable utilityVariable = utilityNode.getVariable();
-            if (utilityVariable.isTemporal()) {
+            if (utilityVariable.isTemporal() && !UtilityOperations.getsItsFactorBelow(utilityNode)) {
                 // Get a deep copy of the potential. Deep copy re-links the potential to their variaible in the
                 // probNet
                 Potential potential = utilityNode.getPotentials().get(0).deepCopy(probNet);

@@ -20,6 +20,7 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -165,8 +166,8 @@ public class FunctionPotential extends GLMPotential implements DESSimulablePoten
      * @param scale - the scale factor
      */
     @Override public void scalePotential(double scale) {
-        String scaleString = String.valueOf(scale);
-        covariates[0] = new VariableExpression(this.variables, scaleString + "*" + this.covariates[0].asStringExpression());
+        String scaleString = BigDecimal.valueOf(scale).stripTrailingZeros().toPlainString(); // jeval reads no scientific notation
+        covariates[0] = new VariableExpression(this.variables, scaleString + "*(" + this.covariates[0].asStringExpression() + ")");
     }
     
     /**

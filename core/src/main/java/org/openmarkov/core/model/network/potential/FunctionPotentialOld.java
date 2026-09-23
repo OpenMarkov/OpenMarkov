@@ -20,6 +20,7 @@ import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -168,8 +169,8 @@ public class FunctionPotentialOld extends GLMPotential implements DESSimulablePo
 // 24/10/2023 'Double(double)' is deprecated and marked for removal
 //		String scaleString = new Double(scale).toString();
 //
-        String scaleString = Double.toString(scale);
-        String function = scaleString.concat("*").concat(covariates[0].asStringExpression());
+        String scaleString = BigDecimal.valueOf(scale).stripTrailingZeros().toPlainString();
+        String function = scaleString + "*(" + covariates[0].asStringExpression() + ")";
         covariates[0] = new VariableExpression(variables, function);
     }
     
