@@ -107,6 +107,8 @@ public class NetsIOTest {
             "MID-Chancellor.pgmx",
             "MID-Chancellor-new.pgmx",
             "MID-Chancellor-corrected.pgmx",
+            "MID-Chancellor-1-0.pgmx",
+            "MID-Chancellor-corrected-1-0.pgmx",
             "MID-mammography.pgmx",
             "MID-hip-Briggs.pgmx",
             "MID-dmhee-2.5.pgmx",
@@ -127,6 +129,10 @@ public class NetsIOTest {
             "ID-arthronet-ce.pgmx",
             "ID-mediastinet.pgmx",
             "ID-used-car-buyer.pgmx",
+            // The same in format 1.0, once its exact relations are evaluated
+            "ID-arthronet-1-0.pgmx",
+            "ID-mediastinet-1-0.pgmx",
+            "ID-used-car-buyer-1-0.pgmx",
             "MID-CHAP-Ryan-Griffin.pgmx",
             "MID-HPV.pgmx",
             // Too big

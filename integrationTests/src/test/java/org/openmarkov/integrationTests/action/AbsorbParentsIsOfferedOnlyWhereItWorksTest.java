@@ -46,10 +46,7 @@ public class AbsorbParentsIsOfferedOnlyWhereItWorksTest {
     @Tag(TestSpeed.MEDIUM)
     @Test public void absorbingWorksWhereverItIsOffered() throws Exception {
         List<String> failures = new ArrayList<>();
-        // Format 1.0 copies are left out: distributions as parents are error 9
-        List<URL> urls = Networks.getNetworks()
-                                 .filter(u -> u.getPath().endsWith(".pgmx") && !u.getPath().contains("/1-0/"))
-                                 .toList();
+        List<URL> urls = Networks.getNetworks().filter(u -> u.getPath().endsWith(".pgmx")).toList();
         for (URL url : urls) {
             ProbNet net;
             try {

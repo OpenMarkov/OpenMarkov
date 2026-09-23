@@ -354,13 +354,34 @@ public class UnivariateDistrPotential extends TableWithEvents
     }
     
     @Override
-    public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions) throws NonProjectablePotentialException.PotentialCannotBeConvertedToATable {
-        throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
+    public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions) throws NonProjectablePotentialException {
+        return asExactDistribution().tableProject(evidenceCase, inferenceOptions);
     }
     
     @Override
-    public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> alreadyProjectedPotentials) throws NonProjectablePotentialException.PotentialCannotBeConvertedToATable {
-        throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
+    public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> alreadyProjectedPotentials) throws NonProjectablePotentialException {
+        return asExactDistribution().tableProject(evidenceCase, inferenceOptions, alreadyProjectedPotentials);
+    }
+
+    /**
+     * An "Exact" distribution with numbers as parameters, as format 1.0 writes the relation that
+     * format 0.2 keeps as {@link ExactDistrPotential}, says the same and is projected as one.
+     *
+     * @throws NonProjectablePotentialException.PotentialCannotBeConvertedToATable for any other distribution
+     */
+    private ExactDistrPotential asExactDistribution() throws NonProjectablePotentialException.PotentialCannotBeConvertedToATable {
+        if (!isExactWithNumbers()) {
+            throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
+        }
+        List<Variable> exactVariables = new ArrayList<>(finiteStatesVariables);
+        exactVariables.addFirst(variables.getFirst());
+        return new ExactDistrPotential(exactVariables, role, distributionTable.getValues().clone());
+    }
+
+    private boolean isExactWithNumbers() {
+        return probDensFunctionClass != null && ExactFunction.class.isAssignableFrom(probDensFunctionClass)
+                && parameterVariables.isEmpty() && Arrays.stream(distributionTable.getFunctionValues())
+                .allMatch(function -> function == null || function.references().isEmpty());
     }
     
     @Override public Potential copy() {
@@ -409,7 +430,15 @@ public class UnivariateDistrPotential extends TableWithEvents
     }
 
     @Override public void scalePotential(double scale) {
-        this.getDistributionTable().scalePotential(scale);
+        if (isExactWithNumbers()) {
+            // The table of the distribution does not scale itself; an exact value is scaled here
+            double[] values = distributionTable.getValues();
+            for (int i = 0; i < values.length; i++) {
+                values[i] *= scale;
+            }
+        } else {
+            this.getDistributionTable().scalePotential(scale);
+        }
     }
     
     public Variable getChildVariable() {
