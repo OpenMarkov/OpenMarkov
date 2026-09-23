@@ -19,6 +19,8 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.Projectable;
 import org.openmarkov.core.model.network.potential.PotentialRole;
@@ -129,7 +131,12 @@ public abstract class ICIPotential extends Potential implements Projectable {
      * @return True if it is valid
      */
     public static boolean validate(Node node, List<Variable> variables, PotentialRole role) {
-        return variables.size() > 1;
+        // Common to every canonical model, so that they are offered in the same cases
+        return !(node.getProbNet().getNetworkType() instanceof DESNetworkType)
+                && (role == PotentialRole.CONDITIONAL_PROBABILITY || role == PotentialRole.POLICY)
+                && variables.size() > 1
+                && variables.stream().allMatch(variable -> variable.getVariableType() == VariableType.FINITE_STATES
+                        || variable.getVariableType() == VariableType.DISCRETIZED);
     }
     
     /**

@@ -81,10 +81,8 @@ public class TuningPotential extends ICIPotential {
      * @return True if it is valid
      */
     public static boolean validate(Node node, List<Variable> variables, PotentialRole role) {
-        if (!ICIPotential.validate(node, variables, role) && role == PotentialRole.CONDITIONAL_PROBABILITY) {
-            return false;
-        }
-        return variables.stream().allMatch(variable -> variable.getNumStates() == 3);
+        return ICIPotential.validate(node, variables, role)
+                && variables.stream().allMatch(variable -> variable.getNumStates() == NUM_STATES);
     }
     
     @Override
