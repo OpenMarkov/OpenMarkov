@@ -20,7 +20,6 @@ import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -169,7 +168,7 @@ public class FunctionPotentialOld extends GLMPotential implements DESSimulablePo
 // 24/10/2023 'Double(double)' is deprecated and marked for removal
 //		String scaleString = new Double(scale).toString();
 //
-        String scaleString = BigDecimal.valueOf(scale).stripTrailingZeros().toPlainString();
+        String scaleString = ReferencedExpression.toExpression(scale);
         String function = scaleString + "*(" + covariates[0].asStringExpression() + ")";
         covariates[0] = new VariableExpression(variables, function);
     }
@@ -274,7 +273,7 @@ As FunctionPotential is not projectable I leave the default behaviour
         List<Variable> parentVariables = parents.getVariables();
         Map<Variable, String> variablesMap = new HashMap();
         for (Variable parentVariable : parentVariables) {
-            variablesMap.put(parentVariable, "" + parents.getFinding(parentVariable).getNumericalValue());
+            variablesMap.put(parentVariable, ReferencedExpression.toExpression(parents.getFinding(parentVariable).getNumericalValue()));
         }
         return Double.parseDouble(this.covariates[0].evaluateWith(variablesMap));
     }

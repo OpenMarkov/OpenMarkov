@@ -1,5 +1,6 @@
 package org.openmarkov.core.expression;
 
+import java.math.BigDecimal;
 import net.sourceforge.jeval.EvaluationException;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
@@ -103,6 +104,15 @@ public class ReferencedExpression<T> {
         return this.asStringExpression();
     }
     
+    /**
+     * @return the number as jeval reads it: without scientific notation, which jeval rejects when
+     * the exponent has a sign, as in 1.0E-4
+     */
+    public static String toExpression(double value) {
+        return Double.isFinite(value) ? BigDecimal.valueOf(value).stripTrailingZeros().toPlainString()
+                : String.valueOf(value);
+    }
+
     public String evaluateWith(Map<T, String> variablesValues) throws NonProjectablePotentialException.CannotEvaluate, NonProjectablePotentialException.CannotResolveVariable {
         String processedExpression = this.processedExpression(variablesValues);
         String result;

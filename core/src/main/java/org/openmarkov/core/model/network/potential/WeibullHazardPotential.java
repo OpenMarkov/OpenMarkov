@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network.potential;
 
+import org.openmarkov.core.expression.ReferencedExpression;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
@@ -189,7 +190,7 @@ public class WeibullHazardPotential extends GLMPotential implements DESSimulable
                     } catch (NumberFormatException e) {
                         // ignore
                     }
-                    variableValues.put(variable, String.valueOf(value));
+                    variableValues.put(variable, ReferencedExpression.toExpression(value));
                 }
                 double lambda = coefficients[constantIndex];
                 for (int j = 0; j < coefficients.length; ++j) {

@@ -7,6 +7,7 @@
 
 package org.openmarkov.gui.action;
 
+import org.openmarkov.core.expression.ReferencedExpression;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.core.PotentialChangeEdit;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
@@ -132,7 +133,7 @@ import static org.openmarkov.core.expression.VariableExpression.Common.COMPLEMEN
                 newConstantValue = Double.valueOf(newAugmentedValues[indexSelected].evaluateWith(Collections.emptyMap()));
                 if (newConstantValue > 1 || newConstantValue < 0) {
                     newConstantValue = Math.clamp(newConstantValue, 0.0, 1.0);
-                    newAugmentedValues[indexSelected] = new VariableExpression(Collections.emptyList(), Double.toString(newConstantValue));
+                    newAugmentedValues[indexSelected] = new VariableExpression(Collections.emptyList(), ReferencedExpression.toExpression(newConstantValue));
                     newValue = newAugmentedValues[indexSelected];
                 }
             } catch (NonProjectablePotentialException.CannotEvaluate |
@@ -228,7 +229,7 @@ import static org.openmarkov.core.expression.VariableExpression.Common.COMPLEMEN
                     
                     newModifyingValue = Util.roundAndReduce(newModifyingValue, PotentialsTablePanelOperations.DEFAULT_EPSILON, PotentialsTablePanelOperations.DEFAULT_MAX_DECIMALS);
                     
-                    valuesOfColumn[index] = new VariableExpression(Collections.emptyList(), Double.toString(newModifyingValue));
+                    valuesOfColumn[index] = new VariableExpression(Collections.emptyList(), ReferencedExpression.toExpression(newModifyingValue));
                 }
             }
             for (int valueIndex = 0; valueIndex < valuesOfColumn.length; valueIndex++) {

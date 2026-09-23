@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network.potential.operation;
 
+import org.openmarkov.core.expression.ReferencedExpression;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.model.network.Criterion;
@@ -620,7 +621,7 @@ final class TablePotentialArithmetic {
             for (int iPotential = 0; iPotential < numPotentials; iPotential++) {
                 int potentialsPositionIPotential = potentialsPositions[iPotential];
                 // Each table goes to the operand of its parent, not to "U" + position
-                assignment.put(utilityVariables.get(iPotential), "" + tables[iPotential][potentialsPositionIPotential]);
+                assignment.put(utilityVariables.get(iPotential), ReferencedExpression.toExpression(tables[iPotential][potentialsPositionIPotential]));
                 // Obtain the intervention
                 if (thereAreInterventions && indexPotentialWithInterventions == iPotential) {
                     strategyTree = inputStrategyTrees[potentialsPositionIPotential];

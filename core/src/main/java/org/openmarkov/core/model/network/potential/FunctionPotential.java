@@ -6,6 +6,7 @@
  */
 package org.openmarkov.core.model.network.potential;
 
+import org.openmarkov.core.expression.ReferencedExpression;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
@@ -20,7 +21,6 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -101,7 +101,7 @@ public class FunctionPotential extends GLMPotential implements DESSimulablePoten
         List<Variable> parentVariables = parents.getVariables();
         Map<Variable, String> variablesMap = new HashMap<>();
         for (Variable parentVariable : parentVariables) {
-            variablesMap.put(parentVariable, "" + parents.getFinding(parentVariable).getNumericalValue());
+            variablesMap.put(parentVariable, ReferencedExpression.toExpression(parents.getFinding(parentVariable).getNumericalValue()));
         }
         return Double.parseDouble(this.covariates[0].evaluateWith(variablesMap));
     }
@@ -166,7 +166,7 @@ public class FunctionPotential extends GLMPotential implements DESSimulablePoten
      * @param scale - the scale factor
      */
     @Override public void scalePotential(double scale) {
-        String scaleString = BigDecimal.valueOf(scale).stripTrailingZeros().toPlainString(); // jeval reads no scientific notation
+        String scaleString = ReferencedExpression.toExpression(scale);
         covariates[0] = new VariableExpression(this.variables, scaleString + "*(" + this.covariates[0].asStringExpression() + ")");
     }
     

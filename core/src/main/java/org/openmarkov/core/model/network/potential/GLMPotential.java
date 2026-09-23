@@ -6,6 +6,7 @@
  */
 package org.openmarkov.core.model.network.potential;
 
+import org.openmarkov.core.expression.ReferencedExpression;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.expression.VariableExpression;
@@ -238,7 +239,7 @@ public abstract class GLMPotential extends Potential {
                         // ignore
                     }
                 }
-                variableValues.put(variable, String.valueOf(numericValue));
+                variableValues.put(variable, ReferencedExpression.toExpression(numericValue));
             }
         }
         return tableProject(evidenceCase, inferenceOptions, coefficients, covariates, evidencelessVariables, variableValues);

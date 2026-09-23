@@ -6,6 +6,7 @@
  */
 package org.openmarkov.core.model.network.potential;
 
+import org.openmarkov.core.expression.ReferencedExpression;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.expression.VariableExpression;
@@ -108,7 +109,7 @@ public class LinearCombinationPotential extends GLMPotential implements Scalable
                 } catch (NumberFormatException e) {
                     // ignore
                 }
-                variableValues.put(variable, String.valueOf(value));
+                variableValues.put(variable, ReferencedExpression.toExpression(value));
             }
             double regression = coefficients[constantIndex];
             for (int j = 0; j < coefficients.length; ++j) {
