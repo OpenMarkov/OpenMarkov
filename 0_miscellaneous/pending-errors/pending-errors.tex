@@ -202,6 +202,10 @@ Debajo va una ficha con:
   \item \textbf{Decisión de equipo}: si el arreglo no se puede hacer sin que el equipo decida
         antes algo (qué debe hacer el programa, qué ficheros se aceptan…), qué hay que decidir.
         Estos errores conviene no empezarlos hasta tener la decisión.
+  \item \textbf{Corregir antes}, solo si lo hay: el error que hay que corregir antes que este, o a
+        la vez como mínimo, porque sin él este arreglo no basta o rompe otra cosa; y por qué.
+  \item \textbf{Tapado por}, solo si lo hay: el error que hoy impide ver este, o comprobar su
+        arreglo desde la aplicación, y dónde. Este sí se puede corregir sin esperar al otro.
   \item \textbf{Relacionados}: otros errores que tocan el mismo código o conviene arreglar a la
         vez, y notas del apéndice sobre lo mismo.
 \end{itemize}
@@ -1640,6 +1644,7 @@ Prueba de regresión: en \texttt{core/\allowbreak{}src/\allowbreak{}test}, proye
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:71]{error~71}: en las redes CHAP del repositorio, que fallan antes. \newline \hyperref[err:74]{error~74}: en el jar publicado la ventana del ámbito de decisión no se abre; desde el IDE se ve.
 \fichakey{Relacionados}\hyperref[err:10]{error~10}, \hyperref[err:12]{error~12}, \hyperref[err:14]{error~14}, \hyperref[err:71]{error~71}, \hyperref[err:74]{error~74}, \hyperref[nota:28]{nota~28}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -1992,6 +1997,7 @@ Prueba: en un diagrama de influencia, el diálogo «Add variables to potential»
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:20]{error~20}: en parte: la copia de \texttt{Transition\allowbreak{}Table\allowbreak{}Potential} por su constructor de copia no se ve porque \texttt{copy(\allowbreak{})} devuelve otra clase.
 \fichakey{Relacionados}\hyperref[err:20]{error~20}, \hyperref[err:21]{error~21}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -2110,6 +2116,7 @@ Pruebas de regresión: para \texttt{Distribution\allowbreak{}Table\allowbreak{}P
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:19]{error~19}: a la vez, como mínimo: sin él, la tabla interna del nodo copiado sigue apuntando a la variable «Events» del original.
 \fichakey{Relacionados}\hyperref[err:19]{error~19}, \hyperref[err:21]{error~21}, \hyperref[nota:184]{nota~184}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -2183,6 +2190,7 @@ Prueba de regresión: para una \texttt{Transition\allowbreak{}Table\allowbreak{}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:19]{error~19} y \hyperref[err:20]{error~20}: sin ellos, pegar sigue sin funcionar del todo para las tablas de transiciones y para los sucesos con dos o más sucesos padres.
 \fichakey{Relacionados}\hyperref[err:19]{error~19}, \hyperref[err:20]{error~20}, \hyperref[err:99]{error~99}, \hyperref[err:105]{error~105}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -2510,6 +2518,7 @@ Cada cambio que el usuario hace sobre una red es una edición que se apunta en e
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:30]{error~30}: si se comparte con \texttt{Node\allowbreak{}State\allowbreak{}Edit} la fotografía de los potenciales, como propone esta ficha, primero hay que corregirla.
 \fichakey{Relacionados}\hyperref[err:25]{error~25}, \hyperref[err:30]{error~30}, \hyperref[err:173]{error~173}, \hyperref[nota:5]{nota~5}, \hyperref[nota:15]{nota~15}, \hyperref[nota:150]{nota~150}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -3028,6 +3037,7 @@ Prueba de regresión: sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}n
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué estrategia rige para las ediciones de varios pasos («comprobar antes» o «probar y revertir») y si una violación previa debe bloquear ediciones que no la empeoran
+\fichakey{Corregir antes}\hyperref[err:37]{error~37}: si se decide que una red que incumple sus restricciones no pueda entrar al abrir un fichero, este error deja de alcanzarse.
 \fichakey{Relacionados}\hyperref[err:28]{error~28}, \hyperref[nota:184]{nota~184}, \hyperref[err:37]{error~37}, \hyperref[nota:142]{nota~142}, \hyperref[nota:158]{nota~158}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -3782,6 +3792,7 @@ Prueba: \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué debe enseñar el modo inferencia en un nodo de utilidad que otro nodo de utilidad suma o multiplica: su utilidad esperada, calculada aparte, o nada
+\fichakey{Tapado por}\hyperref[err:46]{error~46}: en nueve redes, entre ellas MID-HPV, el cálculo de rangos falla antes.
 \fichakey{Relacionados}\hyperref[err:8]{error~8}, \hyperref[err:41]{error~41}, \hyperref[err:44]{error~44}, \hyperref[err:45]{error~45}, \hyperref[err:46]{error~46}, \hyperref[err:108]{error~108}, \hyperref[err:112]{error~112}, \hyperref[err:113]{error~113}, \hyperref[nota:109]{nota~109}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -4472,6 +4483,7 @@ Prueba: construir con \texttt{Decision\allowbreak{}Tree\allowbreak{}Manager\allo
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el tipo de política (óptima, determinista, probabilista) debe poder elegirse en la interfaz o si se retira \texttt{Policy\allowbreak{}Type\allowbreak{}Panel}
+\fichakey{Tapado por}\hyperref[err:52]{error~52}: en algunas redes el cálculo de la utilidad esperada falla antes de abrir la ventana.
 \fichakey{Relacionados}\hyperref[err:52]{error~52}, \hyperref[err:55]{error~55}, \hyperref[err:56]{error~56}, \hyperref[nota:32]{nota~32}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -4537,6 +4549,7 @@ Prueba: una prueba de interfaz que, sobre \texttt{0\_\allowbreak{}miscellaneous/
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:51]{error~51}: la tabla con ceros no se ve porque la ventana no llega a abrirse.
 \fichakey{Relacionados}\hyperref[err:51]{error~51}, \hyperref[err:53]{error~53}, \hyperref[err:67]{error~67}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -4643,6 +4656,7 @@ Pruebas de regresión: \texttt{new\ VEExpected\allowbreak{}Utility\allowbreak{}D
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:51]{error~51}: la ventana no llega a abrirse.
 \fichakey{Relacionados}\hyperref[err:52]{error~52}, \hyperref[err:54]{error~54}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -4809,6 +4823,7 @@ Prueba de regresión: con \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}net
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:51]{error~51}: la ventana no llega a abrirse.
 \fichakey{Relacionados}\hyperref[err:51]{error~51}, \hyperref[nota:32]{nota~32}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -5090,6 +5105,7 @@ Prueba de regresión: leer \texttt{DAN-dating.\allowbreak{}pgmx} con \texttt{\te
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:62]{error~62}: a la vez, como mínimo: en cuanto el lector asigne agentes, abrir las propiedades de una decisión leída de un fichero puede lanzar una excepción.
 \fichakey{Relacionados}\hyperref[err:61]{error~61}, \hyperref[err:62]{error~62}, \hyperref[nota:72]{nota~72}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -5550,6 +5566,7 @@ Las redes con variables que se repiten ciclo a ciclo (por ejemplo, los diagramas
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si las curvas de la evolución temporal deben normalizarse por cada opción de la decisión (y qué significa una columna que suma cero, es decir, una alternativa imposible con esa evidencia), o si basta con decir en la ventana que se muestran valores sin normalizar
+\fichakey{Tapado por}\hyperref[err:74]{error~74}: en el jar publicado; desde el IDE se ve.
 \fichakey{Relacionados}\hyperref[err:48]{error~48}, \hyperref[err:52]{error~52}, \hyperref[err:69]{error~69}, \hyperref[err:74]{error~74}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -5892,6 +5909,7 @@ Prueba de regresión: en \texttt{core/\allowbreak{}src/\allowbreak{}test}, los c
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:46]{error~46}: en el modo inferencia, donde el cálculo de rangos falla antes.
 \fichakey{Relacionados}\hyperref[err:10]{error~10}, \hyperref[err:13]{error~13}, \hyperref[err:14]{error~14}, \hyperref[err:15]{error~15}, \hyperref[err:46]{error~46}, \hyperref[err:70]{error~70}, \hyperref[err:114]{error~114}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -6126,6 +6144,7 @@ El análisis de coste-efectividad, el análisis de sensibilidad determinista (to
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:83]{error~83}: arreglado solo este, el jar publicado pasa a fallar también en el mapa de ámbito de decisión.
 \fichakey{Relacionados}\hyperref[err:15]{error~15}, \hyperref[err:67]{error~67}, \hyperref[err:80]{error~80}, \hyperref[err:81]{error~81}, \hyperref[err:82]{error~82}, \hyperref[err:83]{error~83}, \hyperref[err:84]{error~84}, \hyperref[err:86]{error~86}, \hyperref[err:88]{error~88}, \hyperref[err:89]{error~89}, \hyperref[err:90]{error~90}, \hyperref[err:91]{error~91}, \hyperref[nota:37]{nota~37}, \hyperref[nota:58]{nota~58}, \hyperref[nota:169]{nota~169}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -6609,6 +6628,7 @@ Prueba de regresión: para un conjunto de columnas (exacta+complemento, beta+com
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:82]{error~82}: la zona de datos sale de un solo color. \newline \hyperref[err:81]{error~81}: las opciones tercera y siguientes salen en gris.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:81]{error~81}, \hyperref[err:82]{error~82}, \hyperref[err:83]{error~83}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -6675,6 +6695,7 @@ Prueba de regresión: el método extraído con \texttt{\{1,\allowbreak{}5,\allow
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:82]{error~82}: la zona de datos sale de un solo color.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:80]{error~80}, \hyperref[err:82]{error~82}, \hyperref[err:83]{error~83}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -6736,6 +6757,7 @@ Prueba de regresión: construir la gráfica con una decisión de tres opciones (
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:74]{error~74}: en el jar publicado el mapa de ámbito global no llega a dibujarse.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:80]{error~80}, \hyperref[err:81]{error~81}, \hyperref[err:83]{error~83}, \hyperref[err:90]{error~90}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -6794,6 +6816,7 @@ Prueba de regresión: construir la gráfica con un patrón conocido (media rejil
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:74]{error~74}: en el jar publicado, en ámbito de decisión; desde el IDE se ve.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:80]{error~80}, \hyperref[err:81]{error~81}, \hyperref[err:82]{error~82}, \hyperref[err:88]{error~88}, \hyperref[err:90]{error~90}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -6860,6 +6883,7 @@ Prueba de regresión: construir la gráfica sin pantalla (o extraer el cálculo 
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:74]{error~74}: en el jar publicado; desde el IDE se ve.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:85]{error~85}, \hyperref[err:86]{error~86}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -6984,6 +7008,7 @@ Prueba de regresión: en \texttt{inference/\allowbreak{}src/\allowbreak{}test}, 
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:48]{error~48}: allí se decide el mensaje para la evidencia imposible, que estas ventanas deben usar.
 \fichakey{Relacionados}\hyperref[err:48]{error~48}, \hyperref[err:54]{error~54}, \hyperref[err:74]{error~74}, \hyperref[err:84]{error~84}, \hyperref[err:85]{error~85}, \hyperref[err:87]{error~87}, \hyperref[nota:46]{nota~46}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -7083,6 +7108,7 @@ Prueba de regresión: sacar de la ventana el cálculo de los umbrales y de las f
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el diálogo debe proponer y ofrecer solo escenarios posibles con la evidencia, o dejarlos elegir y avisar al aceptar
+\fichakey{Corregir antes}\hyperref[err:54]{error~54}: la comprobación necesita la probabilidad del escenario, y hoy sale 0 también con evidencia posible.
 \fichakey{Relacionados}\hyperref[err:54]{error~54}, \hyperref[err:85]{error~85}, \hyperref[err:86]{error~86}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -7165,6 +7191,8 @@ Prueba de regresión: con \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}net
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:83]{error~83}: a la vez, como mínimo, en \texttt{Map\allowbreak{}Dialog}: con este cambio solo, un mapa en el que gana la primera opción o hay empate en todas las casillas pasaría a fallar.
+\fichakey{Tapado por}\hyperref[err:74]{error~74}: en el jar publicado; desde el IDE se ve.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:83]{error~83}, \hyperref[err:89]{error~89}, \hyperref[err:90]{error~90}, \hyperref[err:91]{error~91}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -7233,6 +7261,7 @@ Prueba de regresión: extraer el cálculo de mínimos y máximos a un método si
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:74]{error~74}: en el jar publicado la ventana no llega a abrirse; desde el IDE se ve.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:88]{error~88}, \hyperref[err:90]{error~90}, \hyperref[err:91]{error~91}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -7300,6 +7329,8 @@ Prueba de regresión: con el método extraído, un barrido en que «no» baja de
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:83]{error~83}: a la vez, como mínimo, en \texttt{Map\allowbreak{}Dialog}: el caso del rango vacío es ese error.
+\fichakey{Tapado por}\hyperref[err:74]{error~74}: en el jar publicado; desde el IDE se ve. \newline \hyperref[err:82]{error~82}: en el mapa de ámbito global la zona de datos sale de un solo color.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:82]{error~82}, \hyperref[err:83]{error~83}, \hyperref[err:88]{error~88}, \hyperref[err:89]{error~89}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -7354,6 +7385,7 @@ Prueba de regresión: construir sin pantalla la gráfica de \texttt{Plot\allowbr
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:74]{error~74}: en el jar publicado; desde el IDE se ve.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:88]{error~88}, \hyperref[err:89]{error~89}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -8366,6 +8398,7 @@ Prueba de regresión: la situación medida arriba, con criterios «Cost» (con d
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:102]{error~102}: si su arreglo reescribe la exportación a partir de los objetos de resultados, este error desaparece.
 \fichakey{Relacionados}\hyperref[err:102]{error~102}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -10278,6 +10311,7 @@ Prueba de regresión: con variables de números de estados distintos (por ejempl
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:132]{error~132}: con «Unique superparent» marcada, que es la opción de fábrica, no se aprende ningún enlace.
 \fichakey{Relacionados}\hyperref[err:125]{error~125}, \hyperref[err:126]{error~126}, \hyperref[err:127]{error~127}, \hyperref[err:129]{error~129}, \hyperref[err:130]{error~130}, \hyperref[err:131]{error~131}, \hyperref[err:132]{error~132}, \hyperref[err:133]{error~133}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -10352,6 +10386,7 @@ Prueba de regresión: sobre \texttt{BN-asia10k.\allowbreak{}csv} con clase \text
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:132]{error~132}: con «Unique superparent» marcada, que es la opción de fábrica, no se aprende ningún enlace.
 \fichakey{Relacionados}\hyperref[err:127]{error~127}, \hyperref[err:128]{error~128}, \hyperref[err:130]{error~130}, \hyperref[err:131]{error~131}, \hyperref[err:132]{error~132}, \hyperref[err:133]{error~133}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -10444,6 +10479,7 @@ Prueba de regresión: sobre \texttt{BN-asia10k.\allowbreak{}csv} con clase \text
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Tapado por}\hyperref[err:132]{error~132}: con «Unique superparent» marcada, que es la opción de fábrica, no se aprende ningún enlace.
 \fichakey{Relacionados}\hyperref[err:127]{error~127}, \hyperref[err:128]{error~128}, \hyperref[err:129]{error~129}, \hyperref[err:132]{error~132}, \hyperref[err:133]{error~133}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -10580,6 +10616,7 @@ Prueba: con una base de 1 003 casos, cada índice aparece en exactamente una par
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:133]{error~133}: a la vez, como mínimo: arreglado solo este, con la opción de fábrica el superpadre se aplicaría sin compararlo con el Bayes ingenuo.
 \fichakey{Relacionados}\hyperref[err:127]{error~127}, \hyperref[err:128]{error~128}, \hyperref[err:129]{error~129}, \hyperref[err:130]{error~130}, \hyperref[err:131]{error~131}, \hyperref[err:133]{error~133}, \hyperref[err:134]{error~134}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -10637,6 +10674,8 @@ Prueba de regresión: ejecutar el algoritmo con \texttt{same\allowbreak{}SP\ =\ 
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:128]{error~128}: con él, todos los enlaces bajan la exactitud medida, así que comparando con el Bayes ingenuo no se añadiría ninguno.
+\fichakey{Tapado por}\hyperref[err:132]{error~132}: con «Unique superparent» marcada, que es la opción de fábrica, no se aprende ningún enlace.
 \fichakey{Relacionados}\hyperref[err:127]{error~127}, \hyperref[err:128]{error~128}, \hyperref[err:129]{error~129}, \hyperref[err:130]{error~130}, \hyperref[err:132]{error~132}, \hyperref[err:134]{error~134}, \hyperref[err:141]{error~141}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -10735,6 +10774,7 @@ Prueba de regresión: con una métrica de prueba (una subclase de \texttt{Accura
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si la tabla del aprendizaje interactivo con el superpadre debe enseñar solo alternativas para el paso en curso o también los pasos siguientes
+\fichakey{Tapado por}\hyperref[err:132]{error~132}: con «Unique superparent» marcada, que es la opción de fábrica, no se aprende ningún enlace.
 \fichakey{Relacionados}\hyperref[err:132]{error~132}, \hyperref[err:133]{error~133}, \hyperref[err:140]{error~140}, \hyperref[err:141]{error~141}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -11306,6 +11346,7 @@ Pruebas de regresión, repitiendo las llamadas de la ventana sobre \texttt{BN-as
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si «Finish» debe seguir desde la red tal como la ha dejado el usuario, como dice su ayuda emergente, o volver a aprender desde el principio
+\fichakey{Corregir antes}\hyperref[err:140]{error~140}: a la vez, como mínimo: «Finish» tiene que partir de la fase real del algoritmo, que hoy corrige \texttt{init}.
 \fichakey{Relacionados}\hyperref[err:133]{error~133}, \hyperref[err:134]{error~134}, \hyperref[err:139]{error~139}, \hyperref[err:140]{error~140}, \hyperref[err:142]{error~142}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -12683,6 +12724,7 @@ Prueba de regresión: construir \texttt{GLMPanel} (o \texttt{Weibull\allowbreak{
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:18]{error~18}: a la vez, como mínimo: en cuanto se puedan añadir variables, la del propio nodo seguiría ofrecida y se duplicaría.
 \fichakey{Relacionados}\hyperref[err:18]{error~18}, \hyperref[nota:30]{nota~30}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -14319,6 +14361,7 @@ Comprobación: tras el cambio, «an utility» no debe aparecer en ningún texto 
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
+\fichakey{Corregir antes}\hyperref[err:48]{error~48}: si se resuelve con un mensaje propio para la evidencia imposible, este texto deja de verse en los casos que cubra, y ese mensaje debe nombrar la variable y el estado.
 \fichakey{Relacionados}\hyperref[err:48]{error~48}, \hyperref[err:184]{error~184}, \hyperref[err:187]{error~187}
 \end{ficha}
 \paragraph{Qué pasa}
