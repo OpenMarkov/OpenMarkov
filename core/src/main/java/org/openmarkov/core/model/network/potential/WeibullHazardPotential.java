@@ -120,12 +120,16 @@ public class WeibullHazardPotential extends GLMPotential implements DESSimulable
         throw new NotSupportedOperationException();
     }
     
+    @Override public VariableExpression[] getMandatoryCovariatesOfThisPotential() {
+        return MANDATORY_COVARIATES;
+    }
+
     public double getGamma() {
-        return coefficients[getGammaIndex(covariates)];
+        return coefficients[indexOfMandatory(VariableExpression.Common.GAMMA)];
     }
     
     public void setGamma(double gamma) {
-        this.coefficients[getGammaIndex(covariates)] = gamma;
+        this.coefficients[indexOfMandatory(VariableExpression.Common.GAMMA)] = gamma;
     }
     
     @Override

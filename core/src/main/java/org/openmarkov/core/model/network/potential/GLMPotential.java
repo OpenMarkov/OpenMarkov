@@ -8,6 +8,7 @@ package org.openmarkov.core.model.network.potential;
 
 import org.openmarkov.core.expression.ReferencedExpression;
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.InferenceOptions;
@@ -20,6 +21,7 @@ import org.openmarkov.core.model.network.modelUncertainty.NormalFunction;
 import org.openmarkov.core.model.network.modelUncertainty.XORShiftRandom;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +131,22 @@ public abstract class GLMPotential extends Potential {
     public static VariableExpression[] getMandatoryCovariates() {
         return new VariableExpression[]{VariableExpression.Common.CONSTANT};
     }
+
+    /** The covariates this kind of potential cannot be computed without. */
+    public VariableExpression[] getMandatoryCovariatesOfThisPotential() {
+        return getMandatoryCovariates();
+    }
+
+    /** @return the position of a mandatory covariate, or an exception that names it */
+    protected int indexOfMandatory(VariableExpression covariate) {
+        for (int i = 0; i < covariates.length; i++) {
+            if (covariates[i].asStringExpression().equals(covariate.asStringExpression())) {
+                return i;
+            }
+        }
+        throw new InvalidArgumentException(covariate.asStringExpression(), "covariates",
+                "the potential lacks this covariate, which it needs");
+    }
     
     protected static VariableExpression[] getDefaultCovariates(List<Variable> variables, PotentialRole role) {
         return getDefaultCovariates(variables, role, getMandatoryCovariates());
@@ -167,11 +185,11 @@ public abstract class GLMPotential extends Potential {
     }
     
     public double getConstant() {
-        return coefficients[getConstantIndex(covariates)];
+        return coefficients[indexOfMandatory(VariableExpression.Common.CONSTANT)];
     }
     
     public void setConstant(double constant) {
-        this.coefficients[getConstantIndex(covariates)] = constant;
+        this.coefficients[indexOfMandatory(VariableExpression.Common.CONSTANT)] = constant;
     }
     
     public double[] getCovarianceMatrix() {
@@ -212,6 +230,11 @@ public abstract class GLMPotential extends Potential {
         if (coefficients.length != covariates.length) {
             throw new NonProjectablePotentialException.CoefficientsDoNotMatchCovariates(this, coefficients.length,
                                                                                        covariates.length);
+        }
+        for (VariableExpression mandatory : getMandatoryCovariatesOfThisPotential()) {
+            if (Arrays.stream(covariates).noneMatch(c -> c.asStringExpression().equals(mandatory.asStringExpression()))) {
+                throw new NonProjectablePotentialException.MissingMandatoryCovariate(this, mandatory.asStringExpression());
+            }
         }
         List<Variable> evidencelessVariables = new ArrayList<>();
         Map<Variable, String> variableValues = new HashMap<>();

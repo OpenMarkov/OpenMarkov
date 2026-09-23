@@ -47,6 +47,16 @@ public abstract sealed class NonProjectablePotentialException extends OpenMarkov
      * and the covariates only if the file carries them — so the mismatch is caught here, when the
      * potential is asked to project itself, and reported with both counts.
      */
+    public static final class MissingMandatoryCovariate extends NonProjectablePotentialException {
+        public MissingMandatoryCovariate(Potential potential, String covariate) {
+            this.potential = potential;
+            this.covariate = covariate;
+        }
+
+        public final Potential potential;
+        public final String covariate;
+    }
+
     public static final class CoefficientsDoNotMatchCovariates extends NonProjectablePotentialException {
         public CoefficientsDoNotMatchCovariates(Potential potential, int coefficientCount, int covariateCount) {
             this.potential = potential;

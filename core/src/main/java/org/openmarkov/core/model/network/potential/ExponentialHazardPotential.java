@@ -86,6 +86,10 @@ public class ExponentialHazardPotential extends WeibullHazardPotential {
     public static VariableExpression[] getMandatoryCovariates() {
         return new VariableExpression[]{VariableExpression.Common.CONSTANT};
 	}
+
+    @Override public VariableExpression[] getMandatoryCovariatesOfThisPotential() {
+        return MANDATORY_COVARIATES; // Gamma is added when projecting
+    }
     
     /**
      * Projects this potential to a table by treating the exponential model as the special case of the

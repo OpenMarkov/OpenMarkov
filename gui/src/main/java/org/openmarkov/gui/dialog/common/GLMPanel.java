@@ -133,7 +133,7 @@ import java.util.List;
         if (row >= 0 && row < tableModel.getRowCount()) {
             VariableExpression covariate = (VariableExpression) tableModel.getValueAt(row, 0);
             boolean isMandatory = false;
-            VariableExpression[] mandatoryCovariates = GLMPotential.getMandatoryCovariates();
+            VariableExpression[] mandatoryCovariates = potential.getMandatoryCovariatesOfThisPotential();
             for (VariableExpression mandatoryCovariate : mandatoryCovariates) {
                 isMandatory |= mandatoryCovariate.asStringExpression().equals(covariate.asStringExpression());
             }
@@ -161,7 +161,7 @@ import java.util.List;
                 int selectedRow = valuesTable.getSelectedRow();
                 VariableExpression covariate = (VariableExpression) tableModel.getValueAt(selectedRow, 0);
                 boolean isMandatory = false;
-                VariableExpression[] mandatoryCovariates = GLMPotential.getMandatoryCovariates();
+                VariableExpression[] mandatoryCovariates = potential.getMandatoryCovariatesOfThisPotential();
                 for (VariableExpression mandatoryCovariate : mandatoryCovariates) {
                     isMandatory |= mandatoryCovariate.asStringExpression().equals(covariate.asStringExpression());
                 }

@@ -352,7 +352,7 @@
           <Variable name="ShouldBe_Exact [0]" timeSlice="0" />
         </Variables>
       </Potential>
-      <Potential type="Hazard (Weibull)">
+      <Potential type="Hazard (Exponential)">
         <Variables>
           <Variable name="ExponentialHazard [0]" timeSlice="0" />
         </Variables>

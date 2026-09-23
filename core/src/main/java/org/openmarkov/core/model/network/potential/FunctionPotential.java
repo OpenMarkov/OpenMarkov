@@ -165,6 +165,11 @@ public class FunctionPotential extends GLMPotential implements DESSimulablePoten
      *
      * @param scale - the scale factor
      */
+    /** A formula has no Constant: it is the whole expression. */
+    @Override public VariableExpression[] getMandatoryCovariatesOfThisPotential() {
+        return new VariableExpression[0];
+    }
+
     @Override public void scalePotential(double scale) {
         String scaleString = ReferencedExpression.toExpression(scale);
         covariates[0] = new VariableExpression(this.variables, scaleString + "*(" + this.covariates[0].asStringExpression() + ")");
