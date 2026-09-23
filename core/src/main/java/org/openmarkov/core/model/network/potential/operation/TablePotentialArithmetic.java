@@ -123,8 +123,7 @@ final class TablePotentialArithmetic {
         // Multiply
         int incrementedVariable = 0;
 
-        int[] offsets = TablePotential.calculateOffsets(resultDimension);
-        int tableSize = numVariables > 0 ? resultDimension[numVariables - 1] * offsets[numVariables - 1] : 1;
+        int tableSize = TablePotential.computeTableSize(resultVariables);
         double[] resultValues = new double[tableSize];
 
         StrategicTablePotential potentialWithInterventions = findFirstPotentialWithInterventions(tablePotentials);
@@ -269,13 +268,7 @@ final class TablePotentialArithmetic {
 
         // Sum
         int incrementedVariable = 0;
-        boolean resultVariablesNotEmpty = !resultVariables.isEmpty();
-        int[] dimensions = resultVariablesNotEmpty ? TablePotential.calculateDimensions(resultVariables) : new int[0];
-        int[] offsets = resultVariablesNotEmpty ? TablePotential.calculateOffsets(dimensions) : new int[0];
-        int tableSize = 1; // If numVariables == 0 the potential is a constant
-        if (numVariables > 0) {
-            tableSize = dimensions[numVariables - 1] * offsets[numVariables - 1];
-        }
+        int tableSize = TablePotential.computeTableSize(resultVariables);
         double[] resultValues = new double[tableSize];
         StrategyTree[] resultStrategyTrees = (thereAreInterventions || constantPotentialsStrategyTree != null)
                 ? new StrategyTree[tableSize]
@@ -598,8 +591,7 @@ final class TablePotentialArithmetic {
         int[] potentialsPositions = initializeToZero(numPotentials);
         int incrementedVariable = 0;
 
-        int[] offsets = thereAreVariables ? TablePotential.calculateOffsets(resultDimension) : null;
-        int tableSize = thereAreVariables ? resultDimension[numVariables - 1] * offsets[numVariables - 1] : 1;
+        int tableSize = TablePotential.computeTableSize(resultVariables);
         double[] resultValues = new double[tableSize];
 
         StrategicTablePotential potentialWithInterventions = findFirstPotentialWithInterventions(potentials);

@@ -66,8 +66,7 @@ final class TablePotentialMerge {
 
         int[] mergedDimension = TablePotential.calculateDimensions(mergedVariables);
         int[][] offsetAccumulate = AuxiliaryOperations.getAccumulatedOffsets(potentials, mergedVariables);
-        int[] offsets = TablePotential.calculateOffsets(mergedDimension);
-        int tableSize = mergedDimension[numMergedVariables - 1] * offsets[numMergedVariables - 1];
+        int tableSize = TablePotential.computeTableSize(mergedVariables);
         double[] mergedValues = new double[tableSize];
         int numPotentials = potentials.size();
 

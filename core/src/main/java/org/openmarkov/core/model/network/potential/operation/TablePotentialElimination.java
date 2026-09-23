@@ -115,10 +115,7 @@ final class TablePotentialElimination {
 
         int resultSize = TablePotential.computeTableSize(variablesToKeep);
         double[] resultValues = new double[resultSize];
-        int eliminationSize = 1;
-        for (Variable variable : variablesToEliminate) {
-            eliminationSize *= variable.getNumStates();
-        }
+        int eliminationSize = TablePotential.computeTableSize(variablesToEliminate);
 
         // The trees of each carrier, or null in the position of a potential without them. The
         // gate of a configuration is the product of the potentials that carry no tree - the

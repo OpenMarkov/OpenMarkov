@@ -141,7 +141,7 @@ public abstract class AbstractIndexedPotential extends Potential {
         }
         offsets[0] = 1;
         for (int i = 1; i < dimensions.length; i++) {
-            offsets[i] = dimensions[i - 1] * offsets[i - 1];
+            offsets[i] = multiplyStates(dimensions[i - 1], offsets[i - 1]);
         }
         return offsets;
     }
@@ -158,14 +158,18 @@ public abstract class AbstractIndexedPotential extends Potential {
     public static int computeTableSize(List<Variable> variables) {
         int tableSize = 1;
         for (Variable variable : variables) {
-            try {
-                tableSize = Math.multiplyExact(tableSize, variable.getNumStates());
-            } catch (ArithmeticException e) {
-                throw new InvalidArgumentException("variables",
-                        "the product of their numbers of states exceeds the maximum table size, 2^31 - 1");
-            }
+            tableSize = multiplyStates(tableSize, variable.getNumStates());
         }
         return tableSize;
+    }
+
+    private static int multiplyStates(int a, int b) {
+        try {
+            return Math.multiplyExact(a, b);
+        } catch (ArithmeticException e) {
+            throw new InvalidArgumentException("variables",
+                    "the product of their numbers of states exceeds the maximum table size, 2^31 - 1");
+        }
     }
 
     /**
