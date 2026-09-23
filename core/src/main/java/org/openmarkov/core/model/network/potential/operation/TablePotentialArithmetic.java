@@ -95,7 +95,8 @@ final class TablePotentialArithmetic {
 
         potentials = AuxiliaryOperations.getNonConstantPotentials(potentials);
         if (potentials.isEmpty()) {
-            return buildConstantPotential(constantFactor, role);
+            return buildConstantPotential(constantFactor, role, criterion,
+                                          findFirstPotentialWithInterventions(tablePotentials));
         }
 
         // Gets the union
@@ -675,6 +676,16 @@ final class TablePotentialArithmetic {
         TablePotential constantTablePotential = new TablePotential(null, role);
         constantTablePotential.getValues()[0] = constantFactor;
         return constantTablePotential;
+    }
+
+    /** Like the general case, keeps the criterion and the tree of the constant carrier. */
+    private static TablePotential buildConstantPotential(double constantFactor, PotentialRole role,
+                                                         Criterion criterion,
+                                                         StrategicTablePotential carrier) {
+        StrategyTree[] trees = carrier == null || carrier.strategyTrees == null ? null
+                : new StrategyTree[] { carrier.strategyTrees[0] };
+        return buildResultPotential(criterion, role, new ArrayList<>(), new double[] { constantFactor },
+                                    carrier != null, trees);
     }
 
     private static TablePotential buildResultPotential(Criterion criterion, PotentialRole role,
