@@ -177,7 +177,8 @@ corrige y, si la corrección es parcial, qué sigue presente. Corregidos del tod
 \hyperref[err:1]{errores~1}, \hyperref[err:2]{2}, \hyperref[err:3]{3}, \hyperref[err:4]{4},
 \hyperref[err:6]{6}, \hyperref[err:7]{7}, \hyperref[err:8]{8}, \hyperref[err:10]{10},
 \hyperref[err:11]{11}, \hyperref[err:12]{12}, \hyperref[err:13]{13} y \hyperref[err:14]{14}.
-Corregidos en parte: \hyperref[err:5]{errores~5}, \hyperref[err:9]{9} y \hyperref[err:157]{157}.
+Corregidos en parte: \hyperref[err:5]{errores~5}, \hyperref[err:9]{9}, \hyperref[err:112]{112} y
+\hyperref[err:157]{157}.
 El resto de la ficha (qué pasa, el código, cómo arreglarlo) describe el código anterior a esos
 commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo que explica la
 \hyperref[nota:185]{nota~185}; al revisarlo aparecieron el \hyperref[err:193]{error~193} y la
@@ -229,7 +230,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{192 errores}; 48 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{45} necesitan antes una decisión del equipo. Por esfuerzo estimado: 156 pequeños, 36 medios y 0 grandes.
-De los 192, 12 están ya corregidos y 12 lo están en parte.
+De los 192, 12 están ya corregidos y 13 lo están en parte.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -389,7 +390,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:110]{110} & «Sort probnet» falla en una red de sucesos con un nodo enlazado a sí mismo & \texttt{full} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:ficheros}.\ Abrir y guardar redes}}\\
 \hyperref[err:111]{111} & Un .pgmx mal escrito se abre sin aviso y con todas las tablas uniformes & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:112]{112} & Guardar en formato 1.0 deja la red sin poder evaluarse al reabrirla & \texttt{io} & M \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:112]{112} & \textcolor{corregidoverde}{\textbf{Corregido en parte}} · Guardar en formato 1.0 deja la red sin poder evaluarse al reabrirla & \texttt{io} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:113]{113} & Guardar en formato 0.2 convierte los nodos de producto en uniformes & \texttt{io} & S \hfill No\\
 \hyperref[err:114]{114} & «Save» falla en tres redes con un papel de potencial mal escrito & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:115]{115} & Una distribución desconocida en una red de sucesos falla lejos de la causa & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -9007,9 +9008,9 @@ Según lo que decida el equipo, \texttt{Nets\allowbreak{}IO} rechaza el fichero 
 Prueba de regresión: el fichero de prueba descrito arriba (\texttt{BN-asia.\allowbreak{}pgmx} con las tablas en \texttt{\textless{}Valores\textgreater{}}) debe dar \texttt{Badly\allowbreak{}Structured\allowbreak{}File} (o el aviso) al abrirse por \texttt{get\allowbreak{}Prob\allowbreak{}Net\allowbreak{}Reader(\allowbreak{}url).\allowbreak{}read(\allowbreak{}url)}, y las 148 redes que hoy cumplen el esquema deben seguir abriéndose.
 
 \setcounter{subsection}{111}
-\subsection[Guardar en formato 1.0 deja la red sin poder evaluarse al reabrirla]{Guardar en formato ProbModelXML 1.0, el que la ventana propone para una red nueva, convierte las utilidades en distribuciones y la red ya no se puede evaluar al reabrirla}\label{err:112}
+\subsection[Guardar en formato 1.0 deja la red sin poder evaluarse al reabrirla]{\textcolor{corregidoverde}{[Corregido en parte]} Guardar en formato ProbModelXML 1.0, el que la ventana propone para una red nueva, convierte las utilidades en distribuciones y la red ya no se puede evaluar al reabrirla}\label{err:112}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Presente en parte. El commit \texttt{551e715} (23-09-2026) hizo que una distribución «Exact» con números, que es como el formato 1.0 guarda las relaciones exactas, se convierta en tabla como el \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential} que es, así que las redes guardadas en 1.0 vuelven a evaluarse y dan lo mismo que en 0.2 (\texttt{ID-decide-test-1-0.\allowbreak{}pgmx} da 9,3289, como su versión 0.2); sigue que guardar en 0.2 una red reabierta desde un fichero 1.0 escribe esas relaciones como \texttt{Univariate\allowbreak{}Distr\allowbreak{}Potential}, y el lector 0.2 rechaza el fichero (\texttt{PGMXParser\allowbreak{}Exception\$Potential\allowbreak{}Type\allowbreak{}Not\allowbreak{}Supported}). Los \hyperref[err:46]{errores~46} y \hyperref[err:50]{50}, que fallaban también por esta causa, están sin volver a comprobar.
 \fichakey{Módulo}io, core, gui
 \fichakey{Paquete}org.openmarkov.io.probmodel.writer; org.openmarkov.io.probmodel.reader; org.openmarkov.core.model.network.potential; org.openmarkov.gui.window
 \fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_1_0.java:191-199} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:126-166} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/UnivariateDistrPotential.java:356-364} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:149-156} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader.java:32-42} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:79-101, 126-129, 204-205, 246-280, 480-510} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/io/NetworkOMFileChooser.java:73-82, 107-124} \newline \path{gui/src/main/java/org/openmarkov/gui/configuration/UserPreferences.java:113-115}
