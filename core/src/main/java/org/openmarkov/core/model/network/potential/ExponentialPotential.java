@@ -6,6 +6,7 @@
  */
 package org.openmarkov.core.model.network.potential;
 
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.expression.VariableExpression;
@@ -131,12 +132,16 @@ import java.util.Map;
     }
     
     @Override public void scalePotential(double scale) {
-        /*
-         * Add ln(scale) to the first coefficient (constant covariate) is the same as
-         * multiply all the exponential potential by the scale
-         */
-        coefficients[0] += Math.log(scale);
-        
+        // Adding ln(scale) to the coefficient of Constant, wherever it is, multiplies the potential by the scale
+        int constantIndex = getConstantIndex(covariates);
+        if (constantIndex < 0) {
+            throw new InvalidArgumentException("covariates",
+                    "an exponential potential needs the covariate Constant to be scaled");
+        }
+        coefficients[constantIndex] += Math.log(scale);
+        if (sampledCoefficients != null) {
+            sampledCoefficients[constantIndex] += Math.log(scale);
+        }
     }
     
     @Override public Potential deepCopy(ProbNet copyNet) {
