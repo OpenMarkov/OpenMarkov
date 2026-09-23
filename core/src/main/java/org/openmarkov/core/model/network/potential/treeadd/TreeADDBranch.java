@@ -384,11 +384,11 @@ public class TreeADDBranch implements ClassLocalizable {
         if (states != null) {
             newStates = new ArrayList<>(states);
         }
-        Variable newRootVariable = copyNet.getVariable(this.rootVariable.getName());
+        Variable newRootVariable = Potential.findVariableToCopy(copyNet, this.rootVariable, "a branch of a tree");
         
         List<Variable> newParentVariables = new ArrayList<>();
         for (Variable variable : this.parentVariables) {
-            newParentVariables.add(copyNet.getVariable(variable.getName()));
+            newParentVariables.add(Potential.findVariableToCopy(copyNet, variable, "a branch of a tree"));
         }
         
         TreeADDBranch branch = new TreeADDBranch(newStates, newRootVariable, newParentVariables);

@@ -798,6 +798,19 @@ public abstract class Potential implements Localizable {
      *
      * @return A deep copy of the potential
      */
+    /**
+     * @return the variable of {@code copyNet} named as {@code variable}
+     * @throws InvalidArgumentException if {@code copyNet} has no such variable
+     */
+    public static Variable findVariableToCopy(ProbNet copyNet, Variable variable, String copiedObject) {
+        Variable copied = copyNet.getVariable(variable.getName());
+        if (copied == null) {
+            throw new InvalidArgumentException(variable.getName(), "copyNet",
+                    "network " + copyNet.getName() + " has no such variable, needed to copy " + copiedObject);
+        }
+        return copied;
+    }
+
     public Potential deepCopy(ProbNet copyNet) {
         Potential potential;
         try {
@@ -810,7 +823,8 @@ public abstract class Potential implements Localizable {
         
         List<Variable> newReferences = new ArrayList<>();
         for (Variable variable : this.variables) {
-            newReferences.add(copyNet.getVariable(variable.getName()));
+            newReferences.add(findVariableToCopy(copyNet, variable, "the " + getClass().getSimpleName()
+                    + " over " + this.variables));
         }
         
         potential.setVariables(newReferences);

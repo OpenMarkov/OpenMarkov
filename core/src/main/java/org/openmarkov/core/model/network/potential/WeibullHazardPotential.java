@@ -366,7 +366,8 @@ public class WeibullHazardPotential extends GLMPotential implements DESSimulable
         potential.setLog(this.log);
         
         if (timeVariable != null) {
-            potential.setTimeVariable(copyNet.getVariable(this.getTimeVariable().getName()));
+            potential.setTimeVariable(findVariableToCopy(copyNet, this.timeVariable,
+                    "the time variable of the WeibullHazardPotential over " + this.variables));
         }
         
         return potential;

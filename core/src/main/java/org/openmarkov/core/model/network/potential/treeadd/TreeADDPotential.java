@@ -895,7 +895,8 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
         treeADDPotential.indentLevel = this.indentLevel;
         
         if (this.topVariable != null) {
-            treeADDPotential.topVariable = copyNet.getVariable(this.topVariable.getName());
+            treeADDPotential.topVariable = findVariableToCopy(copyNet, this.topVariable, "the TreeADDPotential over "
+                    + this.variables);
         }
         
         return treeADDPotential;
