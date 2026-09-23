@@ -51,7 +51,7 @@ public class BasicOperations {
             newTable = DiscretePotentialOperations.sum(parentsPotentials);
         } else if (nodePotential instanceof ProductPotential) {
             newTable = DiscretePotentialOperations.multiply(parentsPotentials);
-        } else {   // FunctionPotential
+        } else if (nodePotential instanceof FunctionPotential) {
             try {
                 newTable = DiscretePotentialOperations.evaluateFunctionPotential(
                         (FunctionPotential) nodePotential, parentsPotentials, parentVariables);
@@ -59,6 +59,9 @@ public class BasicOperations {
                      NonProjectablePotentialException.CannotResolveVariable e) {
                 throw new UnrecoverableException(e); // a formula the parents cannot satisfy
             }
+        } else {
+            throw new InvalidArgumentException(nodePotential == null ? null : nodePotential.getClass().getSimpleName(),
+                    "nodePotential", "only a sum, a product or a formula says how to combine the parents");
         }
         // }
         // create the list of variables for the new ExactDistrPotential
@@ -184,7 +187,14 @@ public class BasicOperations {
      * @return true iff the node has parents and are all observable
      */
     public static boolean haveParentsAndAreAllAbsorbable(Node node) {
-        return !node.getParents().isEmpty() && areAllItsParentsAbsorbable(node);
+        return !node.getParents().isEmpty() && combinesItsParents(node) && areAllItsParentsAbsorbable(node);
+    }
+
+    /** Only a sum, a product or a formula says how to combine the values of the parents. */
+    private static boolean combinesItsParents(Node node) {
+        Potential potential = node.getPotential();
+        return potential instanceof SumPotential || potential instanceof ProductPotential
+                || potential instanceof FunctionPotential;
     }
     
     
