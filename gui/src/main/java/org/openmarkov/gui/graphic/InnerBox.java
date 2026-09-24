@@ -46,42 +46,19 @@ public abstract sealed class InnerBox extends VisualElement permits FSVariableBo
 	protected static final double STATES_VERTICAL_SEPARATION = 12;
 
 	/**
-	 * Horizontal starting position of bars in Chance and Decision Nodes.
-	 */
-	protected static final double BAR_HORIZONTAL_POSITION = 52;
-
-	/**
-	 * Horizontal starting position of bars in Utility Nodes.
-	 */
-	protected static final double BAR_HORIZONTAL_POSITION_UTILITY = 32;
-
-	/**
-	 * Maximum length of the bar.
-	 */
-	protected static final double BAR_FULL_LENGTH = 100;
-
-	/**
 	 * Height of the bar.
 	 */
 	protected static final double BAR_HEIGHT = 5;
 
 	/**
-	 * Horizontal position for the value to be shown on the right
-	 * of the bar in Chance and Decision Nodes.
-	 */
-	protected static final double VALUE_HORIZONTAL_POSITION = BAR_HORIZONTAL_POSITION + BAR_FULL_LENGTH + STATES_INDENT;
-
-	/**
-	 * Horizontal position for the value to be shown on the right
-	 * of the bar in Utility Nodes.
-	 */
-	protected static final double VALUE_HORIZONTAL_POSITION_UTILITY = BAR_HORIZONTAL_POSITION_UTILITY + BAR_FULL_LENGTH
-			+ STATES_INDENT;
-
-	/**
      * Object used to measure foreground in a specific font.
 	 */
 	private static final FontMetrics fontMeter = new JPanel().getFontMetrics(INNERBOX_FONT);
+
+	/**
+	 * Width of the narrowest column that shows a value: what a probability takes in the font of the box.
+	 */
+	protected static final double VALUE_COLUMN_WIDTH = fontMeter.stringWidth(VisualState.formatValue(0));
 
 	/**
 	 * The height of this InnerBox.
@@ -113,6 +90,45 @@ public abstract sealed class InnerBox extends VisualElement permits FSVariableBo
 	 */
 	protected static double getInnerBoxTextWidth(String text, Graphics2D g) {
 		return fontMeter.getStringBounds(text, g).getWidth();
+	}
+
+	/**
+	 * Returns the width of a text in the font of the innerBox.
+	 */
+	protected static double getTextWidth(String text) {
+		return fontMeter.stringWidth(text);
+	}
+
+	/**
+	 * Width of the column on the left of the bars, where the names of the states or the label go.
+	 */
+	protected abstract double getLabelColumnWidth();
+
+	/**
+	 * Width of the column on the right of the bars, where the values go. Wide enough for any value
+	 * this box can show.
+	 */
+	protected abstract double getValueColumnWidth();
+
+	/**
+	 * Horizontal position where the bars start, measured from the left border of the box.
+	 */
+	protected double getBarX() {
+		return STATES_INDENT + getLabelColumnWidth();
+	}
+
+	/**
+	 * Horizontal position where the values start, measured from the left border of the box.
+	 */
+	protected double getValueX() {
+		return BOX_WIDTH - STATES_INDENT - getValueColumnWidth();
+	}
+
+	/**
+	 * Length of a full bar: what is left between the label column and the value column.
+	 */
+	protected double getBarFullLength() {
+		return getValueX() - STATES_INDENT - getBarX();
 	}
 
 	/**

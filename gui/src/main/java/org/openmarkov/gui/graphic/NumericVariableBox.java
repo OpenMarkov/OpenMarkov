@@ -162,6 +162,18 @@ public non-sealed class NumericVariableBox extends InnerBox {
         return 1;
     }
     
+    @Override protected double getLabelColumnWidth() {
+        return getTextWidth(visualState.getStateName()) + STATES_INDENT;
+    }
+    
+    /**
+     * Wide enough for the value at either end of the range, so for every value in between.
+     */
+    @Override protected double getValueColumnWidth() {
+        return Math.max(VALUE_COLUMN_WIDTH, Math.max(getTextWidth(VisualState.formatValue(minValue)),
+                                                     getTextWidth(VisualState.formatValue(maxValue))));
+    }
+    
     @Override public Shape getShape(Graphics2D g) {
         double innerNodeHeight = getInnerBoxHeight(g);
         return new Rectangle2D.Double(0, 0, BOX_WIDTH, innerNodeHeight);
@@ -185,9 +197,8 @@ public non-sealed class NumericVariableBox extends InnerBox {
         visualState.paint(g);
         
         //draw the scale in the bottom part
-        double scaleXPostion =
-                STATES_INDENT + BAR_HORIZONTAL_POSITION_UTILITY
-                        - 1;
+        double scaleXPostion = getBarX() - 1;
+        double barFullLength = getBarFullLength();
         double scaleYPostion = INTERNAL_MARGIN
                 + STATES_VERTICAL_SEPARATION + SCALE_VERTICAL_SEPARATION + (
                 BAR_HEIGHT * (
@@ -195,22 +206,22 @@ public non-sealed class NumericVariableBox extends InnerBox {
                 )
         );
         
-        g.draw(new Line2D.Double(scaleXPostion, scaleYPostion, scaleXPostion + BAR_FULL_LENGTH, scaleYPostion));
+        g.draw(new Line2D.Double(scaleXPostion, scaleYPostion, scaleXPostion + barFullLength, scaleYPostion));
         g.draw(new Line2D.Double(scaleXPostion, scaleYPostion - (BAR_HEIGHT / 2), scaleXPostion,
                                  scaleYPostion + (BAR_HEIGHT / 2)));
-        g.draw(new Line2D.Double(scaleXPostion + (BAR_FULL_LENGTH / 4), scaleYPostion - (BAR_HEIGHT / 2),
-                                 scaleXPostion + (BAR_FULL_LENGTH / 4), scaleYPostion + (BAR_HEIGHT / 2)));
-        g.draw(new Line2D.Double(scaleXPostion + (BAR_FULL_LENGTH / 2), scaleYPostion - (BAR_HEIGHT / 2),
-                                 scaleXPostion + (BAR_FULL_LENGTH / 2), scaleYPostion + (BAR_HEIGHT / 2)));
-        g.draw(new Line2D.Double(scaleXPostion + (BAR_FULL_LENGTH * 3 / 4), scaleYPostion - (BAR_HEIGHT / 2),
-                                 scaleXPostion + (BAR_FULL_LENGTH * 3 / 4), scaleYPostion + (BAR_HEIGHT / 2)));
-        g.draw(new Line2D.Double(scaleXPostion + BAR_FULL_LENGTH, scaleYPostion - (BAR_HEIGHT / 2),
-                                 scaleXPostion + BAR_FULL_LENGTH, scaleYPostion + (BAR_HEIGHT / 2)));
+        g.draw(new Line2D.Double(scaleXPostion + (barFullLength / 4), scaleYPostion - (BAR_HEIGHT / 2),
+                                 scaleXPostion + (barFullLength / 4), scaleYPostion + (BAR_HEIGHT / 2)));
+        g.draw(new Line2D.Double(scaleXPostion + (barFullLength / 2), scaleYPostion - (BAR_HEIGHT / 2),
+                                 scaleXPostion + (barFullLength / 2), scaleYPostion + (BAR_HEIGHT / 2)));
+        g.draw(new Line2D.Double(scaleXPostion + (barFullLength * 3 / 4), scaleYPostion - (BAR_HEIGHT / 2),
+                                 scaleXPostion + (barFullLength * 3 / 4), scaleYPostion + (BAR_HEIGHT / 2)));
+        g.draw(new Line2D.Double(scaleXPostion + barFullLength, scaleYPostion - (BAR_HEIGHT / 2),
+                                 scaleXPostion + barFullLength, scaleYPostion + (BAR_HEIGHT / 2)));
         
         g.setFont(SCALE_FONT);
         g.drawString("" + minValue, (int) scaleXPostion - SCALE_RANGE_HORIZONTAL_OFFSET,
                      (int) scaleYPostion + g.getFont().getSize() + SCALE_RANGE_VERTICAL_OFFSET);
-        g.drawString("" + maxValue, (int) ((int) scaleXPostion + BAR_FULL_LENGTH) - SCALE_RANGE_HORIZONTAL_OFFSET,
+        g.drawString("" + maxValue, (int) ((int) scaleXPostion + barFullLength) - SCALE_RANGE_HORIZONTAL_OFFSET,
                      (int) scaleYPostion + g.getFont().getSize() + SCALE_RANGE_VERTICAL_OFFSET);
         g.setFont(INNERBOX_FONT);
     }

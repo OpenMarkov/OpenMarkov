@@ -26,6 +26,11 @@ import java.util.HashMap;
 public non-sealed class FSVariableBox extends InnerBox {
 
 	/**
+	 * Width of the column where the names of the states go. A longer name is shortened.
+	 */
+	private static final double STATE_NAME_COLUMN_WIDTH = 52;
+
+	/**
 	 * This variable contains a list of all the visual states that are part
 	 * of this inner box.
 	 */
@@ -116,6 +121,14 @@ public non-sealed class FSVariableBox extends InnerBox {
 		return visualStates.size();
 	}
 	
+	@Override protected double getLabelColumnWidth() {
+		return STATE_NAME_COLUMN_WIDTH;
+	}
+
+	@Override protected double getValueColumnWidth() {
+		return VALUE_COLUMN_WIDTH;
+	}
+
 	@Override public Shape getShape(Graphics2D g) {
 		double innerNodeHeight = getInnerBoxHeight(g);
 		return new Rectangle2D.Double(0, 0, BOX_WIDTH, innerNodeHeight);

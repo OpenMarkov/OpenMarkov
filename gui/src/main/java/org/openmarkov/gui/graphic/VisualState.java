@@ -36,8 +36,9 @@ public final class VisualState extends VisualElement {
      */
     protected static final Font STATES_FONT = GUIFonts.of(Font.PLAIN, 11);
     
-    /** Factor to multiply a number in the range of (0,1) to draw a bar to obtain its size in pixels. */
-    private static final double lengthRelationInBars = 10000.0;
+    /** How a value is written in the box: a fixed number of decimals, with a point. */
+    private static final DecimalFormat VALUE_FORMAT = new DecimalFormat("0." + "0".repeat(NUMBER_OF_DECIMALS),
+                                                                        new DecimalFormatSymbols(Locale.US));
     
     /**
      * The VisualNode this State is associated to.
@@ -68,11 +69,6 @@ public final class VisualState extends VisualElement {
     private final List<Boolean> evidence;
     
     /**
-     * Formatting string for values shown in the visual state
-     */
-    private String formattingString = "0.";
-    
-    /**
      * Creates a new State.
      *
      * @param visualNode visualNode to which this State is associated.
@@ -92,7 +88,13 @@ public final class VisualState extends VisualElement {
         this.evidence = new ArrayList<>();
         this.evidence.add(false);
         this.currentStateValue = 0;
-        this.formattingString = this.formattingString + "0".repeat(VisualState.NUMBER_OF_DECIMALS);
+    }
+    
+    /**
+     * Writes a value the way the box shows it.
+     */
+    static String formatValue(double value) {
+        return VALUE_FORMAT.format(value);
     }
     
     /**
@@ -248,12 +250,13 @@ public final class VisualState extends VisualElement {
      *
      * @param x x coordinate reference for painting
      * @param y y coordinate reference for painting
+     * @param barFullLength length of a full bar
      * @param g graphics object where paint the node.
      */
-    private static void paintNotCompiled(Double x, Double y, Graphics2D g) {
+    private static void paintNotCompiled(Double x, Double y, double barFullLength, Graphics2D g) {
         Double aux1 = x;
-        int aux2 = Double.valueOf(InnerBox.BAR_FULL_LENGTH / 20).intValue();
-        while (aux1 < (x + InnerBox.BAR_FULL_LENGTH)) {
+        int aux2 = Double.valueOf(barFullLength / 20).intValue();
+        while (aux1 < (x + barFullLength)) {
             g.drawLine(aux1.intValue() + (aux2 / 2), Double.valueOf(y + InnerBox.BAR_HEIGHT / 2).intValue(),
                        aux1.intValue() + aux2 + (aux2 / 2), Double.valueOf(y + InnerBox.BAR_HEIGHT / 2).intValue());
             aux1 += (aux2 * 2);
@@ -282,17 +285,12 @@ public final class VisualState extends VisualElement {
      * @param g graphics object where paint the node.
      */
     @Override public void paint(Graphics2D g) {
-        double xBar;
-        double xValue;
+        InnerBox innerBox = this.visualNode.getInnerBox();
         double xName = InnerBox.STATES_INDENT;
+        double xBar = innerBox.getBarX();
+        double xValue = innerBox.getValueX();
+        double barFullLength = innerBox.getBarFullLength();
         boolean isNumeric = this.visualNode.getNode().getVariable().getVariableType() == VariableType.NUMERIC;
-        if (isNumeric) {
-            xBar = xName + InnerBox.BAR_HORIZONTAL_POSITION_UTILITY;
-            xValue = xName + InnerBox.VALUE_HORIZONTAL_POSITION_UTILITY;
-        } else {
-            xBar = xName + InnerBox.BAR_HORIZONTAL_POSITION;
-            xValue = xName + InnerBox.VALUE_HORIZONTAL_POSITION;
-        }
         double yFirstBar;
         double yText;
         if (this.visualNode.getVisualNetwork().isPropagationActive()) {
@@ -316,7 +314,7 @@ public final class VisualState extends VisualElement {
         
         g.setColor(GUIColors.Inference.BOX_TEXT.getColor());
         g.setFont(STATES_FONT);
-        this.stateName = adjustText(this.stateName, InnerBox.BAR_HORIZONTAL_POSITION, 2, STATES_FONT, g);
+        this.stateName = adjustText(this.stateName, innerBox.getLabelColumnWidth(), 2, STATES_FONT, g);
         g.drawString(this.stateName, (int) xName, (int) yText);
         if (getVisualNode().getVisualNetwork().isPropagationActive()) {
             for (int i = 0; i < this.stateValues.size(); i++) {
@@ -325,52 +323,47 @@ public final class VisualState extends VisualElement {
                            Double.valueOf(yFirstBar + (i * InnerBox.BAR_HEIGHT) - 1).intValue(),
                            Double.valueOf(xBar - 1).intValue(),
                            Double.valueOf(yFirstBar + (i * InnerBox.BAR_HEIGHT) + InnerBox.BAR_HEIGHT).intValue());
-                g.drawLine(Double.valueOf(xBar + InnerBox.BAR_FULL_LENGTH).intValue(),
+                g.drawLine(Double.valueOf(xBar + barFullLength).intValue(),
                            Double.valueOf(yFirstBar + (i * InnerBox.BAR_HEIGHT) - 1).intValue(),
-                           Double.valueOf(xBar + InnerBox.BAR_FULL_LENGTH).intValue(),
+                           Double.valueOf(xBar + barFullLength).intValue(),
                            Double.valueOf(yFirstBar + (i * InnerBox.BAR_HEIGHT) + InnerBox.BAR_HEIGHT).intValue());
                 setColorCaseDependent(i, g);
                 double barLength;
                 if (isNumeric) {
-                    InnerBox innerBox = this.visualNode.getInnerBox();
                     Double minRange = ((NumericVariableBox) innerBox).getMinValue();
                     Double maxRange = ((NumericVariableBox) innerBox).getMaxValue();
                     double range = maxRange - minRange;
                     double value = this.stateValues.get(i) - minRange;
-                    barLength = ((value * lengthRelationInBars) / range) / InnerBox.BAR_FULL_LENGTH;
+                    barLength = (value / range) * barFullLength;
                 } else {
-                    barLength = (this.stateValues.get(i) * lengthRelationInBars) / InnerBox.BAR_FULL_LENGTH;
+                    barLength = this.stateValues.get(i) * barFullLength;
                 }
                 g.fill(new Rectangle2D.Double(xBar, yFirstBar + (i * InnerBox.BAR_HEIGHT), barLength,
                                               InnerBox.BAR_HEIGHT));
                 setColorCaseDependent(this.currentStateValue, g);
                 
                 if (!Double.isNaN(this.stateValues.get(this.currentStateValue))) {
-                    // Value is currently formatted fixely with 4 decimals
-                    DecimalFormat decimalFormat = new DecimalFormat(this.formattingString,
-                                                                    new DecimalFormatSymbols(Locale.US));
-                    String formattedValue = String.valueOf(decimalFormat.format(this.stateValues.get(this.currentStateValue)));
-                    g.drawString(formattedValue, ((int) xValue), (int) yText);
+                    g.drawString(formatValue(this.stateValues.get(this.currentStateValue)), ((int) xValue), (int) yText);
                 }
             }
         } else {
             g.setPaint(GUIColors.Inference.STATE_BAR_BORDER.getColor());
             g.drawLine(Double.valueOf(xBar - 1).intValue(), Double.valueOf(yFirstBar - 1).intValue(),
                        Double.valueOf(xBar - 1).intValue(), Double.valueOf(yFirstBar + InnerBox.BAR_HEIGHT).intValue());
-            g.drawLine(Double.valueOf(xBar + InnerBox.BAR_FULL_LENGTH).intValue(), Double.valueOf(yFirstBar - 1)
+            g.drawLine(Double.valueOf(xBar + barFullLength).intValue(), Double.valueOf(yFirstBar - 1)
                                                                                          .intValue(),
-                       Double.valueOf(xBar + InnerBox.BAR_FULL_LENGTH).intValue(),
+                       Double.valueOf(xBar + barFullLength).intValue(),
                        Double.valueOf(yFirstBar + InnerBox.BAR_HEIGHT).intValue());
             if (getVisualNode().hasAnyFinding()) {
                 if (this.evidence.get(this.currentStateValue)) {
                     setColorCaseDependent(this.currentStateValue, g);
-                    g.fill(new Rectangle2D.Double(xBar, yFirstBar, InnerBox.BAR_FULL_LENGTH, InnerBox.BAR_HEIGHT));
+                    g.fill(new Rectangle2D.Double(xBar, yFirstBar, barFullLength, InnerBox.BAR_HEIGHT));
                     g.setPaint(GUIColors.Inference.STATE_BAR_BORDER.getColor());
                 } else {
-                    paintNotCompiled(xBar, yFirstBar, g);
+                    paintNotCompiled(xBar, yFirstBar, barFullLength, g);
                 }
             } else {
-                paintNotCompiled(xBar, yFirstBar, g);
+                paintNotCompiled(xBar, yFirstBar, barFullLength, g);
             }
         }
         g.setPaint(GUIColors.Inference.BOX_TEXT.getColor());
