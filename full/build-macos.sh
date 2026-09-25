@@ -12,4 +12,4 @@ if [ -z "${JAVA_HOME:-}" ] && [ -x /usr/libexec/java_home ]; then
 fi
 
 mvn -pl full -am package -DskipTests
-java -jar OpenMarkov.jar "$@"
+java -jar full/target/OpenMarkov.jar "$@"

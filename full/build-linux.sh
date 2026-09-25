@@ -7,4 +7,4 @@ set -e
 cd "$(dirname "$0")/.."
 
 mvn -pl full -am package -DskipTests
-java -jar OpenMarkov.jar "$@"
+java -jar full/target/OpenMarkov.jar "$@"

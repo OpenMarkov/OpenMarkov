@@ -54,7 +54,7 @@ jobs:
     - name: Move JAR to public web folder
       run: |
         mkdir public
-        cp OpenMarkov.jar public/
+        cp full/target/OpenMarkov.jar public/
 
     - name: Upload Pages Artifact
       uses: actions/upload-pages-artifact@v3

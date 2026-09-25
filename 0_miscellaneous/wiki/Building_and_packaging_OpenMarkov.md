@@ -25,11 +25,10 @@ time:
 mvn -pl full -am clean package -DskipTests --batch-mode
 ```
 
-It produces **`OpenMarkov.jar`** in the **root of the repository** — not under `full/target/`, which
-is where Maven output usually goes. Run it with:
+It produces **`full/target/OpenMarkov.jar`**. Run it with:
 
 ```
-java -jar OpenMarkov.jar
+java -jar full/target/OpenMarkov.jar
 ```
 
 The jar bundles every library OpenMarkov needs, and the same file works on Windows, Linux and
@@ -181,9 +180,9 @@ building the `.rpm`; the package is produced correctly.
 **The installer contains code from weeks ago.** You left out `-am`, so Maven took the other modules
 from `~/.m2` instead of rebuilding them. See section 2.1.
 
-**`OpenMarkov.jar` is nowhere under `full/target/`.** That is correct: the `full` module
-writes it to the root of the repository. The jar that does sit in `full/target/` contains
-only the classes of the `full` module and is not runnable on its own.
+**There are two jars under `full/target/`.** `OpenMarkov.jar` is the runnable one. The other,
+`full-<version>.jar`, contains only the classes of the `full` module and is not runnable on its
+own.
 
 **The jar does not start on a user's machine.** The jar needs a JDK 25 or newer installed. Give
 them an installer instead, which carries its own Java runtime.

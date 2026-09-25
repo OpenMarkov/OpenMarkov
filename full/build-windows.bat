@@ -7,4 +7,4 @@ cd /d "%~dp0.."
 call mvn -pl full -am package -DskipTests
 if errorlevel 1 exit /b 1
 
-java -jar OpenMarkov.jar %*
+java -jar full\target\OpenMarkov.jar %*

@@ -124,7 +124,6 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.6.0</version>
                 <configuration>
-                    <outputDirectory>${project.basedir}/..</outputDirectory>
                     <finalName>OpenMarkov</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <attach>false</attach>
