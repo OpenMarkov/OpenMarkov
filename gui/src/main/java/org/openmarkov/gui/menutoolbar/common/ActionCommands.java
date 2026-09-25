@@ -172,6 +172,8 @@ public enum ActionCommands {
     TREE_SHOW_CEP("ShowCEP"),
     /** Action invoked when the user wants to obtain a Graphviz/dot structure of a sub-tree. */
     TREE_SAVE_GRAPHVIZ("SaveGraphViz"),
+    /** Action invoked when the user wants to export the decision tree to an Amua model file. */
+    TREE_EXPORT_AMUA("ExportAmua"),
     /* End tree contextual menu actions */
     /** Action invoked when the user wants to expand a node. */
     NODE_EXPANSION("NodeExpansion"),

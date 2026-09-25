@@ -44,6 +44,10 @@ public class TreeContextualMenu extends ContextualMenu {
      * Object that represents the item 'Save GraphViz'.
      */
     private JMenuItem saveGraphvizMenuItem = null;
+    /**
+     * Object that represents the item 'Export to Amua'.
+     */
+    private JMenuItem exportAmuaMenuItem = null;
 
     public TreeContextualMenu(ActionListener newListener, boolean enableShowCEP) {
         super(newListener);
@@ -63,6 +67,7 @@ public class TreeContextualMenu extends ContextualMenu {
         	add(getShowCEPMenuItem());
         }
         add(getSaveGraphvizMenuItem());
+        add(getExportAmuaMenuItem());
     }
 
     /**
@@ -131,6 +136,19 @@ public class TreeContextualMenu extends ContextualMenu {
     }
 
     /**
+     * This method initialises exportAmuaMenuItem.
+     *
+     * @return a new 'Export to Amua' menu item.
+     */
+    private JMenuItem getExportAmuaMenuItem() {
+        if (exportAmuaMenuItem == null) {
+            exportAmuaMenuItem = new LocalizedMenuItem(MenuItemNames.TREE_EXPORT_AMUA_MENUITEM, ActionCommands.TREE_EXPORT_AMUA.getCommandName());
+            exportAmuaMenuItem.addActionListener(listener);
+        }
+        return exportAmuaMenuItem;
+    }
+
+    /**
      * Returns the component that corresponds to an action command.
      *
      * @param actionCommand action command that identifies the component.
@@ -143,6 +161,7 @@ public class TreeContextualMenu extends ContextualMenu {
             case ActionCommands.TREE_EXPAND_ALL -> expandAllMenuItem;
             case ActionCommands.TREE_OPEN_NETWORK -> openNetworkMenuItem;
             case ActionCommands.TREE_SHOW_CEP -> showCEPMenuItem;
+            case ActionCommands.TREE_EXPORT_AMUA -> exportAmuaMenuItem;
             case null, default -> null;
         };
     }

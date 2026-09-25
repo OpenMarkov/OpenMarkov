@@ -367,6 +367,9 @@
         <OpenMarkov>
             <Description value="OpenMarkov file"/>
         </OpenMarkov>
+        <Amua>
+            <Description value="Amua model"/>
+        </Amua>
         <!-- CMI -->
         <OpenMarkov.0.2>
             <Description value="ProbModelXML 0.2"/>

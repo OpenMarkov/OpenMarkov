@@ -12,6 +12,7 @@ import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.PotentialOperationException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.decisiontree.operation.DecisionTreeManager;
@@ -20,6 +21,8 @@ import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.dialog.costeffectiveness.CEPDialog;
+import org.openmarkov.gui.dialog.io.FileFilterByExtension;
+import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.gui.menutoolbar.common.ActionCommands;
 import org.openmarkov.gui.menutoolbar.menu.ContextualMenuFactory;
 import org.openmarkov.gui.menutoolbar.menu.TreeContextualMenu;
@@ -33,6 +36,7 @@ import org.openmarkov.gui.window.decisiontree.elements.DecisionTreeNodePanel;
 import org.openmarkov.gui.window.edition.ZoomManager;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.inference.decisiontree.operation.DecisionTreeManagerImpl;
+import org.openmarkov.io.amua.AmuaExporter;
 import org.openmarkov.java.swing.MouseListenerUtils;
 
 import javax.swing.*;
@@ -43,6 +47,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.util.List;
 
 
 @SuppressWarnings("serial")
@@ -251,11 +257,46 @@ public final class DecisionTreeEditor extends EditorPanel {
                             tree2dot.paintDTNode(treeNode);
                         }
                     }
+                    case ActionCommands.TREE_EXPORT_AMUA -> exportToAmua();
                     case null, default -> {
                     
                     }
                 }
             });
+        }
+        
+        /** Writes the whole decision tree to an Amua model file chosen by the user. */
+        private void exportToAmua() throws Exception {
+            DecisionTreeBranchPanel root = (DecisionTreeBranchPanel) DecisionTreeEditor.this.jTree.getModel().getRoot();
+            AmuaExporter exporter = new AmuaExporter(root.getTreeBranch().getChild());
+            StringDatabase strings = StringDatabase.getUniqueInstance();
+            String title = strings.getString("ExportAmua.Title");
+            if (!exporter.isValidDTForAmua()) {
+                JOptionPane.showMessageDialog(DecisionTreeEditor.this,
+                                              strings.getFormattedString("ExportAmua.InvalidTree", exporter.getValidationErrorMessage()),
+                                              title, JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            OMFileChooser chooser = new OMFileChooser();
+            chooser.setFileFilter(new FileFilterByExtension<>(null, List.of("amua"), "Amua"));
+            if (chooser.showSaveDialog(DecisionTreeEditor.this) != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+            File file = chooser.getSelectedFile();
+            if (file == null) {
+                return;
+            }
+            try {
+                exporter.writeAmuaDT(file);
+            } catch (IllegalStateException e) {
+                JOptionPane.showMessageDialog(DecisionTreeEditor.this,
+                                              strings.getFormattedString("ExportAmua.InvalidTree", e.getMessage()),
+                                              title, JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            JOptionPane.showMessageDialog(DecisionTreeEditor.this,
+                                          strings.getFormattedString("ExportAmua.Done", file.getAbsolutePath()),
+                                          title, JOptionPane.INFORMATION_MESSAGE);
         }
         
         private void openAssociatedCEP() {

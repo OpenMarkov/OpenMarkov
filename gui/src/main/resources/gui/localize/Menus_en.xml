@@ -245,6 +245,9 @@
         <SaveGraphviz value="Save Graphviz">
             <Mnemonic value="g"/>
         </SaveGraphviz>
+        <ExportAmua value="Export to Amua">
+            <Mnemonic value="x"/>
+        </ExportAmua>
     </Tree>
     <Tools value="Tools">
         <DBGenerator value="Generate dataset randomly">

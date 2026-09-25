@@ -437,6 +437,11 @@ public class MenuItemNames {
      */
     public static final String TREE_SAVE_GRAPHVIZ = TREE_MENU + ".SaveGraphviz";
 
+    /**
+     * String database token for the item 'Tree - Export to Amua'.
+     */
+    public static final String TREE_EXPORT_AMUA_MENUITEM = TREE_MENU + ".ExportAmua";
+
 	/* End tree contextual menu */
 
 	/**

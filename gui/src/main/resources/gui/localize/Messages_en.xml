@@ -361,4 +361,9 @@
             <TemporalEvolution value="Evaluating"/>
         </Note>
     </ProgressMonitor>
+    <ExportAmua>
+        <Title value="Export to Amua"/>
+        <InvalidTree value="The decision tree cannot be exported to Amua: ~"/>
+        <Done value="Decision tree exported to ~. In Amua, open it with Model &gt; Open Model."/>
+    </ExportAmua>
 </properties>
