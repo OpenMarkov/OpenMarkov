@@ -4,7 +4,7 @@
 # Cualquier argumento se pasa a OpenMarkov (ficheros a abrir, -l <idioma>, ...).
 #
 set -e
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 
-mvn install
-java -jar target/full-0.3.0-SNAPSHOT-jar-with-dependencies.jar "$@"
+mvn -pl full -am -P GenerateFullJar package -DskipTests
+java -jar OpenMarkov.jar "$@"
