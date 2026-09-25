@@ -119,6 +119,35 @@
                     <connectTimeout>750</connectTimeout>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <outputDirectory>${project.basedir}/..</outputDirectory>
+                    <finalName>OpenMarkov</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <attach>false</attach>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.openmarkov.full.OpenMarkov</mainClass>
+                        </manifest>
+                    </archive>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <profiles>
@@ -601,53 +630,6 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>GenerateFullJar</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-assembly-plugin</artifactId>
-                            <version>3.6.0</version>
-                            <configuration>
-                                <outputDirectory>${project.basedir}/..</outputDirectory>
-                                <finalName>OpenMarkov-${maven.build.timestamp}</finalName>
-                                <!--                        <finalName>OpenMarkov-${maven.build.timestamp}</finalName>-->
-                                <finalName>OpenMarkov</finalName>
-                                <appendAssemblyId>false</appendAssemblyId>
-                                <attach>false</attach>
-                                <descriptorRefs>
-                                    <descriptorRef>jar-with-dependencies</descriptorRef>
-                                </descriptorRefs>
-                                <archive>
-                                    <manifest>
-                                        <mainClass>org.openmarkov.full.OpenMarkov</mainClass>
-                                    </manifest>
-                                </archive>
-                                <appendAssemblyId>false</appendAssemblyId>
-                                <encoding>UTF-8</encoding>
-                            </configuration>
-                            <executions>
-                                <execution><!-- MLUQUE: I do not know if this block is necessary -->
-                                    <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                                    <phase>package</phase> <!-- bind to the packaging phase -->
-                                    <goals>
-                                        <goal>single</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-assembly-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>

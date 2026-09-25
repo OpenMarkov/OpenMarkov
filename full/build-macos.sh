@@ -11,5 +11,5 @@ if [ -z "${JAVA_HOME:-}" ] && [ -x /usr/libexec/java_home ]; then
     JH="$(/usr/libexec/java_home -v 25 2>/dev/null)" && export JAVA_HOME="$JH"
 fi
 
-mvn -pl full -am -P GenerateFullJar package -DskipTests
+mvn -pl full -am package -DskipTests
 java -jar OpenMarkov.jar "$@"
