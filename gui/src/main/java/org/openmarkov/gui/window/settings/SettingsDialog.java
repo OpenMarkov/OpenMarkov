@@ -37,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -159,8 +160,7 @@ public final class SettingsDialog extends JDialog {
             uiScaleSpinner.setMinimum(0.5);
             uiScaleSpinner.setMaximum(2.0);
             uiScaleSpinner.setCurrentValueNoListener(UserPreferences.UI_SCALE.get());
-            uiScaleSpinner.setMaximumSize(new Dimension(80, uiScaleSpinner.getMaximumSize().height));
-            uiScaleSpinner.setPreferredSize(new Dimension(80, uiScaleSpinner.getPreferredSize().height));
+            ((JSpinner.DefaultEditor) uiScaleSpinner.getEditor()).getTextField().setColumns(4);
             uiScaleSpinner.setStepSize(0.1);
             
             var uiScaleLabel = new JLabel("UI scale  ");
