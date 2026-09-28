@@ -95,8 +95,7 @@ public class PotentialPanelManager {
      */
     public final PotentialPanel createPotentialPanel(Node node, PotentialEditPanel potentialEditPanel) {
 
-        if (node.getPotential() == null)
-            node.setPotential(PotentialUtils.generateDefaultPotential(node));
+
 
         Object potentialClass = node.getPotential().getClass();
 

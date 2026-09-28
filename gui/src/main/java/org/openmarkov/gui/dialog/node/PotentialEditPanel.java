@@ -228,8 +228,6 @@ public class PotentialEditPanel extends JPanel {
     private JComboBox<Class<? extends Potential>> getPotentialTypeJCombobox() throws ThereIsNoPotentialInNodeException {
         if (this.potentialTypeComboBox == null) {
             if (node.getPotential() == null){
-                //node.setPotential(PotentialUtils.generateDefaultPotential(node));
-                //this.instanciatePotential(PotentialUtils.generateDefaultPotential(node));
                 setPotentialInNode(PotentialUtils.generateDefaultPotential(node));
             }
             Class<? extends Potential> potentialClass = this.node.getPotential().getClass();

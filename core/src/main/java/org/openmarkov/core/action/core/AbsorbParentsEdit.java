@@ -37,6 +37,8 @@ import org.openmarkov.core.model.network.potential.TablePotential;
         List<Node> parents = probNet.getParents(node);
         ArrayList<TablePotential> parentsPotential = new ArrayList<>();
         for (Node node : parents) {
+            if (node.getPotential() == null)
+                throw new ThereIsNoPotentialInNodeException(node.getName());
             try {
                 parentsPotential.add(node.getPotential().tableProject(null, null));
             } catch (NonProjectablePotentialException e) {
