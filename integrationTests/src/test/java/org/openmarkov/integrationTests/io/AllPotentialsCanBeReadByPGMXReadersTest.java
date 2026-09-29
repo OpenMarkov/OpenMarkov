@@ -16,6 +16,7 @@ import org.openmarkov.core.model.network.potential.UncertainTablePotential;
 import org.openmarkov.core.model.network.potential.canonical.MaxPotential;
 import org.openmarkov.core.model.network.potential.canonical.MinPotential;
 import org.openmarkov.core.model.network.potential.canonical.TuningPotential;
+import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 import org.openmarkov.io.probmodel.reader.PotentialParser;
 import org.openmarkov.io.xmlbif.XMLBIFReader;
@@ -113,6 +114,7 @@ class AllPotentialsCanBeReadByPGMXReadersTest {
             boolean requiresToReadAllPotentials = !AllPotentialsCanBeReadByPGMXReadersTest.READERS_THAT_CAN_MISS_POTENTIAL_READER_METHODS.contains(readerClass);
             return PluginSearch.init()
                                .extending(Potential.class)
+                               .annotatedWith(PotentialType.class)
                                .filter(ClassUtils::isConcrete)
                                .stream()
                                .filter(potentialClass -> !POTENTIALS_WITHOUT_PGMX_REPRESENTATION.contains(potentialClass))
