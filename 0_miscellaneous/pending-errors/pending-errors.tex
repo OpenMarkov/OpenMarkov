@@ -88,6 +88,7 @@
 \definecolor{notaborde}{RGB}{200,175,60}
 \definecolor{decisionrojo}{RGB}{160,40,40}
 \definecolor{corregidoverde}{RGB}{30,120,50}
+\definecolor{asignadoazul}{RGB}{30,70,150}
 
 \newmdenv[
   backgroundcolor=notafondo, linecolor=notaborde, linewidth=0.8pt,
@@ -144,7 +145,7 @@ aparecieron al comprobarlas. Cada error se ha vuelto a comprobar contra el códi
 haber leído nada más: qué ve el usuario, por dónde se llega, en qué clase y en qué líneas está, y
 por dónde podría ir el arreglo.
 
-\textbf{Qué no es.} No es un plan de trabajo ni un reparto de tareas, y no incluye las propuestas
+\textbf{Qué no es.} No es un plan de trabajo, y no incluye las propuestas
 de rediseño. Lo que se comprobó y no es un error por corregir (porque ya está corregido, porque el
 código hace lo correcto, porque nada llega a él o porque una decisión del equipo lo deja fuera)
 está en el apéndice~\ref{app:notas}, para que no haga falta volver a mirarlo.
@@ -184,6 +185,11 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:185]{nota~185}; al revisarlo aparecieron el \hyperref[err:193]{error~193} y la
 \hyperref[nota:186]{nota~186}.
 
+\paragraph{Errores asignados el 29 de septiembre}
+Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
+en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
+Del \hyperref[err:157]{error~157} le queda la parte que sigue presente.
+
 \paragraph{Cómo se ha comprobado}
 Para cada error se leyó el código de hoy, se buscaron todos los sitios que llaman a la parte
 afectada y se estableció por dónde llega un usuario real (qué menú, qué diálogo, qué fichero) o un
@@ -197,6 +203,7 @@ Cada error tiene un número, corrido en todo el documento, y un título que dice
 Debajo va una ficha con:
 \begin{itemize}
   \item \textbf{Estado}: presente, o presente en parte (y entonces qué parte ya está corregida).
+  \item \textbf{Asignado a}, solo si lo hay: quién se encarga de corregirlo.
   \item \textbf{Módulo}, \textbf{paquete} y \textbf{ficheros} con sus líneas, con las rutas
         relativas a la raíz del repositorio.
   \item \textbf{Esfuerzo} estimado: pequeño (horas), medio (días) o grande (semanas).
@@ -230,7 +237,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{192 errores}; 48 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{45} necesitan antes una decisión del equipo. Por esfuerzo estimado: 156 pequeños, 36 medios y 0 grandes.
-De los 192, 12 están ya corregidos y 13 lo están en parte.
+De los 192, 12 están ya corregidos y 13 lo están en parte; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -296,21 +303,21 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:23]{23} & Se ofrece «Tree with Excluded Events» con solo padres suceso, y falla & \texttt{core} & S \hfill No\\
 \hyperref[err:193]{193} & «Absorb parents» falla si un padre es una regresión & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:ediciones}.\ Ediciones de la red: deshacer, cancelar y pegar}}\\
-\hyperref[err:24]{24} & Un dominio estándar de otro tamaño borra tablas que «Cancel» no devuelve & \texttt{core} & M \hfill No\\
-\hyperref[err:25]{25} & Restringir un enlace cambia la tabla del hijo y deshacer no la devuelve & \texttt{gui} & S \hfill No\\
+\hyperref[err:24]{24} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un dominio estándar de otro tamaño borra tablas que «Cancel» no devuelve & \texttt{core} & M \hfill No\\
+\hyperref[err:25]{25} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Restringir un enlace cambia la tabla del hijo y deshacer no la devuelve & \texttt{gui} & S \hfill No\\
 \hyperref[err:26]{26} & Enlazar a una utilidad producto la convierte en suma y cambia el resultado & \texttt{core} & S \hfill No\\
-\hyperref[err:27]{27} & Rehacer un enlace y su restricción deja el enlace sin la restricción & \texttt{core} & M \hfill No\\
-\hyperref[err:28]{28} & Pasar a suceso una decisión numérica sin política la deja a medias & \texttt{core} & S \hfill No\\
+\hyperref[err:27]{27} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Rehacer un enlace y su restricción deja el enlace sin la restricción & \texttt{core} & M \hfill No\\
+\hyperref[err:28]{28} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Pasar a suceso una decisión numérica sin política la deja a medias & \texttt{core} & S \hfill No\\
 \hyperref[err:29]{29} & Mover un estado con un hijo sin potencial deja la tabla permutada a medias & \texttt{core} & S \hfill No\\
 \hyperref[err:30]{30} & Deshacer un cambio de estados duplica tablas de los hijos y cambia resultados & \texttt{core} & S \hfill No\\
 \hyperref[err:31]{31} & Pegar en una red que ya incumple una restricción se rechaza siempre & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:33]{33} & Deshacer o cancelar «mostrar el comentario al abrir» no la devuelve & \texttt{core} & S \hfill No\\
+\hyperref[err:33]{33} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Deshacer o cancelar «mostrar el comentario al abrir» no la devuelve & \texttt{core} & S \hfill No\\
 \hyperref[err:34]{34} & Deshacer o cancelar «Always append» de un suceso no devuelve su valor & \texttt{core} & S \hfill No\\
 \hyperref[err:35]{35} & Una red expandida o aprendida no se marca como modificada ni pide guardar & \texttt{core} & S \hfill No\\
 \hyperref[err:36]{36} & En una red expandida o aprendida, deshacer no recuerda nada al principio & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:restricciones}.\ Restricciones de red}}\\
-\hyperref[err:37]{37} & Abrir un fichero no comprueba las restricciones de la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:38]{38} & Un estado puede quedarse con el nombre vacío o repetido & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:37]{37} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir un fichero no comprueba las restricciones de la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:38]{38} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un estado puede quedarse con el nombre vacío o repetido & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:39]{39} & Ocho restricciones opcionales no llegan a ninguna red & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:inferencia}.\ Evidencia, inferencia y variables numéricas}}\\
 \hyperref[err:40]{40} & Una variable numérica sin precisión se discretiza a un único valor cero & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -392,7 +399,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:111]{111} & Un .pgmx mal escrito se abre sin aviso y con todas las tablas uniformes & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:112]{112} & \textcolor{corregidoverde}{\textbf{Corregido en parte}} · Guardar en formato 1.0 deja la red sin poder evaluarse al reabrirla & \texttt{io} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:113]{113} & Guardar en formato 0.2 convierte los nodos de producto en uniformes & \texttt{io} & S \hfill No\\
-\hyperref[err:114]{114} & «Save» falla en tres redes con un papel de potencial mal escrito & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:114]{114} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · «Save» falla en tres redes con un papel de potencial mal escrito & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:115]{115} & Una distribución desconocida en una red de sucesos falla lejos de la causa & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:116]{116} & Una tabla de sucesos con incertidumbre en el fichero impide abrir la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:117]{117} & Abrir un .xml que no es ProbModelXML falla con una excepción de índice & \texttt{io} & S \hfill No\\
@@ -403,7 +410,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:121]{121} & Weka con @Relation, @Attribute o @Data en mayúsculas mezcladas no se abre & \texttt{io} & S \hfill No\\
 \hyperref[err:122]{122} & Una base con una columna de números guardada en Weka no se puede reabrir & \texttt{io} & S \hfill No\\
 \hyperref[err:123]{123} & Un fichero de Weka en una carpeta con tilde, «ñ» o «+» no se puede reabrir & \texttt{io} & S \hfill No\\
-\hyperref[err:124]{124} & Una línea de CSV con campos de menos, de más o en blanco inventa casos & \texttt{io} & S \hfill No\\
+\hyperref[err:124]{124} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Una línea de CSV con campos de menos, de más o en blanco inventa casos & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:aprendizaje}.\ Aprendizaje y evaluación de redes}}\\
 \hyperref[err:125]{125} & La exactitud del Bayes ingenuo selectivo usa el caso evaluado al entrenar & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:126]{126} & El Bayes ingenuo selectivo elige características sin el alfa del diálogo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
@@ -435,48 +442,48 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:151]{151} & En una regresión, lo escrito como Cholesky se pierde al guardar la red & \texttt{gui} & S \hfill No\\
 \hyperref[err:152]{152} & Añadir una fila a la tabla de vida y aceptar borra el primer tramo & \texttt{gui} & S \hfill No\\
 \hyperref[err:153]{153} & El editor de una distribución univariante enseña «1» en cada parámetro & \texttt{core} & M \hfill No\\
-\hyperref[err:154]{154} & En la tabla de utilidad, una restricción de enlace bloquea otras casillas & \texttt{core} & S \hfill No\\
-\hyperref[err:155]{155} & La ventana de restricción de un enlace edita la tabla del padre & \texttt{gui} & S \hfill No\\
-\hyperref[err:156]{156} & La tabla de utilidad enseña 922 337 203,685478 en vez de valores mayores & \texttt{core} & S \hfill No\\
-\hyperref[err:157]{157} & \textcolor{corregidoverde}{\textbf{Corregido en parte}} · El panel de Weibull deja borrar «Gamma» y la relación revienta al calcular & \texttt{gui} & S \hfill No\\
-\hyperref[err:158]{158} & En el panel de una regresión no se ve la columna de las covariables & \texttt{gui} & S \hfill No\\
+\hyperref[err:154]{154} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · En la tabla de utilidad, una restricción de enlace bloquea otras casillas & \texttt{core} & S \hfill No\\
+\hyperref[err:155]{155} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La ventana de restricción de un enlace edita la tabla del padre & \texttt{gui} & S \hfill No\\
+\hyperref[err:156]{156} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La tabla de utilidad enseña 922 337 203,685478 en vez de valores mayores & \texttt{core} & S \hfill No\\
+\hyperref[err:157]{157} & \textcolor{corregidoverde}{\textbf{Corregido en parte}} · \textcolor{asignadoazul}{\textbf{Jorge Rico}} · El panel de Weibull deja borrar «Gamma» y la relación revienta al calcular & \texttt{gui} & S \hfill No\\
+\hyperref[err:158]{158} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · En el panel de una regresión no se ve la columna de las covariables & \texttt{gui} & S \hfill No\\
 \hyperref[err:159]{159} & «Add variables to potential» en una hoja del árbol no añade ningún padre & \texttt{gui} & S \hfill No\\
 \hyperref[err:160]{160} & El árbol ofrece repetir una variable discretizada y elegirla da un error & \texttt{gui} & S \hfill No\\
 \hyperref[err:161]{161} & «Split interval» con el campo vacío o sin un número da un error inesperado & \texttt{gui} & S \hfill No\\
-\hyperref[err:162]{162} & La pestaña «Parents» ofrece padres que las restricciones rechazan & \texttt{gui} & S \hfill No\\
-\hyperref[err:163]{163} & El límite superior del último intervalo de revelación no se puede cambiar & \texttt{gui} & S \hfill No\\
+\hyperref[err:162]{162} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La pestaña «Parents» ofrece padres que las restricciones rechazan & \texttt{gui} & S \hfill No\\
+\hyperref[err:163]{163} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · El límite superior del último intervalo de revelación no se puede cambiar & \texttt{gui} & S \hfill No\\
 \hyperref[err:164]{164} & Un número no válido en el indicador da un error y vacía la pestaña & \texttt{gui} & S \hfill No\\
-\hyperref[err:165]{165} & El doble clic en la ventanilla de expresiones mete dos veces el texto & \texttt{gui} & S \hfill No\\
+\hyperref[err:165]{165} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · El doble clic en la ventanilla de expresiones mete dos veces el texto & \texttt{gui} & S \hfill No\\
 \hyperref[err:166]{166} & Tras cambiar el tipo de un nodo, una copia suya no encuentra sus padres & \texttt{core} & S \hfill No\\
 \hyperref[err:167]{167} & Una columna con incertidumbre fuera del primer estado se deja editar & \texttt{core} & S \hfill No\\
-\hyperref[err:168]{168} & Tras alejar el zoom, los nombres de estado siguen recortados al acercarlo & \texttt{gui} & S \hfill No\\
+\hyperref[err:168]{168} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Tras alejar el zoom, los nombres de estado siguen recortados al acercarlo & \texttt{gui} & S \hfill No\\
 \hyperref[err:169]{169} & Con precisión 0.0, 2.0 o 0.5, los límites de los tramos acaban en punto & \texttt{gui} & S \hfill No\\
 \hyperref[err:170]{170} & Tras A, B y C, el nodo de azar nuevo se llama «E», la letra de los sucesos & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:menus}.\ Interfaz: menús, diálogos y herramientas}}\\
-\hyperref[err:171]{171} & Abrir una red desde internet apaga «Guardar» para todas las redes & \texttt{gui} & M \hfill No\\
+\hyperref[err:171]{171} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir una red desde internet apaga «Guardar» para todas las redes & \texttt{gui} & M \hfill No\\
 \hyperref[err:172]{172} & «Edits history» deja un núcleo al cien por cien y puede colgar el programa & \texttt{full} & S \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:173]{173} & Aceptar los dominios estándar sin marcar ninguno lanza una excepción & \texttt{gui} & S \hfill No\\
-\hyperref[err:174]{174} & Aceptar los criterios estándar sin marcar nada borra los criterios de la red & \texttt{gui} & S \hfill No\\
+\hyperref[err:173]{173} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Aceptar los dominios estándar sin marcar ninguno lanza una excepción & \texttt{gui} & S \hfill No\\
+\hyperref[err:174]{174} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Aceptar los criterios estándar sin marcar nada borra los criterios de la red & \texttt{gui} & S \hfill No\\
 \hyperref[err:175]{175} & «OpenMarkov configuration» edita unas preferencias que el programa no usa & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:176]{176} & Las escalas de criterio se redondean a tres decimales y pueden quedar en 0 & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:textos}.\ Textos y títulos que se ven mal}}\\
-\hyperref[err:177]{177} & La ayuda de atajos da dos teclas equivocadas, y una cierra el programa & \texttt{gui} & S \hfill No\\
-\hyperref[err:178]{178} & Pegar un nodo de sucesos donde no se admite da «\textgreater\textgreater\textgreater{} eventNode is null \textless\textless\textless» & \texttt{core} & S \hfill No\\
-\hyperref[err:179]{179} & El selector del tipo de relación enseña nombres internos como «ProbTable» & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:180]{180} & El diálogo de dominios estándar se abre sin título & \texttt{gui} & S \hfill No\\
-\hyperref[err:181]{181} & Seis de las ventanillas del editor de árboles se abren sin título & \texttt{gui} & S \hfill No\\
-\hyperref[err:182]{182} & Varios títulos de error parten las siglas: «tree a d d», «X m l invalid» & \texttt{core} & S \hfill No\\
-\hyperref[err:183]{183} & El aviso de zoom fuera de rango dice «Requested zoomManager» & \texttt{gui} & S \hfill No\\
-\hyperref[err:184]{184} & El rótulo del panel del indicador dice «Probability of ocurrence» & \texttt{gui} & S \hfill No\\
-\hyperref[err:185]{185} & La ayuda de «Add → Utility node» dice «Create an utility node» & \texttt{gui} & S \hfill No\\
-\hyperref[err:186]{186} & El mensaje de evidencia incompatible dice «old evidente» y es ilegible & \texttt{core} & S \hfill No\\
+\hyperref[err:177]{177} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La ayuda de atajos da dos teclas equivocadas, y una cierra el programa & \texttt{gui} & S \hfill No\\
+\hyperref[err:178]{178} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Pegar un nodo de sucesos donde no se admite da «\textgreater\textgreater\textgreater{} eventNode is null \textless\textless\textless» & \texttt{core} & S \hfill No\\
+\hyperref[err:179]{179} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · El selector del tipo de relación enseña nombres internos como «ProbTable» & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:180]{180} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · El diálogo de dominios estándar se abre sin título & \texttt{gui} & S \hfill No\\
+\hyperref[err:181]{181} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Seis de las ventanillas del editor de árboles se abren sin título & \texttt{gui} & S \hfill No\\
+\hyperref[err:182]{182} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Varios títulos de error parten las siglas: «tree a d d», «X m l invalid» & \texttt{core} & S \hfill No\\
+\hyperref[err:183]{183} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · El aviso de zoom fuera de rango dice «Requested zoomManager» & \texttt{gui} & S \hfill No\\
+\hyperref[err:184]{184} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · El rótulo del panel del indicador dice «Probability of ocurrence» & \texttt{gui} & S \hfill No\\
+\hyperref[err:185]{185} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La ayuda de «Add → Utility node» dice «Create an utility node» & \texttt{gui} & S \hfill No\\
+\hyperref[err:186]{186} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · El mensaje de evidencia incompatible dice «old evidente» y es ilegible & \texttt{core} & S \hfill No\\
 \hyperref[err:187]{187} & El error de muestras sin peso dice «Samples weigth is 0» & \texttt{core} & S \hfill No\\
-\hyperref[err:188]{188} & La ayuda de «Unique superparent» dice «commont» & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
+\hyperref[err:188]{188} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La ayuda de «Unique superparent» dice «commont» & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:rendimiento}.\ Rendimiento}}\\
-\hyperref[err:189]{189} & Entrar en modo inferencia con una red grande congela la ventana & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:190]{190} & Cada resultado de una operación sobre tablas reserva una tabla que tira & \texttt{core} & S \hfill No\\
-\hyperref[err:191]{191} & Cada tabla de probabilidad nueva se rellena dos veces con el mismo valor & \texttt{core} & S \hfill No\\
-\hyperref[err:192]{192} & La maximización reserva la tabla de la unión de variables sin usarla & \texttt{core} & S \hfill No\\
+\hyperref[err:189]{189} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Entrar en modo inferencia con una red grande congela la ventana & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:190]{190} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Cada resultado de una operación sobre tablas reserva una tabla que tira & \texttt{core} & S \hfill No\\
+\hyperref[err:191]{191} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Cada tabla de probabilidad nueva se rellena dos veces con el mismo valor & \texttt{core} & S \hfill No\\
+\hyperref[err:192]{192} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La maximización reserva la tabla de la unión de variables sin usarla & \texttt{core} & S \hfill No\\
 \bottomrule
 \end{longtable}
 }
@@ -2510,9 +2517,10 @@ Prueba de regresión: en \texttt{Dynamic-LIMID-every-potential.\allowbreak{}pgmx
 Cada cambio que el usuario hace sobre una red es una edición que se apunta en el historial y se puede deshacer. Aquí van los cambios que no se deshacen bien, los que dejan la red a medias y los que se rechazan sin motivo.
 
 \setcounter{subsection}{23}
-\subsection[Un dominio estándar de otro tamaño borra tablas que «Cancel» no devuelve]{Elegir un dominio estándar con otro número de estados borra las tablas del nodo y de sus hijos, y ni «Cancel» ni «deshacer» las devuelven}\label{err:24}
+\subsection[Un dominio estándar de otro tamaño borra tablas que «Cancel» no devuelve]{\textcolor{asignadoazul}{[Jorge Rico]} Elegir un dominio estándar con otro número de estados borra las tablas del nodo y de sus hijos, y ni «Cancel» ni «deshacer» las devuelven}\label{err:24}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/NodeReplaceStatesEdit.java} \newline \path{core/src/main/java/org/openmarkov/core/model/network/VariableStateOperations.java:69-110,292-320} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:167-210} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanel.java:1078-1117} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:399-402}
@@ -2585,9 +2593,10 @@ El mismo código toca el \texttt{reset\allowbreak{}Link} de \texttt{Node\allowbr
 Prueba de regresión: sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}bn/\allowbreak{}BN-one-disease.\allowbreak{}pgmx}, ejecutar \texttt{Node\allowbreak{}Replace\allowbreak{}States\allowbreak{}Edit} con un dominio de tres estados dentro de una sub-historia, cancelarla y exigir que los potenciales de «Disease» y «Symptom» sean los originales; repetir con un enlace con restricción y con una variable discretizada.
 
 \setcounter{subsection}{24}
-\subsection[Restringir un enlace cambia la tabla del hijo y deshacer no la devuelve]{Marcar una casilla como incompatible en la restricción de un enlace cambia la tabla del hijo fuera del historial, y ni «Cancel», ni deshacer, ni volver a pulsar la casilla la devuelven}\label{err:25}
+\subsection[Restringir un enlace cambia la tabla del hijo y deshacer no la devuelve]{\textcolor{asignadoazul}{[Jorge Rico]} Marcar una casilla como incompatible en la restricción de un enlace cambia la tabla del hijo fuera del historial, y ni «Cancel», ni deshacer, ni volver a pulsar la casilla la devuelven}\label{err:25}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui, core
 \fichakey{Paquete}org.openmarkov.gui.component; org.openmarkov.gui.action; org.openmarkov.core.model.network.potential.operation
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/component/LinkRestrictionValuesTable.java:54-80} \newline \path{gui/src/main/java/org/openmarkov/gui/action/LinkRestrictionPotentialValueEdit.java:73-115} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/LinkRestrictionPotentialOperations.java:163-200,218-253} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionPanel.java:140-151} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionEditDialog.java:43,99-108} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:243-255}
@@ -2721,9 +2730,10 @@ La misma regla debe cumplirse en \texttt{Add\allowbreak{}Link\allowbreak{}Edit.\
 Prueba: en \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-mediastinet.\allowbreak{}pgmx}, añadir y luego quitar un padre numérico a \texttt{Net\_\allowbreak{}QALE} debe dejarlo como \texttt{Product\allowbreak{}Potential} de sus tres padres y con la misma utilidad esperada que al principio.
 
 \setcounter{subsection}{26}
-\subsection[Rehacer un enlace y su restricción deja el enlace sin la restricción]{Rehacer un enlace trazado y la restricción o la revelación que se le puso después deja el enlace sin ellas: se escriben en un enlace que ya no está en la red}\label{err:27}
+\subsection[Rehacer un enlace y su restricción deja el enlace sin la restricción]{\textcolor{asignadoazul}{[Jorge Rico]} Rehacer un enlace trazado y la restricción o la revelación que se le puso después deja el enlace sin ellas: se escriben en un enlace que ya no está en la red}\label{err:27}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core; gui
 \fichakey{Paquete}org.openmarkov.core.action.base.linkEdits; org.openmarkov.core.action.core; org.openmarkov.gui.action
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:254-264} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/RemoveLinkEdit.java:171-187} \newline \path{gui/src/main/java/org/openmarkov/gui/action/LinkRestrictionPotentialValueEdit.java:73-115} \newline \path{core/src/main/java/org/openmarkov/core/action/core/RevelationStateEdit.java:28-52} \newline \path{gui/src/main/java/org/openmarkov/gui/action/RevelationIntervalEdit.java:67-69} \newline \path{core/src/main/java/org/openmarkov/core/action/core/VariableTypeEdit.java:271-307} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:243-255} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/VisualLink.java:142}
@@ -2809,9 +2819,10 @@ Conviene revisar con el mismo criterio las demás ediciones que quitan y vuelven
 Prueba de regresión: la secuencia medida (trazar, restringir, deshacer dos veces, rehacer dos veces) debe dejar en el enlace de la red la tabla \texttt{{[}1,\allowbreak{}\ 1,\allowbreak{}\ 0,\allowbreak{}\ 1{]}}; lo mismo con una revelación; y restringir, quitar el enlace, deshacer y deshacer la restricción debe dejar el enlace sin tabla de restricciones.
 
 \setcounter{subsection}{27}
-\subsection[Pasar a suceso una decisión numérica sin política la deja a medias]{Cambiar a suceso un nodo de decisión numérico sin política revienta y deja el nodo convertido a medias, sin poder deshacerlo}\label{err:28}
+\subsection[Pasar a suceso una decisión numérica sin política la deja a medias]{\textcolor{asignadoazul}{[Jorge Rico]} Cambiar a suceso un nodo de decisión numérico sin política revienta y deja el nodo convertido a medias, sin poder deshacerlo}\label{err:28}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/VariableTypeEdit.java:80-135} \newline \path{core/src/main/java/org/openmarkov/core/action/base/MultiStepEdit.java:36-48} \newline \path{gui/src/main/java/org/openmarkov/gui/action/ChangeNodeTypeEdit.java:47-62} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDefinitionPanel.java:332-342} \newline \path{core/src/main/java/org/openmarkov/core/model/network/VariableType.java:58-65}
@@ -3088,9 +3099,10 @@ Sitios con la misma comprobación posterior: \texttt{Paste\allowbreak{}Edit} (ve
 Prueba de regresión: abrir una red con un ciclo, pegar un nodo aislado y exigir que se pegue (o, si se decide lo contrario, que el mensaje diga que la red ya era inválida).
 
 \setcounter{subsection}{32}
-\subsection[Deshacer o cancelar «mostrar el comentario al abrir» no la devuelve]{Deshacer o cancelar la casilla «mostrar el comentario al abrir» no la devuelve a su valor}\label{err:33}
+\subsection[Deshacer o cancelar «mostrar el comentario al abrir» no la devuelve]{\textcolor{asignadoazul}{[Jorge Rico]} Deshacer o cancelar la casilla «mostrar el comentario al abrir» no la devuelve a su valor}\label{err:33}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/NetworkCommentEdit.java:34-50} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkDefinitionPanel.java:301-316} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkDefinitionPanel.java:351-358} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:280-283} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:356}
@@ -3343,9 +3355,10 @@ Prueba: abrir en una pestaña una red copiada con \texttt{copy(\allowbreak{})}, 
 Una restricción es una regla que dice qué permite cada tipo de red (por ejemplo, que no haya ciclos). Se imponen dos veces: al comprobar una red entera (PNConstraint.checkProbNet) y antes de cada edición (PNEdit.checkConstraintsWillBeMet).
 
 \setcounter{subsection}{36}
-\subsection[Abrir un fichero no comprueba las restricciones de la red]{Abrir un fichero no comprueba ninguna restricción: una red bayesiana con un ciclo se abre sin aviso}\label{err:37}
+\subsection[Abrir un fichero no comprueba las restricciones de la red]{\textcolor{asignadoazul}{[Jorge Rico]} Abrir un fichero no comprueba ninguna restricción: una red bayesiana con un ciclo se abre sin aviso}\label{err:37}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}io
 \fichakey{Paquete}org.openmarkov.io.probmodel.reader
 \fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:134-150} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:272-286} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:154-181} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:103-124} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:190-216} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:339-356}
@@ -3396,9 +3409,10 @@ Qué hacer con el resultado es la decisión de producto: lanzar una excepción d
 Prueba de regresión: el fichero con A→B y B→A debe dar la excepción o el aviso que se decida.
 
 \setcounter{subsection}{37}
-\subsection[Un estado puede quedarse con el nombre vacío o repetido]{La comprobación de nombres de estado no se ejecuta nunca: se puede dejar un estado con el nombre vacío, o con uno repetido por programa}\label{err:38}
+\subsection[Un estado puede quedarse con el nombre vacío o repetido]{\textcolor{asignadoazul}{[Jorge Rico]} La comprobación de nombres de estado no se ejecuta nunca: se puede dejar un estado con el nombre vacío, o con uno repetido por programa}\label{err:38}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.constraint
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/constraint/ValidState.java:23-83} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:123-124} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:147-152} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Variable.java:292-307} \newline \path{gui/src/main/java/org/openmarkov/gui/component/DiscretizeTablePanel.java:733-746} \newline \path{gui/src/main/java/org/openmarkov/gui/component/DiscretizeTablePanel.java:907-940}
@@ -9257,9 +9271,10 @@ Otros sitios: las ramas de un árbol se escriben con el mismo \texttt{get\allowb
 Prueba de regresión: para las siete redes citadas, guardar con \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2}, reabrir y comprobar que cada nodo de utilidad conserva su clase y sus variables, y que la utilidad esperada (y, en \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-HPV.\allowbreak{}pgmx}, el análisis de coste-efectividad global) es la misma que antes de guardar.
 
 \setcounter{subsection}{113}
-\subsection[«Save» falla en tres redes con un papel de potencial mal escrito]{«Save» falla con NullPointerException en ID-CEA-test-2therapies-new-test, MID-CHAP-Ryan-Griffin y MID-Cochlear: sus ficheros traen un papel de potencial mal escrito que el lector acepta sin avisar}\label{err:114}
+\subsection[«Save» falla en tres redes con un papel de potencial mal escrito]{\textcolor{asignadoazul}{[Jorge Rico]} «Save» falla con NullPointerException en ID-CEA-test-2therapies-new-test, MID-CHAP-Ryan-Griffin y MID-Cochlear: sus ficheros traen un papel de potencial mal escrito que el lector acepta sin avisar}\label{err:114}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}io
 \fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.io.probmodel.writer
 \fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1375-1387,1563-1571} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:70-97,733-753} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/PotentialRole.java:31-42} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:246-254, 308-324, 368-388} \newline \path{0_miscellaneous/networks/id/ID-CEA-test-2therapies-new-test.pgmx:148} \newline \path{0_miscellaneous/networks/mid/MID-CHAP-Ryan-Griffin.pgmx:808} \newline \path{0_miscellaneous/networks/mid/MID-Cochlear.pgmx:4854} \newline \path{integrationTests/src/main/resources/networks/mid/MID-Cochlear.pgmx}
@@ -10009,9 +10024,10 @@ Del lado del lector, aceptar en una cadena entre comillas cualquier carácter sa
 Prueba de regresión: guardar una base en una carpeta temporal cuyo nombre lleve tilde, eñe y \texttt{+}, y volver a leerla con el mismo número de variables y casos; y comprobar que el fichero no contiene la ruta de la carpeta.
 
 \setcounter{subsection}{123}
-\subsection[Una línea de CSV con campos de menos, de más o en blanco inventa casos]{Una línea de un CSV con campos de menos, de más o en blanco se lee como un caso inventado o tumba la lectura}\label{err:124}
+\subsection[Una línea de CSV con campos de menos, de más o en blanco inventa casos]{\textcolor{asignadoazul}{[Jorge Rico]} Una línea de un CSV con campos de menos, de más o en blanco se lee como un caso inventado o tumba la lectura}\label{err:124}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}io
 \fichakey{Paquete}org.openmarkov.io.database.excel
 \fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/database/excel/CSVDataBaseIO.java:106-165} \newline \path{io/src/main/java/org/openmarkov/io/database/excel/CSVDataBaseIO.java:233-261}
@@ -12318,9 +12334,10 @@ Conviene revisar \texttt{Augmented\allowbreak{}Prob\allowbreak{}Table\allowbreak
 Prueba: leer \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}1-0/\allowbreak{}ID-CEA-minimal-1-0.\allowbreak{}pgmx} y comprobar que expresiones y números de «Effectiveness» coinciden (0.8 y 1.3); editar una casilla con «2» y comprobar que las dos copias valen 2 y que el fichero guardado las escribe iguales.
 
 \setcounter{subsection}{153}
-\subsection[En la tabla de utilidad, una restricción de enlace bloquea otras casillas]{En la tabla de un nodo de utilidad, una restricción de enlace bloquea las casillas equivocadas y deja editables las prohibidas}\label{err:154}
+\subsection[En la tabla de utilidad, una restricción de enlace bloquea otras casillas]{\textcolor{asignadoazul}{[Jorge Rico]} En la tabla de un nodo de utilidad, una restricción de enlace bloquea las casillas equivocadas y deja editables las prohibidas}\label{err:154}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core, gui
 \fichakey{Paquete}org.openmarkov.core.model.network.potential.operation; org.openmarkov.gui.dialog.common
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/LinkRestrictionPotentialOperations.java:70-113, 403-416} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/TablePotentialPanel.java:579-602, 616-640} \newline \path{gui/src/main/java/org/openmarkov/gui/validator/LinkRestrictionValidator.java:35-58}
@@ -12391,9 +12408,10 @@ Hay que corregir los dos sitios a la vez:
 Prueba: el caso medido arriba, comprobando que «Therapy = yes» bloquea exactamente las columnas (absent,yes) y (present,yes), y una prueba equivalente con un nodo de azar para no romper el caso que hoy funciona.
 
 \setcounter{subsection}{154}
-\subsection[La ventana de restricción de un enlace edita la tabla del padre]{Pulsar una casilla de la ventana de restricción de un enlace edita la tabla del padre: cambia en silencio una de sus probabilidades o lanza una excepción, y si el padre es una decisión la ventana ni siquiera se abre}\label{err:155}
+\subsection[La ventana de restricción de un enlace edita la tabla del padre]{\textcolor{asignadoazul}{[Jorge Rico]} Pulsar una casilla de la ventana de restricción de un enlace edita la tabla del padre: cambia en silencio una de sus probabilidades o lanza una excepción, y si el padre es una decisión la ventana ni siquiera se abre}\label{err:155}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.component; org.openmarkov.gui.action; org.openmarkov.gui.dialog.link
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/component/LinkRestrictionValuesTable.java:48-87} \newline \path{gui/src/main/java/org/openmarkov/gui/component/ValuesTable.java:142-149,170-207} \newline \path{gui/src/main/java/org/openmarkov/gui/action/TablePotentialValueEdit.java:144-157} \newline \path{gui/src/main/java/org/openmarkov/gui/component/PotentialsTablePanelOperations.java:48-75,204-207} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionPanel.java:85-91,140-154} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionEditDialog.java:39-48,99-108} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:251-263} \newline \path{gui/src/main/java/org/openmarkov/gui/validator/LinkRestrictionValidator.java:35-58}
@@ -12497,9 +12515,10 @@ La tabla de la ventana de restricción no debe estar ligada al padre como si ens
 Prueba de regresión: construir \texttt{Link\allowbreak{}Restriction\allowbreak{}Panel} sobre «Do test?» → «Result of test» de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}dan/\allowbreak{}DAN-decide-test.\allowbreak{}pgmx} sin excepción; sobre VisitToAsia → Tuberculosis de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}bn/\allowbreak{}BN-asia.\allowbreak{}pgmx}, pulsar las cuatro casillas: ninguna debe lanzar excepción y la tabla de VisitToAsia debe seguir en \texttt{{[}0.\allowbreak{}99,\allowbreak{}\ 0.\allowbreak{}01{]}}; y sobre Disease → Health state de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-decide-test.\allowbreak{}pgmx}, Disease debe seguir en \texttt{{[}0.\allowbreak{}86,\allowbreak{}\ 0.\allowbreak{}14{]}}.
 
 \setcounter{subsection}{155}
-\subsection[La tabla de utilidad enseña 922 337 203,685478 en vez de valores mayores]{La tabla de un nodo de utilidad enseña 922 337 203,685478 en lugar de cualquier valor mayor, en valor absoluto, que unos 922 millones}\label{err:156}
+\subsection[La tabla de utilidad enseña 922 337 203,685478 en vez de valores mayores]{\textcolor{asignadoazul}{[Jorge Rico]} La tabla de un nodo de utilidad enseña 922 337 203,685478 en lugar de cualquier valor mayor, en valor absoluto, que unos 922 millones}\label{err:156}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core, gui
 \fichakey{Paquete}org.openmarkov.core.model.network; org.openmarkov.gui.dialog.common
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/Util.java:288-303, 318-327} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/TablePotentialPanel.java:521-533} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/TableWithEventsPanel.java:495}
@@ -12549,9 +12568,10 @@ Sitios que dependen de ello: \texttt{Table\allowbreak{}Potential\allowbreak{}Pan
 Prueba: \texttt{round\allowbreak{}And\allowbreak{}Reduce(\allowbreak{}1e9,\allowbreak{}\ 1e-12,\allowbreak{}\ 10)\ ==\ 1e9}, \texttt{round\allowbreak{}And\allowbreak{}Reduce(\allowbreak{}-1e15,\allowbreak{}\ 1e-12,\allowbreak{}\ 10)\ ==\ -1e15}, y que los redondeos pequeños de siempre no cambian (por ejemplo \texttt{round\allowbreak{}And\allowbreak{}Reduce(\allowbreak{}0.\allowbreak{}30000000000000004,\allowbreak{}\ 1e-12,\allowbreak{}\ 10)\ ==\ 0.\allowbreak{}3}).
 
 \setcounter{subsection}{156}
-\subsection[El panel de Weibull deja borrar «Gamma» y la relación revienta al calcular]{\textcolor{corregidoverde}{[Corregido en parte]} El panel de un riesgo de Weibull deja borrar la covariable «Gamma», y la relación se queda sin forma y revienta al calcular}\label{err:157}
+\subsection[El panel de Weibull deja borrar «Gamma» y la relación revienta al calcular]{\textcolor{corregidoverde}{[Corregido en parte]} \textcolor{asignadoazul}{[Jorge Rico]} El panel de un riesgo de Weibull deja borrar la covariable «Gamma», y la relación se queda sin forma y revienta al calcular}\label{err:157}
 \begin{ficha}
 \fichakey{Estado}Presente en parte. El commit \texttt{522d926} (23-09-2026) hizo que el panel pregunte al potencial que edita por sus covariables obligatorias, así que ya no deja quitar ni reescribir \texttt{Gamma} en un riesgo de Weibull; sigue apagándose el botón de añadir al elegir una fila obligatoria.
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.common
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/common/GLMPanel.java:130-143,158-178} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/GLMPotential.java:128-130} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/WeibullHazardPotential.java:40-43,122-124,137,176,278-281}
@@ -12628,9 +12648,10 @@ Si se quiere que el modelo también se defienda, el constructor de \texttt{Weibu
 Prueba de regresión: construir \texttt{Weibull\allowbreak{}Potential\allowbreak{}Panel} sin pantalla sobre el nodo «Failure {[}1{]}» de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-hip-Briggs.\allowbreak{}pgmx}, elegir la fila «Gamma» y comprobar que quitar está apagado y añadir encendido; con un «Hazard (Exponential)», que la fila «Constant» apaga quitar y ninguna otra lo hace.
 
 \setcounter{subsection}{157}
-\subsection[En el panel de una regresión no se ve la columna de las covariables]{En el panel de una regresión la columna de las covariables no se ve: solo aparecen los coeficientes, sin decir de qué son}\label{err:158}
+\subsection[En el panel de una regresión no se ve la columna de las covariables]{\textcolor{asignadoazul}{[Jorge Rico]} En el panel de una regresión la columna de las covariables no se ve: solo aparecen los coeficientes, sin decir de qué son}\label{err:158}
 \begin{ficha}
 \fichakey{Estado}Presente en parte. El diálogo «Reorder variables» (\texttt{Reorder\allowbreak{}Variables\allowbreak{}Panel}) ya no oculta su primera columna desde el commit \texttt{8055530}; queda el panel de las regresiones.
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.common
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/common/GLMPanel.java:36-42} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/KeyTablePanel.java:132-140,190-197} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/KeyTable.java:176-203} \newline \path{gui/src/main/java/org/openmarkov/gui/component/StickyColumnsTablePane.java:111-114,124-146} \newline \path{gui/src/main/java/org/openmarkov/gui/component/OMTableModel.java:21-43}
@@ -12933,9 +12954,10 @@ Las tres conversiones están en \texttt{Tree\allowbreak{}ADDEditor\allowbreak{}P
 Prueba de regresión: con \texttt{Split\allowbreak{}Interval\allowbreak{}Panel} con el texto vacío y con «abc», aceptar no debe cerrar la ventanilla (o no debe salir ninguna excepción que no sea del árbol); con «1» en la rama de 0 a 2 de «Time in treatment {[}0{]}», la rama debe partirse en dos.
 
 \setcounter{subsection}{161}
-\subsection[La pestaña «Parents» ofrece padres que las restricciones rechazan]{La pestaña «Parents» del diálogo de un nodo ofrece como posibles padres nodos que las restricciones de la red rechazan, y elegir uno termina en un diálogo de error técnico}\label{err:162}
+\subsection[La pestaña «Parents» ofrece padres que las restricciones rechazan]{\textcolor{asignadoazul}{[Jorge Rico]} La pestaña «Parents» del diálogo de un nodo ofrece como posibles padres nodos que las restricciones de la red rechazan, y elegir uno termina en un diálogo de error técnico}\label{err:162}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.common
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/common/PrefixedDataTablePanel.java:165-190} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PrefixedDataTablePanel.java:115-143} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/KeyTablePanel.java:362-380} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:69-187} \newline \path{core/src/main/java/org/openmarkov/core/action/base/PNEdit.java:37-56} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/KeyListSelectionDialog.java:139}
@@ -13019,9 +13041,10 @@ Conviene también que, si a pesar de todo la edición falla, se ejecuten todas o
 Prueba: sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}bn/\allowbreak{}BN-asia.\allowbreak{}pgmx}, construir la pestaña de padres de «VisitToAsia» y comprobar que la lista no contiene «X-ray», «Dyspnea», «Tuberculosis» ni «TuberculosisOrCancer», y que todos los candidatos ofrecidos se pueden añadir sin excepción.
 
 \setcounter{subsection}{162}
-\subsection[El límite superior del último intervalo de revelación no se puede cambiar]{Escribir el límite superior del último intervalo de las condiciones de revelación de un enlace lanza una excepción inesperada y deja la tabla diciendo algo que el enlace no tiene}\label{err:163}
+\subsection[El límite superior del último intervalo de revelación no se puede cambiar]{\textcolor{asignadoazul}{[Jorge Rico]} Escribir el límite superior del último intervalo de las condiciones de revelación de un enlace lanza una excepción inesperada y deja la tabla diciendo algo que el enlace no tiene}\label{err:163}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.component
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/component/RevelationArcDiscretizeTablePanel.java:97-141} \newline \path{gui/src/main/java/org/openmarkov/gui/action/RevelationIntervalEdit.java:144-150} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:259-264} \newline \path{gui/src/main/java/org/openmarkov/gui/validator/RevelationArcValidator.java}
@@ -13143,9 +13166,10 @@ Aparte, \texttt{accept\allowbreak{}Potential\allowbreak{}Edit\allowbreak{}Change
 Prueba: construir el panel sobre un nodo de suceso, escribir «abc» y «-1» y comprobar que el guardado no deja escapar \texttt{Number\allowbreak{}Format\allowbreak{}Exception} ni \texttt{Illegal\allowbreak{}Argument\allowbreak{}Exception} y que la relación del nodo no cambia.
 
 \setcounter{subsection}{164}
-\subsection[El doble clic en la ventanilla de expresiones mete dos veces el texto]{La ventanilla de expresiones mete dos veces la variable o la función cuando se hace el doble clic que pide su ayuda}\label{err:165}
+\subsection[El doble clic en la ventanilla de expresiones mete dos veces el texto]{\textcolor{asignadoazul}{[Jorge Rico]} La ventanilla de expresiones mete dos veces la variable o la función cuando se hace el doble clic que pide su ayuda}\label{err:165}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.common
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/common/ArithmeticExpressionDialog.java:110-145} \newline \path{gui/src/main/resources/gui/localize/ArithmeticExpressionEvaluator_en.xml:5-6}
@@ -13326,9 +13350,10 @@ Alternativa: rechazar al leer el fichero una columna con incertidumbre incomplet
 Prueba: tabla con incertidumbre solo en el segundo estado de una columna; la columna debe quedar no editable y con las opciones «Edit/Remove uncertainty».
 
 \setcounter{subsection}{167}
-\subsection[Tras alejar el zoom, los nombres de estado siguen recortados al acercarlo]{Tras alejar el zoom en modo inferencia, los nombres de estado recortados siguen recortados al volver a acercarlo}\label{err:168}
+\subsection[Tras alejar el zoom, los nombres de estado siguen recortados al acercarlo]{\textcolor{asignadoazul}{[Jorge Rico]} Tras alejar el zoom en modo inferencia, los nombres de estado recortados siguen recortados al volver a acercarlo}\label{err:168}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.graphic
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/graphic/VisualState.java:37, 317-320} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/VisualElement.java:132-146} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/FSVariableBox.java:64-82, 100-106} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/NumericVariableBox.java:134-135} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:241-251}
@@ -13468,9 +13493,10 @@ Prueba: \texttt{get\allowbreak{}Next\allowbreak{}Node\allowbreak{}Name(\allowbre
 Los menús, los diálogos generales y las herramientas del menú Tools.
 
 \setcounter{subsection}{170}
-\subsection[Abrir una red desde internet apaga «Guardar» para todas las redes]{Abrir una red desde una dirección de internet apaga «Guardar» para todas las redes durante el resto de la sesión, y a la vez deja esa red apuntando a un fichero local inventado}\label{err:171}
+\subsection[Abrir una red desde internet apaga «Guardar» para todas las redes]{\textcolor{asignadoazul}{[Jorge Rico]} Abrir una red desde una dirección de internet apaga «Guardar» para todas las redes durante el resto de la sesión, y a la vez deja esa red apuntando a un fichero local inventado}\label{err:171}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:179-186, 203, 219-222, 246-254, 368-382, 391-402} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:90, 278-285, 413, 853-857} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanel.java:557-565}
@@ -13618,9 +13644,10 @@ Botones: antes de tocar el historial, buscar la posición de la edición en \tex
 Prueba: sin ventana, extraer a un método el cálculo de «cuántos pasos hasta la edición X» sobre un \texttt{PNESupport} con tres ediciones y comprobar que deshace hasta la segunda en dos pasos y que con una edición que no está en el historial no hace nada.
 
 \setcounter{subsection}{172}
-\subsection[Aceptar los dominios estándar sin marcar ninguno lanza una excepción]{Aceptar el diálogo de dominios estándar sin marcar ninguno lanza una excepción inesperada}\label{err:173}
+\subsection[Aceptar los dominios estándar sin marcar ninguno lanza una excepción]{\textcolor{asignadoazul}{[Jorge Rico]} Aceptar el diálogo de dominios estándar sin marcar ninguno lanza una excepción inesperada}\label{err:173}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.node
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/StandardDomainPanel.java:33-62} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/StandardDomainsDialog.java:56-76} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanel.java:1070-1112} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/OkCancelDialog.java:67-80}
@@ -13692,9 +13719,10 @@ Si se cambia el panel, conviene aplicar la misma regla a \texttt{Standard\allowb
 Prueba de regresión: construir \texttt{Standard\allowbreak{}Domains\allowbreak{}Dialog} sin mostrarlo, comprobar que «OK» está desactivado (o que \texttt{do\allowbreak{}Ok\allowbreak{}Click\allowbreak{}Before\allowbreak{}Hide} devuelve \texttt{false}) mientras no hay selección, y que tras marcar un botón \texttt{get\allowbreak{}Chosen\allowbreak{}States(\allowbreak{})} devuelve sus estados.
 
 \setcounter{subsection}{173}
-\subsection[Aceptar los criterios estándar sin marcar nada borra los criterios de la red]{Aceptar «Standard criteria» sin marcar ninguna opción borra los criterios de decisión de la red, sale como error inesperado y la red deja de marcarse como modificada}\label{err:174}
+\subsection[Aceptar los criterios estándar sin marcar nada borra los criterios de la red]{\textcolor{asignadoazul}{[Jorge Rico]} Aceptar «Standard criteria» sin marcar ninguna opción borra los criterios de decisión de la red, sale como error inesperado y la red deja de marcarse como modificada}\label{err:174}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.network
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/network/StandardCriteriaDialog.java:82-112} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/StandardCriteriaDialog.java:126-136} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/StandardCriteriaPanel.java:38-57} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/DecisionCriteriaTablePanel.java:178-195} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:80-84} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:269-282} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/OkCancelDialog.java:67-78} \newline \path{core/src/main/java/org/openmarkov/core/action/base/EditsHistoryStacker.java:48-60} \newline \path{core/src/main/java/org/openmarkov/core/action/base/PNESupport.java:286-295} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:415} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:372-374}
@@ -13950,9 +13978,10 @@ Prueba de regresión: sin ventana, con la tabla del diálogo o con el cálculo e
 Textos que la aplicación, en inglés, enseña equivocados, vacíos o con el nombre de una clave.
 
 \setcounter{subsection}{176}
-\subsection[La ayuda de atajos da dos teclas equivocadas, y una cierra el programa]{La ayuda de atajos promete dos teclas equivocadas, y siguiendo una se cierra el programa}\label{err:177}
+\subsection[La ayuda de atajos da dos teclas equivocadas, y una cierra el programa]{\textcolor{asignadoazul}{[Jorge Rico]} La ayuda de atajos promete dos teclas equivocadas, y siguiendo una se cierra el programa}\label{err:177}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog
 \fichakey{Ficheros}\path{gui/src/main/resources/gui/localize/Dialogs_en.xml:702-709} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/ShortcutsBox.java:38-45, 117-120} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/MainMenu.java:203, 205, 209, 218, 331, 342} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanel.java:149-158} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:119} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:391-411}
@@ -14008,9 +14037,10 @@ Corregir los dos textos en \texttt{Dialogs\_\allowbreak{}en.\allowbreak{}xml}: \
 Para que no vuelva a pasar, la ayuda podría construirse leyendo los aceleradores de los elementos de la barra de menús en vez de repetirlos a mano. Como mínimo, una prueba que compare cada fila de \texttt{Shortcuts\allowbreak{}Box.\allowbreak{}Common.\allowbreak{}*} y \texttt{Shortcuts\allowbreak{}Box.\allowbreak{}Specific.\allowbreak{}*} que nombre una tecla con \texttt{Ctrl} con el acelerador del elemento de menú correspondiente (\texttt{Main\allowbreak{}Menu.\allowbreak{}create\allowbreak{}All\allowbreak{}Items} y \texttt{build\allowbreak{}View\allowbreak{}Menu}).
 
 \setcounter{subsection}{177}
-\subsection[Pegar un nodo de sucesos donde no se admite da «\textgreater\textgreater\textgreater{} eventNode is null \textless\textless\textless»]{Al pegar un nodo de sucesos en una red que no los admite, el mensaje de error dice «\textgreater\textgreater\textgreater{} eventNode is null \textless\textless\textless»}\label{err:178}
+\subsection[Pegar un nodo de sucesos donde no se admite da «\textgreater\textgreater\textgreater{} eventNode is null \textless\textless\textless»]{\textcolor{asignadoazul}{[Jorge Rico]} Al pegar un nodo de sucesos en una red que no los admite, el mensaje de error dice «\textgreater\textgreater\textgreater{} eventNode is null \textless\textless\textless»}\label{err:178}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/AddNodeEdit.java:88-92, 145-148} \newline \path{gui/src/main/java/org/openmarkov/gui/action/PasteEdit.java:85} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:169} \newline \path{core/src/main/resources/core/localize/core_class_localizations_en.xml:456-457}
@@ -14047,9 +14077,10 @@ La misma regla vive en \texttt{No\allowbreak{}Event\allowbreak{}Nodes.\allowbrea
 Prueba: red bayesiana o diagrama de influencia, \texttt{Add\allowbreak{}Node\allowbreak{}Edit} con tipo EVENT, y afirmar que el mensaje localizado contiene el nombre de la variable y no contiene «\textgreater\textgreater\textgreater».
 
 \setcounter{subsection}{178}
-\subsection[El selector del tipo de relación enseña nombres internos como «ProbTable»]{El selector del tipo de relación enseña nombres internos como «ProbTable» o «UnivariateDistr»}\label{err:179}
+\subsection[El selector del tipo de relación enseña nombres internos como «ProbTable»]{\textcolor{asignadoazul}{[Jorge Rico]} El selector del tipo de relación enseña nombres internos como «ProbTable» o «UnivariateDistr»}\label{err:179}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui, core
 \fichakey{Paquete}org.openmarkov.gui.dialog.node; org.openmarkov.core.model.network.potential.plugin
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:228-256} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:34-46} \newline \path{gui/src/main/resources/gui/localize/Selectables_en.xml:3-49} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_1_0.java:116, 191}
@@ -14103,9 +14134,10 @@ Hay que decidir los textos.
 Prueba: para cada clase concreta anotada con \texttt{@Potential\allowbreak{}Type}, el nombre para mostrar no debe ser la clave rodeada \texttt{\textgreater{}\textgreater{}\textgreater{}\ …\ \textless{}\textless{}\textless{}}.
 
 \setcounter{subsection}{179}
-\subsection[El diálogo de dominios estándar se abre sin título]{El diálogo de dominios estándar se abre sin título}\label{err:180}
+\subsection[El diálogo de dominios estándar se abre sin título]{\textcolor{asignadoazul}{[Jorge Rico]} El diálogo de dominios estándar se abre sin título}\label{err:180}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.node
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/StandardDomainsDialog.java:24-37} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/DialogBase.java:49} \newline \path{gui/src/main/resources/gui/localize/Buttons_en.xml:3-7}
@@ -14126,9 +14158,10 @@ Añadir en el constructor \texttt{set\allowbreak{}Title(\allowbreak{}string\allo
 Prueba: construir el diálogo sin mostrarlo y comprobar que \texttt{get\allowbreak{}Title(\allowbreak{})} no está vacío.
 
 \setcounter{subsection}{180}
-\subsection[Seis de las ventanillas del editor de árboles se abren sin título]{Seis de las ventanillas del editor de árboles se abren sin título}\label{err:181}
+\subsection[Seis de las ventanillas del editor de árboles se abren sin título]{\textcolor{asignadoazul}{[Jorge Rico]} Seis de las ventanillas del editor de árboles se abren sin título}\label{err:181}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.treeadd
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/AddStatesToBranchDialog.java:48-61} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/RemoveStatesDialog.java:48-58} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/AddVariablesDialog.java:47-57} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/RemoveVariablesDialog.java:46-56} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/ChangeIntervalDialog.java:48-62} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/SetReferenceDialog.java} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/SplitIntervalDialog.java:33} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/TreeADDEditorPanel.java:1245}
@@ -14188,9 +14221,10 @@ Es la misma familia que \hyperref[err:180]{error~180} (diálogo de dominios est�
 Prueba: una prueba de interfaz (AssertJ-Swing, con pantalla) que abra cada operación del menú del árbol y compruebe que el título de la ventana no está vacío (estas ventanas no se pueden construir sin pantalla).
 
 \setcounter{subsection}{181}
-\subsection[Varios títulos de error parten las siglas: «tree a d d», «X m l invalid»]{Los títulos de varias ventanas de error parten las siglas letra a letra: «Invalid limit in tree a d d», «X m l invalid»}\label{err:182}
+\subsection[Varios títulos de error parten las siglas: «tree a d d», «X m l invalid»]{\textcolor{asignadoazul}{[Jorge Rico]} Los títulos de varias ventanas de error parten las siglas letra a letra: «Invalid limit in tree a d d», «X m l invalid»}\label{err:182}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.exception
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/exception/IBundledOpenMarkovException.java:22-43} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/ExceptionDialog.java:52-69} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/ExceptionDialog.java:87-103} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/OMExceptionHandler.java:57} \newline \path{gui/src/main/java/org/openmarkov/gui/exception/InvalidLimitInTreeADDException.java} \newline \path{gui/src/main/java/org/openmarkov/gui/exception/ChangeDomainOfTreeADDIsNotAllowedException.java} \newline \path{core/src/main/java/org/openmarkov/core/exception/ProbNetParserException.java:147-160} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/exception/PGMXParserException.java:92-103} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:136-141} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:176-180}
@@ -14255,9 +14289,10 @@ Aparte, dos nombres de clase llevan erratas que se ven en el título: \texttt{Tr
 Prueba de regresión: una prueba unitaria de \texttt{titlify\allowbreak{}Exception\allowbreak{}Name} con \texttt{Invalid\allowbreak{}Limit\allowbreak{}In\allowbreak{}Tree\allowbreak{}ADDException}, \texttt{Prob\allowbreak{}Net\allowbreak{}Parser\allowbreak{}Exception.\allowbreak{}XMLInvalid} y \texttt{Only\allowbreak{}DESNets\allowbreak{}Allowed\allowbreak{}Exception} que exija «Invalid limit in tree ADD», «XML invalid» y «Only DES nets allowed», y que un nombre sin siglas como \texttt{Tried\allowbreak{}To\allowbreak{}Split\allowbreak{}Interval\allowbreak{}Outside\allowbreak{}Bounds\allowbreak{}Exception} siga dando «Tried to split interval outside bounds».
 
 \setcounter{subsection}{182}
-\subsection[El aviso de zoom fuera de rango dice «Requested zoomManager»]{El aviso de zoom fuera de rango dice «Requested zoomManager» en vez de «Requested zoom»}\label{err:183}
+\subsection[El aviso de zoom fuera de rango dice «Requested zoomManager»]{\textcolor{asignadoazul}{[Jorge Rico]} El aviso de zoom fuera de rango dice «Requested zoomManager» en vez de «Requested zoom»}\label{err:183}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.menutoolbar.toolbar
 \fichakey{Ficheros}\path{gui/src/main/resources/gui/localize/gui_class_localizations_en.xml:102-103} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/toolbar/ZoomComboBox.java:125-143} \newline \path{gui/src/main/resources/gui/localize/Dialogs_en.xml:907-909}
@@ -14291,9 +14326,10 @@ Cambiar el texto a «Requested zoom (\{requestedZoom\}) is out of the range {[}\
 Prueba de regresión: una prueba que recorra los ficheros de textos en inglés y falle si algún valor contiene un identificador con forma de nombre de campo Java como \texttt{zoom\allowbreak{}Manager}, o, más simple, que compruebe el mensaje de \texttt{Zoom\allowbreak{}Out\allowbreak{}Of\allowbreak{}Range\allowbreak{}Exception}.
 
 \setcounter{subsection}{183}
-\subsection[El rótulo del panel del indicador dice «Probability of ocurrence»]{El rótulo del panel del indicador dice «Probability of ocurrence», con una errata}\label{err:184}
+\subsection[El rótulo del panel del indicador dice «Probability of ocurrence»]{\textcolor{asignadoazul}{[Jorge Rico]} El rótulo del panel del indicador dice «Probability of ocurrence», con una errata}\label{err:184}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.common
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/common/IndicatorPotentialPanel.java:60,65}
@@ -14320,9 +14356,10 @@ gui/src/main/java/org/openmarkov/gui/dialog/common/IndicatorPotentialPanel.java:
 Cambiar el texto a «Probability of occurrence:». Si se aprovecha para llevarlo a un fichero de textos, seguir el estilo del resto de paneles de relación. No hace falta prueba.
 
 \setcounter{subsection}{184}
-\subsection[La ayuda de «Add → Utility node» dice «Create an utility node»]{La ayuda emergente de «Add → Utility node», en el menú contextual del lienzo, dice «Create an utility node»}\label{err:185}
+\subsection[La ayuda de «Add → Utility node» dice «Create an utility node»]{\textcolor{asignadoazul}{[Jorge Rico]} La ayuda emergente de «Add → Utility node», en el menú contextual del lienzo, dice «Create an utility node»}\label{err:185}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.menutoolbar.menu
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/NetworkContextualMenu.java:106-133} \newline \path{gui/src/main/java/org/openmarkov/gui/componentBuilder/JMenuItemBuilder.java:166-167}
@@ -14353,9 +14390,10 @@ Cambiar el texto a «Create a utility node». Los rótulos y ayudas de este subm
 Comprobación: tras el cambio, «an utility» no debe aparecer en ningún texto visible de la interfaz.
 
 \setcounter{subsection}{185}
-\subsection[El mensaje de evidencia incompatible dice «old evidente» y es ilegible]{El mensaje de evidencia incompatible dice «old evidente» y describe cada hallazgo con su representación interna en lugar de nombrar la variable y el estado}\label{err:186}
+\subsection[El mensaje de evidencia incompatible dice «old evidente» y es ilegible]{\textcolor{asignadoazul}{[Jorge Rico]} El mensaje de evidencia incompatible dice «old evidente» y describe cada hallazgo con su representación interna en lugar de nombrar la variable y el estado}\label{err:186}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.exception
 \fichakey{Ficheros}\path{core/src/main/resources/core/localize/core_class_localizations_en.xml:219-222, 337-338} \newline \path{core/src/main/java/org/openmarkov/core/exception/IncompatibleEvidenceException.java:26-34} \newline \path{core/src/main/java/org/openmarkov/core/model/network/EvidenceCase.java:108-117} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:260-266} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorInputHandler.java:260-269} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/UnexpectedThrowableDialog.java:35-39, 51, 101-110}
@@ -14476,9 +14514,10 @@ En \texttt{Menus\_\allowbreak{}en.\allowbreak{}xml}, corregir «ocurred» o quit
 Prueba: una prueba de \texttt{core} que construya \texttt{Samples\allowbreak{}Weight\allowbreak{}Is\allowbreak{}Zero} y compruebe que \texttt{get\allowbreak{}Exception\allowbreak{}Message(\allowbreak{})} no contiene «weigth»; y, si se quiere cubrir las demás, una que busque «weigth» y «ocurred» en los ficheros \texttt{*\_\allowbreak{}en.\allowbreak{}xml} de todos los módulos.
 
 \setcounter{subsection}{187}
-\subsection[La ayuda de «Unique superparent» dice «commont»]{La ayuda emergente de «Unique superparent», en las opciones del clasificador de superpadre, dice «commont» en vez de «common»}\label{err:188}
+\subsection[La ayuda de «Unique superparent» dice «commont»]{\textcolor{asignadoazul}{[Jorge Rico]} La ayuda emergente de «Unique superparent», en las opciones del clasificador de superpadre, dice «commont» en vez de «common»}\label{err:188}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}learning.gui
 \fichakey{Paquete}org.openmarkov.learning.algorithm.nbderived.spnb.gui
 \fichakey{Ficheros}\path{learning.gui/src/main/resources/learning/gui/localize/Learning_en.xml:154-156} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/gui/SuperParentNaiveBayesParametersDialog.java:30-31}
@@ -14512,9 +14551,10 @@ Cambiar «commont» por «common» en la línea 155 de \texttt{Learning\_\allowb
 Trabajo de más en el camino que más se recorre, y operaciones largas que bloquean la ventana.
 
 \setcounter{subsection}{188}
-\subsection[Entrar en modo inferencia con una red grande congela la ventana]{Entrar en modo inferencia con una red grande deja la ventana entera congelada durante decenas de segundos, sin progreso ni forma de cancelar}\label{err:189}
+\subsection[Entrar en modo inferencia con una red grande congela la ventana]{\textcolor{asignadoazul}{[Jorge Rico]} Entrar en modo inferencia con una red grande deja la ventana entera congelada durante decenas de segundos, sin progreso ni forma de cancelar}\label{err:189}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:146-163, 180-181} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:58-119} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:324-363, 580-599} \newline \path{gui/src/main/java/org/openmarkov/gui/util/GUIUtils.java:57-81} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainGUI.java:108-118} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:465-472}
@@ -14588,9 +14628,10 @@ Cuidado: la red no debe poder editarse mientras el trabajador lee de ella, y el 
 Prueba: con \texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks/\allowbreak{}bn/\allowbreak{}BN-cpcs422b.\allowbreak{}pgmx}, comprobar (por ejemplo con AssertJ-Swing) que durante la propagación el hilo de la interfaz sigue atendiendo eventos.
 
 \setcounter{subsection}{189}
-\subsection[Cada resultado de una operación sobre tablas reserva una tabla que tira]{Cada resultado de una operación sobre tablas reserva y rellena una tabla entera que tira acto seguido}\label{err:190}
+\subsection[Cada resultado de una operación sobre tablas reserva una tabla que tira]{\textcolor{asignadoazul}{[Jorge Rico]} Cada resultado de una operación sobre tablas reserva y rellena una tabla entera que tira acto seguido}\label{err:190}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.potential
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:55-75}
@@ -14634,9 +14675,10 @@ Revisar las tres subclases de \texttt{Table\allowbreak{}Potential} (\texttt{Stra
 Verificar con el banco de referencia de las operaciones, \texttt{Operations\allowbreak{}Reference\allowbreak{}Times\allowbreak{}Test} en \texttt{integration\allowbreak{}Tests} (red cpcs422b), antes y después; la batería entera de pruebas debe pasar sin cambios de valores.
 
 \setcounter{subsection}{190}
-\subsection[Cada tabla de probabilidad nueva se rellena dos veces con el mismo valor]{Cada tabla de probabilidad nueva se rellena dos veces seguidas con el mismo valor}\label{err:191}
+\subsection[Cada tabla de probabilidad nueva se rellena dos veces con el mismo valor]{\textcolor{asignadoazul}{[Jorge Rico]} Cada tabla de probabilidad nueva se rellena dos veces seguidas con el mismo valor}\label{err:191}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.potential
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:465-513}
@@ -14678,9 +14720,10 @@ Borrar el \texttt{Arrays.\allowbreak{}fill} de la línea 501 (el de la 510 cubre
 Medirlo con el banco de referencia de las operaciones, \texttt{Operations\allowbreak{}Reference\allowbreak{}Times\allowbreak{}Test} en \texttt{integration\allowbreak{}Tests}, antes y después. La batería de pruebas existente de \texttt{Table\allowbreak{}Potential} basta como red de seguridad; no hace falta prueba nueva de comportamiento.
 
 \setcounter{subsection}{191}
-\subsection[La maximización reserva la tabla de la unión de variables sin usarla]{La maximización reserva una tabla del tamaño de la unión de variables solo para calcular unos desplazamientos}\label{err:192}
+\subsection[La maximización reserva la tabla de la unión de variables sin usarla]{\textcolor{asignadoazul}{[Jorge Rico]} La maximización reserva una tabla del tamaño de la unión de variables solo para calcular unos desplazamientos}\label{err:192}
 \begin{ficha}
 \fichakey{Estado}Presente
+\fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.potential.operation
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/TablePotentialMaximization.java:86-105} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/TablePotentialMaximization.java:206-225} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/AbstractIndexedPotential.java:183-186} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/AbstractIndexedPotential.java:307-309} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/TablePotentialElimination.java:113}
