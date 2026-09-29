@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35} y \hyperref[err:36]{36}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36} y \hyperref[err:41]{41}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -240,7 +240,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{193 errores}; 49 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{46} necesitan antes una decisión del equipo. Por esfuerzo estimado: 157 pequeños, 36 medios y 0 grandes.
-De los 193, 19 están ya corregidos y 11 lo están en parte; 36 están asignados a Jorge Rico.
+De los 193, 20 están ya corregidos y 11 lo están en parte; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -324,7 +324,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:39]{39} & Ocho restricciones opcionales no llegan a ninguna red & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:inferencia}.\ Evidencia, inferencia y variables numéricas}}\\
 \hyperref[err:40]{40} & Una variable numérica sin precisión se discretiza a un único valor cero & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:41]{41} & Un hallazgo sobre un nodo numérico de azar hace fallar la propagación & \texttt{core} & M \hfill No\\
+\hyperref[err:41]{41} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un hallazgo sobre un nodo numérico de azar hace fallar la propagación & \texttt{core} & M \hfill No\\
 \hyperref[err:42]{42} & Entrar en modo inferencia falla si hay nodos de utilidad intermedios & \texttt{inference} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:43]{43} & Un nodo numérico de azar sin potencial tumba la discretización & \texttt{core} & S \hfill No\\
 \hyperref[err:44]{44} & Un hallazgo numérico con más de dos decimales se pierde al discretizar & \texttt{core} & S \hfill No\\
@@ -3740,16 +3740,16 @@ La forma en que se escriben los límites de los tramos con una precisión como 0
 Prueba de regresión: una red P → N (numérica, precisión 0, valores 3 y 7) convertida con \texttt{convert\allowbreak{}Numerical\allowbreak{}Variables\allowbreak{}To\allowbreak{}FS} debe dar dos estados; y leer un \texttt{.\allowbreak{}pgmx} sin \texttt{\textless{}Precision\textgreater{}} como el descrito arriba y evaluarlo con \texttt{VEEvaluation} debe dar 5,0.
 
 \setcounter{subsection}{40}
-\subsection[Un hallazgo sobre un nodo numérico de azar hace fallar la propagación]{Poner un hallazgo, en modo inferencia, sobre un nodo numérico de azar hace fallar la propagación con un NullPointerException}\label{err:41}
+\subsection[Un hallazgo sobre un nodo numérico de azar hace fallar la propagación]{\textcolor{corregidoverde}{[Corregido]} Poner un hallazgo, en modo inferencia, sobre un nodo numérico de azar hace fallar la propagación con un NullPointerException}\label{err:41}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{b8e0c8a} (30-09-2026): \texttt{VEPropagation} discretiza las variables numéricas con toda la evidencia, previa y posterior a la resolución, y pasa los hallazgos de las dos a las variables nuevas, sin tocar la evidencia que recibe. En \texttt{MID-\allowbreak{}Colorectal.\allowbreak{}pgmx}, con la política de cribado impuesta, un hallazgo posterior sobre «Age {[}0{]}» da las mismas probabilidades que el mismo hallazgo previo, y la edad cambia el resultado; sin política impuesta sigue fallando al calcular la política óptima, que tiene que discretizar la edad sin observarla (\hyperref[err:42]{error~42}). En \texttt{MID-\allowbreak{}dmhee-2.\allowbreak{}5.\allowbreak{}pgmx}, un hallazgo posterior de valor 0 sobre «Duration of treatment {[}0{]}» se propaga; con otro valor, que contradice el delta del nodo, se rechaza como evidencia incompatible (\hyperref[err:194]{error~194}).
 \fichakey{Módulo}core, inference
 \fichakey{Paquete}org.openmarkov.core.model.network; org.openmarkov.inference.algorithm.variableElimination.tasks
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:63-70,203-225,324-333,431-459} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:117-157,228-242} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VariableElimination.java:95-100} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:581-600}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}No
-\fichakey{Relacionados}\hyperref[err:42]{error~42}, \hyperref[err:44]{error~44}, \hyperref[err:45]{error~45}, \hyperref[err:46]{error~46}, \hyperref[nota:55]{nota~55}
+\fichakey{Relacionados}\hyperref[err:42]{error~42}, \hyperref[err:44]{error~44}, \hyperref[err:45]{error~45}, \hyperref[err:46]{error~46}, \hyperref[err:194]{error~194}, \hyperref[nota:55]{nota~55}
 \end{ficha}
 \paragraph{Qué pasa}
 El usuario abre una red con nodos numéricos de azar, pasa a modo inferencia y añade un hallazgo a uno de ellos (el diálogo pide un valor numérico). La propagación falla con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}: la excepción no es de las que \texttt{Evidence\allowbreak{}Manager.\allowbreak{}do\allowbreak{}Propagation} recoge y llega al gestor global, que muestra la ventana de error inesperado; el panel no enseña probabilidades para ese caso de evidencia.
