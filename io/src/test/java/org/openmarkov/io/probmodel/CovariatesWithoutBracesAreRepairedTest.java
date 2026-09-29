@@ -31,8 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class CovariatesWithoutBracesAreRepairedTest {
 
-    private static final Path NETWORK = Path.of(System.getProperty("user.dir")).getParent()
-            .resolve("0_miscellaneous/networks/mid/MID-mammography.pgmx");
+    private static final String NETWORK = "MID-mammography.pgmx";
 
     private static VariableExpression firstCovariate(ProbNet net) {
         return Arrays.stream(((GLMPotential) net.getNode("Death (OC) [1]").getPotential()).getCovariates())
@@ -42,7 +41,7 @@ public class CovariatesWithoutBracesAreRepairedTest {
 
     @Tag(TestSpeed.MEDIUM)
     @Test public void theNameGetsItsBracesAndSurvivesSaving() throws Exception {
-        ProbNet net = new PGMXReader().read(NETWORK.toUri().toURL()).probNet();
+        ProbNet net = new PGMXReader().read(getClass().getClassLoader().getResource(NETWORK)).probNet();
         assertEquals("pow({Age [1]},8)", firstCovariate(net).asStringExpression());
         assertEquals(List.of(net.getVariable("Age [1]")), firstCovariate(net).references());
 
