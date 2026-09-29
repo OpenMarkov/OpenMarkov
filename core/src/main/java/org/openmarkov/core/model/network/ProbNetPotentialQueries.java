@@ -92,6 +92,7 @@ public final class ProbNetPotentialQueries {
     /**
      * Projects all potentials in the network onto the given evidence,
      * returning them in topological order as {@link TablePotential}s.
+     * Every table projected from a utility node carries the criterion of that node.
      *
      * @param probNet      the network whose potentials to project
      * @param evidenceCase the evidence to project onto
@@ -114,10 +115,26 @@ public final class ProbNetPotentialQueries {
             // contribute exactly one today - that is the default in Potential - so this changes
             // nothing yet. It is what lets a canonical model hand over its factorization instead of
             // the single table it currently multiplies them back into.
-            projectedPotentials.addAll(
-                    potential.tableProjectToFactors(evidenceCase, inferenceOptions, projectedPotentials));
+            List<TablePotential> factors =
+                    potential.tableProjectToFactors(evidenceCase, inferenceOptions, projectedPotentials);
+            Criterion criterion = criterionOfUtilityNode(probNet, potential);
+            if (criterion != null) {
+                for (TablePotential factor : factors) {
+                    if (factor.getCriterion() == null) {
+                        factor.setCriterion(criterion);
+                    }
+                }
+            }
+            projectedPotentials.addAll(factors);
         }
         return projectedPotentials;
+    }
+
+    /** The criterion of the utility node the potential belongs to, or null if it does not belong to one. */
+    private static Criterion criterionOfUtilityNode(ProbNet probNet, Potential potential) {
+        Variable variable = potential.getConditionedVariable();
+        Node node = variable == null ? null : probNet.getNode(variable);
+        return node != null && node.getNodeType() == NodeType.UTILITY ? variable.getDecisionCriterion() : null;
     }
 
     /**
