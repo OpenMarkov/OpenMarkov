@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29} y \hyperref[err:30]{30}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30} y \hyperref[err:35]{35}.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -240,7 +240,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{192 errores}; 48 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{45} necesitan antes una decisión del equipo. Por esfuerzo estimado: 156 pequeños, 36 medios y 0 grandes.
-De los 192, 17 están ya corregidos y 12 lo están en parte; 36 están asignados a Jorge Rico.
+De los 192, 18 están ya corregidos y 12 lo están en parte; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -316,7 +316,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:31]{31} & Pegar en una red que ya incumple una restricción se rechaza siempre & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:33]{33} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Deshacer o cancelar «mostrar el comentario al abrir» no la devuelve & \texttt{core} & S \hfill No\\
 \hyperref[err:34]{34} & Deshacer o cancelar «Always append» de un suceso no devuelve su valor & \texttt{core} & S \hfill No\\
-\hyperref[err:35]{35} & Una red expandida o aprendida no se marca como modificada ni pide guardar & \texttt{core} & S \hfill No\\
+\hyperref[err:35]{35} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una red expandida o aprendida no se marca como modificada ni pide guardar & \texttt{core} & S \hfill No\\
 \hyperref[err:36]{36} & En una red expandida o aprendida, deshacer no recuerda nada al principio & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:restricciones}.\ Restricciones de red}}\\
 \hyperref[err:37]{37} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir un fichero no comprueba las restricciones de la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -3208,9 +3208,9 @@ Por coherencia, el constructor de copia \texttt{Node(\allowbreak{}Node)} (línea
 Prueba de regresión: rellenar el caso pendiente de \texttt{Edit\allowbreak{}Undo\allowbreak{}Cases} con un nodo de suceso de una red \texttt{DESNetwork\allowbreak{}Type} que empiece con \texttt{always\allowbreak{}Append=true} y \texttt{always\allowbreak{}Observed=false}; ejecutar la edición con \texttt{false}, deshacer y comprobar que vuelve a \texttt{true} (y el caso simétrico con \texttt{always\allowbreak{}Observed=true}).
 
 \setcounter{subsection}{34}
-\subsection[Una red expandida o aprendida no se marca como modificada ni pide guardar]{La ventana de una red expandida o aprendida a partir de otra no se marca nunca como modificada, y cerrarla no pide guardar}\label{err:35}
+\subsection[Una red expandida o aprendida no se marca como modificada ni pide guardar]{\textcolor{corregidoverde}{[Corregido]} La ventana de una red expandida o aprendida a partir de otra no se marca nunca como modificada, y cerrarla no pide guardar}\label{err:35}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{4d1921e} (29-09-2026): \texttt{Prob\allowbreak{}Net\allowbreak{}Copier} ya no sustituye los oyentes de la copia por los del original, en ninguna de las dos copias. La copia se marca como modificada tras una edición, que es lo que su pestaña lee para pedir que se guarde (medido con la red expandida de \texttt{MID-\allowbreak{}Chancellor-\allowbreak{}corrected.\allowbreak{}pgmx} y con las copias de \texttt{BN-\allowbreak{}asia.\allowbreak{}pgmx}), y los oyentes del original dejan de recibir sus ediciones. Al aprender partiendo de una red modelo, la pestaña de la red aprendida queda marcada como modificada al terminar, como ya pasaba sin red modelo.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/ProbNetCopier.java:39-67, 119} \newline \path{core/src/main/java/org/openmarkov/core/action/base/PNESupport.java:55-62, 92-95, 286-295} \newline \path{core/src/main/java/org/openmarkov/core/model/network/TemporalNetOperations.java:101-108, 451-469} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:431-432} \newline \path{learning.core/src/main/java/org/openmarkov/learning/core/LearningManager.java:185-186} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:161-186} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:1152-1155} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:368-388} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/LearningDialog.java:899-904, 1019-1023}
