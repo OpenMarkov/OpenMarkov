@@ -238,9 +238,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{192 errores}; 48 de ellos son defectos nuevos, encontrados al
-comprobar los demás. \textbf{45} necesitan antes una decisión del equipo. Por esfuerzo estimado: 156 pequeños, 36 medios y 0 grandes.
-De los 192, 19 están ya corregidos y 11 lo están en parte; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{193 errores}; 49 de ellos son defectos nuevos, encontrados al
+comprobar los demás. \textbf{46} necesitan antes una decisión del equipo. Por esfuerzo estimado: 157 pequeños, 36 medios y 0 grandes.
+De los 193, 19 están ya corregidos y 11 lo están en parte; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -253,7 +253,7 @@ El apéndice recoge además 186 notas con lo que se comprobó y no entra en la l
 \ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 18 \\
 \ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 12 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
-\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 10 \\
+\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 11 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 17 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 7 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 21 \\
@@ -328,6 +328,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:42]{42} & Entrar en modo inferencia falla si hay nodos de utilidad intermedios & \texttt{inference} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:43]{43} & Un nodo numérico de azar sin potencial tumba la discretización & \texttt{core} & S \hfill No\\
 \hyperref[err:44]{44} & Un hallazgo numérico con más de dos decimales se pierde al discretizar & \texttt{core} & S \hfill No\\
+\hyperref[err:194]{194} & Un hallazgo sobre un nodo con delta se ignora antes de resolver y se rechaza después & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:45]{45} & Observar un nodo numérico de azar no informa sobre sus padres & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:46]{46} & Un nodo de utilidad sin rango impide entrar en modo inferencia & \texttt{gui} & S \hfill No\\
 \hyperref[err:47]{47} & «Add finding» marca siempre el primer estado y pisa el hallazgo anterior & \texttt{gui} & S \hfill No\\
@@ -4024,6 +4025,39 @@ Otros sitios de la misma regla, «el nombre de un estado discretizado y su búsq
 El \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} de \texttt{VEPropagation.\allowbreak{}prune\allowbreak{}Network} al preguntar por una variable numérica que la discretización ha sustituido es un defecto distinto, \hyperref[err:42]{error~42}; arreglar este error no lo arregla.
 
 Prueba de regresión: convertir la red P → N con un hallazgo N=7,123 y otro N=0,35 y comprobar que la evidencia sigue conteniendo un hallazgo sobre la N convertida.
+
+\setcounter{subsection}{193}
+\subsection[Un hallazgo sobre un nodo con delta se ignora antes de resolver y se rechaza después]{Un hallazgo sobre un nodo definido por un potencial delta, con otro valor que el del delta, se sustituye sin aviso por ese valor si es previo a la resolución, y se rechaza como evidencia incompatible si es posterior}\label{err:194}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network; org.openmarkov.core.model.network.potential
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/EvidenceCase.java:317-330} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/DeltaPotential.java:177-185} \newline \path{core/src/main/java/org/openmarkov/core/inference/tasks/TaskUtilities.java:47-54} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:262-283}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué significa un hallazgo sobre un nodo cuyo potencial es un delta: un valor que sustituye al del delta, como si este fuera un valor por omisión que el usuario cambia para un caso, o evidencia imposible, que hay que rechazar con un mensaje
+\fichakey{Relacionados}\hyperref[err:41]{error~41}, \hyperref[err:44]{error~44}, \hyperref[err:45]{error~45}, \hyperref[err:48]{error~48}
+\end{ficha}
+\paragraph{Qué pasa}
+Visto al corregir el \hyperref[err:41]{error~41}. En \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}DMHEE/\allowbreak{}MID-dmhee-2.\allowbreak{}5.\allowbreak{}pgmx}, «Duration of treatment {[}0{]}» es un nodo numérico de azar con un potencial delta de valor 0. Con un hallazgo previo a la resolución de valor 2 (el que se pone en modo edición), al extender la evidencia el hallazgo pasa a valer 0, y la propagación da lo mismo que sin hallazgo: la política óptima elige «combination therapy» y la probabilidad de «State {[}1{]}» es {[}0,005; 0,0341; 0,1027; 0,8582{]}. Con el delta cambiado a 2, que es lo que diría el hallazgo si sustituyera al valor del delta, la política óptima elige «monotherapy» y «State {[}1{]}» es {[}0,0098; 0,0669; 0,2018; 0,7215{]}. El usuario no recibe ningún aviso.
+
+Desde el commit \texttt{b8e0c8a}, que corrige el \hyperref[err:41]{error~41}, el mismo hallazgo puesto después de la resolución (en modo inferencia) no se sustituye: choca con el valor que el delta ha puesto en la evidencia previa y la propagación lo rechaza como evidencia incompatible; la ventana quita el hallazgo y lo comunica como describe el \hyperref[err:48]{error~48}. Antes de ese commit fallaba con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}. Los dos modos tratan hoy de forma distinta el mismo gesto.
+
+En las redes del repositorio hay 15 nodos numéricos de azar con potencial delta: nueve son edades («Age», «Age at entry», «Age at diagnosis») y seis contadores de tiempo («Time in treatment», «Time in state», «Duration of treatment»). En \texttt{MID-\allowbreak{}dmhee-3.\allowbreak{}5.\allowbreak{}pgmx}, un hallazgo previo de 40 u 80 sobre «Age {[}0{]}», cuyo delta vale 60, también pasa a valer 60; en ese modelo la edad no cambia la utilidad esperada (579,833 con el delta en 40, 60 u 80), así que allí no se nota.
+
+Por qué pasa: \texttt{Evidence\allowbreak{}Case.\allowbreak{}extend\allowbreak{}In\allowbreak{}Place}, que usan \texttt{Task\allowbreak{}Utilities.\allowbreak{}extend\allowbreak{}Pre\allowbreak{}Resolution\allowbreak{}Evidence} y \texttt{extend\allowbreak{}Post\allowbreak{}Resolution\allowbreak{}Evidence}, recorre todos los potenciales de la red y guarda los hallazgos que inducen con \texttt{findings.\allowbreak{}put}, que pisa el que ya hubiera sobre la misma variable (línea 328). \texttt{Delta\allowbreak{}Potential.\allowbreak{}get\allowbreak{}Induced\allowbreak{}Findings} devuelve siempre su propio valor, sin mirar la evidencia que recibe.
+\paragraph{Cómo arreglarlo}
+Depende de la decisión.
+
+\begin{itemize}
+\tightlist
+\item
+  Si el hallazgo sustituye al valor del delta, \texttt{extend\allowbreak{}In\allowbreak{}Place} no debe pisar un hallazgo que ya está, y el valor que el delta pone en la evidencia previa no debe chocar con un hallazgo posterior sobre el mismo nodo.
+\item
+  Si es evidencia imposible, \texttt{extend\allowbreak{}In\allowbreak{}Place} debe rechazar el hallazgo del usuario con \texttt{Incompatible\allowbreak{}Evidence\allowbreak{}Exception} cuando el valor inducido es otro, como ya pasa con el hallazgo posterior, y la ventana decir por qué.
+\end{itemize}
+
+Prueba: en \texttt{MID-\allowbreak{}dmhee-2.\allowbreak{}5.\allowbreak{}pgmx}, un hallazgo de valor 2 sobre «Duration of treatment {[}0{]}» debe tratarse igual antes y después de la resolución, como diga la decisión.
 
 \setcounter{subsection}{44}
 \subsection[Observar un nodo numérico de azar no informa sobre sus padres]{Observar un nodo numérico de azar no cambia la probabilidad de sus padres, y la utilidad esperada se calcula como si esa observación no dijera nada de ellos}\label{err:45}
