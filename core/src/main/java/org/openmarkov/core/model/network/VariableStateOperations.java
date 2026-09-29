@@ -202,10 +202,12 @@ public final class VariableStateOperations {
         // Every potential is asked first and none is installed until all of them have answered,
         // so a potential that refuses leaves the network as it was instead of half changed.
         refuseIfAnyPotentialCannotBeReordered(node, variable);
-        setPotentialAfterReorderingFirstPotential(node, variable, newStates);
+        Map<Node, List<Potential>> reordered = new HashMap<>();
+        reordered.put(node, reorderedPotentials(node, variable, newStates));
         for (Node child : node.getChildren()) {
-            setPotentialAfterReorderingFirstPotential(child, variable, newStates);
+            reordered.put(child, reorderedPotentials(child, variable, newStates));
         }
+        reordered.forEach(Node::setPotentials);
         variable.setStates(newStates);
         resetLink(node);
     }
@@ -224,16 +226,22 @@ public final class VariableStateOperations {
         }
     }
 
-    private static void setPotentialAfterReorderingFirstPotential(Node auxNode, Variable variable,
-                                                                  State[] newStates) {
-        if (auxNode.getNodeType() == NodeType.CHANCE || auxNode.getNodeType() == NodeType.UTILITY) {
-            Potential oldPotential = null;
-            oldPotential = auxNode.getPotential();
-            Potential newPotential = oldPotential != null ? oldPotential.reorder(variable, newStates) : null;
-            if (newPotential != null) {
-                auxNode.setPotential(newPotential);
-            }
+    /**
+     * The potentials of a chance, utility or decision node with the states of {@code variable} in
+     * their new order; those of any other node, unchanged.
+     */
+    private static List<Potential> reorderedPotentials(Node auxNode, Variable variable, State[] newStates) {
+        List<Potential> potentials = auxNode.getPotentials();
+        NodeType nodeType = auxNode.getNodeType();
+        if (nodeType != NodeType.CHANCE && nodeType != NodeType.UTILITY && nodeType != NodeType.DECISION) {
+            return potentials;
         }
+        List<Potential> reordered = new ArrayList<>();
+        for (Potential potential : potentials) {
+            Potential newPotential = potential.contains(variable) ? potential.reorder(variable, newStates) : null;
+            reordered.add(newPotential != null ? newPotential : potential);
+        }
+        return reordered;
     }
 
     /**
