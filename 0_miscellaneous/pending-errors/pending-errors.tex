@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26} y \hyperref[err:29]{29}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29} y \hyperref[err:30]{30}.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -240,7 +240,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{192 errores}; 48 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{45} necesitan antes una decisión del equipo. Por esfuerzo estimado: 156 pequeños, 36 medios y 0 grandes.
-De los 192, 16 están ya corregidos y 12 lo están en parte; 36 están asignados a Jorge Rico.
+De los 192, 17 están ya corregidos y 12 lo están en parte; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -312,7 +312,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:27]{27} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Rehacer un enlace y su restricción deja el enlace sin la restricción & \texttt{core} & M \hfill No\\
 \hyperref[err:28]{28} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Pasar a suceso una decisión numérica sin política la deja a medias & \texttt{core} & S \hfill No\\
 \hyperref[err:29]{29} & \textcolor{corregidoverde}{\textbf{Corregido}} · Mover un estado con un hijo sin potencial deja la tabla permutada a medias & \texttt{core} & S \hfill No\\
-\hyperref[err:30]{30} & Deshacer un cambio de estados duplica tablas de los hijos y cambia resultados & \texttt{core} & S \hfill No\\
+\hyperref[err:30]{30} & \textcolor{corregidoverde}{\textbf{Corregido}} · Deshacer un cambio de estados duplica tablas de los hijos y cambia resultados & \texttt{core} & S \hfill No\\
 \hyperref[err:31]{31} & Pegar en una red que ya incumple una restricción se rechaza siempre & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:33]{33} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Deshacer o cancelar «mostrar el comentario al abrir» no la devuelve & \texttt{core} & S \hfill No\\
 \hyperref[err:34]{34} & Deshacer o cancelar «Always append» de un suceso no devuelve su valor & \texttt{core} & S \hfill No\\
@@ -2954,9 +2954,9 @@ Conviene revisar a la vez si el lector debe aceptar nodos de azar sin potencial 
 Prueba: A → B con B sin potencial, mover un estado de A: no debe lanzar, y los estados y la tabla de A deben quedar permutados juntos; y un nodo con dos potenciales debe conservar los dos, ambos reordenados.
 
 \setcounter{subsection}{29}
-\subsection[Deshacer un cambio de estados duplica tablas de los hijos y cambia resultados]{Deshacer o cancelar un cambio de estados copia las tablas de los hijos en el nodo y en sus padres, y la red da otras probabilidades y se guarda así}\label{err:30}
+\subsection[Deshacer un cambio de estados duplica tablas de los hijos y cambia resultados]{\textcolor{corregidoverde}{[Corregido]} Deshacer o cancelar un cambio de estados copia las tablas de los hijos en el nodo y en sus padres, y la red da otras probabilidades y se guarda así}\label{err:30}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{c5328e1} (29-09-2026): para poder deshacer, \texttt{Node\allowbreak{}State\allowbreak{}Edit} guarda la lista de potenciales propia del nodo y la de cada vecino, como las demás ediciones, en vez de lo que devuelve \texttt{Prob\allowbreak{}Net.\allowbreak{}get\allowbreak{}Potentials(\allowbreak{}variable)}, que no se ha tocado. Deshacer o cancelar añadir, quitar, subir o bajar un estado deja cada nodo con sus potenciales de antes; en \texttt{BN-prostanet.\allowbreak{}pgmx}, la red vuelve a tener 50 potenciales y las mismas probabilidades.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:137-145, 203-207} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:576-600} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Node.java:241-248} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:399-402} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/TablePotentialPanel.java:170-171} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_1_0.java:140-153}
