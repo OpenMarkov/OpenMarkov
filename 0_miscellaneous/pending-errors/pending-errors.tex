@@ -185,6 +185,9 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:185]{nota~185}; al revisarlo aparecieron el \hyperref[err:193]{error~193} y la
 \hyperref[nota:186]{nota~186}.
 
+\paragraph{Correcciones marcadas desde el 29 de septiembre}
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{error~15}.
+
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
 en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
@@ -237,7 +240,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{192 errores}; 48 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{45} necesitan antes una decisión del equipo. Por esfuerzo estimado: 156 pequeños, 36 medios y 0 grandes.
-De los 192, 12 están ya corregidos y 13 lo están en parte; 36 están asignados a Jorge Rico.
+De los 192, 13 están ya corregidos y 13 lo están en parte; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -292,7 +295,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:12]{12} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una regresión no se calcula si un padre vale menos de una milésima & \texttt{core} & S \hfill No\\
 \hyperref[err:13]{13} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una covariable con el nombre sin llaves se acepta pero no se calcula nunca & \texttt{io} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:14]{14} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una regresión sin \texttt{Constant} o \texttt{Gamma} muere con un índice −1 sin mensaje & \texttt{core} & S \hfill No\\
-\hyperref[err:15]{15} & Una utilidad de regresión no cuenta como utilidad al calcular & \texttt{core} & S \hfill No\\
+\hyperref[err:15]{15} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una utilidad de regresión no cuenta como utilidad al calcular & \texttt{core} & S \hfill No\\
 \hyperref[err:16]{16} & Una tabla de fórmulas con \texttt{Complement} en vez de \texttt{\#} no se puede proyectar & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:17]{17} & Quitar una etiqueta referenciada del árbol deja la red sin poder evaluarse & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:18]{18} & Añadir a una hoja del árbol la variable del nodo deja una red que no abre & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
@@ -1643,9 +1646,9 @@ Además, corregir la red \texttt{Dynamic-LIMID-every-potential.\allowbreak{}pgmx
 Prueba de regresión: en \texttt{core/\allowbreak{}src/\allowbreak{}test}, proyectar un \texttt{Weibull\allowbreak{}Hazard\allowbreak{}Potential} sin \texttt{Gamma}, un \texttt{Linear\allowbreak{}Combination\allowbreak{}Potential} y un \texttt{Exponential\allowbreak{}Potential} sin \texttt{Constant}, y comprobar que lanzan la excepción nueva con el nombre de la covariable ausente; y una prueba de integración que proyecte todos los potenciales de \texttt{Dynamic-LIMID-every-potential.\allowbreak{}pgmx}.
 
 \setcounter{subsection}{14}
-\subsection[Una utilidad de regresión no cuenta como utilidad al calcular]{Un nodo de utilidad definido como regresión no cuenta como utilidad: el coste-efectividad falla con ClassCastException o pierde ese coste sin avisar, y la evaluación puede dar utilidad 0}\label{err:15}
+\subsection[Una utilidad de regresión no cuenta como utilidad al calcular]{\textcolor{corregidoverde}{[Corregido]} Un nodo de utilidad definido como regresión no cuenta como utilidad: el coste-efectividad falla con ClassCastException o pierde ese coste sin avisar, y la evaluación puede dar utilidad 0}\label{err:15}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{c6f8655} (29-09-2026): \texttt{Prob\allowbreak{}Net\allowbreak{}Potential\allowbreak{}Queries.\allowbreak{}table\allowbreak{}Project\allowbreak{}Potentials} da a toda tabla proyectada desde un nodo de utilidad el criterio del nodo cuando no lo trae, así que la combinación lineal, la exponencial y el árbol de regresiones cuentan como utilidad en la evaluación y en el coste-efectividad; también la utilidad constante definida como «Delta», que se perdía por la misma causa. No se ha hecho que \texttt{create\allowbreak{}CEPPotential} falle con un mensaje ante una utilidad sin criterio: con el arreglo, solo le llegaría la de un nodo de utilidad que no tenga criterio.
 \fichakey{Módulo}core, inference
 \fichakey{Paquete}org.openmarkov.core.model.network.potential; org.openmarkov.inference.algorithm.variableElimination
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/LinearCombinationPotential.java:84-131} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/ExponentialPotential.java:80-118} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/ExactDistrPotential.java:69-75} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/ExactDistrPotential.java:93-100} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/treeadd/TreeADDPotential.java:669-690} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/Potential.java:432-434} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetPotentialQueries.java:101-121} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/VariableEliminationCore.java:192-217} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/DecisionVariableElimination.java:43-49}
