@@ -40,7 +40,7 @@ import org.openmarkov.core.model.network.potential.TablePotential;
             if (node.getPotential() == null)
                 throw new ThereIsNoPotentialInNodeException(node.getName());
             try {
-                parentsPotential.add(node.getPotential().tableProject(null, null));
+                parentsPotential.add(BasicOperations.tableOfAParentToAbsorb(node));
             } catch (NonProjectablePotentialException e) {
                 throw new UnreachableException(e);
             }
