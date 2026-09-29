@@ -35,6 +35,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Task: propagation
@@ -263,6 +265,32 @@ public class VEPropagation extends VariableElimination implements Propagation {
             evidence.addFindings(postResolutionEvidence.getFindings());
         }
         return evidence;
+    }
+
+    /**
+     * As in every exact algorithm, but a numeric variable observed after the resolution is also kept at its
+     * observed value, and the findings of both evidence cases move to the variables of the discretized network.
+     */
+    @Override void exactAlgorithmsPreprocessing() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException {
+        EvidenceCase allEvidence = getAllEvidence();
+        probNet = TaskUtilities.discretizeNonObservedNumericVariables(probNet, allEvidence);
+        probNet = TaskUtilities.absorbAllIntermediateNumericNodes(probNet, allEvidence);
+        replacePreResolutionEvidence(findingsOn(getPreResolutionEvidence(), allEvidence));
+        if (postResolutionEvidence != null) {
+            postResolutionEvidence = findingsOn(postResolutionEvidence, allEvidence);
+        }
+    }
+
+    /** The findings of {@code moved} on the variables of {@code evidence}, matched by name. */
+    private static EvidenceCase findingsOn(EvidenceCase evidence, EvidenceCase moved) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+        Set<String> names = evidence.getVariables().stream().map(Variable::getName).collect(Collectors.toSet());
+        EvidenceCase findings = new EvidenceCase();
+        for (Finding finding : moved.getFindings()) {
+            if (names.contains(finding.getVariable().getName())) {
+                findings.addFinding(finding);
+            }
+        }
+        return findings;
     }
     
     public List<Variable> getVariablesOfInterest() {
