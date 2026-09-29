@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{error~15}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15} y \hyperref[err:193]{193}.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -240,7 +240,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{192 errores}; 48 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{45} necesitan antes una decisión del equipo. Por esfuerzo estimado: 156 pequeños, 36 medios y 0 grandes.
-De los 192, 13 están ya corregidos y 13 lo están en parte; 36 están asignados a Jorge Rico.
+De los 192, 14 están ya corregidos y 13 lo están en parte; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -304,7 +304,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:21]{21} & Los nodos de sucesos pegados siguen leyendo los padres del nodo original & \texttt{gui} & M \hfill No\\
 \hyperref[err:22]{22} & Aceptar un árbol con sucesos deja un deshacer que borra la relación & \texttt{core} & S \hfill No\\
 \hyperref[err:23]{23} & Se ofrece «Tree with Excluded Events» con solo padres suceso, y falla & \texttt{core} & S \hfill No\\
-\hyperref[err:193]{193} & «Absorb parents» falla si un padre es una regresión & \texttt{core} & S \hfill No\\
+\hyperref[err:193]{193} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Absorb parents» falla si un padre es una regresión & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:ediciones}.\ Ediciones de la red: deshacer, cancelar y pegar}}\\
 \hyperref[err:24]{24} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un dominio estándar de otro tamaño borra tablas que «Cancel» no devuelve & \texttt{core} & M \hfill No\\
 \hyperref[err:25]{25} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Restringir un enlace cambia la tabla del hijo y deshacer no la devuelve & \texttt{gui} & S \hfill No\\
@@ -2452,9 +2452,9 @@ De paso, \texttt{instanciate\allowbreak{}Safely} convierte cualquier excepción 
 Prueba: para un nodo con solo padres suceso, \texttt{validate} devuelve \texttt{false} y el nodo no la ofrece; para uno con un suceso y un padre de azar, se construye sin error.
 
 \setcounter{subsection}{192}
-\subsection[«Absorb parents» falla si un padre es una regresión]{«Absorb parents» sobre un nodo de suma, de producto o de fórmula sale como error inesperado cuando un padre está definido por una regresión, porque la tabla de la regresión trae la variable del propio padre}\label{err:193}
+\subsection[«Absorb parents» falla si un padre es una regresión]{\textcolor{corregidoverde}{[Corregido]} «Absorb parents» sobre un nodo de suma, de producto o de fórmula sale como error inesperado cuando un padre está definido por una regresión, porque la tabla de la regresión trae la variable del propio padre}\label{err:193}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{799a16e} (29-09-2026): \texttt{Basic\allowbreak{}Operations.\allowbreak{}table\allowbreak{}Of\allowbreak{}AParent\allowbreak{}To\allowbreak{}Absorb} deja fuera de la tabla de cada padre la variable del propio padre, y lo usan el menú (\texttt{Absorb\allowbreak{}Parents\allowbreak{}Edit}) y el preproceso de la inferencia (\texttt{Basic\allowbreak{}Operations.\allowbreak{}absorb\allowbreak{}Parents}). El menú absorbe ya un padre definido por una regresión, y la evaluación deja de contar su valor dos veces, consecuencia que esta ficha no recogía: con un coste constante de −4 en «Cost: Second Test», padre de «Total» en \texttt{ID-used-car-buyer.\allowbreak{}pgmx}, la utilidad esperada era 24,96 en vez de 28,96.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core, org.openmarkov.core.inference
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/AbsorbParentsEdit.java:33-68} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:43-76, 201-238} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/LinearCombinationPotential.java:94-95} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/ExponentialPotential.java:88-89}
