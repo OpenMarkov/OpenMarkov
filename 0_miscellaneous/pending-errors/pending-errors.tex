@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193} y \hyperref[err:26]{26}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26} y \hyperref[err:29]{29}.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -240,7 +240,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{192 errores}; 48 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{45} necesitan antes una decisión del equipo. Por esfuerzo estimado: 156 pequeños, 36 medios y 0 grandes.
-De los 192, 15 están ya corregidos y 13 lo están en parte; 36 están asignados a Jorge Rico.
+De los 192, 16 están ya corregidos y 12 lo están en parte; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -311,7 +311,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:26]{26} & \textcolor{corregidoverde}{\textbf{Corregido}} · Enlazar a una utilidad producto la convierte en suma y cambia el resultado & \texttt{core} & S \hfill No\\
 \hyperref[err:27]{27} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Rehacer un enlace y su restricción deja el enlace sin la restricción & \texttt{core} & M \hfill No\\
 \hyperref[err:28]{28} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Pasar a suceso una decisión numérica sin política la deja a medias & \texttt{core} & S \hfill No\\
-\hyperref[err:29]{29} & Mover un estado con un hijo sin potencial deja la tabla permutada a medias & \texttt{core} & S \hfill No\\
+\hyperref[err:29]{29} & \textcolor{corregidoverde}{\textbf{Corregido}} · Mover un estado con un hijo sin potencial deja la tabla permutada a medias & \texttt{core} & S \hfill No\\
 \hyperref[err:30]{30} & Deshacer un cambio de estados duplica tablas de los hijos y cambia resultados & \texttt{core} & S \hfill No\\
 \hyperref[err:31]{31} & Pegar en una red que ya incumple una restricción se rechaza siempre & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:33]{33} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Deshacer o cancelar «mostrar el comentario al abrir» no la devuelve & \texttt{core} & S \hfill No\\
@@ -2899,9 +2899,9 @@ Pruebas:
 \end{itemize}
 
 \setcounter{subsection}{28}
-\subsection[Mover un estado con un hijo sin potencial deja la tabla permutada a medias]{Mover un estado de un nodo cuyo hijo no tiene potencial revienta y deja la tabla del nodo permutada con los estados en el orden viejo}\label{err:29}
+\subsection[Mover un estado con un hijo sin potencial deja la tabla permutada a medias]{\textcolor{corregidoverde}{[Corregido]} Mover un estado de un nodo cuyo hijo no tiene potencial revienta y deja la tabla del nodo permutada con los estados en el orden viejo}\label{err:29}
 \begin{ficha}
-\fichakey{Estado}Presente en parte. Desde \texttt{2c4fca6} (ajustado en \texttt{72d422b}), un nodo de azar o de utilidad sin potencial se salta al reordenar, así que mover un estado ya no lanza \texttt{NoSuchElementException} ni deja la tabla permutada con los estados en el orden viejo. Sigue presente el segundo efecto: solo se reordena el primer potencial del nodo y se instala con \texttt{setPotential}, que vacía la lista, de modo que un nodo con dos potenciales pierde los demás.
+\fichakey{Estado}Corregido. La parte del nodo sin potencial, desde \texttt{2c4fca6} (ajustado en \texttt{72d422b}); el resto, en el commit \texttt{6d143ee} (29-09-2026): \texttt{Variable\allowbreak{}State\allowbreak{}Operations} reordena todos los potenciales del nodo y de sus hijos, no solo el primero, y los instala todos cuando ya están calculados. También los de un nodo de decisión, que se saltaban: una política impuesta conservaba el orden viejo de los estados de su padre y cambiaba de sentido sin aviso (medido en \texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}Imposed\allowbreak{}Policy.\allowbreak{}pgmx}), consecuencia que esta ficha no recogía.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/VariableStateOperations.java:200-236} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:154-163} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Node.java:215-220}
