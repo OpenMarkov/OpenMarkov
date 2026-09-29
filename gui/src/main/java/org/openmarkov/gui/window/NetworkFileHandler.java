@@ -107,6 +107,7 @@ public class NetworkFileHandler {
     }
     
     NetworkEditorPanel createNewFrame(ProbNet probNet, String networkFile) {
+        probNet.getPNESupport().setWithUndo(true);
         NetworkEditorPanel networkPanel = new NetworkEditorPanel(probNet, mainPanel);
         if (networkFile != null) {
             networkPanel.setNetworkFile(networkFile);
