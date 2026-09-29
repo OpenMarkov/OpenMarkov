@@ -53,7 +53,6 @@ final class ProbNetCopier {
         }
         copyLinks(source, dest, false);
         copyMetadata(source, dest, false);
-        dest.getPNESupport().setListeners(source.getPNESupport().getListeners());
         dest.setAdditionalProperties(source.getAdditionalProperties());
         if (source.getDecisionCriteria() != null) {
             dest.setDecisionCriteria(source.getDecisionCriteria());
@@ -116,7 +115,6 @@ final class ProbNetCopier {
 
         copyLinks(source, dest, true);
         copyMetadata(source, dest, true);
-        dest.getPNESupport().setListeners(source.getPNESupport().getListeners());
         dest.setAdditionalProperties(source.getAdditionalProperties());
         return dest;
     }
