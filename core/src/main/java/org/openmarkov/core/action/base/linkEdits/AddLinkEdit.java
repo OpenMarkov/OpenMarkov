@@ -13,8 +13,8 @@ import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.constraint.*;
 import org.openmarkov.core.model.network.potential.Potential;
-import org.openmarkov.core.model.network.potential.SumPotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
+import org.openmarkov.core.model.network.potential.operation.PotentialOperations;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -200,7 +200,7 @@ public final class AddLinkEdit extends BaseLinkEdit {
                     if (!variables.contains(nodeFrom.getVariable())) {
                         variables.add(nodeFrom.getVariable());
                     }
-                    Potential newPotential = new SumPotential(variables, oldPotential.getPotentialRole());
+                    Potential newPotential = PotentialOperations.superValuePotential(oldPotential, variables);
                     newPotentials.add(newPotential);
                 }
                 

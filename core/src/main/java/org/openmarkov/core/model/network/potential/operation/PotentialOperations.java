@@ -292,6 +292,20 @@ public class PotentialOperations {
         return new UniformPotential(variables, role);
     }
     
+    /**
+     * The potential of a utility node whose parents are all numeric, once its variables are
+     * {@code variables}. A sum, a product or a formula keeps what it is; any other potential becomes a sum.
+     */
+    public static Potential superValuePotential(Potential oldPotential, List<Variable> variables) {
+        if (oldPotential instanceof SumPotential || oldPotential instanceof ProductPotential
+                || oldPotential instanceof FunctionPotential) {
+            Potential potential = oldPotential.copy();
+            potential.setVariables(new ArrayList<>(variables));
+            return potential;
+        }
+        return new SumPotential(variables, oldPotential.getPotentialRole());
+    }
+    
     public static @NotNull ArrayList<Variable> variableAndParents(ProbNet probNet, Variable variable) {
         return new ArrayList<>(Stream.concat(Stream.of(variable),
                                              probNet.getParents(probNet.getNode(variable))

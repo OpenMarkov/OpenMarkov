@@ -26,7 +26,6 @@ import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
 import org.openmarkov.core.model.network.constraint.OnlyFiniteStatesVariables;
 import org.openmarkov.core.model.network.constraint.OnlyNumericVariables;
 import org.openmarkov.core.model.network.potential.Potential;
-import org.openmarkov.core.model.network.potential.SumPotential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
 import org.openmarkov.core.model.network.potential.operation.PotentialOperations;
@@ -164,8 +163,8 @@ public class VariableTypeEdit extends MultiStepEdit {
                 List<Potential> newPotentials = new ArrayList<>();
                 if (child.onlyNumericalParents()) {
                     for (Potential oldPotential : child.getPotentials()) {
-                        Potential newPotential = new SumPotential(oldPotential.getVariables(),
-                                                                  oldPotential.getPotentialRole());
+                        Potential newPotential = PotentialOperations.superValuePotential(oldPotential,
+                                                                                         oldPotential.getVariables());
                         newPotentials.add(newPotential);
                     }
                 } else {

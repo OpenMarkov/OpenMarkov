@@ -21,9 +21,9 @@ import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.ModelNetworkConstraint;
 import org.openmarkov.core.model.network.potential.Potential;
-import org.openmarkov.core.model.network.potential.SumPotential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
+import org.openmarkov.core.model.network.potential.operation.PotentialOperations;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
                         // Update potential
                         List<Variable> variables = oldPotential.getVariables();
                         variables.remove(node1.getVariable());
-                        Potential newPotential = new SumPotential(variables, oldPotential.getPotentialRole());
+                        Potential newPotential = PotentialOperations.superValuePotential(oldPotential, variables);
                         newPotentials.add(newPotential);
                     }
                 } else if (!node2.onlyNumericalParents()) {//mixture of finite states and numerical Uniform
