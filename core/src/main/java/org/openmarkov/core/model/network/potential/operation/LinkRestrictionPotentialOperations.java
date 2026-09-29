@@ -507,15 +507,19 @@ public class LinkRestrictionPotentialOperations {
 	 * @param newPotential the new potential to set
 	 */
 	public static void setPotentialWithRestrictions(Node node, Potential newPotential) {
-		List<Potential> potentials = new ArrayList<>();
-		potentials.add(newPotential);
- 		node.setPotentials(potentials);
-		// update potential with link restriction
-		if (newPotential instanceof TablePotential && node.getNodeType() != NodeType.DECISION) {
-			Potential restricted = updatePotentialByLinkRestrictions(node);
-			potentials = new ArrayList<>();
-			potentials.add(restricted);
+		if(newPotential == null){
+			node.clearPotentials();
+		}else {
+			List<Potential> potentials = new ArrayList<>();
+			potentials.add(newPotential);
 			node.setPotentials(potentials);
+			// update potential with link restriction
+			if (newPotential instanceof TablePotential && node.getNodeType() != NodeType.DECISION) {
+				Potential restricted = updatePotentialByLinkRestrictions(node);
+				potentials = new ArrayList<>();
+				potentials.add(restricted);
+				node.setPotentials(potentials);
+			}
 		}
 	}
 }
