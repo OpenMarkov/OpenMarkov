@@ -60,9 +60,10 @@ public class ExactRelationsInFormat1AreEvaluatedTest {
     @Tag(TestSpeed.MEDIUM)
     @Test public void theCopiesInFormat1GiveTheSameUtility() throws Exception {
         for (URL url02 : evaluableInfluenceDiagrams()) {
-            String path10 = url02.getPath().replace("/networks/id/", "/networks/id/1-0/").replace(".pgmx", "-1-0.pgmx");
-            if (Files.exists(Path.of(path10))) {
-                assertArrayEquals(utility(read(url02)), utility(read(Path.of(path10).toUri().toURL())), 0.0, path10);
+            Path path02 = Path.of(url02.toURI());
+            Path path10 = path02.resolveSibling("1-0").resolve(path02.getFileName().toString().replace(".pgmx", "-1-0.pgmx"));
+            if (Files.exists(path10)) {
+                assertArrayEquals(utility(read(url02)), utility(read(path10.toUri().toURL())), 0.0, path10.toString());
             }
         }
     }
