@@ -134,13 +134,10 @@ public class NodeStateEdit extends PNEdit {
         this.revelationConditionMap = new HashMap<>();
 
         // Save node potentials and neighbours
-        this.oldPotentials = probNet.getPotentials(variable);
+        this.oldPotentials = node.getPotentials();
         this.listOldPotentials = new HashMap<>();
         for (Node nodeNeighbour : probNet.getNeighbors(node)) {
-            this.listOldPotentials.put(
-                    nodeNeighbour.getVariable(),
-                    probNet.getPotentials(nodeNeighbour.getVariable())
-            );
+            this.listOldPotentials.put(nodeNeighbour.getVariable(), nodeNeighbour.getPotentials());
         }
     }
     
