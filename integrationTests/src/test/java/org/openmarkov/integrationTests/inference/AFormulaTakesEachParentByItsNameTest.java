@@ -41,7 +41,7 @@ public class AFormulaTakesEachParentByItsNameTest {
     private ProbNet read(UnaryOperator<String> change) throws Exception {
         String text;
         try (InputStream in = getClass().getResourceAsStream(NETWORK)) {
-            text = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            text = new String(in.readAllBytes(), StandardCharsets.UTF_8).replace("\r\n", "\n");
         }
         assertTrue(text.contains(LINK_U1 + "\n      " + LINK_U2), "the network changed");
         Path file = Files.createTempFile("formula", ".pgmx");
