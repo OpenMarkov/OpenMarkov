@@ -212,35 +212,40 @@
         </Variables>
         <Values>0.999 0.001 0.15 0.85</Values>
       </Potential>
-      <Potential type="Uniform">
+      <Potential type="UnivariateDistr" distribution="Exact">
         <Variables>
           <Variable name="QoL today" />
           <Variable name="Symptom today" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
-      <Potential type="Uniform">
+      <Potential type="UnivariateDistr" distribution="Exact">
         <Variables>
           <Variable name="QoL tomorrow" />
           <Variable name="Symptom tomorrow" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
-      <Potential type="Uniform">
+      <Potential type="UnivariateDistr" distribution="Exact">
         <Variables>
           <Variable name="Cost of therapy (today)" />
           <Variable name="Therapy today" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
-      <Potential type="Uniform">
+      <Potential type="UnivariateDistr" distribution="Exact">
         <Variables>
           <Variable name="Cost of therapy (tomorrow)" />
           <Variable name="Therapy tomorrow" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
-      <Potential type="Uniform">
+      <Potential type="UnivariateDistr" distribution="Exact">
         <Variables>
           <Variable name="Cost of test" />
           <Variable name="Do test?" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
     </Potentials>
   </ProbNet>

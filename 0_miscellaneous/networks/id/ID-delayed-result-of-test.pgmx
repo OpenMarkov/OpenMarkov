@@ -233,35 +233,40 @@
         </Variables>
         <Values>0.999 0.001 0.15 0.85</Values>
       </Potential>
-      <Potential type="Uniform" role="utility">
+      <Potential type="Table" role="utility">
         <UtilityVariable name="QoL today" />
         <Variables>
           <Variable name="Symptom today" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
-      <Potential type="Uniform" role="utility">
+      <Potential type="Table" role="utility">
         <UtilityVariable name="QoL tomorrow" />
         <Variables>
           <Variable name="Symptom tomorrow" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
-      <Potential type="Uniform" role="utility">
+      <Potential type="Table" role="utility">
         <UtilityVariable name="Cost of therapy (today)" />
         <Variables>
           <Variable name="Therapy today" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
-      <Potential type="Uniform" role="utility">
+      <Potential type="Table" role="utility">
         <UtilityVariable name="Cost of therapy (tomorrow)" />
         <Variables>
           <Variable name="Therapy tomorrow" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
-      <Potential type="Uniform" role="utility">
+      <Potential type="Table" role="utility">
         <UtilityVariable name="Cost of test" />
         <Variables>
           <Variable name="Do test?" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
     </Potentials>
     <AdditionalProperties />

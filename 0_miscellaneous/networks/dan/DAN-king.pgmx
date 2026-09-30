@@ -670,11 +670,12 @@
           <Variable name="Noble descent" />
         </Variables>
       </Potential>
-      <Potential type="Uniform" role="utility">
+      <Potential type="Table" role="utility">
         <UtilityVariable name="U1" />
         <Variables>
           <Variable name="Quality of wooer" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
       <Potential type="Table" role="utility">
         <UtilityVariable name="U2" />
@@ -715,11 +716,12 @@
         </Variables>
         <Values>-0.1 -0.05</Values>
       </Potential>
-      <Potential type="Uniform" role="utility">
+      <Potential type="Table" role="utility">
         <UtilityVariable name="Cost marriage" />
         <Variables>
           <Variable name="Marriage" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
       <Potential type="Table" role="utility">
         <UtilityVariable name="Cost war" />
@@ -728,11 +730,12 @@
         </Variables>
         <Values>0.0 -5.0</Values>
       </Potential>
-      <Potential type="Uniform" role="utility">
+      <Potential type="Table" role="utility">
         <UtilityVariable name="Cost retirement" />
         <Variables>
           <Variable name="Retire" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
     </Potentials>
     <AdditionalProperties />

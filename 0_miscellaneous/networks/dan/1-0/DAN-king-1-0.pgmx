@@ -625,11 +625,12 @@
           <Variable name="Noble descent" />
         </Variables>
       </Potential>
-      <Potential type="Uniform">
+      <Potential type="UnivariateDistr" distribution="Exact">
         <Variables>
           <Variable name="U1" />
           <Variable name="Quality of wooer" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
       <Potential type="UnivariateDistr" distribution="Exact">
         <Variables>
@@ -670,11 +671,12 @@
         </Variables>
         <Values>-0.1 -0.05</Values>
       </Potential>
-      <Potential type="Uniform">
+      <Potential type="UnivariateDistr" distribution="Exact">
         <Variables>
           <Variable name="Cost marriage" />
           <Variable name="Marriage" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
       <Potential type="UnivariateDistr" distribution="Exact">
         <Variables>
@@ -683,11 +685,12 @@
         </Variables>
         <Values>0.0 -5.0</Values>
       </Potential>
-      <Potential type="Uniform">
+      <Potential type="UnivariateDistr" distribution="Exact">
         <Variables>
           <Variable name="Cost retirement" />
           <Variable name="Retire" />
         </Variables>
+        <Values>0.0 0.0</Values>
       </Potential>
     </Potentials>
   </ProbNet>
