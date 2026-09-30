@@ -202,8 +202,13 @@ public class BasicOperations {
      * The table of a parent that a sum, a product or a formula absorbs. The table of a regression also
      * carries the parent's own variable, which has a single state; it is left out.
      */
-    public static TablePotential tableOfAParentToAbsorb(Node parent) throws NonProjectablePotentialException {
-        return (TablePotential) parent.getPotential().tableProject(null, null).removeVariable(parent.getVariable());
+    public static TablePotential tableOfAParentToAbsorb(Node parent)
+            throws NonProjectablePotentialException, ThereIsNoPotentialInNodeException {
+        Potential potential = parent.getPotential();
+        if (potential == null) {
+            throw new ThereIsNoPotentialInNodeException(parent.getName());
+        }
+        return (TablePotential) potential.tableProject(null, null).removeVariable(parent.getVariable());
     }
 
     public static void absorbParents(ProbNet network, Node node, EvidenceCase evidence) throws ThereIsNoPotentialInNodeException {
