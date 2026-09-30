@@ -418,11 +418,7 @@ public class DANOperations {
                 } else {
                     //We ensure here that the first variable of a utility potential is the variable of the utility node.
                     //This condition is necessary to correctly evaluate the network with VariableEliminationCore
-                    TablePotential potentialProjectedFromTreeADD = null;
-                    try {
-                        potentialProjectedFromTreeADD = potential.tableProject(decisionEvidence, null);
-                    } catch (NonProjectablePotentialException ignored) {
-                    }
+                    TablePotential potentialProjectedFromTreeADD = potential.tableProject(decisionEvidence, null);
                     if (potentialProjectedFromTreeADD != null) {
                         Potential newPotential;
                         Node newConditionedVariable = probNet
