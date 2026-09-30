@@ -9,6 +9,8 @@ package org.openmarkov.core.model.network;
 
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.inference.PartialOrderDAN;
 import org.openmarkov.core.model.graph.Link;
@@ -439,6 +441,9 @@ public class ProbNetOperations {
             Variable oldVariable = node.getVariable();
             // Should the node be converted
             if (oldVariable.getVariableType() == VariableType.NUMERIC && node.getNodeType() == NodeType.CHANCE) {
+                if (node.getPotentials().isEmpty()) {
+                    throw new UnrecoverableException(new ThereIsNoPotentialInNodeException(node.getName()));
+                }
                 EvidenceCase configuration = new EvidenceCase(evidence);
                 Potential oldPotential = node.getPotentials().get(0);
                 if (configuration.contains(oldVariable)) {
