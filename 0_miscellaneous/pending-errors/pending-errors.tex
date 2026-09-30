@@ -189,6 +189,9 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41} y \hyperref[err:43]{43}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
+\paragraph{Errores añadidos el 30 de septiembre}
+Los \hyperref[err:195]{errores~195} a \hyperref[err:199]{199}, del exportador a Amua (sección~\ref{sec:amua}), se anotaron el 28 de septiembre en una copia aparte de esta lista; se han pasado a ella tras comprobar que siguen presentes.
+
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
 en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
@@ -239,9 +242,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{193 errores}; 49 de ellos son defectos nuevos, encontrados al
-comprobar los demás. \textbf{46} necesitan antes una decisión del equipo. Por esfuerzo estimado: 157 pequeños, 36 medios y 0 grandes.
-De los 193, 21 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
+comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
+De los 198, 21 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -266,6 +269,7 @@ El apéndice recoge además 186 notas con lo que se comprobó y no entra en la l
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 6 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 12 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
+\ref{sec:amua}. Exportación a Amua & 5 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -489,6 +493,12 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:190]{190} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Cada resultado de una operación sobre tablas reserva una tabla que tira & \texttt{core} & S \hfill No\\
 \hyperref[err:191]{191} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Cada tabla de probabilidad nueva se rellena dos veces con el mismo valor & \texttt{core} & S \hfill No\\
 \hyperref[err:192]{192} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La maximización reserva la tabla de la unión de variables sin usarla & \texttt{core} & S \hfill No\\
+\multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:amua}.\ Exportación a Amua}}\\
+\hyperref[err:195]{195} & Amua recibe coste y efectividad cruzados si la red pone antes la efectividad & \texttt{io} & S \hfill No\\
+\hyperref[err:196]{196} & El escenario base de Amua es siempre la primera opción de la decisión & \texttt{io} & S \hfill No\\
+\hyperref[err:197]{197} & Probabilidades que no suman uno se exportan a Amua como uniformes & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:198]{198} & Amua recibe las probabilidades y los valores redondeados a cuatro decimales & \texttt{io} & S \hfill No\\
+\hyperref[err:199]{199} & Una decisión por debajo del primer nivel se rechaza con «Decision node not found» & \texttt{io} & S \hfill No\\
 \bottomrule
 \end{longtable}
 }
@@ -14799,6 +14809,107 @@ Sustituir en los dos sitios por \texttt{accumulated\allowbreak{}Offsets{[}i{]}\ 
 Si se borra \texttt{multiply\allowbreak{}And\allowbreak{}Maximize\allowbreak{}Uniformly} (el código sin llamadores se recoge en \hyperref[nota:162]{nota~162}, donde no hay nada que corregir), queda un solo sitio.
 
 
+% ══════════════════════════════════════════════════════════════════════
+\section{Exportación a Amua}\label{sec:amua}
+
+El exportador de árboles de decisión al formato del programa Amua (paquete \texttt{org.\allowbreak{}openmarkov.\allowbreak{}io.\allowbreak{}amua}, fachada \texttt{Amua\allowbreak{}Exporter}), al que se llega desde el menú contextual del árbol de decisión, «Export to Amua», desde el commit \texttt{76e6996}. Estos errores se comprobaron contra el código del commit \texttt{4e21edf}; el 30 de septiembre se volvieron a comprobar contra \texttt{a0f0cd6}, sin cambios en el paquete entre los dos.
+
+\setcounter{subsection}{194}
+\subsection[Amua recibe coste y efectividad cruzados si la red pone antes la efectividad]{Al exportar a Amua un árbol de coste-efectividad cuya red declara el criterio de efectividad antes que el de coste, el coste y la efectividad de cada rama van a la dimensión equivocada}\label{err:195}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.amua
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/amua/adatper/AmuaDTAssignDimensions.java:41-50}, \path{io/src/main/java/org/openmarkov/io/amua/writer/AmuaDTWriter.java:212-241}
+\fichakey{Comprobado}Leyendo el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:196]{error~196}
+\end{ficha}
+\paragraph{Qué pasa}
+El fichero de Amua lleva una lista de dimensiones y, en cada nodo, un \texttt{<cost>} y un \texttt{<payoff>} por dimensión, en el mismo orden. \texttt{Amua\allowbreak{}DT\allowbreak{}Assign\allowbreak{}Dimensions.\allowbreak{}assign\allowbreak{}Dimensions} escribe las dimensiones en el orden de \texttt{get\allowbreak{}Decision\allowbreak{}Criteria(\allowbreak{})} y fija \texttt{cost\allowbreak{}Dim} y \texttt{effect\allowbreak{}Dim} según ese orden. En cambio, \texttt{Amua\allowbreak{}DT\allowbreak{}Writer.\allowbreak{}write\allowbreak{}Node\allowbreak{}Cost} y \texttt{write\allowbreak{}Node\allowbreak{}Payoff} escriben siempre primero el coste y después la efectividad.
+
+Si la red declara los criterios en el orden efectividad, coste, la dimensión que se llama como la efectividad recibe el coste y viceversa, y el análisis de coste-efectividad de Amua sale con los papeles cambiados, sin aviso. Las pruebas del paquete usan siempre el orden coste, efectividad, así que no lo ven.
+\paragraph{Cómo arreglarlo}
+Escribir los valores de cada nodo en el orden de las dimensiones: el coste en la posición \texttt{cost\allowbreak{}Dim} y la efectividad en \texttt{effect\allowbreak{}Dim}, pasando \texttt{Amua\allowbreak{}DT\allowbreak{}Dimensions} a los dos métodos del escritor. Una alternativa más sólida es guardar en el nodo un \texttt{double{[}{]}} por dimensión desde la conversión. Prueba: un árbol con los criterios en orden efectividad, coste, comprobando que el \texttt{<payoff>} de la posición \texttt{effect\allowbreak{}Dim} de una hoja es su efectividad.
+
+\setcounter{subsection}{195}
+\subsection[El escenario base de Amua es siempre la primera opción de la decisión]{Al exportar a Amua un árbol de coste-efectividad, el escenario base que se escribe es la primera opción de la decisión, no la de menor coste, salvo que las opciones sean hojas}\label{err:196}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.amua.adatper
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/amua/adatper/AmuaDTConverter.java:157-185}, \path{io/src/main/java/org/openmarkov/io/amua/adatper/AmuaDTAssignDimensions.java:119-149}
+\fichakey{Comprobado}Leyendo el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:195]{error~195}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{calc\allowbreak{}Base\allowbreak{}Scenario} elige como escenario base la opción de menor coste (y, si empatan, la de mayor efectividad) mirando la utilidad parcial (\texttt{get\allowbreak{}Partial\allowbreak{}Utility(\allowbreak{})}) de cada hijo de la decisión. Pero \texttt{Amua\allowbreak{}DT\allowbreak{}Converter.\allowbreak{}assign\allowbreak{}Utilities}, en los árboles de coste-efectividad, solo copia el coste y la efectividad evaluados en los nodos de utilidad (tipo 2); en los demás deja la utilidad parcial a (0,~0).
+
+Las opciones de una decisión llevan normalmente a nodos de azar, así que todas empatan a (0,~0) y gana siempre la primera. En los árboles unicriterio, en cambio, la utilidad parcial se copia en todos los nodos. La prueba \texttt{assign\allowbreak{}Dimensions\allowbreak{}CETest} rellena a mano las utilidades parciales y solo comprueba que el escenario base no sea nulo.
+\paragraph{Cómo arreglarlo}
+En \texttt{assign\allowbreak{}Utilities}, poner como utilidad parcial el coste y la efectividad evaluados de cualquier nodo, como ya se hace en el caso unicriterio, y dejar el \emph{payoff} solo en las hojas. Prueba: un árbol convertido de verdad (no montado a mano) con dos opciones que llevan a nodos de azar de costes distintos, con la más barata en segundo lugar.
+
+\setcounter{subsection}{196}
+\subsection[Probabilidades que no suman uno se exportan a Amua como uniformes]{Si las probabilidades de las ramas de un nodo de azar no suman uno, el exportador a Amua las sustituye todas por 1/n sin avisar, y el modelo exportado da otros resultados}\label{err:197}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.amua.adatper
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/amua/adatper/AmuaDTConverter.java:89-133}
+\fichakey{Comprobado}Leyendo el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}Sí: qué hacer con unas probabilidades que no suman uno (rechazar la exportación, o normalizar si el error es pequeño como se decidió en el \hyperref[err:5]{error~5} y rechazar si es mayor)
+\fichakey{Relacionados}\hyperref[err:5]{error~5}, \hyperref[err:198]{error~198}
+\end{ficha}
+\paragraph{Qué pasa}
+Después de convertir los hijos de un nodo de azar, \texttt{convert\allowbreak{}To\allowbreak{}Amua\allowbreak{}Tree} suma sus probabilidades y, si la suma se aparta de uno más de $10^{-4}$, pone todas a $1/n$. No lo avisa ni lo anota en ningún sitio. Además, una probabilidad \texttt{NaN} en una rama se cambia antes por 0 (líneas 93-96), así que una sola rama \texttt{NaN} basta para que todo el nodo pase a uniforme. El fichero de Amua describe entonces un modelo distinto del de OpenMarkov.
+
+No se ha buscado una red del repositorio en la que la evaluación del árbol deje probabilidades que no sumen uno; la consecuencia se ha deducido leyendo el código.
+\paragraph{Cómo arreglarlo}
+Llevar la comprobación a \texttt{Amua\allowbreak{}DT\allowbreak{}Validator}, para que el usuario reciba el mensaje de árbol no válido con el nodo afectado, y aplicar lo que decida el equipo. En ningún caso cambiar las probabilidades sin avisar.
+
+\setcounter{subsection}{197}
+\subsection[Amua recibe las probabilidades y los valores redondeados a cuatro decimales]{El exportador a Amua escribe las probabilidades, los costes y las efectividades redondeados a cuatro decimales: un valor por debajo de 0,00005 sale como 0 y tres ramas de 1/3 suman 0,9999}\label{err:198}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.amua.writer
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/amua/writer/AmuaDTWriter.java:29}, \path{io/src/main/java/org/openmarkov/io/amua/writer/AmuaDTWriter.java:187-241}
+\fichakey{Comprobado}Leyendo el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:197]{error~197}, \hyperref[nota:52]{nota~52}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Amua\allowbreak{}DT\allowbreak{}Writer} formatea las probabilidades y, en los árboles de coste-efectividad, los costes y las efectividades con un \texttt{Decimal\allowbreak{}Format(\allowbreak{}"\#.\#\#\#\#")} estático. Todo valor se escribe con cuatro decimales como mucho: una probabilidad o una efectividad pequeñas se convierten en 0, y las ramas de un nodo de azar pueden dejar de sumar uno exactamente (tres ramas de 1/3 dan 0,3333 cada una). No se ha comprobado cómo reacciona Amua a una suma de 0,9999.
+
+En los árboles unicriterio, en cambio, el coste y el \emph{payoff} se escriben con \texttt{String.\allowbreak{}value\allowbreak{}Of} y toda su precisión. Los cuatro decimales de \texttt{DEFAULT\_\allowbreak{}DECIMALS} son en Amua solo los decimales con que se muestran los resultados, no una precisión de los datos.
+\paragraph{Cómo arreglarlo}
+Escribir todos los números con \texttt{Double.\allowbreak{}toString}, que conserva la precisión y usa siempre el punto decimal, lo que resuelve también lo de la \hyperref[nota:52]{nota~52}. Prueba: exportar un nodo de azar con tres ramas de 1/3 y una efectividad de $10^{-6}$ y releer los valores del XML.
+
+\setcounter{subsection}{198}
+\subsection[Una decisión por debajo del primer nivel se rechaza con «Decision node not found»]{Un árbol de coste-efectividad cuya decisión no está en la raíz ni en el primer nivel pasa la validación del exportador a Amua, pero se rechaza con el mensaje «Decision node not found»}\label{err:199}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.amua.adatper
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/amua/adatper/AmuaDTAssignDimensions.java:119-172}, \path{io/src/main/java/org/openmarkov/io/amua/adatper/AmuaDTValidator.java:103-125}, \path{io/src/main/java/org/openmarkov/io/amua/AmuaExporter.java:80-100}
+\fichakey{Comprobado}Leyendo el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:196]{error~196}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Amua\allowbreak{}DT\allowbreak{}Validator} acepta la única decisión del árbol a cualquier profundidad. Pero \texttt{get\allowbreak{}Decision\allowbreak{}Node}, que usa el cálculo del escenario base, solo la busca en la raíz y en sus hijos directos. Si hay dos nodos de azar antes de la decisión, el árbol pasa la validación y después se rechaza con «Decision node not found», un mensaje que contradice al árbol que el usuario tiene delante.
+
+Además, \texttt{calc\allowbreak{}Base\allowbreak{}Scenario} lanza \texttt{Illegal\allowbreak{}Argument\allowbreak{}Exception} si la decisión no tiene opciones, y \texttt{Amua\allowbreak{}Exporter.\allowbreak{}is\allowbreak{}Valid\allowbreak{}DT\allowbreak{}For\allowbreak{}Amua} solo captura \texttt{Illegal\allowbreak{}State\allowbreak{}Exception}, así que ese caso saldría como error no previsto. Hoy no parece alcanzable, porque una decisión del árbol tiene siempre opciones.
+\paragraph{Cómo arreglarlo}
+Comprobar en Amua dónde admite el nodo de decisión en un análisis de coste-efectividad y exigir eso mismo en \texttt{Amua\allowbreak{}DT\allowbreak{}Validator}, con un mensaje que diga dónde está la decisión y dónde tendría que estar. Si Amua la admite a cualquier profundidad, que \texttt{get\allowbreak{}Decision\allowbreak{}Node} la busque en todo el árbol. Hacer que el cálculo del escenario base lance la misma excepción que el resto de la validación.
+
+
 % ═════════════════════════════════════════════════════════════════════════════
 \appendix
 \renewcommand{\thesection}{\Alph{section}}
@@ -14877,8 +14988,8 @@ cambia algo (por ejemplo, un código que hoy no llama nadie empieza a usarse), s
 \textbf{48}\phantomsection\label{nota:48} & \textbf{La evolución temporal de varias utilidades falla si no se fuerza un solo criterio}\newline El constructor \texttt{MIDTemporal\allowbreak{}Evolution(\allowbreak{}Prob\allowbreak{}Net,\allowbreak{}\ List\textless{}Node\textgreater{})} deja el objeto en modo de coste-efectividad y \texttt{evaluate\allowbreak{}Slice} lanza \texttt{Class\allowbreak{}Cast\allowbreak{}Exception} al tratar la partición como una tabla (medido sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-Chancellor-corrected.\allowbreak{}pgmx}). Su único llamador, \texttt{Trace\allowbreak{}Temporal\allowbreak{}Evolution\allowbreak{}Dialog}, llama a \texttt{force\allowbreak{}Unicriterion(\allowbreak{})} justo después de construirlo, y así el cálculo termina bien. \\[3pt]
 \textbf{49}\phantomsection\label{nota:49} & \textbf{La evaluación ciclo a ciclo traga la excepción de un potencial no proyectable}\newline \texttt{Temporal\allowbreak{}Evaluation.\allowbreak{}resolve} captura \texttt{Non\allowbreak{}Projectable\allowbreak{}Potential\allowbreak{}Exception}, la registra y evalúa un modelo al que le faltan ese potencial y los siguientes, sin avisar a quien llama. Solo la construyen pruebas de \texttt{integration\allowbreak{}Tests}, y en la práctica ni siquiera llega a ese punto: falla antes al pedir el registro de mensajes (\hyperref[nota:37]{nota~37}). \\[3pt]
 \textbf{50}\phantomsection\label{nota:50} & \textbf{El lector de XMLBIF no lee ningún fichero, ni pone enlaces ni posiciones}\newline \texttt{XMLBIFReader} falla con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} incluso con \texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}net\allowbreak{}AB.\allowbreak{}xml}, el fichero de su prueba, porque \texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Variable} es estático y no usa su forma de leer nombres; además \texttt{get\allowbreak{}Links} está vacío y no lee las posiciones de los nodos. Su anotación de formato está comentada y ningún llamador lo construye, así que hoy no se alcanza; lo que sí le pasa a quien abre desde «Abrir» un \texttt{.\allowbreak{}xml} de ese formato es \hyperref[err:117]{error~117}. \\[3pt]
-\textbf{51}\phantomsection\label{nota:51} & \textbf{El exportador de árboles de decisión a Amua no lo usa ningún menú ni llamador}\newline El paquete \texttt{org.\allowbreak{}openmarkov.\allowbreak{}io.\allowbreak{}amua} (fachada \texttt{Amua\allowbreak{}Exporter}, 13 clases y 37 pruebas) convierte un árbol de decisión en un fichero del programa Amua, pero fuera del paquete y de sus pruebas solo se nombra en la línea \texttt{exports} del \texttt{module-info.\allowbreak{}java} del módulo \texttt{io}. No hay entrada de menú, acción ni anotación de complemento que lo ofrezca. \\[3pt]
-\textbf{52}\phantomsection\label{nota:52} & \textbf{El exportador a Amua escribe los decimales con coma si el sistema está en castellano}\newline \texttt{Amua\allowbreak{}DTWriter} usa \texttt{new\ Decimal\allowbreak{}Format(\allowbreak{}"\#.\allowbreak{}\#\#\#\#")} con los símbolos del idioma del sistema, así que con \texttt{es\_\allowbreak{}ES} escribe \texttt{0,\allowbreak{}8}, que Amua no puede leer, y además redondea a cuatro decimales. El exportador no tiene llamadores (\hyperref[nota:51]{nota~51}), y dentro de la aplicación de escritorio tampoco se vería, porque \texttt{Open\allowbreak{}Markov.\allowbreak{}main} fija el formato numérico inglés al arrancar. \\[3pt]
+\textbf{51}\phantomsection\label{nota:51} & \textbf{El exportador de árboles de decisión a Amua no lo usaba ningún menú ni llamador}\newline El paquete \texttt{org.\allowbreak{}openmarkov.\allowbreak{}io.\allowbreak{}amua} (fachada \texttt{Amua\allowbreak{}Exporter}) convierte un árbol de decisión en un fichero del programa Amua. Cuando se hizo la lista no tenía llamadores; desde el commit \texttt{76e6996} el menú contextual del árbol de decisión ofrece «Export to Amua», y sus defectos alcanzables pasan a la lista como errores \hyperref[err:195]{195} a \hyperref[err:199]{199}. \\[3pt]
+\textbf{52}\phantomsection\label{nota:52} & \textbf{El exportador a Amua escribiría los decimales con coma si el sistema está en castellano}\newline \texttt{Amua\allowbreak{}DTWriter} usa \texttt{new\ Decimal\allowbreak{}Format(\allowbreak{}"\#.\allowbreak{}\#\#\#\#")} con los símbolos del idioma del sistema, así que con \texttt{es\_\allowbreak{}ES} escribiría \texttt{0,\allowbreak{}8}, que Amua no puede leer. Dentro de la aplicación de escritorio no se ve, porque \texttt{Open\allowbreak{}Markov.\allowbreak{}main} fija el formato numérico inglés al arrancar; solo lo sufriría quien usara el exportador como biblioteca. El redondeo a cuatro decimales del mismo formato sí se ve y es el \hyperref[err:198]{error~198}, cuyo arreglo resuelve también esto. \\[3pt]
 \textbf{53}\phantomsection\label{nota:53} & \textbf{Pedir al algoritmo PC el motivo de una orientación de una sola flecha lanza una excepción}\newline \texttt{PCAlgorithm.\allowbreak{}get\allowbreak{}Motivation(\allowbreak{}PNEdit)} lee siempre la segunda flecha de un \texttt{COrient\allowbreak{}Links\allowbreak{}Edit}, y con uno de una sola flecha, que \texttt{Collider\allowbreak{}Orientation.\allowbreak{}try\allowbreak{}Orient\allowbreak{}Collider} construye a veces, lanza \texttt{No\allowbreak{}Such\allowbreak{}Element\allowbreak{}Exception}. Solo lo llaman pruebas: el diálogo de aprendizaje interactivo toma el motivo que ya lleva cada propuesta, construido correctamente. \\[3pt]
 \textbf{54}\phantomsection\label{nota:54} & \textbf{La discretización por anchura igual lanza una excepción con una columna no numérica}\newline \texttt{Discretization.\allowbreak{}calculate\allowbreak{}Variable\allowbreak{}Min} y \texttt{calculate\allowbreak{}Variable\allowbreak{}Max} convierten los nombres de estado con \texttt{Double.\allowbreak{}parse\allowbreak{}Double} sin protección, y \texttt{Discretization.\allowbreak{}process} no comprueba si la variable es numérica. Los dos diálogos que la llaman, el de aprendizaje y el de preprocesado de \texttt{bn\allowbreak{}Evaluation}, deshabilitan la discretización y la dejan en «ninguna» para las variables no numéricas. \\[3pt]
 \textbf{55}\phantomsection\label{nota:55} & \textbf{\texttt{Configuration.\allowbreak{}add\allowbreak{}Finding} descarta sin aviso el valor de una variable discretizada}\newline El \texttt{switch} de \texttt{Configuration.\allowbreak{}add\allowbreak{}Finding(\allowbreak{}Variable,\allowbreak{}\ double)} no contempla las variables discretizadas y vuelve sin hacer nada, como dice su javadoc. Sus únicos llamadores, en la simulación de eventos discretos, solo le pasan variables de sucesos y de nodos de azar, y \texttt{Chance\allowbreak{}Record} rechaza antes de simular los nodos de azar que no son numéricos ni de estados finitos (cómo llega ese rechazo al usuario se describe en \hyperref[err:106]{error~106}). \\[3pt]
@@ -15229,6 +15340,12 @@ mismos criterios.
 \hyperref[err:191]{Error 191} & plan de cambios, F2-a \\
 \hyperref[err:192]{Error 192} & plan de cambios, RP31 \\
 \hyperref[err:193]{Error 193} & hallazgo nuevo, visto junto al \hyperref[err:1]{error~1} \\
+\hyperref[err:194]{Error 194} & hallazgo nuevo, al corregir el \hyperref[err:41]{error~41} \\
+\hyperref[err:195]{Error 195} & hallazgo nuevo, al revisar el exportador a Amua tras enlazarlo al menú (\hyperref[nota:51]{nota~51}) \\
+\hyperref[err:196]{Error 196} & hallazgo nuevo, al revisar el exportador a Amua tras enlazarlo al menú (\hyperref[nota:51]{nota~51}) \\
+\hyperref[err:197]{Error 197} & hallazgo nuevo, al revisar el exportador a Amua tras enlazarlo al menú (\hyperref[nota:51]{nota~51}) \\
+\hyperref[err:198]{Error 198} & hallazgo nuevo, al revisar el exportador a Amua tras enlazarlo al menú (\hyperref[nota:51]{nota~51}) \\
+\hyperref[err:199]{Error 199} & hallazgo nuevo, al revisar el exportador a Amua tras enlazarlo al menú (\hyperref[nota:51]{nota~51}) \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
