@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46} y \hyperref[err:47]{47}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47} y \hyperref[err:49]{49}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 23 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 24 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -338,7 +338,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:46]{46} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un nodo de utilidad sin rango impide entrar en modo inferencia & \texttt{gui} & S \hfill No\\
 \hyperref[err:47]{47} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Add finding» marca siempre el primer estado y pisa el hallazgo anterior & \texttt{gui} & S \hfill No\\
 \hyperref[err:48]{48} & La evidencia imposible se trata distinto según el gesto & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:49]{49} & Construir una propagación cambia el tipo de análisis de la red del usuario & \texttt{core} & S \hfill No\\
+\hyperref[err:49]{49} & \textcolor{corregidoverde}{\textbf{Corregido}} · Construir una propagación cambia el tipo de análisis de la red del usuario & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:decisiones}.\ Decisiones: políticas, criterios, agentes y árbol de decisión}}\\
 \hyperref[err:50]{50} & El árbol de decisión falla en casi todas las redes en formato 1.0 & \texttt{inference} & M \hfill No\\
 \hyperref[err:51]{51} & «Show optimal policy» y «Show expected utility» no llegan a abrirse & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -4347,9 +4347,9 @@ Cuidado: la normalización por columnas del aprendizaje y la normalización cond
 Pruebas: con una red de dos nodos y una tabla con un cero, introducir por cada gesto la evidencia de probabilidad cero y comprobar que el mensaje y el tipo de diálogo son los mismos. Como la ventana no se prueba sin pantalla, al menos una prueba del núcleo que afirme el tipo y el mensaje de la excepción de \texttt{VEPropagation}.
 
 \setcounter{subsection}{48}
-\subsection[Construir una propagación cambia el tipo de análisis de la red del usuario]{Construir una propagación o una evolución temporal cambia el tipo de análisis guardado en la red del usuario, sin pasar por deshacer ni marcarla como modificada}\label{err:49}
+\subsection[Construir una propagación cambia el tipo de análisis de la red del usuario]{\textcolor{corregidoverde}{[Corregido]} Construir una propagación o una evolución temporal cambia el tipo de análisis guardado en la red del usuario, sin pasar por deshacer ni marcarla como modificada}\label{err:49}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{8806ba4} (30-09-2026): \texttt{Prob\allowbreak{}Net\allowbreak{}Copier.\allowbreak{}shallow\allowbreak{}Copy} da a la copia su propio objeto de opciones (\texttt{new\ Inference\allowbreak{}Options(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})}), así que las escrituras de \texttt{VEPropagation} y \texttt{MIDTemporal\allowbreak{}Evolution.\allowbreak{}force\allowbreak{}Unicriterion} quedan en la copia del algoritmo. \texttt{Prob\allowbreak{}Net\allowbreak{}Potential\allowbreak{}Queries.\allowbreak{}build\allowbreak{}Markov\allowbreak{}Decision\allowbreak{}Network} no se ha cambiado: nada escribe en las opciones de la red de Markov que construye.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/ProbNetCopier.java:64-65} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetPotentialQueries.java:133-142} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:83-94} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:173,545-551} \newline \path{core/src/main/java/org/openmarkov/core/inference/InferenceAlgorithm.java:35-38,73-84} \newline \path{core/src/main/java/org/openmarkov/core/action/core/MulticriteriaEdit.java:56,70} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:585} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TraceTemporalEvolutionDialog.java:319,373-376}
