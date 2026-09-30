@@ -552,21 +552,41 @@ public class EvidenceManager {
      * Calculates minUtilityRange and maxUtilityRange fields. It is an
      * approximate implementation. The correct computation is given by a method
      * with the same name, but commented above.
-     *
-     * @throws NonProjectablePotentialException if the potential cannot be projected
      */
-    private void calculateMinAndMaxUtilityRanges() throws NonProjectablePotentialException {
-        List<Variable> utilityVariables = this.networkEditorPanel.getVisualNetwork().getProbNet().getVariables(NodeType.UTILITY);
-        for (Variable utility : utilityVariables) {
-            ProbNet newNet = this.networkEditorPanel.getVisualNetwork().getProbNet().copy();
-            // The call to TaskUtilities.extendPreResolutionEvidence that used to be here did
-            // nothing for this computation - the utility ranges below do not look at the evidence,
-            // and the method returned the network unchanged. Its only effect was a side one: it
-            // extended the panel's own evidence in place, putting findings the user never entered
-            // in front of them. The extension now belongs to inference, which keeps its own copy.
-            Node node = newNet.getNode(utility);
-            this.minUtilityRange.put(utility, UtilityFunctionComputer.approximateMinUtility(node));
-            this.maxUtilityRange.put(utility, UtilityFunctionComputer.approximateMaxUtility(node));
+    private void calculateMinAndMaxUtilityRanges() {
+        computeUtilityRanges(this.networkEditorPanel.getVisualNetwork().getProbNet(), this.minUtilityRange,
+                             this.maxUtilityRange);
+    }
+    
+    /**
+     * Puts in {@code minRanges} and {@code maxRanges} the approximate range of each utility node of
+     * {@code probNet}. A node whose range cannot be computed is left out, so that it does not prevent
+     * the propagation; it is drawn without a scaled bar.
+     *
+     * @param probNet   network whose utility nodes are measured. It is not modified.
+     * @param minRanges minimum of each utility variable. Its previous contents are discarded.
+     * @param maxRanges maximum of each utility variable. Its previous contents are discarded.
+     */
+    static void computeUtilityRanges(ProbNet probNet, Map<Variable, Double> minRanges,
+                                     Map<Variable, Double> maxRanges) {
+        minRanges.clear();
+        maxRanges.clear();
+        // The call to TaskUtilities.extendPreResolutionEvidence that used to be here did
+        // nothing for this computation - the utility ranges below do not look at the evidence,
+        // and the method returned the network unchanged. Its only effect was a side one: it
+        // extended the panel's own evidence in place, putting findings the user never entered
+        // in front of them. The extension now belongs to inference, which keeps its own copy.
+        ProbNet copy = probNet.copy();
+        for (Variable utility : probNet.getVariables(NodeType.UTILITY)) {
+            Node node = copy.getNode(utility);
+            try {
+                double min = UtilityFunctionComputer.approximateMinUtility(node);
+                double max = UtilityFunctionComputer.approximateMaxUtility(node);
+                minRanges.put(utility, min);
+                maxRanges.put(utility, max);
+            } catch (NonProjectablePotentialException e) {
+                // No range for this node, e.g. its value depends on a numeric variable without a finding
+            }
         }
     }
     

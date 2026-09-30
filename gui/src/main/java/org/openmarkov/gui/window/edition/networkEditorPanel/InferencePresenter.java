@@ -64,8 +64,13 @@ class InferencePresenter {
         NumericVariableBox innerBox = (NumericVariableBox) visualNode.getInnerBox();
         VisualState visualState = innerBox.getVisualState();
         visualState.setStateValue(caseNumber, individualProbabilities.get(variable).getValues()[0]);
-        innerBox.setMinValue(this.networkEditorPanel.getEvidenceManager().getMinUtilityRangeOf(variable));
-        innerBox.setMaxValue(this.networkEditorPanel.getEvidenceManager().getMaxUtilityRangeOf(variable));
+        // A node without a range keeps the limits of its variable's domain
+        Double min = this.networkEditorPanel.getEvidenceManager().getMinUtilityRangeOf(variable);
+        Double max = this.networkEditorPanel.getEvidenceManager().getMaxUtilityRangeOf(variable);
+        if (min != null && max != null) {
+            innerBox.setMinValue(min);
+            innerBox.setMaxValue(max);
+        }
     }
     
     /**
