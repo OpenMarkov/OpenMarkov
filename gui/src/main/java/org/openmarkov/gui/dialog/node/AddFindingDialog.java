@@ -51,7 +51,6 @@ public class AddFindingDialog extends OkCancelDialog {
     
 
     private Finding newFinding;
-    private Finding previousFinding;
     
 
     /**
@@ -119,19 +118,13 @@ public class AddFindingDialog extends OkCancelDialog {
         if (this.variable.getVariableType() == VariableType.FINITE_STATES) {
             State[] states = this.variable.getStates();
             radioButtonsPanel.setLayout(new GridLayout(states.length, 1));
+            String initialState = initialState(states, finding);
             for (int i = states.length - 1; i >= 0; i--) {
                 String stateName = states[i].getName();
                 JRadioButton jRadioButton = new JRadioButton(stateName);
-                if (finding != null) {
-                    jRadioButton.setSelected(finding.getState().equals(stateName));
-                    previousFinding = new Finding(this.variable, new State(stateName));
-                }
+                jRadioButton.setSelected(stateName.equals(initialState));
                 radioButtonsPanel.add(jRadioButton);
                 jRadioButton.setActionCommand(stateName);
-                if (i == 0) {
-                    jRadioButton.setSelected(true);
-                    previousFinding = new Finding(this.variable, new State(stateName));
-                }
                 
                 buttonGroup.add(jRadioButton);
                 jRadioButton.addActionListener(evt -> newFinding =
@@ -162,6 +155,18 @@ public class AddFindingDialog extends OkCancelDialog {
         return principalPanel;
     }
     
+    /**
+     * Returns the name of the state the dialog starts on: that of the current finding, if there is one,
+     * or else the first state.
+     *
+     * @param states  states of the variable
+     * @param finding current finding of the variable, or {@code null} if there is none
+     * @return the name of the state to select
+     */
+    static String initialState(State[] states, Finding finding) {
+        return (finding != null) ? finding.getState() : states[0].getName();
+    }
+    
     public Object getSelectedState() {
         if (variable.getVariableType() == VariableType.FINITE_STATES) {
             return buttonGroup.getSelection().getActionCommand();
@@ -179,7 +184,7 @@ public class AddFindingDialog extends OkCancelDialog {
         if (!visualNode.isPreResolutionFinding()) {
             networkEditorPanel.getEvidenceManager().setNewFinding(visualNode, null, newFinding, false);
         } else {
-            networkEditorPanel.getEvidenceManager().setNewFinding(visualNode, previousFinding, newFinding, false);
+            networkEditorPanel.getEvidenceManager().setNewFinding(visualNode, finding, newFinding, false);
         }
         probNet.getPNESupport().closeSubEditHistory();
         return super.doOkClickBeforeHide();
