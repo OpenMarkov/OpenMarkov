@@ -187,6 +187,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
 Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41} y \hyperref[err:43]{43}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -240,7 +241,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{193 errores}; 49 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{46} necesitan antes una decisión del equipo. Por esfuerzo estimado: 157 pequeños, 36 medios y 0 grandes.
-De los 193, 21 están ya corregidos y 10 lo están en parte; 36 están asignados a Jorge Rico.
+De los 193, 21 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -327,7 +328,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:41]{41} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un hallazgo sobre un nodo numérico de azar hace fallar la propagación & \texttt{core} & M \hfill No\\
 \hyperref[err:42]{42} & Entrar en modo inferencia falla si hay nodos de utilidad intermedios & \texttt{inference} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:43]{43} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un nodo numérico de azar sin potencial tumba la discretización & \texttt{core} & S \hfill No\\
-\hyperref[err:44]{44} & Un hallazgo numérico con más de dos decimales se pierde al discretizar & \texttt{core} & S \hfill No\\
+\hyperref[err:44]{44} & \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}} · Un hallazgo numérico con más de dos decimales se pierde al discretizar & \texttt{core} & S \hfill No\\
 \hyperref[err:194]{194} & Un hallazgo sobre un nodo con delta se ignora antes de resolver y se rechaza después & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:45]{45} & Observar un nodo numérico de azar no informa sobre sus padres & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:46]{46} & Un nodo de utilidad sin rango impide entrar en modo inferencia & \texttt{gui} & S \hfill No\\
@@ -3933,9 +3934,9 @@ El mismo supuesto («todo nodo de azar tiene potencial») está en \hyperref[err
 Prueba: con la red A → X anterior, \texttt{convert\allowbreak{}Numerical\allowbreak{}Variables\allowbreak{}To\allowbreak{}FS} no debe lanzar esa excepción y \texttt{VEPropagation} debe dar el posterior de A o un error con mensaje.
 
 \setcounter{subsection}{43}
-\subsection[Un hallazgo numérico con más de dos decimales se pierde al discretizar]{El hallazgo sobre una variable numérica observada con un valor más fino que una centésima desaparece de la evidencia al discretizar}\label{err:44}
+\subsection[Un hallazgo numérico con más de dos decimales se pierde al discretizar]{\textcolor{corregidoverde}{[Cerrado sin arreglo]} El hallazgo sobre una variable numérica observada con un valor más fino que una centésima desaparece de la evidencia al discretizar}\label{err:44}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Cerrado sin arreglo el 30-09-2026. El defecto sigue en el código: de los 1001 valores 0,00; 0,01; \ldots; 10,00 pierden el hallazgo 129. No se ha encontrado nada que un usuario pueda ver por su causa. Medido comparando el código de \texttt{d3a0ad0} con el arreglo descrito abajo (apuntar el hallazgo al estado 0): la propagación como la hace la ventana da las mismas probabilidades en \texttt{MID-\allowbreak{}Colorectal.\allowbreak{}pgmx}, con la política de cribado impuesta, la precisión de «Age {[}0{]}» puesta a 0,01 y un hallazgo de 50,05, tanto previo como posterior a la resolución; en \texttt{MID-\allowbreak{}Chancellor.\allowbreak{}pgmx} con duración de ciclo 0,1, la evolución temporal de «State {[}0{]}» y de «Life years {[}0{]}» da los mismos valores, y la de «Cost lamivudine {[}0{]}» difiere en el último dígito (1012,3756706466048 frente a 1012,3756706466047). El único fallo visible es pedir la evolución temporal de la propia variable numérica, «Time in treatment {[}0{]}»: con ciclo 0,1 muere con \texttt{No\allowbreak{}Such\allowbreak{}Element\allowbreak{}Exception} en \texttt{MID\allowbreak{}Temporal\allowbreak{}Evolution.\allowbreak{}compute\allowbreak{}Posterior\allowbreak{}Probability}, y con el arreglo funciona. Pero la ventana no ofrece la evolución temporal para un nodo numérico de azar (\texttt{Main\allowbreak{}Panel\allowbreak{}Menu\allowbreak{}Assistant}), y el único código del producto que lanza esa tarea es ese diálogo.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:444-459} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:575-588} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Variable.java:75}
