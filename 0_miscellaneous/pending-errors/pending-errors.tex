@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41} y \hyperref[err:43]{43}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43} y \hyperref[err:46]{46}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 21 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 22 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -335,7 +335,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:44]{44} & \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}} · Un hallazgo numérico con más de dos decimales se pierde al discretizar & \texttt{core} & S \hfill No\\
 \hyperref[err:194]{194} & Un hallazgo sobre un nodo con delta se ignora antes de resolver y se rechaza después & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:45]{45} & Observar un nodo numérico de azar no informa sobre sus padres & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:46]{46} & Un nodo de utilidad sin rango impide entrar en modo inferencia & \texttt{gui} & S \hfill No\\
+\hyperref[err:46]{46} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un nodo de utilidad sin rango impide entrar en modo inferencia & \texttt{gui} & S \hfill No\\
 \hyperref[err:47]{47} & «Add finding» marca siempre el primer estado y pisa el hallazgo anterior & \texttt{gui} & S \hfill No\\
 \hyperref[err:48]{48} & La evidencia imposible se trata distinto según el gesto & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:49]{49} & Construir una propagación cambia el tipo de análisis de la red del usuario & \texttt{core} & S \hfill No\\
@@ -4142,9 +4142,9 @@ Sitios de la misma regla: la rama de hallazgos de \texttt{Prob\allowbreak{}Net\a
 Prueba de regresión: la red Disease → N con relación exacta y hallazgo N = 7 debe dar P(Disease) = {[}0, 1{]} con \texttt{VEPropagation} y utilidad esperada 10 con \texttt{VEEvaluation}, igual que la misma red con N de estados finitos; y la utilidad esperada de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-Chancellor.\allowbreak{}pgmx} no debe cambiar.
 
 \setcounter{subsection}{45}
-\subsection[Un nodo de utilidad sin rango impide entrar en modo inferencia]{Un nodo de utilidad cuyo rango no se puede calcular impide entrar en modo inferencia aunque la propagación funcionaría}\label{err:46}
+\subsection[Un nodo de utilidad sin rango impide entrar en modo inferencia]{\textcolor{corregidoverde}{[Corregido]} Un nodo de utilidad cuyo rango no se puede calcular impide entrar en modo inferencia aunque la propagación funcionaría}\label{err:46}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{2abb859} (30-09-2026): \texttt{Evidence\allowbreak{}Manager.\allowbreak{}compute\allowbreak{}Utility\allowbreak{}Ranges} calcula el rango nodo a nodo y deja sin él al nodo que falla; \texttt{Inference\allowbreak{}Presenter} solo lo aplica si existe, así que ese nodo conserva los límites del dominio de su variable. Comprobado con \texttt{MID-dmhee-4.7.\allowbreak{}pgmx}: se entra en modo inferencia y «Drug cost {[}0{]}» queda sin barra escalada.
 \fichakey{Módulo}gui, core
 \fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel; org.openmarkov.core.model.network
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:558-598} \newline \path{core/src/main/java/org/openmarkov/core/model/network/UtilityFunctionComputer.java:82-119} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/InferencePresenter.java:60-69} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/NumericVariableBox.java:101-123} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:70-125} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:145-163}
