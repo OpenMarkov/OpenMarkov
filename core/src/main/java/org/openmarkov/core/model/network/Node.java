@@ -9,6 +9,7 @@ package org.openmarkov.core.model.network;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.model.graph.Link;
@@ -213,32 +214,39 @@ public class Node implements Cloneable, ClassLocalizable {
      * @param potential the new potential; must not be {@code null}
      */
     public void setPotential(Potential potential) {
+        refuseNull(potential);
         synchronized (potentials) {
             this.potentials.clear();
-            addPotential(potential);
+            this.potentials.add(potential);
         }
     }
-    
+
     /** Removes all potentials from this node. */
     public void clearPotentials() {
         this.potentials.clear();
     }
-    
+
     /**
-     * @param potential {@code Potential}
+     * @param potential the potential to add; must not be {@code null}
      */
     public void addPotential(Potential potential) {
+        refuseNull(potential);
         this.potentials.add(potential);
     }
-    
+
     /**
      * Replaces all potentials of this node with the given list.
      * The clear and addAll are performed atomically to prevent other threads
      * from observing an intermediate empty state.
      *
-     * @param potentials new list of potentials; {@code null} is treated as empty
+     * @param potentials new list of potentials, none of them {@code null}; a {@code null} list is treated as empty
      */
     public void setPotentials(List<Potential> potentials) {
+        if (potentials != null) {
+            for (Potential potential : potentials) {
+                refuseNull(potential);
+            }
+        }
         synchronized (this.potentials) {
             this.potentials.clear();
             if (potentials != null) {
@@ -246,7 +254,14 @@ public class Node implements Cloneable, ClassLocalizable {
             }
         }
     }
-    
+
+    private void refuseNull(Potential potential) {
+        if (potential == null) {
+            throw new InvalidArgumentException("potential",
+                    "it is null; to leave node " + getName() + " without potentials, clear them");
+        }
+    }
+
     /**
      * @param potential {@code Potential}
      *
