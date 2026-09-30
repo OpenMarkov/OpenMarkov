@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43} y \hyperref[err:46]{46}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46} y \hyperref[err:47]{47}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 22 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 23 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -336,7 +336,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:194]{194} & Un hallazgo sobre un nodo con delta se ignora antes de resolver y se rechaza después & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:45]{45} & Observar un nodo numérico de azar no informa sobre sus padres & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:46]{46} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un nodo de utilidad sin rango impide entrar en modo inferencia & \texttt{gui} & S \hfill No\\
-\hyperref[err:47]{47} & «Add finding» marca siempre el primer estado y pisa el hallazgo anterior & \texttt{gui} & S \hfill No\\
+\hyperref[err:47]{47} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Add finding» marca siempre el primer estado y pisa el hallazgo anterior & \texttt{gui} & S \hfill No\\
 \hyperref[err:48]{48} & La evidencia imposible se trata distinto según el gesto & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:49]{49} & Construir una propagación cambia el tipo de análisis de la red del usuario & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:decisiones}.\ Decisiones: políticas, criterios, agentes y árbol de decisión}}\\
@@ -4203,13 +4203,13 @@ De paso, copiar la red una sola vez fuera del bucle (hoy se copia una vez por no
 Prueba: entrar en modo inferencia en \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}DMHEE/\allowbreak{}MID-dmhee-4.\allowbreak{}7.\allowbreak{}pgmx} (o llamar a \texttt{do\allowbreak{}Propagation} sobre su panel) debe terminar con las probabilidades calculadas y el nodo «Drug cost {[}0{]}» sin barra escalada.
 
 \setcounter{subsection}{46}
-\subsection[«Add finding» marca siempre el primer estado y pisa el hallazgo anterior]{El diálogo de añadir hallazgo marca siempre el primer estado, de modo que aceptar sin tocar cambia el hallazgo que ya había, y deshacer ese cambio no devuelve el anterior}\label{err:47}
+\subsection[«Add finding» marca siempre el primer estado y pisa el hallazgo anterior]{\textcolor{corregidoverde}{[Corregido]} El diálogo de añadir hallazgo marca siempre el primer estado, de modo que aceptar sin tocar cambia el hallazgo que ya había, y deshacer ese cambio no devuelve el anterior}\label{err:47}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{9ca2afa} (30-09-2026): \texttt{Add\allowbreak{}Finding\allowbreak{}Dialog} pasa a \texttt{set\allowbreak{}New\allowbreak{}Finding} el hallazgo que tenía el nodo, así que deshacer lo devuelve, y elige el estado inicial en un solo sitio (\texttt{initial\allowbreak{}State}). Al ejecutarlo se vio que la primera consecuencia de abajo no se daba: \texttt{Button\allowbreak{}Group.\allowbreak{}add} desmarca el botón que llega marcado si el grupo ya tiene otro, y el del hallazgo se añadía antes que el del estado 0, así que aceptar sin tocar conservaba el hallazgo. La segunda sí se daba.
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.node
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/AddFindingDialog.java:119-141, 172-186} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:123-136, 489-509} \newline \path{gui/src/main/java/org/openmarkov/gui/action/AddFindingEdit.java:29-58}
-\fichakey{Comprobado}Leyendo el código
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \end{ficha}
