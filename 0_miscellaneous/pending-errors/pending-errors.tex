@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36} y \hyperref[err:41]{41}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41} y \hyperref[err:43]{43}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -240,7 +240,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{193 errores}; 49 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{46} necesitan antes una decisión del equipo. Por esfuerzo estimado: 157 pequeños, 36 medios y 0 grandes.
-De los 193, 20 están ya corregidos y 11 lo están en parte; 36 están asignados a Jorge Rico.
+De los 193, 21 están ya corregidos y 10 lo están en parte; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -326,7 +326,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:40]{40} & Una variable numérica sin precisión se discretiza a un único valor cero & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:41]{41} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un hallazgo sobre un nodo numérico de azar hace fallar la propagación & \texttt{core} & M \hfill No\\
 \hyperref[err:42]{42} & Entrar en modo inferencia falla si hay nodos de utilidad intermedios & \texttt{inference} & M \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:43]{43} & Un nodo numérico de azar sin potencial tumba la discretización & \texttt{core} & S \hfill No\\
+\hyperref[err:43]{43} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un nodo numérico de azar sin potencial tumba la discretización & \texttt{core} & S \hfill No\\
 \hyperref[err:44]{44} & Un hallazgo numérico con más de dos decimales se pierde al discretizar & \texttt{core} & S \hfill No\\
 \hyperref[err:194]{194} & Un hallazgo sobre un nodo con delta se ignora antes de resolver y se rechaza después & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:45]{45} & Observar un nodo numérico de azar no informa sobre sus padres & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
@@ -3893,9 +3893,9 @@ Otros sitios de la misma regla: \texttt{Prob\allowbreak{}Net\allowbreak{}Operati
 Prueba de regresión: \texttt{VEPropagation} sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-arthronet.\allowbreak{}pgmx} y \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-mediastinet.\allowbreak{}pgmx} con todas las variables de interés y evidencia vacía debe terminar y devolver, para los nodos de utilidad intermedios, lo que se decida; y la red bayesiana Disease → N con todas las variables no debe lanzar excepción.
 
 \setcounter{subsection}{42}
-\subsection[Un nodo numérico de azar sin potencial tumba la discretización]{Propagar o evaluar una red con un nodo numérico de azar sin potencial muere con IndexOutOfBoundsException al discretizar}\label{err:43}
+\subsection[Un nodo numérico de azar sin potencial tumba la discretización]{\textcolor{corregidoverde}{[Corregido]} Propagar o evaluar una red con un nodo numérico de azar sin potencial muere con IndexOutOfBoundsException al discretizar}\label{err:43}
 \begin{ficha}
-\fichakey{Estado}Presente en parte. Desde el commit \texttt{83ff8ab} la ventana principal comprueba, antes de entrar en modo inferencia, evaluar, pedir la estrategia óptima o el árbol de decisión, expandir la red o pulsar el botón de coste-efectividad de la barra, que todo nodo que no sea de decisión tenga potencial, y si no avisa con un mensaje que nombra el nodo. Sigue sin corregir \texttt{ProbNetOperations.convertNumericalVariablesToFS}, que continúa suponiendo que el nodo tiene potencial: el análisis de coste-efectividad lanzado desde el menú Herramientas, el análisis de sensibilidad y cualquier llamador de la API siguen muriendo con \texttt{IndexOutOfBoundsException} sin decir qué nodo está mal.
+\fichakey{Estado}Corregido. La comprobación de la ventana principal, desde \texttt{83ff8ab}; el resto, en el commit \texttt{8b173d5} (30-09-2026): \texttt{Prob\allowbreak{}Net\allowbreak{}Operations.\allowbreak{}convert\allowbreak{}Numerical\allowbreak{}Variables\allowbreak{}To\allowbreak{}FS} rechaza un nodo numérico de azar sin potencial con \texttt{There\allowbreak{}Is\allowbreak{}No\allowbreak{}Potential\allowbreak{}In\allowbreak{}Node\allowbreak{}Exception}, envuelta en \texttt{Unrecoverable\allowbreak{}Exception}, y el mensaje nombra el nodo. Así lo reciben también el análisis de coste-efectividad del menú Herramientas, el análisis de sensibilidad y quien llame a la API. Dejar el nodo sin convertir solo trasladaba el fallo: la propagación moría después, en \texttt{VEPropagation}, con el mismo \texttt{Index\allowbreak{}Out\allowbreak{}Of\allowbreak{}Bounds\allowbreak{}Exception}.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:431-443} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:561-566} \newline \path{core/src/main/java/org/openmarkov/core/inference/tasks/TaskUtilities.java:88-90} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VariableElimination.java:95-97}
