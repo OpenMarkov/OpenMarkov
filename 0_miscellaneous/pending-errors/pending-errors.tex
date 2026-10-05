@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138} y \hyperref[err:142]{142}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142} y \hyperref[err:143]{143}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 38 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 39 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -439,7 +439,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:140]{140} & El PC interactivo adelanta la fase al llenar la tabla y descoloca botones & \texttt{learning.\allowbreak{}algorithm} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:141]{141} & «Finish» del PC interactivo empieza de cero y descarta lo aplicado a mano & \texttt{learning.\allowbreak{}algorithm} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:142]{142} & \textcolor{corregidoverde}{\textbf{Corregido}} · PC interactivo: con un borrado bloqueado, «Finish» da NullPointerException & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
-\hyperref[err:143]{143} & El bosque aumentado (FAN) falla sin características ligadas a la clase & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
+\hyperref[err:143]{143} & \textcolor{corregidoverde}{\textbf{Corregido}} · El bosque aumentado (FAN) falla sin características ligadas a la clase & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:144]{144} & Discretizar por frecuencias iguales con decimales falla o cuenta mal & \texttt{learning.\allowbreak{}core} & S \hfill No\\
 \hyperref[err:145]{145} & «Split Dataset» lanza siempre una excepción, elija la opción que elija & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \hyperref[err:146]{146} & Validación cruzada: casos por pliegue truncados y pérdida por caso inflada & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
@@ -11609,9 +11609,9 @@ En \texttt{Interactive\allowbreak{}Learning\allowbreak{}Dialog.\allowbreak{}btn\
 Pruebas de regresión, repitiendo las llamadas de la ventana: con \texttt{BN-asia10k.\allowbreak{}csv}, llenar la tabla, bloquear el borrado Tuberculosis--VisitToAsia y llamar a \texttt{learn}, que no debe lanzar y debe dejar ese enlace en la red; con \texttt{alarm500.\allowbreak{}csv}, bloquear el primer borrado de la tabla y llamar a \texttt{run\allowbreak{}Till\allowbreak{}Next\allowbreak{}Phase}, que tampoco debe lanzar ni quitar el enlace bloqueado.
 
 \setcounter{subsection}{142}
-\subsection[El bosque aumentado (FAN) falla sin características ligadas a la clase]{El clasificador de bosque aumentado lanza un puntero nulo cuando ninguna característica tiene información mutua positiva con la clase (por ejemplo, con una base de una sola columna)}\label{err:143}
+\subsection[El bosque aumentado (FAN) falla sin características ligadas a la clase]{\textcolor{corregidoverde}{[Corregido]} El clasificador de bosque aumentado lanza un puntero nulo cuando ninguna característica tiene información mutua positiva con la clase (por ejemplo, con una base de una sola columna)}\label{err:143}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{3b2da4f} (05-10-2026): \texttt{get\allowbreak{}Optimal\allowbreak{}Edit} devuelve \texttt{null} si \texttt{get\allowbreak{}Best\allowbreak{}Root\allowbreak{}For\allowbreak{}Subtree} no encuentra raíz, sin asignar \texttt{subtree\allowbreak{}Root}, y \texttt{compute\allowbreak{}Averaged\allowbreak{}Conditional\allowbreak{}Mutual\allowbreak{}Information} da 0 con menos de dos características. Las dos pruebas de regresión construyen la base en la propia prueba (solo la clase, y la clase con una característica constante), en vez de leer \texttt{One\allowbreak{}Node-\allowbreak{}1000.\allowbreak{}csv}.
 \fichakey{Módulo}learning.algorithm
 \fichakey{Paquete}org.openmarkov.learning.algorithm.nbderived.fanb
 \fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/fanb/ForestAugmentedNBAlgorithm.java:85-157}
