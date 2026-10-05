@@ -20,6 +20,7 @@ import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
@@ -122,6 +123,38 @@ public class EMAlgorithmTests {
 		
 		Assertions.assertDoesNotThrow(em::parametricLearning,
 		                              "parametricLearning must accept a UniformPotential CPT without ClassCastException");
+	}
+	
+	/**
+	 * A node with a uniform potential gets the table learned for it: the table is created
+	 * in the copy of the network that EM works on, and must reach the network returned.
+	 */
+	@Test
+	public void parametricLearningGivesItsLearnedTableToANodeWithUniformPotential() throws Exception {
+		ProbNet net = new ProbNet();
+		Variable A = new Variable("A", "a0", "a1");
+		Variable B = new Variable("B", "b0", "b1");
+		net.addNode(A, NodeType.CHANCE);
+		net.addNode(B, NodeType.CHANCE);
+		net.addLink(A, B, true);
+		net.addPotential(new TablePotential(Arrays.asList(A), PotentialRole.CONDITIONAL_PROBABILITY));
+		net.addPotential(new UniformPotential(Arrays.asList(B, A), PotentialRole.CONDITIONAL_PROBABILITY));
+		
+		// 80 cases with A = a0, 90% of them with B = b0; 20 with A = a1, 20% of them with B = b0
+		int[][] cases = new int[100][];
+		for (int i = 0; i < 100; i++) {
+			int a = i < 80 ? 0 : 1;
+			int b = (a == 0 ? i < 72 : i < 84) ? 0 : 1;
+			cases[i] = new int[]{a, b};
+		}
+		List<Variable> variables = new ArrayList<>(Arrays.asList(A, B));
+		
+		ProbNet learned = new EMAlgorithm(net, new CaseDatabase(variables, cases), 0.0).parametricLearning();
+		
+		Potential potentialOfB = learned.getNode(B).getPotentials().get(0);
+		Assertions.assertInstanceOf(TablePotential.class, potentialOfB, "B must no longer be uniform");
+		// P(B | A), with B changing fastest
+		Assertions.assertArrayEquals(new double[]{0.9, 0.1, 0.2, 0.8}, ((TablePotential) potentialOfB).getValues(), 1e-6);
 	}
 	
 	/**

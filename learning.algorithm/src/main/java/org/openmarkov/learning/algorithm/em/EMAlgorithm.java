@@ -129,7 +129,8 @@ public class EMAlgorithm extends LearningAlgorithm {
         // Init sigma
         List<TablePotential> potentials = new ArrayList<>();
         Map<ICIPotential, List<TablePotential>> iciSubpotentials = new IdentityHashMap<>();
-        ProbNet expandedNet = adaptNetwork(probNet, potentials, iciSubpotentials);
+        List<TablePotential> tablesOfUniformNodes = new ArrayList<>();
+        ProbNet expandedNet = adaptNetwork(probNet, potentials, iciSubpotentials, tablesOfUniformNodes);
         
         // Keyed by identity: potentials hash the way they compare, and two potentials holding the
         // same numbers must still be told apart as two sets of parameters to learn.
@@ -230,6 +231,10 @@ public class EMAlgorithm extends LearningAlgorithm {
         for (ICIPotential iciPotential : iciSubpotentials.keySet()) {
             iciPotential.setNoisyPotentials(iciSubpotentials.get(iciPotential));
         }
+        // The tables learned for the uniform nodes exist only in the copy: give them to the network returned
+        for (TablePotential table : tablesOfUniformNodes) {
+            probNet.getNode(table.getVariable(0)).setPotential(table);
+        }
         
         return probNet;
     }
@@ -244,7 +249,8 @@ public class EMAlgorithm extends LearningAlgorithm {
     }
     
     private static ProbNet adaptNetwork(ProbNet probNet, List<TablePotential> potentials,
-                                        Map<ICIPotential, List<TablePotential>> iciSubpotentials) {
+                                        Map<ICIPotential, List<TablePotential>> iciSubpotentials,
+                                        List<TablePotential> tablesOfUniformNodes) {
         ProbNet expandedNet = probNet.copy();
         for (Potential potential : expandedNet.getPotentials()) {
             if (potential.getPotentialRole() == PotentialRole.CONDITIONAL_PROBABILITY) {
@@ -257,6 +263,7 @@ public class EMAlgorithm extends LearningAlgorithm {
                         TablePotential newPotential = new TablePotential(uniformPotential.getVariables(),
                                                                          uniformPotential.getPotentialRole());
                         potentials.add(newPotential);
+                        tablesOfUniformNodes.add(newPotential);
                         expandedNet.getNode(potential.getVariable(0)).setPotential(newPotential);
                     }
                     case ICIPotential iciPotential -> {
