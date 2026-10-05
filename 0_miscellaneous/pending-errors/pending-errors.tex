@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128} y \hyperref[err:129]{129}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129} y \hyperref[err:130]{130}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 30 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 31 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -426,7 +426,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:127]{127} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre pesa sus enlaces con cuentas de casillas equivocadas & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:128]{128} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre penaliza la clase verdadera: ningún enlace sube la exactitud & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:129]{129} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre puntúa los enlaces candidatos con la probabilidad al revés & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
-\hyperref[err:130]{130} & El superpadre cuenta dos veces la hija de cada enlace al medir la exactitud & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
+\hyperref[err:130]{130} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre cuenta dos veces la hija de cada enlace al medir la exactitud & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:131]{131} & La validación cruzada de dos clasificadores no prueba un tercio de casos & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:132]{132} & El superpadre por defecto no aprende nada: propone un enlace a sí mismo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:133]{133} & El superpadre acepta el primer enlace aunque empeore al Bayes ingenuo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
@@ -10535,9 +10535,9 @@ Conviene hacerlo a la vez que \hyperref[err:127]{error~127} (cuentas leídas de 
 Prueba de regresión: sobre \texttt{BN-asia10k.\allowbreak{}csv} con clase \texttt{Bronchitis}, la puntuación que \texttt{get\allowbreak{}Score} da a \texttt{Add\allowbreak{}Link\allowbreak{}Edit(\allowbreak{}X-ray\ →\ Smoker)} sin enlaces entre características debe ser igual a la que la métrica da a la red una vez añadido ese enlace; y, en general, un enlace debe puntuarse igual como candidato que como enlace ya añadido.
 
 \setcounter{subsection}{129}
-\subsection[El superpadre cuenta dos veces la hija de cada enlace al medir la exactitud]{El clasificador de superpadre cuenta dos veces cada característica que recibe un segundo padre: al medir la exactitud multiplica P(hija \textbar{} clase) y además P(hija \textbar{} padre, clase), así que elige enlaces con un clasificador que no es el que construye}\label{err:130}
+\subsection[El superpadre cuenta dos veces la hija de cada enlace al medir la exactitud]{\textcolor{corregidoverde}{[Corregido]} El clasificador de superpadre cuenta dos veces cada característica que recibe un segundo padre: al medir la exactitud multiplica P(hija \textbar{} clase) y además P(hija \textbar{} padre, clase), así que elige enlaces con un clasificador que no es el que construye}\label{err:130}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{271f3ee} (05-10-2026): \texttt{predict\allowbreak{}Class\allowbreak{}Value\allowbreak{}Augmented\allowbreak{}NB} no multiplica P(hija \textbar{} clase) para la hija de cada pareja, que solo aporta el factor del enlace. La prueba de regresión es la primera de las dos propuestas abajo, con una base sintética en la que una característica es copia exacta de otra: con el enlace entre las dos, la exactitud es la del clasificador sin la copia (antes del arreglo, 0,7565 frente a 0,799). La segunda, sobre \texttt{BN-\allowbreak{}asia10k.\allowbreak{}csv}, no se ha añadido. Con «Unique superparent» marcada sigue sin aprenderse ningún enlace (\hyperref[err:132]{error~132}).
 \fichakey{Módulo}learning.metric
 \fichakey{Paquete}org.openmarkov.learning.metric.cmi.accuracy
 \fichakey{Ficheros}\path{learning.metric/src/main/java/org/openmarkov/learning/metric/cmi/accuracy/Accuracy.java:193-209} \newline \path{learning.metric/src/main/java/org/openmarkov/learning/metric/cmi/accuracy/Accuracy.java:80-97} \newline \path{learning.metric/src/main/java/org/openmarkov/learning/metric/cmi/accuracy/Accuracy.java:212-222} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:84-142} \newline \path{learning.core/src/main/java/org/openmarkov/learning/core/algorithm/LearningAlgorithm.java:172-183}
