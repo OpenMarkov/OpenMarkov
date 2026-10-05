@@ -111,19 +111,23 @@ public class SuperParentNBAlgorithm extends DiscriminativeAlgorithm {
         if (bestParent != null && !orphans.isEmpty()) {
             superParents.add(bestParent);
             final Node selectedParent = bestParent;
+            // A node cannot be its own parent
+            List<Node> children = orphans.stream().filter(orphan -> orphan != selectedParent).toList();
             if (this.sameSP && (bestParentScore > currentAccuracy || !onlyPositiveEdits)) {
                 // sameSP mode: connect bestParent to ALL orphans via a compound edit
-                List<PNEdit> linkEdits = orphans.stream()
+                List<PNEdit> linkEdits = children.stream()
                         .map(orphan -> (PNEdit) new AddLinkEdit(probNet, selectedParent.getVariable(),
                                 orphan.getVariable(), true))
                         .toList();
                 ListPNEdit compoundEdit = new ListPNEdit(probNet, linkEdits);
-                bestEditProposal = new LearningEditProposal(compoundEdit,
-                        new ScoreEditMotivation(bestParentScore));
-                orphans.clear();
-                currentAccuracy = bestParentScore;
+                if (!linkEdits.isEmpty() && (!onlyAllowedEdits || isAllowed(compoundEdit))) {
+                    bestEditProposal = new LearningEditProposal(compoundEdit,
+                            new ScoreEditMotivation(bestParentScore));
+                    orphans.clear();
+                    currentAccuracy = bestParentScore;
+                }
             } else if (!this.sameSP) {
-                for (Node nodeChild : orphans) {
+                for (Node nodeChild : children) {
                     AddLinkEdit addLink = new AddLinkEdit(probNet, bestParent.getVariable(), nodeChild.getVariable(), true);
                     double addScore = metric.getScore(addLink);
 
