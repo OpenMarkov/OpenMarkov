@@ -149,15 +149,24 @@ public class MeasuresSet {
                     "Confusion matrix are calculated with " + matrix.getNumCases() + " cases.\n";
         }
         if (measures.size() > 0) {
-            int numCasesScores = measures.get(0).getNumCases();
-            information = information + "Scores are calculated with " + numCasesScores +
-                    " cases.\n ";
+            information = information + getScoresCasesNote() + ".\n ";
         }
         if (!allVariablesAreUsed) {
             information = information +
                     "The probabilities were calculated without evidence in all the variables.\n";
         }
         return information;
+    }
+    
+    /**
+     * @return a sentence, without the final period, that tells how many cases the scores were
+     * calculated with and, when there are several iterations, that the scores are their average
+     */
+    public String getScoresCasesNote() {
+        int numCasesScores = measures.get(0).getNumCases();
+        return numIterations > 1 ?
+                "Scores are averages of " + numIterations + " iterations, with " + numCasesScores + " cases in all" :
+                "Scores are calculated with " + numCasesScores + " cases";
     }
     
     /**
@@ -176,7 +185,7 @@ public class MeasuresSet {
         for (MeasureValue measure : measures) {
             rows.add(new ScoresRow.Data(measure.getMeasureType() + " score", measure.getValue()));
             if (measure.getMeasureType() == LOGLIKELIHOOD) {
-                double loss = -measure.getValue() / measure.getNumCases();
+                double loss = measure.getLossPerCase();
                 rows.add(new ScoresRow.Data(measure.getMeasureType() + " Loss", loss));
                 if (measures.size() > 1) {
                     rows.add(new ScoresRow.Section("Score measures"));

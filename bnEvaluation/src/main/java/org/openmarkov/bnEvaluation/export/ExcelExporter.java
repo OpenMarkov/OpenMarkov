@@ -16,7 +16,6 @@ import org.openmarkov.bnEvaluation.FormatExcel;
 import org.openmarkov.bnEvaluation.measures.MeasureMatrix;
 import org.openmarkov.bnEvaluation.measures.MeasureMatrixIndProb;
 import org.openmarkov.bnEvaluation.measures.MeasureMatrixIndicators;
-import org.openmarkov.bnEvaluation.measures.MeasureValue;
 import org.openmarkov.bnEvaluation.measures.MeasuresSet;
 import org.openmarkov.bnEvaluation.measures.ScoresRow;
 import org.openmarkov.core.model.database.CaseDatabase;
@@ -221,9 +220,6 @@ public final class ExcelExporter {
     private void writeScores(Workbook workbook, MeasuresSet set) {
         FormatExcel format = new FormatExcel(workbook);
         Sheet sheet = workbook.createSheet("Scores");
-        List<MeasureValue> values = set.getMeasures();
-        int numCasesScores = values.get(0).getNumCases();
-
         int rowIndex = 0;
         for (ScoresRow row : set.buildScoresRows()) {
             if (row instanceof ScoresRow.Section section) {
@@ -243,12 +239,7 @@ public final class ExcelExporter {
         }
 
         Row casesNote = sheet.createRow(rowIndex++);
-        casesNote.createCell(0).setCellValue("Scores are calculated with " + numCasesScores + " cases");
-        if (numIterations > 1) {
-            Row iterationsNote = sheet.createRow(rowIndex);
-            iterationsNote.createCell(0).setCellValue(
-                    "Measures calculated as an average of " + numIterations + " iterations");
-        }
+        casesNote.createCell(0).setCellValue(set.getScoresCasesNote());
     }
 
     // -------------------------------------------------------------------------

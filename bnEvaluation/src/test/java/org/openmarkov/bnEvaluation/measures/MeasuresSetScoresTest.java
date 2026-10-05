@@ -76,4 +76,40 @@ class MeasuresSetScoresTest {
                 section -> assertThat(section.title()).isEqualTo("Score measures"));
         assertThat(((ScoresRow.Data) rows.get(4)).label()).isEqualTo("BAYES score");
     }
+
+    /**
+     * Cross-validation of 10 cases in 4 folds of 3, 3, 2 and 2 cases: the loss is per case,
+     * so it is the sum of the four log-likelihoods divided by the 10 cases.
+     */
+    @Test
+    void lossOfSeveralFoldsIsDividedByAllTheirCases() {
+        MeasuresSet first = foldWithLogLikelihood(-6.0, 3);
+        MeasuresSet mean = new MeasuresSet(first);
+        mean.accumulateMeasureSet(first);
+        mean.accumulateMeasureSet(foldWithLogLikelihood(-5.0, 3));
+        mean.accumulateMeasureSet(foldWithLogLikelihood(-3.0, 2));
+        mean.accumulateMeasureSet(foldWithLogLikelihood(-2.0, 2));
+        mean.setAveraged();
+
+        List<ScoresRow> rows = mean.buildScoresRows();
+
+        assertThat(((ScoresRow.Data) rows.get(1)).value()).isEqualTo(-4.0); // mean of the four folds
+        assertThat(((ScoresRow.Data) rows.get(2)).value()).isEqualTo(1.6);  // 16 / 10
+        assertThat(mean.getMeasureInformation())
+                .contains("Scores are averages of 4 iterations, with 10 cases in all.");
+    }
+
+    @Test
+    void aSingleEvaluationTellsItsNumberOfCases() {
+        assertThat(foldWithLogLikelihood(-6.0, 3).getMeasureInformation())
+                .contains("Scores are calculated with 3 cases.");
+    }
+
+    private static MeasuresSet foldWithLogLikelihood(double logLikelihood, int numCases) {
+        MeasuresSet set = new MeasuresSet("title");
+        MeasureValue measure = new MeasureValue(MeasureType.LOGLIKELIHOOD);
+        measure.setValue(logLikelihood, numCases);
+        set.addMeasureValue(measure);
+        return set;
+    }
 }
