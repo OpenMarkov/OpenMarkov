@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132} y \hyperref[err:133]{133}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133} y \hyperref[err:135]{135}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 34 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 35 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -431,7 +431,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:132]{132} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre por defecto no aprende nada: propone un enlace a sí mismo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:133]{133} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre acepta el primer enlace aunque empeore al Bayes ingenuo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:134]{134} & Superpadre interactivo: llenar la tabla avanza el algoritmo y la vacía & \texttt{learning.\allowbreak{}algorithm} & M \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:135]{135} & El Bayes ingenuo selectivo hacia delante no da dos veces el mismo modelo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
+\hyperref[err:135]{135} & \textcolor{corregidoverde}{\textbf{Corregido}} · El Bayes ingenuo selectivo hacia delante no da dos veces el mismo modelo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:136]{136} & El árbol aumentado (TAN) orienta sus enlaces distinto en cada aprendizaje & \texttt{learning.\allowbreak{}algorithm} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:137]{137} & El EM deja sin aprender los nodos con potencial uniforme & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:138]{138} & El esqueleto del algoritmo PC cambia al renombrar una variable & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
@@ -10946,9 +10946,9 @@ Hay que mantener el resultado del aprendizaje automático y de la validación cr
 Pruebas de regresión, repitiendo las llamadas de la ventana sobre \texttt{BN-asia10k.\allowbreak{}csv} con clase \texttt{Bronchitis} y «Unique superparent» desmarcada: tras llenar la tabla, bloquear la primera propuesta y volver a llenarla no debe dejarla vacía (hoy, sin el llenado previo, se ofrece X-ray→LungCancer); desmarcar y volver a marcar «Only positive edits» debe dar la misma tabla que al abrir; y «Finish» nada más abrir debe dar la misma red que el aprendizaje automático.
 
 \setcounter{subsection}{134}
-\subsection[El Bayes ingenuo selectivo hacia delante no da dos veces el mismo modelo]{El Bayes ingenuo selectivo hacia delante aprende modelos distintos en ejecuciones distintas sobre la misma base}\label{err:135}
+\subsection[El Bayes ingenuo selectivo hacia delante no da dos veces el mismo modelo]{\textcolor{corregidoverde}{[Corregido]} El Bayes ingenuo selectivo hacia delante aprende modelos distintos en ejecuciones distintas sobre la misma base}\label{err:135}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{1bd8c38} (05-10-2026): \texttt{get\allowbreak{}Optimal\allowbreak{}Edit} recorre las candidatas en el orden de la red también hacia delante, y entre las de igual exactitud gana la primera; un paso que iguala la exactitud actual se sigue aceptando. Cuando se piden también los cambios que no mejoran, se propone la mejor candidata y no la última recorrida. La prueba de regresión usa una métrica de prueba con veinte características empatadas y comprueba que se propone la primera de la red; no ejecuta el algoritmo dos veces sobre una base, como proponía la ficha.
 \fichakey{Módulo}learning.algorithm
 \fichakey{Paquete}org.openmarkov.learning.algorithm.nbderived.snb
 \fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/snb/SelectiveNBAlgorithm.java:59-96}
