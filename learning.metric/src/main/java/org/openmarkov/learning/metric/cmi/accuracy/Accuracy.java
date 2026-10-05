@@ -228,7 +228,13 @@ public class Accuracy extends Metric {
     public int predictClassValueAugmentedNB(int[] row, List<Variable[]> van, int it){
         double[] probs = getProbRootNode();
         
+        // The child of a link takes part only through the factor of the link, as in the learned network
+        Set<String> children = van.stream().map(arc -> arc[0].getName()).collect(Collectors.toSet());
+
         for (String variable : getNonRootNodes().stream().map(Node::getVariable).map(Variable::getName).toList()) {
+            if(children.contains(variable)){
+                continue;
+            }
             int index = getIndexVariable(variable);
             for(int i=0; i<freqRootNode.length;i++){
                 probs[i]*= ((crossTabs.get(variable)[it][row[index]][i]+ alpha)/(freqRootNode[i]+ alpha*getNonRootNodes().size()))
