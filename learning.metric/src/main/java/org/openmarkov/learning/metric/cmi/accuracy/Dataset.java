@@ -4,7 +4,6 @@ import org.openmarkov.core.model.database.CaseDatabase;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 /**
  * Splits a case database into k-fold training and test sets for cross-validation.
@@ -50,21 +49,30 @@ public class Dataset {
     }
 
 
+    /**
+     * Shuffles the cases once and deals them into disjoint test sets that cover them all;
+     * the training set of each fold is made of the other test sets.
+     */
     private void initializeDatasets(){
+        int[][] shuffled = cases.clone();
+        for (int i = shuffled.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            int[] swapped = shuffled[i];
+            shuffled[i] = shuffled[j];
+            shuffled[j] = swapped;
+        }
 
-        IntStream.range(0, numOfSamples).forEach(it ->{
-
-            int maxCase = random.nextInt(cases.length-sampleSize-1);
-            test[it]= Arrays.copyOfRange(cases, maxCase, maxCase+sampleSize);
-            training[it] = new int[cases.length-sampleSize][];
-
-            for(int i = 0; i<maxCase;i++){
-                training[it][i]=cases[i];
-            }
-            for(int i=maxCase+sampleSize; i<cases.length;i++){
-                training[it][i-sampleSize]=cases[i];
-            }
-        });
+        // The cases left over by the division go one to each of the first folds
+        int remainder = cases.length % numOfSamples;
+        int start = 0;
+        for (int it = 0; it < numOfSamples; it++) {
+            int end = start + sampleSize + (it < remainder ? 1 : 0);
+            test[it] = Arrays.copyOfRange(shuffled, start, end);
+            training[it] = new int[cases.length - (end - start)][];
+            System.arraycopy(shuffled, 0, training[it], 0, start);
+            System.arraycopy(shuffled, end, training[it], start, cases.length - end);
+            start = end;
+        }
     }
 
 

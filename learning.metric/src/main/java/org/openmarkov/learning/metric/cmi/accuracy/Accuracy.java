@@ -142,7 +142,7 @@ public class Accuracy extends Metric {
             }
         }
 
-        return (double) counter/(dataset.getTest()[0].length*KFOLD);
+        return (double) counter/caseDatabase.getNumCases();
     }
 
 
@@ -163,7 +163,7 @@ public class Accuracy extends Metric {
                 }
             }
         }
-        return (double) counter/(dataset.getTest()[0].length*KFOLD);
+        return (double) counter/caseDatabase.getNumCases();
     }
 
 
