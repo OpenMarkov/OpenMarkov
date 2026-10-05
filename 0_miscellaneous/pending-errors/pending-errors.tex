@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142} y \hyperref[err:143]{143}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143} y \hyperref[err:144]{144}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 39 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 40 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -440,7 +440,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:141]{141} & «Finish» del PC interactivo empieza de cero y descarta lo aplicado a mano & \texttt{learning.\allowbreak{}algorithm} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:142]{142} & \textcolor{corregidoverde}{\textbf{Corregido}} · PC interactivo: con un borrado bloqueado, «Finish» da NullPointerException & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:143]{143} & \textcolor{corregidoverde}{\textbf{Corregido}} · El bosque aumentado (FAN) falla sin características ligadas a la clase & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
-\hyperref[err:144]{144} & Discretizar por frecuencias iguales con decimales falla o cuenta mal & \texttt{learning.\allowbreak{}core} & S \hfill No\\
+\hyperref[err:144]{144} & \textcolor{corregidoverde}{\textbf{Corregido}} · Discretizar por frecuencias iguales con decimales falla o cuenta mal & \texttt{learning.\allowbreak{}core} & S \hfill No\\
 \hyperref[err:145]{145} & «Split Dataset» lanza siempre una excepción, elija la opción que elija & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \hyperref[err:146]{146} & Validación cruzada: casos por pliegue truncados y pérdida por caso inflada & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \hyperref[err:147]{147} & Quedarse sin memoria al aprender sale como error no previsto & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
@@ -11659,9 +11659,9 @@ Proteger también la división de \texttt{compute\allowbreak{}Averaged\allowbrea
 Prueba de regresión: aprender FAN con \texttt{One\allowbreak{}Node-1000.\allowbreak{}csv} y con una base cuya única característica es constante; el resultado debe ser el Bayes ingenuo (o la clase sola) sin excepción.
 
 \setcounter{subsection}{143}
-\subsection[Discretizar por frecuencias iguales con decimales falla o cuenta mal]{Discretizar por frecuencias iguales una columna numérica escrita con decimales o notación científica lanza una excepción o cuenta mal los casos}\label{err:144}
+\subsection[Discretizar por frecuencias iguales con decimales falla o cuenta mal]{\textcolor{corregidoverde}{[Corregido]} Discretizar por frecuencias iguales una columna numérica escrita con decimales o notación científica lanza una excepción o cuenta mal los casos}\label{err:144}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{0e77ce6} (05-10-2026): \texttt{discretize\allowbreak{}Equal\allowbreak{}Freq} guarda cada valor numérico con su número de casos en un mapa ordenado y ya no busca el estado por su nombre; dos nombres del mismo número suman sus casos. La primera prueba de regresión no lee \texttt{Cataract-\allowbreak{}Data2.\allowbreak{}csv}, que las pruebas de \texttt{learning.\allowbreak{}core} no alcanzan, sino una variable con estados escritos como los que fallaban («1000000000.0», «1.00E+09», «1.000291517E9»); la segunda es la de «1», «1.50» y «3», que da el corte en 1,5.
 \fichakey{Módulo}learning.core
 \fichakey{Paquete}org.openmarkov.learning.core.preprocess
 \fichakey{Ficheros}\path{learning.core/src/main/java/org/openmarkov/learning/core/preprocess/Discretization.java:271-358} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/LearningDialog.java:1213-1214} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/DataPreprocessor.java:78-83}
