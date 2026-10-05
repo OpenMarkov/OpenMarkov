@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144} y \hyperref[err:145]{145}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145} y \hyperref[err:146]{146}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 41 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 42 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -442,7 +442,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:143]{143} & \textcolor{corregidoverde}{\textbf{Corregido}} · El bosque aumentado (FAN) falla sin características ligadas a la clase & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:144]{144} & \textcolor{corregidoverde}{\textbf{Corregido}} · Discretizar por frecuencias iguales con decimales falla o cuenta mal & \texttt{learning.\allowbreak{}core} & S \hfill No\\
 \hyperref[err:145]{145} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Split Dataset» lanza siempre una excepción, elija la opción que elija & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
-\hyperref[err:146]{146} & Validación cruzada: casos por pliegue truncados y pérdida por caso inflada & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
+\hyperref[err:146]{146} & \textcolor{corregidoverde}{\textbf{Corregido}} · Validación cruzada: casos por pliegue truncados y pérdida por caso inflada & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \hyperref[err:147]{147} & Quedarse sin memoria al aprender sale como error no previsto & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
 \hyperref[err:148]{148} & Una variable de la red modelo que falta en los datos da error no previsto & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
 \hyperref[err:149]{149} & Red modelo sin alguna columna de la base: error no previsto al cargarla & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
@@ -11795,9 +11795,9 @@ Revisar después el resto de la ventana, que hoy no se ha podido ejecutar nunca:
 Prueba de regresión en \texttt{bn\allowbreak{}Evaluation/\allowbreak{}src/\allowbreak{}test/\allowbreak{}java/\allowbreak{}org/\allowbreak{}openmarkov/\allowbreak{}bn\allowbreak{}Evaluation/\allowbreak{}}: para una base de N casos, los tres métodos devuelven un \texttt{Split\allowbreak{}Set} cuyo banco de prueba tiene \texttt{num\allowbreak{}Test} casos y el de entrenamiento N − \texttt{num\allowbreak{}Test}, de modo que entre los dos suman todos los casos; los primeros y los últimos casos coinciden con las filas esperadas; y \texttt{Split\allowbreak{}Set.\allowbreak{}to\allowbreak{}Table(\allowbreak{})} se construye sin error.
 
 \setcounter{subsection}{145}
-\subsection[Validación cruzada: casos por pliegue truncados y pérdida por caso inflada]{En la validación cruzada, si el número de casos no es múltiplo del número de pliegues, la ventana de resultados dice que las puntuaciones se calcularon con menos casos y la pérdida por caso de la log-verosimilitud sale más alta}\label{err:146}
+\subsection[Validación cruzada: casos por pliegue truncados y pérdida por caso inflada]{\textcolor{corregidoverde}{[Corregido]} En la validación cruzada, si el número de casos no es múltiplo del número de pliegues, la ventana de resultados dice que las puntuaciones se calcularon con menos casos y la pérdida por caso de la log-verosimilitud sale más alta}\label{err:146}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{0a04b34} (05-10-2026): \texttt{Measure\allowbreak{}Value.\allowbreak{}average\allowbreak{}Value} conserva el total de casos de todas las iteraciones y guarda cuántas son, y la pérdida por caso (\texttt{get\allowbreak{}Loss\allowbreak{}Per\allowbreak{}Case}) es la suma de las iteraciones dividida por ese total. Con varias iteraciones, la ventana y la hoja de Excel dicen «Scores are averages of k iterations, with N cases in all» (\texttt{Measures\allowbreak{}Set.\allowbreak{}get\allowbreak{}Scores\allowbreak{}Cases\allowbreak{}Note}); con una sola, lo mismo que antes. En Excel esa frase sustituye a las dos notas anteriores. El texto también cambia en el muestreo repetido, donde N es ahora el total de las muestras. La prueba de regresión acumula cuatro pliegues de 3, 3, 2 y 2 casos en un \texttt{Measures\allowbreak{}Set} y comprueba la fila «LOGLIKELIHOOD Loss» y el texto; no ejecuta una validación cruzada entera.
 \fichakey{Módulo}bnEvaluation
 \fichakey{Paquete}org.openmarkov.bnEvaluation.measures
 \fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/measures/MeasureValue.java:48-58} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/measures/MeasuresSet.java:115-161} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/measures/MeasuresSet.java:168-187} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/LearningEvaluator.java:114-136} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/SplitSetManager.java:229-286} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/export/ExcelExporter.java:221-251} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/ResultsDialog.java:325-332}
