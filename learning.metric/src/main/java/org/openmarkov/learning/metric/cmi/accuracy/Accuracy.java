@@ -32,6 +32,9 @@ public class Accuracy extends Metric {
     //Frequencies two-dimensional crosstab for an attribute and the class variable
     private Map<String, double[][][]> crossTabs = new HashMap<>();
 
+    //Frequencies of each value for the class variable in the training set of each fold
+    private double[][] trainingClassCounts;
+
     //Three dimensional crosstab: attribute, parent, class
     private Map<String, double[][][][]> _2ndLevelCrosstab = new HashMap<>();
 
@@ -132,7 +135,7 @@ public class Accuracy extends Metric {
 
         for(int i=0; i<dataset.getTest().length; i++){
             for (int[] row : dataset.getTest()[i]) {
-                if(row[getClassVariableIndex()]==predictClassValue(row, variables)){
+                if(row[getClassVariableIndex()]==predictClassValue(row, variables, i)){
                     counter++;
                 }
             }
@@ -167,21 +170,50 @@ public class Accuracy extends Metric {
      * Checks the most probable class for an instance given an specific model
      * @param row case used to predict the class
      * @param variables list of variables that conform the model
+     * @param it fold of the case: only its training set is used
      * @return the most probable class
      */
-    public int predictClassValue(int[] row, Collection<Variable> variables){
-        double[] probs = getProbRootNode();
-        
+    public int predictClassValue(int[] row, Collection<Variable> variables, int it){
+        double[] classCounts = getTrainingClassCounts(it);
+        int trainingSize = dataset.getTraining()[it].length;
+        // Logarithms, so that many features do not make the product vanish
+        double[] logProbs = new double[classCounts.length];
+        for(int j=0; j<classCounts.length; j++){
+            logProbs[j] = Math.log(classCounts[j]/trainingSize);
+        }
+
         for (String variable : variables.stream().map(Variable::getName).toList()) {
             int index = getIndexVariable(variable);
-            for (int it=0; it<KFOLD; it++){
-                for(int j=0; j<freqRootNode.length;j++){
-                    probs[j]*= ((crossTabs.get(variable)[it][row[index]][j] + alpha)/(freqRootNode[j] + alpha* variables.size()));
+            for(int j=0; j<classCounts.length; j++){
+                // A class absent from the training set is already impossible
+                if(classCounts[j] > 0){
+                    logProbs[j] += Math.log((crossTabs.get(variable)[it][row[index]][j] + alpha)/(classCounts[j] + alpha* variables.size()));
                 }
             }
         }
 
-        return getIndexOfMaxValue(probs);
+        int predictedClass = 0;
+        for(int j=1; j<logProbs.length; j++){
+            if(logProbs[j] > logProbs[predictedClass]){
+                predictedClass = j;
+            }
+        }
+        return predictedClass;
+    }
+
+    /** Number of cases of each class in the training set of a fold. */
+    private double[] getTrainingClassCounts(int it){
+        if(trainingClassCounts == null){
+            int numClasses = getRootNode().getVariable().getNumStates();
+            int classIndex = getClassVariableIndex();
+            trainingClassCounts = new double[KFOLD][numClasses];
+            for(int fold=0; fold<KFOLD; fold++){
+                for (int[] trainingRow : dataset.getTraining()[fold]) {
+                    trainingClassCounts[fold][trainingRow[classIndex]]++;
+                }
+            }
+        }
+        return trainingClassCounts[it];
     }
 
     /**
