@@ -182,12 +182,14 @@ public class Accuracy extends Metric {
             logProbs[j] = Math.log(classCounts[j]/trainingSize);
         }
 
-        for (String variable : variables.stream().map(Variable::getName).toList()) {
-            int index = getIndexVariable(variable);
+        for (Variable variable : variables) {
+            int index = getIndexVariable(variable.getName());
+            double[][] crossTab = crossTabs.get(variable.getName())[it];
             for(int j=0; j<classCounts.length; j++){
                 // A class absent from the training set is already impossible
                 if(classCounts[j] > 0){
-                    logProbs[j] += Math.log((crossTabs.get(variable)[it][row[index]][j] + alpha)/(classCounts[j] + alpha* variables.size()));
+                    // Alpha is added once per state, so that the probabilities of the states add up to one
+                    logProbs[j] += Math.log((crossTab[row[index]][j] + alpha)/(classCounts[j] + alpha*variable.getNumStates()));
                 }
             }
         }
@@ -401,6 +403,10 @@ public class Accuracy extends Metric {
 
     public void setAlpha(double alpha) {
         this.alpha = alpha;
+    }
+
+    public double getAlpha() {
+        return alpha;
     }
 
 /*    @Override

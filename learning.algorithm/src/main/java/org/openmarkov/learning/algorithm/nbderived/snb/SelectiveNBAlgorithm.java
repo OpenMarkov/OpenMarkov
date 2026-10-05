@@ -40,6 +40,7 @@ public class SelectiveNBAlgorithm extends DiscriminativeAlgorithm {
     @Override public void init(ModelNetUse modelNetUse) {
         if (metric instanceof Accuracy) {
             ((Accuracy) metric).setClassVariable(this.classVariableName);
+            ((Accuracy) metric).setAlpha(alpha);
         }
         if (!forward) {
             setRelationsForRootVariable();
