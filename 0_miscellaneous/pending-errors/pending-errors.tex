@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135} y \hyperref[err:137]{137}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137} y \hyperref[err:138]{138}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 36 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 37 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -434,7 +434,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:135]{135} & \textcolor{corregidoverde}{\textbf{Corregido}} · El Bayes ingenuo selectivo hacia delante no da dos veces el mismo modelo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:136]{136} & El árbol aumentado (TAN) orienta sus enlaces distinto en cada aprendizaje & \texttt{learning.\allowbreak{}algorithm} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:137]{137} & \textcolor{corregidoverde}{\textbf{Corregido}} · El EM deja sin aprender los nodos con potencial uniforme & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
-\hyperref[err:138]{138} & El esqueleto del algoritmo PC cambia al renombrar una variable & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
+\hyperref[err:138]{138} & \textcolor{corregidoverde}{\textbf{Corregido}} · El esqueleto del algoritmo PC cambia al renombrar una variable & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:139]{139} & El PC interactivo ofrece las dos orientaciones de un enlace, contra Meek & \texttt{learning.\allowbreak{}algorithm} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:140]{140} & El PC interactivo adelanta la fase al llenar la tabla y descoloca botones & \texttt{learning.\allowbreak{}algorithm} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:141]{141} & «Finish» del PC interactivo empieza de cero y descarta lo aplicado a mano & \texttt{learning.\allowbreak{}algorithm} & M \hfill \textcolor{decisionrojo}{Sí}\\
@@ -11123,9 +11123,9 @@ Si la instalación en la red devuelta debe poder deshacerse, hacerla con una edi
 Prueba de regresión: la misma red A → B con B uniforme; tras aprender, B debe tener un \texttt{Table\allowbreak{}Potential} con P(B \textbar{} A) próximo a las frecuencias de los casos.
 
 \setcounter{subsection}{137}
-\subsection[El esqueleto del algoritmo PC cambia al renombrar una variable]{El esqueleto que aprende el algoritmo PC depende de los nombres de las variables: cambiar el nombre de una columna de la base de casos añade o quita enlaces}\label{err:138}
+\subsection[El esqueleto del algoritmo PC cambia al renombrar una variable]{\textcolor{corregidoverde}{[Corregido]} El esqueleto que aprende el algoritmo PC depende de los nombres de las variables: cambiar el nombre de una columna de la base de casos añade o quita enlaces}\label{err:138}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{efc5f82} (05-10-2026): \texttt{separation\allowbreak{}Sets\allowbreak{}Logic} trata cada pareja una sola vez en cada profundidad, y \texttt{evaluate\allowbreak{}Separation\allowbreak{}Sets} prueba los subconjuntos de los vecinos de X y los de los vecinos de Y, sin repetir los comunes, y guarda el mejor. Un empate exacto entre dos pruebas se sigue resolviendo por el orden de los nodos. La prueba de regresión es la de la red sintética de cinco variables (20 000 casos muestreados en la propia prueba): el esqueleto es el correcto con el nodo llamado «A» o «G»; antes del arreglo, con «A» sobraba A--B. Las medidas de abajo sobre \texttt{alarm10k.\allowbreak{}csv} y \texttt{alarm500.\allowbreak{}csv} no se han repetido, ni se ha medido cuántas pruebas de independencia más se hacen.
 \fichakey{Módulo}learning.algorithm
 \fichakey{Paquete}org.openmarkov.learning.algorithm.pc
 \fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/pc/SkeletonDiscovery.java:18-27} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/pc/SkeletonDiscovery.java:173-216} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/pc/util/NodePair.java:38-51} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/pc/PCAlgorithm.java:412-425}
