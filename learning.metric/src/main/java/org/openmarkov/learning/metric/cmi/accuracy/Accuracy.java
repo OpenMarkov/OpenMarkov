@@ -235,21 +235,24 @@ public class Accuracy extends Metric {
             }
         }
 
+        // Each link weighs every class with the counts of that class, not only the class of the case
         van.forEach(arc->{
-            probs[row[getClassVariableIndex()]] *= getProb(arc[0], arc[1], row, it);
+            for(int i=0; i<probs.length; i++){
+                probs[i] *= getProb(arc[0], arc[1], row, it, i);
+            }
         });
 
         return getIndexOfMaxValue(probs);
     }
 
 
-    protected double getProb(Variable tail, Variable head, int[] row, int it){
+    protected double getProb(Variable tail, Variable head, int[] row, int it, int classValue){
         double[][][][] ct = _2ndLevelCrosstab.get(tail.getName()+"-"+head.getName());
         double count = 0;
 
-        double value = ct[it][row[getIndexVariable(tail)]][row[getIndexVariable(head)]][row[getClassVariableIndex()]];
+        double value = ct[it][row[getIndexVariable(tail)]][row[getIndexVariable(head)]][classValue];
         for(int i=0; i < tail.getNumStates(); i++){
-            count+=ct[it][i][row[getIndexVariable(head)]][row[getClassVariableIndex()]];
+            count+=ct[it][i][row[getIndexVariable(head)]][classValue];
         }
         
         return (value + alpha) / (count + alpha * getNonRootNodes().size());
