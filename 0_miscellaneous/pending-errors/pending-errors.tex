@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50} y \hyperref[err:125]{125}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125} y \hyperref[err:126]{126}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 26 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 27 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -422,7 +422,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:124]{124} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Una línea de CSV con campos de menos, de más o en blanco inventa casos & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:aprendizaje}.\ Aprendizaje y evaluación de redes}}\\
 \hyperref[err:125]{125} & \textcolor{corregidoverde}{\textbf{Corregido}} · La exactitud del Bayes ingenuo selectivo usa el caso evaluado al entrenar & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
-\hyperref[err:126]{126} & El Bayes ingenuo selectivo elige características sin el alfa del diálogo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
+\hyperref[err:126]{126} & \textcolor{corregidoverde}{\textbf{Corregido}} · El Bayes ingenuo selectivo elige características sin el alfa del diálogo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:127]{127} & El superpadre pesa sus enlaces con cuentas de casillas equivocadas & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:128]{128} & El superpadre penaliza la clase verdadera: ningún enlace sube la exactitud & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:129]{129} & El superpadre puntúa los enlaces candidatos con la probabilidad al revés & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
@@ -10239,9 +10239,9 @@ El suavizado usa \texttt{alpha\ *\ variables.\allowbreak{}size(\allowbreak{})} e
 Prueba de regresión: con la base sintética de 150 características descrita arriba, la exactitud debe ser próxima a la de un Bayes ingenuo evaluado por separado, no la proporción de la clase 0; y con una característica que identifica cada caso (un estado distinto por caso), la exactitud no debe superar la de adivinar.
 
 \setcounter{subsection}{125}
-\subsection[El Bayes ingenuo selectivo elige características sin el alfa del diálogo]{El Bayes ingenuo selectivo elige las características sin el suavizado que el usuario pone en el diálogo: la métrica trabaja siempre con alfa 0}\label{err:126}
+\subsection[El Bayes ingenuo selectivo elige características sin el alfa del diálogo]{\textcolor{corregidoverde}{[Corregido]} El Bayes ingenuo selectivo elige las características sin el suavizado que el usuario pone en el diálogo: la métrica trabaja siempre con alfa 0}\label{err:126}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{d426114} (05-10-2026): \texttt{Selective\allowbreak{}NB\allowbreak{}Algorithm.\allowbreak{}init} pasa el alfa a la métrica, y \texttt{predict\allowbreak{}Class\allowbreak{}Value} lo suma en el denominador una vez por estado de la característica, no una vez por característica. La prueba de regresión usa una base sintética (cinco características de diez estados, 150 casos) en vez de \texttt{Cataract-\allowbreak{}RRDdataset\allowbreak{}Pre\allowbreak{}Proc3.\allowbreak{}csv}, que no está al alcance de las pruebas de \texttt{learning.\allowbreak{}algorithm}: hacia atrás conserva tres características con alfa 0 y cuatro con alfa 0,5. Las medidas de abajo son anteriores a este arreglo y al del \hyperref[err:125]{error~125}, y no se han repetido. La rama del superpadre conserva el denominador antiguo (\hyperref[err:127]{errores~127} a \hyperref[err:130]{130}).
 \fichakey{Módulo}learning.algorithm
 \fichakey{Paquete}org.openmarkov.learning.algorithm.nbderived.snb
 \fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/snb/SelectiveNBAlgorithm.java:40-50} \newline \path{learning.metric/src/main/java/org/openmarkov/learning/metric/cmi/accuracy/Accuracy.java:42} \newline \path{learning.metric/src/main/java/org/openmarkov/learning/metric/cmi/accuracy/Accuracy.java:172-185} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:59-65} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/algorithm/nbderived/snb/gui/SelectiveNBParametersDialog.java:45-51}
