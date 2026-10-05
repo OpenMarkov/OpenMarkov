@@ -16,8 +16,6 @@ import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.stringformat.LocalizationFormatter;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,9 +23,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * This class implements the routines to manage the discretization of the
@@ -272,24 +270,19 @@ public class Discretization {
         State[] states = variable.getStates();
         List<Double> intervalLimits = new ArrayList<Double>();
         double accruedFreq = 0, stateFreq;
-        int stateIndex;
-        NumberFormat nf = NumberFormat.getNumberInstance(new Locale("en"));
-        DecimalFormat decimalFormat = (DecimalFormat) nf;
-        decimalFormat.applyPattern("###.########");
-        String stateName;
-        
-        // Order the numerical states
-        List<Double> orderedStates = new ArrayList<Double>();
-        for (int i = 0; i < states.length; i++) {
-            if (!states[i].getName().equals("?"))
-                orderedStates.add(Double.parseDouble(states[i].getName()));
-        }
-        Collections.sort(orderedStates);
         
         int[] casesForVariable = database.getCases(variable);
         int[] histogram = new int[variable.getStates().length];
         for (int i = 0; i < casesForVariable.length; ++i) {
             ++histogram[casesForVariable[i]];
+        }
+        
+        // Order the numerical states, each with its number of cases. Two names of the same
+        // number ("2" and "2.0") add up their cases.
+        Map<Double, Integer> casesPerValue = new TreeMap<>();
+        for (int i = 0; i < states.length; i++) {
+            if (!states[i].getName().equals("?"))
+                casesPerValue.merge(Double.parseDouble(states[i].getName()), histogram[i], Integer::sum);
         }
         
         // number of cases with valid data, i.e. all minus the missing values
@@ -303,17 +296,9 @@ public class Discretization {
         double intervalFreq = validCaseNum / numIntervals;
         intervalLimits.add(Double.NEGATIVE_INFINITY);
         
-        for (Double state : orderedStates) {
-            //check whether the state is integer or double
-            stateName = state.toString();
-            String stateToSearch = stateName.contains("E") ?
-                    decimalFormat.format(state.doubleValue()) :
-                    state.toString();
-            stateIndex = variable.getStateIndex(stateToSearch);
-            if (stateIndex == -1) {
-                stateIndex = variable.getStateIndex("" + state.intValue());
-            }
-            stateFreq = histogram[stateIndex];
+        for (Map.Entry<Double, Integer> valueAndCases : casesPerValue.entrySet()) {
+            Double state = valueAndCases.getKey();
+            stateFreq = valueAndCases.getValue();
             if ((accruedFreq + stateFreq) >= intervalFreq) {
                 intervalLimits.add(state);
                 accruedFreq = 0;

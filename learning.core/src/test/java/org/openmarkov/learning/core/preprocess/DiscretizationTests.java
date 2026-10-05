@@ -392,4 +392,40 @@ public class DiscretizationTests {
 		Assertions.assertEquals(1, newCases[7][1]);
 	}
 
+
+	/** Returns the variable X of the database discretized in intervals of equal frequency. */
+	private static Variable equalFrequencyIntervals(CaseDatabase db, int numIntervals) {
+		Map<String, Discretization.Option> discretizeOptions = new HashMap<>();
+		discretizeOptions.put("X", Discretization.Option.EQUAL_FREQ);
+		Map<String, Integer> numIntervalsPerVariable = new HashMap<>();
+		numIntervalsPerVariable.put("X", numIntervals);
+		return Discretization.process(db, discretizeOptions, numIntervalsPerVariable).getVariable("X");
+	}
+
+	/** Numbers written in ways that Java does not write them back: the states must not be looked up by name. */
+	@Test public void testDiscretizeEqualFreqAcceptsAnyWayOfWritingANumber() {
+		Variable x = new Variable("X", "1000000000.0", "1.00E+09", "1.000291517E9", "2.5E9", "0.50");
+		int[][] cases = new int[50][1];
+		for (int i = 0; i < 50; i++) cases[i][0] = i % 5;
+		CaseDatabase db = new CaseDatabase(List.of(x), cases);
+
+		Variable discretized = equalFrequencyIntervals(db, 2);
+
+		// The first two names are the same number, with 20 of the 50 cases between them
+		Assertions.assertEquals(2, discretized.getStates().length);
+		Assertions.assertEquals("(-Infinity , 1.0E9]", discretized.getStates()[0].getName());
+	}
+
+	/** "1.50" must count its own 80 cases, not the 10 cases of "1", which is its integer part. */
+	@Test public void testDiscretizeEqualFreqCountsTheCasesOfEachValue() {
+		Variable x = new Variable("X", "1", "1.50", "3");
+		int[][] cases = new int[100][1];
+		for (int i = 0; i < 100; i++) cases[i][0] = i < 10 ? 0 : i < 90 ? 1 : 2;
+		CaseDatabase db = new CaseDatabase(List.of(x), cases);
+
+		Variable discretized = equalFrequencyIntervals(db, 2);
+
+		Assertions.assertEquals(2, discretized.getStates().length);
+		Assertions.assertEquals("(-Infinity , 1.5]", discretized.getStates()[0].getName());
+	}
 }
