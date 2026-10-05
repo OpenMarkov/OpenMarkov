@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137} y \hyperref[err:138]{138}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138} y \hyperref[err:142]{142}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 37 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 38 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -438,7 +438,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:139]{139} & El PC interactivo ofrece las dos orientaciones de un enlace, contra Meek & \texttt{learning.\allowbreak{}algorithm} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:140]{140} & El PC interactivo adelanta la fase al llenar la tabla y descoloca botones & \texttt{learning.\allowbreak{}algorithm} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:141]{141} & «Finish» del PC interactivo empieza de cero y descarta lo aplicado a mano & \texttt{learning.\allowbreak{}algorithm} & M \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:142]{142} & PC interactivo: con un borrado bloqueado, «Finish» da NullPointerException & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
+\hyperref[err:142]{142} & \textcolor{corregidoverde}{\textbf{Corregido}} · PC interactivo: con un borrado bloqueado, «Finish» da NullPointerException & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:143]{143} & El bosque aumentado (FAN) falla sin características ligadas a la clase & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:144]{144} & Discretizar por frecuencias iguales con decimales falla o cuenta mal & \texttt{learning.\allowbreak{}core} & S \hfill No\\
 \hyperref[err:145]{145} & «Split Dataset» lanza siempre una excepción, elija la opción que elija & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
@@ -11517,9 +11517,9 @@ Los demás algoritmos que ofrecen aprendizaje interactivo también vuelven a eje
 Prueba de regresión, repitiendo las llamadas de la ventana sobre \texttt{BN-asia10k.\allowbreak{}csv}: aplicar los 21 borrados y la orientación Dyspnea→Bronchitis y llamar al método que use «Finish». Si se decide seguir desde el estado actual, la red final debe conservar Dyspnea→Bronchitis; y, borrando a mano Smoker--LungCancer, el enlace no debe volver.
 
 \setcounter{subsection}{141}
-\subsection[PC interactivo: con un borrado bloqueado, «Finish» da NullPointerException]{En el aprendizaje interactivo con PC, después de bloquear una propuesta de borrado, «Finish» termina con un NullPointerException y deja la red a medio aprender; en bases con muchas variables fallan también «Complete phase» y «Apply edit»}\label{err:142}
+\subsection[PC interactivo: con un borrado bloqueado, «Finish» da NullPointerException]{\textcolor{corregidoverde}{[Corregido]} En el aprendizaje interactivo con PC, después de bloquear una propuesta de borrado, «Finish» termina con un NullPointerException y deja la red a medio aprender; en bases con muchas variables fallan también «Complete phase» y «Apply edit»}\label{err:142}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{63f3ebc} (05-10-2026): \texttt{Skeleton\allowbreak{}Discovery.\allowbreak{}is\allowbreak{}Valid\allowbreak{}Edit} pregunta por la edición sola, con \texttt{is\allowbreak{}Blocked(\allowbreak{}PNEdit)}, y también por la inversa: con solo la primera, el borrado bloqueado X--Y se proponía al recorrer la pareja desde Y, porque ya no entraba en la lista de borrados considerados que antes lo tapaba. \texttt{Learning\allowbreak{}Edit\allowbreak{}Proposal.\allowbreak{}equals} admite un motivo nulo, y \texttt{btn\allowbreak{}Next\allowbreak{}Phase\allowbreak{}Action\allowbreak{}Performed} vuelve a añadir la ventana como oyente en un \texttt{finally}; esto último solo está comprobado leyendo. Las orientaciones (\texttt{Collider\allowbreak{}Orientation}, \texttt{Meek\allowbreak{}Orientation} y \texttt{PCAlgorithm.\allowbreak{}get\allowbreak{}Next\allowbreak{}Edit}) siguen comparando edición y motivo. La prueba de regresión usa la red sintética de cinco variables del \hyperref[err:138]{error~138}, no \texttt{BN-\allowbreak{}asia10k.\allowbreak{}csv} ni \texttt{alarm500.\allowbreak{}csv}: llena la tabla, bloquea cada borrado por turno, reinicia el algoritmo como «Finish» y lo ejecuta hasta el final, que no falla y conserva el enlace. «Complete phase» y «Apply edit» no tienen prueba propia.
 \fichakey{Módulo}learning.algorithm
 \fichakey{Paquete}org.openmarkov.learning.algorithm.pc
 \fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/pc/SkeletonDiscovery.java:221-269} \newline \path{learning.core/src/main/java/org/openmarkov/learning/core/util/LearningEditProposal.java:70-83} \newline \path{learning.core/src/main/java/org/openmarkov/learning/core/algorithm/LearningAlgorithm.java:88-122} \newline \path{learning.core/src/main/java/org/openmarkov/learning/core/algorithm/LearningAlgorithm.java:190-233} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/pc/PCAlgorithm.java:170-180} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/pc/PCAlgorithm.java:405} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/interactive/InteractiveLearningDialog.java:208-218} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/interactive/InteractiveLearningDialog.java:327-361}
