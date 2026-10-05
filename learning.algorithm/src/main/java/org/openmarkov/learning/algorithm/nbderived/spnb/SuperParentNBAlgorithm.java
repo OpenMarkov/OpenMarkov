@@ -71,6 +71,11 @@ public class SuperParentNBAlgorithm extends DiscriminativeAlgorithm {
         //this.probNet.addConstraint(new NoCycle(), true);
         this.probNet.addConstraint(maxNumParentsConstraint);
         this.probNet.removeConstraint(new DistinctLinks());
+        if (metric instanceof Accuracy) {
+            // Step 1: the classifier to beat is the naive Bayes that the search starts from
+            ((Accuracy) metric).resetCache();
+            currentAccuracy = metric.getScore();
+        }
     }
     
     
@@ -83,6 +88,8 @@ public class SuperParentNBAlgorithm extends DiscriminativeAlgorithm {
     @Override
     protected LearningEditProposal getOptimalEdit(boolean onlyAllowedEdits,
                                                   boolean onlyPositiveEdits) {
+        // The superparent is the candidate with the highest accuracy; what it adds must beat the current classifier
+        double bestParentScore = Double.NEGATIVE_INFINITY;
         double bestPartialScore = currentAccuracy;
         BaseLinkEdit bestEdit = null;
         LearningEditProposal bestEditProposal = null;
@@ -94,9 +101,9 @@ public class SuperParentNBAlgorithm extends DiscriminativeAlgorithm {
 
             if (!isEditAlreadyConsidered(addLink) && !isBlocked(addLink)
                     && (!onlyAllowedEdits || addLink.getNodeFrom() == getRootNode() || isAllowed(addLink))
-                    && (addScore >= bestPartialScore || !onlyPositiveEdits)
+                    && addScore >= bestParentScore
             ) {
-                bestPartialScore = addScore;
+                bestParentScore = addScore;
                 bestParent = nodeParent;
             }
         }
@@ -104,7 +111,7 @@ public class SuperParentNBAlgorithm extends DiscriminativeAlgorithm {
         if (bestParent != null && !orphans.isEmpty()) {
             superParents.add(bestParent);
             final Node selectedParent = bestParent;
-            if (this.sameSP) {
+            if (this.sameSP && (bestParentScore > currentAccuracy || !onlyPositiveEdits)) {
                 // sameSP mode: connect bestParent to ALL orphans via a compound edit
                 List<PNEdit> linkEdits = orphans.stream()
                         .map(orphan -> (PNEdit) new AddLinkEdit(probNet, selectedParent.getVariable(),
@@ -112,10 +119,10 @@ public class SuperParentNBAlgorithm extends DiscriminativeAlgorithm {
                         .toList();
                 ListPNEdit compoundEdit = new ListPNEdit(probNet, linkEdits);
                 bestEditProposal = new LearningEditProposal(compoundEdit,
-                        new ScoreEditMotivation(bestPartialScore));
+                        new ScoreEditMotivation(bestParentScore));
                 orphans.clear();
-                currentAccuracy = bestPartialScore;
-            } else {
+                currentAccuracy = bestParentScore;
+            } else if (!this.sameSP) {
                 for (Node nodeChild : orphans) {
                     AddLinkEdit addLink = new AddLinkEdit(probNet, bestParent.getVariable(), nodeChild.getVariable(), true);
                     double addScore = metric.getScore(addLink);

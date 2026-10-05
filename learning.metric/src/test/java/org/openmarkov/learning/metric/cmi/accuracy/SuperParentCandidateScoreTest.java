@@ -66,6 +66,18 @@ class SuperParentCandidateScoreTest {
         assertThat(accuracyOfTheNet()).isEqualTo(asCandidate);
     }
 
+    /** The classifier that the superparent algorithm has to beat is the one that the network has now. */
+    @Test
+    void theScoreOfTheNetworkIsTheAccuracyWithTheLinksThatItHas() {
+        assertThat(metric.getScore()).isEqualTo(metric.computeAugmentedNetAccuracy(List.of()));
+
+        link(x, y);
+        metric.resetCache();
+
+        assertThat(metric.getScore()).isEqualTo(metric.computeAugmentedNetAccuracy(List.<Variable[]>of(new Variable[]{y, x})));
+        assertThat(metric.getScore()).isNotEqualTo(metric.computeAugmentedNetAccuracy(List.of()));
+    }
+
     @Test
     void aCandidateSuperParentScoresTheSameOnceItsLinksAreAdded() {
         double asCandidate = metric.getScore(new AddLinkEdit(net, classVariable, x, true));

@@ -81,12 +81,7 @@ public class Accuracy extends Metric {
      * @return the result
      */
     private double scoreAugmentedNet(Variable[] v){
-        LinkedList<Variable[]> augmentedNet = new LinkedList<>();
-        
-        getNonRootNodes().stream().filter(n -> n.getNumParents() > 1).toList().forEach(node -> {
-            augmentedNet.add(new Variable[]{node.getVariable(),
-                    node.getParents().stream().filter(n -> n != getRootNode()).toList().get(0).getVariable()});
-        });
+        LinkedList<Variable[]> augmentedNet = getLinksBetweenFeatures();
 
         if(!v[0].getName().equals(getRootNode().getName()) && !v[1].getName().equals(getRootNode().getName())){
             augmentedNet.add(new Variable[]{v[1], v[0]});
@@ -98,6 +93,17 @@ public class Accuracy extends Metric {
         }
 
         return computeAugmentedNetAccuracy(augmentedNet);
+    }
+
+
+    /** The links between features that the network already has, each as the pair {child, parent}. */
+    private LinkedList<Variable[]> getLinksBetweenFeatures(){
+        LinkedList<Variable[]> links = new LinkedList<>();
+        getNonRootNodes().stream().filter(n -> n.getNumParents() > 1).toList().forEach(node -> {
+            links.add(new Variable[]{node.getVariable(),
+                    node.getParents().stream().filter(n -> n != getRootNode()).toList().get(0).getVariable()});
+        });
+        return links;
     }
 
 
@@ -318,6 +324,8 @@ public class Accuracy extends Metric {
                     build2ndLevelProbDistribution(n1, n2);
                 });
             });
+            // The score of the network is the accuracy of the classifier that it has now
+            cachedScore = computeAugmentedNetAccuracy(getLinksBetweenFeatures());
 
         }else{
             getNonRootNodes().forEach(n ->{
