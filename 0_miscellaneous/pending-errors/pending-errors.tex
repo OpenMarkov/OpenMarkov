@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125} y \hyperref[err:126]{126}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126} y \hyperref[err:127]{127}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 27 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 28 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -423,7 +423,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:aprendizaje}.\ Aprendizaje y evaluación de redes}}\\
 \hyperref[err:125]{125} & \textcolor{corregidoverde}{\textbf{Corregido}} · La exactitud del Bayes ingenuo selectivo usa el caso evaluado al entrenar & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:126]{126} & \textcolor{corregidoverde}{\textbf{Corregido}} · El Bayes ingenuo selectivo elige características sin el alfa del diálogo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
-\hyperref[err:127]{127} & El superpadre pesa sus enlaces con cuentas de casillas equivocadas & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
+\hyperref[err:127]{127} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre pesa sus enlaces con cuentas de casillas equivocadas & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:128]{128} & El superpadre penaliza la clase verdadera: ningún enlace sube la exactitud & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:129]{129} & El superpadre puntúa los enlaces candidatos con la probabilidad al revés & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:130]{130} & El superpadre cuenta dos veces la hija de cada enlace al medir la exactitud & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
@@ -10309,9 +10309,9 @@ Los únicos algoritmos que usan \texttt{Accuracy} son estos dos, y en \texttt{Su
 Prueba de regresión: tras \texttt{init}, el alfa de la métrica debe ser el del algoritmo; y con \texttt{Cataract-RRDdataset\allowbreak{}Pre\allowbreak{}Proc3.\allowbreak{}csv}, clase \texttt{success}, hacia atrás, el modelo aprendido con alfa 0 y con alfa 0,5 no debe ser el mismo (hoy, con los dos, la clase sola).
 
 \setcounter{subsection}{126}
-\subsection[El superpadre pesa sus enlaces con cuentas de casillas equivocadas]{El clasificador de superpadre pesa sus enlaces con cuentas leídas en casillas equivocadas de la tabla de tres variables}\label{err:127}
+\subsection[El superpadre pesa sus enlaces con cuentas de casillas equivocadas]{\textcolor{corregidoverde}{[Corregido]} El clasificador de superpadre pesa sus enlaces con cuentas leídas en casillas equivocadas de la tabla de tres variables}\label{err:127}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{935dbd1} (05-10-2026): \texttt{build2nd\allowbreak{}Level\allowbreak{}Prob\allowbreak{}Distribution} lee cada casilla en la posición en que la guarda \texttt{build\allowbreak{}Absolute\allowbreak{}Freq\allowbreak{}Cross\allowbreak{}Tab}. La prueba de regresión, con variables de 3, 4 y 2 estados, compara todas las casillas de las diez iteraciones con las cuentas directas. Cómo se usan después esas cuentas sigue como estaba (\hyperref[err:128]{errores~128} a \hyperref[err:130]{130}).
 \fichakey{Módulo}learning.metric
 \fichakey{Paquete}org.openmarkov.learning.metric.cmi.accuracy
 \fichakey{Ficheros}\path{learning.metric/src/main/java/org/openmarkov/learning/metric/cmi/accuracy/Accuracy.java:292-310} \newline \path{learning.metric/src/main/java/org/openmarkov/learning/metric/cmi/accuracy/Accuracy.java:193-222} \newline \path{learning.metric/src/main/java/org/openmarkov/learning/metric/cmi/util/MetricUtils.java:173-211}
