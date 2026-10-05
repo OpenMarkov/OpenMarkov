@@ -330,13 +330,14 @@ public class Accuracy extends Metric {
         double[][][][] crossTab = new double[KFOLD][fstStates][sndStates][rootStates];
 
         for(int it=0; it<KFOLD; it++){
-            TablePotential potential = buildAbsoluteFreqCrossTab(probNet, caseDatabase, n1, n2, getRootNode(),  dataset.getTraining()[it]);
+            // The table has the variables in the order (n1, class, n2), and the first one changes fastest
+            double[] values = buildAbsoluteFreqCrossTab(probNet, caseDatabase, n1, n2, getRootNode(),  dataset.getTraining()[it]).getValues();
             for(int i=0; i<fstStates;i++){
-                double[][] tmp = new double[sndStates][rootStates];
                 for(int j=0; j<sndStates; j++){
-                    tmp[j] = Arrays.copyOfRange(potential.getValues(), (i * sndStates + j) * rootStates, (i * sndStates + j + 1) * rootStates);
+                    for(int k=0; k<rootStates; k++){
+                        crossTab[it][i][j][k] = values[i + fstStates * (k + rootStates * j)];
+                    }
                 }
-               crossTab[it][i] = tmp;
             }
         }
         _2ndLevelCrosstab.put(n1.getName()+"-"+n2.getName(), crossTab);
