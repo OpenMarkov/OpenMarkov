@@ -52,7 +52,7 @@ public class SplitSetManager {
      */
     public SplitSet generateRandomTestSet(int numTest) {
         //database information
-        ArrayList<Variable> listaVariables = (ArrayList<Variable>) caseDatabase.getVariables();
+        List<Variable> listaVariables = caseDatabase.getVariables();
         int numVariables = listaVariables.size();
         int[][] cases = caseDatabase.getCases();
         //declare test and train cases
@@ -162,7 +162,7 @@ public class SplitSetManager {
      * @return the resulting split containing test and training databases
      */
     public SplitSet generateFirstTestSet(int numTest) {
-        ArrayList<Variable> listaVariables = (ArrayList<Variable>) caseDatabase.getVariables();
+        List<Variable> listaVariables = caseDatabase.getVariables();
         int numVariables = listaVariables.size();
         int[][] cases = caseDatabase.getCases();
         //declare test and train cases
@@ -194,7 +194,7 @@ public class SplitSetManager {
      * @return the resulting split containing test and training databases
      */
     public SplitSet generateLastTestSet(int numTest) {
-        ArrayList<Variable> listaVariables = (ArrayList<Variable>) caseDatabase.getVariables();
+        List<Variable> listaVariables = caseDatabase.getVariables();
         int numVariables = listaVariables.size();
         int[][] cases = caseDatabase.getCases();
         //declare test and train cases

@@ -147,4 +147,41 @@ class SplitSetManagerTest {
                     "train split " + k);
         }
     }
+
+    /** The three ways in which "Split Dataset" chooses the test cases: at random, the first ones and the last ones. */
+    @Test
+    void theFirstCasesAreTheTestSetAndTheRestTheTrainingSet() {
+        SplitSet split = new SplitSetManager(db(10)).generateFirstTestSet(3);
+
+        assertEquals(List.of(0, 1, 2), values(split.getTestDatabase().getCases()));
+        assertEquals(List.of(3, 4, 5, 6, 7, 8, 9), values(split.getTrainDatabase().getCases()));
+    }
+
+    @Test
+    void theLastCasesAreTheTestSetAndTheRestTheTrainingSet() {
+        SplitSet split = new SplitSetManager(db(10)).generateLastTestSet(3);
+
+        assertEquals(List.of(7, 8, 9), values(split.getTestDatabase().getCases()));
+        assertEquals(List.of(0, 1, 2, 3, 4, 5, 6), values(split.getTrainDatabase().getCases()));
+    }
+
+    @Test
+    void aRandomTestSetAndItsTrainingSetShareOutAllTheCases() {
+        SplitSet split = new SplitSetManager(db(10), 7L).generateRandomTestSet(3);
+
+        List<Integer> test = values(split.getTestDatabase().getCases());
+        List<Integer> all = new ArrayList<>(test);
+        all.addAll(values(split.getTrainDatabase().getCases()));
+        Collections.sort(all);
+        assertEquals(3, test.size());
+        assertEquals(IntStream.range(0, 10).boxed().toList(), all);
+    }
+
+    /** The table that the results window shows for a split: a row for each state of the variable. */
+    @Test
+    void theTableOfASplitIsBuilt() {
+        SplitSet split = new SplitSetManager(db(10)).generateFirstTestSet(3);
+
+        assertEquals(10, split.toTable().getRowCount());
+    }
 }
