@@ -186,7 +186,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131} y \hyperref[err:133]{133}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132} y \hyperref[err:133]{133}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -244,7 +244,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 33 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 34 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -428,7 +428,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:129]{129} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre puntúa los enlaces candidatos con la probabilidad al revés & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:130]{130} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre cuenta dos veces la hija de cada enlace al medir la exactitud & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:131]{131} & \textcolor{corregidoverde}{\textbf{Corregido}} · La validación cruzada de dos clasificadores no prueba un tercio de casos & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
-\hyperref[err:132]{132} & El superpadre por defecto no aprende nada: propone un enlace a sí mismo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
+\hyperref[err:132]{132} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre por defecto no aprende nada: propone un enlace a sí mismo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:133]{133} & \textcolor{corregidoverde}{\textbf{Corregido}} · El superpadre acepta el primer enlace aunque empeore al Bayes ingenuo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:134]{134} & Superpadre interactivo: llenar la tabla avanza el algoritmo y la vacía & \texttt{learning.\allowbreak{}algorithm} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:135]{135} & El Bayes ingenuo selectivo hacia delante no da dos veces el mismo modelo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
@@ -10672,9 +10672,9 @@ El cambio alterará los modelos que aprenden los dos clasificadores; conviene ha
 Prueba: con una base de 1 003 casos, cada índice aparece en exactamente una parte de prueba y en nueve de entrenamiento.
 
 \setcounter{subsection}{131}
-\subsection[El superpadre por defecto no aprende nada: propone un enlace a sí mismo]{El clasificador de superpadre, con su opción por defecto, no aprende nada: propone un enlace del superpadre a sí mismo y el cambio entero se rechaza}\label{err:132}
+\subsection[El superpadre por defecto no aprende nada: propone un enlace a sí mismo]{\textcolor{corregidoverde}{[Corregido]} El clasificador de superpadre, con su opción por defecto, no aprende nada: propone un enlace del superpadre a sí mismo y el cambio entero se rechaza}\label{err:132}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{87b167f} (05-10-2026): \texttt{get\allowbreak{}Optimal\allowbreak{}Edit} deja fuera al superpadre de las huérfanas a las que lo enlaza, en los dos modos, y en el modo «Unique superparent» comprueba que el cambio compuesto está permitido antes de proponerlo y de vaciar \texttt{orphans}, cuando se piden solo cambios permitidos. La prueba de regresión del modo «Unique superparent» usa una base sintética en la que la clase vale 1 cuando dos características difieren, en vez de \texttt{BN-\allowbreak{}asia10k.\allowbreak{}csv}. En el modo de una en una, un superpadre sigue en \texttt{orphans} y más tarde podría proponerse como hija de una de sus hijas; ejecutado con solo cambios permitidos, ese enlace no se propone. Con «solo cambios permitidos» desmarcada no se ha comprobado.
 \fichakey{Módulo}learning.algorithm
 \fichakey{Paquete}org.openmarkov.learning.algorithm.nbderived.spnb
 \fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:59-142} \newline \path{learning.core/src/main/java/org/openmarkov/learning/core/algorithm/LearningAlgorithm.java} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/gui/SuperParentNaiveBayesParametersDialog.java:26-52}
