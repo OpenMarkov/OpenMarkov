@@ -16,7 +16,6 @@ import org.openmarkov.learning.metric.cmi.accuracy.Accuracy;
 import org.openmarkov.learning.algorithm.nbderived.common.DiscriminativeAlgorithm;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 
 @LearningAlgorithmType(name = "Selective naive bayes", discriminative = true, supportsUnobservedVariables = false,
@@ -65,10 +64,11 @@ public class SelectiveNBAlgorithm extends DiscriminativeAlgorithm {
         LearningEditProposal bestEditProposal = null;
         ((Accuracy) metric).resetCache();
 
+        // In the order of the network, so that every run tries the candidates in the same order
         Collection<Node> candidates = (!forward) ? getRootNode().getChildren() :
                 getNonRootNodes().stream()
                                  .filter(n -> !getRootNode().getChildren().contains(n))
-                                 .collect(Collectors.toSet());
+                                 .toList();
 
         for (Node n1 : candidates) {
             BaseLinkEdit edit;
@@ -82,7 +82,10 @@ public class SelectiveNBAlgorithm extends DiscriminativeAlgorithm {
 
             if (!isEditAlreadyConsidered(edit) && !isBlocked(edit)
                     && (!onlyAllowedEdits || isAllowed(edit))
-                    && (addScore >= bestPartialScore || !onlyPositiveEdits)
+                    // The first candidate must not worsen the accuracy; another one replaces it only if it is
+                    // better, so the first one wins a tie
+                    && (bestEdit == null ? (addScore >= bestPartialScore || !onlyPositiveEdits)
+                                         : addScore > bestPartialScore)
             ) {
                 bestEdit = edit;
                 bestPartialScore = addScore;
