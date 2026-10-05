@@ -21,7 +21,9 @@ import java.util.*;
  * Uses the PC-Stable variant: adjacency snapshots are frozen at the start of each
  * conditioning-set depth level so that all pairs at depth d are tested with the same
  * candidates, regardless of which edges have been removed at that depth.
- * This makes the skeleton order-independent.
+ * Each pair is tested with the conditioning sets taken from the neighbors of both of its
+ * nodes, so the skeleton does not depend on which of the two comes first. Only an exact
+ * tie between two tests is still resolved by the order of the nodes.
  *
  * @author Manuel Arias
  */
@@ -169,13 +171,15 @@ class SkeletonDiscovery {
     /**
      * Iterates through all currently-present undirected edges (X-Y) and tests
      * independence at the given depth using the PC-Stable frozen snapshot.
+     * Each edge is handled once, with the neighbors of both of its nodes.
      */
     private void separationSetsLogic(int adjacencySize) {
+        Set<NodePair> handledPairs = new HashSet<>();
         for (Node nodeX : pc.sortedNodes()) {
             for (Node nodeY : PCAlgorithm.sorted(nodeX.getSiblings())) {
-                List<Node> snapshotNeighbors = stableAdjSnapshot.getOrDefault(nodeX, Collections.emptyList());
-                List<Node> adjacencySubset = new ArrayList<>(snapshotNeighbors);
-                adjacencySubset.remove(nodeY);
+                if (!handledPairs.add(new NodePair(nodeX, nodeY))) {
+                    continue;
+                }
 
                 RemoveLinkEdit removeLinkEdit = new RemoveLinkEdit(
                         pc.net(), nodeX.getVariable(), nodeY.getVariable(), false);
@@ -184,24 +188,36 @@ class SkeletonDiscovery {
                     PCEditMotivation motivation = pc.cache.get(new NodePair(nodeX, nodeY));
                     if (motivation == null || (motivation.getScore() != ALREADY_DONE
                             && motivation.getSeparationSet().size() < adjacencySize)) {
-                        evaluateSeparationSets(nodeX, nodeY, adjacencySubset, adjacencySize);
+                        evaluateSeparationSets(nodeX, nodeY, adjacencySize);
                     }
                 }
             }
         }
     }
 
+    /** Neighbors of {@code node} in the frozen snapshot, without {@code other}. */
+    private List<Node> snapshotNeighborsWithout(Node node, Node other) {
+        List<Node> neighbors = new ArrayList<>(stableAdjSnapshot.getOrDefault(node, Collections.emptyList()));
+        neighbors.remove(other);
+        return neighbors;
+    }
+
     /**
      * Evaluates separation sets for a given pair of nodes and updates the cache.
+     * The candidate sets are the subsets of the neighbors of X and those of the neighbors of Y.
      * Always caches the best separation set found regardless of the significance level;
      * the onlyPositiveEdits filtering is applied later when displaying the table.
      */
-    private void evaluateSeparationSets(Node nodeX, Node nodeY,
-                                        List<Node> adjacencySubset, int adjacencySize) {
+    private void evaluateSeparationSets(Node nodeX, Node nodeY, int adjacencySize) {
         double bestScore = 0.0;
         List<Node> bestScoreSeparationSet = null;
 
-        for (List<Node> separationSet : PCAlgorithm.subSetsOfSize(adjacencySubset, adjacencySize)) {
+        // A set of neighbors of both nodes is tested only once
+        Set<List<Node>> separationSets = new LinkedHashSet<>(
+                PCAlgorithm.subSetsOfSize(snapshotNeighborsWithout(nodeX, nodeY), adjacencySize));
+        separationSets.addAll(PCAlgorithm.subSetsOfSize(snapshotNeighborsWithout(nodeY, nodeX), adjacencySize));
+
+        for (List<Node> separationSet : separationSets) {
             double linkScore = pc.independenceTester.test(pc.database(), nodeX, nodeY, separationSet);
             if (linkScore > bestScore) {
                 bestScore = linkScore;
