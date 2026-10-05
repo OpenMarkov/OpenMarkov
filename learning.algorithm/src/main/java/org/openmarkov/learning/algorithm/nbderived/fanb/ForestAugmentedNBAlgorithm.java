@@ -92,6 +92,10 @@ public class ForestAugmentedNBAlgorithm extends DiscriminativeAlgorithm {
 
         if (subtreeRoot == null) {
             bestEdit = getBestRootForSubtree();
+            if (bestEdit == null) {
+                // No feature is related to the class: there is no tree to hang, so nothing is proposed
+                return null;
+            }
             subtreeRoot = probNet.getNode(bestEdit.getVariableTo());
             mwst.redirect(subtreeRoot.getVariable(), probNet);
             bestPartialScore = unconditionedMetric.getScore(bestEdit);
@@ -132,6 +136,10 @@ public class ForestAugmentedNBAlgorithm extends DiscriminativeAlgorithm {
         double score = 0.0;
         List<Node> nonRootNodes = getNonRootNodes();
         int nodesSize = nonRootNodes.size();
+        if (nodesSize < 2) {
+            // There are no pairs of features to average
+            return 0.0;
+        }
         for (Node n1 : nonRootNodes) {
             for (Node n2 : nonRootNodes) {
                 score += metric.getScore(new AddLinkEdit(probNet, n1.getVariable(), n2.getVariable(), true));
