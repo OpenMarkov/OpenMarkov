@@ -77,7 +77,7 @@ public class Accuracy extends Metric {
 
     /**
      * Return the score for an augmented NB model
-     * @param v list of pairs of variables representing the current model
+     * @param v origin and destination of the link to score. Each pair of the model is {child, parent}
      * @return the result
      */
     private double scoreAugmentedNet(Variable[] v){
@@ -89,10 +89,11 @@ public class Accuracy extends Metric {
         });
 
         if(!v[0].getName().equals(getRootNode().getName()) && !v[1].getName().equals(getRootNode().getName())){
-            augmentedNet.add(v);
+            augmentedNet.add(new Variable[]{v[1], v[0]});
         }else{
-            getNonRootNodes().stream().filter(n->n.getNumParents()<2 && !n.getName().equals(v[1].getName())).forEach(tail ->{
-                augmentedNet.add(new Variable[]{v[1], tail.getVariable()});
+            // v[1] is the candidate superparent: every feature without a second parent becomes its child
+            getNonRootNodes().stream().filter(n->n.getNumParents()<2 && !n.getName().equals(v[1].getName())).forEach(child ->{
+                augmentedNet.add(new Variable[]{child.getVariable(), v[1]});
             });
         }
 
@@ -221,7 +222,7 @@ public class Accuracy extends Metric {
     /**
      * Returns the most probable class value given a case and an augmented NB model
      * @param row the row
-     * @param van the van
+     * @param van pairs {child, parent} of the links between features
      * @return the result
      */
     public int predictClassValueAugmentedNB(int[] row, List<Variable[]> van, int it){
@@ -246,13 +247,14 @@ public class Accuracy extends Metric {
     }
 
 
-    protected double getProb(Variable tail, Variable head, int[] row, int it, int classValue){
-        double[][][][] ct = _2ndLevelCrosstab.get(tail.getName()+"-"+head.getName());
+    /** Probability of the value of the child in the case, given the value of its parent and the class. */
+    protected double getProb(Variable child, Variable parent, int[] row, int it, int classValue){
+        double[][][][] ct = _2ndLevelCrosstab.get(child.getName()+"-"+parent.getName());
         double count = 0;
 
-        double value = ct[it][row[getIndexVariable(tail)]][row[getIndexVariable(head)]][classValue];
-        for(int i=0; i < tail.getNumStates(); i++){
-            count+=ct[it][i][row[getIndexVariable(head)]][classValue];
+        double value = ct[it][row[getIndexVariable(child)]][row[getIndexVariable(parent)]][classValue];
+        for(int i=0; i < child.getNumStates(); i++){
+            count+=ct[it][i][row[getIndexVariable(parent)]][classValue];
         }
         
         return (value + alpha) / (count + alpha * getNonRootNodes().size());
