@@ -74,7 +74,7 @@ public class LearningEditProposal implements Comparable<LearningEditProposal> {
 		if ((obj == null) || (obj.getClass() != this.getClass()))
 			return false;
 		LearningEditProposal other = (LearningEditProposal) obj;
-		return this.edit.equals(other.edit) && this.motivation.equals(other.motivation);
+		return this.edit.equals(other.edit) && Objects.equals(this.motivation, other.motivation);
 	}
 
 	@Override

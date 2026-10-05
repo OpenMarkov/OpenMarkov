@@ -248,7 +248,7 @@ class SkeletonDiscovery {
                 RemoveLinkEdit removeLinkEdit =
                         new RemoveLinkEdit(pc.net(), nodeX.getVariable(), nodeY.getVariable(), false);
 
-                if (isValidEdit(removeLinkEdit, bestMotivation, onlyAllowedEdits)) {
+                if (isValidEdit(removeLinkEdit, onlyAllowedEdits)) {
                     bestMotivation = motivation;
                     bestEditProposal = new LearningEditProposal(removeLinkEdit, motivation);
                 }
@@ -277,9 +277,12 @@ class SkeletonDiscovery {
         return bestMotivation == null || motivation.compareTo(bestMotivation) > 0;
     }
 
-    private boolean isValidEdit(RemoveLinkEdit removeLinkEdit, PCEditMotivation bestMotivation,
-                                boolean onlyAllowedEdits) {
-        return !pc.checkBlocked(new LearningEditProposal(removeLinkEdit, bestMotivation))
+    private boolean isValidEdit(RemoveLinkEdit removeLinkEdit, boolean onlyAllowedEdits) {
+        // A removal is blocked whatever its motivation, which changes as the tests go on,
+        // and whichever of its two nodes it is seen from
+        RemoveLinkEdit inverseEdit = new RemoveLinkEdit(pc.net(), removeLinkEdit.getVariableTo(),
+                removeLinkEdit.getVariableFrom(), removeLinkEdit.isDirected());
+        return !pc.isBlocked(removeLinkEdit) && !pc.isBlocked(inverseEdit)
                 && !pc.alreadyConsidered(removeLinkEdit, lastRemovedEdits)
                 && (!onlyAllowedEdits || pc.checkAllowed(removeLinkEdit));
     }

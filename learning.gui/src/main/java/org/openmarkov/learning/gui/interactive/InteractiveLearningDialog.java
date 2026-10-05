@@ -354,9 +354,13 @@ public class InteractiveLearningDialog extends JDialog
     private void btnNextPhaseActionPerformed(
             ActionEvent evt) {//GEN-FIRST:event_btnNextPhaseActionPerformed
         learningManager.getLearnedNet().getPNESupport().removeListener(this);
-        learningManager.getLearningAlgorithm().runTillNextPhase();
-        updateEditionsTable(onlyAllowed, onlyPositive, learningManager.getLearningAlgorithm().getBlockedEdits());
-        learningManager.getLearnedNet().getPNESupport().addListener(this);
+        try {
+            learningManager.getLearningAlgorithm().runTillNextPhase();
+            updateEditionsTable(onlyAllowed, onlyPositive, learningManager.getLearningAlgorithm().getBlockedEdits());
+        } finally {
+            // Also after a failure, so that the dialog keeps following the changes of the network
+            learningManager.getLearnedNet().getPNESupport().addListener(this);
+        }
         updateUI();
     }//GEN-LAST:event_btnNextPhaseActionPerformed
     
