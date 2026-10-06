@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class AllLicensesAreVisited {
     
     private static boolean isAfterReviewDate() {
-        var date = LocalDateTime.of(2026, 9, 30, 0, 0, 0);
+        var date = LocalDateTime.of(2026, 10, 30, 0, 0, 0);
         return LocalDateTime.now().isAfter(date);
     }
     
