@@ -44,6 +44,7 @@ import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.layout.bayesian.StressLayout;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.gui.window.MainGUI;
+import org.openmarkov.gui.window.OMTabbedPane;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.java.function.PriorityComparator;
 import org.openmarkov.java.swing.ComponentUtilities;
@@ -79,7 +80,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -158,8 +158,8 @@ public class LearningDialog extends JDialog {
     private final JFrame parent;
     private final AlgorithmConfigurationManager algorithmConfigurationManager;
     private final CaseDatabaseManager caseDbManager;
-
-    private final JTabbedPane generalTabbedPane;
+    
+    private final OMTabbedPane generalTabbedPane;
     private final GeneralTabPanel generalTabPanel;
     private final ModelNetTabPanel modelNetTabPanel;
 
@@ -177,7 +177,7 @@ public class LearningDialog extends JDialog {
         if (lastModelNetDirectory != null) {
             modelNetFileChooser.setCurrentDirectory(lastModelNetDirectory);
         }
-        generalTabbedPane = new JTabbedPane();
+        generalTabbedPane = new OMTabbedPane();
 
         // --- Build GeneralTabPanel ---
         generalTabPanel = new GeneralTabPanel(stringDatabase);

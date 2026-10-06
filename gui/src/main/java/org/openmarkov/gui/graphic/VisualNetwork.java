@@ -91,6 +91,10 @@ public class VisualNetwork implements PNEditListener {
     private @Nullable List<NewLinkInfo> newLinks = new ArrayList<>();
     private LinkCreationSourceDirection newLinksSourceDirection;
     
+    public LinkCreationSourceDirection newLinksSourceDirection() {
+        return this.newLinksSourceDirection;
+    }
+    
     public Stream<VisualArrow> getNewLinksArrows() {
         return this.newLinks.stream().map(NewLinkInfo::arrow);
     }

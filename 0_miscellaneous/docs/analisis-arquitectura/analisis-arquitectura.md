@@ -63,7 +63,17 @@ La regla de capas ("`core` sin interfaz gráfica, el motor sin Swing") no está 
 
 **(4) El registro es silencioso ante colisiones y descartes.** Dos plugins con el mismo nombre se resuelven con un `put` que sobreescribe según el orden de escaneo ([`InferenceManager.java:60-66`](../../../core/src/main/java/org/openmarkov/core/inference/annotation/InferenceManager.java#L60-L66), [`ProbDensFunctionManager.java:38-64`](../../../core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/ProbDensFunctionManager.java#L38-L64), `CaseDatabaseManager`, `PotentialPanelManager`); una clase anotada que no extiende la base correcta desaparece de la intersección `annotatedWith(X).childrenOf(Y)` sin rastro. Solo `PotentialUtils` resuelve la colisión de forma determinista (`putIfAbsent` ordenado por herencia) — la solución existe, pero es local.
 
-Además: los contratos reflexivos (constructores concretos, métodos estáticos como el `validate` de `Potential` o `getUniqueInstance()` de los tipos de red) no los puede expresar el sistema de tipos, y la red de seguridad pensada para suplirlo — `ImplementationRequirementsAreMetTest` — está `@Disabled` con 58 clases incumpliendo ([`ImplementationRequirementsAreMetTest.java:18-31`](../../../integrationTests/src/test/java/org/openmarkov/integrationTests/staticAnalysis/verifyImplementationRequirements/ImplementationRequirementsAreMetTest.java#L18-L31)). Matiz de la verificación: el contrato de los tipos de red sí tiene un test activo (`NetworkTypeContractsTest`), y los constructores de los readers/writers del propio repositorio se ejercitan indirectamente en los tests; lo desprotegido son las subclases de `Potential` y cualquier clase nueva o externa. Por último, en el paquete `org.openmarkov.plugin` conviven la API viva (`PluginSearch`/`PluginLoader`) y una API muerta sin ningún uso (`Filter`, `PluginManager`) que despista a quien llega.
+Además: los contratos reflexivos (constructores concretos, métodos estáticos como el `validate` de
+`Potential` o `getUniqueInstance()` de los tipos de red) no los puede expresar el sistema de tipos,
+y la red de seguridad pensada para suplirlo — `ImplementationRequirementsAreMetTest` — está
+`@Disabled` con 58 clases incumpliendo ([
+`ImplementationRequirementsAreMetTest.java:18-31`](../../../integrationTests/src/test/java/org/openmarkov/integrationTests/reflectionAnalysis/verifyImplementationRequirements/ImplementationRequirementsAreMetTest.java#L18-L31)).
+Matiz de la verificación: el contrato de los tipos de red sí tiene un test activo (
+`NetworkTypeContractsTest`), y los constructores de los readers/writers del propio repositorio se
+ejercitan indirectamente en los tests; lo desprotegido son las subclases de `Potential` y cualquier
+clase nueva o externa. Por último, en el paquete `org.openmarkov.plugin` conviven la API viva (
+`PluginSearch`/`PluginLoader`) y una API muerta sin ningún uso (`Filter`, `PluginManager`) que
+despista a quien llega.
 
 **Propuestas.**
 1. Descubrir por anotación, no por paquete: ClassGraph localiza clases anotadas en todo el classpath sin cargarlas (`enableAnnotationInfo`). El prefijo quedaría como optimización opcional.

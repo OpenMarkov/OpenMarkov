@@ -14,23 +14,36 @@ import org.openmarkov.core.action.core.ChangeNetworkTypeEdit;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.StringWithProperties;
+import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.constraint.NoEventNodes;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.SameAsPrevious;
-import org.openmarkov.core.model.network.type.*;
+import org.openmarkov.core.model.network.type.BayesianNetworkType;
+import org.openmarkov.core.model.network.type.DESNetworkType;
+import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
+import org.openmarkov.core.model.network.type.InfluenceDiagramType;
+import org.openmarkov.core.model.network.type.MIDType;
+import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.gui.graphic.SelectionListener;
 import org.openmarkov.gui.graphic.VisualLink;
 import org.openmarkov.gui.graphic.VisualNode;
 import org.openmarkov.gui.localize.MenuLocalizer;
-import org.openmarkov.gui.menutoolbar.common.*;
+import org.openmarkov.gui.menutoolbar.common.ActionCommands;
+import org.openmarkov.gui.menutoolbar.common.MenuAssistant;
+import org.openmarkov.gui.menutoolbar.common.MenuItemNames;
+import org.openmarkov.gui.menutoolbar.common.MenuToolBarBasic;
+import org.openmarkov.gui.menutoolbar.common.ZoomMenuToolBar;
 import org.openmarkov.gui.window.decisiontree.DecisionTreeEditor;
 import org.openmarkov.gui.window.edition.ZoomManager;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import java.awt.*;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -329,14 +342,14 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
      * @param networkPanel information of the network panel.
      */
     public void updateOptionsNetworkDependent(NetworkEditorPanel networkPanel) {
-        int tabCount = mainPanel.getNetworksTabPanel().getTabCount();
+        int tabCount = mainPanel.getTabPanels().getTabCount();
         var networkIndex = IntStream.range(0, tabCount)
                                     .filter(tabIndex -> {
-                                        Component component = mainPanel.getNetworksTabPanel().getComponentAt(tabIndex);
+                                        Component component = mainPanel.getTabPanels().getComponentAt(tabIndex);
                                         return component == networkPanel;
                                     })
                                     .findFirst().getAsInt();
-        mainPanel.getNetworksTabPanel().setSelectedIndex(networkIndex);
+        mainPanel.getTabPanels().setSelectedIndex(networkIndex);
         NetworkEditorPanel currentNetworkEditorPanel = networkPanel;
         ProbNet currentProbNet = currentNetworkEditorPanel.getProbNet();
         NetworkEditorPanel.WorkingMode workingMode = currentNetworkEditorPanel.getWorkingMode();
@@ -779,9 +792,9 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
     }
 
     public @Nullable EditorPanel getCurrentEditor() {
-        int selectedIndex = mainPanel.getNetworksTabPanel().getSelectedIndex();
-        if (selectedIndex <= -1 || selectedIndex >= mainPanel.getNetworksTabPanel().getTabCount()) return null;
-        Component componentAt = mainPanel.getNetworksTabPanel().getComponentAt(selectedIndex);
+        int selectedIndex = mainPanel.getTabPanels().getSelectedIndex();
+        if (selectedIndex <= -1 || selectedIndex >= mainPanel.getTabPanels().getTabCount()) return null;
+        Component componentAt = mainPanel.getTabPanels().getComponentAt(selectedIndex);
         if (componentAt instanceof EditorPanel editorPanel) {
             return editorPanel;
         }

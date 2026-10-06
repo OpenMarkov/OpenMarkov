@@ -36,7 +36,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -112,13 +111,13 @@ public class MainPanel extends JPanel {
     
     public final MainGUI mainGUI;
     
-    public AutoScrollableTabbedPane getNetworksTabPanel() {
-        return this.networksTabPanel;
+    public AutoScrollableTabbedPane getTabPanels() {
+        return this.tabPanels;
     }
     
     public List<NetworkEditorPanel> getNetworkEditors() {
-        return IntStream.range(0, this.networksTabPanel.getTabCount())
-                        .mapToObj(this.networksTabPanel::getComponentAt)
+        return IntStream.range(0, this.tabPanels.getTabCount())
+                        .mapToObj(this.tabPanels::getComponentAt)
                         .filter(NetworkEditorPanel.class::isInstance)
                         .map(NetworkEditorPanel.class::cast)
                         .toList();
@@ -128,7 +127,7 @@ public class MainPanel extends JPanel {
     /**
      * Networks tabs come from here.
      */
-    private final AutoScrollableTabbedPane networksTabPanel;
+    private final AutoScrollableTabbedPane tabPanels;
     
     private final ToolbarManager toolbarManager;
     
@@ -143,11 +142,11 @@ public class MainPanel extends JPanel {
         mainFrame = mainGUI;
         mainFrame.setName(mainGUI.getName());
         toolbarManager = new ToolbarManager(this);
-        this.networksTabPanel = new AutoScrollableTabbedPane(new JTabbedPane());
+        this.tabPanels = new AutoScrollableTabbedPane(new OMTabbedPane());
         
         //Movement for right and left.
-        InputMap inputMap = this.networksTabPanel.getjTabbedPane()
-                                                 .getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        InputMap inputMap = this.tabPanels.getjTabbedPane()
+                                          .getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         inputMap.put(KeyStroke.getKeyStroke(
                 KeyEvent.VK_RIGHT,
                 InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK
@@ -160,8 +159,8 @@ public class MainPanel extends JPanel {
         this.mainPanelListenerAssistant = new MainPanelListenerAssistant(this);
         this.mainMenu = new MainMenu(this, mainPanelListenerAssistant);
         
-        this.networksTabPanel.getjTabbedPane().addChangeListener(e -> {
-            var selectedComponent = this.networksTabPanel.getSelectedComponent();
+        this.tabPanels.getjTabbedPane().addChangeListener(e -> {
+            var selectedComponent = this.tabPanels.getSelectedComponent();
             switch (selectedComponent) {
                 case NetworkEditorPanel networkPanel -> {
                     this.getMainPanelMenuAssistant().updateOptionsNetworkDependent(networkPanel);
@@ -237,7 +236,7 @@ public class MainPanel extends JPanel {
         this.setSize(new Dimension(Math.max(600, previousWidth), Math.max(500, previousHeight)));
         this.add(this.getToolBarPanel(), BorderLayout.NORTH);
         this.getMainPanelMenuAssistant();
-        this.add(networksTabPanel.getjTabbedPane(), BorderLayout.CENTER);
+        this.add(tabPanels.getjTabbedPane(), BorderLayout.CENTER);
     }
     
     /**
@@ -504,17 +503,17 @@ public class MainPanel extends JPanel {
     }
     
     public void forceClose(NetworkEditorPanel networkPanel) {
-        this.networksTabPanel.remove(networkPanel);
+        this.tabPanels.remove(networkPanel);
     }
     
     public void addCloseableTab(String title, EditorPanel component) {
         var uniqueTitle = getUniqueTitle(title, null);
-        this.networksTabPanel.addTab(uniqueTitle, component.getScrollPanel());
+        this.tabPanels.addTab(uniqueTitle, component.getScrollPanel());
         
         TabHeader header = new TabHeader(uniqueTitle);
         header.closeButton.addActionListener(e -> component.close());
-        this.networksTabPanel.setTabComponentAt(this.networksTabPanel.getTabCount() - 1, header);
-        Component tabComponent = this.networksTabPanel.getTabComponentAt(this.networksTabPanel.getTabCount() - 1);
+        this.tabPanels.setTabComponentAt(this.tabPanels.getTabCount() - 1, header);
+        Component tabComponent = this.tabPanels.getTabComponentAt(this.tabPanels.getTabCount() - 1);
         
         if (component instanceof NetworkEditorPanel networkPanel) {
             Consumer<NetworkEditorPanel> reloadNamesAndColor = networkP -> {
@@ -527,7 +526,7 @@ public class MainPanel extends JPanel {
                 if (name.contains(".")) {
                     name = name.substring(0, name.lastIndexOf('.'));
                 }
-                String uniqueTitleOnChange = this.getUniqueTitle(name, Set.of(this.networksTabPanel.indexOfTabComponent(tabComponent)));
+                String uniqueTitleOnChange = this.getUniqueTitle(name, Set.of(this.tabPanels.indexOfTabComponent(tabComponent)));
                 header.titleLabel.setText(uniqueTitleOnChange);
                 header.titleLabel.setToolTipText(Optional.ofNullable(networkP.getNetworkFile())
                                                          .map(filepath -> "Network located at: " + filepath)
@@ -538,17 +537,17 @@ public class MainPanel extends JPanel {
             reloadNamesAndColor.accept(networkPanel);
         }
         
-        tabComponent.addMouseListener(new MouseListener() {
+        MouseListener onClick = new MouseListener() {
             @Override public void mouseClicked(MouseEvent e) {
             
             }
             
             @Override public void mousePressed(MouseEvent e) {
                 MainPanel mainPanel = MainPanel.this;
-                int tabIndex = mainPanel.networksTabPanel.indexOfTabComponent(tabComponent);
+                int tabIndex = mainPanel.tabPanels.indexOfTabComponent(tabComponent);
                 switch (e.getButton()) {
                     //LEFT_CLICK
-                    case 1 -> mainPanel.networksTabPanel.setSelectedIndex(tabIndex);
+                    case 1 -> mainPanel.tabPanels.setSelectedIndex(tabIndex);
                     //RIGHT_CLICK
                     case 3 -> {
                         JPopupMenu tabContextMenu = new JPopupMenu();
@@ -588,7 +587,7 @@ public class MainPanel extends JPanel {
                         JMenuItem closeAllTabsButThis = new JMenuItem("Close all tabs but this");
                         closeAllTabsButThis.addActionListener(e2 -> multiClose(Stream.concat(
                                 IntStream.range(0, tabIndex).boxed(),
-                                IntStream.range(tabIndex + 1, MainPanel.this.networksTabPanel.getTabCount()).boxed()
+                                IntStream.range(tabIndex + 1, MainPanel.this.tabPanels.getTabCount()).boxed()
                         ).toList()));
                         tabContextMenu.add(closeAllTabsButThis);
                         JMenuItem closeTabsToTheLeft = new JMenuItem("Close tabs to the left");
@@ -598,7 +597,7 @@ public class MainPanel extends JPanel {
                         tabContextMenu.add(closeTabsToTheLeft);
                         JMenuItem closeTabsToTheRight = new JMenuItem("Close tabs to the right");
                         closeTabsToTheRight.addActionListener(e2 -> {
-                            multiClose(IntStream.range(tabIndex + 1, MainPanel.this.networksTabPanel.getTabCount())
+                            multiClose(IntStream.range(tabIndex + 1, MainPanel.this.tabPanels.getTabCount())
                                                 .boxed()
                                                 .toList());
                         });
@@ -619,11 +618,13 @@ public class MainPanel extends JPanel {
             @Override public void mouseExited(MouseEvent e) {
             
             }
-        });
+        };
+        tabComponent.addMouseListener(onClick);
+        header.titleLabel.addMouseListener(onClick);
     }
     
     public boolean closeAllTabs() {
-        List<Integer> tabsToClose = IntStream.range(0, MainPanel.this.networksTabPanel.getTabCount())
+        List<Integer> tabsToClose = IntStream.range(0, MainPanel.this.tabPanels.getTabCount())
                                              .boxed()
                                              .toList();
         var closedTabs = multiClose(tabsToClose);
@@ -633,30 +634,30 @@ public class MainPanel extends JPanel {
     public ArrayList<Integer> multiClose(List<Integer> tabIndexesToClose) {
         tabIndexesToClose = tabIndexesToClose.stream().distinct().sorted(Comparator.reverseOrder()).toList();
         ArrayList<Integer> closedTabs = new ArrayList<>(tabIndexesToClose.size());
-        int initialTab = MainPanel.this.networksTabPanel.getSelectedIndex();
+        int initialTab = MainPanel.this.tabPanels.getSelectedIndex();
         boolean initialTabClosed = false;
         for (int tabIndexToClose : tabIndexesToClose) {
-            MainPanel.this.networksTabPanel.setSelectedIndex(tabIndexToClose);
-            if (!((EditorPanel) MainPanel.this.networksTabPanel.getSelectedComponent()).close()) {
+            MainPanel.this.tabPanels.setSelectedIndex(tabIndexToClose);
+            if (!((EditorPanel) MainPanel.this.tabPanels.getSelectedComponent()).close()) {
                 return closedTabs;
             }
             closedTabs.add(tabIndexToClose);
             initialTabClosed = initialTabClosed || initialTab == tabIndexToClose;
         }
         if (!initialTabClosed) {
-            MainPanel.this.networksTabPanel.setSelectedIndex(initialTab);
+            MainPanel.this.tabPanels.setSelectedIndex(initialTab);
         }
         return closedTabs;
     }
     
     private String getUniqueTitle(String title, @Nullable Set<Integer> tabIndexesToSkip) {
         String uniqueTitle = title;
-        IntStream indexes = IntStream.range(0, this.networksTabPanel.getTabCount());
+        IntStream indexes = IntStream.range(0, this.tabPanels.getTabCount());
         if (tabIndexesToSkip != null && !tabIndexesToSkip.isEmpty()) {
             indexes = indexes.filter(index -> !tabIndexesToSkip.contains(index));
         }
         var presentNames = indexes
-                .mapToObj(index -> ((TabHeader) this.networksTabPanel.getTabComponentAt(index)).titleLabel.getText())
+                .mapToObj(index -> ((TabHeader) this.tabPanels.getTabComponentAt(index)).titleLabel.getText())
                 .collect(Collectors.toSet());
         int appendedIndex = 2;
         while (presentNames.contains(uniqueTitle)) {

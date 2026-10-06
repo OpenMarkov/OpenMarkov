@@ -31,19 +31,19 @@ public class DESRecord {
     /**
      * Manages the random number stream for performing DES
      */
-    protected final DESRandomProvider desRandomProvider = new DESRandomProvider();
+    public final DESRandomProvider desRandomProvider = new DESRandomProvider();
     /**
      * Node whose variable properties through simulation is recorded
      */
-    final Node recordNode;
+    protected final Node recordNode;
     /**
      * DESSimulablePotential associated to recordNode
      */
-    final DESSimulablePotential recordPotential;
+    protected final DESSimulablePotential recordPotential;
     /**
      * Variable whose properties are recorded here
      */
-    final Variable recordVariable;
+    protected final Variable recordVariable;
     /**
      * Type of recordVariable
      */

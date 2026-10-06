@@ -15,7 +15,16 @@ import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.action.core.AbsorbNodeEdit;
 import org.openmarkov.core.action.core.AbsorbParentsEdit;
 import org.openmarkov.core.action.core.RemovePolicyEdit;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.inference.tasks.OptimalPolicies;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
@@ -120,9 +129,9 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     // This should be in a future a configuration option that should be read on
     // start
     private static final int DEFAULT_THRESHOLD_VALUE = 5;
-
-
-    private final EditorInputHandler editorInputHandler;
+    
+    
+    private final EditorCommandHandlerGenerator editorInputHandler;
     private final EvidenceManager evidenceManager;
     private final InferencePresenter inferencePresenter;
 
@@ -198,11 +207,9 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.visualNetwork.getProbNet().getPNESupport().addListener(new PNEditEventHandler(this));
         this.automaticPropagation = true;
         this.propagationActive = true;
-        this.editorInputHandler = new EditorInputHandler(this);
-        this.addMouseListener(this.editorInputHandler);
-        this.addMouseMotionListener(this.editorInputHandler);
-        this.addKeyListener(this.editorInputHandler);
-        this.addFocusListener(this.editorInputHandler);
+        this.editorInputHandler = new EditorCommandHandlerGenerator(this);
+        this.editorInputHandler.applyListeners();
+        
         this.setZoomToFitNetwork();
         this.inferencePresenter = new InferencePresenter(this);
         this.setLayout(new BorderLayout());
@@ -783,7 +790,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      */
     private void setZoomToFitNetwork() {
         double[] networkBounds = this.visualNetwork.getNetworkBounds((Graphics2D) this.getGraphics());
-        Dimension panelBounds = this.getMainPanel().getNetworksTabPanel().getSize();
+        Dimension panelBounds = this.getMainPanel().getTabPanels().getSize();
         double zoom = 1;
 
         while (((networkBounds[1] * zoom) > panelBounds.getWidth())
@@ -983,7 +990,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
 
     }
     
-    public EditorInputHandler editorInputHandler() {
+    public EditorCommandHandlerGenerator editorInputHandler() {
         return this.editorInputHandler;
     }
     

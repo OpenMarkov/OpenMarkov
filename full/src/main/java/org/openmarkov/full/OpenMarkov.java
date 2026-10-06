@@ -140,7 +140,7 @@ public class OpenMarkov {
                 }
             }
             OpenMarkov.executeArguments(OpenMarkov.readArguments(baseArgs));
-            if (MainGUI.INSTANCE.mainPanel.getNetworksTabPanel().getTabCount() == 0 &&
+            if (MainGUI.INSTANCE.mainPanel.getTabPanels().getTabCount() == 0 &&
                     UserPreferences.STARTUP_ACTIONS.get().contains(StartupAction.SHOW_CREATE_NEW_NETWORK)) {
                 MainGUI.INSTANCE.mainPanel.getMainPanelListenerAssistant().getFileHandler().createNewNetwork();
             }

@@ -17,12 +17,17 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.chart.ui.RectangleEdge;
-import org.jfree.chart.ui.TextAnchor;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.NotSupportedOperationException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
@@ -32,16 +37,33 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
-import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.gui.window.OMTabbedPane;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEPSA;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisModel;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -65,7 +87,7 @@ public class CEProbabilisticDialog extends JDialog {
     /**
      * Tabbed pane
      */
-    private JTabbedPane tabbedPane;
+    private OMTabbedPane tabbedPane;
     /**
      * Number of points/iterations in the sensitivity range of each parameter
      */
@@ -206,7 +228,7 @@ public class CEProbabilisticDialog extends JDialog {
      */
     private JTabbedPane getTabbedPane() {
         if (tabbedPane == null) {
-            tabbedPane = new JTabbedPane();
+            tabbedPane = new OMTabbedPane();
             tabbedPane.addTab(stringDatabase.getString("SensitivityAnalysis.Type.CEPlane"), null, getCEPlanePanel(),
                               null);
             tabbedPane.addTab(stringDatabase.getString("SensitivityAnalysis.Type.AcceptabilityCurve"), null,

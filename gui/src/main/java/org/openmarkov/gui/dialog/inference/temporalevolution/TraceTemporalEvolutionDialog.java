@@ -52,6 +52,7 @@ import org.openmarkov.gui.dialog.common.CommonOptions;
 import org.openmarkov.gui.dialog.common.OptionDialog;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.gui.loader.element.ImageLoader;
+import org.openmarkov.gui.window.OMTabbedPane;
 import org.openmarkov.inference.algorithm.temporalevaluation.tasks.MIDTemporalEvolution;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VETemporalEvolution;
 
@@ -165,7 +166,7 @@ public class TraceTemporalEvolutionDialog extends JDialog {
     private ChartPanel chartPanel;
     private TemporalEvolutionTablePane tablePane;
     //31/10/2022; isUtility, conditioningVariables, stringDatabase, conditiningVariables made final; javadoc added; 07/11/2022; fields added: arrayXYSeriesUpfront, arrayXYSeriesDiscount, jCheckBoxUpfrontValues,jCheckBoxDiscounted,markedCheckBoxes
-    private JTabbedPane tabbedPane;
+    private OMTabbedPane tabbedPane;
     private Variable variableOfInterest;
     private ProbNet expandedNetwork;
     /**
@@ -945,7 +946,7 @@ public class TraceTemporalEvolutionDialog extends JDialog {
      */
     protected JTabbedPane getTabbedPane() {
         if (tabbedPane == null) {
-            tabbedPane = new JTabbedPane();
+            tabbedPane = new OMTabbedPane();
             tabbedPane.setName("TraceTemporalEvolutionTabbedPane");
             tabbedPane.addTab(stringDatabase.getString("TemporalEvolutionChart.Title"), null,
                               getChartsPanelWithCheckBoxes(), null);

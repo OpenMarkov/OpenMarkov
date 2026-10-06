@@ -260,4 +260,12 @@ public class GUIColors {
         }
     }
     
+    public static final class Bindings {
+        public static final GUIColor BOUND = new GUIColor(new Color(103, 190, 114, 102));
+        public static final GUIColor UNBOUND = new GUIColor(new Color(134, 134, 134, 255));
+        public static final GUIColor MODIFYING = new GUIColor(new Color(17, 64, 255));
+        public static final GUIColor HOVER = new GUIColor(new Color(79, 176, 255));
+        public static final GUIColor INVALID = new GUIColor(new Color(217, 70, 70));
+    }
+    
 }

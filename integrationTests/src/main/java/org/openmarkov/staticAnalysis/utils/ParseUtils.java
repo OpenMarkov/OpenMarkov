@@ -1,6 +1,5 @@
 package org.openmarkov.staticAnalysis.utils;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Range;
@@ -12,12 +11,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ScanResult;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 import org.openmarkov.integrationTests.IntegrationTest;
@@ -25,11 +21,11 @@ import org.openmarkov.java.classUtils.ClassUtils;
 import org.openmarkov.java.initialization.Lazy;
 import org.openmarkov.plugin.PluginSearch;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,39 +39,33 @@ public class ParseUtils {
     
     static {
         PARSER_CONFIGURATION = StaticJavaParser.getParserConfiguration();
-        // The project compiles with <release>25</release>; parsing at a lower level
-        // rejects sources that use newer syntax (the first casualty was an unnamed
-        // variable '_', reserved below Java 22).
         ParseUtils.PARSER_CONFIGURATION.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
         typeSolver.add(new ReflectionTypeSolver(false)); //Adds parsing of JDK code
-        ScanResult scan = new ClassGraph().scan();
-        var classPaths = scan.getClasspathURLs().stream()
-                             .map(URL::getFile)
-                             .map(File::new)
-                             .filter(File::exists)
-                             .toList();
-        scan.close();
-        for (File classPath : classPaths) {
-            //Adds external dependencies jar for resolving classes.
-            String absolutePath = classPath.getAbsolutePath();
-            if (absolutePath.endsWith(".jar")) {
-                try {
-                    typeSolver.add(new JarTypeSolver(classPath));
-                } catch (IOException e) {
-                }
-            } else {
-                // With this system's separator: written with backslashes, this matched nothing on
-                // anything that does not use them, and the type solver was pointed at the build output
-                // instead of at the sources. Same defect as in ClassUtils.fileOfClass, second copy.
-                String buildOutput = File.separator + "target" + File.separator + "classes";
-                String sources = File.separator + "src" + File.separator + "main" + File.separator + "java";
-                if (absolutePath.contains(buildOutput)) {
-                    absolutePath = absolutePath.replace(buildOutput, sources);
-                }
-                typeSolver.add(new JavaParserTypeSolver(new File(absolutePath)));
-            }
-        }
+        typeSolver.add(new ClassLoaderTypeSolver(Thread.currentThread().getContextClassLoader()));
+        
+        // This code is to load external dependencies such as code from .jars or target/class, but it is mostly
+        // unrequired on testing.
+        //
+        // I left this code here just in case necessities change.
+//        try (ScanResult scan = new ClassGraph().scan()) {
+//            List<URL> classpathUrls = scan.getClasspathURLs();
+//            for (URL url : classpathUrls) {
+//                if (url.getPath().endsWith(".jar")) {
+//                    try {
+//                        typeSolver.add(new JarTypeSolver(new File(url.toURI())));
+//                    } catch (Exception ignored) {
+//                    }
+//                }
+//            }
+//            URL[] urlArray = classpathUrls.toArray(new URL[0]);
+//            ClassLoader projectClassLoader = new URLClassLoader(
+//                    urlArray,
+//                    Thread.currentThread().getContextClassLoader()
+//            );
+//            typeSolver.add(new ClassLoaderTypeSolver(projectClassLoader));
+//        }
+        
         ParseUtils.PARSER_CONFIGURATION.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         StaticJavaParser.setConfiguration(ParseUtils.PARSER_CONFIGURATION);
     }

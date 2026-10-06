@@ -6,8 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.gui.bindings.Binding;
+import org.openmarkov.gui.bindings.BindingPanel;
+import org.openmarkov.gui.bindings.Bindings;
+import org.openmarkov.gui.bindings.Input;
+import org.openmarkov.gui.bindings.InputCombination;
 import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.component.NumericSpinner;
+import org.openmarkov.gui.configuration.GUIColor;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.configuration.OperatingSystem;
 import org.openmarkov.gui.configuration.StartupAction;
@@ -22,6 +28,7 @@ import org.openmarkov.gui.dialog.io.FileFilterByExtension;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.window.MainGUI;
+import org.openmarkov.gui.window.OMTabbedPane;
 import org.openmarkov.java.collectionsUtils.streamUtils.StreamUtils;
 import org.openmarkov.java.langUtils.SwitchUtils;
 import org.openmarkov.java.swing.ComponentUtilities;
@@ -36,8 +43,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JSpinner;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -54,17 +61,25 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public final class SettingsDialog extends JDialog {
@@ -127,25 +142,27 @@ public final class SettingsDialog extends JDialog {
         this.currentSelectedSection = selectedSection;
         var gridpanel = new JPanel(new GridBagLayout());
         gridpanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        var gridbag = new SimplifiedGridBagConstraint(gridpanel, new GridBagConstraints(), 2);
         
         Component res = switch (selectedSection) {
             case UI -> {
-                SettingsDialog.generateUIVisualSection(gridbag);
+                SettingsDialog.generateUIVisualSection(gridpanel);
                 yield gridpanel;
             }
-            case Networks -> {
-                SettingsDialog.generateNetworkVisualSection(gridbag);
+            case NETWORKS -> {
+                SettingsDialog.generateNetworkVisualSection(gridpanel);
                 yield gridpanel;
             }
-            case SettingsBackup -> {
-                this.generateSettingsBackupVisualSection(gridbag);
+            case BINDINGS -> {
+                SettingsDialog.generateBindingsVisualSection(this, gridpanel);
+                yield gridpanel;
+            }
+            case SETTINGS_BACKUP -> {
+                this.generateSettingsBackupVisualSection(gridpanel);
                 yield gridpanel;
             }
         };
         //noinspection ConstantValue
         if (res == gridpanel) {
-            gridbag.addCorrectionGlue();
             var resultingPanel = new JPanel(new BorderLayout());
             resultingPanel.add(gridpanel, BorderLayout.NORTH);
             return resultingPanel;
@@ -153,7 +170,252 @@ public final class SettingsDialog extends JDialog {
         return res;
     }
     
-    private static void generateUIVisualSection(SimplifiedGridBagConstraint gridbag) {
+    record BindingRowPanel(JPanel panel, JLabel bindingName, JLabel bindingHelp, JLabel bindingError,
+                           JLabel bindingCombination) {
+    }
+    
+    private static void generateBindingsVisualSection(SettingsDialog settingsDialog, JPanel panel) {
+        var gridbag = new SimplifiedGridBagConstraint(panel, new GridBagConstraints(), 1);
+        
+        //Guide
+        {
+            var assignLabel = new JLabel("Assign actions to key+mouse combinations  ");
+            var helpToolTip = GUIUtils.generateTooltipElement("""
+                                                                      <html>
+                                                                      </html>
+                                                                      """);
+            
+            gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, assignLabel, helpToolTip));
+        }
+        //Tabs
+        {
+            HashMap<Binding, BindingRowPanel> bindingsToPanels = new HashMap<>();
+            Consumer<Binding> assignPanelColor = binding -> {
+                GUIColor borderColor;
+                if (binding.isInvalid()) {
+                    borderColor = GUIColors.Bindings.INVALID;
+                } else if (binding.isSetByUser()) {
+                    borderColor = GUIColors.Bindings.BOUND;
+                } else {
+                    borderColor = GUIColors.General.TRANSPARENT;
+                }
+                bindingsToPanels.get(binding).panel.setBorder(BorderFactory.createLineBorder(borderColor.getColor(), 2));
+            };
+            Runnable checkBindings = () -> {
+                Binding.checkValidity(null);
+                for (var binding : Bindings.ALL_BINDINGS) {
+                    var bindingPanel = bindingsToPanels.get(binding);
+                    var invalidityReasons = binding.invalidReasonsAsString();
+                    bindingPanel.bindingError.setVisible(!invalidityReasons.isEmpty());
+                    bindingPanel.bindingError.setToolTipText(invalidityReasons.orElse("<html></html>"));
+                    bindingPanel.bindingCombination.setText(binding.inputCombination().toString());
+                    assignPanelColor.accept(binding);
+                }
+            };
+            
+            for (var binding : Bindings.ALL_BINDINGS) {
+                var keyBoardRepresentation = switch (binding.keyAcceptance) {
+                    case ALLOWED -> "⌨";
+                    case REQUIRES_AT_LEAST_ONE -> "\uD83D\uDFB5⌨";
+                    case FORBIDDEN -> "";
+                };
+                var mouseRepresentation = switch (binding.mouseAcceptance) {
+                    case REQUIRED -> "\uD83D\uDFB5\uD83D\uDDAF";
+                    case REQUIRED_WITH_JUST_ONE_MOUSE -> "\uD83D\uDFB5⒈\uD83D\uDDAF";
+                    case REQUIRED_WITH_SINGLE_CLICK -> "\uD83D\uDFB5①\uD83D\uDDAF";
+                    case ALLOWED -> "\uD83D\uDDAF";
+                    case ALLOWED_WITH_JUST_ONE_MOUSE -> "⒈\uD83D\uDDAF";
+                    case ALLOWED_WITH_SINGLE_CLICK -> "①\uD83D\uDDAF";
+                    case FORBIDDEN -> "";
+                };
+                
+                var bindingRowPanel = new BindingRowPanel(new JPanel(new BorderLayout()),
+                                                          new JLabel("  - " + binding.name + "  "),
+                                                          GUIUtils.generateTooltipElement(binding.description),
+                                                          GUIUtils.generateIconTooltip("◬", "<html></html>"),
+                                                          new JLabel(binding.inputCombination().toString()));
+                
+                
+                bindingRowPanel.panel
+                        .add(ComponentUtilities
+                                     .joinComponents(FlowLayout.LEFT,
+                                                     bindingRowPanel.bindingName,
+                                                     bindingRowPanel.bindingHelp,
+                                                     bindingRowPanel.bindingError,
+                                                     new JLabel("   "),
+                                                     GUIUtils.generateIconTooltip(keyBoardRepresentation, binding.keyAcceptance.toString()),
+                                                     new JLabel(!keyBoardRepresentation.isBlank() && !mouseRepresentation.isBlank() ? " + " : ""),
+                                                     GUIUtils.generateIconTooltip(mouseRepresentation, binding.mouseAcceptance.toString())
+                                     )
+                                , BorderLayout.WEST);
+                bindingRowPanel.panel.add(bindingRowPanel.bindingCombination, BorderLayout.EAST);
+                
+                final AtomicBoolean isModifyingInput = new AtomicBoolean(false);
+                
+                Runnable stopModification = () -> {
+                    if (!isModifyingInput.get()) {
+                        return;
+                    }
+                    isModifyingInput.set(false);
+                    bindingRowPanel.panel.setFocusable(false);
+                    bindingRowPanel.bindingCombination.setText(binding.inputCombination().toString());
+                    checkBindings.run();
+                };
+                Consumer<Input> addInput = input -> {
+                    Binding.tryUpdateBinding(binding, input, true, (_) -> {
+                    });
+                    bindingRowPanel.bindingCombination.setText(binding.inputCombination().toString());
+                };
+                
+                final Collection<Integer> pressedKeys = new HashSet<>();
+                MouseAdapter l = new MouseAdapter() {
+                    @Override public void mousePressed(MouseEvent e) {
+                        if (!isModifyingInput.get()) {
+                            return;
+                        }
+                        addInput.accept(new Input.Click(e.getButton(), e.getClickCount()));
+                    }
+                    
+                    @Override public void mouseReleased(MouseEvent e) {
+                        if (!binding.isModifiable()) {
+                            return;
+                        }
+                        if (!isModifyingInput.get()) {
+                            switch (e.getButton()) {
+                                case MouseEvent.BUTTON1 -> {
+                                    isModifyingInput.set(true);
+                                    binding.setInputCombination(new InputCombination());
+                                    bindingRowPanel.bindingCombination.setText("Reading new combination...");
+                                    bindingRowPanel.panel.setBorder(BorderFactory.createLineBorder(GUIColors.Bindings.MODIFYING.getColor(), 2));
+                                    bindingRowPanel.panel.setFocusable(true);
+                                    bindingRowPanel.panel.requestFocus();
+                                    pressedKeys.clear();
+                                }
+                                case MouseEvent.BUTTON2 -> {
+                                    binding.resetInputCombination(new InputCombination());
+                                    checkBindings.run();
+                                }
+                                case MouseEvent.BUTTON3 -> {
+                                    JDialog bindingDialog = new JDialog(settingsDialog);
+                                    bindingDialog.setTitle("Modifying binding for: " + binding.name);
+                                    bindingDialog.setModal(true);
+                                    bindingDialog.setLayout(new BorderLayout());
+                                    var mouseAndPanel = new BindingPanel(binding);
+                                    bindingDialog.add(mouseAndPanel, BorderLayout.CENTER);
+                                    bindingDialog.pack();
+                                    bindingDialog.setLocationRelativeTo(null);
+                                    ComponentUtilities.showDialog(bindingDialog);
+                                    checkBindings.run();
+                                }
+                            }
+                        } else {
+                            stopModification.run();
+                        }
+                    }
+                    
+                    @Override public void mouseEntered(MouseEvent e) {
+                        if (!binding.isModifiable()) {
+                            return;
+                        }
+                        bindingRowPanel.panel.setBorder(BorderFactory.createLineBorder(GUIColors.Bindings.HOVER.getColor(), 2));
+                    }
+                    
+                    @Override public void mouseExited(MouseEvent e) {
+                        if (!isModifyingInput.get()) {
+                            assignPanelColor.accept(binding);
+                            return;
+                        }
+                        stopModification.run();
+                    }
+                };
+                bindingRowPanel.panel.addMouseListener(l);
+                bindingRowPanel.panel.addMouseMotionListener(l);
+                bindingRowPanel.panel.addMouseWheelListener(e -> {
+                    if (!isModifyingInput.get()) {
+                        GUIUtils.redispatchMouseEventToParent(e, bindingRowPanel.panel);
+                        return;
+                    }
+                    addInput.accept(new Input.MouseWheel(e.getWheelRotation() < 0));
+                    stopModification.run();
+                });
+                bindingRowPanel.panel.addKeyListener(new KeyListener() {
+                    
+                    
+                    @Override public void keyTyped(KeyEvent e) {
+                    }
+                    
+                    @Override public void keyPressed(KeyEvent e) {
+                        if (!pressedKeys.add(e.getKeyCode())) {
+                            return;
+                        }
+                        if (!isModifyingInput.get()) {
+                            return;
+                        }
+                        if (binding.isModifiable() && e.getKeyCode() == KeyEvent.VK_DELETE) {
+                            binding.setInputCombination(new InputCombination());
+                            stopModification.run();
+                            return;
+                        }
+                        addInput.accept(new Input.Key(e.getKeyCode()));
+                    }
+                    
+                    @Override public void keyReleased(KeyEvent e) {
+                        if (!isModifyingInput.get()) {
+                            return;
+                        }
+                        if (!pressedKeys.remove(e.getKeyCode())) {
+                            return;
+                        }
+                        stopModification.run();
+                    }
+                });
+                bindingsToPanels.put(binding, bindingRowPanel);
+            }
+            
+            var tabs = new OMTabbedPane();
+            var tabsAndBindings = Bindings.ALL_BINDINGS.stream()
+                                                       .collect(Collectors.groupingBy(binding -> binding.tab, LinkedHashMap::new, Collectors.toList()));
+            for (var tabAndBinding : tabsAndBindings.entrySet()) {
+                var tabPanel = new JPanel(new GridBagLayout());
+                var tabConstraints = new SimplifiedGridBagConstraint(tabPanel, new GridBagConstraints(), 1);
+                
+                var tabName = tabAndBinding.getKey();
+                var sectionAndBindings = tabAndBinding.getValue()
+                                                      .stream()
+                                                      .collect(Collectors.groupingBy(binding -> binding.sectionInTab, LinkedHashMap::new, Collectors.toList()));
+                for (var sectionAndBinding : sectionAndBindings.entrySet()) {
+                    var sectionName = sectionAndBinding.getKey();
+                    if (!sectionName.isBlank()) {
+                        tabConstraints
+                                .anchor(SimplifiedGridBagConstraint.Anchor.WEST)
+                                .weightx(0)
+                                .globalFill(SimplifiedGridBagConstraint.Fill.NONE)
+                                .add(new JLabel(sectionName));
+                    }
+                    for (var binding : sectionAndBinding.getValue()) {
+                        tabConstraints
+                                .anchor(SimplifiedGridBagConstraint.Anchor.WEST)
+                                .weightx(1)
+                                .globalFill(SimplifiedGridBagConstraint.Fill.HORIZONTAL)
+                                .add(bindingsToPanels.get(binding).panel);
+                    }
+                }
+                tabs.addTab(tabName, tabPanel);
+            }
+            gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
+                   .weightx(1)
+                   .weighty(1)
+                   .globalFill(SimplifiedGridBagConstraint.Fill.BOTH)
+                   .add(tabs);
+            checkBindings.run();
+        }
+        gridbag.addCorrectionGlue();
+    }
+    
+    private static void generateUIVisualSection(JPanel panel) {
+        var gridbag = new SimplifiedGridBagConstraint(panel, new GridBagConstraints(), 2);
+        
         //UI Scale
         {
             var uiScaleSpinner = new NumericSpinner<>(Double.class);
@@ -246,9 +508,12 @@ public final class SettingsDialog extends JDialog {
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(optionsPanel);
         }
+        gridbag.addCorrectionGlue();
     }
     
-    private static void generateNetworkVisualSection(SimplifiedGridBagConstraint gridbag) {
+    private static void generateNetworkVisualSection(JPanel panel) {
+        var gridbag = new SimplifiedGridBagConstraint(panel, new GridBagConstraints(), 2);
+        
         //Add to recents
         {
             var addToRecentsCheckBox = new JCheckBox();
@@ -318,9 +583,12 @@ public final class SettingsDialog extends JDialog {
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(new JScrollPane(customDomainArea));
         }
+        gridbag.addCorrectionGlue();
     }
     
-    private void generateSettingsBackupVisualSection(SimplifiedGridBagConstraint gridbag) {
+    private void generateSettingsBackupVisualSection(JPanel panel) {
+        var gridbag = new SimplifiedGridBagConstraint(panel, new GridBagConstraints(), 2);
+        
         //Create backup
         {
             var createBackupButton = new JButton("Create config backup file...");
@@ -468,6 +736,7 @@ public final class SettingsDialog extends JDialog {
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(restoreBackupButton);
         }
+        gridbag.addCorrectionGlue();
     }
     
     private OkCancelDialog.ChosenOption showPreferenceChooser(SimplifiedGridBagConstraint gridbag, HashSet<UserPreference<?>> selectedPreferences, String preferencesToRestore, List<List<String>> onlyShowThoseOfPath) {
@@ -529,19 +798,20 @@ public final class SettingsDialog extends JDialog {
     }
     
     enum Section {
-        UI, Networks, SettingsBackup;
+        UI, NETWORKS, BINDINGS, SETTINGS_BACKUP;
         
         @Nullable SettingsDialog.Section belongsTo() {
             return switch (this) {
-                case UI, Networks, SettingsBackup -> null;
+                case UI, NETWORKS, BINDINGS, SETTINGS_BACKUP -> null;
             };
         }
         
         @Override public String toString() {
             return switch (this) {
                 case UI -> "User Interface";
-                case Networks -> "Networks";
-                case SettingsBackup -> "Settings backup";
+                case NETWORKS -> "Networks";
+                case BINDINGS -> "Bindings";
+                case SETTINGS_BACKUP -> "Settings backup";
             };
         }
         

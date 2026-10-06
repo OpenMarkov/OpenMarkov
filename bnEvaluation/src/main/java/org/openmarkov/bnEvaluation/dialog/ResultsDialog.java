@@ -24,14 +24,15 @@ import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.common.BottomPanelButtonDialog;
 import org.openmarkov.gui.dialog.common.DialogBase;
 import org.openmarkov.gui.util.JTableGeneration;
+import org.openmarkov.gui.window.OMTabbedPane;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JOptionPane;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -192,7 +193,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.PAGE_AXIS));
         // JTabbedPane with multiples tabbeds
-        JTabbedPane tabbedPane = new JTabbedPane();
+        JTabbedPane tabbedPane = new OMTabbedPane();
         jPanel.add(tabbedPane);
         // matrix confusion and indicators jtables
         MeasureMatrix measureMatrix = measures.getMeasureMatrix();

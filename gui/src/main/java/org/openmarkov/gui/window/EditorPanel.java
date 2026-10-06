@@ -87,8 +87,8 @@ public abstract sealed class EditorPanel extends JPanel permits DecisionTreeEdit
      * Prepares the frame for closing
      */
     public boolean close() {
-        MainGUI.INSTANCE.mainPanel.getNetworksTabPanel().remove(this);
-        if (MainGUI.INSTANCE.mainPanel.getNetworksTabPanel().getTabCount() == 0) {
+        MainGUI.INSTANCE.mainPanel.getTabPanels().remove(this);
+        if (MainGUI.INSTANCE.mainPanel.getTabPanels().getTabCount() == 0) {
             MainGUI.INSTANCE.mainPanel.updateFor(null);
             MainGUI.INSTANCE.mainPanel.getMainPanelMenuAssistant().updateOptionsAllNetworkClosed();
         }

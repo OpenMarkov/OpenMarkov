@@ -24,7 +24,7 @@ A diferencia de otros módulos de inferencia, **no depende de `inference`** (la 
 La invocación es directa, desde el GUI (`gui/.../window/MainPanelListenerAssistant.java`):
 
 ```java
-new org.openmarkov.inference.DES.DESInference(probNet, simulationProgressMonitor);
+new org.openmarkov.inference.DES.gui.DESInference(probNet, simulationProgressMonitor);
 ```
 
 Es decir, no pasa por `InferenceManager.getDefaultAlgorithm(...)`; el constructor de `DESInference` ejecuta toda la simulación y presenta los resultados en una ventana Swing. Consecuencia: este módulo no se descubre como plugin de inferencia; se enlaza explícitamente desde `gui` (que lo declara como dependencia).

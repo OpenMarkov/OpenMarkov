@@ -16,15 +16,16 @@ import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.chart.ui.RectangleEdge;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.inference.tasks.CEAnalysis;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
@@ -36,17 +37,37 @@ import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.dialog.costeffectiveness.InterventionDialog;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
-import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.gui.window.OMTabbedPane;
 import org.openmarkov.inference.algorithm.variableElimination.operation.CEBaseOperations;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEAnalysis;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -89,7 +110,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Tabbed pane
 	 */
-	private JTabbedPane tabbedPane;
+	private OMTabbedPane tabbedPane;
 	/**
 	 * Localized stringDatabase
 	 */
@@ -209,7 +230,7 @@ public class CEDecisionResults extends JDialog {
 	 */
 	private JTabbedPane getTabbedPane() {
 		if (tabbedPane == null) {
-			tabbedPane = new JTabbedPane();
+			tabbedPane = new OMTabbedPane();
 			tabbedPane
 					.addTab(stringDatabase.getString("CostEffectivenessResults.Analysis.Tab"), null, getAnalysisPanel(),
 							null);

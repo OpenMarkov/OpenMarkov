@@ -29,6 +29,7 @@ import java.awt.Font;
 import java.awt.Taskbar;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
 /**
@@ -81,7 +82,11 @@ public final class GUIUtils {
     }
     
     public static @NotNull JLabel generateTooltipElement(String toolTipText) {
-        var restoreDimensionsVisualTooltip = new JLabel("ⓘ");
+        return generateIconTooltip("ⓘ", toolTipText);
+    }
+    
+    public static JLabel generateIconTooltip(String icon, String toolTipText) {
+        var restoreDimensionsVisualTooltip = new JLabel(icon);
         Font defaultFont = UIManager.getFont("Label.font");
         restoreDimensionsVisualTooltip.setFont(defaultFont.deriveFont(Font.PLAIN, 20));
         restoreDimensionsVisualTooltip.setToolTipText(toolTipText);
@@ -181,4 +186,19 @@ public final class GUIUtils {
         });
     }
     
+    public static void redispatchMouseEventToParent(MouseEvent e, Component component) {
+        if (component == null) {
+            return;
+        }
+        Component current = component.getParent();
+        while (current != null) {
+            // Find the first parent ancestor that actually listens for mouse events
+            if (current.getMouseListeners().length > 0 || current.getMouseMotionListeners().length > 0) {
+                MouseEvent parentEvent = SwingUtilities.convertMouseEvent(component, e, current);
+                current.dispatchEvent(parentEvent);
+                break;
+            }
+            current = current.getParent();
+        }
+    }
 }

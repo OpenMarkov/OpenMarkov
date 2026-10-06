@@ -8,7 +8,10 @@
 package org.openmarkov.gui.dialog.node;
 
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.VariableType;
@@ -16,6 +19,7 @@ import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.exception.BinomialPotentialWrongValueException;
 import org.openmarkov.gui.graphic.VisualNode;
 import org.openmarkov.gui.loader.element.IconBind;
+import org.openmarkov.gui.window.OMTabbedPane;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.java.swing.ComponentUtilities;
 
@@ -23,7 +27,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Window;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.FocusEvent;
@@ -83,7 +90,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
     /**
      * Panel to tab the different options.
      */
-    private JTabbedPane tabbedPane = null;
+    private OMTabbedPane tabbedPane = null;
     /**
      * Panel that contains the panel where node fields are. It is used to place
      * the fields at the top of the panel.
@@ -190,7 +197,7 @@ public class NodePropertiesDialog extends OkCancelDialog {
      */
     private JTabbedPane getTabbedPane() {
         if (this.tabbedPane == null) {
-            this.tabbedPane = new JTabbedPane();
+            this.tabbedPane = new OMTabbedPane();
             this.tabbedPane.setName("NodePropertiesDialogTabbedPane");
             this.tabbedPane.addTab(this.stringDatabase.getString("NodePropertiesDialog.DefinitionTab.Title"), null,
                                    this.getNodeDefinitionPanel(), null);

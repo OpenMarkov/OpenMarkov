@@ -331,7 +331,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
                                                                 null, MainMenu.ctrlShift(KeyEvent.VK_RIGHT));
             this.viewMenu.add(goNextTab);
             goNextTab.addActionListener(e -> {
-                var networksTabPanel = this.mainPanel.getNetworksTabPanel();
+                var networksTabPanel = this.mainPanel.getTabPanels();
                 if (networksTabPanel.getTabCount() <= 1) return;
                 int nextIndex = networksTabPanel.getSelectedIndex() + 1;
                 if (nextIndex >= networksTabPanel.getTabCount()) nextIndex = 0;
@@ -342,7 +342,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
                                                                     null, MainMenu.ctrlShift(KeyEvent.VK_LEFT));
             this.viewMenu.add(goPreviousTab);
             goPreviousTab.addActionListener(e -> {
-                var networksTabPanel = this.mainPanel.getNetworksTabPanel();
+                var networksTabPanel = this.mainPanel.getTabPanels();
                 if (networksTabPanel.getTabCount() <= 1) return;
                 int previous = networksTabPanel.getSelectedIndex() - 1;
                 if (previous == -1) previous = networksTabPanel.getTabCount() - 1;

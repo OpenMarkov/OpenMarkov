@@ -9,7 +9,17 @@ package org.openmarkov.gui.window;
 
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.EmptyDatabaseException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ParsingSourceException;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.io.ProbNetInfo;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
@@ -114,7 +124,7 @@ public class NetworkFileHandler {
         }
         probNet.getPNESupport().addListener(mainPanel.getMainPanelMenuAssistant());
         mainPanel.addCloseableTab(probNet.getName(), networkPanel);
-        mainPanel.getNetworksTabPanel().setSelectedComponent(networkPanel);
+        mainPanel.getTabPanels().setSelectedComponent(networkPanel);
         networkPanel.setContextualMenuFactory(mainPanel.getContextualMenuFactory());
         networkPanel.getEditorPanel().getVisualNetwork().addSelectionListener(mainPanel.getMainPanelMenuAssistant());
         mainPanel.getMainPanelMenuAssistant().updateOptionsNewNetworkOpen();
@@ -206,7 +216,7 @@ public class NetworkFileHandler {
                 return;
             }
         }
-        networksMatchingThisOne.forEach(networkEditor -> mainPanel.getNetworksTabPanel().remove(networkEditor));
+        networksMatchingThisOne.forEach(networkEditor -> mainPanel.getTabPanels().remove(networkEditor));
         NetworkEditorPanel networkPanel = this.createNewFrame(netReadFrom, networkFile);
         networkPanel.setWriter(probNetInfo.writer());
         networkPanel.setReader(probNetInfo.reader());
@@ -361,12 +371,12 @@ public class NetworkFileHandler {
     // ── Close ─────────────────────────────────────────────────────
     
     void closeCurrentTab() throws WriterException {
-        var selectedComponent = mainPanel.getNetworksTabPanel().getSelectedComponent();
+        var selectedComponent = mainPanel.getTabPanels().getSelectedComponent();
         switch (selectedComponent) {
             case NetworkEditorPanel networkPanel -> this.closeCurrentNetwork();
             case null -> {
             }
-            default -> mainPanel.getNetworksTabPanel().remove(selectedComponent);
+            default -> mainPanel.getTabPanels().remove(selectedComponent);
         }
     }
     
@@ -380,7 +390,7 @@ public class NetworkFileHandler {
         }
         boolean canClose = this.networkCanBeClosed(currentNetworkEditorPanel);
         if (canClose) {
-            mainPanel.getNetworksTabPanel().remove(currentNetworkEditorPanel);
+            mainPanel.getTabPanels().remove(currentNetworkEditorPanel);
             if (networkPanels.isEmpty()) {
                 mainPanel.getMainPanelMenuAssistant().updateOptionsAllNetworkClosed();
                 

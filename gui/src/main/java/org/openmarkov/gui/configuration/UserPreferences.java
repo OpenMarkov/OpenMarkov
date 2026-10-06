@@ -3,6 +3,7 @@ package org.openmarkov.gui.configuration;
 import com.google.gson.reflect.TypeToken;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
+import org.openmarkov.gui.bindings.InputCombination;
 import org.openmarkov.gui.dialog.common.WindowDimensions;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -95,6 +97,10 @@ public final class UserPreferences {
                          UnsupportedLookAndFeelException e) {
                 }
             }), new TypeToken<>() {
+            });
+    
+    public static final UserPreference<HashMap<String, InputCombination>> COMBINATIONS = UserPreference
+            .of("user_interface/bindings", HashMap::new, null, new TypeToken<>() {
             });
     
     public static final UserPreference<String> PREFERENCE_LANGUAGE = UserPreference

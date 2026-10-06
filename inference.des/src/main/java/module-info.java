@@ -10,4 +10,5 @@ open module inference.DES {
     requires org.jetbrains.annotations;
     
     exports org.openmarkov.inference.DES;
+    exports org.openmarkov.inference.DES.exception;
 }

@@ -7,10 +7,11 @@
 
 package org.openmarkov.gui.dialog.network;
 
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.util.PropertyNames;
+import org.openmarkov.gui.window.OMTabbedPane;
 import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.JTabbedPane;
@@ -37,7 +38,7 @@ public class NetworkPropertiesDialog extends OkCancelDialog implements PropertyN
     /**
      * Panel to tab the different options.
      */
-    private JTabbedPane tabbedPane = null;
+    private OMTabbedPane tabbedPane = null;
     /**
      * Panel that contains the panel where definition fields are. It is used to
      * place the fields at the top of the panel.
@@ -138,7 +139,7 @@ public class NetworkPropertiesDialog extends OkCancelDialog implements PropertyN
      */
     private JTabbedPane getTabbedPane() {
         if (tabbedPane == null) {
-            tabbedPane = new JTabbedPane();
+            tabbedPane = new OMTabbedPane();
             tabbedPane.setName("tabbedPane");
             setOnlyNecesaryTabs();
         }

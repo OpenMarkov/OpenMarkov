@@ -1,7 +1,7 @@
 package org.openmarkov.integrationTests;
 
 import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.integrationTests.staticAnalysis.NoConfusingExceptionsTest;
+import org.openmarkov.integrationTests.reflectionAnalysis.NoConfusingExceptionsTest;
 
 import java.io.File;
 import java.net.URISyntaxException;

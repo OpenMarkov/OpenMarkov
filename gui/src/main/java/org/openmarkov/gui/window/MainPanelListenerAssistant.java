@@ -9,8 +9,16 @@ package org.openmarkov.gui.window;
 
 import org.openmarkov.core.action.base.linkEdits.InvertLinkAndUpdatePotentialsEdit;
 import org.openmarkov.core.action.core.AddNodeEdit;
-import org.openmarkov.core.exception.*;
-import org.openmarkov.core.inference.MulticriteriaOptions;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.LinkOperations;
@@ -18,11 +26,8 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.gui.action.RemoveLinkRestrictionEdit;
 import org.openmarkov.gui.configuration.LastOpenFiles;
-import org.openmarkov.gui.dialog.common.OkCancelDialog;
-import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
 import org.openmarkov.gui.dialog.link.LinkRestrictionEditDialog;
 import org.openmarkov.gui.dialog.link.RevelationArcEditDialog;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
@@ -37,8 +42,6 @@ import org.openmarkov.gui.window.settings.SettingsDialog;
 import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.JButton;
-import javax.swing.ProgressMonitor;
-import javax.swing.SwingUtilities;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,8 +50,6 @@ import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -366,7 +367,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
     }
     
     public EditorPanel getCurrentPanel() {
-        return (EditorPanel) mainPanel.getNetworksTabPanel().getSelectedComponent();
+        return (EditorPanel) mainPanel.getTabPanels().getSelectedComponent();
     }
     
     public void openNetwork(String fileName) throws ProbNetParserException, IOException, org.openmarkov.core.io.format.annotation.NoReaderForFileException, org.openmarkov.gui.exception.CorruptNetworkFile {

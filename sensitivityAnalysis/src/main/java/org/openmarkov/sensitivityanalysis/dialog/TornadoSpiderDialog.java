@@ -22,15 +22,16 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.IntervalBarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.category.DefaultIntervalCategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.chart.ui.RectangleEdge;
-import org.jfree.chart.ui.TextAnchor;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.ProbNet;
@@ -44,17 +45,29 @@ import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.window.MainGUI;
+import org.openmarkov.gui.window.OMTabbedPane;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VESensAnTornadoSpider;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisModel;
 import org.openmarkov.sensitivityanalysis.model.TornadoBar;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
-
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Paint;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -109,7 +122,7 @@ public class TornadoSpiderDialog extends JDialog {
     /**
      * Tabbed pane
      */
-    private JTabbedPane tabbedPane;
+    private OMTabbedPane tabbedPane;
     
     /**
      * ProbNet
@@ -226,7 +239,7 @@ public class TornadoSpiderDialog extends JDialog {
      */
     private JTabbedPane getTabbedPane() {
         if (tabbedPane == null) {
-            tabbedPane = new JTabbedPane();
+            tabbedPane = new OMTabbedPane();
             tabbedPane.addTab(stringDatabase.getString("SensitivityAnalysis.Type.Tornado"), null, getTornadoPanel(), null);
             tabbedPane.addTab(stringDatabase.getString("SensitivityAnalysis.Type.Spider"), null, getSpiderPanel(), null);
         }
@@ -247,7 +260,6 @@ public class TornadoSpiderDialog extends JDialog {
             tornadoPanel.add(getOptionsChartPanel("tornado"), BorderLayout.EAST);
         }
         tornadoPanel.add(getTornadoChart(), BorderLayout.CENTER);
-        
         return tornadoPanel;
     }
     

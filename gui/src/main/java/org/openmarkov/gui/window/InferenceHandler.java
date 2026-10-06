@@ -7,15 +7,29 @@
 
 package org.openmarkov.gui.window;
 
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.OpenMarkovException;
+import org.openmarkov.core.exception.PotentialOperationException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.TemporalNetOperations;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.potential.StrategyCarrier;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
+import org.openmarkov.gui.desnets.DESInference;
 import org.openmarkov.gui.dialog.PropagationOptionsDialog;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
@@ -29,7 +43,8 @@ import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluat
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEOptimalIntervention;
 import org.openmarkov.java.swing.ComponentUtilities;
 
-import javax.swing.*;
+import javax.swing.ProgressMonitor;
+import javax.swing.SwingUtilities;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -197,7 +212,7 @@ class InferenceHandler {
             DecisionTreeEditor decisionTree = new DecisionTreeEditor(networkPanel);
             mainPanel.addCloseableTab("Decision tree for " + networkPanel.getProbNet().getName(), decisionTree);
             mainPanel.getMainPanelMenuAssistant().updateOptionsDecisionTree(decisionTree);
-            mainPanel.getNetworksTabPanel().setSelectedComponent(decisionTree);
+            mainPanel.getTabPanels().setSelectedComponent(decisionTree);
         } catch (OutOfMemoryError e) {
             throw new NotEnoughMemoryException(e);
         }
@@ -288,7 +303,7 @@ class InferenceHandler {
 
             new Thread(() -> {
                 try {
-                    new org.openmarkov.inference.DES.DESInference(probNet, simulationProgressMonitor);
+                    new DESInference(probNet, simulationProgressMonitor);
                 } catch (IOException | OpenMarkovException e) {
                     throw new UnrecoverableException(e);
                 }

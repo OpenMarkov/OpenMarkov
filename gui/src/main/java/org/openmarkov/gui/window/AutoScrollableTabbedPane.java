@@ -1,13 +1,15 @@
 package org.openmarkov.gui.window;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import java.awt.Component;
+import java.awt.Dimension;
 
 public class AutoScrollableTabbedPane {
     
-    private final JTabbedPane jTabbedPane;
+    private final OMTabbedPane jTabbedPane;
     
-    public AutoScrollableTabbedPane(JTabbedPane jTabbedPane) {
+    public AutoScrollableTabbedPane(OMTabbedPane jTabbedPane) {
         this.jTabbedPane = jTabbedPane;
     }
     
