@@ -169,6 +169,26 @@ conservan su número, así que falta el 32. En las fichas revisadas, las líneas
 del código anterior. Con el tiempo se irán desplazando, así que conviene buscar por el nombre del
 método.
 
+\paragraph{Revisión del 7 de octubre}
+Se revisó la lista contra \texttt{2b4fc61}, que añade dos commits de Jorge Rico (\texttt{eafc412} y
+\texttt{2b4fc61}). Cambian tres cosas que tocan a esta lista: los gestos del editor de red pasan de
+\texttt{EditorInputHandler} a una clase nueva, \texttt{EditorCommandHandlerGenerator}, con teclas y
+botones del ratón reasignables; quince clases de la simulación de sucesos pasan del módulo
+\texttt{inference.des} al módulo \texttt{gui} (paquete \texttt{org.openmarkov.gui.desnets}); y se
+borran \texttt{Filter} y \texttt{PluginManager}. Ningún error queda corregido ni cambia de estado.
+En las fichas de los errores sin corregir se han puesto al día el módulo, el paquete y las rutas; y
+las líneas de la fila \emph{Ficheros} y de los títulos de los extractos de código, para los ficheros
+que tocan esos commits, son ahora las de \texttt{2b4fc61}. Las líneas que se citan en el texto no se
+han tocado. Los \hyperref[err:48]{errores~48} y \hyperref[err:170]{170} pasan por la clase nueva, y
+las \hyperref[nota:172]{notas~172} y \hyperref[nota:175]{175} se han reescrito porque esos commits
+hacen parte de lo que proponían.
+
+Ese día se revisaron además las filas \emph{Corregir antes}: se han quitado las que nombraban un error
+ya corregido (en los \hyperref[err:24]{errores~24}, \hyperref[err:132]{132} y \hyperref[err:133]{133}),
+y las que quedan están dibujadas en el grafo del resumen. Y se volvió a medir el
+\hyperref[err:134]{error~134}, que se apoyaba en los errores 132 y 133, ya corregidos: pasa a estar
+presente en parte y su ficha se ha reescrito con las medidas nuevas.
+
 \paragraph{Correcciones marcadas el 23 de septiembre}
 Los catorce commits que van de \texttt{bbde667} a \texttt{522d926} corrigen errores de esta lista.
 Esos errores no salen de ella: se quedan en su sitio con la marca
@@ -218,7 +238,8 @@ Debajo va una ficha con:
         antes algo (qué debe hacer el programa, qué ficheros se aceptan…), qué hay que decidir.
         Estos errores conviene no empezarlos hasta tener la decisión.
   \item \textbf{Corregir antes}, solo si lo hay: el error que hay que corregir antes que este, o a
-        la vez como mínimo, porque sin él este arreglo no basta o rompe otra cosa; y por qué.
+        la vez como mínimo, porque sin él este arreglo no basta o rompe otra cosa; y por qué. Solo
+        se nombran errores que siguen sin corregir: cuando el otro se corrige, la fila se quita.
   \item \textbf{Tapado por}, solo si lo hay: el error que hoy impide ver este, o comprobar su
         arreglo desde la aplicación, y dónde. Este sí se puede corregir sin esperar al otro.
   \item \textbf{Relacionados}: otros errores que tocan el mismo código o conviene arreglar a la
@@ -244,7 +265,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 42 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 42 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -272,6 +293,54 @@ El apéndice recoge además 186 notas con lo que se comprobó y no entra en la l
 \ref{sec:amua}. Exportación a Amua & 5 \\
 \bottomrule
 \end{tabular}
+\end{center}
+
+\paragraph{Errores que hay que corregir antes que otros}
+El grafo recoge las filas \emph{Corregir antes} de las fichas. Una flecha de A a B dice que A hay que
+corregirlo antes que B, o a la vez como mínimo. Solo aparecen errores sin corregir; en azul, los
+asignados a Jorge Rico. Los demás errores sin corregir no esperan a ninguno.
+
+\begin{center}
+\begin{tikzpicture}[>=stealth,
+  err/.style={circle,draw=black!70,fill=fichafondo,minimum size=9.5mm,inner sep=0pt,font=\small\bfseries},
+  jorge/.style={err,draw=asignadoazul,text=asignadoazul,thick}]
+\node[err] (e19) at (0.0,0.0) {\hyperref[err:19]{19}};
+\node[err] (e20) at (-1.1,-1.6) {\hyperref[err:20]{20}};
+\node[err] (e21) at (0.0,-3.2) {\hyperref[err:21]{21}};
+\node[err] (e83) at (3.6,0.0) {\hyperref[err:83]{83}};
+\node[err] (e74) at (2.4,-1.6) {\hyperref[err:74]{74}};
+\node[err] (e88) at (3.6,-1.6) {\hyperref[err:88]{88}};
+\node[err] (e90) at (4.8,-1.6) {\hyperref[err:90]{90}};
+\node[err] (e48) at (7.4,0.0) {\hyperref[err:48]{48}};
+\node[err] (e86) at (6.8,-1.6) {\hyperref[err:86]{86}};
+\node[jorge] (e186) at (8.0,-1.6) {\hyperref[err:186]{186}};
+\node[jorge] (e37) at (2.4,-3.4) {\hyperref[err:37]{37}};
+\node[err] (e31) at (2.4,-5.0) {\hyperref[err:31]{31}};
+\node[err] (e62) at (3.6,-3.4) {\hyperref[err:62]{62}};
+\node[err] (e60) at (3.6,-5.0) {\hyperref[err:60]{60}};
+\node[err] (e54) at (4.8,-3.4) {\hyperref[err:54]{54}};
+\node[err] (e87) at (4.8,-5.0) {\hyperref[err:87]{87}};
+\node[err] (e102) at (6.0,-3.4) {\hyperref[err:102]{102}};
+\node[err] (e103) at (6.0,-5.0) {\hyperref[err:103]{103}};
+\node[err] (e140) at (7.2,-3.4) {\hyperref[err:140]{140}};
+\node[err] (e141) at (7.2,-5.0) {\hyperref[err:141]{141}};
+\node[err] (e18) at (8.4,-3.4) {\hyperref[err:18]{18}};
+\node[err] (e159) at (8.4,-5.0) {\hyperref[err:159]{159}};
+\draw[->,thick,black!70] (e19) -- (e20);
+\draw[->,thick,black!70] (e19) -- (e21);
+\draw[->,thick,black!70] (e20) -- (e21);
+\draw[->,thick,black!70] (e83) -- (e74);
+\draw[->,thick,black!70] (e83) -- (e88);
+\draw[->,thick,black!70] (e83) -- (e90);
+\draw[->,thick,black!70] (e48) -- (e86);
+\draw[->,thick,black!70] (e48) -- (e186);
+\draw[->,thick,black!70] (e37) -- (e31);
+\draw[->,thick,black!70] (e62) -- (e60);
+\draw[->,thick,black!70] (e54) -- (e87);
+\draw[->,thick,black!70] (e102) -- (e103);
+\draw[->,thick,black!70] (e140) -- (e141);
+\draw[->,thick,black!70] (e18) -- (e159);
+\end{tikzpicture}
 \end{center}
 
 La tabla siguiente es la lista completa, en el orden del documento. La última columna da el
@@ -388,18 +457,18 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:93]{93} & Los parámetros inciertos salen en otro orden en cada apertura del análisis & \texttt{core} & S \hfill No\\
 \hyperref[err:94]{94} & Ocultar una opción en una pestaña deja marcada su casilla en la otra & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:des}.\ Simulación de sucesos discretos}}\\
-\hyperref[err:95]{95} & Una utilidad acumulativa vale cero hasta el primer suceso que la alcanza & \texttt{inference.\allowbreak{}des} & M \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:96]{96} & La simulación se cae si un nodo espera a un padre de un suceso no ocurrido & \texttt{inference.\allowbreak{}des} & S \hfill No\\
-\hyperref[err:97]{97} & Un ciclo entre nodos de azar de una red de sucesos impide simular & \texttt{inference.\allowbreak{}des} & M \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:95]{95} & Una utilidad acumulativa vale cero hasta el primer suceso que la alcanza & \texttt{gui}, \texttt{inference.\allowbreak{}des} & M \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:96]{96} & La simulación se cae si un nodo espera a un padre de un suceso no ocurrido & \texttt{gui} & S \hfill No\\
+\hyperref[err:97]{97} & Un ciclo entre nodos de azar de una red de sucesos impide simular & \texttt{gui}, \texttt{inference.\allowbreak{}des} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:98]{98} & Una tabla o valor exacto con un suceso padre hace caer la simulación & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:99]{99} & Añadir o quitar un enlace deja una relación uniforme y la simulación falla & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:100]{100} & Una tabla de vida «con tasas» se simula como si fueran probabilidades & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:101]{101} & La relación «External» se ofrece, elegirla falla y no trae valores de fuera & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:102]{102} & Resultados de la simulación: la media descontada va al criterio equivocado & \texttt{inference.\allowbreak{}des} & S \hfill No\\
-\hyperref[err:103]{103} & El CSV de la simulación de sucesos tiene los títulos corridos una columna & \texttt{inference.\allowbreak{}des} & S \hfill No\\
-\hyperref[err:104]{104} & Simular con traza una red de sucesos sin guardar falla antes de empezar & \texttt{inference.\allowbreak{}des} & S \hfill No\\
+\hyperref[err:102]{102} & Resultados de la simulación: la media descontada va al criterio equivocado & \texttt{gui} & S \hfill No\\
+\hyperref[err:103]{103} & El CSV de la simulación de sucesos tiene los títulos corridos una columna & \texttt{gui} & S \hfill No\\
+\hyperref[err:104]{104} & Simular con traza una red de sucesos sin guardar falla antes de empezar & \texttt{gui} & S \hfill No\\
 \hyperref[err:105]{105} & Un fallo de «Tree with Excluded Events» abre una ventana desde el núcleo & \texttt{core} & S \hfill No\\
-\hyperref[err:106]{106} & Un nodo de azar discretizado impide simular con un error inesperado & \texttt{inference.\allowbreak{}des} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:106]{106} & Un nodo de azar discretizado impide simular con un error inesperado & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:107]{107} & La hoja de la propagación estocástica cambia el orden de los hallazgos & \texttt{stochastic\allowbreak{}Propagation\allowbreak{}Output} & S \hfill No\\
 \hyperref[err:108]{108} & La propagación estocástica no rechaza nodos numéricos: falla sin explicarlo & \texttt{stochastic\allowbreak{}Propagation\allowbreak{}Output} & S \hfill No\\
 \hyperref[err:109]{109} & Las casillas de estadísticos del panel de Monte Carlo no hacen nada & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -1089,7 +1158,7 @@ Prueba de regresión: sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}n
 \fichakey{Estado}Presente en parte. El commit \texttt{551e715} (23-09-2026) hizo que una distribución «Exact» con números, como guarda el formato 1.0 las relaciones exactas, se convierta en tabla y se escale como el \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential} que es, así que los trece nodos de suma y producto medidos ya se absorben y las redes 1.0 se evalúan; sigue que el menú no mira si los potenciales de los padres se pueden convertir en tabla, y \texttt{Absorb\allowbreak{}Parents\allowbreak{}Edit.\allowbreak{}generate\allowbreak{}Edits} y \texttt{Basic\allowbreak{}Operations.\allowbreak{}absorb\allowbreak{}Parents} siguen convirtiendo el fallo en \texttt{Unreachable\allowbreak{}Exception} para cualquier otra distribución de un padre (por ejemplo, una normal). Esto último se ha deducido leyendo el código.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core; org.openmarkov.core.inference
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/AbsorbParentsEdit.java:36-46} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:144-195} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:279-300} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/UnivariateDistrPotential.java:357-364} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/UniformPotential.java:91-99} \newline \path{core/src/main/java/org/openmarkov/core/inference/tasks/TaskUtilities.java:119-121} \newline \path{gui/src/main/java/org/openmarkov/gui/validator/AbsorbParentsValidator.java:24-26} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/NodeContextualMenu.java:142} \newline \path{gui/src/main/java/org/openmarkov/gui/configuration/UserPreferences.java:108}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/AbsorbParentsEdit.java:36-46} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:144-195} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:279-300} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/UnivariateDistrPotential.java:357-364} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/UniformPotential.java:91-99} \newline \path{core/src/main/java/org/openmarkov/core/inference/tasks/TaskUtilities.java:119-121} \newline \path{gui/src/main/java/org/openmarkov/gui/validator/AbsorbParentsValidator.java:24-26} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/NodeContextualMenu.java:142} \newline \path{gui/src/main/java/org/openmarkov/gui/configuration/UserPreferences.java:114}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si «Absorb parents» debe funcionar con padres cuya relación es una distribución exacta (como las guarda el formato 1.0) o solo rechazarse con un mensaje
@@ -2538,11 +2607,10 @@ Cada cambio que el usuario hace sobre una red es una edición que se apunta en e
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/NodeReplaceStatesEdit.java} \newline \path{core/src/main/java/org/openmarkov/core/model/network/VariableStateOperations.java:69-110,292-320} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:167-210} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanel.java:1078-1117} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:399-402}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/NodeReplaceStatesEdit.java} \newline \path{core/src/main/java/org/openmarkov/core/model/network/VariableStateOperations.java:69-110,292-320} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:167-210} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanel.java:1078-1117} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:406-409}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}No
-\fichakey{Corregir antes}\hyperref[err:30]{error~30}: si se comparte con \texttt{Node\allowbreak{}State\allowbreak{}Edit} la fotografía de los potenciales, como propone esta ficha, primero hay que corregirla.
 \fichakey{Relacionados}\hyperref[err:25]{error~25}, \hyperref[err:30]{error~30}, \hyperref[err:173]{error~173}, \hyperref[nota:5]{nota~5}, \hyperref[nota:15]{nota~15}, \hyperref[nota:150]{nota~150}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -2614,7 +2682,7 @@ Prueba de regresión: sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}n
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui, core
 \fichakey{Paquete}org.openmarkov.gui.component; org.openmarkov.gui.action; org.openmarkov.core.model.network.potential.operation
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/component/LinkRestrictionValuesTable.java:54-80} \newline \path{gui/src/main/java/org/openmarkov/gui/action/LinkRestrictionPotentialValueEdit.java:73-115} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/LinkRestrictionPotentialOperations.java:163-200,218-253} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionPanel.java:140-151} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionEditDialog.java:43,99-108} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:243-255}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/component/LinkRestrictionValuesTable.java:54-80} \newline \path{gui/src/main/java/org/openmarkov/gui/action/LinkRestrictionPotentialValueEdit.java:73-115} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/LinkRestrictionPotentialOperations.java:163-200,218-253} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionPanel.java:140-151} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionEditDialog.java:43,99-108} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:244-256}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -2751,7 +2819,7 @@ Prueba: en \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbre
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core; gui
 \fichakey{Paquete}org.openmarkov.core.action.base.linkEdits; org.openmarkov.core.action.core; org.openmarkov.gui.action
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:254-264} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/RemoveLinkEdit.java:171-187} \newline \path{gui/src/main/java/org/openmarkov/gui/action/LinkRestrictionPotentialValueEdit.java:73-115} \newline \path{core/src/main/java/org/openmarkov/core/action/core/RevelationStateEdit.java:28-52} \newline \path{gui/src/main/java/org/openmarkov/gui/action/RevelationIntervalEdit.java:67-69} \newline \path{core/src/main/java/org/openmarkov/core/action/core/VariableTypeEdit.java:271-307} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:243-255} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/VisualLink.java:142}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:254-264} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/RemoveLinkEdit.java:171-187} \newline \path{gui/src/main/java/org/openmarkov/gui/action/LinkRestrictionPotentialValueEdit.java:73-115} \newline \path{core/src/main/java/org/openmarkov/core/action/core/RevelationStateEdit.java:28-52} \newline \path{gui/src/main/java/org/openmarkov/gui/action/RevelationIntervalEdit.java:67-69} \newline \path{core/src/main/java/org/openmarkov/core/action/core/VariableTypeEdit.java:271-307} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:244-256} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/VisualLink.java:142}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}No
@@ -3120,7 +3188,7 @@ Prueba de regresión: abrir una red con un ciclo, pegar un nodo aislado y exigir
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/NetworkCommentEdit.java:34-50} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkDefinitionPanel.java:301-316} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkDefinitionPanel.java:351-358} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:280-283} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:356}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/NetworkCommentEdit.java:34-50} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkDefinitionPanel.java:301-316} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkDefinitionPanel.java:351-358} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:281-284} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:356}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -3167,7 +3235,7 @@ Prueba: con la opción a falso, ejecutar \texttt{Network\allowbreak{}Comment\all
 \fichakey{Estado}Presente en parte. Copiar una red ya conserva «Always append»: \texttt{Node.\allowbreak{}copy\allowbreak{}Properties\allowbreak{}To}, por la que pasan las dos formas de copiar una red, copia el campo desde el commit \texttt{db16fd4}.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/EventNodeAlwaysAppendEdit.java:35-56} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDefinitionPanel.java:674-690, 735-744, 1001-1002} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:399-402} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Node.java:141-149, 733-743}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/EventNodeAlwaysAppendEdit.java:35-56} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDefinitionPanel.java:674-690, 735-744, 1001-1002} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:406-409} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Node.java:141-149, 733-743}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -3376,7 +3444,7 @@ Una restricción es una regla que dice qué permite cada tipo de red (por ejempl
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}io
 \fichakey{Paquete}org.openmarkov.io.probmodel.reader
-\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:134-150} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:272-286} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:154-181} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:103-124} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:190-216} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:339-356}
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:134-150} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:272-286} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:164-191} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:103-124} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:190-216} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:339-356}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué hacer al abrir una red que no cumple sus restricciones: rechazar el fichero o abrirlo avisando (abrir avisando no deja fuera ficheros antiguos)
@@ -3818,7 +3886,7 @@ Prueba: \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{
 \fichakey{Estado}Presente
 \fichakey{Módulo}inference, core
 \fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination.tasks; org.openmarkov.core.model.network
-\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:141-157, 175-217, 228-242} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VariableElimination.java:95-97} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:146-178} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:431-459, 1050-1054} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:584-588} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/InferencePresenter.java:60-69, 118-126} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:145-163}
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:141-157, 175-217, 228-242} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VariableElimination.java:95-97} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:146-178} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:431-459, 1050-1054} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:584-588} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/InferencePresenter.java:60-69, 118-126} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:146-164}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué debe enseñar el modo inferencia en un nodo de utilidad que otro nodo de utilidad suma o multiplica: su utilidad esperada, calculada aparte, o nada
@@ -4076,7 +4144,7 @@ Prueba: en \texttt{MID-\allowbreak{}dmhee-2.\allowbreak{}5.\allowbreak{}pgmx}, u
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:420-459} \newline \path{core/src/main/java/org/openmarkov/core/inference/tasks/TaskUtilities.java:88-90} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VariableElimination.java:95-97} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:688-692} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/ProbDensFunction.java:24-64}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:420-459} \newline \path{core/src/main/java/org/openmarkov/core/inference/tasks/TaskUtilities.java:88-90} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VariableElimination.java:95-97} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:701-705} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/ProbDensFunction.java:24-64}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué hacer con un hallazgo sobre un nodo cuya relación es una distribución de probabilidad (normal, gamma\ldots): usar la densidad en el valor observado, que hoy no se puede calcular, o rechazar el hallazgo con un mensaje
@@ -4269,7 +4337,7 @@ Prueba: construir el diálogo sin mostrarlo, o extraer la elección del estado i
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorInputHandler.java:260-266} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:183-190, 527-541, 394-401, 633-825} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:145-163} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/PropagationOptionsDialogListener.java:67-72} \newline \path{stochasticPropagationOutput/src/main/java/org/openmarkov/stochasticPropagationOutput/StochasticPropagationOutputFrame.java:194-201} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/OMExceptionHandler.java:17-59} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/TablePotentialTransform.java:45-48} \newline \path{core/src/main/resources/core/localize/core_class_localizations_en.xml:96-97} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:534-536}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:269-277} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:183-190, 527-541, 394-401, 633-825} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:146-164} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/PropagationOptionsDialogListener.java:67-72} \newline \path{stochasticPropagationOutput/src/main/java/org/openmarkov/stochasticPropagationOutput/StochasticPropagationOutputFrame.java:194-201} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/OMExceptionHandler.java:17-59} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/TablePotentialTransform.java:45-48} \newline \path{core/src/main/resources/core/localize/core_class_localizations_en.xml:96-97} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:534-536}
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué respuesta única dar (una excepción del dominio con mensaje propio, dónde se lanza y dónde se captura) y si al fallar la propagación debe apagarse la propagación automática o no
@@ -4291,7 +4359,7 @@ Todo acaba en el manejador global \texttt{OMException\allowbreak{}Handler}: lo e
 \begin{itemize}
 \tightlist
 \item
-  Doble clic en un estado de un nodo (el gesto principal): \texttt{Editor\allowbreak{}Input\allowbreak{}Handler}, líneas 270-277, envuelve todo en \texttt{Unreachable\allowbreak{}Exception} → diálogo de error no previsto.
+  Doble clic en un estado de un nodo (el gesto principal): \texttt{Editor\allowbreak{}Command\allowbreak{}Handler\allowbreak{}Generator}, líneas 269-277, envuelve todo en \texttt{Unreachable\allowbreak{}Exception} → diálogo de error no previsto.
 \item
   Quitar un hallazgo dejando una evidencia restante imposible: \texttt{Evidence\allowbreak{}Manager.\allowbreak{}remove\allowbreak{}Finding}, líneas 191-194, apaga la propagación y envuelve en \texttt{Unreachable\allowbreak{}Exception} → diálogo de error no previsto.
 \item
@@ -4312,16 +4380,17 @@ Además, el texto de \texttt{Cannot\allowbreak{}Normalize\allowbreak{}Potential\
 
 No se ha ejecutado la ventana; la cadena se ha seguido leyendo el código.
 \paragraph{El código}
-gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorInputHandler.java:270-277
+gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:269-277
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \ControlFlowTok{try} \OperatorTok{\{}
-    \KeywordTok{this}\OperatorTok{.}\FunctionTok{networkEditorPanel}\OperatorTok{.}\FunctionTok{getEvidenceManager}\OperatorTok{().}\FunctionTok{toggleFinding}\OperatorTok{(}\NormalTok{visualNode}\OperatorTok{,}\NormalTok{ visualState}\OperatorTok{);}
+    \KeywordTok{this}\OperatorTok{.}\FunctionTok{networkEditorPanel}\OperatorTok{.}\FunctionTok{getEvidenceManager}\OperatorTok{()}
+                           \OperatorTok{.}\FunctionTok{toggleFinding}\OperatorTok{(}\NormalTok{visualNode}\OperatorTok{,}\NormalTok{ visualState}\OperatorTok{);}
 \OperatorTok{\}} \ControlFlowTok{catch} \OperatorTok{(}\NormalTok{IncompatibleEvidenceException }\OperatorTok{|}\NormalTok{ NotEvaluableNetworkException }\OperatorTok{|}
-\NormalTok{         NonProjectablePotentialException }\OperatorTok{|}
-\NormalTok{         NotEnoughMemoryException }\OperatorTok{|}\NormalTok{ DoEditException }\OperatorTok{|}\NormalTok{ CannotNormalizePotentialException }\OperatorTok{|}
-\NormalTok{         ConstraintViolatedException ex}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{         NonProjectablePotentialException }\OperatorTok{|}\NormalTok{ NotEnoughMemoryException }\OperatorTok{|}
+\NormalTok{         DoEditException }\OperatorTok{|}\NormalTok{ CannotNormalizePotentialException }\OperatorTok{|}
+\NormalTok{         ConstraintViolatedException }\OperatorTok{|}\NormalTok{ ThereIsNoPotentialInNodeException ex}\OperatorTok{)} \OperatorTok{\{}
     \ControlFlowTok{throw} \KeywordTok{new} \FunctionTok{UnreachableException}\OperatorTok{(}\NormalTok{ex}\OperatorTok{);}
 \OperatorTok{\}}
 \end{Highlighting}
@@ -4338,7 +4407,7 @@ gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceM
 \end{Highlighting}
 \end{Shaded}
 \paragraph{Cómo arreglarlo}
-Una salida posible: una excepción del dominio con mensaje («esta evidencia es imposible en esta red», «estos dos hallazgos se contradicen»), lanzada donde ya se detecta ---la normalización de la posterior en la propagación (\texttt{VEPropagation}), los pesos de las muestras (\texttt{Stochastic\allowbreak{}Propagation}) y \texttt{Evidence\allowbreak{}Case.\allowbreak{}add\allowbreak{}Finding}--- y capturada una sola vez en los embudos que ya existen (\texttt{GUIUtils.\allowbreak{}execute\allowbreak{}UIAction}, \texttt{JMenu\allowbreak{}Item\allowbreak{}Builder}, \texttt{Ok\allowbreak{}Cancel\allowbreak{}Dialog}, \texttt{OMException\allowbreak{}Handler}). Así sobran los envoltorios «inalcanzable» de \texttt{Editor\allowbreak{}Input\allowbreak{}Handler} y de \texttt{Evidence\allowbreak{}Manager.\allowbreak{}remove\allowbreak{}Finding}.
+Una salida posible: una excepción del dominio con mensaje («esta evidencia es imposible en esta red», «estos dos hallazgos se contradicen»), lanzada donde ya se detecta ---la normalización de la posterior en la propagación (\texttt{VEPropagation}), los pesos de las muestras (\texttt{Stochastic\allowbreak{}Propagation}) y \texttt{Evidence\allowbreak{}Case.\allowbreak{}add\allowbreak{}Finding}--- y capturada una sola vez en los embudos que ya existen (\texttt{GUIUtils.\allowbreak{}execute\allowbreak{}UIAction}, \texttt{JMenu\allowbreak{}Item\allowbreak{}Builder}, \texttt{Ok\allowbreak{}Cancel\allowbreak{}Dialog}, \texttt{OMException\allowbreak{}Handler}). Así sobran los envoltorios «inalcanzable» de \texttt{Editor\allowbreak{}Command\allowbreak{}Handler\allowbreak{}Generator} y de \texttt{Evidence\allowbreak{}Manager.\allowbreak{}remove\allowbreak{}Finding}.
 
 Hay que decidir a la vez qué pasa con la propagación automática al fallar (hoy unos sitios la apagan y otros no).
 
@@ -4542,7 +4611,7 @@ Prueba: construir con \texttt{Decision\allowbreak{}Tree\allowbreak{}Manager\allo
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.node
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:478-486, 617-632, 299-300} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditDialog.java:95-102} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:560-600} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/NodeContextualMenu.java:191-203} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:276-278} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PolicyTypePanel.java} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Node.java:95}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:478-486, 617-632, 299-300} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditDialog.java:95-102} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:567-607} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/NodeContextualMenu.java:191-203} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:277-279} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PolicyTypePanel.java} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Node.java:95}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el tipo de política (óptima, determinista, probabilista) debe poder elegirse en la interfaz o si se retira \texttt{Policy\allowbreak{}Type\allowbreak{}Panel}
@@ -4608,7 +4677,7 @@ Prueba: una prueba de interfaz que, sobre \texttt{0\_\allowbreak{}miscellaneous/
 \fichakey{Estado}Presente
 \fichakey{Módulo}core, inference, gui
 \fichakey{Paquete}org.openmarkov.core.model.network.potential; org.openmarkov.inference.algorithm.variableElimination.tasks
-\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEExpectedUtilityDecision.java:55-66} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/AbstractIndexedPotential.java:183-208} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:742-771} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/StrategicTablePotential.java:107-110} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:568-582}
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEExpectedUtilityDecision.java:55-66} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/AbstractIndexedPotential.java:183-208} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:742-771} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/StrategicTablePotential.java:107-110} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:575-589}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -4715,7 +4784,7 @@ Pruebas de regresión: \texttt{new\ VEExpected\allowbreak{}Utility\allowbreak{}D
 \fichakey{Estado}Presente
 \fichakey{Módulo}inference, gui
 \fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination.tasks; org.openmarkov.gui.window.edition.networkEditorPanel
-\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEExpectedUtilityDecision.java:55-66} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEOptimalIntervention.java:120-126} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:568-580} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:586-590}
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEExpectedUtilityDecision.java:55-66} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEOptimalIntervention.java:120-126} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:575-587} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:593-597}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -4743,7 +4812,7 @@ Por qué pasa: \texttt{VEExpected\allowbreak{}Utility\allowbreak{}Decision} (la 
 
 \texttt{VEOptimal\allowbreak{}Intervention} tiene \texttt{set\allowbreak{}Pre\allowbreak{}Resolution\allowbreak{}Evidence} y \texttt{set\allowbreak{}Conditioning\allowbreak{}Variables} con el cuerpo vacío, pero su constructor sí recibe la evidencia y se la pasa a su evaluación, y el único llamador de producción (\texttt{Inference\allowbreak{}Handler}, línea 226, «Mostrar estrategia óptima») usa ese constructor. Nadie llama a los métodos vacíos, así que por ahí hoy no se llega a ningún fallo.
 \paragraph{El código}
-gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:568-573
+gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:575-580
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4882,7 +4951,7 @@ Prueba de regresión: con \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}net
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:568-570, 594-597} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditDialog.java:76-85} \newline \path{gui/src/main/resources/gui/localize/Dialogs_en.xml:824-829}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:575-577, 601-604} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditDialog.java:76-85} \newline \path{gui/src/main/resources/gui/localize/Dialogs_en.xml:824-829}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -4898,7 +4967,7 @@ Por qué pasa: el constructor de \texttt{Potential\allowbreak{}Edit\allowbreak{}
 
 Comprobado consultando la base de textos: \texttt{Expected\allowbreak{}Utility\allowbreak{}Dialog.\allowbreak{}Title} → «Expected utility» y \texttt{Optimal\allowbreak{}Policy\allowbreak{}Dialog.\allowbreak{}Title} → «Optimal policy» existen en \texttt{Dialogs\_\allowbreak{}en.\allowbreak{}xml}. Es un texto que se ve mal en inglés, así que la decisión de tener la aplicación solo en inglés no lo deja fuera.
 \paragraph{El código}
-gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:576-579
+gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:583-586
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4908,7 +4977,7 @@ gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEd
 \end{Highlighting}
 \end{Shaded}
 
-gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:602-605
+gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:609-612
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4929,7 +4998,7 @@ Prueba: construir el diálogo por el mismo camino (sin mostrarlo) y comprobar qu
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/RemovePolicyEdit.java:27-49} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Node.java:95} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/ImposePolicyPanel.java:31-43} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:546-557} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:646-652} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:464-473}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/RemovePolicyEdit.java:27-49} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Node.java:95} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/ImposePolicyPanel.java:31-43} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:553-564} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:659-665} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:464-473}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -5001,7 +5070,7 @@ Prueba: imponer una política \{0, 1\} con \texttt{Impose\allowbreak{}Policy\all
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/DecisionCriteriaEdit.java:44} \newline \path{core/src/main/java/org/openmarkov/core/action/core/DecisionCriteriaEdit.java:67-83} \newline \path{core/src/main/java/org/openmarkov/core/action/core/DecisionCriteriaEdit.java:97-101} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/DecisionCriteriaTablePanel.java:56-70} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:280-283}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/DecisionCriteriaEdit.java:44} \newline \path{core/src/main/java/org/openmarkov/core/action/core/DecisionCriteriaEdit.java:67-83} \newline \path{core/src/main/java/org/openmarkov/core/action/core/DecisionCriteriaEdit.java:97-101} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/DecisionCriteriaTablePanel.java:56-70} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:281-284}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -5229,7 +5298,7 @@ Prueba de regresión: en \texttt{Agents\allowbreak{}Test}, leer \texttt{test-dec
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.action; org.openmarkov.core.model.network
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/action/NetworkAgentEdit.java:48-59} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetAgentManager.java:47-86} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkAgentsTablePanel.java:44-147} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:79-90,269-282}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/action/NetworkAgentEdit.java:48-59} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetAgentManager.java:47-86} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkAgentsTablePanel.java:44-147} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:80-91,270-283}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}No
@@ -5308,7 +5377,7 @@ Prueba de regresión: sobre una red \texttt{DECPOMDPType} con dos decisiones de 
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.node
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDefinitionPanel.java:129-138,622-671,674-677} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:66-81,330-338} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetAgentManager.java:78-84} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkAgentsTablePanel.java:44-78}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDefinitionPanel.java:129-138,622-671,674-677} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:73-88,337-345} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetAgentManager.java:78-84} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkAgentsTablePanel.java:44-78}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -5496,7 +5565,7 @@ Prueba de regresión: instanciar «Therapy today=no» en \texttt{0\_\allowbreak{
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:373-378,393-398} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:207-243} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEOptimalIntervention.java:64-90} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/OptimalStrategyDialog.java:31-37} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/toolbar/StandardToolBar.java:260-263}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:386-391,406-411} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:222-258} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEOptimalIntervention.java:64-90} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/OptimalStrategyDialog.java:31-37} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/toolbar/StandardToolBar.java:260-263}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -5539,7 +5608,7 @@ inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/t
 \end{Highlighting}
 \end{Shaded}
 
-gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:373-378
+gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:386-391
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5567,7 +5636,7 @@ Prueba de regresión: sobre las redes de prueba sin decisiones (diagrama de infl
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:365-398} \newline \path{inference/src/main/java/org/openmarkov/inference/decisiontree/operation/DecisionTreeManagerImpl.java:55-74} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/toolbar/StandardToolBar.java:275-287}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:378-411} \newline \path{inference/src/main/java/org/openmarkov/inference/decisiontree/operation/DecisionTreeManagerImpl.java:55-74} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/toolbar/StandardToolBar.java:275-287}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -5590,7 +5659,7 @@ Por qué pasa. El árbol de decisión solo se ofrece desde el botón «Decision 
 
 Ninguna de las dos reglas mira si hay decisiones, pero para el árbol eso no produce fallo: con diagramas de influencia y redes de análisis de decisiones sin ninguna decisión (\texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-only-utility.\allowbreak{}pgmx}, \texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-one-chance.\allowbreak{}pgmx}, \texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks/\allowbreak{}dan/\allowbreak{}DAN-one-chance.\allowbreak{}pgmx}) el árbol se construye (un árbol con solo nodos de azar).
 \paragraph{El código}
-gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:377-380, 391-397
+gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:390-393, 404-410
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5625,7 +5694,7 @@ Las redes con variables que se repiten ciclo a ciclo (por ejemplo, los diagramas
 \fichakey{Estado}Presente
 \fichakey{Módulo}inference
 \fichakey{Paquete}org.openmarkov.inference.algorithm.temporalevaluation.tasks; org.openmarkov.inference.algorithm.variableElimination.tasks
-\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:273-283} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:291-295} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:602-619} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:210-213} \newline \path{core/src/main/java/org/openmarkov/core/inference/InferenceAlgorithm.java:200-204} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TraceTemporalEvolutionDialog.java:315-334}
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:273-283} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:291-295} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:602-619} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:210-213} \newline \path{core/src/main/java/org/openmarkov/core/inference/InferenceAlgorithm.java:200-204} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TraceTemporalEvolutionDialog.java:316-335}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si las curvas de la evolución temporal deben normalizarse por cada opción de la decisión (y qué significa una columna que suma cero, es decir, una alternativa imposible con esa evidencia), o si basta con decir en la ventana que se muestran valores sin normalizar
@@ -5810,7 +5879,7 @@ Prueba de regresión: sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}n
 \fichakey{Estado}Presente
 \fichakey{Módulo}inference
 \fichakey{Paquete}org.openmarkov.inference.algorithm.temporalevaluation.tasks
-\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:602-619} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:440-481} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:629-643} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/NodeContextualMenu.java:168-169} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TraceTemporalEvolutionDialog.java:311-340}
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:602-619} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/tasks/MIDTemporalEvolution.java:440-481} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:642-656} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/NodeContextualMenu.java:168-169} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TraceTemporalEvolutionDialog.java:312-341}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si la evolución temporal de una decisión tiene sentido (probabilidad de elegir cada opción en cada ciclo) o si la opción no debe ofrecerse sobre decisiones
@@ -5853,7 +5922,7 @@ inference/src/main/java/org/openmarkov/inference/algorithm/temporalevaluation/ta
 \end{Highlighting}
 \end{Shaded}
 
-gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:629-642
+gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:642-655
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5892,7 +5961,7 @@ Prueba: construir el MID mínimo descrito y comprobar que \texttt{new\ MIDTempor
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.potential
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/SameAsPrevious.java:61-63} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/SameAsPrevious.java:85-103} \newline \path{core/src/main/java/org/openmarkov/core/model/network/TemporalNetOperations.java:66-76} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:237-265}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/SameAsPrevious.java:61-63} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/SameAsPrevious.java:85-103} \newline \path{core/src/main/java/org/openmarkov/core/model/network/TemporalNetOperations.java:66-76} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:250-278}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -6113,7 +6182,7 @@ Prueba: en una red con «Therapy {[}0{]}» y «Therapy», pasar la primera a ate
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.network
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkTemporalOptionsPanel.java:44-114} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:130,213-218,269-272} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkDefinitionPanel.java:347-350} \newline \path{core/src/main/java/org/openmarkov/core/action/core/CycleLengthEdit.java:28-49}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkTemporalOptionsPanel.java:44-114} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:131,214-219,270-273} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkDefinitionPanel.java:347-350} \newline \path{core/src/main/java/org/openmarkov/core/action/core/CycleLengthEdit.java:28-49}
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -6164,7 +6233,7 @@ gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkTemporalOptionsPanel.
 \end{Highlighting}
 \end{Shaded}
 
-gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:269-272
+gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:270-273
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -6203,7 +6272,7 @@ El análisis de coste-efectividad, el análisis de sensibilidad determinista (to
 \begin{ficha}
 \fichakey{Estado}Presente
 \fichakey{Módulo}full, inference.des
-\fichakey{Ficheros}\path{inference.des/pom.xml:24-28} \newline \path{pom.xml:322-326} \newline \path{full/pom.xml:608-654} \newline \path{full/pom.xml:178-196} \newline \path{.github/workflows/maven.yml:51-57} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/MapDialog.java:389-390} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TraceTemporalEvolutionDialog.java:654,680,1056} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:844,856} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:450,458,623,631,652} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/PlotDialog.java:294} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:523,535,558,568,571} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CESpiderDialog.java:377,388,477,496}
+\fichakey{Ficheros}\path{inference.des/pom.xml:24-28} \newline \path{pom.xml:322-326} \newline \path{full/pom.xml:608-654} \newline \path{full/pom.xml:178-196} \newline \path{.github/workflows/maven.yml:51-57} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/MapDialog.java:389-390} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TraceTemporalEvolutionDialog.java:655,681,1057} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:865,877} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:462,470,635,643,664} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/PlotDialog.java:294} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:545,557,580,590,593} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CESpiderDialog.java:377,388,477,496}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -6389,7 +6458,7 @@ Pruebas:
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.modelUncertainty
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/TablePotentialSampler.java:60-77} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/Sampler.java:56-82,126-179} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1324-1356} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VECEPSA.java:105-113} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:130-142}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/TablePotentialSampler.java:60-77} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/Sampler.java:56-82,126-179} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1324-1356} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VECEPSA.java:105-113} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:152-164}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué significa una columna de probabilidad en la que unas casillas llevan distribución y otras un número fijo (prohibirla al leer y al editar, o sortear las inciertas conservando las fijas)
@@ -6459,7 +6528,7 @@ Prueba: la tabla descrita arriba, sorteada, debe sortear la columna y0 y no pone
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.modelUncertainty
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/Sampler.java:162-179} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/TablePotentialSampler.java:85-88} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/XORShiftRandom.java} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:566-575} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VECEPSA.java:105-113} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:130-142}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/Sampler.java:162-179} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/TablePotentialSampler.java:85-88} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/XORShiftRandom.java} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:566-575} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VECEPSA.java:105-113} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:152-164}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}No
@@ -6942,7 +7011,7 @@ Prueba de regresión: construir la gráfica sin pantalla (o extraer el cálculo 
 \fichakey{Estado}Presente
 \fichakey{Módulo}costEffectiveness
 \fichakey{Paquete}org.openmarkov.costEffectiveness
-\fichakey{Ficheros}\path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:479-487,547-590} \newline \path{core/src/main/java/org/openmarkov/core/model/network/CEP.java:480-485} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/operation/CEBaseOperations.java:395-409}
+\fichakey{Ficheros}\path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:500-508,568-611} \newline \path{core/src/main/java/org/openmarkov/core/model/network/CEP.java:480-485} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/operation/CEBaseOperations.java:395-409}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -6967,7 +7036,7 @@ la partición de la frontera es el objeto de «yes»: true
 tabla de la frontera: 1 fila, nombre de la fila 0: no
 \end{Verbatim}
 \paragraph{El código}
-costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:479-487
+costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:500-508
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7067,7 +7136,7 @@ Prueba de regresión: en \texttt{inference/\allowbreak{}src/\allowbreak{}test}, 
 \fichakey{Estado}Presente
 \fichakey{Módulo}costEffectiveness, gui
 \fichakey{Paquete}org.openmarkov.costEffectiveness; org.openmarkov.gui.dialog.costeffectiveness
-\fichakey{Ficheros}\path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:273-291} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:380-397} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:547-576} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:866-902} \newline \path{core/src/main/java/org/openmarkov/core/model/network/CEP.java:149-151} \newline \path{core/src/main/java/org/openmarkov/core/model/network/CEP.java:167-173} \newline \path{core/src/main/java/org/openmarkov/core/model/network/CEP.java:227-229} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/costeffectiveness/CEPDialog.java:204-208} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CostEffectivenessPlugin.java:83-110}
+\fichakey{Ficheros}\path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:294-312} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:401-418} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:568-597} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:887-923} \newline \path{core/src/main/java/org/openmarkov/core/model/network/CEP.java:149-151} \newline \path{core/src/main/java/org/openmarkov/core/model/network/CEP.java:167-173} \newline \path{core/src/main/java/org/openmarkov/core/model/network/CEP.java:227-229} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/costeffectiveness/CEPDialog.java:204-208} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CostEffectivenessPlugin.java:83-110}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -7101,7 +7170,7 @@ Medido, reproduciendo el camino del menú con el panel de ámbito real (\texttt{
   \texttt{CEPDialog.\allowbreak{}get\allowbreak{}Data\allowbreak{}From\allowbreak{}CEP} con la partición global de \texttt{ID-arthronet-ce.\allowbreak{}pgmx} y la evidencia imposible de arriba: \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} en la línea 207.
 \end{itemize}
 \paragraph{El código}
-costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:282-291
+costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:303-312
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7250,7 +7319,7 @@ Prueba de regresión: con \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}net
 \fichakey{Estado}Presente
 \fichakey{Módulo}sensitivityAnalysis
 \fichakey{Paquete}org.openmarkov.sensitivityanalysis.dialog
-\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:321-371} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:532-533} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/PlotDialog.java:213} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/MapDialog.java:249} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/model/TornadoBar.java:54-60}
+\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:333-383} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:544-545} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/PlotDialog.java:213} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/MapDialog.java:249} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/model/TornadoBar.java:54-60}
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -7281,7 +7350,7 @@ El mismo inicio aparece en el eje vertical del diagrama de araña de la misma cl
 
 Aparte, en la rama con decisión la barra no sale de la diferencia punto a punto entre las dos opciones; ese es otro defecto, \hyperref[err:89]{error~89}.
 \paragraph{El código}
-sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:321-365
+sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:333-377
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7320,7 +7389,7 @@ Prueba de regresión: extraer el cálculo de mínimos y máximos a un método si
 \fichakey{Estado}Presente
 \fichakey{Módulo}sensitivityAnalysis
 \fichakey{Paquete}org.openmarkov.sensitivityanalysis.dialog
-\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:334-350} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:561-571} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:283-289}
+\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:346-362} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:573-583} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:295-301}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -7346,7 +7415,7 @@ Medido:
   Con barridos escritos a mano de cinco puntos: si «no» va de 0 a −1 y «yes» de 0 a 1, la barra sale {[}1, 1{]}, un punto, cuando la diferencia va de 0 a 2. Si la referencia es constante, o las dos opciones suben a la vez, la barra es correcta.
 \end{itemize}
 \paragraph{El código}
-sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:338-350
+sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:350-362
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7388,7 +7457,7 @@ Prueba de regresión: con el método extraído, un barrido en que «no» baja de
 \fichakey{Estado}Presente
 \fichakey{Módulo}sensitivityAnalysis
 \fichakey{Paquete}org.openmarkov.sensitivityanalysis.dialog
-\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/PlotDialog.java:212-213} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/PlotDialog.java:279-281} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:532-533} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:615-617} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/MapDialog.java:248-249} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/MapDialog.java:349-350} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/MapDialog.java:384}
+\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/PlotDialog.java:212-213} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/PlotDialog.java:279-281} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:544-545} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:627-629} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/MapDialog.java:248-249} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/MapDialog.java:349-350} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/MapDialog.java:384}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -7444,7 +7513,7 @@ Prueba de regresión: construir sin pantalla la gráfica de \texttt{Plot\allowbr
 \fichakey{Estado}Presente
 \fichakey{Módulo}sensitivityAnalysis
 \fichakey{Paquete}org.openmarkov.sensitivityanalysis.dialog
-\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:373-376} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:420-423}
+\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:385-388} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:432-435}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -7478,7 +7547,7 @@ Medido con un pequeño programa de prueba sin ventana que construye el mismo \te
 
 Los píxeles exactos dependen del tamaño de la ventana y de los rótulos, pero el signo del margen no: con 16 o más parámetros el reparto deja barras fuera.
 \paragraph{El código}
-sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:373-376, 420-423
+sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:385-388, 432-435
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7668,7 +7737,7 @@ Prueba: llamar varias veces a \texttt{get\allowbreak{}Uncertain\allowbreak{}Para
 \fichakey{Estado}Presente
 \fichakey{Módulo}sensitivityAnalysis
 \fichakey{Paquete}org.openmarkov.sensitivityanalysis.dialog
-\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:99,126,207-242,338-346,412-457}
+\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:121,148,229-264,360-368,434-479}
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -7685,7 +7754,7 @@ No es el mismo defecto que el ya corregido en el commit \texttt{dce0e1b} (el esc
 
 Comprobado leyendo; no se ejecutó porque construir la ventana exige ejecutar la simulación probabilística (\texttt{VECEPSA}) en su constructor.
 \paragraph{El código}
-sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:412-437
+sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:434-459
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7725,7 +7794,7 @@ Dos opciones:
 
 Si se prefiere que cada pestaña filtre por su cuenta, entonces cada juego necesita su propio vector de estados y \texttt{refresh\allowbreak{}Chart\allowbreak{}Panels} debe rehacer solo su gráfica; es una decisión de interfaz.
 
-La misma estructura aparece en \texttt{inference.\allowbreak{}des/\allowbreak{}src/\allowbreak{}main/\allowbreak{}java/\allowbreak{}org/\allowbreak{}openmarkov/\allowbreak{}inference/\allowbreak{}DES/\allowbreak{}CEDESDialog.\allowbreak{}java} (ventana del plano de la simulación de sucesos discretos), aunque allí la pestaña de la curva de aceptabilidad está comentada en \texttt{get\allowbreak{}Tabbed\allowbreak{}Pane}, \texttt{get\allowbreak{}Show\allowbreak{}Hide\allowbreak{}Panel} se usa una sola vez y no se produce el desajuste.
+La misma estructura aparece en \texttt{gui/\allowbreak{}src/\allowbreak{}main/\allowbreak{}java/\allowbreak{}org/\allowbreak{}openmarkov/\allowbreak{}gui/\allowbreak{}desnets/\allowbreak{}CEDESDialog.\allowbreak{}java} (ventana del plano de la simulación de sucesos discretos), aunque allí la pestaña de la curva de aceptabilidad está comentada en \texttt{get\allowbreak{}Tabbed\allowbreak{}Pane}, \texttt{get\allowbreak{}Show\allowbreak{}Hide\allowbreak{}Panel} se usa una sola vez y no se produce el desajuste.
 
 Prueba: construir el diálogo sin su constructor con resultados escritos a mano, desmarcar una casilla del plano y comprobar que la de la curva queda desmarcada.
 
@@ -7738,9 +7807,9 @@ Las redes de simulación de eventos discretos (DES), en las que el tiempo avanza
 \subsection[Una utilidad acumulativa vale cero hasta el primer suceso que la alcanza]{En la simulación de sucesos, una utilidad acumulativa que depende de un nodo de azar vale cero hasta que llega el primer suceso, y el resultado sale más bajo}\label{err:95}
 \begin{ficha}
 \fichakey{Estado}Presente
-\fichakey{Módulo}inference.des
-\fichakey{Paquete}org.openmarkov.inference.DES
-\fichakey{Ficheros}\path{inference.des/src/main/java/org/openmarkov/inference/DES/UtilityEvaluation.java:50-72} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/UtilityEvaluation.java:80-103} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/UtilityRecord.java:86-95} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/ChanceEvaluation.java:51-89} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/GenericEvaluation.java:83-86} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:120-123} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:195-197} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESInference.java:315-333}
+\fichakey{Módulo}gui, inference.des
+\fichakey{Paquete}org.openmarkov.gui.desnets; org.openmarkov.inference.DES
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/desnets/UtilityEvaluation.java:50-72} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/UtilityEvaluation.java:80-103} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/UtilityRecord.java:87-96} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/ChanceEvaluation.java:51-89} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/GenericEvaluation.java:84-87} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:120-123} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:195-197} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/DESInference.java:317-335}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué valor tiene en el instante cero un nodo de azar que tiene un suceso como antecesor (hoy, implícitamente, su primer estado o 0,0, sin muestrearlo), porque de ese valor depende la utilidad del primer tramo
@@ -7796,7 +7865,7 @@ En esa red, el valor inicial de \texttt{Ill} coincide con lo correcto porque «n
 
 Para reproducirlo hay que construir en el editor una red de sucesos como la descrita.
 \paragraph{El código}
-inference.des/src/main/java/org/openmarkov/inference/DES/UtilityEvaluation.java:50-72
+gui/src/main/java/org/openmarkov/gui/desnets/UtilityEvaluation.java:50-72
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7827,7 +7896,7 @@ inference.des/src/main/java/org/openmarkov/inference/DES/UtilityEvaluation.java:
 \end{Highlighting}
 \end{Shaded}
 
-inference.des/src/main/java/org/openmarkov/inference/DES/UtilityRecord.java:86-89
+gui/src/main/java/org/openmarkov/gui/desnets/UtilityRecord.java:87-90
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7862,9 +7931,9 @@ Pruebas de regresión: la red descrita (sano al empezar, suceso en el año 3, mu
 \subsection[La simulación se cae si un nodo espera a un padre de un suceso no ocurrido]{La simulación de sucesos se cae cuando un suceso actualiza un nodo de azar cuyo padre de azar depende de otro suceso que aún no ha ocurrido}\label{err:96}
 \begin{ficha}
 \fichakey{Estado}Presente
-\fichakey{Módulo}inference.des
-\fichakey{Paquete}org.openmarkov.inference.DES
-\fichakey{Ficheros}\path{inference.des/src/main/java/org/openmarkov/inference/DES/ChanceEvaluation.java:63-89, 97-113} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/ChanceRecord.java:90-123} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:245-297}
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.desnets
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/desnets/ChanceEvaluation.java:63-89, 97-113} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/ChanceRecord.java:91-124} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:260-312}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -7883,7 +7952,7 @@ El otro bucle igual, en \texttt{add\allowbreak{}Values\allowbreak{}Orphan\allowb
 
 El repositorio no tiene ninguna red de sucesos. La medida se hizo con una red de sucesos de prueba con dos sucesos: \texttt{Onset} (año 3), que hace pasar \texttt{Ill} a «yes», y \texttt{Accident} (año 5), que hace pasar \texttt{Injured} a «yes»; y un enlace \texttt{Injured\ →\ Ill}, con la tabla de \texttt{Ill} sobre \texttt{{[}Ill,\allowbreak{}\ Onset,\allowbreak{}\ Injured{]}}. Al ocurrir \texttt{Onset} la simulación termina con \texttt{Index\allowbreak{}Out\allowbreak{}Of\allowbreak{}Bounds\allowbreak{}Exception:\ Index\ 1\ out\ of\ bounds\ for\ length\ 1} en \texttt{Chance\allowbreak{}Evaluation.\allowbreak{}update} (línea 107).
 \paragraph{El código}
-inference.des/src/main/java/org/openmarkov/inference/DES/ChanceEvaluation.java:103-110
+gui/src/main/java/org/openmarkov/gui/desnets/ChanceEvaluation.java:103-110
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7899,7 +7968,7 @@ inference.des/src/main/java/org/openmarkov/inference/DES/ChanceEvaluation.java:1
 \end{Highlighting}
 \end{Shaded}
 
-inference.des/src/main/java/org/openmarkov/inference/DES/ChanceRecord.java:120-123
+gui/src/main/java/org/openmarkov/gui/desnets/ChanceRecord.java:121-124
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7930,9 +7999,9 @@ Prueba de regresión: la red descrita (dos sucesos independientes, el nodo actua
 \subsection[Un ciclo entre nodos de azar de una red de sucesos impide simular]{Un ciclo entre nodos de azar en una red de sucesos impide simular: hoy desborda la pila y, detrás, hay un bucle infinito}\label{err:97}
 \begin{ficha}
 \fichakey{Estado}Presente
-\fichakey{Módulo}inference.des
-\fichakey{Paquete}org.openmarkov.inference.DES
-\fichakey{Ficheros}\path{inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:153-178} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/EventRecord.java:83-125} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/GenericEvaluation.java:63-80} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/ChanceEvaluation.java:70-73} \newline \path{core/src/main/java/org/openmarkov/core/model/network/type/DESNetworkType.java:30-43}
+\fichakey{Módulo}gui, inference.des
+\fichakey{Paquete}org.openmarkov.gui.desnets; org.openmarkov.inference.DES
+\fichakey{Ficheros}\path{inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:153-178} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/EventRecord.java:84-126} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/GenericEvaluation.java:64-81} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/ChanceEvaluation.java:70-73} \newline \path{core/src/main/java/org/openmarkov/core/model/network/type/DESNetworkType.java:30-43}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si una red DES puede tener ciclos entre nodos de azar (y entonces con qué orden se evalúan) o si debe prohibirlos una restricción del tipo de red
@@ -7982,7 +8051,7 @@ inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:165-178
 \end{Highlighting}
 \end{Shaded}
 
-inference.des/src/main/java/org/openmarkov/inference/DES/EventRecord.java:106-117
+gui/src/main/java/org/openmarkov/gui/desnets/EventRecord.java:107-118
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8025,7 +8094,7 @@ Prueba de regresión: una red DES con \texttt{Ill\ ↔\ Mood} produce el mensaje
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.potential
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/Finding.java:82-91} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:238-268} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:721-738} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/ExactDistrPotential.java:158-160} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/ExactDistrPotential.java:219-223} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:224-229} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:149-161} \newline \path{gui/src/main/java/org/openmarkov/gui/action/ChangeNodeTypeEdit.java:48-63} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/ChanceEvaluation.java:136-138} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/UtilityEvaluation.java:90-92} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/EventEvaluation.java:96-101}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/Finding.java:82-91} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:238-268} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:721-738} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/ExactDistrPotential.java:158-160} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/ExactDistrPotential.java:219-223} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:224-229} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:149-161} \newline \path{gui/src/main/java/org/openmarkov/gui/action/ChangeNodeTypeEdit.java:48-63} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/ChanceEvaluation.java:136-138} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/UtilityEvaluation.java:90-92} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/EventEvaluation.java:96-101}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Cómo deben tratar las variables de suceso los potenciales que no las entienden (tabla, valor exacto): prohibirlas y convertir el potencial al enlazar, ignorarlas al leer la casilla, o dar al hallazgo de un suceso un estado válido
@@ -8132,9 +8201,9 @@ Pruebas de regresión: los tres casos medidos (nodo de azar con tabla por omisi�
 \subsection[Añadir o quitar un enlace deja una relación uniforme y la simulación falla]{En una red de sucesos, añadir o quitar un enlace cambia la relación del nodo hijo por una uniforme que la simulación no admite, y simular termina en un error inesperado que no dice qué nodo es}\label{err:99}
 \begin{ficha}
 \fichakey{Estado}Presente en parte. Con un nodo recién creado al que aún no se le ha abierto la relación, enlazarlo ya no le deja una relación uniforme sino ninguna, y antes de simular sale un mensaje normal que nombra el nodo sin potencial (commits \texttt{710de2c} y \texttt{83ff8ab}). Sigue sin corregir para todo nodo que ya tuviera relación: añadir o quitar un enlace, o un bucle, la cambia por \texttt{Uniform\allowbreak{}Potential} perdiendo sus números, y la simulación sigue terminando en la \texttt{Class\allowbreak{}Cast\allowbreak{}Exception} de \texttt{DESRecord} como error inesperado sin decir el nodo.
-\fichakey{Módulo}core, inference.des
-\fichakey{Paquete}org.openmarkov.core.action.base.linkEdits; org.openmarkov.core.model.network.potential; org.openmarkov.inference.DES
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:189-234} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/RemoveLinkEdit.java:92-116} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/Potential.java:700-736} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:149-156} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:107} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/GenericEvaluation.java:63-80} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESInference.java:392-441} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:274-297} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/EmptyPotentialPanel.java:19} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/DistributionTablePotentialPanel.java:66-72} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/TransitionTablePotentialPanel.java:24-25}
+\fichakey{Módulo}core, gui, inference.des
+\fichakey{Paquete}org.openmarkov.core.action.base.linkEdits; org.openmarkov.core.model.network.potential; org.openmarkov.gui.desnets; org.openmarkov.inference.DES
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:189-234} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/RemoveLinkEdit.java:92-116} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/Potential.java:700-736} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:149-156} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:107} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/GenericEvaluation.java:64-81} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/DESInference.java:394-443} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:289-312} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/EmptyPotentialPanel.java:19} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/DistributionTablePotentialPanel.java:66-72} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/TransitionTablePotentialPanel.java:24-25}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué relación debe quedar en un nodo de una red de sucesos cuando se le añade o se le quita un padre: una que la simulación admita y conserve los números que se puedan (como hace una tabla corriente), o la uniforme de hoy, obligando a editarla antes de simular
@@ -8336,7 +8405,7 @@ Prueba: con una tabla de un tramo de tasa λ, comprobar que la media de muchos s
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.potential
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/ExternalPotential.java:17-24,67-70,137-144} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/ChanceEvaluation.java:63-89,123-161} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:117-134} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:228-253, 488-522, 584-587} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PotentialPanelManager.java:95-117} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:117,515-519} \newline \path{integrationTests/src/test/java/org/openmarkov/integrationTests/gui/AllPotentialsHaveAPanelTest.java:13-16}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/ExternalPotential.java:17-24,67-70,137-144} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/ChanceEvaluation.java:63-89,123-161} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:117-134} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:228-253, 488-522, 584-587} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PotentialPanelManager.java:95-117} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:117,515-519} \newline \path{integrationTests/src/test/java/org/openmarkov/integrationTests/gui/AllPotentialsHaveAPanelTest.java:13-16}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si la relación «External» se completa (ligada al fichero de datos de Monte Carlo, con su panel) o se deja de ofrecer como tipo de relación
@@ -8347,7 +8416,7 @@ En una red de simulación de eventos discretos (DES), el selector de clase de re
 
 \texttt{External\allowbreak{}Potential} (módulo \texttt{core}) se declara como tipo de relación con \texttt{@Potential\allowbreak{}Type(\allowbreak{}names\ =\ "External")} y su comentario dice que representa «un valor que se toma de una fuente externa, como un fichero». La clase no guarda ninguna fuente (ni fichero, ni columna, ni nombre) y su único método de simulación devuelve siempre \texttt{Double.\allowbreak{}MAX\_\allowbreak{}VALUE} (líneas 137-144), que el comentario de la interfaz \texttt{DESSimulable\allowbreak{}Potential} usa como «no hay muestra». Medido: \texttt{sample\allowbreak{}Conditioned\allowbreak{}Variable} devuelve \texttt{1.\allowbreak{}7976931348623157E308}. El lector de ProbModelXML sí la reconoce (\texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0}, líneas 117 y 515-519), así que un fichero puede traerla.
 
-La simulación DES sí tiene un fichero de datos de entrada, elegido en las opciones de Monte Carlo (\texttt{Monte\allowbreak{}Carlo\allowbreak{}Options.\allowbreak{}get\allowbreak{}Input\allowbreak{}File\allowbreak{}Path}, \texttt{DESInference}, línea 404). Al empezar cada individuo, \texttt{Chance\allowbreak{}Evaluation.\allowbreak{}add\allowbreak{}Values\allowbreak{}Orphan\allowbreak{}Nodes} (\texttt{inference.\allowbreak{}des}, líneas 63-89) toma del fichero el valor de cada nodo de azar \textbf{sin sucesos antecesores} cuyo nombre sea una columna del fichero, y solo si no lo encuentra muestrea su relación.
+La simulación DES sí tiene un fichero de datos de entrada, elegido en las opciones de Monte Carlo (\texttt{Monte\allowbreak{}Carlo\allowbreak{}Options.\allowbreak{}get\allowbreak{}Input\allowbreak{}File\allowbreak{}Path}, \texttt{DESInference}, línea 404). Al empezar cada individuo, \texttt{Chance\allowbreak{}Evaluation.\allowbreak{}add\allowbreak{}Values\allowbreak{}Orphan\allowbreak{}Nodes} (módulo \texttt{gui}, líneas 63-89) toma del fichero el valor de cada nodo de azar \textbf{sin sucesos antecesores} cuyo nombre sea una columna del fichero, y solo si no lo encuentra muestrea su relación.
 
 Esa lectura no depende de la clase de relación: vale igual para una tabla que para «External». Por tanto, «External» funciona de hecho como una etiqueta que no comprueba nada. Si no hay fichero, si el nombre del nodo no es una columna, o si el nodo tiene un suceso antecesor (entonces se recalcula con \texttt{compute\allowbreak{}Chance\allowbreak{}Value} sin mirar el fichero), la simulación usa \texttt{Double.\allowbreak{}MAX\_\allowbreak{}VALUE} como valor del nodo (para una variable de estados, \texttt{(\allowbreak{}int)\ Double.\allowbreak{}MAX\_\allowbreak{}VALUE} como índice de estado) sin avisar. Esto último es lectura del código; no se ha lanzado una simulación.
 
@@ -8393,9 +8462,9 @@ Reactivar \texttt{All\allowbreak{}Potentials\allowbreak{}Have\allowbreak{}APanel
 \subsection[Resultados de la simulación: la media descontada va al criterio equivocado]{La tabla de resultados de la simulación de sucesos pone la columna de media descontada al criterio que no tiene descuento, y la media descontada del coste no se ve}\label{err:102}
 \begin{ficha}
 \fichakey{Estado}Presente
-\fichakey{Módulo}inference.des
-\fichakey{Paquete}org.openmarkov.inference.DES
-\fichakey{Ficheros}\path{inference.des/src/main/java/org/openmarkov/inference/DES/CriteriaValues.java:20,36-42,195-209} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/SimulationSummaryResults.java:184-212} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESInference.java:373-386} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESResultsWindow.java:135-218}
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.desnets
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/desnets/CriteriaValues.java:20,36-42,195-209} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/SimulationSummaryResults.java:188-216} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/DESInference.java:375-388} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/DESResultsWindow.java:144-227}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -8420,7 +8489,7 @@ con [Cost, Effectiveness]: cabeceras Effectiveness (dos columnas: Mean, Disc. Me
 fila de la serie 0, opción «none»: 2 | 2 | 100
 \end{Verbatim}
 \paragraph{El código}
-inference.des/src/main/java/org/openmarkov/inference/DES/CriteriaValues.java:202-207
+gui/src/main/java/org/openmarkov/gui/desnets/CriteriaValues.java:202-207
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8432,7 +8501,7 @@ inference.des/src/main/java/org/openmarkov/inference/DES/CriteriaValues.java:202
 \end{Highlighting}
 \end{Shaded}
 
-inference.des/src/main/java/org/openmarkov/inference/DES/DESInference.java:373-376
+gui/src/main/java/org/openmarkov/gui/desnets/DESInference.java:375-378
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8455,9 +8524,9 @@ Prueba de regresión: la situación medida arriba, con criterios «Cost» (con d
 \subsection[El CSV de la simulación de sucesos tiene los títulos corridos una columna]{El CSV exportado de la simulación de sucesos tiene la fila de títulos con una columna menos que las de datos, y una hoja de cálculo desalinea todas las columnas}\label{err:103}
 \begin{ficha}
 \fichakey{Estado}Presente
-\fichakey{Módulo}inference.des
-\fichakey{Paquete}org.openmarkov.inference.DES
-\fichakey{Ficheros}\path{inference.des/src/main/java/org/openmarkov/inference/DES/DESResultsWindow.java:88-117}
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.desnets
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/desnets/DESResultsWindow.java:97-126}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -8480,7 +8549,7 @@ fila de títulos: 9 campos, el primero «SERIES;Mean cost for none»
 fila de datos:   10 campos, el primero «0»
 \end{Verbatim}
 \paragraph{El código}
-inference.des/src/main/java/org/openmarkov/inference/DES/DESResultsWindow.java:88-107
+gui/src/main/java/org/openmarkov/gui/desnets/DESResultsWindow.java:97-116
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8513,9 +8582,9 @@ Prueba de regresión: extraer la construcción del texto del CSV a un método si
 \subsection[Simular con traza una red de sucesos sin guardar falla antes de empezar]{Simular con la traza textual activada una red de sucesos que aún no se ha guardado falla antes de empezar}\label{err:104}
 \begin{ficha}
 \fichakey{Estado}Presente
-\fichakey{Módulo}inference.des
-\fichakey{Paquete}org.openmarkov.inference.DES
-\fichakey{Ficheros}\path{inference.des/src/main/java/org/openmarkov/inference/DES/DESLogTextWriter.java:53-61} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESLogTextWriter.java:221-238} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESInference.java:433} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:79-101} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/common/MonteCarloOptionsPanel.java:313-319} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:274-297}
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.desnets
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/desnets/DESLogTextWriter.java:53-61} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/DESLogTextWriter.java:221-238} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/DESInference.java:435} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:89-111} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/common/MonteCarloOptionsPanel.java:313-319} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:289-312}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -8544,7 +8613,7 @@ Detalles menores del mismo método:
   Como el fichero se abre en \texttt{initialize} antes de construir los registros, una simulación que falla después (por ejemplo, la de \hyperref[err:97]{error~97}) deja un fichero de traza vacío.
 \end{itemize}
 \paragraph{El código}
-inference.des/src/main/java/org/openmarkov/inference/DES/DESLogTextWriter.java:221-227
+gui/src/main/java/org/openmarkov/gui/desnets/DESLogTextWriter.java:221-227
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8559,7 +8628,7 @@ inference.des/src/main/java/org/openmarkov/inference/DES/DESLogTextWriter.java:2
 \paragraph{Cómo arreglarlo}
 Quitar la extensión solo si la hay (último punto, no el primero) y usar el nombre entero si no la hay.
 
-Sitios con la misma suposición sobre el nombre de la red: \texttt{DESLog\allowbreak{}Text\allowbreak{}Writer.\allowbreak{}create\allowbreak{}Filename} es el único que corta en \texttt{index\allowbreak{}Of(\allowbreak{}\textquotesingle{}.\allowbreak{}\textquotesingle{})} dentro de \texttt{inference.\allowbreak{}des}; \texttt{DESResults\allowbreak{}Excel\allowbreak{}Writer.\allowbreak{}create\allowbreak{}Filename} (líneas 181-183) repite exactamente el mismo corte, aunque hoy esa clase no tiene ninguna referencia; si se vuelve a usar, necesita el mismo arreglo.
+Sitios con la misma suposición sobre el nombre de la red: \texttt{DESLog\allowbreak{}Text\allowbreak{}Writer.\allowbreak{}create\allowbreak{}Filename} es el único que corta en \texttt{index\allowbreak{}Of(\allowbreak{}\textquotesingle{}.\allowbreak{}\textquotesingle{})} entre las clases de la simulación de sucesos (paquete \texttt{org.\allowbreak{}openmarkov.\allowbreak{}gui.\allowbreak{}desnets}); \texttt{DESResults\allowbreak{}Excel\allowbreak{}Writer.\allowbreak{}create\allowbreak{}Filename} (líneas 181-183) repite exactamente el mismo corte, aunque hoy esa clase no tiene ninguna referencia; si se vuelve a usar, necesita el mismo arreglo.
 
 Prueba de regresión: construir \texttt{DESLog\allowbreak{}Text\allowbreak{}Writer} con la traza activada para redes llamadas «Untitled», «a.pgmx» y «a.b.pgmx» no debe lanzar y debe producir nombres que empiecen por «Untitled», «a» y «a.b».
 
@@ -8569,7 +8638,7 @@ Prueba de regresión: construir \texttt{DESLog\allowbreak{}Text\allowbreak{}Writ
 \fichakey{Estado}Presente en parte. La relación hermana, \texttt{Tree\allowbreak{}With\allowbreak{}Events\allowbreak{}Potential}, ya no abre ninguna ventana: lanza \texttt{There\allowbreak{}Must\allowbreak{}Be\allowbreak{}Just\allowbreak{}One\allowbreak{}Event\allowbreak{}In\allowbreak{}Configuration} (commit \texttt{e3a4b1e}).
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.potential.treeadd
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/treeadd/TreeWithExcludedEventsPotential.java:28,125-143} \newline \path{core/src/main/java/module-info.java:20} \newline \path{core/src/main/java/org/openmarkov/core/action/core/PurposeEdit.java:18} \newline \path{core/src/main/java/org/openmarkov/core/action/core/MonteCarloOptionsEdit.java:8,32} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/ChanceEvaluation.java:85,123-161} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:228} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/EventRecord.java:134}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/treeadd/TreeWithExcludedEventsPotential.java:28,125-143} \newline \path{core/src/main/java/module-info.java:20} \newline \path{core/src/main/java/org/openmarkov/core/action/core/PurposeEdit.java:18} \newline \path{core/src/main/java/org/openmarkov/core/action/core/MonteCarloOptionsEdit.java:8,32} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/ChanceEvaluation.java:85,123-161} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESRecord.java:228} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/EventRecord.java:135}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -8631,9 +8700,9 @@ Prueba: construir un \texttt{Tree\allowbreak{}With\allowbreak{}Excluded\allowbre
 \subsection[Un nodo de azar discretizado impide simular con un error inesperado]{Un nodo de azar discretizado en una red de sucesos impide simular con un error inesperado, y el mensaje previsto diría que ese nodo «debe ser de azar»}\label{err:106}
 \begin{ficha}
 \fichakey{Estado}Presente
-\fichakey{Módulo}inference.des, gui
-\fichakey{Paquete}org.openmarkov.inference.DES; org.openmarkov.gui.dialog.node
-\fichakey{Ficheros}\path{inference.des/src/main/java/org/openmarkov/inference/DES/ChanceRecord.java:76-84} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/GenericEvaluation.java:63-80} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/DESInference.java:105-113,437} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/exception/NodeMustBeChance.java:6-13} \newline \path{inference.des/src/main/resources/inference_des/localize/inference_des_class_localizations_en.xml:5-6} \newline \path{core/src/main/java/org/openmarkov/core/exception/OpenMarkovException.java:27-35} \newline \path{core/src/main/java/org/openmarkov/core/model/network/VariableType.java:58-65} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanel.java:856-868, 886-894} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:274-297}
+\fichakey{Módulo}gui, inference.des
+\fichakey{Paquete}org.openmarkov.gui.desnets; org.openmarkov.gui.dialog.node
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/desnets/ChanceRecord.java:77-85} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/GenericEvaluation.java:64-81} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/DESInference.java:107-115,439} \newline \path{inference.des/src/main/java/org/openmarkov/inference/DES/exception/NodeMustBeChance.java:6-13} \newline \path{inference.des/src/main/resources/inference_des/localize/inference_des_class_localizations_en.xml:5-6} \newline \path{core/src/main/java/org/openmarkov/core/exception/OpenMarkovException.java:27-35} \newline \path{core/src/main/java/org/openmarkov/core/model/network/VariableType.java:58-65} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanel.java:856-868, 886-894} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:289-312}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si una red de sucesos debe admitir nodos de azar discretizados (y entonces la simulación los trata como de estados) o si el editor no debe ofrecer ese tipo en una red de sucesos
@@ -8666,7 +8735,7 @@ DESInference.initialize -> UnreachableException: java.lang.reflect.InvocationTar
 NodeMustBeChance.getMessage() = null
 \end{Verbatim}
 \paragraph{El código}
-inference.des/src/main/java/org/openmarkov/inference/DES/ChanceRecord.java:76-81
+gui/src/main/java/org/openmarkov/gui/desnets/ChanceRecord.java:77-82
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8679,7 +8748,7 @@ inference.des/src/main/java/org/openmarkov/inference/DES/ChanceRecord.java:76-81
 \end{Highlighting}
 \end{Shaded}
 
-inference.des/src/main/java/org/openmarkov/inference/DES/GenericEvaluation.java:68-78
+gui/src/main/java/org/openmarkov/gui/desnets/GenericEvaluation.java:69-79
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8697,7 +8766,7 @@ inference.des/src/main/java/org/openmarkov/inference/DES/GenericEvaluation.java:
 \end{Highlighting}
 \end{Shaded}
 
-inference.des/src/main/java/org/openmarkov/inference/DES/DESInference.java:107-113
+gui/src/main/java/org/openmarkov/gui/desnets/DESInference.java:109-115
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8948,7 +9017,7 @@ Depende de la decisión de equipo:
 \begin{itemize}
 \tightlist
 \item
-  Si los estadísticos deben poder elegirse: inicializar cada casilla con su propio indicador (\texttt{is\allowbreak{}Mean}, \texttt{is\allowbreak{}Sum}, \texttt{is\allowbreak{}Trimmed\allowbreak{}Mean}, \texttt{is\allowbreak{}Median}) sin forzar el estado, activarlas, hacer que la simulación (\texttt{inference.\allowbreak{}des}, \texttt{DESInference} y la ventana de resultados) use los indicadores, y guardarlos y leerlos en \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0}/\texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0}.
+  Si los estadísticos deben poder elegirse: inicializar cada casilla con su propio indicador (\texttt{is\allowbreak{}Mean}, \texttt{is\allowbreak{}Sum}, \texttt{is\allowbreak{}Trimmed\allowbreak{}Mean}, \texttt{is\allowbreak{}Median}) sin forzar el estado, activarlas, hacer que la simulación (\texttt{DESInference} y la ventana de resultados, en el módulo \texttt{gui}) use los indicadores, y guardarlos y leerlos en \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0}/\texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0}.
 \item
   Si no: quitar el recuadro «DES Inference Statistics» y las cuatro escrituras de \texttt{get\allowbreak{}Monte\allowbreak{}Carlo\allowbreak{}Options(\allowbreak{})}, y los cuatro campos de \texttt{Monte\allowbreak{}Carlo\allowbreak{}Options} si nadie más los necesita (hay una prueba, \texttt{Options\allowbreak{}Are\allowbreak{}Copied\allowbreak{}Whole\allowbreak{}Test}, que los copia).
 \end{itemize}
@@ -9075,7 +9144,7 @@ Prueba de regresión: el fichero de prueba descrito arriba (\texttt{BN-asia.\all
 \fichakey{Estado}Presente en parte. El commit \texttt{551e715} (23-09-2026) hizo que una distribución «Exact» con números, que es como el formato 1.0 guarda las relaciones exactas, se convierta en tabla como el \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential} que es, así que las redes guardadas en 1.0 vuelven a evaluarse y dan lo mismo que en 0.2 (\texttt{ID-decide-test-1-0.\allowbreak{}pgmx} da 9,3289, como su versión 0.2); sigue que guardar en 0.2 una red reabierta desde un fichero 1.0 escribe esas relaciones como \texttt{Univariate\allowbreak{}Distr\allowbreak{}Potential}, y el lector 0.2 rechaza el fichero (\texttt{PGMXParser\allowbreak{}Exception\$Potential\allowbreak{}Type\allowbreak{}Not\allowbreak{}Supported}). Los \hyperref[err:46]{errores~46} y \hyperref[err:50]{50}, que fallaban también por esta causa, están sin volver a comprobar.
 \fichakey{Módulo}io, core, gui
 \fichakey{Paquete}org.openmarkov.io.probmodel.writer; org.openmarkov.io.probmodel.reader; org.openmarkov.core.model.network.potential; org.openmarkov.gui.window
-\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_1_0.java:191-199} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:126-166} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/UnivariateDistrPotential.java:356-364} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:149-156} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader.java:32-42} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:79-101, 126-129, 204-205, 246-280, 480-510} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/io/NetworkOMFileChooser.java:73-82, 107-124} \newline \path{gui/src/main/java/org/openmarkov/gui/configuration/UserPreferences.java:113-115}
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_1_0.java:191-199} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:126-166} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/UnivariateDistrPotential.java:356-364} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:149-156} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader.java:32-42} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:89-111, 136-139, 214-215, 256-290, 490-520} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/io/NetworkOMFileChooser.java:73-82, 107-124} \newline \path{gui/src/main/java/org/openmarkov/gui/configuration/UserPreferences.java:119-121}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Dónde se resuelve (al escribir, al leer o haciendo que una distribución exacta se pueda convertir en tabla) y qué pasa con los ficheros 1.0 ya guardados, entre ellos las copias de las carpetas \texttt{1-0} del repositorio
@@ -9157,7 +9226,7 @@ core/src/main/java/org/openmarkov/core/model/network/potential/UnivariateDistrPo
 \end{Highlighting}
 \end{Shaded}
 
-gui/src/main/java/org/openmarkov/gui/configuration/UserPreferences.java:107-109
+gui/src/main/java/org/openmarkov/gui/configuration/UserPreferences.java:113-115
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9191,7 +9260,7 @@ Prueba de regresión: para cada red de \texttt{0\_\allowbreak{}miscellaneous/\al
 \fichakey{Estado}Presente
 \fichakey{Módulo}io
 \fichakey{Paquete}org.openmarkov.io.probmodel.writer; org.openmarkov.io.probmodel.reader
-\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:770-798,833-851} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/Potential.java:726-736} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/SumPotential.java:141-144} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/ProductPotential.java:68-77} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1397-1409} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader.java:32-41} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:246-254} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:42-60}
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:770-798,833-851} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/Potential.java:726-736} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/SumPotential.java:141-144} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/ProductPotential.java:68-77} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1397-1409} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader.java:32-41} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:256-264} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:42-60}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -9325,7 +9394,7 @@ Prueba de regresión: para las siete redes citadas, guardar con \texttt{PGMXWrit
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}io
 \fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.io.probmodel.writer
-\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1375-1387,1563-1571} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:70-97,733-753} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/PotentialRole.java:31-42} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:246-254, 308-324, 368-388} \newline \path{0_miscellaneous/networks/id/ID-CEA-test-2therapies-new-test.pgmx:148} \newline \path{0_miscellaneous/networks/mid/MID-CHAP-Ryan-Griffin.pgmx:808} \newline \path{0_miscellaneous/networks/mid/MID-Cochlear.pgmx:4854} \newline \path{integrationTests/src/main/resources/networks/mid/MID-Cochlear.pgmx}
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1375-1387,1563-1571} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:70-97,733-753} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/PotentialRole.java:31-42} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:256-264, 318-334, 378-398} \newline \path{0_miscellaneous/networks/id/ID-CEA-test-2therapies-new-test.pgmx:148} \newline \path{0_miscellaneous/networks/mid/MID-CHAP-Ryan-Griffin.pgmx:808} \newline \path{0_miscellaneous/networks/mid/MID-Cochlear.pgmx:4854} \newline \path{integrationTests/src/main/resources/networks/mid/MID-Cochlear.pgmx}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el lector rechaza un papel de potencial desconocido (corrigiendo antes los ficheros que lo traen) o lo acepta como sinónimo avisando
@@ -10681,7 +10750,6 @@ Prueba: con una base de 1 003 casos, cada índice aparece en exactamente una par
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
-\fichakey{Corregir antes}\hyperref[err:133]{error~133}: a la vez, como mínimo: arreglado solo este, con la opción de fábrica el superpadre se aplicaría sin compararlo con el Bayes ingenuo.
 \fichakey{Relacionados}\hyperref[err:127]{error~127}, \hyperref[err:128]{error~128}, \hyperref[err:129]{error~129}, \hyperref[err:130]{error~130}, \hyperref[err:131]{error~131}, \hyperref[err:133]{error~133}, \hyperref[err:134]{error~134}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -10739,7 +10807,6 @@ Prueba de regresión: ejecutar el algoritmo con \texttt{same\allowbreak{}SP\ =\ 
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
-\fichakey{Corregir antes}\hyperref[err:128]{error~128}: con él, todos los enlaces bajan la exactitud medida, así que comparando con el Bayes ingenuo no se añadiría ninguno.
 \fichakey{Tapado por}\hyperref[err:132]{error~132}: con «Unique superparent» marcada, que es la opción de fábrica, no se aprende ningún enlace.
 \fichakey{Relacionados}\hyperref[err:127]{error~127}, \hyperref[err:128]{error~128}, \hyperref[err:129]{error~129}, \hyperref[err:130]{error~130}, \hyperref[err:132]{error~132}, \hyperref[err:134]{error~134}, \hyperref[err:141]{error~141}
 \end{ficha}
@@ -10830,85 +10897,86 @@ Conviene hacerlo con \hyperref[err:128]{error~128}, \hyperref[err:129]{error~129
 Prueba de regresión: con una métrica de prueba (una subclase de \texttt{Accuracy}) que dé al Bayes ingenuo una exactitud mayor que la de cualquier superpadre y cualquier enlace, el algoritmo, en los dos modos, debe devolver el Bayes ingenuo sin enlaces entre características.
 
 \setcounter{subsection}{133}
-\subsection[Superpadre interactivo: llenar la tabla avanza el algoritmo y la vacía]{En el aprendizaje interactivo con el clasificador de superpadre, llenar la tabla hace avanzar el algoritmo como si se hubieran aplicado las propuestas: «Block edit» o volver a marcar «Only positive edits» dejan la tabla vacía y dan el aprendizaje por terminado, y «Finish» nada más abrir no aprende ningún enlace}\label{err:134}
+\subsection[Superpadre interactivo: llenar la tabla avanza el algoritmo y la vacía]{En el aprendizaje interactivo con el clasificador de superpadre, llenar la tabla hace avanzar el algoritmo como si se hubieran aplicado las propuestas: «Block edit» o volver a marcar «Only positive edits» dejan la tabla vacía y dan el aprendizaje por terminado, y aplicando las propuestas una a una se aprenden menos enlaces que con el aprendizaje automático}\label{err:134}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Presente en parte. «Finish» nada más abrir la ventana ya aprende lo mismo que el aprendizaje automático: \texttt{init} repone \texttt{current\allowbreak{}Accuracy} desde el commit \texttt{3ce9c93} (05-10-2026, \hyperref[err:133]{error~133}). Lo demás sigue presente. La ficha se volvió a medir el 7-10-2026 sobre \texttt{2b4fc61}, con los errores 127 a 133 ya corregidos, y sus números son los de esa medida.
 \fichakey{Módulo}learning.algorithm
 \fichakey{Paquete}org.openmarkov.learning.algorithm.nbderived.spnb
-\fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:41-47} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:59-74} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:84-142} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/common/DiscriminativeAlgorithm.java:81-90} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/interactive/InteractiveLearningDialog.java:298-352} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/interactive/InteractiveLearningDialog.java:403-427} \newline \path{learning.core/src/main/java/org/openmarkov/learning/core/algorithm/LearningAlgorithm.java:88-103}
+\fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:41-47} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:59-79} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:88-153} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/common/DiscriminativeAlgorithm.java:81-90} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/interactive/InteractiveLearningDialog.java:306-350} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/interactive/InteractiveLearningDialog.java:407-431} \newline \path{learning.core/src/main/java/org/openmarkov/learning/core/algorithm/LearningAlgorithm.java:88-103}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si la tabla del aprendizaje interactivo con el superpadre debe enseñar solo alternativas para el paso en curso o también los pasos siguientes
-\fichakey{Tapado por}\hyperref[err:132]{error~132}: con «Unique superparent» marcada, que es la opción de fábrica, no se aprende ningún enlace.
 \fichakey{Relacionados}\hyperref[err:132]{error~132}, \hyperref[err:133]{error~133}, \hyperref[err:140]{error~140}, \hyperref[err:141]{error~141}
 \end{ficha}
 \paragraph{Qué pasa}
-El usuario llega por Herramientas («Tools») → «Learning» → tipo «Discriminative» → «Superparent naive bayes» → «Options», desmarca «Unique superparent» (con la opción marcada, que es la de fábrica, hoy no se aprende nada por \hyperref[err:132]{error~132}), deja «Interactive learning», que es la opción marcada por omisión, y pulsa «Learn». La ventana «Interactive learning» se abre con una propuesta: el primer enlace que añadiría el aprendizaje automático. A partir de ahí:
+El usuario llega por Herramientas («Tools») → «Learning» → tipo «Discriminative» → «Superparent naive bayes», deja «Interactive learning», que es la opción marcada por omisión, y pulsa «Learn». La ventana «Interactive learning» se abre con una propuesta. Con «Unique superparent» desmarcada (en «Options») la propuesta es un enlace; con la casilla marcada, que es la opción de fábrica, es un cambio compuesto con todos los enlaces que salen del superpadre elegido. A partir de ahí:
 
 \begin{itemize}
 \tightlist
 \item
-  Si pulsa «Block edit» sobre esa propuesta, la tabla se queda vacía y la ventana da el aprendizaje por terminado: desactiva «Apply edit» y «Complete phase», y «Finish» ya no aprende. Hay otros enlaces que el algoritmo ofrecería.
+  Si pulsa «Block edit» sobre esa propuesta, la tabla se queda vacía y la ventana da el aprendizaje por terminado: desactiva «Apply edit» y «Complete phase», y «Finish» ya no aprende. Con «Unique superparent» desmarcada hay otros enlaces que el algoritmo ofrecería.
 \item
-  Si desmarca «Only positive edits», la tabla enseña varios enlaces, cada uno desde un superpadre distinto y ninguno desde el de la propuesta inicial; si la vuelve a marcar, la tabla se queda vacía y la ventana da el aprendizaje por terminado.
+  Si desmarca «Only positive edits», la tabla enseña varios enlaces, cada uno desde un superpadre distinto y ninguno desde el de la propuesta inicial; si la vuelve a marcar, la tabla se queda vacía y la ventana da el aprendizaje por terminado. Con «Unique superparent» marcada la tabla queda vacía ya al desmarcarla.
 \item
-  Si pulsa «Finish» nada más abrir, la red no recibe ningún enlace entre características, cuando el aprendizaje automático sí añade uno.
+  Si aplica las propuestas una a una con «Apply edit» hasta que la tabla se vacía, la red puede quedarse con menos enlaces entre características que la que da el aprendizaje automático sobre la misma base.
 \end{itemize}
 
-El clasificador de superpadre guarda el estado de su búsqueda en tres campos: \texttt{super\allowbreak{}Parents} (las características ya usadas como superpadre), \texttt{orphans} (las que aún no tienen un segundo padre) y \texttt{current\allowbreak{}Accuracy} (la exactitud que hay que superar). \texttt{get\allowbreak{}Optimal\allowbreak{}Edit} los cambia en cuanto encuentra una propuesta, antes de que se aplique nada: añade el superpadre elegido a \texttt{super\allowbreak{}Parents} (aunque después ningún enlace desde él pase la comparación), quita la hija propuesta de \texttt{orphans} (o vacía la lista en el modo «Unique superparent») y pone en \texttt{current\allowbreak{}Accuracy} la exactitud de la propuesta.
+El clasificador de superpadre guarda el estado de su búsqueda en tres campos: \texttt{super\allowbreak{}Parents} (las características ya usadas como superpadre), \texttt{orphans} (las que aún no tienen un segundo padre) y \texttt{current\allowbreak{}Accuracy} (la exactitud que hay que superar). \texttt{get\allowbreak{}Optimal\allowbreak{}Edit} los cambia mientras busca, antes de que se aplique nada: añade el superpadre elegido a \texttt{super\allowbreak{}Parents} (aunque después ningún enlace desde él pase la comparación), quita la hija propuesta de \texttt{orphans} (o vacía la lista en el modo «Unique superparent») y pone en \texttt{current\allowbreak{}Accuracy} la exactitud de la propuesta.
 
-El aprendizaje automático (\texttt{Learning\allowbreak{}Algorithm.\allowbreak{}run}) aplica cada propuesta nada más pedirla, y no lo nota. La ventana, en cambio, cada vez que rehace la tabla (\texttt{Interactive\allowbreak{}Learning\allowbreak{}Dialog.\allowbreak{}update\allowbreak{}Editions\allowbreak{}Table}: al abrirse, tras «Apply edit», «Block edit» o «Show blocked» y al cambiar cada casilla) llama a \texttt{get\allowbreak{}Best\allowbreak{}Edit} y después a \texttt{get\allowbreak{}Next\allowbreak{}Edit} hasta tener 50 propuestas. \texttt{Discriminative\allowbreak{}Algorithm.\allowbreak{}get\allowbreak{}Best\allowbreak{}Edit} solo vacía el historial de propuestas ya consideradas, y \texttt{get\allowbreak{}Next\allowbreak{}Edit} vuelve a llamar a \texttt{get\allowbreak{}Optimal\allowbreak{}Edit}, así que cada llamada avanza el estado como si la propuesta anterior se hubiera aplicado. El refresco siguiente parte de ese estado: deja fuera los superpadres ya propuestos, no ofrece las hijas ya propuestas y exige superar la exactitud de la última propuesta.
+El aprendizaje automático (\texttt{Learning\allowbreak{}Algorithm.\allowbreak{}run}) aplica cada propuesta nada más pedirla, y no lo nota. La ventana, en cambio, cada vez que rehace la tabla (\texttt{Interactive\allowbreak{}Learning\allowbreak{}Dialog.\allowbreak{}update\allowbreak{}Editions\allowbreak{}Table}: al abrirse, tras «Apply edit», «Block edit» o «Show blocked» y al cambiar cada casilla) llama a \texttt{get\allowbreak{}Best\allowbreak{}Edit} y después a \texttt{get\allowbreak{}Next\allowbreak{}Edit} hasta tener 50 propuestas. \texttt{Discriminative\allowbreak{}Algorithm.\allowbreak{}get\allowbreak{}Best\allowbreak{}Edit} solo vacía el historial de propuestas ya consideradas, y \texttt{get\allowbreak{}Next\allowbreak{}Edit} vuelve a llamar a \texttt{get\allowbreak{}Optimal\allowbreak{}Edit}, así que cada llamada avanza el estado como si la propuesta anterior se hubiera aplicado. El refresco siguiente parte de ese estado: deja fuera los superpadres ya propuestos, no ofrece las hijas ya propuestas y exige superar la exactitud de la última propuesta. Lo mismo pasa con el llenado que sigue a cada «Apply edit»: gasta superpadres que el aprendizaje automático habría probado en los pasos siguientes, y por eso aplicar una a una puede acabar antes.
 
-«Finish» pasa por \texttt{init} (\hyperref[err:141]{error~141}), que rehace \texttt{super\allowbreak{}Parents} y \texttt{orphans} pero no \texttt{current\allowbreak{}Accuracy} (\hyperref[err:133]{error~133}): se queda la exactitud que dejó el llenado de la tabla, y ningún superpadre la alcanza.
+«Finish» nada más abrir la ventana sí da hoy la red del aprendizaje automático: pasa por \texttt{init} (\hyperref[err:141]{error~141}), que rehace los tres campos. Después de un bloqueo o de un cambio de casilla que deje la tabla vacía, «Finish» no hace nada, porque la ventana ya ha dado el aprendizaje por terminado.
 
 Es el mismo patrón que el del aprendizaje interactivo con PC (\hyperref[err:140]{error~140}), con otro estado y en otra clase.
 
-Medido con un pequeño programa de prueba que construye el algoritmo como la ventana de aprendizaje (alfa 0,5, «Unique superparent» desmarcada) y repite las llamadas de la ventana (llenar la tabla, bloquear con \texttt{block\allowbreak{}Edit}, volver a llenarla con la casilla desmarcada y marcada, \texttt{learn} como «Finish»), sobre cuatro bases:
+Medido con una prueba temporal que construye el algoritmo como la ventana de aprendizaje (métrica de exactitud, alfa 0,5) y repite sus llamadas: llenar la tabla; bloquear con \texttt{block\allowbreak{}Edit} y volver a llenarla; llenarla con la casilla desmarcada y otra vez marcada; \texttt{learn} como «Finish»; y aplicar la primera fila y volver a llenar la tabla hasta que se vacía. Sobre cuatro bases, con «Unique superparent» desmarcada:
 
 \begin{itemize}
 \tightlist
 \item
-  \texttt{learning.\allowbreak{}algorithm/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}network/\allowbreak{}BN-asia10k.\allowbreak{}csv}, clase \texttt{Bronchitis}: la tabla se abre con X-ray→Smoker (0,8253), igual que el aprendizaje automático, que solo añade ese enlace. Bloqueándolo, la tabla queda vacía; el mismo algoritmo, con esa propuesta bloqueada antes de llenar la tabla, ofrece X-ray→LungCancer (0,8124). Desmarcando «Only positive edits», la tabla enseña seis enlaces desde seis superpadres distintos (TuberculosisOrCancer→Tuberculosis, Tuberculosis→TuberculosisOrCancer, LungCancer→VisitToAsia, Smoker→LungCancer, VisitToAsia→Dyspnea y Dyspnea→X-ray) y ninguno desde X-ray; volviéndola a marcar, la tabla queda vacía. «Finish» nada más abrir: ningún enlace.
+  \texttt{learning.\allowbreak{}algorithm/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}network/\allowbreak{}BN-asia10k.\allowbreak{}csv}, clase \texttt{Bronchitis}: el aprendizaje automático añade cuatro enlaces (X-ray→Tuberculosis, LungCancer→TuberculosisOrCancer, Tuberculosis→Dyspnea y TuberculosisOrCancer→Smoker). La tabla se abre con TuberculosisOrCancer→Smoker (0,8428). Bloqueándolo, la tabla queda vacía; el mismo algoritmo, con esa propuesta bloqueada antes de llenar la tabla, ofrece TuberculosisOrCancer→LungCancer (0,8428). Desmarcando «Only positive edits», la tabla enseña cinco enlaces desde cinco superpadres distintos (Tuberculosis→TuberculosisOrCancer, Smoker→Tuberculosis, VisitToAsia→LungCancer, X-ray→VisitToAsia y Dyspnea→X-ray) y ninguno desde TuberculosisOrCancer; volviéndola a marcar, la tabla queda vacía. Aplicando la primera fila hasta vaciar la tabla quedan tres enlaces: falta LungCancer→TuberculosisOrCancer.
 \item
-  \texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks/\allowbreak{}learning/\allowbreak{}learn\allowbreak{}Test\allowbreak{}Data\allowbreak{}Base.\allowbreak{}csv}, clase \texttt{A}: se abre con B→E, lo mismo que aprende el automático; bloqueándolo, tabla vacía (sin el llenado previo se ofrecería B→C); con la casilla desmarcada, tres enlaces desde otros superpadres; al volver a marcarla, vacía; «Finish» nada más abrir, ningún enlace.
+  \texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks/\allowbreak{}learning/\allowbreak{}learn\allowbreak{}Test\allowbreak{}Data\allowbreak{}Base.\allowbreak{}csv}, clase \texttt{A}: el automático añade cuatro enlaces (D→B, B→E, C→D y F→C). La tabla se abre con D→B (0,808); bloqueándolo, tabla vacía (sin el llenado previo se ofrecerían D→E y B→D); con la casilla desmarcada, tres enlaces desde otros superpadres; al volver a marcarla, vacía. Aplicando la primera fila hasta vaciar la tabla quedan dos enlaces (D→B y F→C).
 \item
-  \texttt{learning.\allowbreak{}algorithm/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}network/\allowbreak{}Head\allowbreak{}To\allowbreak{}Head2.\allowbreak{}csv}, clase \texttt{C}: se abre con B→F, lo mismo que el automático; bloqueándolo, vacía (se ofrecería B→E); desmarcada, dos enlaces; marcada otra vez, vacía; «Finish», ningún enlace.
+  \texttt{learning.\allowbreak{}algorithm/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}network/\allowbreak{}Head\allowbreak{}To\allowbreak{}Head2.\allowbreak{}csv}, clase \texttt{C}: el automático añade A→B y F→E. La tabla se abre con dos filas, F→E (0,7114) y su inverso E→F (0,7126), que es la propuesta del paso siguiente; bloqueando la primera, vacía (aquí también sin el llenado previo); con la casilla desmarcada, un enlace (A→B); marcada otra vez, vacía. Aplicando la primera fila hasta vaciar la tabla quedan los dos enlaces del automático.
 \item
-  \texttt{core/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}nets/\allowbreak{}Cataract-RRDdataset\allowbreak{}Pre\allowbreak{}Proc3.\allowbreak{}csv}, clase \texttt{success}: se abre con opType→breakType, lo mismo que el automático; bloqueándolo, vacía (se ofrecería opType→loc57); desmarcada, cinco enlaces; marcada otra vez, vacía; «Finish», ningún enlace.
+  \texttt{core/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}nets/\allowbreak{}Cataract-RRDdataset\allowbreak{}Pre\allowbreak{}Proc3.\allowbreak{}csv}, clase \texttt{success}: el automático no añade ningún enlace y la tabla se abre vacía. Un segundo llenado con las mismas casillas ofrece loc48rrd→loc48 (0,9646), que supera la exactitud de partida; es el llenado que, por lectura, hace «Show blocked».
 \end{itemize}
 
-En las cuatro bases, aplicar la propuesta de la tabla con «Apply edit» da lo mismo que el aprendizaje automático, que se detiene tras el primer enlace: el adelanto se ve al bloquear, al cambiar las casillas y al pulsar «Finish».
+En las tres primeras bases, «Finish» nada más abrir da la misma red que el aprendizaje automático.
 
-Con «Unique superparent» marcada, en \texttt{BN-asia10k.\allowbreak{}csv} la tabla se abre con la propuesta compuesta que describe \hyperref[err:132]{error~132} y cualquier refresco la deja vacía, porque la primera propuesta ya vació \texttt{orphans}.
+Con «Unique superparent» marcada, en las tres primeras bases la tabla se abre con el cambio compuesto (en \texttt{BN-asia10k.\allowbreak{}csv}, los seis enlaces desde TuberculosisOrCancer, 0,8454) y cualquier refresco la deja vacía, porque la primera propuesta ya vació \texttt{orphans}: al bloquear, al desmarcar «Only positive edits» y al volver a marcarla. «Finish» nada más abrir y «Apply edit» dan la red del aprendizaje automático.
 
 La ventana es un \texttt{JDialog} y no se ha abierto: lo que hace con la tabla vacía (botones desactivados, «Finish» sin efecto) está leído en \texttt{update\allowbreak{}Editions\allowbreak{}Table} y \texttt{btn\allowbreak{}Run\allowbreak{}Action\allowbreak{}Performed}.
 \paragraph{El código}
-learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:86-139
+learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:111-150
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\DataTypeTok{double}\NormalTok{ bestPartialScore }\OperatorTok{=}\NormalTok{ currentAccuracy}\OperatorTok{;}
-\KeywordTok{...}
-\ControlFlowTok{if} \OperatorTok{(}\NormalTok{bestParent }\OperatorTok{!=} \KeywordTok{null} \OperatorTok{\&\&} \OperatorTok{!}\NormalTok{orphans}\OperatorTok{.}\FunctionTok{isEmpty}\OperatorTok{())} \OperatorTok{\{}
-\NormalTok{    superParents}\OperatorTok{.}\FunctionTok{add}\OperatorTok{(}\NormalTok{bestParent}\OperatorTok{);}
-    \DataTypeTok{final} \BuiltInTok{Node}\NormalTok{ selectedParent }\OperatorTok{=}\NormalTok{ bestParent}\OperatorTok{;}
-    \ControlFlowTok{if} \OperatorTok{(}\KeywordTok{this}\OperatorTok{.}\FunctionTok{sameSP}\OperatorTok{)} \OperatorTok{\{}
-        \KeywordTok{...}
-\NormalTok{        orphans}\OperatorTok{.}\FunctionTok{clear}\OperatorTok{();}
-\NormalTok{        currentAccuracy }\OperatorTok{=}\NormalTok{ bestPartialScore}\OperatorTok{;}
-    \OperatorTok{\}} \ControlFlowTok{else} \OperatorTok{\{}
-        \ControlFlowTok{for} \OperatorTok{(}\BuiltInTok{Node}\NormalTok{ nodeChild }\OperatorTok{:}\NormalTok{ orphans}\OperatorTok{)} \OperatorTok{\{}
-            \KeywordTok{...}
-        \OperatorTok{\}}
-    \OperatorTok{\}}
-\OperatorTok{\}}
+\ControlFlowTok{if} (bestParent != \KeywordTok{null} && !orphans.isEmpty()) \{
+    superParents.add(bestParent);
+    ...
+    \ControlFlowTok{if} (\KeywordTok{this}.sameSP && (bestParentScore > currentAccuracy || !onlyPositiveEdits)) \{
+        ...
+        \ControlFlowTok{if} (!linkEdits.isEmpty() && (!onlyAllowedEdits || isAllowed(compoundEdit))) \{
+            bestEditProposal = \KeywordTok{new} LearningEditProposal(compoundEdit,
+                    \KeywordTok{new} ScoreEditMotivation(bestParentScore));
+            orphans.clear();
+            currentAccuracy = bestParentScore;
+        \}
+    \} \ControlFlowTok{else} \ControlFlowTok{if} (!\KeywordTok{this}.sameSP) \{
+        \ControlFlowTok{for} (Node nodeChild : children) \{
+            ...
+        \}
+    \}
+\}
 
-\ControlFlowTok{if} \OperatorTok{(}\NormalTok{bestEdit }\OperatorTok{!=} \KeywordTok{null}\OperatorTok{)} \OperatorTok{\{}
-\NormalTok{    bestEditProposal }\OperatorTok{=}\NormalTok{ LearningEditProposal}\OperatorTok{.}\FunctionTok{scored}\OperatorTok{(}\NormalTok{bestEdit}\OperatorTok{,}\NormalTok{ bestPartialScore}\OperatorTok{);}
-    \FunctionTok{markEditAsConsidered}\OperatorTok{(}\NormalTok{bestEdit}\OperatorTok{);}
-\NormalTok{    orphans}\OperatorTok{.}\FunctionTok{remove}\OperatorTok{(}\NormalTok{probNet}\OperatorTok{.}\FunctionTok{getNode}\OperatorTok{(}\NormalTok{bestEdit}\OperatorTok{.}\FunctionTok{getVariableTo}\OperatorTok{()));}
-\NormalTok{    currentAccuracy }\OperatorTok{=}\NormalTok{ bestPartialScore}\OperatorTok{;}
-\OperatorTok{\}}
+\ControlFlowTok{if} (bestEdit != \KeywordTok{null}) \{
+    bestEditProposal = LearningEditProposal.scored(bestEdit, bestPartialScore);
+    markEditAsConsidered(bestEdit);
+    orphans.remove(probNet.getNode(bestEdit.getVariableTo()));
+    currentAccuracy = bestPartialScore;
+\}
 \end{Highlighting}
 \end{Shaded}
 
@@ -10941,9 +11009,9 @@ Buscar propuestas no debe cambiar el estado del algoritmo; \texttt{super\allowbr
 
 Qué debe enseñar la tabla depende de lo que decida el equipo: solo alternativas para el paso en curso (otros superpadres y otras hijas, con el historial de propuestas ya consideradas para no repetirlas), o también los pasos siguientes, en cuyo caso el llenado debe hacerse sobre una copia del estado y separar en la tabla lo que depende de aplicar antes otra fila.
 
-Hay que mantener el resultado del aprendizaje automático y de la validación cruzada de \texttt{bn\allowbreak{}Evaluation}, que usan \texttt{run}. Si una edición se rechaza, el estado no debe cambiar (hoy \texttt{orphans.\allowbreak{}clear(\allowbreak{})} se hace antes de saber si se aplicó, como señala \hyperref[err:132]{error~132}). \texttt{init} debe reponer también \texttt{current\allowbreak{}Accuracy}, que es lo que propone \hyperref[err:133]{error~133}.
+Hay que mantener el resultado del aprendizaje automático y de la validación cruzada de \texttt{bn\allowbreak{}Evaluation}, que usan \texttt{run}. Si una edición se rechaza al ejecutarla, el estado no debe cambiar.
 
-Pruebas de regresión, repitiendo las llamadas de la ventana sobre \texttt{BN-asia10k.\allowbreak{}csv} con clase \texttt{Bronchitis} y «Unique superparent» desmarcada: tras llenar la tabla, bloquear la primera propuesta y volver a llenarla no debe dejarla vacía (hoy, sin el llenado previo, se ofrece X-ray→LungCancer); desmarcar y volver a marcar «Only positive edits» debe dar la misma tabla que al abrir; y «Finish» nada más abrir debe dar la misma red que el aprendizaje automático.
+Pruebas de regresión, repitiendo las llamadas de la ventana sobre \texttt{BN-asia10k.\allowbreak{}csv} con clase \texttt{Bronchitis} y «Unique superparent» desmarcada: tras llenar la tabla, bloquear la primera propuesta y volver a llenarla no debe dejarla vacía (bloqueada antes del primer llenado, se ofrece TuberculosisOrCancer→LungCancer); desmarcar y volver a marcar «Only positive edits» debe dar la misma tabla que al abrir; y aplicar la primera fila hasta vaciar la tabla debe dar la misma red que el aprendizaje automático.
 
 \setcounter{subsection}{134}
 \subsection[El Bayes ingenuo selectivo hacia delante no da dos veces el mismo modelo]{\textcolor{corregidoverde}{[Corregido]} El Bayes ingenuo selectivo hacia delante aprende modelos distintos en ejecuciones distintas sobre la misma base}\label{err:135}
@@ -12077,7 +12145,7 @@ El lienzo donde se dibuja la red, el diálogo de propiedades de un nodo y los pa
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.node
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:228-256, 488-522, 658-669, 675-683} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:236-262, 307-332, 399-430} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:55-59}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:228-256, 488-522, 658-669, 675-683} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:243-269, 314-339, 406-437} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:55-59}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -12462,7 +12530,7 @@ Prueba: el caso medido arriba, comprobando que «Therapy = yes» bloquea exactam
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.component; org.openmarkov.gui.action; org.openmarkov.gui.dialog.link
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/component/LinkRestrictionValuesTable.java:48-87} \newline \path{gui/src/main/java/org/openmarkov/gui/component/ValuesTable.java:142-149,170-207} \newline \path{gui/src/main/java/org/openmarkov/gui/action/TablePotentialValueEdit.java:144-157} \newline \path{gui/src/main/java/org/openmarkov/gui/component/PotentialsTablePanelOperations.java:48-75,204-207} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionPanel.java:85-91,140-154} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionEditDialog.java:39-48,99-108} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:251-263} \newline \path{gui/src/main/java/org/openmarkov/gui/validator/LinkRestrictionValidator.java:35-58}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/component/LinkRestrictionValuesTable.java:48-87} \newline \path{gui/src/main/java/org/openmarkov/gui/component/ValuesTable.java:142-149,170-207} \newline \path{gui/src/main/java/org/openmarkov/gui/action/TablePotentialValueEdit.java:144-157} \newline \path{gui/src/main/java/org/openmarkov/gui/component/PotentialsTablePanelOperations.java:48-75,204-207} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionPanel.java:85-91,140-154} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/link/LinkRestrictionEditDialog.java:39-48,99-108} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:252-264} \newline \path{gui/src/main/java/org/openmarkov/gui/validator/LinkRestrictionValidator.java:35-58}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -13095,7 +13163,7 @@ Prueba: sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allow
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.component
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/component/RevelationArcDiscretizeTablePanel.java:97-141} \newline \path{gui/src/main/java/org/openmarkov/gui/action/RevelationIntervalEdit.java:144-150} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:259-264} \newline \path{gui/src/main/java/org/openmarkov/gui/validator/RevelationArcValidator.java}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/component/RevelationArcDiscretizeTablePanel.java:97-141} \newline \path{gui/src/main/java/org/openmarkov/gui/action/RevelationIntervalEdit.java:144-150} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:260-265} \newline \path{gui/src/main/java/org/openmarkov/gui/validator/RevelationArcValidator.java}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -13153,7 +13221,7 @@ Prueba de regresión: construir \texttt{Revelation\allowbreak{}Arc\allowbreak{}D
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.common
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/common/IndicatorPotentialPanel.java:80-89} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/IndicatorPotential.java:155-178} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:236-262, 307-324, 423-430} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditDialog.java:110-113} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/OkCancelDialog.java:68-79}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/common/IndicatorPotentialPanel.java:80-89} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/IndicatorPotential.java:155-178} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:243-269, 314-331, 430-437} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditDialog.java:110-113} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/OkCancelDialog.java:68-79}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -13404,7 +13472,7 @@ Prueba: tabla con incertidumbre solo en el segundo estado de una columna; la col
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.graphic
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/graphic/VisualState.java:37, 317-320} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/VisualElement.java:132-146} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/FSVariableBox.java:64-82, 100-106} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/NumericVariableBox.java:134-135} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:241-251}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/graphic/VisualState.java:37, 317-320} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/VisualElement.java:132-146} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/FSVariableBox.java:64-82, 100-106} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/NumericVariableBox.java:134-135} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:248-258}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -13498,7 +13566,7 @@ Prueba de regresión: una prueba unitaria de \texttt{convert\allowbreak{}To\allo
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/Util.java:370-405, 429-445} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorInputHandler.java:698}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/Util.java:370-405, 429-445} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:772} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorInputHandler.java:698}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -13506,7 +13574,7 @@ Prueba de regresión: una prueba unitaria de \texttt{convert\allowbreak{}To\allo
 \paragraph{Qué pasa}
 Al crear un nodo de azar con doble clic en el lienzo o desde el menú contextual, en una red que ya tiene los nodos A, B y C, el nombre propuesto es «E», y el siguiente nodo de suceso pasaría a llamarse «E1». No hay error, pero rompe la convención de que la E es de los nodos de suceso, que \texttt{get\allowbreak{}Next\allowbreak{}Event\allowbreak{}Node\allowbreak{}Name} sigue.
 
-\texttt{Editor\allowbreak{}Input\allowbreak{}Handler.\allowbreak{}create\allowbreak{}Node} pide el nombre a \texttt{Util.\allowbreak{}get\allowbreak{}Next\allowbreak{}Node\allowbreak{}Name} (módulo \texttt{core}). Para un nodo de azar, \texttt{get\allowbreak{}Next\allowbreak{}Chance\allowbreak{}Node\allowbreak{}Name} recorre las letras desde la A buscando la primera libre y quiere saltarse la D (decisiones), la U (utilidades) y la E (sucesos). Pero el salto es un \texttt{if} que avanza una sola letra: desde la C avanza a la D, la reconoce y avanza a la E, y en la siguiente vuelta prueba la E como candidata sin volver a mirar si está reservada.
+El doble clic crea el nodo con \texttt{Editor\allowbreak{}Command\allowbreak{}Handler\allowbreak{}Generator.\allowbreak{}create\allowbreak{}Node} y el menú contextual con \texttt{Editor\allowbreak{}Input\allowbreak{}Handler.\allowbreak{}create\allowbreak{}Node}; los dos piden el nombre a \texttt{Util.\allowbreak{}get\allowbreak{}Next\allowbreak{}Node\allowbreak{}Name} (módulo \texttt{core}). Para un nodo de azar, \texttt{get\allowbreak{}Next\allowbreak{}Chance\allowbreak{}Node\allowbreak{}Name} recorre las letras desde la A buscando la primera libre y quiere saltarse la D (decisiones), la U (utilidades) y la E (sucesos). Pero el salto es un \texttt{if} que avanza una sola letra: desde la C avanza a la D, la reconoce y avanza a la E, y en la siguiente vuelta prueba la E como candidata sin volver a mirar si está reservada.
 
 La U y la D sí se saltan bien (tras la U viene la V, que no está reservada, y a la D solo se llega desde la C). El javadoc dice que las únicas letras que nunca devuelve son la D y la U, lo que tampoco coincide con la intención de saltar la E.
 
@@ -13547,7 +13615,7 @@ Los menús, los diálogos generales y las herramientas del menú Tools.
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:179-186, 203, 219-222, 246-254, 368-382, 391-402} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:90, 278-285, 413, 853-857} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanel.java:557-565}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:189-196, 213, 229-232, 256-264, 378-392, 401-412} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:103, 291-298, 426, 866-870} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanel.java:556-564}
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}No
@@ -13582,7 +13650,7 @@ Al cambiar de pestaña, \texttt{update\allowbreak{}Options\allowbreak{}Network\a
 
 Todo esto sale de la lectura del código; no se ha ejecutado.
 \paragraph{El código}
-gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:187-190, 207, 223-226
+gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:197-200, 217, 233-236
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -13600,7 +13668,7 @@ gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:187-190, 207
 \end{Highlighting}
 \end{Shaded}
 
-gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:279-286, 859-863
+gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:292-299, 872-876
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -13773,7 +13841,7 @@ Prueba de regresión: construir \texttt{Standard\allowbreak{}Domains\allowbreak{
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.network
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/network/StandardCriteriaDialog.java:82-112} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/StandardCriteriaDialog.java:126-136} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/StandardCriteriaPanel.java:38-57} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/DecisionCriteriaTablePanel.java:178-195} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:80-84} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:269-282} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/OkCancelDialog.java:67-78} \newline \path{core/src/main/java/org/openmarkov/core/action/base/EditsHistoryStacker.java:48-60} \newline \path{core/src/main/java/org/openmarkov/core/action/base/PNESupport.java:286-295} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:415} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:372-374}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/network/StandardCriteriaDialog.java:82-112} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/StandardCriteriaDialog.java:126-136} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/StandardCriteriaPanel.java:38-57} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/DecisionCriteriaTablePanel.java:178-195} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:81-85} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:270-283} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/OkCancelDialog.java:67-78} \newline \path{core/src/main/java/org/openmarkov/core/action/base/EditsHistoryStacker.java:48-60} \newline \path{core/src/main/java/org/openmarkov/core/action/base/PNESupport.java:286-295} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:428} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:382-384}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -14032,7 +14100,7 @@ Textos que la aplicación, en inglés, enseña equivocados, vacíos o con el nom
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog
-\fichakey{Ficheros}\path{gui/src/main/resources/gui/localize/Dialogs_en.xml:702-709} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/ShortcutsBox.java:38-45, 117-120} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/MainMenu.java:203, 205, 209, 218, 331, 342} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanel.java:149-158} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:119} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:391-411}
+\fichakey{Ficheros}\path{gui/src/main/resources/gui/localize/Dialogs_en.xml:702-709} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/ShortcutsBox.java:38-45, 117-120} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/MainMenu.java:203, 205, 209, 218, 331, 342} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanel.java:148-157} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:120} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:401-421}
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -14091,7 +14159,7 @@ Para que no vuelva a pasar, la ayuda podría construirse leyendo los aceleradore
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/AddNodeEdit.java:88-92, 145-148} \newline \path{gui/src/main/java/org/openmarkov/gui/action/PasteEdit.java:85} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:169} \newline \path{core/src/main/resources/core/localize/core_class_localizations_en.xml:456-457}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/AddNodeEdit.java:88-92, 145-148} \newline \path{gui/src/main/java/org/openmarkov/gui/action/PasteEdit.java:85} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:178} \newline \path{core/src/main/resources/core/localize/core_class_localizations_en.xml:456-457}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -14605,7 +14673,7 @@ Trabajo de más en el camino que más se recorre, y operaciones largas que bloqu
 \fichakey{Asignado a}Jorge Rico
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:146-163, 180-181} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:58-119} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:324-363, 580-599} \newline \path{gui/src/main/java/org/openmarkov/gui/util/GUIUtils.java:57-81} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainGUI.java:108-118} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:465-472}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:147-164, 181-182} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:73-134} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:324-363, 580-599} \newline \path{gui/src/main/java/org/openmarkov/gui/util/GUIUtils.java:58-82} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainGUI.java:108-118} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:472-479}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué hacer con \texttt{Main\allowbreak{}GUI.\allowbreak{}freeze(\allowbreak{})/\allowbreak{}unfreeze(\allowbreak{})} (borrarlo o reactivarlo)
@@ -15117,10 +15185,10 @@ cambia algo (por ejemplo, un código que hoy no llama nadie empieza a usarse), s
 \textbf{169}\phantomsection\label{nota:169} & \textbf{Declarar las versiones de terceros en un solo sitio y que cada módulo declare lo que usa}\newline Propuesta: mover las versiones de las bibliotecas de terceros a \texttt{\textless{}dependency\allowbreak{}Management\textgreater{}} del \texttt{pom.\allowbreak{}xml} raíz (el fichero que configura la construcción con Maven), que cada módulo declare lo que usa y verificarlo con \texttt{mvn\ dependency:analyze}. Hoy todas se declaran en \texttt{\textless{}dependencies\textgreater{}} del raíz y las heredan todos los módulos, incluido \texttt{core}; es una reorganización sin consecuencia visible en la aplicación. \\[3pt]
 \textbf{170}\phantomsection\label{nota:170} & \textbf{Podar los \texttt{requires} que no se usan y quitar a \texttt{core} la dependencia del escritorio}\newline Propuesta: quitar de los \texttt{module-info.\allowbreak{}java} las dependencias sin uso (en \texttt{core}, \texttt{org.\allowbreak{}apache.\allowbreak{}poi.\allowbreak{}poi} y \texttt{java.\allowbreak{}desktop}; en \texttt{inference}, \texttt{java.\allowbreak{}desktop} y \texttt{jeval}; en \texttt{gui}, \texttt{jdk.\allowbreak{}compiler}), borrar los restos de escritorio de \texttt{core}, como el import muerto de \texttt{JOption\allowbreak{}Pane} en \texttt{Purpose\allowbreak{}Edit} y la \texttt{Cannot\allowbreak{}Undo\allowbreak{}Exception} de \texttt{Monte\allowbreak{}Carlo\allowbreak{}Options\allowbreak{}Edit.\allowbreak{}undo(\allowbreak{})}, y retirar entonces \texttt{requires\ java.\allowbreak{}desktop} de \texttt{core}. Es limpieza sin consecuencia visible; el único resto de escritorio que sí se nota, el diálogo de \texttt{Tree\allowbreak{}With\allowbreak{}Excluded\allowbreak{}Events\allowbreak{}Potential}, es \hyperref[err:105]{error~105}. \\[3pt]
 \textbf{171}\phantomsection\label{nota:171} & \textbf{Una sola política para instanciar complementos y descubrirlos en todo el camino de clases}\newline Propuesta: un ayudante común con la política de \texttt{Inference\allowbreak{}Manager.\allowbreak{}build} (aislar, registrar y seguir), avisos ante nombres repetidos y clases descartadas, descubrimiento por anotación en todo el camino de clases y no solo bajo \texttt{org.\allowbreak{}openmarkov} (\texttt{Plugin\allowbreak{}Loader}), y que el algoritmo preferido lo declare el complemento en vez de nombrarlo \texttt{core} por texto. Es una unificación sin consecuencia hoy: por ejemplo, el nombre del algoritmo preferido coincide con la anotación de \texttt{VEPropagation}; el gestor que se cae entero por un complemento defectuoso es \hyperref[nota:106]{nota~106}. \\[3pt]
-\textbf{172}\phantomsection\label{nota:172} & \textbf{Borrar la API de complementos sin uso y reactivar la prueba de requisitos de construcción}\newline Propuesta: borrar \texttt{Filter} y \texttt{Plugin\allowbreak{}Manager}, que nadie importa; reactivar \texttt{Implementation\allowbreak{}Requirements\allowbreak{}Are\allowbreak{}Met\allowbreak{}Test}, hoy con \texttt{@Disabled}, congelando la lista actual de incumplimientos para que no crezca; y decidir el destino del \texttt{name(\allowbreak{})} de \texttt{@Constraint} (\hyperref[nota:145]{nota~145}). Es limpieza y red de seguridad de pruebas, sin consecuencia visible; hoy nada comprueba que una subclase nueva de \texttt{Potential} tenga el constructor que necesita su copia por reflexión. \\[3pt]
+\textbf{172}\phantomsection\label{nota:172} & \textbf{Reactivar la prueba de requisitos de construcción}\newline Propuesta: reactivar \texttt{Implementation\allowbreak{}Requirements\allowbreak{}Are\allowbreak{}Met\allowbreak{}Test}, hoy con \texttt{@Disabled}, congelando la lista actual de incumplimientos para que no crezca; y decidir el destino del \texttt{name(\allowbreak{})} de \texttt{@Constraint} (\hyperref[nota:145]{nota~145}). La otra parte de la propuesta, borrar \texttt{Filter} y \texttt{Plugin\allowbreak{}Manager}, que nadie importaba, está hecha en \texttt{eafc412}. Es red de seguridad de pruebas, sin consecuencia visible; hoy nada comprueba que una subclase nueva de \texttt{Potential} tenga el constructor que necesita su copia por reflexión. \\[3pt]
 \textbf{173}\phantomsection\label{nota:173} & \textbf{Abrir el punto de extensión de los formatos de fichero}\newline Propuesta: que cada complemento de formato declare su extensión y versión (o sepa decir si puede leer un fichero), mover a \texttt{core} el contrato de lectores y escritores, que hoy vive en \texttt{io}, y añadir lectura y escritura sobre flujos. Es un rediseño: hoy \texttt{Format\allowbreak{}Manager.\allowbreak{}get\allowbreak{}Prob\allowbreak{}Net\allowbreak{}Reader} elige el lector solo por extensión y supone un XML con \texttt{format\allowbreak{}Version}, así que un formato nuevo que no sea XML no se podría abrir; el lector de XMLBIF es \hyperref[nota:50]{nota~50}. \\[3pt]
 \textbf{174}\phantomsection\label{nota:174} & \textbf{Que cada excepción construya su mensaje y avisar ante claves de texto repetidas}\newline Propuesta: que cada excepción construya su mensaje en inglés en vez de buscarlo por el nombre de su clase en los ficheros de textos (hoy renombrarla rompe el mensaje sin aviso del compilador), sacar de \texttt{Bundle\allowbreak{}Search}, en \texttt{core}, los nombres de paquetes de \texttt{sensitivity\allowbreak{}Analysis} y \texttt{stochastic\allowbreak{}Propagation\allowbreak{}Output}, usar un registrador por clase y avisar cuando \texttt{String\allowbreak{}Database} funda claves repetidas. Es reorganización del diagnóstico: medido, las 172 subclases concretas de \texttt{Open\allowbreak{}Markov\allowbreak{}Exception} tienen su texto, y las claves repetidas no tienen hoy consecuencia en inglés (\hyperref[nota:63]{nota~63}). \\[3pt]
-\textbf{175}\phantomsection\label{nota:175} & \textbf{Renombrar el módulo \texttt{inference.\allowbreak{}DES} y separar el motor de simulación de sus ventanas}\newline Propuesta: renombrar el módulo a la convención \texttt{org.\allowbreak{}openmarkov.\allowbreak{}*} y partirlo, con el motor \texttt{DESInference} abajo y sin escritorio, y \texttt{CEDESDialog}, \texttt{DESResults\allowbreak{}Window} y la exportación a Excel en un módulo encima de \texttt{gui}. Es una reorganización sin consecuencia visible; hoy el \texttt{Progress\allowbreak{}Monitor} obligatorio del motor impide simular sin pantalla, y sus ventanas no pueden usar componentes de \texttt{gui} sin crear un ciclo. \\[3pt]
+\textbf{175}\phantomsection\label{nota:175} & \textbf{Renombrar el módulo \texttt{inference.\allowbreak{}DES} y separar el motor de simulación de sus ventanas}\newline Propuesta: renombrar el módulo a la convención \texttt{org.\allowbreak{}openmarkov.\allowbreak{}*} y dejar el motor \texttt{DESInference} abajo y sin escritorio. Desde \texttt{eafc412} las ventanas (\texttt{CEDESDialog}, \texttt{DESResults\allowbreak{}Window} y la exportación a Excel) están en \texttt{gui}, paquete \texttt{org.\allowbreak{}openmarkov.\allowbreak{}gui.\allowbreak{}desnets}, y ya pueden usar sus componentes. Pero el motor se ha mudado con ellas: sigue sin separarse de las ventanas, y su \texttt{Progress\allowbreak{}Monitor} obligatorio sigue impidiendo simular sin pantalla. Es una reorganización sin consecuencia visible. \\[3pt]
 \textbf{176}\phantomsection\label{nota:176} & \textbf{Que la ventana pida los algoritmos al registro de complementos y no los construya a mano}\newline Propuesta: una fábrica de tareas que resuelva la implementación en el registro, en lugar de los \texttt{new\ VEPropagation}, \texttt{new\ VEEvaluation}, \texttt{new\ VECEAnalysis} y demás que hacen la ventana y los módulos de análisis. No cambia ningún resultado hoy, porque cada tarea de la ventana tiene un solo algoritmo aplicable; lo que sí pasa es que registrar un algoritmo nuevo como complemento no cambia lo que ejecuta la aplicación. \\[3pt]
 \textbf{177}\phantomsection\label{nota:177} & \textbf{Extraer de la ventana un documento sin Swing con la red, su fichero y su estado}\newline Propuesta: un \texttt{Network\allowbreak{}Document} sin Swing, que el panel observe y que \texttt{Nets\allowbreak{}IO} reciba, con la red, la ruta del fichero, el lector o escritor con que se abrió, el indicador de modificado y la evidencia, que hoy se reparten \texttt{Network\allowbreak{}Editor\allowbreak{}Panel} y \texttt{PNESupport}. Es una reorganización de responsabilidades sin consecuencia visible propia; el defecto que causa que las copias de red hereden ese estado es \hyperref[err:35]{error~35}. \\[3pt]
 \textbf{178}\phantomsection\label{nota:178} & \textbf{Mover a \texttt{core} las ediciones del módulo gráfico que no dependen de Swing}\newline Propuesta: mover a \texttt{core/\allowbreak{}action} las ediciones de \texttt{gui/\allowbreak{}src/\allowbreak{}main/\allowbreak{}java/\allowbreak{}org/\allowbreak{}openmarkov/\allowbreak{}gui/\allowbreak{}action/\allowbreak{}} que no tocan clases visuales, como \texttt{Change\allowbreak{}Node\allowbreak{}Type\allowbreak{}Edit}, \texttt{Impose\allowbreak{}Policy\allowbreak{}Edit} o \texttt{Table\allowbreak{}Potential\allowbreak{}Value\allowbreak{}Edit}, junto con la redistribución de probabilidades de \texttt{Potentials\allowbreak{}Table\allowbreak{}Panel\allowbreak{}Operations}, y adaptar las que dependen de \texttt{Visual\allowbreak{}Node} o \texttt{Visual\allowbreak{}Network}. Es un traslado sin consecuencia visible; hoy quien quiera usarlas sin interfaz depende del módulo Swing, como hace \texttt{learning.\allowbreak{}gui} para \texttt{Auto\allowbreak{}Arrange\allowbreak{}Edit}. \\[3pt]
