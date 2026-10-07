@@ -209,7 +209,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148} y \hyperref[err:149]{149}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149} y \hyperref[err:52]{52}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -272,7 +272,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 45 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 46 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -418,7 +418,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:decisiones}.\ Decisiones: políticas, criterios, agentes y árbol de decisión}}\\
 \hyperref[err:50]{50} & \textcolor{corregidoverde}{\textbf{Corregido}} · El árbol de decisión falla en casi todas las redes en formato 1.0 & \texttt{inference} & M \hfill No\\
 \hyperref[err:51]{51} & «Show optimal policy» y «Show expected utility» no llegan a abrirse & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
-\hyperref[err:52]{52} & «Show expected utility» falla con utilidad constante y rellena ceros & \texttt{core} & S \hfill No\\
+\hyperref[err:52]{52} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Show expected utility» falla con utilidad constante y rellena ceros & \texttt{core} & S \hfill No\\
 \hyperref[err:53]{53} & La utilidad esperada de una decisión ignora la evidencia previa & \texttt{inference} & S \hfill No\\
 \hyperref[err:54]{54} & Un hallazgo que descarta la primera opción de una decisión anula el cálculo & \texttt{inference} & M \hfill No\\
 \hyperref[err:55]{55} & Las ventanas de utilidad esperada y política óptima muestran la clave & \texttt{gui} & S \hfill No\\
@@ -4625,7 +4625,6 @@ Prueba: construir con \texttt{Decision\allowbreak{}Tree\allowbreak{}Manager\allo
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el tipo de política (óptima, determinista, probabilista) debe poder elegirse en la interfaz o si se retira \texttt{Policy\allowbreak{}Type\allowbreak{}Panel}
-\fichakey{Tapado por}\hyperref[err:52]{error~52}: en algunas redes el cálculo de la utilidad esperada falla antes de abrir la ventana.
 \fichakey{Relacionados}\hyperref[err:52]{error~52}, \hyperref[err:55]{error~55}, \hyperref[err:56]{error~56}, \hyperref[nota:32]{nota~32}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -4682,9 +4681,9 @@ Al corregirlo, estas dos ventanas empezarán a abrirse, y con ellas se verán \h
 Prueba: una prueba de interfaz que, sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-decide-test.\allowbreak{}pgmx} en modo inferencia, pida «Show optimal policy» y «Show expected utility» de «Therapy» y compruebe que se abre la ventana sin excepción. El panel no se puede construir sin pantalla, así que la prueba necesita una.
 
 \setcounter{subsection}{51}
-\subsection[«Show expected utility» falla con utilidad constante y rellena ceros]{«Show expected utility» sobre una decisión muere con un índice fuera de rango cuando la utilidad que resulta no tiene variables, y rellena con ceros cuando le faltan variables}\label{err:52}
+\subsection[«Show expected utility» falla con utilidad constante y rellena ceros]{\textcolor{corregidoverde}{[Corregido]} «Show expected utility» sobre una decisión muere con un índice fuera de rango cuando la utilidad que resulta no tiene variables, y rellena con ceros cuando le faltan variables}\label{err:52}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{d592f80} (08-10-2026): \texttt{VEExpected\allowbreak{}Utility\allowbreak{}Decision.\allowbreak{}resolve} añade a la utilidad, antes de reordenarla, las variables de las que no depende, repitiendo su valor para cada estado (\texttt{Table\allowbreak{}Potential.\allowbreak{}add\allowbreak{}Variable}). Fijando cada opción de la decisión como evidencia sale el mismo número en las redes medidas. Lo comprueba \texttt{The\allowbreak{}Expected\allowbreak{}Utility\allowbreak{}Of\allowbreak{}ADecision\allowbreak{}Has\allowbreak{}AValue\allowbreak{}For\allowbreak{}Every\allowbreak{}Configuration\allowbreak{}Test}. No se han tocado \texttt{Table\allowbreak{}Potential.\allowbreak{}reorder} ni \texttt{get\allowbreak{}Accumulated\allowbreak{}Offsets}: siguen suponiendo que el orden pedido es una permutación de las variables del potencial, y no se ha establecido que otro llamador pueda pedir otra cosa. La ventana sigue sin abrirse por el \hyperref[err:51]{error~51}.
 \fichakey{Módulo}core, inference, gui
 \fichakey{Paquete}org.openmarkov.core.model.network.potential; org.openmarkov.inference.algorithm.variableElimination.tasks
 \fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEExpectedUtilityDecision.java:55-66} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/AbstractIndexedPotential.java:183-208} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:742-771} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/StrategicTablePotential.java:107-110} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:575-589}
