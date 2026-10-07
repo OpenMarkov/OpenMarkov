@@ -62,7 +62,18 @@ public class VEExpectedUtilityDecision extends VariableElimination implements Ex
 		VEEvaluation veEvaluation = new VEEvaluation(probNet);
 		veEvaluation.setConditioningVariables(informationalPredecesors);
 
-		result = veEvaluation.getUtility().reorder(orderedVariables);
+		TablePotential utility = veEvaluation.getUtility();
+		// The utility has the same value for every state of a variable that it does not depend on
+		for (Variable variable : orderedVariables) {
+			if (!utility.contains(variable)) {
+				TablePotential extended = utility.addVariable(variable);
+				if (utility.isAdditive()) {
+					extended.setCriterion(utility.getCriterion());
+				}
+				utility = extended;
+			}
+		}
+		result = utility.reorder(orderedVariables);
 	}
 
 	@Override public TablePotential getExpectedUtility()
