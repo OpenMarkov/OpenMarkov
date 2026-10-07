@@ -940,7 +940,9 @@ public class LearningDialog extends JDialog {
             JOptionPane.showMessageDialog(this,
                     e.getExceptionMessage() + "\n" + stringDatabase.getString("Learning.Alpha.SmoothingAdvice"),
                     e.getExceptionTitle(), JOptionPane.ERROR_MESSAGE);
-        } catch (UnobservedVariablesException | EmptyModelNetException | DoEditException e) {
+        } catch (UnobservedVariablesException e) {
+            throw new UnrecoverableException(e);
+        } catch (EmptyModelNetException | DoEditException e) {
             throw new UnreachableException(e);
         }
     }// GEN-LAST:event_learnButtonActionPerformed

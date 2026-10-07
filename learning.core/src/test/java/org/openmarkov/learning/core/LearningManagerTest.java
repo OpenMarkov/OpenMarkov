@@ -96,4 +96,21 @@ public class LearningManagerTest {
         List<String> names = thrown.unobservedVariables.stream().map(Variable::getName).toList();
         assertEquals(List.of("C"), names);
     }
+
+    /** The message names the missing variables, without their type or their states. */
+    @Test
+    public void testUnobservedVariablesMessageGivesOnlyTheNames() {
+        CaseDatabase db = new CaseDatabase(List.of(new Variable("A", "0", "1")), new int[][] { { 0 } });
+        ProbNet modelNet = new ProbNet();
+        modelNet.addNode(new Variable("A", "0", "1"), NodeType.CHANCE);
+        modelNet.addNode(new Variable("B", "0", "1"), NodeType.CHANCE);
+        modelNet.addNode(new Variable("C", "0", "1"), NodeType.CHANCE);
+        ModelNetUse use = new ModelNetUse(true, true, false, false, false, false);
+
+        UnobservedVariablesException thrown = assertThrows(UnobservedVariablesException.class,
+                () -> new LearningManager(db, DummyLearningAlgorithm.class, modelNet, use));
+
+        assertEquals("Algorithm Dummy does not support unobserved variables, which are: B, C",
+                thrown.getExceptionMessage());
+    }
 }

@@ -447,7 +447,7 @@
     <Localization class="org.openmarkov.learning.core.exception.EmptyModelNetException"
                   value="There is no network selected to use as model, and one is required."/>
     <Localization class="org.openmarkov.learning.core.exception.UnobservedVariablesException"
-                  value="Algorithm {algorithmType.name} does not support unobserved variables, which are: {unobservedVariables}"/>
+                  value="Algorithm {algorithmType.name} does not support unobserved variables, which are: {unobservedVariableNames}"/>
     <Localization class="org.openmarkov.core.action.base.linkEdits.MultiAddLinkEdit"
                   value="Add link(s): {edits}"/>
     <Localization class="org.openmarkov.core.action.core.EventNodeAlwaysAppendEdit"

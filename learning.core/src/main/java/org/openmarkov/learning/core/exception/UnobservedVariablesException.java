@@ -13,6 +13,7 @@ import org.openmarkov.learning.core.algorithm.LearningAlgorithm;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithmType;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Thrown when a learning algorithm that does not support unobserved variables
@@ -30,10 +31,13 @@ public class UnobservedVariablesException extends OpenMarkovException {
         this.algorithmType = algorithmClass.getAnnotation(LearningAlgorithmType.class);
         this.algorithmClass = algorithmClass;
         this.unobservedVariables = latentVariables;
+        this.unobservedVariableNames = latentVariables.stream().map(Variable::getName).collect(Collectors.joining(", "));
     }
     
     public final Class<? extends LearningAlgorithm> algorithmClass;
     public final List<Variable> unobservedVariables;
+    /** The names of the unobserved variables, separated by commas. */
+    public final String unobservedVariableNames;
     public final LearningAlgorithmType algorithmType;
     
     @Override public String toString() {
