@@ -935,7 +935,7 @@ public class LearningDialog extends JDialog {
 
             this.setVisible(false);
         } catch (OutOfMemoryError e1) {
-            throw new UnreachableException(new NotEnoughMemoryException(e1));
+            throw new UnrecoverableException(new NotEnoughMemoryException(e1));
         } catch (CannotNormalizePotentialException e) {
             JOptionPane.showMessageDialog(this,
                     e.getExceptionMessage() + "\n" + stringDatabase.getString("Learning.Alpha.SmoothingAdvice"),
