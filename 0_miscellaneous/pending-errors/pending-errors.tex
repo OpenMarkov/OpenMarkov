@@ -101,6 +101,9 @@
 \newtcolorbox{ficha}{breakable, enhanced, colback=fichafondo, colframe=fichaborde, boxrule=0.6pt,
   arc=0pt, left=8pt, right=8pt, top=4pt, bottom=4pt, before skip=6pt, after skip=8pt,
   fontupper=\small, parbox=false, before upper={\setlength{\parskip}{2.5pt}}}
+\tikzset{errnodo/.style={circle,draw=black!70,fill=white,minimum size=7.5mm,inner sep=0pt,font=\footnotesize\bfseries},
+  errjorge/.style={draw=asignadoazul,text=asignadoazul},
+  erreste/.style={line width=1.2pt}}
 \newcommand{\fichakey}[1]{\par\noindent\hangindent=3.6cm\hangafter=1\makebox[3.6cm][l]{\bfseries #1}\ignorespaces}
 
 % ── Numeración: un número por error, corrido en todo el documento ─────────────
@@ -185,7 +188,7 @@ hacen parte de lo que proponían.
 
 Ese día se revisaron además las filas \emph{Corregir antes}: se han quitado las que nombraban un error
 ya corregido (en los \hyperref[err:24]{errores~24}, \hyperref[err:132]{132} y \hyperref[err:133]{133}),
-y las que quedan están dibujadas en el grafo del resumen. Y se volvió a medir el
+y las que quedan están dibujadas en la fila \emph{Grafo} de cada ficha y, todas juntas, en el grafo del resumen. Y se volvió a medir el
 \hyperref[err:134]{error~134}, que se apoyaba en los errores 132 y 133, ya corregidos: pasa a estar
 presente en parte y su ficha se ha reescrito con las medidas nuevas.
 
@@ -240,6 +243,10 @@ Debajo va una ficha con:
   \item \textbf{Corregir antes}, solo si lo hay: el error que hay que corregir antes que este, o a
         la vez como mínimo, porque sin él este arreglo no basta o rompe otra cosa; y por qué. Solo
         se nombran errores que siguen sin corregir: cuando el otro se corrige, la fila se quita.
+  \item \textbf{Grafo}, debajo de la fila anterior: todos los errores sin corregir que van antes
+        que este, también los que van antes de aquellos, y en qué orden. Una flecha de A a B dice
+        que A se corrige antes que B; un error al que no llega ninguna flecha no espera a otro. El
+        error de la ficha es el del borde grueso.
   \item \textbf{Tapado por}, solo si lo hay: el error que hoy impide ver este, o comprobar su
         arreglo desde la aplicación, y dónde. Este sí se puede corregir sin esperar al otro.
   \item \textbf{Relacionados}: otros errores que tocan el mismo código o conviene arreglar a la
@@ -2209,6 +2216,7 @@ Pruebas de regresión: para \texttt{Distribution\allowbreak{}Table\allowbreak{}P
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \fichakey{Corregir antes}\hyperref[err:19]{error~19}: a la vez, como mínimo: sin él, la tabla interna del nodo copiado sigue apuntando a la variable «Events» del original.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n19) at (0.00,0.00) {\hyperref[err:19]{19}}; \node[errnodo,erreste] (n20) at (1.50,0.00) {\hyperref[err:20]{20}}; \draw[->,black!70] (n19) -- (n20); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:19]{error~19}, \hyperref[err:21]{error~21}, \hyperref[nota:184]{nota~184}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -2283,6 +2291,7 @@ Prueba de regresión: para una \texttt{Transition\allowbreak{}Table\allowbreak{}
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}No
 \fichakey{Corregir antes}\hyperref[err:19]{error~19} y \hyperref[err:20]{error~20}: sin ellos, pegar sigue sin funcionar del todo para las tablas de transiciones y para los sucesos con dos o más sucesos padres.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n19) at (0.00,0.00) {\hyperref[err:19]{19}}; \node[errnodo] (n20) at (1.50,0.00) {\hyperref[err:20]{20}}; \node[errnodo,erreste] (n21) at (3.00,0.00) {\hyperref[err:21]{21}}; \draw[->,black!70] (n19) -- (n20); \draw[->,black!70] (n19) to[bend left=40] (n21); \draw[->,black!70] (n20) -- (n21); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:19]{error~19}, \hyperref[err:20]{error~20}, \hyperref[err:99]{error~99}, \hyperref[err:105]{error~105}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -3133,6 +3142,7 @@ Prueba de regresión: sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}n
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué estrategia rige para las ediciones de varios pasos («comprobar antes» o «probar y revertir») y si una violación previa debe bloquear ediciones que no la empeoran
 \fichakey{Corregir antes}\hyperref[err:37]{error~37}: si se decide que una red que incumple sus restricciones no pueda entrar al abrir un fichero, este error deja de alcanzarse.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo,erreste] (n31) at (1.50,0.00) {\hyperref[err:31]{31}}; \node[errnodo,errjorge] (n37) at (0.00,0.00) {\hyperref[err:37]{37}}; \draw[->,black!70] (n37) -- (n31); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:28]{error~28}, \hyperref[nota:184]{nota~184}, \hyperref[err:37]{error~37}, \hyperref[nota:142]{nota~142}, \hyperref[nota:158]{nota~158}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -5238,6 +5248,7 @@ Prueba de regresión: leer \texttt{DAN-dating.\allowbreak{}pgmx} con \texttt{\te
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \fichakey{Corregir antes}\hyperref[err:62]{error~62}: a la vez, como mínimo: en cuanto el lector asigne agentes, abrir las propiedades de una decisión leída de un fichero puede lanzar una excepción.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo,erreste] (n60) at (1.50,0.00) {\hyperref[err:60]{60}}; \node[errnodo] (n62) at (0.00,0.00) {\hyperref[err:62]{62}}; \draw[->,black!70] (n62) -- (n60); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:61]{error~61}, \hyperref[err:62]{error~62}, \hyperref[nota:72]{nota~72}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -6277,6 +6288,7 @@ El análisis de coste-efectividad, el análisis de sensibilidad determinista (to
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \fichakey{Corregir antes}\hyperref[err:83]{error~83}: arreglado solo este, el jar publicado pasa a fallar también en el mapa de ámbito de decisión.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo,erreste] (n74) at (1.50,0.00) {\hyperref[err:74]{74}}; \node[errnodo] (n83) at (0.00,0.00) {\hyperref[err:83]{83}}; \draw[->,black!70] (n83) -- (n74); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:15]{error~15}, \hyperref[err:67]{error~67}, \hyperref[err:80]{error~80}, \hyperref[err:81]{error~81}, \hyperref[err:82]{error~82}, \hyperref[err:83]{error~83}, \hyperref[err:84]{error~84}, \hyperref[err:86]{error~86}, \hyperref[err:88]{error~88}, \hyperref[err:89]{error~89}, \hyperref[err:90]{error~90}, \hyperref[err:91]{error~91}, \hyperref[nota:37]{nota~37}, \hyperref[nota:58]{nota~58}, \hyperref[nota:169]{nota~169}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -7141,6 +7153,7 @@ Prueba de regresión: en \texttt{inference/\allowbreak{}src/\allowbreak{}test}, 
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \fichakey{Corregir antes}\hyperref[err:48]{error~48}: allí se decide el mensaje para la evidencia imposible, que estas ventanas deben usar.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n48) at (0.00,0.00) {\hyperref[err:48]{48}}; \node[errnodo,erreste] (n86) at (1.50,0.00) {\hyperref[err:86]{86}}; \draw[->,black!70] (n48) -- (n86); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:48]{error~48}, \hyperref[err:54]{error~54}, \hyperref[err:74]{error~74}, \hyperref[err:84]{error~84}, \hyperref[err:85]{error~85}, \hyperref[err:87]{error~87}, \hyperref[nota:46]{nota~46}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -7241,6 +7254,7 @@ Prueba de regresión: sacar de la ventana el cálculo de los umbrales y de las f
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el diálogo debe proponer y ofrecer solo escenarios posibles con la evidencia, o dejarlos elegir y avisar al aceptar
 \fichakey{Corregir antes}\hyperref[err:54]{error~54}: la comprobación necesita la probabilidad del escenario, y hoy sale 0 también con evidencia posible.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n54) at (0.00,0.00) {\hyperref[err:54]{54}}; \node[errnodo,erreste] (n87) at (1.50,0.00) {\hyperref[err:87]{87}}; \draw[->,black!70] (n54) -- (n87); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:54]{error~54}, \hyperref[err:85]{error~85}, \hyperref[err:86]{error~86}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -7324,6 +7338,7 @@ Prueba de regresión: con \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}net
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \fichakey{Corregir antes}\hyperref[err:83]{error~83}: a la vez, como mínimo, en \texttt{Map\allowbreak{}Dialog}: con este cambio solo, un mapa en el que gana la primera opción o hay empate en todas las casillas pasaría a fallar.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n83) at (0.00,0.00) {\hyperref[err:83]{83}}; \node[errnodo,erreste] (n88) at (1.50,0.00) {\hyperref[err:88]{88}}; \draw[->,black!70] (n83) -- (n88); \end{tikzpicture}
 \fichakey{Tapado por}\hyperref[err:74]{error~74}: en el jar publicado; desde el IDE se ve.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:83]{error~83}, \hyperref[err:89]{error~89}, \hyperref[err:90]{error~90}, \hyperref[err:91]{error~91}
 \end{ficha}
@@ -7462,6 +7477,7 @@ Prueba de regresión: con el método extraído, un barrido en que «no» baja de
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \fichakey{Corregir antes}\hyperref[err:83]{error~83}: a la vez, como mínimo, en \texttt{Map\allowbreak{}Dialog}: el caso del rango vacío es ese error.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n83) at (0.00,0.00) {\hyperref[err:83]{83}}; \node[errnodo,erreste] (n90) at (1.50,0.00) {\hyperref[err:90]{90}}; \draw[->,black!70] (n83) -- (n90); \end{tikzpicture}
 \fichakey{Tapado por}\hyperref[err:74]{error~74}: en el jar publicado; desde el IDE se ve. \newline \hyperref[err:82]{error~82}: en el mapa de ámbito global la zona de datos sale de un solo color.
 \fichakey{Relacionados}\hyperref[err:74]{error~74}, \hyperref[err:82]{error~82}, \hyperref[err:83]{error~83}, \hyperref[err:88]{error~88}, \hyperref[err:89]{error~89}
 \end{ficha}
@@ -8531,6 +8547,7 @@ Prueba de regresión: la situación medida arriba, con criterios «Cost» (con d
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \fichakey{Corregir antes}\hyperref[err:102]{error~102}: si su arreglo reescribe la exportación a partir de los objetos de resultados, este error desaparece.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n102) at (0.00,0.00) {\hyperref[err:102]{102}}; \node[errnodo,erreste] (n103) at (1.50,0.00) {\hyperref[err:103]{103}}; \draw[->,black!70] (n102) -- (n103); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:102]{error~102}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -11480,6 +11497,7 @@ Pruebas de regresión, repitiendo las llamadas de la ventana sobre \texttt{BN-as
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si «Finish» debe seguir desde la red tal como la ha dejado el usuario, como dice su ayuda emergente, o volver a aprender desde el principio
 \fichakey{Corregir antes}\hyperref[err:140]{error~140}: a la vez, como mínimo: «Finish» tiene que partir de la fase real del algoritmo, que hoy corrige \texttt{init}.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n140) at (0.00,0.00) {\hyperref[err:140]{140}}; \node[errnodo,erreste] (n141) at (1.50,0.00) {\hyperref[err:141]{141}}; \draw[->,black!70] (n140) -- (n141); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:133]{error~133}, \hyperref[err:134]{error~134}, \hyperref[err:139]{error~139}, \hyperref[err:140]{error~140}, \hyperref[err:142]{error~142}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -12863,6 +12881,7 @@ Prueba de regresión: construir \texttt{GLMPanel} (o \texttt{Weibull\allowbreak{
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \fichakey{Corregir antes}\hyperref[err:18]{error~18}: a la vez, como mínimo: en cuanto se puedan añadir variables, la del propio nodo seguiría ofrecida y se duplicaría.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n18) at (0.00,0.00) {\hyperref[err:18]{18}}; \node[errnodo,erreste] (n159) at (1.50,0.00) {\hyperref[err:159]{159}}; \draw[->,black!70] (n18) -- (n159); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:18]{error~18}, \hyperref[nota:30]{nota~30}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -14517,6 +14536,7 @@ Comprobación: tras el cambio, «an utility» no debe aparecer en ningún texto 
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \fichakey{Corregir antes}\hyperref[err:48]{error~48}: si se resuelve con un mensaje propio para la evidencia imposible, este texto deja de verse en los casos que cubra, y ese mensaje debe nombrar la variable y el estado.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n48) at (0.00,0.00) {\hyperref[err:48]{48}}; \node[errnodo,errjorge,erreste] (n186) at (1.50,0.00) {\hyperref[err:186]{186}}; \draw[->,black!70] (n48) -- (n186); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:48]{error~48}, \hyperref[err:184]{error~184}, \hyperref[err:187]{error~187}
 \end{ficha}
 \paragraph{Qué pasa}
