@@ -4,6 +4,7 @@ import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.learning.core.LearningManager;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithm;
 import org.openmarkov.learning.core.exception.EmptyModelNetException;
@@ -82,6 +83,12 @@ public class LearningController {
         }
         learningManager.init(learningAlgorithm);
         return learningManager;
+    }
+
+    /** @return whether the model network has this variable and discretizes it */
+    public static boolean isDiscretizedInModelNet(ProbNet modelNet, Variable variable) {
+        Node modelNode = modelNet.getNode(variable.getName());
+        return modelNode != null && modelNode.getVariable().getVariableType() == VariableType.DISCRETIZED;
     }
 
     /**

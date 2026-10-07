@@ -33,7 +33,6 @@ import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.gui.action.AutoArrangeEdit;
 import org.openmarkov.gui.dialog.io.DBReaderOMFileChooser;
 import org.openmarkov.gui.dialog.io.DBWriterOMFileChooser;
@@ -1216,12 +1215,8 @@ public class LearningDialog extends JDialog {
             discretizeOptions.setEnabled(isNumeric[variableIndex] && discretizeComboBox.getSelectedIndex() == 0);
             /* If there is a model net and the variable is in the model net
              * and is discretized, then the default option should be 'As in model'*/
-            if (modelNet != null) {
-                VariableType variableTypeInModel = modelNet.getNode(variable.getName()).getVariable()
-                                                           .getVariableType();
-                if (variableTypeInModel == VariableType.DISCRETIZED) {
-                    discretizeOptions.setSelectedItem(stringDatabase.getString("Learning.Discretize.ModelNet"));
-                }
+            if (modelNet != null && LearningController.isDiscretizedInModelNet(modelNet, variable)) {
+                discretizeOptions.setSelectedItem(stringDatabase.getString("Learning.Discretize.ModelNet"));
             }
             numIntervals.setEnabled(isNumeric[variableIndex] && discretizeOptions.getSelectedIndex() > 1);
 
