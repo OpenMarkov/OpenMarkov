@@ -658,14 +658,8 @@ public final class NodeDefinitionPanel extends JPanel
             jComboBoxNetworkAgents.setName("jComboBoxAgents");
             jComboBoxNetworkAgents.setPreferredSize(new Dimension(50, 15));
             if (node.getVariable().getAgent() != null && agents != null) {
-                String name = node.getVariable().getAgent().getString();
-                int i;
-                for (i = 0; i < agentNames.length; i++) {
-                    if (name == agentNames[i]) {
-                        break;
-                    }
-                }
-                jComboBoxNetworkAgents.setSelectedIndex(i);
+                jComboBoxNetworkAgents.setSelectedIndex(
+                        indexOfAgent(node.getVariable().getAgent().getString(), agentNames));
             } else {
                 jComboBoxNetworkAgents.setSelectedIndex(0);
             }
@@ -673,6 +667,18 @@ public final class NodeDefinitionPanel extends JPanel
             jComboBoxNetworkAgents.addItemListener(this);
         }
         return jComboBoxNetworkAgents;
+    }
+    
+    /**
+     * @return the position of {@code name} in {@code agentNames}, or 0, the empty entry, when it is not there
+     */
+    static int indexOfAgent(String name, String[] agentNames) {
+        for (int i = 0; i < agentNames.length; i++) {
+            if (agentNames[i].equals(name)) {
+                return i;
+            }
+        }
+        return 0;
     }
     
     // TODO decision criteria comboBox getter
