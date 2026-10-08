@@ -209,7 +209,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52} y \hyperref[err:53]{53}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53} y \hyperref[err:85]{85}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -272,7 +272,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 47 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 48 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -453,7 +453,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:82]{82} & El mapa de dos parámetros pinta toda la zona de datos de un solo color & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
 \hyperref[err:83]{83} & El mapa no se abre si gana en todo él la misma opción y no es la primera & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
 \hyperref[err:84]{84} & La tabla de intervenciones fronterizas nombra otra opción si dos empatan & \texttt{cost\allowbreak{}Effectiveness} & S \hfill No\\
-\hyperref[err:85]{85} & El coste-efectividad falla si un hallazgo hace imposible una sola opción & \texttt{inference} & S \hfill No\\
+\hyperref[err:85]{85} & \textcolor{corregidoverde}{\textbf{Corregido}} · El coste-efectividad falla si un hallazgo hace imposible una sola opción & \texttt{inference} & S \hfill No\\
 \hyperref[err:86]{86} & Las ventanas de coste-efectividad fallan si una opción es imposible & \texttt{cost\allowbreak{}Effectiveness} & S \hfill No\\
 \hyperref[err:87]{87} & El escenario del ámbito de decisión puede ser imposible y no se comprueba & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:88]{88} & Con valores todos negativos, el tornado dibuja barras hasta cero & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
@@ -7070,9 +7070,9 @@ Hay otro llamador de \texttt{calculate\allowbreak{}Frontier\allowbreak{}Interven
 Prueba de regresión: dos particiones iguales, como en la medida de arriba, comprobando que la fila se llama «yes».
 
 \setcounter{subsection}{84}
-\subsection[El coste-efectividad falla si un hallazgo hace imposible una sola opción]{El análisis de coste-efectividad de un diagrama de influencia falla con NullPointerException cuando un hallazgo previo hace imposible una opción de una decisión y no las demás}\label{err:85}
+\subsection[El coste-efectividad falla si un hallazgo hace imposible una sola opción]{\textcolor{corregidoverde}{[Corregido]} El análisis de coste-efectividad de un diagrama de influencia falla con NullPointerException cuando un hallazgo previo hace imposible una opción de una decisión y no las demás}\label{err:85}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{af673f0} (08-10-2026): \texttt{CEBase\allowbreak{}Operations.\allowbreak{}optimal\allowbreak{}CEP} compara solo las opciones cuya partición no es la de probabilidad cero, y conserva el índice de estado de cada una para su intervención. Con \texttt{ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx} y un hallazgo en cada estado de «Test», el análisis global termina y da los mismos umbrales, costes y efectividades que fijando además la única opción posible de «Dec: Test». Los otros lectores de umbrales que nombra «Cómo arreglarlo» no se han tocado. Que una opción imposible cuya partición no es la cero siga compitiendo es el \hyperref[err:54]{error~54}.
 \fichakey{Módulo}inference
 \fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination.operation
 \fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/operation/CEBaseOperations.java:64-120} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/operation/CEBaseOperations.java:609-661} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/operation/CEBaseOperations.java:543-556} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/operation/CEAlgebra.java:195-203} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/operation/CEAlgebra.java:333-358} \newline \path{core/src/main/java/org/openmarkov/core/model/network/CEP.java:146-151}
