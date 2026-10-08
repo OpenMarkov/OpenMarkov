@@ -209,7 +209,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54}, \hyperref[err:56]{56}, \hyperref[err:57]{57}, \hyperref[err:59]{59}, \hyperref[err:62]{62}, \hyperref[err:61]{61} y \hyperref[err:60]{60}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54}, \hyperref[err:56]{56}, \hyperref[err:57]{57}, \hyperref[err:59]{59}, \hyperref[err:62]{62}, \hyperref[err:61]{61}, \hyperref[err:60]{60} y \hyperref[err:63]{63}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}, y al corregir el 63, el \hyperref[err:200]{error~200}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -270,9 +270,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
-comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 55 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{199 errores}; 55 de ellos son defectos nuevos, encontrados al
+comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 163 pequeños, 36 medios y 0 grandes.
+De los 199, 56 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -286,7 +286,7 @@ El apéndice recoge además 186 notas con lo que se comprobó y no entra en la l
 \ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 12 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 11 \\
-\ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 17 \\
+\ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 18 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 7 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 21 \\
 \ref{sec:des}. Simulación de sucesos discretos & 16 \\
@@ -423,10 +423,11 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:60]{60} & \textcolor{corregidoverde}{\textbf{Corregido}} · El agente de cada decisión se pierde al guardar y no se lee al abrir & \texttt{io} & S \hfill No\\
 \hyperref[err:61]{61} & \textcolor{corregidoverde}{\textbf{Corregido}} · Quitar, renombrar o mover un agente descuadra las decisiones & \texttt{gui} & M \hfill No\\
 \hyperref[err:62]{62} & \textcolor{corregidoverde}{\textbf{Corregido}} · Las propiedades de una decisión no se abren si su agente ya no figura & \texttt{gui} & S \hfill No\\
-\hyperref[err:63]{63} & Evaluar DAN-arthronet falla con NullPointerException al instanciar & \texttt{inference} & S \hfill No\\
+\hyperref[err:63]{63} & \textcolor{corregidoverde}{\textbf{Corregido}} · Evaluar DAN-arthronet falla con NullPointerException al instanciar & \texttt{inference} & S \hfill No\\
 \hyperref[err:64]{64} & Instanciar una variable de una red de decisiones duplica un enlace & \texttt{inference} & S \hfill No\\
 \hyperref[err:65]{65} & La estrategia óptima de una red sin decisiones lanza una excepción & \texttt{gui} & S \hfill No\\
 \hyperref[err:66]{66} & El botón del árbol de decisión se enciende en redes que no admiten árbol & \texttt{gui} & S \hfill No\\
+\hyperref[err:200]{200} & Una rama de una red de decisiones suma como utilidad el factor de un producto borrado & \texttt{inference} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:temporal}.\ Modelos temporales y evolución temporal}}\\
 \hyperref[err:67]{67} & Con evidencia, las curvas de la evolución temporal no suman uno & \texttt{inference} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:68]{68} & La evolución temporal de una variable que empieza en el ciclo 1 falla & \texttt{inference} & S \hfill No\\
@@ -5442,9 +5443,9 @@ Es el mismo patrón que \hyperref[nota:30]{nota~30} (comparar nombres con \textt
 Prueba de regresión: construir el selector para una decisión cuyo agente sea \texttt{new\ String\allowbreak{}With\allowbreak{}Properties(\allowbreak{}new\ String(\allowbreak{}"Agent\ 1"))} en una red con «Agent 1» en la lista y comprobar que queda marcado ese agente; y con un nombre que no está en la lista, que queda marcado el hueco vacío.
 
 \setcounter{subsection}{62}
-\subsection[Evaluar DAN-arthronet falla con NullPointerException al instanciar]{Evaluar DAN-arthronet (y cualquier red de análisis de decisiones con la misma forma) termina con NullPointerException al instanciar}\label{err:63}
+\subsection[Evaluar DAN-arthronet falla con NullPointerException al instanciar]{\textcolor{corregidoverde}{[Corregido]} Evaluar DAN-arthronet (y cualquier red de análisis de decisiones con la misma forma) termina con NullPointerException al instanciar}\label{err:63}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{2ec95a5} (08-10-2026): \texttt{DANOperations.\allowbreak{}instantiate} pasa al enlace siguiente cuando el nodo de destino ya no está en la copia. \texttt{DAN-arthronet.\allowbreak{}pgmx} se evalúa (0,0825). Con las cuatro decisiones fijadas en sí, no, no, no da −2,3212, lo mismo que la cuenta a mano. No coincide con \texttt{ID-arthronet.\allowbreak{}pgmx} (0,4961) porque los ficheros no son el mismo modelo: la tabla de «Infeccion PTR» da una probabilidad de infección con implante de 0,6455 en el diagrama de influencia y de 0,4675 en la red de análisis de decisiones. Los otros bucles del método que nombra «Cómo arreglarlo» no se han revisado. Al medirlo apareció el \hyperref[err:200]{error~200}.
 \fichakey{Módulo}inference
 \fichakey{Paquete}org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core
 \fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANOperations.java:71-79} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANOperations.java:100-146}
@@ -5684,6 +5685,46 @@ Usar una sola regla para los dos modos, la misma que aplica quien construye el �
 El botón de estrategia óptima de las mismas líneas tiene su propio problema (\hyperref[err:65]{error~65}), que no se arregla con esto.
 
 Prueba: con una red MID abierta en modo inferencia, comprobar que la opción \texttt{DECISION\_\allowbreak{}TREE} queda desactivada; con un diagrama de influencia, activada en los dos modos.
+
+\setcounter{subsection}{199}
+\subsection[Una rama de una red de decisiones suma como utilidad el factor de un producto borrado]{Al instanciar una variable de una red de análisis de decisiones, un nodo de utilidad de producto puede borrarse y dejar suelto uno de sus factores, que la rama suma como si fuera una utilidad}\label{err:200}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}inference
+\fichakey{Paquete}org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANOperations.java:111-142}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:63]{error~63}, \hyperref[err:64]{error~64}
+\end{ficha}
+\paragraph{Qué pasa}
+Visto al corregir el \hyperref[err:63]{error~63}. En \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}dan/\allowbreak{}DAN-arthronet.\allowbreak{}pgmx}, la rama en la que no se hace el implante vale $-0{,}0000333$ y debería valer 0: no hay implante, ni pruebas, ni tratamiento, y por tanto ni coste ni efectividad. El diagrama de influencia con las mismas variables, \texttt{ID-arthronet.\allowbreak{}pgmx}, da 0 con «Realizar Implante = no».
+
+Lo ve el usuario al pedir la estrategia óptima o el árbol de decisión de esa red, que desde el commit \texttt{2ec95a5} se evalúa: la utilidad de la rama «no» entra en la comparación con la de «si» desplazada en esa cantidad. En esta red solo puede cambiar la decisión en un empate casi exacto.
+
+Medido instanciando «Realizar Implante = no» con \texttt{DANOperations.\allowbreak{}instantiate} y evaluando lo que queda con \texttt{DANDecomposition\allowbreak{}Into\allowbreak{}Symmetric\allowbreak{}DANs\allowbreak{}Evaluation}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+nodos que quedan: IMC, Diabetes, Alergia ATB, EVAC Implante, Coste Implante, C2E
+utilidad: -3.33E-5
+\end{Verbatim}
+
+Por qué pasa. La utilidad de la red es «Beneficio neto», que suma «EVAC Total» y «Coste ajustado»; «Coste ajustado» es un nodo de producto que multiplica «Coste total» por «C2E», un factor constante de valor $-3{,}33\cdot10^{-5}$ que pasa el coste a unidades de efectividad. Al instanciar «no», \texttt{instantiate} quita los nodos que esa opción hace imposibles y todos sus descendientes (líneas 111-142), entre ellos «Coste total», «Coste ajustado», «EVAC Total» y «Beneficio neto». «C2E», «EVAC Implante» y «Coste Implante» no descienden de ninguno y se quedan. Sin los nodos que los combinaban, la evaluación los trata como utilidades sueltas y las suma: «EVAC Implante» y «Coste Implante» valen 0 con «no», y queda el factor.
+
+El borrado deshace la estructura de los nodos que combinan utilidades. Aquí lo que sobra es un factor; con otra red podría quedar un coste sin pasar por su factor, sumado a la efectividad en otra unidad. No se ha medido en ninguna otra red.
+\paragraph{Cómo arreglarlo}
+Hay que decidir qué vale un nodo que combina utilidades (suma o producto) cuando la rama borra alguno de sus padres, y aplicarlo en la cascada de borrado. Dos opciones:
+
+\begin{itemize}
+\tightlist
+\item
+  conservar el nodo que combina y dar valor cero a los padres que la rama borra, como ya se hace con la última utilidad de la red (\texttt{replace\allowbreak{}Utility\allowbreak{}Potential\allowbreak{}With\allowbreak{}Zero}); en un producto, eso deja el producto en cero;
+\item
+  al borrar un nodo que combina, borrar también los padres de utilidad que no tengan otro hijo.
+\end{itemize}
+
+Prueba de regresión: instanciar «Realizar Implante = no» en \texttt{DAN-arthronet.\allowbreak{}pgmx} y evaluar lo que queda debe dar 0.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Modelos temporales y evolución temporal}\label{sec:temporal}
@@ -15423,6 +15464,7 @@ mismos criterios.
 \hyperref[err:197]{Error 197} & hallazgo nuevo, al revisar el exportador a Amua tras enlazarlo al menú (\hyperref[nota:51]{nota~51}) \\
 \hyperref[err:198]{Error 198} & hallazgo nuevo, al revisar el exportador a Amua tras enlazarlo al menú (\hyperref[nota:51]{nota~51}) \\
 \hyperref[err:199]{Error 199} & hallazgo nuevo, al revisar el exportador a Amua tras enlazarlo al menú (\hyperref[nota:51]{nota~51}) \\
+\hyperref[err:200]{Error 200} & hallazgo nuevo, al corregir el \hyperref[err:63]{error~63} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
