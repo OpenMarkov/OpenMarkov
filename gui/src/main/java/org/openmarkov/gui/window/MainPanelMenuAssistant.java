@@ -388,8 +388,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                 setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC, isOnlyChanceNodes);
                 setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_SENSITIVITY, isOnlyChanceNodes);
                 setOptionEnabled(ActionCommands.DECISION_SHOW_OPTIMAL_STRATEGY, canShowOptimalStrategy(currentProbNet));
-                setOptionEnabled(ActionCommands.DECISION_TREE, !isOnlyChanceNodes && ((currentProbNet.getNetworkType() instanceof InfluenceDiagramType)
-                        || (currentProbNet.getNetworkType() instanceof DecisionAnalysisNetworkType)));
+                setOptionEnabled(ActionCommands.DECISION_TREE, canShowDecisionTree(currentProbNet));
                 setOptionEnabled(ActionCommands.EVENT_CREATION, !isOnlyChanceNodes && !currentProbNet.hasConstraintOfClass(NoEventNodes.class));
                 boolean canPerformCE = (
                         currentProbNet.getNetworkType() instanceof MIDType || currentProbNet
@@ -403,9 +402,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                 setOptionEnabled(ActionCommands.CREATE_NEW_EVIDENCE_CASE, true);
                 updateOptionsEvidenceCasesNavigation(currentNetworkEditorPanel);
                 setOptionEnabled(ActionCommands.PROPAGATE_EVIDENCE, !currentNetworkEditorPanel.isPropagationActive());
-                if (!currentNetworkEditorPanel.getProbNet().hasConstraintOfClass(OnlyChanceNodes.class)) {
-                    setOptionEnabled(ActionCommands.DECISION_TREE, true);
-                }
+                setOptionEnabled(ActionCommands.DECISION_TREE, canShowDecisionTree(currentNetworkEditorPanel.getProbNet()));
                 setOptionEnabled(ActionCommands.DECISION_SHOW_OPTIMAL_STRATEGY,
                                  canShowOptimalStrategy(currentNetworkEditorPanel.getProbNet()));
             }
@@ -791,6 +788,16 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
      */
     static boolean canShowOptimalStrategy(ProbNet probNet) {
         return !probNet.hasConstraintOfClass(OnlyChanceNodes.class) && !probNet.getNodes(NodeType.DECISION).isEmpty();
+    }
+
+    /**
+     * @return whether the decision tree of {@code probNet} can be asked for: it admits decisions and is an
+     * influence diagram or a decision analysis network
+     */
+    static boolean canShowDecisionTree(ProbNet probNet) {
+        return !probNet.hasConstraintOfClass(OnlyChanceNodes.class)
+                && (probNet.getNetworkType() instanceof InfluenceDiagramType
+                        || probNet.getNetworkType() instanceof DecisionAnalysisNetworkType);
     }
 
     public @Nullable NetworkEditorPanel getCurrentNetworkEditorPanel() {
