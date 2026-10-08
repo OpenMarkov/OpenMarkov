@@ -89,6 +89,53 @@ public class CEAlgebra {
     }
 
     /**
+     * Replaces by the zero partition the partitions of the configurations whose probability is zero.
+     *
+     * @param gPotential  {@code GTablePotential} of {@code CEP}s
+     * @param probability {@code TablePotential}
+     * @return A {@code GTablePotential} whose variables are the union of both inputs.
+     */
+    @SuppressWarnings("unchecked")
+    public static GTablePotential discardImpossibleOptions(GTablePotential gPotential, TablePotential probability) {
+        ArrayList<Variable> gVariables = new ArrayList<>(gPotential.getVariables());
+        ArrayList<Variable> pVariables = new ArrayList<>(probability.getVariables());
+        HashSet<Variable> variablesSet = new LinkedHashSet<>(gVariables);
+        variablesSet.addAll(pVariables);
+        ArrayList<Variable> variablesResult = new ArrayList<>(variablesSet);
+
+        int numVariablesResult = variablesResult.size();
+        GTablePotential result = new GTablePotential(variablesResult, PotentialRole.UNSPECIFIED);
+        result.setCriterion(gPotential.getCriterion());
+
+        int[] accOffGPot = result.getAccumulatedOffsets(gVariables);
+        int[] accOffPPot = result.getAccumulatedOffsets(pVariables);
+        int[] resultCoordinate = new int[numVariablesResult];
+        int[] resultDimensions = result.getDimensions();
+        int gPosition = 0;
+        int pPosition = 0;
+        int incrementedVariable = 0;
+
+        while (incrementedVariable != numVariablesResult) {
+            result.elementTable.add(probability.getValues()[pPosition] == 0.0
+                    ? CEP.getZeroPartition() : gPotential.elementTable.get(gPosition));
+            for (incrementedVariable = 0; incrementedVariable < numVariablesResult; incrementedVariable++) {
+                resultCoordinate[incrementedVariable]++;
+                if (resultCoordinate[incrementedVariable] == resultDimensions[incrementedVariable]) {
+                    resultCoordinate[incrementedVariable] = 0;
+                } else {
+                    break;
+                }
+            }
+            if (incrementedVariable != numVariablesResult) {
+                gPosition += accOffGPot[incrementedVariable];
+                pPosition += accOffPPot[incrementedVariable];
+                incrementedVariable = 0;
+            }
+        }
+        return result;
+    }
+
+    /**
      * Divides a {@code GTablePotential} of {@code CEP}s by a {@code TablePotential}.
      *
      * @param utilityPotential     {@code GTablePotential}
