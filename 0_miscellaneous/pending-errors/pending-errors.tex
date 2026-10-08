@@ -209,7 +209,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54} y \hyperref[err:56]{56}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54}, \hyperref[err:56]{56} y \hyperref[err:57]{57}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -272,7 +272,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 50 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 51 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -420,7 +420,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:54]{54} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un hallazgo que descarta la primera opción de una decisión anula el cálculo & \texttt{inference} & M \hfill No\\
 \hyperref[err:55]{55} & Las ventanas de utilidad esperada y política óptima muestran la clave & \texttt{gui} & S \hfill No\\
 \hyperref[err:56]{56} & \textcolor{corregidoverde}{\textbf{Corregido}} · Deshacer «quitar la política impuesta» pierde la tabla de la política & \texttt{core} & S \hfill No\\
-\hyperref[err:57]{57} & Renombrar un criterio de decisión no se deshace ni se cancela & \texttt{core} & S \hfill No\\
+\hyperref[err:57]{57} & \textcolor{corregidoverde}{\textbf{Corregido}} · Renombrar un criterio de decisión no se deshace ni se cancela & \texttt{core} & S \hfill No\\
 \hyperref[err:58]{58} & Confirmar un criterio sin cambiar su nombre se rechaza como repetido & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:59]{59} & Evaluar una red de decisiones sin criterios falla sin explicar qué falta & \texttt{core} & S \hfill No\\
 \hyperref[err:60]{60} & El agente de cada decisión se pierde al guardar y no se lee al abrir & \texttt{io} & S \hfill No\\
@@ -5071,9 +5071,9 @@ Si además se quiere que el tipo de política signifique algo, \texttt{Impose\al
 Prueba: imponer una política \{0, 1\} con \texttt{Impose\allowbreak{}Policy\allowbreak{}Edit}, ejecutar \texttt{Remove\allowbreak{}Policy\allowbreak{}Edit} y deshacer: la decisión debe volver a tener exactamente esa tabla. Y construir \texttt{Remove\allowbreak{}Policy\allowbreak{}Edit} sobre una decisión sin tabla no debe lanzar.
 
 \setcounter{subsection}{56}
-\subsection[Renombrar un criterio de decisión no se deshace ni se cancela]{Renombrar un criterio de decisión no se deshace, ni con Deshacer ni con «Cancelar» en las propiedades de la red}\label{err:57}
+\subsection[Renombrar un criterio de decisión no se deshace ni se cancela]{\textcolor{corregidoverde}{[Corregido]} Renombrar un criterio de decisión no se deshace, ni con Deshacer ni con «Cancelar» en las propiedades de la red}\label{err:57}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{871dc06} (08-10-2026): \texttt{Decision\allowbreak{}Criteria\allowbreak{}Edit} guarda el nombre anterior del criterio y, al deshacer un renombrado, se lo devuelve al mismo objeto. El caso «renaming a decision criterion» de \texttt{Edit\allowbreak{}Undo\allowbreak{}Cases} lo comprueba. El «Cancelar» del diálogo no se ha probado aparte: deshace con este mismo \texttt{undo(\allowbreak{})}.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.action.core
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/DecisionCriteriaEdit.java:44} \newline \path{core/src/main/java/org/openmarkov/core/action/core/DecisionCriteriaEdit.java:67-83} \newline \path{core/src/main/java/org/openmarkov/core/action/core/DecisionCriteriaEdit.java:97-101} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/DecisionCriteriaTablePanel.java:56-70} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:281-284}
