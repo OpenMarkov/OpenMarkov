@@ -92,7 +92,7 @@ public abstract class idDecideTestNetworkTests extends IDNetworkTests {
 	}
     
     @Test
-    public void veExpectedUtilityTest() throws NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ConstraintViolatedException {
+    public void veExpectedUtilityTest() throws NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, IncompatibleEvidenceException, ConstraintViolatedException {
 		VEExpectedUtilityDecision veExpectedUtilityDecision;
 			Variable decisionVariable = probNet.getVariable("Therapy");
 			veExpectedUtilityDecision = new VEExpectedUtilityDecision(probNet, decisionVariable);

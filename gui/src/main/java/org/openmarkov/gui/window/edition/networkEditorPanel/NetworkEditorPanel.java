@@ -564,11 +564,12 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     /**
      * This method shows the expected utility of a decision node.
      */
-    public void showExpectedUtilityOfNode() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, ThereIsNoPotentialInNodeException {
+    public void showExpectedUtilityOfNode() throws IncompatibleEvidenceException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, ThereIsNoPotentialInNodeException {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
         Node node = visualNode.getNode();
         VEExpectedUtilityDecision veExpectedUtilityDecision
                 = new VEExpectedUtilityDecision(this.visualNetwork.getProbNet(), node.getVariable());
+        veExpectedUtilityDecision.setPreResolutionEvidence(this.evidenceManager.getPreResolutionEvidence());
         Potential expectedUtility = veExpectedUtilityDecision.getExpectedUtility();
         Node dummyNode = new Node(new ProbNet(), node.getVariable(), node.getNodeType());
         dummyNode.setPotential(expectedUtility);
@@ -582,10 +583,11 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     /**
      * This method shows the optimal policy for a decision node.
      */
-    public void showOptimalPolicyOfNode() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, ThereIsNoPotentialInNodeException {
+    public void showOptimalPolicyOfNode() throws IncompatibleEvidenceException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, ThereIsNoPotentialInNodeException {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
         ProbNet dummyProbNet = new ProbNet();
         OptimalPolicies veOptimalPolicy = new VEEvaluation(this.visualNetwork.getProbNet());
+        veOptimalPolicy.setPreResolutionEvidence(this.evidenceManager.getPreResolutionEvidence());
         Potential optimalPolicy = veOptimalPolicy.getOptimalPolicy(visualNode.getNode().getVariable());
         dummyProbNet.addPotential(optimalPolicy);
         Variable conditionedVariable = optimalPolicy.getVariable(0);

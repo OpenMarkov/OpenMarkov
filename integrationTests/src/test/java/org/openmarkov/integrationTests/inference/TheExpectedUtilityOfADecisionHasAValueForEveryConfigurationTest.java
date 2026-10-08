@@ -8,6 +8,8 @@ package org.openmarkov.integrationTests.inference;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -35,6 +37,17 @@ public class TheExpectedUtilityOfADecisionHasAValueForEveryConfigurationTest {
     private static TablePotential expectedUtility(String path, String decision) throws Exception {
         ProbNet net = new PGMXReader().read(IntegrationTest.class.getResource("/networks" + path)).probNet();
         return new VEExpectedUtilityDecision(net, net.getVariable(decision)).getExpectedUtility();
+    }
+
+    @Test
+    void theEvidenceEnteredBeforeTheResolutionIsUsed() throws Exception {
+        ProbNet net = new PGMXReader().read(IntegrationTest.class.getResource("/networks/id/ID-decide-test.pgmx")).probNet();
+        EvidenceCase diseasePresent = new EvidenceCase();
+        diseasePresent.addFinding(new Finding(net.getVariable("Disease"), 1));
+        VEExpectedUtilityDecision task = new VEExpectedUtilityDecision(net, net.getVariable("Do test?"));
+        task.setPreResolutionEvidence(diseasePresent);
+
+        assertArrayEquals(new double[]{7.25, 7.05}, task.getExpectedUtility().getValues(), DELTA);
     }
 
     private static List<String> names(TablePotential potential) {

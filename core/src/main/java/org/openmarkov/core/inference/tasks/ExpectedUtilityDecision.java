@@ -20,5 +20,5 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 public interface ExpectedUtilityDecision extends Task {
 
 	TablePotential getExpectedUtility()
-            throws NonProjectablePotentialException, NotEvaluableNetworkException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ConstraintViolatedException;
+            throws NonProjectablePotentialException, NotEvaluableNetworkException, IncompatibleEvidenceException, ConstraintViolatedException;
 }

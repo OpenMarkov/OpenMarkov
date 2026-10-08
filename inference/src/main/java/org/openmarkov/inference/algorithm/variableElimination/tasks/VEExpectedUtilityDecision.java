@@ -53,7 +53,7 @@ public class VEExpectedUtilityDecision extends VariableElimination implements Ex
 	}
 
 	private void resolve()
-			throws NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ConstraintViolatedException {
+			throws NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, IncompatibleEvidenceException, ConstraintViolatedException {
 		List<Variable> informationalPredecesors = ProbNetOperations.getInformationalPredecessors(probNet, decision);
 		List<Variable> orderedVariables = new ArrayList<>(informationalPredecesors);
 		orderedVariables.remove(decision);
@@ -61,6 +61,7 @@ public class VEExpectedUtilityDecision extends VariableElimination implements Ex
 
 		VEEvaluation veEvaluation = new VEEvaluation(probNet);
 		veEvaluation.setConditioningVariables(informationalPredecesors);
+		veEvaluation.setPreResolutionEvidence(getPreResolutionEvidence());
 
 		TablePotential utility = veEvaluation.getUtility();
 		// The utility has the same value for every state of a variable that it does not depend on
@@ -77,7 +78,7 @@ public class VEExpectedUtilityDecision extends VariableElimination implements Ex
 	}
 
 	@Override public TablePotential getExpectedUtility()
-			throws NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, ConstraintViolatedException {
+			throws NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, IncompatibleEvidenceException, ConstraintViolatedException {
 		if (result == null) {
 			resolve();
 		}
