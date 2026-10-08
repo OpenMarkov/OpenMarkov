@@ -209,7 +209,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54}, \hyperref[err:56]{56}, \hyperref[err:57]{57}, \hyperref[err:59]{59}, \hyperref[err:62]{62}, \hyperref[err:61]{61}, \hyperref[err:60]{60}, \hyperref[err:63]{63} y \hyperref[err:65]{65}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}, y al corregir el 63, el \hyperref[err:200]{error~200}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54}, \hyperref[err:56]{56}, \hyperref[err:57]{57}, \hyperref[err:59]{59}, \hyperref[err:62]{62}, \hyperref[err:61]{61}, \hyperref[err:60]{60}, \hyperref[err:63]{63}, \hyperref[err:65]{65} y \hyperref[err:66]{66}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}, y al corregir el 63, el \hyperref[err:200]{error~200}.
 Los \hyperref[err:44]{errores~44} y \hyperref[err:64]{64} llevan la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de cada ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -272,7 +272,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{199 errores}; 55 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 163 pequeños, 36 medios y 0 grandes.
-De los 199, 57 están ya corregidos, 10 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
+De los 199, 58 están ya corregidos, 10 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -426,7 +426,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:63]{63} & \textcolor{corregidoverde}{\textbf{Corregido}} · Evaluar DAN-arthronet falla con NullPointerException al instanciar & \texttt{inference} & S \hfill No\\
 \hyperref[err:64]{64} & \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}} · Instanciar una variable de una red de decisiones duplica un enlace & \texttt{inference} & S \hfill No\\
 \hyperref[err:65]{65} & \textcolor{corregidoverde}{\textbf{Corregido}} · La estrategia óptima de una red sin decisiones lanza una excepción & \texttt{gui} & S \hfill No\\
-\hyperref[err:66]{66} & El botón del árbol de decisión se enciende en redes que no admiten árbol & \texttt{gui} & S \hfill No\\
+\hyperref[err:66]{66} & \textcolor{corregidoverde}{\textbf{Corregido}} · El botón del árbol de decisión se enciende en redes que no admiten árbol & \texttt{gui} & S \hfill No\\
 \hyperref[err:200]{200} & Una rama de una red de decisiones suma como utilidad el factor de un producto borrado & \texttt{inference} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:temporal}.\ Modelos temporales y evolución temporal}}\\
 \hyperref[err:67]{67} & Con evidencia, las curvas de la evolución temporal no suman uno & \texttt{inference} & M \hfill \textcolor{decisionrojo}{Sí}\\
@@ -5634,9 +5634,9 @@ El botón del árbol de decisión tiene una regla de activación parecida (\hype
 Prueba de regresión: sobre las redes de prueba sin decisiones (diagrama de influencia y red de análisis de decisiones), comprobar que el botón queda desactivado tras cargar la red en los dos modos, y que \texttt{VEOptimal\allowbreak{}Intervention.\allowbreak{}get\allowbreak{}Optimal\allowbreak{}Intervention} falla con la excepción declarada y no con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}.
 
 \setcounter{subsection}{65}
-\subsection[El botón del árbol de decisión se enciende en redes que no admiten árbol]{El botón del árbol de decisión se enciende en modo inferencia para redes que no admiten árbol (MID, POMDP, LIMID\ldots), y al pulsarlo sale un error}\label{err:66}
+\subsection[El botón del árbol de decisión se enciende en redes que no admiten árbol]{\textcolor{corregidoverde}{[Corregido]} El botón del árbol de decisión se enciende en modo inferencia para redes que no admiten árbol (MID, POMDP, LIMID\ldots), y al pulsarlo sale un error}\label{err:66}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{e640410} (08-10-2026): los dos modos usan la misma regla, \texttt{Main\allowbreak{}Panel\allowbreak{}Menu\allowbreak{}Assistant.\allowbreak{}can\allowbreak{}Show\allowbreak{}Decision\allowbreak{}Tree}: la red admite decisiones y es un diagrama de influencia o una red de análisis de decisiones. La regla tiene prueba (un MID no lo ofrece); que el modo inferencia la use no, porque necesita la ventana principal, y no se ha probado en la ventana. La regla no se ha llevado a \texttt{Decision\allowbreak{}Tree\allowbreak{}Manager}, que sigue comprobando el tipo por su cuenta.
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:378-411} \newline \path{inference/src/main/java/org/openmarkov/inference/decisiontree/operation/DecisionTreeManagerImpl.java:55-74} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/toolbar/StandardToolBar.java:275-287}
