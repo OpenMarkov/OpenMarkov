@@ -209,7 +209,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53} y \hyperref[err:85]{85}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85} y \hyperref[err:54]{54}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -272,7 +272,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 48 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 49 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -325,8 +325,6 @@ asignados a Jorge Rico. Los demás errores sin corregir no esperan a ninguno.
 \node[err] (e31) at (2.4,-5.0) {\hyperref[err:31]{31}};
 \node[err] (e62) at (3.6,-3.4) {\hyperref[err:62]{62}};
 \node[err] (e60) at (3.6,-5.0) {\hyperref[err:60]{60}};
-\node[err] (e54) at (4.8,-3.4) {\hyperref[err:54]{54}};
-\node[err] (e87) at (4.8,-5.0) {\hyperref[err:87]{87}};
 \node[err] (e102) at (6.0,-3.4) {\hyperref[err:102]{102}};
 \node[err] (e103) at (6.0,-5.0) {\hyperref[err:103]{103}};
 \node[err] (e140) at (7.2,-3.4) {\hyperref[err:140]{140}};
@@ -343,7 +341,6 @@ asignados a Jorge Rico. Los demás errores sin corregir no esperan a ninguno.
 \draw[->,thick,black!70] (e48) -- (e186);
 \draw[->,thick,black!70] (e37) -- (e31);
 \draw[->,thick,black!70] (e62) -- (e60);
-\draw[->,thick,black!70] (e54) -- (e87);
 \draw[->,thick,black!70] (e102) -- (e103);
 \draw[->,thick,black!70] (e140) -- (e141);
 \draw[->,thick,black!70] (e18) -- (e159);
@@ -420,7 +417,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:51]{51} & «Show optimal policy» y «Show expected utility» no llegan a abrirse & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:52]{52} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Show expected utility» falla con utilidad constante y rellena ceros & \texttt{core} & S \hfill No\\
 \hyperref[err:53]{53} & \textcolor{corregidoverde}{\textbf{Corregido}} · La utilidad esperada de una decisión ignora la evidencia previa & \texttt{inference} & S \hfill No\\
-\hyperref[err:54]{54} & Un hallazgo que descarta la primera opción de una decisión anula el cálculo & \texttt{inference} & M \hfill No\\
+\hyperref[err:54]{54} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un hallazgo que descarta la primera opción de una decisión anula el cálculo & \texttt{inference} & M \hfill No\\
 \hyperref[err:55]{55} & Las ventanas de utilidad esperada y política óptima muestran la clave & \texttt{gui} & S \hfill No\\
 \hyperref[err:56]{56} & Deshacer «quitar la política impuesta» pierde la tabla de la política & \texttt{core} & S \hfill No\\
 \hyperref[err:57]{57} & Renombrar un criterio de decisión no se deshace ni se cancela & \texttt{core} & S \hfill No\\
@@ -4857,9 +4854,9 @@ En \texttt{VEOptimal\allowbreak{}Intervention}, los dos métodos vacíos deben d
 Prueba de regresión: \texttt{VEExpected\allowbreak{}Utility\allowbreak{}Decision} sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-decide-test.\allowbreak{}pgmx} para «Do test?» con Disease=present debe dar {[}7,25; 7,05{]}.
 
 \setcounter{subsection}{53}
-\subsection[Un hallazgo que descarta la primera opción de una decisión anula el cálculo]{Un hallazgo previo posible que la primera opción de una decisión hace imposible se toma por evidencia imposible: la evaluación da utilidad 0 y el análisis de coste-efectividad devuelve la partición cero y revienta}\label{err:54}
+\subsection[Un hallazgo que descarta la primera opción de una decisión anula el cálculo]{\textcolor{corregidoverde}{[Corregido]} Un hallazgo previo posible que la primera opción de una decisión hace imposible se toma por evidencia imposible: la evaluación da utilidad 0 y el análisis de coste-efectividad devuelve la partición cero y revienta}\label{err:54}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{1cebd6d} (08-10-2026), junto con el \hyperref[err:85]{error~85} (\texttt{af673f0}): cuando la probabilidad depende de la decisión que se elimina, \texttt{Decision\allowbreak{}Variable\allowbreak{}Elimination} deja fuera de la comparación las opciones con probabilidad cero y se queda con la probabilidad de la opción elegida. Medido con \texttt{ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx}: «New test = negative» da utilidad 295 308,34 y probabilidad 0,8138; «positive», 166 921,02 y 0,1862; «Test = positive», probabilidad 0,1754; y el análisis de coste-efectividad global da los mismos tramos que fijando además «Dec: New test = yes». En \texttt{ID-arthronet-ce.\allowbreak{}pgmx}, «Isquemia = Menor 1 hora y media» da 71 007,47, lo mismo que fijando «Realizar Implante = si». Si el hallazgo es posible con varias opciones con distinta probabilidad, con un solo criterio se elige la de mayor utilidad y se toma su probabilidad; en coste-efectividad se toma la mayor probabilidad, que es una aproximación, porque la opción óptima cambia de un tramo a otro. No se han tocado \texttt{Decision\allowbreak{}Tree\allowbreak{}Expansion} ni \texttt{DANInference}, que toman la probabilidad de la primera rama: la ventana del árbol lo construye sin los hallazgos, y en las redes de análisis de decisiones probadas (\texttt{DAN-decide-test.\allowbreak{}pgmx}, \texttt{DAN-decide-test-with-symptom.\allowbreak{}pgmx}) no se ha obtenido un resultado equivocado.
 \fichakey{Módulo}inference, core
 \fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination; org.openmarkov.core.model.network.potential.operation
 \fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/DecisionVariableElimination.java:50-57} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/TablePotentialTransform.java:99-104} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/DiscretePotentialOperations.java:386-388} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/VariableEliminationCore.java:160-173} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/operation/CEAlgebra.java:181-203}
@@ -7164,9 +7161,9 @@ El resultado de ese análisis es una partición de coste-efectividad por opción
 
 Por qué pasa. El constructor de \texttt{CEDecision\allowbreak{}Results} monta primero la pestaña de análisis, y \texttt{get\allowbreak{}Intervals\allowbreak{}Panel} pide a cada partición \texttt{get\allowbreak{}Num\allowbreak{}Intervals(\allowbreak{})}, que devuelve \texttt{strategy\allowbreak{}Trees.\allowbreak{}length} sin mirar si es la partición cero. No es el único sitio: \texttt{get\allowbreak{}Analysis\allowbreak{}Table} pide después a cada opción \texttt{get\allowbreak{}Cost}, \texttt{get\allowbreak{}Effectiveness} y \texttt{get\allowbreak{}Intervention}, y \texttt{CEP.\allowbreak{}index} lee \texttt{costs.\allowbreak{}length}; lo mismo hacen \texttt{calculate\allowbreak{}Frontier\allowbreak{}Interventions} (pestaña de intervenciones fronterizas y línea del plano), \texttt{get\allowbreak{}Scatter\allowbreak{}Plot\allowbreak{}Data} y \texttt{get\allowbreak{}Line\allowbreak{}Frontier\allowbreak{}Interventions\allowbreak{}Data} (plano). Ningún método de la ventana consulta \texttt{is\allowbreak{}Zero(\allowbreak{})}.
 
-La ventana global, \texttt{CEPDialog}, construye su tabla con \texttt{get\allowbreak{}Data\allowbreak{}From\allowbreak{}CEP}, que lee \texttt{cep.\allowbreak{}get\allowbreak{}Costs(\allowbreak{}).\allowbreak{}length}, y con la partición cero lanza \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception:\ Cannot\ read\ the\ array\ length\ because\ "costs"\ is\ null}. Le llega esa partición cuando la evidencia previa a la resolución es imposible, por ejemplo en \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-arthronet-ce.\allowbreak{}pgmx} con «Isquemia = Implante no realizado» y «CC\_Drenaje = mayor 800 cc y menor 1000 cc», y también con evidencia posible por el defecto de \hyperref[err:54]{error~54}.
+La ventana global, \texttt{CEPDialog}, construye su tabla con \texttt{get\allowbreak{}Data\allowbreak{}From\allowbreak{}CEP}, que lee \texttt{cep.\allowbreak{}get\allowbreak{}Costs(\allowbreak{}).\allowbreak{}length}, y con la partición cero lanza \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception:\ Cannot\ read\ the\ array\ length\ because\ "costs"\ is\ null}. Le llega esa partición cuando la evidencia previa a la resolución es imposible, por ejemplo en \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-arthronet-ce.\allowbreak{}pgmx} con «Isquemia = Implante no realizado» y «CC\_Drenaje = mayor 800 cc y menor 1000 cc».
 
-Otros caminos que dejan particiones cero en la ventana por decisión: un escenario imposible en el diálogo de ámbito (\hyperref[err:87]{error~87}) y \hyperref[err:54]{error~54}, que dejan todas las opciones a cero. Con ámbito global, un hallazgo de este tipo hace fallar el análisis antes, en \texttt{optimal\allowbreak{}CEP} (\hyperref[err:85]{error~85}), o le hace devolver la partición cero entera (\hyperref[err:54]{error~54}). En las redes de análisis de decisiones el selector desactiva el ámbito de decisión, así que por ahí no se llega a esta ventana.
+Otro camino que deja particiones cero en la ventana por decisión: un escenario imposible en el diálogo de ámbito (\hyperref[err:87]{error~87}), que deja todas las opciones a cero. Con ámbito global, un hallazgo de este tipo ya no hace fallar el análisis ni le hace devolver la partición cero entera (\hyperref[err:85]{errores~85} y \hyperref[err:54]{54}, corregidos). En las redes de análisis de decisiones el selector desactiva el ámbito de decisión, así que por ahí no se llega a esta ventana.
 
 Con el jar ejecutable publicado la ventana por decisión tampoco se abre por \hyperref[err:74]{error~74}, pero este error sale antes: la pestaña de análisis se construye antes que la del plano.
 
@@ -7252,8 +7249,6 @@ Prueba de regresión: sacar de la ventana el cálculo de los umbrales y de las f
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el diálogo debe proponer y ofrecer solo escenarios posibles con la evidencia, o dejarlos elegir y avisar al aceptar
-\fichakey{Corregir antes}\hyperref[err:54]{error~54}: la comprobación necesita la probabilidad del escenario, y hoy sale 0 también con evidencia posible.
-\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n54) at (0.00,0.00) {\hyperref[err:54]{54}}; \node[errnodo,erreste] (n87) at (1.50,0.00) {\hyperref[err:87]{87}}; \draw[->,black!70] (n54) -- (n87); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:54]{error~54}, \hyperref[err:85]{error~85}, \hyperref[err:86]{error~86}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -7320,7 +7315,7 @@ Hay que decidir el comportamiento:
   dejar elegir cualquier combinación y comprobar al aceptar que la evidencia con el escenario tiene probabilidad mayor que cero, avisando si no.
 \end{itemize}
 
-Para esa comprobación no sirve hoy la probabilidad que devuelve \texttt{VECEAnalysis.\allowbreak{}get\allowbreak{}Probability}, que sale 0 también con evidencia posible (\hyperref[err:54]{error~54}). Aunque se arregle esto, la ventana debe resistir un resultado con todas las opciones a cero (\hyperref[err:86]{error~86}).
+Para esa comprobación está la probabilidad que devuelve \texttt{VECEAnalysis.\allowbreak{}get\allowbreak{}Probability}, que ya no sale 0 con evidencia posible (\hyperref[err:54]{error~54}, corregido). Aun así, la ventana debe resistir un resultado con todas las opciones a cero (\hyperref[err:86]{error~86}).
 
 La misma regla debe cumplirse en el panel de escenario del análisis de sensibilidad (\texttt{Scope\allowbreak{}Panel}) y en \texttt{Sensitivity\allowbreak{}Analysis\allowbreak{}Dialog}, que arma allí la evidencia.
 
