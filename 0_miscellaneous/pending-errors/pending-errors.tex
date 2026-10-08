@@ -210,7 +210,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
 Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54}, \hyperref[err:56]{56}, \hyperref[err:57]{57}, \hyperref[err:59]{59}, \hyperref[err:62]{62}, \hyperref[err:61]{61}, \hyperref[err:60]{60} y \hyperref[err:63]{63}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}, y al corregir el 63, el \hyperref[err:200]{error~200}.
-El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
+Los \hyperref[err:44]{errores~44} y \hyperref[err:64]{64} llevan la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de cada ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
 Los \hyperref[err:195]{errores~195} a \hyperref[err:199]{199}, del exportador a Amua (sección~\ref{sec:amua}), se anotaron el 28 de septiembre en una copia aparte de esta lista; se han pasado a ella tras comprobar que siguen presentes.
@@ -272,7 +272,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{199 errores}; 55 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 163 pequeños, 36 medios y 0 grandes.
-De los 199, 56 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 199, 56 están ya corregidos, 10 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -424,7 +424,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:61]{61} & \textcolor{corregidoverde}{\textbf{Corregido}} · Quitar, renombrar o mover un agente descuadra las decisiones & \texttt{gui} & M \hfill No\\
 \hyperref[err:62]{62} & \textcolor{corregidoverde}{\textbf{Corregido}} · Las propiedades de una decisión no se abren si su agente ya no figura & \texttt{gui} & S \hfill No\\
 \hyperref[err:63]{63} & \textcolor{corregidoverde}{\textbf{Corregido}} · Evaluar DAN-arthronet falla con NullPointerException al instanciar & \texttt{inference} & S \hfill No\\
-\hyperref[err:64]{64} & Instanciar una variable de una red de decisiones duplica un enlace & \texttt{inference} & S \hfill No\\
+\hyperref[err:64]{64} & \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}} · Instanciar una variable de una red de decisiones duplica un enlace & \texttt{inference} & S \hfill No\\
 \hyperref[err:65]{65} & La estrategia óptima de una red sin decisiones lanza una excepción & \texttt{gui} & S \hfill No\\
 \hyperref[err:66]{66} & El botón del árbol de decisión se enciende en redes que no admiten árbol & \texttt{gui} & S \hfill No\\
 \hyperref[err:200]{200} & Una rama de una red de decisiones suma como utilidad el factor de un producto borrado & \texttt{inference} & S \hfill No\\
@@ -5493,9 +5493,9 @@ Revisar a la vez los demás bucles del mismo método que usan nodos de la copia 
 Prueba de regresión: evaluar \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}dan/\allowbreak{}DAN-arthronet.\allowbreak{}pgmx} con \texttt{DANDecomposition\allowbreak{}Into\allowbreak{}Symmetric\allowbreak{}DANs\allowbreak{}Evaluation} sin excepción, e instanciar «Realizar Implante» = no.
 
 \setcounter{subsection}{63}
-\subsection[Instanciar una variable de una red de decisiones duplica un enlace]{Al instanciar una variable de una red de análisis de decisiones se crea un segundo enlace entre dos nodos ya enlazados, y la red resultante incumple su propia restricción de enlaces distintos}\label{err:64}
+\subsection[Instanciar una variable de una red de decisiones duplica un enlace]{\textcolor{corregidoverde}{[Cerrado sin arreglo]} Al instanciar una variable de una red de análisis de decisiones se crea un segundo enlace entre dos nodos ya enlazados, y la red resultante incumple su propia restricción de enlaces distintos}\label{err:64}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Cerrado sin arreglo el 08-10-2026. El defecto sigue en el código: en \texttt{DAN-delayed-result-of-test.\allowbreak{}pgmx}, \texttt{DAN-king.\allowbreak{}pgmx} y \texttt{DAN-used-car-buyer.\allowbreak{}pgmx} la red instanciada queda con dos enlaces entre el mismo par de nodos (tres en la última). No se ha encontrado nada que un usuario pueda ver por su causa. Medido comparando el código de \texttt{9841b95} con el arreglo descrito abajo (reutilizar el enlace que ya existe): \texttt{DANDecomposition\allowbreak{}Into\allowbreak{}Symmetric\allowbreak{}DANs\allowbreak{}Evaluation} da la misma utilidad y la misma estrategia óptima en 31 redes de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}dan} (todas las que se leen menos \texttt{DAN-7-test-problem} y \texttt{DAN-CE-8-test-problem}, que se dejaron fuera por su duración), y el árbol de decisión de las tres redes afectadas es idéntico nodo a nodo. Las tres se evalúan hoy enteras.
 \fichakey{Módulo}inference
 \fichakey{Paquete}org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core
 \fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANOperations.java:79-97} \newline \path{core/src/main/java/org/openmarkov/core/model/graph/Graph.java:186-205} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:815-835} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:413-425}
