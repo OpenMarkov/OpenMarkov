@@ -10,7 +10,9 @@ package org.openmarkov.core.model.network;
 import org.openmarkov.core.action.base.StateAction;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Static utility methods for managing agents in a {@link ProbNet}.
@@ -76,12 +78,52 @@ public final class ProbNetAgentManager {
                 probNet.setAgents(agents);
                 break;
             case DOWN, RENAME, UP:
+                List<StringWithProperties> oldAgents = agents == null ? List.of() : agents;
+                Set<String> newNames = new HashSet<>();
+                for (Object[] objects : dataTable) {
+                    newNames.add((String) objects[0]);
+                }
                 ArrayList<StringWithProperties> modifiedAgent = new ArrayList<>();
                 for (Object[] objects : dataTable) {
-                    modifiedAgent.add(new StringWithProperties((String) objects[0]));
+                    String name = (String) objects[0];
+                    StringWithProperties agent = agentNamed(oldAgents, name);
+                    if (agent == null) {
+                        agent = renamed(probNet, oldAgents, newNames, name);
+                    }
+                    modifiedAgent.add(agent);
                 }
                 probNet.setAgents(modifiedAgent);
                 break;
         }
+    }
+    private static StringWithProperties agentNamed(List<StringWithProperties> agents, String name) {
+        for (StringWithProperties agent : agents) {
+            if (agent.getString().equals(name)) {
+                return agent;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Creates the agent {@code newName} with the properties of the agent that is no longer in the list,
+     * and gives it the nodes of that agent.
+     */
+    private static StringWithProperties renamed(ProbNet probNet, List<StringWithProperties> oldAgents,
+                                                Set<String> newNames, String newName) {
+        StringWithProperties agent = new StringWithProperties(newName);
+        for (StringWithProperties oldAgent : oldAgents) {
+            if (!newNames.contains(oldAgent.getString())) {
+                agent.put(oldAgent.getAdditionalProperties().clone());
+                for (Node node : probNet.getNodes()) {
+                    StringWithProperties nodeAgent = node.getVariable().getAgent();
+                    if (nodeAgent != null && nodeAgent.getString().equals(oldAgent.getString())) {
+                        node.getVariable().setAgent(agent);
+                    }
+                }
+                break;
+            }
+        }
+        return agent;
     }
 }

@@ -9,10 +9,13 @@ package org.openmarkov.gui.action;
 
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.StateAction;
+import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.StringWithProperties;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 	private final String agentName;
 	private final StateAction stateAction;
 	private List<StringWithProperties> lastAgents;
+	private final Map<Node, StringWithProperties> lastAgentOfEachNode = new HashMap<>();
 	private final Object[][] dataTable;
 
 
@@ -48,6 +52,10 @@ import java.util.stream.Collectors;
 	@Override protected void doEdit() {
 		this.lastAgents = super.getProbNet().getAgents().stream()
 				.collect(Collectors.toList());
+		lastAgentOfEachNode.clear();
+		for (Node node : probNet.getNodes()) {
+			lastAgentOfEachNode.put(node, node.getVariable().getAgent());
+		}
 		probNet.modifyAgent(stateAction,agentName,dataTable);
 
 	}
@@ -55,7 +63,7 @@ import java.util.stream.Collectors;
     @Override public void undo() {
 		super.undo();
 		probNet.setAgents(lastAgents);
-		//TODO restore agents in nodes
+		lastAgentOfEachNode.forEach((node, agent) -> node.getVariable().setAgent(agent));
 	}
 
 }
