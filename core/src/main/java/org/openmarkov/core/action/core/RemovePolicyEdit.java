@@ -7,18 +7,20 @@
 
 package org.openmarkov.core.action.core;
 
-import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.PNEdit;
-import org.openmarkov.core.model.network.*;
+import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.potential.Potential;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Edit that removes the imposed policy from a decision node, restoring it to the
- * optimal policy state. Supports undo by storing the previous potential.
+ * optimal policy state. Supports undo by storing the previous potentials.
  */
 public class RemovePolicyEdit extends PNEdit {
     
-    private final @Nullable Potential oldPotential;
+    private final List<Potential> oldPotentials;
     private final Node node;
 
 	/**
@@ -27,11 +29,7 @@ public class RemovePolicyEdit extends PNEdit {
 	public RemovePolicyEdit(Node node) {
 		super(node.getProbNet());
         this.node = node;
-        if (node.getNodeType() == NodeType.DECISION && node.getPolicyType() != PolicyType.OPTIMAL) {
-            oldPotential = node.getPotentials().get(0);
-        } else {
-            oldPotential = null;
-        }
+        oldPotentials = new ArrayList<>(node.getPotentials());
 	}
 
 	
@@ -41,10 +39,6 @@ public class RemovePolicyEdit extends PNEdit {
     
     @Override public void undo() {
 		super.undo();
-        if (oldPotential != null) {
-            node.setPotential(oldPotential);
-        } else {
-            node.clearPotentials();
-        }
+        node.setPotentials(new ArrayList<>(oldPotentials));
 	}
 }

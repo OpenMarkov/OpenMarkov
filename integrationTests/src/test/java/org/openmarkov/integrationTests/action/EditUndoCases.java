@@ -242,9 +242,12 @@ final class EditUndoCases {
             ProbNet net = bayesianNetwork();
             return new AddPotentialEdit(net, otherPotentialOf(net.getNode("A")));
         }));
-        cases.add(passes(RemovePolicyEdit.class, "removing the policy of a decision", () -> {
+        cases.add(passes(RemovePolicyEdit.class, "removing the imposed policy of a decision", () -> {
             ProbNet net = influenceDiagram();
-            return new RemovePolicyEdit(net.getNode("D"));
+            Node decision = net.getNode("D");
+            decision.setPotential(new TablePotential(List.of(decision.getVariable()), PotentialRole.POLICY,
+                                                     new double[]{0, 1}));
+            return new RemovePolicyEdit(decision);
         }));
         cases.add(passes(RevelationStateEdit.class, "declaring a state that reveals a link", () -> {
             ProbNet net = bayesianNetwork();
