@@ -60,6 +60,17 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String variableName;
     }
     
+    public static final class UnknownAgent extends PGMXParserException {
+        public UnknownAgent(String variableName, String agentName, Element element) {
+            super(element);
+            this.variableName = variableName;
+            this.agentName = agentName;
+        }
+        
+        public final String variableName;
+        public final String agentName;
+    }
+    
     public static final class DataCouldNotBeConverted extends PGMXParserException {
         public DataCouldNotBeConverted(String reason, Element element) {
             super(element);

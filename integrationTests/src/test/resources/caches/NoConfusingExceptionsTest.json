@@ -175,6 +175,7 @@
     "UncertainParameterException",
     "UnexpectedInferenceException",
     "UnexpectedMenuActionException",
+    "UnknownAgent",
     "UnknownNetworkType",
     "UnknownNetworkType",
     "UnlocalizedJavaException",

@@ -430,6 +430,11 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
             Element decisionCriterionElement = new Element(XMLTags.CRITERION.toString());
             getDecisionCriterion(variableElement, decisionCriterionElement, node);
         }
+        if (node.getVariable().getAgent() != null) {
+            Element agentElement = new Element(XMLTags.AGENT.toString());
+            agentElement.setAttribute(XMLAttributes.NAME.toString(), node.getVariable().getAgent().getString());
+            variableElement.addContent(agentElement);
+        }
         VariableType variableType = node.getVariable().getVariableType();
         
         // Write states

@@ -209,6 +209,8 @@ public class PGMXReader_0_2 {
         ProbNet probNet = null;
         if (xMLProbNet != null) { // Read prob net if the xml file exists
             probNet = initializeProbNet(xMLProbNet, netName);
+            // Before the variables, which name their agent
+            getAgents(xMLProbNet, probNet);
             getVariablesLinksAndPotentials(xMLProbNet, probNet);
             getNetworkAdvancedInformation(xMLProbNet, probNet, netName, classes);
         }
@@ -226,7 +228,6 @@ public class PGMXReader_0_2 {
      */
     protected void getNetworkAdvancedInformation(Element xMLProbNet, ProbNet probNet, String netName,
                                                  Map<String, ProbNet> classes) {
-        getAgents(xMLProbNet, probNet);
         getTemporaUnit(xMLProbNet, probNet);
         getAdditionalProperties(xMLProbNet, probNet);
     }
@@ -613,7 +614,7 @@ public class PGMXReader_0_2 {
      * @param root    {@code Element}
      * @param probNet {@code ProbNet}
      */
-    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates {
+    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent {
         Element xmlVariablesRoot = getXMLVariables(root);
         if (xmlVariablesRoot == null) {
             return;
@@ -627,14 +628,14 @@ public class PGMXReader_0_2 {
     }
     
     protected void loadVariables(List<Element> xmlVariables, ProbNet probNet)
-            throws PGMXParserException.VariableHasNoStates {
+            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent {
         for (Element variableElement : xmlVariables) {
             loadVariable(variableElement, probNet);
         }
     }
     
     protected void loadVariable(Element variableElement, ProbNet probNet)
-            throws PGMXParserException.VariableHasNoStates {
+            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent {
         VariableType variableType = getXMLVariableType(variableElement);
         NodeType nodeType = getXMLNodeType(variableElement);
         String variableName = getVariableName(variableElement);
@@ -658,13 +659,30 @@ public class PGMXReader_0_2 {
      * @param variableName    the variable name
      */
     @SuppressWarnings("unlikely-arg-type")
+    /**
+     * @return the agent of {@code probNet} that {@code agentElement} names
+     * @throws PGMXParserException.UnknownAgent if the network has no agent with that name
+     */
+    private static StringWithProperties agentOfTheNetwork(ProbNet probNet, String variableName, Element agentElement)
+            throws PGMXParserException.UnknownAgent {
+        String agentName = agentElement.getAttributeValue(XMLAttributes.NAME.toString());
+        if (probNet.getAgents() != null) {
+            for (StringWithProperties agent : probNet.getAgents()) {
+                if (agent.getString().equals(agentName)) {
+                    return agent;
+                }
+            }
+        }
+        throw new PGMXParserException.UnknownAgent(variableName, agentName, agentElement);
+    }
+    
     protected void loadVariableAdvancedInformation(
             Element variableElement,
             ProbNet probNet,
             VariableType variableType,
             NodeType nodeType,
             String variableName)
-            throws PGMXParserException.VariableHasNoStates {
+            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent {
         
         String stringTimeSlice = variableElement.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
         if (stringTimeSlice != null) {
@@ -730,6 +748,11 @@ public class PGMXReader_0_2 {
         if (xMLUnit != null) {
             String unit = xMLUnit.getText();
             variable.setUnit(new StringWithProperties(unit));
+        }
+        
+        Element xMLAgent = variableElement.getChild(XMLTags.AGENT.toString());
+        if (xMLAgent != null) {
+            variable.setAgent(agentOfTheNetwork(probNet, variableName, xMLAgent));
         }
         
         // other additionalProperties
