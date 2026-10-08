@@ -337,27 +337,19 @@ public class PGMXReader_0_2 {
      */
     protected void getDecisionCriterion(Element root, ProbNet probNet) {
         Element xmlCriteronRoot = root.getChild(XMLTags.DECISION_CRITERIA.toString());
+        List<Criterion> criteria = new ArrayList<>();
         if (xmlCriteronRoot != null) {
-            List<Element> xmlCriterion = getXMLChildren(xmlCriteronRoot);
-            List<Criterion> criteria = new ArrayList<>();
-            for (Element criterionElement : xmlCriterion) {
+            for (Element criterionElement : getXMLChildren(xmlCriteronRoot)) {
                 String criterionName = getElementName(criterionElement);
-                // Properties criterionProperties = getAdditionalProperties(criterionElement);
                 String criterionUnit = criterionElement.getAttributeValue(XMLAttributes.UNIT.toString());
-                Criterion decisionCriterion = new Criterion(criterionName, criterionUnit);
-                /*
-                 * if (criterionProperties != null) { decisionCriterion.put(criterionProperties); }
-                 */
-                criteria.add(decisionCriterion);
-                // criterions.put(criterionName, criterionProperties);
+                criteria.add(new Criterion(criterionName, criterionUnit));
             }
-            probNet.setDecisionCriteria(criteria);
-            // If the probNet has not the OnlyChanceNodes constraint
-            // we create a default criterion
-        } else if (!probNet.hasConstraintOfClass(OnlyChanceNodes.class)) {
-            List<Criterion> criteria = new ArrayList<>();
-            Criterion decisionCriterion = new Criterion();
-            criteria.add(decisionCriterion);
+        }
+        // A network that may have utility nodes always has a criterion
+        if (criteria.isEmpty() && !probNet.hasConstraintOfClass(OnlyChanceNodes.class)) {
+            criteria.add(new Criterion());
+        }
+        if (xmlCriteronRoot != null || !criteria.isEmpty()) {
             probNet.setDecisionCriteria(criteria);
         }
     }
