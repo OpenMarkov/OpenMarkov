@@ -209,7 +209,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54}, \hyperref[err:56]{56}, \hyperref[err:57]{57} y \hyperref[err:59]{59}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54}, \hyperref[err:56]{56}, \hyperref[err:57]{57}, \hyperref[err:59]{59} y \hyperref[err:62]{62}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}.
 El \hyperref[err:44]{error~44} lleva la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de su ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -272,7 +272,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{198 errores}; 54 de ellos son defectos nuevos, encontrados al
 comprobar los demás. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 162 pequeños, 36 medios y 0 grandes.
-De los 198, 52 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+De los 198, 53 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -323,8 +323,6 @@ asignados a Jorge Rico. Los demás errores sin corregir no esperan a ninguno.
 \node[jorge] (e186) at (8.0,-1.6) {\hyperref[err:186]{186}};
 \node[jorge] (e37) at (2.4,-3.4) {\hyperref[err:37]{37}};
 \node[err] (e31) at (2.4,-5.0) {\hyperref[err:31]{31}};
-\node[err] (e62) at (3.6,-3.4) {\hyperref[err:62]{62}};
-\node[err] (e60) at (3.6,-5.0) {\hyperref[err:60]{60}};
 \node[err] (e102) at (6.0,-3.4) {\hyperref[err:102]{102}};
 \node[err] (e103) at (6.0,-5.0) {\hyperref[err:103]{103}};
 \node[err] (e140) at (7.2,-3.4) {\hyperref[err:140]{140}};
@@ -340,7 +338,6 @@ asignados a Jorge Rico. Los demás errores sin corregir no esperan a ninguno.
 \draw[->,thick,black!70] (e48) -- (e86);
 \draw[->,thick,black!70] (e48) -- (e186);
 \draw[->,thick,black!70] (e37) -- (e31);
-\draw[->,thick,black!70] (e62) -- (e60);
 \draw[->,thick,black!70] (e102) -- (e103);
 \draw[->,thick,black!70] (e140) -- (e141);
 \draw[->,thick,black!70] (e18) -- (e159);
@@ -425,7 +422,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:59]{59} & \textcolor{corregidoverde}{\textbf{Corregido}} · Evaluar una red de decisiones sin criterios falla sin explicar qué falta & \texttt{core} & S \hfill No\\
 \hyperref[err:60]{60} & El agente de cada decisión se pierde al guardar y no se lee al abrir & \texttt{io} & S \hfill No\\
 \hyperref[err:61]{61} & Quitar, renombrar o mover un agente descuadra las decisiones & \texttt{gui} & M \hfill No\\
-\hyperref[err:62]{62} & Las propiedades de una decisión no se abren si su agente ya no figura & \texttt{gui} & S \hfill No\\
+\hyperref[err:62]{62} & \textcolor{corregidoverde}{\textbf{Corregido}} · Las propiedades de una decisión no se abren si su agente ya no figura & \texttt{gui} & S \hfill No\\
 \hyperref[err:63]{63} & Evaluar DAN-arthronet falla con NullPointerException al instanciar & \texttt{inference} & S \hfill No\\
 \hyperref[err:64]{64} & Instanciar una variable de una red de decisiones duplica un enlace & \texttt{inference} & S \hfill No\\
 \hyperref[err:65]{65} & La estrategia óptima de una red sin decisiones lanza una excepción & \texttt{gui} & S \hfill No\\
@@ -5243,8 +5240,6 @@ Prueba de regresión: leer \texttt{DAN-dating.\allowbreak{}pgmx} con \texttt{\te
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
-\fichakey{Corregir antes}\hyperref[err:62]{error~62}: a la vez, como mínimo: en cuanto el lector asigne agentes, abrir las propiedades de una decisión leída de un fichero puede lanzar una excepción.
-\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo,erreste] (n60) at (1.50,0.00) {\hyperref[err:60]{60}}; \node[errnodo] (n62) at (0.00,0.00) {\hyperref[err:62]{62}}; \draw[->,black!70] (n62) -- (n60); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:61]{error~61}, \hyperref[err:62]{error~62}, \hyperref[nota:72]{nota~72}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -5379,9 +5374,9 @@ Hay que decidir de paso cómo se identifica un agente dentro de la red (por obje
 Prueba de regresión: sobre una red \texttt{DECPOMDPType} con dos decisiones de agentes distintos y un agente con una propiedad, comprobar para cada operación (quitar, renombrar, subir, bajar) y su deshacer que la lista y el agente de cada decisión quedan coherentes y que las propiedades se conservan.
 
 \setcounter{subsection}{61}
-\subsection[Las propiedades de una decisión no se abren si su agente ya no figura]{Las propiedades de una decisión no se abren si su agente ya no coincide, como objeto, con uno de la lista}\label{err:62}
+\subsection[Las propiedades de una decisión no se abren si su agente ya no figura]{\textcolor{corregidoverde}{[Corregido]} Las propiedades de una decisión no se abren si su agente ya no coincide, como objeto, con uno de la lista}\label{err:62}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{25dd552} (08-10-2026): la búsqueda del agente está en \texttt{Node\allowbreak{}Definition\allowbreak{}Panel.\allowbreak{}index\allowbreak{}Of\allowbreak{}Agent}, que compara los nombres con \texttt{equals} y devuelve el hueco vacío (puesto 0) si el nombre no está en la lista. Probado sobre ese método, no abriendo el diálogo. El nombre huérfano en el nodo sigue siendo el \hyperref[err:61]{error~61}; no se han buscado otros \texttt{==} entre cadenas en \texttt{gui}.
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.node
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDefinitionPanel.java:129-138,622-671,674-677} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:73-88,337-345} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetAgentManager.java:78-84} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkAgentsTablePanel.java:44-78}
