@@ -28,10 +28,12 @@ import java.util.List;
     private final List<Criterion> lastCriteria;
     private final Criterion modifiedCriterion;
     private final @Nullable String newName;
+    private final String lastName;
     
     public DecisionCriteriaEdit(ProbNet probnet, StateAction stateAction, Criterion modifiedCriterion, String newName) {
         super(probnet);
         this.modifiedCriterion = modifiedCriterion;
+        this.lastName = modifiedCriterion.getCriterionName();
         
         if (stateAction == StateAction.ADD) {
             this.newName = modifiedCriterion.getCriterionName();
@@ -96,7 +98,9 @@ import java.util.List;
     
     @Override public void undo() {
         super.undo();
+        if (stateAction == StateAction.RENAME) {
+            modifiedCriterion.setCriterionName(lastName);
+        }
         probNet.setDecisionCriteria(lastCriteria);
-        
     }
 }

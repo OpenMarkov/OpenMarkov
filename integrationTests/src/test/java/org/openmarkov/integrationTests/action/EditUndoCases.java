@@ -278,6 +278,10 @@ final class EditUndoCases {
                         new MulticriteriaOptions())));
         cases.add(passes(DecisionCriteriaEdit.class, "adding a decision criterion",
                          () -> new DecisionCriteriaEdit(influenceDiagram(), StateAction.ADD, new Criterion("new decision criteria"), "new decision criteria")));
+        cases.add(passes(DecisionCriteriaEdit.class, "renaming a decision criterion", () -> {
+            ProbNet net = influenceDiagram();
+            return new DecisionCriteriaEdit(net, StateAction.RENAME, net.getDecisionCriteria().getFirst(), "renamed");
+        }));
         cases.add(passes(DecisionCriterionUnitEdit.class, "changing the unit of a criterion", () -> {
             ProbNet net = influenceDiagram();
             return new DecisionCriterionUnitEdit(net, net.getDecisionCriteria().getFirst().getCriterionName(), "euro");
