@@ -73,6 +73,10 @@ public class DANOperations {
                 continue;
             }
             Node destinationNode = instantiatedNet.getNode(link.getTo().getVariable());
+            // A previous link of this variable has removed the node from the copy
+            if (destinationNode == null) {
+                continue;
+            }
             // Remove link between restricting originalNode and restricted originalNode
             instantiatedNet.removeLink(link.getFrom().getVariable(), link.getTo().getVariable(), true);
             
