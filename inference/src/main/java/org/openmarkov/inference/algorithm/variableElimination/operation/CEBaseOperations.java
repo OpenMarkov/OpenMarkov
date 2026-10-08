@@ -56,17 +56,23 @@ public class CEBaseOperations {
      * intervals with the same intervention.
      *
      * @param decisionVariable {@code Variable}
-     * @param partitions       {@code List} of {@code CEPartitionPotential}
+     * @param allPartitions    one partition per option of the decision. {@code List} of {@code CEPartitionPotential}
      *
      * @return {@code CEPartitionPotential}
      *
      */
-    public static CEP optimalCEP(Variable decisionVariable, List<CEP> partitions) {
+    public static CEP optimalCEP(Variable decisionVariable, List<CEP> allPartitions) {
         CEP result;
-        int i;
-        for (i = 0; i < partitions.size() && partitions.get(i).isZero(); i++)
-            ;
-        if (i == partitions.size()) {
+        // Only the options whose partition has a probability other than zero are compared
+        List<Integer> options = new ArrayList<>();
+        List<CEP> partitions = new ArrayList<>();
+        for (int option = 0; option < allPartitions.size(); option++) {
+            if (!allPartitions.get(option).isZero()) {
+                options.add(option);
+                partitions.add(allPartitions.get(option));
+            }
+        }
+        if (partitions.isEmpty()) {
             result = CEP.getZeroPartition();
         } else {
             double[] allThresholds = getUnionThresholds(partitions, null);
@@ -92,14 +98,14 @@ public class CEBaseOperations {
                 // For each partition in interval, get the cost, effectivities and interventions to do a deterministic CEA
                 for (int subPartitionIndex = 0; subPartitionIndex < numPartitions; subPartitionIndex++) {
                     CEP thisPartition = partitions.get(subPartitionIndex);
-                    // subPartitionIndex is the decision value of each branch
+                    // options.get(subPartitionIndex) is the decision value of each branch
                     StrategyTree strategyTree = thisPartition.getIntervention(middleLambda);
                     if (strategyTree == null) { // First decision. Create a DeltaPotential
                         strategyTree = new StrategyTree(decisionVariable,
-                                                        decisionVariable.getStates()[subPartitionIndex]);
+                                                        decisionVariable.getStates()[options.get(subPartitionIndex)]);
                     } else { // There is a next decision, referenced by a TreeADDPotential with a single TreeADDBranch
                         List<State> branchStates = new ArrayList<State>(1);
-                        branchStates.add(decisionVariable.getStates()[subPartitionIndex]);
+                        branchStates.add(decisionVariable.getStates()[options.get(subPartitionIndex)]);
                         List<Variable> variables = new ArrayList<Variable>(strategyTree.getVariables());
                         variables.add(decisionVariable);
                         TreeADDBranch branch = new TreeADDBranch(branchStates, decisionVariable, strategyTree,
