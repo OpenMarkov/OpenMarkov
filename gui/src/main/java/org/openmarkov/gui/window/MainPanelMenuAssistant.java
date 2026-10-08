@@ -387,7 +387,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                 setOptionEnabled(ActionCommands.UTILITY_CREATION, !isOnlyChanceNodes);
                 setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC, isOnlyChanceNodes);
                 setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_SENSITIVITY, isOnlyChanceNodes);
-                setOptionEnabled(ActionCommands.DECISION_SHOW_OPTIMAL_STRATEGY, !isOnlyChanceNodes);
+                setOptionEnabled(ActionCommands.DECISION_SHOW_OPTIMAL_STRATEGY, canShowOptimalStrategy(currentProbNet));
                 setOptionEnabled(ActionCommands.DECISION_TREE, !isOnlyChanceNodes && ((currentProbNet.getNetworkType() instanceof InfluenceDiagramType)
                         || (currentProbNet.getNetworkType() instanceof DecisionAnalysisNetworkType)));
                 setOptionEnabled(ActionCommands.EVENT_CREATION, !isOnlyChanceNodes && !currentProbNet.hasConstraintOfClass(NoEventNodes.class));
@@ -405,8 +405,9 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                 setOptionEnabled(ActionCommands.PROPAGATE_EVIDENCE, !currentNetworkEditorPanel.isPropagationActive());
                 if (!currentNetworkEditorPanel.getProbNet().hasConstraintOfClass(OnlyChanceNodes.class)) {
                     setOptionEnabled(ActionCommands.DECISION_TREE, true);
-                    setOptionEnabled(ActionCommands.DECISION_SHOW_OPTIMAL_STRATEGY, true);
                 }
+                setOptionEnabled(ActionCommands.DECISION_SHOW_OPTIMAL_STRATEGY,
+                                 canShowOptimalStrategy(currentNetworkEditorPanel.getProbNet()));
             }
         }
         updateOptionsFindingsDependent(currentNetworkEditorPanel);
@@ -760,6 +761,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         boolean workingModeIsNotInference = workingMode != NetworkEditorPanel.WorkingMode.INFERENCE;
         updateOptionsNetworkModified(probNet.getPNESupport().getCanUndo() && workingModeIsNotInference,
                                      probNet.getPNESupport().getCanRedo() && workingModeIsNotInference);
+        setOptionEnabled(ActionCommands.DECISION_SHOW_OPTIMAL_STRATEGY, canShowOptimalStrategy(probNet));
     }
     
     @Override public void afterUndoingEdit(PNEdit edit) {
@@ -770,6 +772,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         boolean workingModeIsNotInference = workingMode != NetworkEditorPanel.WorkingMode.INFERENCE;
         updateOptionsNetworkModified(probNet.getPNESupport().getCanUndo() && workingModeIsNotInference,
                                      probNet.getPNESupport().getCanRedo() && workingModeIsNotInference);
+        setOptionEnabled(ActionCommands.DECISION_SHOW_OPTIMAL_STRATEGY, canShowOptimalStrategy(probNet));
     }
     
     @Override public void afterRedoingEdit(PNEdit edit) {
@@ -780,6 +783,14 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         boolean workingModeIsNotInference = workingMode != NetworkEditorPanel.WorkingMode.INFERENCE;
         updateOptionsNetworkModified(probNet.getPNESupport().getCanUndo() && workingModeIsNotInference,
                                      probNet.getPNESupport().getCanRedo() && workingModeIsNotInference);
+        setOptionEnabled(ActionCommands.DECISION_SHOW_OPTIMAL_STRATEGY, canShowOptimalStrategy(probNet));
+    }
+
+    /**
+     * @return whether the optimal strategy of {@code probNet} can be asked for: it admits decisions and has one
+     */
+    static boolean canShowOptimalStrategy(ProbNet probNet) {
+        return !probNet.hasConstraintOfClass(OnlyChanceNodes.class) && !probNet.getNodes(NodeType.DECISION).isEmpty();
     }
 
     public @Nullable NetworkEditorPanel getCurrentNetworkEditorPanel() {
