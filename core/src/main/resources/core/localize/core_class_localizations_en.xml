@@ -243,6 +243,10 @@
     <Localization
             class="org.openmarkov.core.exception.NonProjectablePotentialException$MissingMandatoryCovariate"
             value="Potential {potential} cannot be projected because it lacks the covariate {covariate}"/>
+    <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$NumericVariableNeedsAFinding"
+                  value="The numeric variable {variable.getName} has a uniform distribution, so it has no value to compute with. Set a finding on it in edition mode and try again."/>
+    <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$UtilityIsNotDefined"
+                  value="The utility of the node {utilityVariable.getName} is not defined: its relation is still the uniform one it was created with."/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$CannotResolveVariable"
                   value="An expression cannot be resolved as there is no value resolved for variable {reference}"/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$MissingEvidenceInVariable"

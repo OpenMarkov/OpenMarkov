@@ -88,14 +88,19 @@ import java.util.Random;
      *
      */
     @Override
-    public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials) throws NonProjectablePotentialException.PotentialCannotBeConvertedToATable {
+    public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, List<TablePotential> projectedPotentials) throws NonProjectablePotentialException {
         switch (this.role) {
-            case LINK_RESTRICTION, UNSPECIFIED -> throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
+            case LINK_RESTRICTION, UNSPECIFIED -> {
+                if (!variables.isEmpty() && variables.getFirst().getDecisionCriterion() != null) {
+                    throw new NonProjectablePotentialException.UtilityIsNotDefined(variables.getFirst());
+                }
+                throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
+            }
             case CONDITIONAL_PROBABILITY, JOINT_PROBABILITY, POLICY -> {
                 Variable conditionedVariable = variables.getFirst();
                 boolean isNumeric = conditionedVariable.getVariableType() == VariableType.NUMERIC;
                 if (isNumeric) {
-                    throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
+                    throw new NonProjectablePotentialException.NumericVariableNeedsAFinding(conditionedVariable);
                 }
                 if (evidenceCase != null && evidenceCase.contains(conditionedVariable)) {
                     // returns a constant

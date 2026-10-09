@@ -47,6 +47,24 @@ public abstract sealed class NonProjectablePotentialException extends OpenMarkov
      * and the covariates only if the file carries them — so the mismatch is caught here, when the
      * potential is asked to project itself, and reported with both counts.
      */
+    /** A numeric variable with a uniform distribution has no value to compute with until it gets a finding. */
+    public static final class NumericVariableNeedsAFinding extends NonProjectablePotentialException {
+        public NumericVariableNeedsAFinding(Variable variable) {
+            this.variable = variable;
+        }
+
+        public final Variable variable;
+    }
+
+    /** A utility node has no numbers: its relation is the uniform one it was created with. */
+    public static final class UtilityIsNotDefined extends NonProjectablePotentialException {
+        public UtilityIsNotDefined(Variable utilityVariable) {
+            this.utilityVariable = utilityVariable;
+        }
+
+        public final Variable utilityVariable;
+    }
+
     public static final class MissingMandatoryCovariate extends NonProjectablePotentialException {
         public MissingMandatoryCovariate(Potential potential, String covariate) {
             this.potential = potential;
