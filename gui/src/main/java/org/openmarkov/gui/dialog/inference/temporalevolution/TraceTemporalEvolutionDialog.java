@@ -310,7 +310,7 @@ public class TraceTemporalEvolutionDialog extends JDialog {
      * @param decisionSelected conditioning decision for which temporal evolution by criterion is displayed
      */
     public TraceTemporalEvolutionDialog(Window owner, Node node, EvidenceCase evidence, Variable decisionSelected) throws NotAllNodesHavePoliciesException {
-        this(owner, node.getProbNet(), decisionSelected);
+        this(owner, node.getProbNet(), conditioningDecision(node, decisionSelected));
         this.isUtility = node.getNodeType() == NodeType.UTILITY;
         progressMonitor.setMaximum(numSlices);
         Thread evaluationThread = new Thread(() -> {
@@ -319,7 +319,7 @@ public class TraceTemporalEvolutionDialog extends JDialog {
 //			TemporalEvolution temporalEvolution = new VETemporalEvolution(probNet, node.getVariable());
                 TemporalEvolution temporalEvolution = new MIDTemporalEvolution(originalProbNet, variableOfInterest);
                 temporalEvolution.setPreResolutionEvidence(evidence);
-                temporalEvolution.setDecisionVariable(decisionSelected);
+                temporalEvolution.setDecisionVariable(conditioningDecision(node, decisionSelected));
                 //no discounted or probabilistic elements
                 this.temporalEvolutionResults = temporalEvolution.getTemporalEvolution();
                 this.expandedNetwork = temporalEvolution.getExpandedNetwork();
@@ -339,6 +339,11 @@ public class TraceTemporalEvolutionDialog extends JDialog {
         });
         evaluationThread.start();
         progressMonitorThread(evaluationThread).start();
+    }
+    
+    /** The evolution of a decision without policy is the one under the optimal strategy, with no decision left. */
+    private static Variable conditioningDecision(Node node, Variable decisionSelected) {
+        return node.getNodeType() == NodeType.DECISION && !node.hasPolicy() ? null : decisionSelected;
     }
     
     // 02/11/2022

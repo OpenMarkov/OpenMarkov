@@ -21,6 +21,7 @@ import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.operation.DiscretePotentialOperations;
 import org.openmarkov.inference.algorithm.variableElimination.VariableEliminationCore;
+import org.openmarkov.inference.algorithm.variableElimination.tasks.VEEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VariableElimination;
 
 import java.util.*;
@@ -282,6 +283,30 @@ public class MIDTemporalEvolution extends VariableElimination implements Tempora
         }
     }
     
+    /**
+     * The evolution of a decision without a policy is the one under the optimal strategy.
+     *
+     * @return the optimal policy of each decision of the expanded network, by the name of the decision, when the
+     * variable asked is such a decision; otherwise, nothing
+     */
+    private Map<String, Potential> optimalPoliciesIfADecisionWithoutPolicyIsAsked()
+            throws NonProjectablePotentialException {
+        Node asked = aggregatedUtilities == null && temporalVariable != null ? probNet.getNode(temporalVariable) : null;
+        if (asked == null || asked.getNodeType() != NodeType.DECISION || asked.hasPolicy()) {
+            return Collections.emptyMap();
+        }
+        Map<String, Potential> byName = new HashMap<>();
+        try {
+            VEEvaluation evaluation = new VEEvaluation(probNet);
+            evaluation.setPreResolutionEvidence(getPreResolutionEvidence());
+            evaluation.getOptimalPolicies().forEach((decision, policy) -> byName.put(decision.getName(), policy));
+        } catch (NotEvaluableNetworkException.NotApplicableNetwork | ConstraintViolatedException
+                 | IncompatibleEvidenceException e) {
+            throw new UnrecoverableException(e);
+        }
+        return byName;
+    }
+    
     //copied from TemporalEvaluation (tableProjectAndClassifyPotentials method)
     
     /**
@@ -290,8 +315,15 @@ public class MIDTemporalEvolution extends VariableElimination implements Tempora
      * Sets conditioning variable.
      */
     private void commonPreprocessing() throws NotAllNodesHavePoliciesException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException {
-        checkDecision(probNet, probNet.getNode(conditioningDecision));
-        setConditioningVariables(Collections.singletonList(conditioningDecision));
+        Map<String, Potential> optimalPolicies = optimalPoliciesIfADecisionWithoutPolicyIsAsked();
+        if (optimalPolicies.isEmpty()) {
+            checkDecision(probNet, probNet.getNode(conditioningDecision));
+            setConditioningVariables(Collections.singletonList(conditioningDecision));
+        } else {
+            // every decision gets a policy: none is left to condition on
+            conditioningDecision = null;
+            setConditioningVariables(Collections.emptyList());
+        }
         
         //Removing not needed utility nodes
         List<Node> utilityNodesToDelete = probNet.getNodes(NodeType.UTILITY);
@@ -308,6 +340,12 @@ public class MIDTemporalEvolution extends VariableElimination implements Tempora
         }
         utilityNodesToDelete.forEach(utilityNode -> probNet.removeNode(utilityNode));
         this.probNet = TaskUtilities.expandNetwork(this.probNet, true);
+        for (Node decision : probNet.getNodes(NodeType.DECISION)) {
+            Potential optimalPolicy = optimalPolicies.get(decision.getName());
+            if (optimalPolicy != null && !decision.hasPolicy()) {
+                decision.setPotential(optimalPolicy.deepCopy(probNet));
+            }
+        }
         //FIXME Informational predecessors ==null? Is this correct?
         //Replaces decision nodes with policies or informationalPredecessors with chance nodes
         //Not done in TemporalEvaluation
