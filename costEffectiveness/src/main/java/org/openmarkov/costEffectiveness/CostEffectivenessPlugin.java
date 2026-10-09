@@ -106,6 +106,9 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
                         yield (CEP) decompositionAlgorithmArticleCEA.getUtility().elementTable.get(0);
                     }
                 };
+                if (cep.isZero()) {
+                    throw new IncompatibleEvidenceException.EvidenceIsImpossible();
+                }
                 yield new CEPDialog(parent, cep, probNet);
             }
         };

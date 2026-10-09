@@ -9,6 +9,7 @@
         <Effectiveness value="Effectiveness"/>
         <Intervention value="Intervention"/>
         <ICER value="ICER"/>
+        <Impossible value="impossible with the evidence"/>
         <Scope value="Scope selector"/>
         <Intervals value="Intervals">
             <Title value="Cost-effectiveness intervals"/>

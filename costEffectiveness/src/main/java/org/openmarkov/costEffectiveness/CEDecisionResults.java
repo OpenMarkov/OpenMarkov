@@ -64,6 +64,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -81,6 +82,7 @@ import java.util.Collections;
 import java.util.EventObject;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Locale;
 
 /**
@@ -170,6 +172,11 @@ public class CEDecisionResults extends JDialog {
 		veceAnalysis.setPreResolutionEvidence(evidenceCase);
 		veceAnalysis.setDecisionVariable(decisionVariable);
 		gtablePotentialResult = veceAnalysis.getUtility();
+		cepsForDecision = new CEP[gtablePotentialResult.elementTable.size()];
+		for (int i = 0; i < cepsForDecision.length; i++) {
+			cepsForDecision[i] = (CEP) gtablePotentialResult.elementTable.get(i);
+		}
+		checkSomeOptionIsPossible(cepsForDecision);
 
 		hasInterventions = false;
 		for (Object cep : gtablePotentialResult.elementTable) {
@@ -295,21 +302,8 @@ public class CEDecisionResults extends JDialog {
 
 		JPanel intervalsPanel = new JPanel();
 
-		cepsForDecision = new CEP[gtablePotentialResult.elementTable.size()];
-
-		boolean moreThanOneInterval = false;
-
-		LinkedHashSet<Double> thresholds = new LinkedHashSet<>();
-		for (int i = 0; i < gtablePotentialResult.elementTable.size(); i++) {
-			CEP cep = (CEP) gtablePotentialResult.elementTable.get(i);
-			cepsForDecision[i] = cep;
-			if (cep.getNumIntervals() > 1) {
-				moreThanOneInterval = true;
-				for (double threshold : cep.getThresholds()) {
-					thresholds.add(threshold);
-				}
-			}
-		}
+		Set<Double> thresholds = thresholdsOf(cepsForDecision);
+		boolean moreThanOneInterval = !thresholds.isEmpty();
 
 		// If there are more than one interval, is necessary get the compact intervals and paint it into the panel
 		if (moreThanOneInterval) {
@@ -399,23 +393,10 @@ public class CEDecisionResults extends JDialog {
 	 * @return table with the CEPs
 	 */
 	public JTable getAnalysisTable() {
-		// Add one for the header
-		int numRows = decisionVariable.getNumStates();
 		int numColumns = getColumns(AnalysisTab.ANALYSIS).length;
 		// Set data in jTable
-		Object[][] values = new Object[numRows][numColumns];
-
-		for (int row = 0; row < numRows; row++) {
-			// Set decision variable state name
-			values[row][COLUMN_STATE_NAME] = decisionVariable.getStateName(row);
-
-			// Set costs and effectiveness for that decision state
-			values[row][COLUMN_COST] = cepsForDecision[row].getCost(meanThreshold);
-			values[row][COLUMN_EFFECTIVENESS] = cepsForDecision[row].getEffectiveness(meanThreshold);
-			if (hasInterventions) {
-				values[row][COLUMN_INTERVENTION] = cepsForDecision[row].getIntervention(meanThreshold);
-			}
-		}
+		Object[][] values = analysisRows(decisionVariable, cepsForDecision, meanThreshold, numColumns, hasInterventions,
+				stringDatabase.getString("CostEffectivenessResults.Impossible"));
 
 		final JTable jtable = new JTable(values, getColumns(AnalysisTab.ANALYSIS)) {
 			@Override public void doLayout() {
@@ -442,7 +423,7 @@ public class CEDecisionResults extends JDialog {
 			@Override public void mouseClicked(MouseEvent event) {
 				int row = jtable.rowAtPoint(event.getPoint());
 				int column = jtable.columnAtPoint(event.getPoint());
-				if (column == COLUMN_INTERVENTION) {
+				if (column == COLUMN_INTERVENTION && !cepsForDecision[row].isZero()) {
 					StrategyTree strategyTree = cepsForDecision[row].getIntervention(meanThreshold);
 
 					if (strategyTree != null) {
@@ -475,7 +456,64 @@ public class CEDecisionResults extends JDialog {
 			jtable.getColumnModel().getColumn(COLUMN_INTERVENTION).setCellRenderer(renderer);
 		}
 
+		// The first column is wide enough for the name of an option that says it is impossible
+		TableColumn names = jtable.getColumnModel().getColumn(COLUMN_STATE_NAME);
+		FontMetrics metrics = jtable.getFontMetrics(jtable.getFont());
+		for (int row = 0; row < values.length; row++) {
+			if (cepsForDecision[row].isZero()) {
+				int width = metrics.stringWidth(String.valueOf(values[row][COLUMN_STATE_NAME])) + 10;
+				names.setMinWidth(Math.max(names.getMinWidth(), width));
+			}
+		}
+
 		return jtable;
+	}
+
+	/** @throws IncompatibleEvidenceException.EvidenceIsImpossible if the evidence is impossible with every option */
+	public static void checkSomeOptionIsPossible(CEP[] ceps) throws IncompatibleEvidenceException.EvidenceIsImpossible {
+		if (Arrays.stream(ceps).allMatch(CEP::isZero)) {
+			throw new IncompatibleEvidenceException.EvidenceIsImpossible();
+		}
+	}
+
+	/**
+	 * @return the thresholds of the options that have more than one interval. An option that is impossible with
+	 * the evidence has none
+	 */
+	public static Set<Double> thresholdsOf(CEP[] ceps) {
+		Set<Double> thresholds = new LinkedHashSet<>();
+		for (CEP cep : ceps) {
+			if (!cep.isZero() && cep.getNumIntervals() > 1) {
+				for (double threshold : cep.getThresholds()) {
+					thresholds.add(threshold);
+				}
+			}
+		}
+		return thresholds;
+	}
+
+	/**
+	 * @return a row per option with its name, cost, effectiveness and, if asked, intervention at that threshold.
+	 * An option that is impossible with the evidence says so after its name and has no values
+	 */
+	public static Object[][] analysisRows(Variable decisionVariable, CEP[] ceps, double threshold, int numColumns,
+			boolean withInterventions, String impossible) {
+		Object[][] values = new Object[ceps.length][numColumns];
+		for (int row = 0; row < ceps.length; row++) {
+			if (ceps[row].isZero()) {
+				values[row][COLUMN_STATE_NAME] = decisionVariable.getStateName(row) + " (" + impossible + ")";
+				values[row][COLUMN_COST] = "-";
+				values[row][COLUMN_EFFECTIVENESS] = "-";
+				continue;
+			}
+			values[row][COLUMN_STATE_NAME] = decisionVariable.getStateName(row);
+			values[row][COLUMN_COST] = ceps[row].getCost(threshold);
+			values[row][COLUMN_EFFECTIVENESS] = ceps[row].getEffectiveness(threshold);
+			if (withInterventions) {
+				values[row][COLUMN_INTERVENTION] = ceps[row].getIntervention(threshold);
+			}
+		}
+		return values;
 	}
 
 	private DefaultTableCellRenderer getDoubleCellRenderer() {
@@ -696,8 +734,10 @@ public class CEDecisionResults extends JDialog {
 		buttonGroup.add(relativeRadioButton);
 
 		relativeDecisionSelector = new JComboBox<>();
-		for (State state : decisionVariable.getStates()) {
-			relativeDecisionSelector.addItem(state);
+		for (int option = 0; option < cepsForDecision.length; option++) {
+			if (!cepsForDecision[option].isZero()) {
+				relativeDecisionSelector.addItem(decisionVariable.getStates()[option]);
+			}
 		}
 		relativeDecisionSelector.setEnabled(false);
 		relativeDecisionSelector.addActionListener(new ActionListener() {
@@ -725,8 +765,9 @@ public class CEDecisionResults extends JDialog {
 
 		ArrayList<JCheckBox> checkBoxesList = new ArrayList();
 
-		for (State state : decisionVariable.getStates()) {
-			JCheckBox stateCheckbox = new JCheckBox(state.getName());
+		for (int option = 0; option < cepsForDecision.length; option++) {
+			boolean possible = !cepsForDecision[option].isZero();
+			JCheckBox stateCheckbox = new JCheckBox(decisionVariable.getStateName(option));
 			stateCheckbox.addActionListener(new ActionListener() {
 				@Override public void actionPerformed(ActionEvent e) {
 					if (analysisTab == AnalysisTab.CEPLANE) {
@@ -736,7 +777,8 @@ public class CEDecisionResults extends JDialog {
 					}
 				}
 			});
-			stateCheckbox.setSelected(true);
+			stateCheckbox.setSelected(possible);
+			stateCheckbox.setEnabled(possible);
 			checkBoxesList.add(stateCheckbox);
 			showHidePanel.add(stateCheckbox);
 		}
@@ -892,7 +934,7 @@ public class CEDecisionResults extends JDialog {
 
 		// Relative
 		if (relativeRadioButton.isSelected()) {
-			int indexSelected = relativeDecisionSelector.getSelectedIndex();
+			int indexSelected = decisionVariable.getStateIndex((State) relativeDecisionSelector.getSelectedItem());
 			baseCost = cepsForDecision[indexSelected].getCost(meanThreshold);
 			baseEffectiveness = cepsForDecision[indexSelected].getEffectiveness(meanThreshold);
 
@@ -938,7 +980,7 @@ public class CEDecisionResults extends JDialog {
 		double baseEffectiveness;
 
 		if (relativeRadioButton.isSelected()) {
-			int indexSelected = relativeDecisionSelector.getSelectedIndex();
+			int indexSelected = decisionVariable.getStateIndex((State) relativeDecisionSelector.getSelectedItem());
 			baseCost = cepsForDecision[indexSelected].getCost(meanThreshold);
 			baseEffectiveness = cepsForDecision[indexSelected].getEffectiveness(meanThreshold);
 
