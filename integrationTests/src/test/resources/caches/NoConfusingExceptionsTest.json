@@ -32,6 +32,7 @@
     "CouldNotParseSourceException",
     "CriterionNameIsAlreadyPresent",
     "CriterionNameIsEmpty",
+    "CycleWithoutAnEvent",
     "DataCouldNotBeConverted",
     "DeltaPotentialWithoutState",
     "DifferentSizesInPotentialsAndStates",

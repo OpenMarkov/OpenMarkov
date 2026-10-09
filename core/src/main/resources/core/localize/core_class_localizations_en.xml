@@ -185,6 +185,8 @@
                   value="State {newState} already exists in node {node}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$StateDuplicated"
                   value="State {stateName} is duplicated in node {node}."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CycleWithoutAnEvent"
+                  value="The link from {parent.getName} to {child.getName} is part of a cycle with no event node. Every cycle of more than one node must contain an event node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ThereIsACycle"
                   value="There is a cycle traversing between {parent} and {child}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ThereIsALoop"
@@ -376,6 +378,8 @@
                   value="Links must have no restrictions"/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoEventNodes"
                   value="No event nodes allowed"/>
+    <Localization class="org.openmarkov.core.model.network.constraint.EveryCycleHasAnEvent"
+                  value="Every cycle of more than one node must contain an event node"/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlyOneOrphanInitialEvent"
                   value="There must be only one Initial Event with no parent"/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlySelfLoopsWithEventAndChanceNodes"

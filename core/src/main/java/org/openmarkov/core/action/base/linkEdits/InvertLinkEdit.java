@@ -79,6 +79,11 @@ import java.util.List;
                 constraintChecker.addException(new ConstraintViolatedException.ThereIsACycle(constraint, node2, node1));
             }
         }
+        if (probNet.getConstraintOfClass(EveryCycleHasAnEvent.class) instanceof EveryCycleHasAnEvent constraint) {
+            if (EveryCycleHasAnEvent.closesACycleWithoutEvents(probNet, child, parent, parent, child)) {
+                constraintChecker.addException(new ConstraintViolatedException.CycleWithoutAnEvent(constraint, child, parent));
+            }
+        }
         if (probNet.getConstraintOfClass(NoMixedParents.class) instanceof NoMixedParents constraint) {
             Node nodeTo = probNet.getNode(this.getVariableTo());
             if (nodeTo.getNodeType() == NodeType.UTILITY) {

@@ -96,6 +96,14 @@ public final class AddLinkEdit extends BaseLinkEdit {
                 constraintChecker.addException(new ConstraintViolatedException.ThereIsACycle(constraint, node1, node2));
             }
         }
+        if (this.isDirected()
+                && probNet.getConstraintOfClass(EveryCycleHasAnEvent.class) instanceof EveryCycleHasAnEvent constraint) {
+            Node node1 = probNet.getNode(this.getVariableFrom());
+            Node node2 = probNet.getNode(this.getVariableTo());
+            if (EveryCycleHasAnEvent.closesACycleWithoutEvents(probNet, node1, node2, null, null)) {
+                constraintChecker.addException(new ConstraintViolatedException.CycleWithoutAnEvent(constraint, node1, node2));
+            }
+        }
         if (probNet.getConstraintOfClass(NoLoops.class) instanceof NoLoops constraint) {
             Node node1 = probNet.getNode(this.getVariableFrom());
             Node node2 = probNet.getNode(this.getVariableTo());

@@ -9,6 +9,7 @@
         <AllChanceVariablesHaveChancePotentials value="All chance variables must have chance potentials"/>
         <DistinctLinks value="Links must be distinct"/>
         <DistinctVariableNames value="Variable names must be distinct"/>
+        <EveryCycleHasAnEvent value="Every cycle must contain an event node"/>
         <MaxNumParents value="Cannot have more than {maxNumParents}"/>
         <ModelNetworkConstraint value="Tried to add, remove or invert the wrong link"/>
         <NoAlwaysObservedDescendantOfDecision value="An always-observed variable cannot be a descendant of a decision node"/>

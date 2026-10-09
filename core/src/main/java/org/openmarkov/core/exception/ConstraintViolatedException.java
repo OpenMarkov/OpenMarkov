@@ -14,6 +14,7 @@ import org.openmarkov.core.model.network.constraint.MaxNumParents;
 import org.openmarkov.core.model.network.constraint.ModelNetworkConstraint;
 import org.openmarkov.core.model.network.constraint.NoAlwaysObservedDescendantOfDecision;
 import org.openmarkov.core.model.network.constraint.NoBackwardLink;
+import org.openmarkov.core.model.network.constraint.EveryCycleHasAnEvent;
 import org.openmarkov.core.model.network.constraint.NoCycle;
 import org.openmarkov.core.model.network.constraint.NoEventNodes;
 import org.openmarkov.core.model.network.constraint.NoLoops;
@@ -273,6 +274,18 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         
         private final Variable parentVariable;
         private final Variable childVariable;
+    }
+    
+    public static class CycleWithoutAnEvent extends ConstraintViolatedException {
+        
+        public CycleWithoutAnEvent(EveryCycleHasAnEvent constraint, Node parent, Node child) {
+            super(constraint);
+            this.parent = parent;
+            this.child = child;
+        }
+        
+        private final Node parent;
+        private final Node child;
     }
     
     public static class ThereIsACycle extends ConstraintViolatedException {

@@ -1,5 +1,7 @@
 package org.openmarkov.gui.desnets;
 
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.model.network.constraint.EveryCycleHasAnEvent;
 import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.inference.MonteCarloOptions;
 import org.openmarkov.core.model.network.Criterion;
@@ -405,6 +407,16 @@ public class DESInference {
         
         dataFromFile = new DataFromFile(monteCarloOptions.getInputFilePath());
         
+        
+        for (Node parent : probNet.getNodes()) {
+            for (Node child : parent.getChildren()) {
+                if (EveryCycleHasAnEvent.closesACycleWithoutEvents(probNet, parent, child, null, null)) {
+                    JOptionPane.showMessageDialog(null, new ConstraintViolatedException.CycleWithoutAnEvent(
+                            new EveryCycleHasAnEvent(), parent, child).getExceptionMessage(), "Cannot simulate", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+            }
+        }
         
         //Decision criteria
         this.criteria = new ArrayList<>();
