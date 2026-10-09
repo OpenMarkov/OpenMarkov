@@ -277,9 +277,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{225 errores}; 81 de ellos son defectos nuevos: 58 encontrados al
-comprobar o corregir los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{46} necesitan antes una decisión del equipo. Por esfuerzo estimado: 189 pequeños, 36 medios y 0 grandes.
-De los 225, 81 están ya corregidos, 10 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{230 errores}; 86 de ellos son defectos nuevos: 63 encontrados al
+comprobar o corregir los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{43} necesitan antes una decisión del equipo. Por esfuerzo estimado: 192 pequeños, 38 medios y 0 grandes.
+De los 230, 81 están ya corregidos, 10 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 191 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -292,7 +292,7 @@ El apéndice recoge además 191 notas con lo que se comprobó y no entra en la l
 \ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 18 \\
 \ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 12 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
-\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 11 \\
+\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 16 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 22 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 8 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 21 \\
@@ -329,6 +329,12 @@ asignados a Jorge Rico. Los demás errores sin corregir no esperan a ninguno.
 \node[err] (e141) at (7.2,-5.0) {\hyperref[err:141]{141}};
 \node[err] (e18) at (8.4,-3.4) {\hyperref[err:18]{18}};
 \node[err] (e159) at (8.4,-5.0) {\hyperref[err:159]{159}};
+\node[err] (e227) at (2.4,0.0) {\hyperref[err:227]{227}};
+\node[err] (e228) at (3.6,0.0) {\hyperref[err:228]{228}};
+\node[err] (e229) at (4.8,0.0) {\hyperref[err:229]{229}};
+\node[err] (e230) at (6.0,0.0) {\hyperref[err:230]{230}};
+\node[err] (e231) at (7.2,0.0) {\hyperref[err:231]{231}};
+\node[err] (e201) at (4.8,-1.6) {\hyperref[err:201]{201}};
 \draw[->,thick,black!70] (e19) -- (e20);
 \draw[->,thick,black!70] (e19) -- (e21);
 \draw[->,thick,black!70] (e20) -- (e21);
@@ -336,6 +342,12 @@ asignados a Jorge Rico. Los demás errores sin corregir no esperan a ninguno.
 \draw[->,thick,black!70] (e102) -- (e103);
 \draw[->,thick,black!70] (e140) -- (e141);
 \draw[->,thick,black!70] (e18) -- (e159);
+\draw[->,thick,black!70] (e227) -- (e201);
+\draw[->,thick,black!70] (e228) -- (e201);
+\draw[->,thick,black!70] (e229) -- (e201);
+\draw[->,thick,black!70] (e230) -- (e201);
+\draw[->,thick,black!70] (e231) -- (e201);
+\draw[->,thick,black!70] (e229) -- (e230);
 \end{tikzpicture}
 \end{center}
 
@@ -404,6 +416,11 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:47]{47} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Add finding» marca siempre el primer estado y pisa el hallazgo anterior & \texttt{gui} & S \hfill No\\
 \hyperref[err:48]{48} & \textcolor{corregidoverde}{\textbf{Corregido}} · La evidencia imposible se trata distinto según el gesto & \texttt{gui} & M \hfill No\\
 \hyperref[err:49]{49} & \textcolor{corregidoverde}{\textbf{Corregido}} · Construir una propagación cambia el tipo de análisis de la red del usuario & \texttt{core} & S \hfill No\\
+\hyperref[err:227]{227} & En una DAN con restricciones, la propagación dice que los hallazgos son imposibles sin haber ninguno & \texttt{inference} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:228]{228} & La propagación de MID-HPV falla al podar la red & \texttt{inference} & S \hfill No\\
+\hyperref[err:229]{229} & Tres MID no propagan porque la edad inicial es uniforme & \texttt{inference} & M \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:230]{230} & MID-CHAP-Ryan-Griffin no propaga: una expresión usa la edad sin valor & \texttt{inference} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:231]{231} & La propagación de MID-Cochlear no termina en un minuto & \texttt{inference} & M \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:decisiones}.\ Decisiones: políticas, criterios, agentes y árbol de decisión}}\\
 \hyperref[err:50]{50} & \textcolor{corregidoverde}{\textbf{Corregido}} · El árbol de decisión falla en casi todas las redes en formato 1.0 & \texttt{inference} & M \hfill No\\
 \hyperref[err:51]{51} & «Show optimal policy» y «Show expected utility» no llegan a abrirse & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -4512,6 +4529,125 @@ Que la copia superficial copie las opciones (\texttt{new\ Inference\allowbreak{}
 Hay que revisar a la vez si algún llamador depende hoy de leer, en la red original, lo que el algoritmo escribió. Hay que buscar lecturas de \texttt{get\allowbreak{}Multicriteria\allowbreak{}Type(\allowbreak{})} posteriores a construir un algoritmo: \texttt{MIDTemporal\allowbreak{}Evolution.\allowbreak{}java:189-191}, \texttt{Temporal\allowbreak{}Evaluation.\allowbreak{}java:81}, \texttt{Decomposition\allowbreak{}Generate\allowbreak{}Decision\allowbreak{}Tree.\allowbreak{}java:58}, \texttt{Sensitivity\allowbreak{}Analysis\allowbreak{}Controller.\allowbreak{}java:97}, \texttt{Decision\allowbreak{}Tree\allowbreak{}Editor.\allowbreak{}java:310}.
 
 Prueba de regresión: leer un modelo con dos criterios, poner su tipo a coste-efectividad, construir \texttt{VEPropagation} y \texttt{MIDTemporal\allowbreak{}Evolution} (constructor de una variable) sobre él y comprobar que el tipo de la red sigue siendo coste-efectividad; y comprobar que \texttt{copy(\allowbreak{})} devuelve un objeto de opciones distinto con los mismos valores.
+
+\setcounter{subsection}{226}
+\subsection[En una DAN con restricciones, la propagación dice que los hallazgos son imposibles sin haber ninguno]{En una red de análisis de decisiones con restricciones, la propagación sin evidencia responde que los hallazgos son imposibles}\label{err:227}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}inference, core
+\fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination.tasks
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:225-233} \newline \path{0_miscellaneous/networks/dan/DAN-reactor.pgmx}
+\fichakey{Comprobado}Ejecutando la propagación del modo inferencia por programa, sin evidencia; no en la ventana, porque el botón no deja entrar
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué debe enseñar el modo inferencia como probabilidad de una variable en una DAN con restricciones
+\fichakey{Relacionados}\hyperref[err:201]{error~201}, \hyperref[err:48]{error~48}
+\end{ficha}
+\paragraph{Qué pasa}
+Este error es un paso del plan para ofrecer el modo inferencia a las redes de análisis de decisiones (DAN) y a los diagramas de influencia de Markov (MID), decidido el 09-10-2026 (\hyperref[err:201]{error~201}). Hoy un usuario no llega a él, porque el botón del modo inferencia está apagado para esos tipos de red; llegará en cuanto se encienda.
+
+Medido: en \texttt{DAN-reactor.pgmx} y en su versión en formato 1.0, \texttt{VEPropagation.getPosteriorValues}, con todas las variables y sin ningún hallazgo, lanza \texttt{IncompatibleEvidenceException.EvidenceIsImpossible} («These findings are impossible in this network: together they have probability zero»). El mensaje es falso: no hay hallazgos. Las otras 66 redes de análisis de decisiones del repositorio propagan.
+
+La red del reactor tiene cuatro restricciones en sus enlaces. El artículo que define estas redes (Díez, Luque, König y Bermejo, «Decision analysis networks», sección II.B) dice que una restricción $(x, y)$ sobre una variable de azar equivale a poner a cero la probabilidad correspondiente. La probabilidad de alguna variable sale así toda a ceros, y la propagación lo toma por evidencia imposible desde el commit \texttt{dd3a7bc} (antes lanzaba «All the values are 0.0 in potential \ldots»).
+
+No se ha mirado qué variable es ni por qué camino llega a cero.
+\paragraph{Cómo arreglarlo}
+Primero, localizar la variable cuya probabilidad sale a ceros y la restricción que lo causa. Después hay dos cosas distintas que resolver: que la propagación no llame evidencia imposible a lo que no lo es, y qué debe enseñar el modo inferencia en ese nodo. El artículo define el significado de una DAN por su árbol de decisión equivalente (sección III) y no se ha encontrado que diga qué es la probabilidad de una variable suelta; esa es la decisión.
+
+Prueba: la propagación de \texttt{DAN-reactor.pgmx} sin evidencia termina, y con dos hallazgos imposibles sigue dando el mensaje del \hyperref[err:48]{error~48}.
+
+\subsection[La propagación de MID-HPV falla al podar la red]{La propagación de \texttt{MID-HPV} termina con NullPointerException al podar la red}\label{err:228}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}inference, core
+\fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination.tasks
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:70, 220} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:278} \newline \path{0_miscellaneous/networks/mid/MID-HPV.pgmx}
+\fichakey{Comprobado}Ejecutando la propagación del modo inferencia por programa, sin evidencia; no en la ventana, porque el botón no deja entrar
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:201]{error~201}
+\end{ficha}
+\paragraph{Qué pasa}
+Este error es un paso del plan para ofrecer el modo inferencia a las redes de análisis de decisiones (DAN) y a los diagramas de influencia de Markov (MID), decidido el 09-10-2026 (\hyperref[err:201]{error~201}). Hoy un usuario no llega a él, porque el botón del modo inferencia está apagado para esos tipos de red; llegará en cuanto se encienda.
+
+Medido: en \texttt{MID-HPV.pgmx} y en su versión en formato 1.0, \texttt{VEPropagation.getPosteriorValues}, con todas las variables y sin evidencia, lanza \texttt{NullPointerException}: «Cannot invoke "Node.getNeighbors()" because "node" is null», en \texttt{ProbNetOperations.removeUnreachableNodes} (línea 220), llamado desde \texttt{ProbNetOperations.getPruned} (línea 70) y este desde \texttt{VEPropagation.pruneNetwork} (línea 278). Tarda 3,4 segundos en llegar al fallo.
+
+La poda recibe una variable de interés que no tiene nodo en la red que se poda. No se ha mirado cuál es ni en qué paso anterior desaparece.
+\paragraph{Cómo arreglarlo}
+Localizar la variable y el paso que la quita de la red (la discretización o la absorción de nodos numéricos son los candidatos, por lectura). Según lo que salga, o la poda no debe recibirla, o el paso anterior no debe quitarla. Que \texttt{removeUnreachableNodes} acepte un nodo nulo sin decir nada tapa el problema.
+
+Prueba: la propagación de \texttt{MID-HPV.pgmx} sin evidencia termina.
+
+\subsection[Tres MID no propagan porque la edad inicial es uniforme]{Tres MID no propagan porque la relación uniforme de una variable numérica sin hallazgo no se convierte en tabla}\label{err:229}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}inference, core
+\fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination.tasks
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/UniformPotential.java:98} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:499}
+\fichakey{Comprobado}Ejecutando la propagación del modo inferencia por programa, sin evidencia; no en la ventana, porque el botón no deja entrar
+\fichakey{Esfuerzo}Medio (días)
+\fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué hace la propagación con una variable numérica de azar cuyo valor no se conoce con certeza: pedir un hallazgo, discretizarla o no ofrecer el modo inferencia a esas redes
+\fichakey{Relacionados}\hyperref[err:201]{error~201}, \hyperref[err:40]{error~40}, \hyperref[err:45]{error~45}
+\end{ficha}
+\paragraph{Qué pasa}
+Este error es un paso del plan para ofrecer el modo inferencia a las redes de análisis de decisiones (DAN) y a los diagramas de influencia de Markov (MID), decidido el 09-10-2026 (\hyperref[err:201]{error~201}). Hoy un usuario no llega a él, porque el botón del modo inferencia está apagado para esos tipos de red; llegará en cuanto se encienda.
+
+Medido: en \texttt{MID-CHD-Walker}, \texttt{MID-Colorectal} y \texttt{MID-mammography}, en sus dos formatos, \texttt{VEPropagation.getPosteriorValues} sin evidencia lanza \texttt{PotentialCannotBeConvertedToATable}: «Potential P(Age {[}0{]}) cannot be converted to a table», en \texttt{UniformPotential.tableProject} (línea 98), llamado desde \texttt{ProbNetOperations.convertNumericalVariablesToFS} (línea 499).
+
+«Age {[}0{]}» es una variable numérica con una relación uniforme y sin hallazgo. El artículo que define los MID (Díez, Yebra, Bermejo y otros, «Markov influence diagrams», \emph{Medical Decision Making}, 2017, sección de evaluación) dice que la evaluación exacta vale para MID con variables discretas «and numeric variables whose value is known with certainty», y que «some MIDs having numerical variables may require patient-level simulation». En estas redes la edad inicial no se conoce con certeza.
+
+El mismo fallo se vio el 09-10-2026 en un diagrama de influencia, \texttt{ID-delayed-result-of-test}, al corregir el \hyperref[err:42]{error~42}; no entró en esta medida porque esa red propaga sin evidencia.
+\paragraph{Cómo arreglarlo}
+Depende de la decisión, que es de modelo y conviene consultar con Javier Díez. Hay además una duda previa que afecta a todos los MID: el artículo describe su evaluación «by expanding it to the desired horizon», y la propagación medida trabaja sobre la red sin desplegar, con sus dos ciclos. No se ha encontrado en el artículo qué debe enseñar el modo inferencia en un MID.
+
+Prueba: según la decisión, las tres redes propagan, o el modo inferencia explica por qué no se ofrece.
+
+\subsection[MID-CHAP-Ryan-Griffin no propaga: una expresión usa la edad sin valor]{\texttt{MID-CHAP-Ryan-Griffin} no propaga porque una expresión usa una variable numérica sin valor}\label{err:230}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}inference, core
+\fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination.tasks
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/expression/ReferencedExpression.java:60, 89, 117}
+\fichakey{Comprobado}Ejecutando la propagación del modo inferencia por programa, sin evidencia; no en la ventana, porque el botón no deja entrar
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} La misma del \hyperref[err:229]{error~229}
+\fichakey{Corregir antes}\hyperref[err:229]{error~229}: es la misma variable sin valor; lo que se decida allí fija qué debe pasar aquí.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n229) at (0.00,0.00) {\hyperref[err:229]{229}}; \node[errnodo,erreste] (n230) at (1.50,0.00) {\hyperref[err:230]{230}}; \draw[->,black!70] (n229) -- (n230); \end{tikzpicture}
+\fichakey{Relacionados}\hyperref[err:201]{error~201}, \hyperref[err:229]{error~229}
+\end{ficha}
+\paragraph{Qué pasa}
+Este error es un paso del plan para ofrecer el modo inferencia a las redes de análisis de decisiones (DAN) y a los diagramas de influencia de Markov (MID), decidido el 09-10-2026 (\hyperref[err:201]{error~201}). Hoy un usuario no llega a él, porque el botón del modo inferencia está apagado para esos tipos de red; llegará en cuanto se encienda.
+
+Medido: en \texttt{MID-CHAP-Ryan-Griffin}, en sus dos formatos, \texttt{VEPropagation.getPosteriorValues} sin evidencia lanza \texttt{CannotResolveVariable}: «An expression cannot be resolved as there is no value resolved for variable Age {[}0{]}», en \texttt{ReferencedExpression} (líneas 89, 60 y 117).
+
+Es la otra cara del \hyperref[err:229]{error~229}: aquí la edad no falla al convertirse en tabla, sino al evaluar la expresión de otro nodo que la usa.
+\paragraph{Cómo arreglarlo}
+Lo que se decida en el \hyperref[err:229]{error~229}. Si la propagación pide un hallazgo en la edad, este error desaparece con él; si la discretiza, la expresión tiene que evaluarse para cada valor.
+
+Prueba: la propagación de \texttt{MID-CHAP-Ryan-Griffin.pgmx} termina, o el modo inferencia explica por qué no se ofrece.
+
+\subsection[La propagación de MID-Cochlear no termina en un minuto]{La propagación de \texttt{MID-Cochlear} no termina en un minuto}\label{err:231}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}inference, core
+\fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination.tasks
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java} \newline \path{0_miscellaneous/networks/mid/MID-Cochlear.pgmx}
+\fichakey{Comprobado}Ejecutando la propagación del modo inferencia por programa, sin evidencia; no en la ventana, porque el botón no deja entrar
+\fichakey{Esfuerzo}Medio (días)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:201]{error~201}
+\end{ficha}
+\paragraph{Qué pasa}
+Este error es un paso del plan para ofrecer el modo inferencia a las redes de análisis de decisiones (DAN) y a los diagramas de influencia de Markov (MID), decidido el 09-10-2026 (\hyperref[err:201]{error~201}). Hoy un usuario no llega a él, porque el botón del modo inferencia está apagado para esos tipos de red; llegará en cuanto se encienda.
+
+Medido: en \texttt{MID-Cochlear}, en sus dos formatos (34 nodos), \texttt{VEPropagation.getPosteriorValues} con todas las variables y sin evidencia no había terminado a los 60 segundos, que es donde se cortó la medida. No se sabe si termina más tarde ni dónde se va el tiempo. Las otras redes MID que propagan lo hacen en menos de 5 segundos.
+
+El artículo que define los MID dice que la complejidad de la evaluación crece linealmente con el horizonte cuando todas las decisiones son atemporales, y que sus redes se evalúan con OpenMarkov en menos de 10 segundos. Esa frase habla de la evaluación de la red desplegada, no de esta propagación.
+\paragraph{Cómo arreglarlo}
+Medir primero: cuánto tarda en total, qué variable de interés se lleva el tiempo y con qué tamaño de tabla. La propagación resuelve cada variable de interés por separado, copiando y podando la red cada vez; con 34 nodos eso solo no explica un minuto. Sin esa medida no se puede proponer nada.
+
+Prueba: la propagación de \texttt{MID-Cochlear.pgmx} sin evidencia termina en un tiempo que se pueda esperar en la ventana.
+
+\setcounter{subsection}{49}
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Decisiones: políticas, criterios, agentes y árbol de decisión}\label{sec:decisiones}
@@ -14690,6 +14826,8 @@ Prueba de regresión: sin ventana, con la tabla del diálogo o con el cálculo e
 \fichakey{Comprobado}Leyendo el código; visto en la ventana con un MID
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No. Pedía decidir si es intencionado y a qué tipos debe ofrecerse. Manuel Arias lo decidió el 09-10-2026: se ofrecerá también a los MID y a las redes de análisis de decisiones, que son los tipos que el algoritmo de propagación declara, pero no antes de arreglar las propagaciones que fallan
+\fichakey{Corregir antes}\hyperref[err:227]{errores~227} (para las redes de análisis de decisiones) y \hyperref[err:228]{228}, \hyperref[err:229]{229}, \hyperref[err:230]{230} y \hyperref[err:231]{231} (para los MID): el modo inferencia se ofrece a cada tipo cuando sus redes propagan.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n227) at (0.00,0.00) {\hyperref[err:227]{227}}; \node[errnodo] (n228) at (1.50,0.00) {\hyperref[err:228]{228}}; \node[errnodo] (n229) at (3.00,0.00) {\hyperref[err:229]{229}}; \node[errnodo] (n230) at (4.50,0.00) {\hyperref[err:230]{230}}; \node[errnodo] (n231) at (6.00,0.00) {\hyperref[err:231]{231}}; \node[errnodo,erreste] (n201) at (3.00,-1.30) {\hyperref[err:201]{201}}; \draw[->,black!70] (n227) -- (n201); \draw[->,black!70] (n228) -- (n201); \draw[->,black!70] (n229) -- (n201); \draw[->,black!70] (n230) -- (n201); \draw[->,black!70] (n231) -- (n201); \draw[->,black!70] (n229) -- (n230); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:66]{error~66}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -16385,6 +16523,11 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:224]{Error 224} & hallazgo nuevo, al portar OpenMarkov a C++/Qt \\
 \hyperref[err:225]{Error 225} & hallazgo nuevo, visto en la ventana al comprobar el arreglo del \hyperref[err:153]{error~153} \\
 \hyperref[err:226]{Error 226} & hallazgo nuevo, al medir las reglas de familia para el \hyperref[err:76]{error~76} \\
+\hyperref[err:227]{Error 227} & hallazgo nuevo, al medir la propagación de cada tipo de red para el \hyperref[err:201]{error~201} \\
+\hyperref[err:228]{Error 228} & hallazgo nuevo, al medir la propagación de cada tipo de red para el \hyperref[err:201]{error~201} \\
+\hyperref[err:229]{Error 229} & hallazgo nuevo, al medir la propagación de cada tipo de red para el \hyperref[err:201]{error~201} \\
+\hyperref[err:230]{Error 230} & hallazgo nuevo, al medir la propagación de cada tipo de red para el \hyperref[err:201]{error~201} \\
+\hyperref[err:231]{Error 231} & hallazgo nuevo, al medir la propagación de cada tipo de red para el \hyperref[err:201]{error~201} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
