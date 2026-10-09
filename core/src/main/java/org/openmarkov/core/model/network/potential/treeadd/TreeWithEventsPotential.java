@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -214,7 +215,7 @@ public class TreeWithEventsPotential extends Potential implements DESSimulablePo
     /**
      * Generates a sampled potential
      */
-    @Override public Potential sample() {
+    @Override public Potential sample(Random randomGenerator) {
         //TODO
         return null;
     }

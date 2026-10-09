@@ -8,6 +8,7 @@ package org.openmarkov.io.probmodel;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.openmarkov.core.model.network.modelUncertainty.XORShiftRandom;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.testTags.TestSpeed;
@@ -29,7 +30,7 @@ class AFileWithUncertaintyInSomeCellsOfAColumnIsSampledTest {
                 getClass().getClassLoader().getResource("column-with-uncertainty-in-some-cells.pgmx")).probNet();
         TablePotential table = (TablePotential) probNet.getNode("X").getPotential();
 
-        double[] sampled = ((TablePotential) table.sample()).getValues();
+        double[] sampled = ((TablePotential) table.sample(new XORShiftRandom())).getValues();
 
         assertEquals(0.2, sampled[0]);
         assertEquals(0.3, sampled[4]);

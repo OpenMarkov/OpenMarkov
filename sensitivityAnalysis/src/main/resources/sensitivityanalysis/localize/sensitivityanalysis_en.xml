@@ -53,6 +53,9 @@
             <PointsPerParameter value="Points per parameter"/>
             <Simulations value="Simulations"/>
             <Multithreading value="Use multithreading"/>
+            <Seed value="Seed">
+                <Tooltip value="A number that fixes the random draws: the same seed gives the same analysis again. Leave it empty to get a different analysis each time. With a seed, multithreading is not used."/>
+            </Seed>
             <ProbabilityAboveOne value="When a probability parameter is above 1: "/>
             <Ignore value="Ignore case"/>
             <ThrowError value="Throw error message"/>

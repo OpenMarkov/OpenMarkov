@@ -154,6 +154,7 @@ public class CEProbabilisticDialog extends JDialog {
         vecepsa.setDecisionVariable(sensitivityAnalysisModel.getDecisionVariable());
         vecepsa.setNumSimulations(sensitivityAnalysisModel.getNumberOfIterationsSimulations());
         vecepsa.setUseMultithreading(false);
+        vecepsa.setSeed(sensitivityAnalysisModel.getSeed());
         
         this.evaluationWTP = DEFAULT_LAMBDA;
         this.referenceWTP = DEFAULT_LAMBDA;

@@ -84,6 +84,11 @@ public class SensitivityAnalysisModel extends Observable {
 	private boolean multithreading;
 
 	/**
+	 * Seed of the random draws of the simulations; null when the user gives none
+	 */
+	private Long seed;
+
+	/**
 	 * Constructor
 	 */
 	public SensitivityAnalysisModel() {
@@ -212,6 +217,14 @@ public class SensitivityAnalysisModel extends Observable {
 		this.numberOfIterationsSimulations = numberOfIterationsSimulations;
 		this.setChanged();
 		this.notifyObservers(numberOfIterationsSimulations);
+	}
+
+	public Long getSeed() {
+		return seed;
+	}
+
+	public void setSeed(Long seed) {
+		this.seed = seed;
 	}
 
 	public boolean isMultithreading() {

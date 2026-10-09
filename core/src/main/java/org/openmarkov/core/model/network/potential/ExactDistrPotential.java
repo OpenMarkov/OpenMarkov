@@ -22,6 +22,7 @@ import org.openmarkov.core.model.network.type.DESNetworkType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Wrapper for TablePotential
@@ -99,9 +100,9 @@ import java.util.List;
         return projectedPotential;
     }
     
-    @Override public Potential sample() {
+    @Override public Potential sample(Random randomGenerator) {
         ExactDistrPotential sampled = (ExactDistrPotential) copy();
-        sampled.tablePotential = (TablePotential) tablePotential.sample(true);
+        sampled.tablePotential = (TablePotential) tablePotential.sample(randomGenerator, true);
         return sampled;
     }
     

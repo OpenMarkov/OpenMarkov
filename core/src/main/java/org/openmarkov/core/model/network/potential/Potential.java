@@ -617,10 +617,10 @@ public abstract class Potential implements Localizable {
     }
     
     /**
+     * @param randomGenerator the generator the numbers are drawn from
      * @return A sampled potential. By default, itself, i.e., not sampled.
-     * TODO This method must be commented further
      */
-    public Potential sample() {
+    public Potential sample(Random randomGenerator) {
         return this; // By default
     }
     

@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -165,7 +166,7 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
     /**
      * Generates a sampled potential
      */
-    @Override public Potential sample() {
+    @Override public Potential sample(Random randomGenerator) {
         //TODO
         return null;
     }

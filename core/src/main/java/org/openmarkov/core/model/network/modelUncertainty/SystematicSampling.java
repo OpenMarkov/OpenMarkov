@@ -484,8 +484,7 @@ public class SystematicSampling extends Sampler {
 		return family.getMean();
 	}
 
-	@Override protected Random createRandomGenerator() {
-		// TODO Auto-generated method stub
+	@Override protected Random getRandomGenerator() {
 		return null;
 	}
 

@@ -155,7 +155,7 @@ public abstract class Sampler {
 	protected double[] generateSample(FamilyDistribution otherFamily, DirichletFamily dirFamily,
 			ComplementFamily complementFamily, int[] indexesOther, int[] indexesDirichlet, int[] indexesComplement,
 			int numStates) {
-		Random randomGenerator = createRandomGenerator();
+		Random randomGenerator = getRandomGenerator();
         double[] sampledConfigurationValues = new double[numStates];
 		// processes the uncertain values that can be sampled individually
         double[] sampleOther = getSample(otherFamily, randomGenerator);
@@ -173,7 +173,7 @@ public abstract class Sampler {
 
 	protected abstract double[] getSample(FamilyDistribution family, Random randomGenerator);
 
-	protected abstract Random createRandomGenerator();
+	protected abstract Random getRandomGenerator();
 
 	public void createSamplerUncertainValues(List<UncertainValue> columnUncertainValues,
 			List<Class<? extends ProbDensFunction>> functionTypes) {

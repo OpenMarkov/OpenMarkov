@@ -15,6 +15,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.DistributionsOfAColumn;
 import org.openmarkov.core.model.network.potential.GTablePotential;
+import org.openmarkov.core.model.network.modelUncertainty.XORShiftRandom;
 import org.openmarkov.core.model.network.potential.Potential;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -46,6 +48,8 @@ public class VECEPSA extends VariableElimination implements CE_PSA {
     
     private Variable decisionVariable;
     
+    private Long seed;
+    
     /**
      * @param network a symmetric network having at least two criteria (and usually decisions and utility nodes)
      */
@@ -58,6 +62,10 @@ public class VECEPSA extends VariableElimination implements CE_PSA {
             throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
         List<GTablePotential> results = new ArrayList<>();
         progress = 0;
+        Random randomGenerator = new XORShiftRandom();
+        if (seed != null) {
+            randomGenerator.setSeed(seed);
+        }
         if (useMultithreading) {
             int numThreads = Runtime.getRuntime().availableProcessors();
             boolean success = false;
@@ -65,7 +73,9 @@ public class VECEPSA extends VariableElimination implements CE_PSA {
                 try (ExecutorService executor = Executors.newFixedThreadPool(numThreads)) {
                     List<Future<GTablePotential>> list = new ArrayList<>();
                     for (int i = 0; i < numSimulations; ++i) {
-                        Simulation simulation = new Simulation(probNet);
+                        Random ofTheSimulation = new XORShiftRandom();
+                        ofTheSimulation.setSeed(randomGenerator.nextLong());
+                        Simulation simulation = new Simulation(probNet, ofTheSimulation);
                         list.add(executor.submit(simulation));
                     }
                     int simulationIndex = 0;
@@ -83,7 +93,7 @@ public class VECEPSA extends VariableElimination implements CE_PSA {
             }
         } else {
             for (int i = 0; i < numSimulations; ++i) {
-                sampleNetworkPotentials(probNet);
+                sampleNetworkPotentials(probNet, randomGenerator);
                 CEAnalysis veEvaluation = new VECEAnalysis(probNet);
                 veEvaluation.setPreResolutionEvidence(getPreResolutionEvidence());
                 veEvaluation.setDecisionVariable(this.decisionVariable);
@@ -103,11 +113,16 @@ public class VECEPSA extends VariableElimination implements CE_PSA {
         this.numSimulations = numSimulations;
     }
     
-    private static void sampleNetworkPotentials(ProbNet probNet) {
+    /** @param seed the seed of the random numbers, to get the same analysis again; null, a different one each time */
+    public void setSeed(Long seed) {
+        this.seed = seed;
+    }
+    
+    private static void sampleNetworkPotentials(ProbNet probNet, Random randomGenerator) {
         for (Node node : probNet.getNodes()) {
             List<Potential> sampledPotentials = new ArrayList<>();
             for (Potential potential : node.getPotentials()) {
-                sampledPotentials.add(potential.sample());
+                sampledPotentials.add(potential.sample(randomGenerator));
             }
             node.setPotentials(sampledPotentials);
         }
@@ -130,14 +145,17 @@ public class VECEPSA extends VariableElimination implements CE_PSA {
         
         final ProbNet probNet;
         
-        Simulation(ProbNet probNet) {
+        final Random randomGenerator;
+        
+        Simulation(ProbNet probNet, Random randomGenerator) {
             super();
             this.probNet = probNet;
+            this.randomGenerator = randomGenerator;
         }
         
         @Override
         public GTablePotential call() throws IncompatibleEvidenceException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
-            sampleNetworkPotentials(probNet);
+            sampleNetworkPotentials(probNet, randomGenerator);
             CEAnalysis veEvaluation = new VECEAnalysis(probNet);
             veEvaluation.setPreResolutionEvidence(getPreResolutionEvidence());
             veEvaluation.setDecisionVariable(decisionVariable);

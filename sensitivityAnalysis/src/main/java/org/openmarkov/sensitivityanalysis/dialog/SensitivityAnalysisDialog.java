@@ -23,6 +23,8 @@ import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisConfiguration
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisController;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -85,9 +87,14 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
      */
     private JPanel iterationSimulationsPanel;
     
+    /** Every number with these digits fits in a long. */
+    private static final int MAX_DIGITS_OF_THE_SEED = 18;
     private JTextField numSimulationsTextField;
     
     private JCheckBox chkUseMultiThreading;
+    private JTextField seedTextField;
+    /** What the multithreading box had before a seed switched it off. */
+    private boolean multithreadingWithoutSeed = true;
     
     private StringDatabase stringDatabase = StringDatabase.getUniqueInstance();
     
@@ -301,6 +308,35 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
                       .setMultithreading(chkUseMultiThreading.isSelected());
             
             analysisTypePanel.add(chkUseMultiThreading);
+            
+            String seedTooltip = stringDatabase.getString("SensitivityAnalysis.General.Seed.Tooltip");
+            JLabel seedLabel = new JLabel(stringDatabase.getString("SensitivityAnalysis.General.Seed"));
+            seedLabel.setToolTipText(seedTooltip);
+            analysisTypePanel.add(seedLabel);
+            seedTextField = new JTextField(8);
+            seedTextField.setName("seedTextField");
+            seedTextField.setToolTipText(seedTooltip);
+            seedTextField.addKeyListener(new KeyAdapter() {
+                @Override public void keyTyped(KeyEvent e) {
+                    if (!Character.isDigit(e.getKeyChar()) || seedTextField.getText().length() >= MAX_DIGITS_OF_THE_SEED) {
+                        e.consume();
+                    }
+                }
+            });
+            seedTextField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override public void insertUpdate(DocumentEvent e) {
+                    seedChanged();
+                }
+                
+                @Override public void removeUpdate(DocumentEvent e) {
+                    seedChanged();
+                }
+                
+                @Override public void changedUpdate(DocumentEvent e) {
+                    seedChanged();
+                }
+            });
+            analysisTypePanel.add(seedTextField);
         }
         
         return analysisTypePanel;
@@ -517,6 +553,22 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
         }
     }
     
+    /** With a seed, multithreading is switched off and cannot be chosen; without it, the box is as it was. */
+    private void seedChanged() {
+        boolean hasSeed = seedOf(seedTextField.getText()) != null;
+        if (hasSeed && chkUseMultiThreading.isEnabled()) {
+            multithreadingWithoutSeed = chkUseMultiThreading.isSelected();
+        }
+        chkUseMultiThreading.setSelected(!hasSeed && multithreadingWithoutSeed);
+        chkUseMultiThreading.setEnabled(!hasSeed);
+    }
+    
+    /** @return the seed written in the field, or null if it has no number */
+    public static Long seedOf(String text) {
+        String digits = text.trim();
+        return digits.matches("\\d{1," + MAX_DIGITS_OF_THE_SEED + "}") ? Long.valueOf(digits) : null;
+    }
+    
     protected void doOkClick() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotSupportedOperationException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, ConstraintViolatedException {
         // This dialog stays open between analyses, so the user may have set evidence in the network
         // since the scenario was built. Both are read again before they are mixed.
@@ -529,6 +581,7 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
                       .setNumberOfIterationsSimulations(Integer.parseInt(numSimulationsTextField.getText()));
             controller.getSensitivityAnalysisModel()
                       .setMultithreading(chkUseMultiThreading.isSelected());
+            controller.getSensitivityAnalysisModel().setSeed(seedOf(seedTextField.getText()));
             
         }
         if (this.controller.getSensitivityAnalysisModel().getDecisionVariable() != null

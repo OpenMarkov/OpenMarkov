@@ -22,7 +22,11 @@ import java.util.Random;
  */
 public class TablePotentialSampler extends Sampler {
 
-	public TablePotentialSampler() {
+	private final Random randomGenerator;
+
+	/** @param randomGenerator the generator every column is drawn from */
+	public TablePotentialSampler(Random randomGenerator) {
+		this.randomGenerator = randomGenerator;
 	}
 
 	public static boolean hasUncertainValuesUtility(UncertainValue[] uTable, int basePosition) {
@@ -83,8 +87,8 @@ public class TablePotentialSampler extends Sampler {
 
 
 	@Override
-	protected Random createRandomGenerator() {
-		return new XORShiftRandom();
+	protected Random getRandomGenerator() {
+		return randomGenerator;
 	}
 
 	@Override

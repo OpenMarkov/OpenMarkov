@@ -20,6 +20,7 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * A potential indicating that the distribution is identical to the previous temporal
@@ -78,7 +79,7 @@ import java.util.List;
         return getOriginalPotential(probNet, getConditionedVariable());
     }
     
-    @Override public Potential sample() {
+    @Override public Potential sample(Random randomGenerator) {
         throw new NotSupportedOperationException("SameAsPrevious potentials cannot be sampled.");
     }
     

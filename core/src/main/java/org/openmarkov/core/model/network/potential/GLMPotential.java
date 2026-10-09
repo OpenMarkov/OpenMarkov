@@ -18,7 +18,6 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.modelUncertainty.NormalFunction;
-import org.openmarkov.core.model.network.modelUncertainty.XORShiftRandom;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -274,13 +273,12 @@ public abstract class GLMPotential extends Potential {
                                                    double[] coefficients, VariableExpression[] covariates, List<Variable> evidencelessVariables,
                                                    Map<Variable, String> variableValues) throws NonProjectablePotentialException;
     
-    @Override public Potential sample() {
+    @Override public Potential sample(Random randomGenerator) {
         if (choleskyDecomposition != null) {
             if (this.sampledCoefficients == null) {
                 this.sampledCoefficients = new double[coefficients.length];
             }
             
-            Random randomGenerator = new XORShiftRandom();
             NormalFunction normalDistribution = new NormalFunction(0, 1);
             double[] normalSamples = new double[coefficients.length];
             for (int i = 0; i < normalSamples.length; ++i) {

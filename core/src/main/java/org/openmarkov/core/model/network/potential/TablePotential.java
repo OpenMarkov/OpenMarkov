@@ -582,15 +582,15 @@ public class TablePotential extends AbstractIndexedPotential
      * For plain {@code TablePotential} (no uncertain values) returns {@code this}.
      * {@link UncertainTablePotential} overrides this via {@link #getUncertainValues()}.
      */
-    public Potential sample(boolean isInsideOfExactDistrPotential) {
+    public Potential sample(Random randomGenerator, boolean isInsideOfExactDistrPotential) {
         if (getUncertainValues() != null) {
-            return new TablePotentialSampler().sample(this, isInsideOfExactDistrPotential);
+            return new TablePotentialSampler(randomGenerator).sample(this, isInsideOfExactDistrPotential);
         }
         return this;
     }
     
-    @Override public Potential sample() {
-        return sample(false);
+    @Override public Potential sample(Random randomGenerator) {
+        return sample(randomGenerator, false);
     }
     
     @Override public boolean equals(Object arg0) {

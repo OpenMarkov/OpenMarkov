@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Map;
 import java.util.Objects;
 import java.util.SequencedMap;
@@ -560,10 +561,10 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
     /**
      * Generates a sampled potential
      */
-    @Override public Potential sample() {
+    @Override public Potential sample(Random randomGenerator) {
         TreeADDPotential sampledTree = (TreeADDPotential) this.copy();
         for (TreeADDBranch branch : sampledTree.getBranches()) {
-            branch.setPotential(branch.getPotential().sample());
+            branch.setPotential(branch.getPotential().sample(randomGenerator));
         }
         return sampledTree;
     }

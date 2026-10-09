@@ -9,6 +9,7 @@ package org.openmarkov.core.model.network.potential;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.openmarkov.core.model.network.modelUncertainty.XORShiftRandom;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Variable;
@@ -56,7 +57,7 @@ class AColumnWithUncertaintyInSomeCellsKeepsItsFixedNumbersTest {
     @Test void theColumnIsSampledAndTheFixedNumberStays() {
         boolean theRangeOfY0Varies = false;
         for (int i = 0; i < 20; i++) {
-            double[] sampled = ((TablePotential) table.sample()).getValues();
+            double[] sampled = ((TablePotential) table.sample(new XORShiftRandom())).getValues();
 
             assertEquals(0.2, sampled[0]);
             assertEquals(1.0, sampled[0] + sampled[1] + sampled[2], 1E-9);
@@ -73,7 +74,7 @@ class AColumnWithUncertaintyInSomeCellsKeepsItsFixedNumbersTest {
     @Test void theFixedNumberIsTheOneTheTableHasWhenItIsSampled() {
         table.getValues()[0] = 0.1;
 
-        assertEquals(0.1, ((TablePotential) table.sample()).getValues()[0]);
+        assertEquals(0.1, ((TablePotential) table.sample(new XORShiftRandom())).getValues()[0]);
     }
 
     @Test void theColumnsWithSomeDistributionAreTheOnesWithUncertainty() throws Exception {
