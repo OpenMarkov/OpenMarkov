@@ -112,7 +112,10 @@ public class AugmentedValuesTable extends ValuesTable {
         AugmentedPotentialValueEdit nodePotentialEdit = new AugmentedPotentialValueEdit(node, expression, row, column, Collections.unmodifiableList(this.priorityList));
         try {
             nodePotentialEdit.executeEdit();
-            var modifiedIndex = PotentialsTablePanelOperations.getPotentialIndex(row, column, ((AugmentedProbTablePotential) node.getPotential()).getAugmentedProbTable());
+            AugmentedProbTable editedTable = node.getPotential() instanceof AugmentedProbTablePotential augmented
+                    ? augmented.getAugmentedProbTable()
+                    : ((UnivariateDistrPotential) node.getPotential()).getAugmentedProbTable();
+            var modifiedIndex = PotentialsTablePanelOperations.getPotentialIndex(row, column, editedTable);
             priorityList.removeIf(value -> value == modifiedIndex);
             priorityList.add(modifiedIndex);
         } catch (DoEditException e) {

@@ -25,6 +25,7 @@ import org.openmarkov.gui.component.PotentialsTablePanelOperations;
 import org.openmarkov.gui.component.ValuesTable;
 import org.openmarkov.gui.component.ValuesTableModel;
 
+import javax.swing.DefaultCellEditor;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -347,6 +348,26 @@ public class UnivariateDistrPotentialPanel extends TablePotentialPanel {
         //
         //	        });
         valuesTable.addMouseListener(new MouseClickedListener());
+        valuesTable.onScrollableTable(omjTable -> {
+            VariableExpressionTextField variableExpressionTextField = new VariableExpressionTextField();
+            variableExpressionTextField.setMinWidthOnEditing(200);
+            DefaultCellEditor defaultCellEditor = new DefaultCellEditor(variableExpressionTextField) {
+                @Override public boolean stopCellEditing() {
+                    if (variableExpressionTextField.isShowing() && !variableExpressionTextField.isValidExpression()) {
+                        return false;
+                    }
+                    return super.stopCellEditing();
+                }
+            };
+            omjTable.setDefaultEditor(Object.class, defaultCellEditor);
+            omjTable.canGenerateEditorWhen(
+                    (row, column) -> valuesTable.getValueAt(row, column, omjTable) instanceof VariableExpression);
+            omjTable.onPrepareEditor((editorComponent, row, column) -> {
+                VariableExpression value = (VariableExpression) valuesTable.getValueAt(row, column, omjTable);
+                ((VariableExpressionTextField) editorComponent).setupWith(getPotential().getParameterVariables(),
+                                                                           value.asStringExpression());
+            });
+        });
     }
     
     /**
