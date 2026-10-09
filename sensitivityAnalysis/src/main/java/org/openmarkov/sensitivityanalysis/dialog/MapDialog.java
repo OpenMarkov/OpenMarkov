@@ -195,6 +195,15 @@ public class MapDialog extends JDialog {
      *
      * @return
      */
+    /** The range of the scale of utilities; when the utility is the same in the whole map, a little around it. */
+    public static double[] scaleRange(double minUtility, double maxUtility) {
+        if (minUtility < maxUtility) {
+            return new double[]{ minUtility, maxUtility };
+        }
+        double margin = minUtility == 0 ? 1 : Math.abs(minUtility) / 100;
+        return new double[]{ minUtility - margin, minUtility + margin };
+    }
+    
     private JFreeChart getMapChart() {
         
         // Format domain axis
@@ -246,7 +255,7 @@ public class MapDialog extends JDialog {
         double vVariationInterval = (vMaxVariationValue - vMinVariationValue) / iterations;
         
         double minRangeUtility = Double.MAX_VALUE;
-        double maxRangeUtility = Double.MIN_VALUE;
+        double maxRangeUtility = Double.NEGATIVE_INFINITY;
         
         // get the potential
         TablePotential uncertainParameterPotential = veSensAnMap.getUncertainParametersPotentials()
@@ -346,9 +355,6 @@ public class MapDialog extends JDialog {
         JFreeChart chart = new JFreeChart(stringDatabase.getString(AnalysisType.MAP.toString()), plot);
         chart.setBackgroundPaint(GUIColors.SensitivityAnalysis.CHART_BACKGROUND.getColor());
         
-        NumberAxis scaleAxis = new NumberAxis(stringDatabase.getString("SensitivityAnalysis.General.Scale"));
-        scaleAxis.setRange(minRangeUtility, maxRangeUtility);
-        
         if (decisionVariable != null) {
             // If the result is conditioned on a decision variable we will paint each point with the color of the
             // winner decision state
@@ -381,9 +387,12 @@ public class MapDialog extends JDialog {
             renderer.setPaintScale(paintScale);
         } else {
             // If the result is not conditioned on a decision variable we will paint an utility scale
-            PaintScale paintScale = new GrayPaintScale(minRangeUtility, maxRangeUtility);
+            double[] range = scaleRange(minRangeUtility, maxRangeUtility);
+            PaintScale paintScale = new GrayPaintScale(range[0], range[1]);
             renderer.setPaintScale(paintScale);
             
+            NumberAxis scaleAxis = new NumberAxis(stringDatabase.getString("SensitivityAnalysis.General.Scale"));
+            scaleAxis.setRange(range[0], range[1]);
             PaintScaleLegend psl = new PaintScaleLegend(paintScale, scaleAxis);
             psl.setAxisOffset(5.0);
             psl.setPosition(RectangleEdge.RIGHT);
