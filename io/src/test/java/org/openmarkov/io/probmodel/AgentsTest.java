@@ -112,4 +112,27 @@ public class AgentsTest {
 		}
 	}
 
+	/** D1 has the same agent in its two cycles; here the one of cycle 1 is not in the network. */
+	@Tag(TestSpeed.FAST)
+	@Test
+	public void theRefusalSaysTheCycleOfTheDecision() throws Exception {
+		String text;
+		try (InputStream in = getClass().getResourceAsStream("/" + probNetManualName)) {
+			text = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+		}
+		String agentOfADecision = "<Agent name=\"Agent 1\" />";
+		int inCycle1 = text.lastIndexOf(agentOfADecision);
+		assertTrue(text.indexOf(agentOfADecision) < inCycle1);
+		Path file = Files.createTempFile("unknown-agent", ".pgmx");
+		try {
+			Files.writeString(file, text.substring(0, inCycle1) + "<Agent name=\"Agent 3\" />"
+					+ text.substring(inCycle1 + agentOfADecision.length()));
+			PGMXParserException.UnknownAgent refused = assertThrows(PGMXParserException.UnknownAgent.class,
+					() -> new PGMXReader().read(file.toUri().toURL()));
+			assertEquals("D1 [1]", refused.variableName);
+		} finally {
+			Files.delete(file);
+		}
+	}
+
 }

@@ -685,8 +685,10 @@ public class PGMXReader_0_2 {
             throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent {
         
         String stringTimeSlice = variableElement.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
+        String nameWithTimeSlice = variableName;
         if (stringTimeSlice != null) {
             variableName = variableName.replace(" [" + stringTimeSlice + "]", "");
+            nameWithTimeSlice = variableName + " [" + stringTimeSlice + "]";
         }
         
         // Coordinates
@@ -705,7 +707,7 @@ public class PGMXReader_0_2 {
                 if (statesElement != null) { // jlgozalo. 25/10/2009
                     states = getXMLStates(statesElement); // previously without null control
                 } else {
-                    throw new PGMXParserException.VariableHasNoStates(variableName, variableElement);
+                    throw new PGMXParserException.VariableHasNoStates(nameWithTimeSlice, variableElement);
                 }
             }
             if (variableType == VariableType.FINITE_STATES) {
@@ -752,7 +754,7 @@ public class PGMXReader_0_2 {
         
         Element xMLAgent = variableElement.getChild(XMLTags.AGENT.toString());
         if (xMLAgent != null) {
-            variable.setAgent(agentOfTheNetwork(probNet, variableName, xMLAgent));
+            variable.setAgent(agentOfTheNetwork(probNet, nameWithTimeSlice, xMLAgent));
         }
         
         // other additionalProperties
