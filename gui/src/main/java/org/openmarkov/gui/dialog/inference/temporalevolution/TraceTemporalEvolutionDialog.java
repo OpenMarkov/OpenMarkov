@@ -1529,7 +1529,8 @@ public class TraceTemporalEvolutionDialog extends JDialog {
             
             for (int j = 0; j <= numSlices; j++) {
                 
-                if (listOfPotentials.get(j) != null) {
+                if (listOfPotentials.get(j) != null && (isUtility || !TemporalEvolutionTablePane.isInAColumnOfZeros(
+                        listOfPotentials.get(j).getValues(), i, variableOfInterest.getNumStates()))) {
                     value = listOfPotentials.get(j).getValues()[i];
                     int time = j;
                     series.add(time, value);

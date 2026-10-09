@@ -19,7 +19,6 @@ import org.openmarkov.core.model.network.potential.DeltaPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
-import org.openmarkov.core.model.network.potential.operation.DiscretePotentialOperations;
 import org.openmarkov.inference.algorithm.variableElimination.VariableEliminationCore;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VariableElimination;
@@ -643,14 +642,30 @@ public class MIDTemporalEvolution extends VariableElimination implements Tempora
             List<Variable> orderedVariables = new ArrayList<>(Arrays.asList(probabilityVariable, conditioningDecision));
             posteriorValue = posteriorValue.reorder(orderedVariables);
         }
-        // TODO - Realizar la normalización condicionada
-        if (getConditioningVariables() == null || getConditioningVariables().isEmpty()) {
-            DiscretePotentialOperations.normalize(posteriorValue);
-        }
         //end copied
+        normalizeEachColumn(posteriorValue, probabilityVariable.getNumStates());
         return posteriorValue;
     }
     
+    
+    /**
+     * Makes each column, one per option of the conditioning decision, add up to one. A column of zeros, which is
+     * an option under which the evidence is impossible, is left as it is.
+     */
+    private static void normalizeEachColumn(TablePotential potential, int numStates) {
+        double[] values = potential.getValues();
+        for (int column = 0; column < values.length; column += numStates) {
+            double sum = 0;
+            for (int state = 0; state < numStates; state++) {
+                sum += values[column + state];
+            }
+            if (sum > 0) {
+                for (int state = 0; state < numStates; state++) {
+                    values[column + state] /= sum;
+                }
+            }
+        }
+    }
     
     /**
      * Computes discounting to the values of {@code utilityPotential} according to the @link{Criterion} of {@code temporalUtility}.

@@ -179,8 +179,11 @@ public class TemporalEvolutionTablePane extends JScrollPane {
                     // cell(row, column) = cell(i+1, j+1)
                 }
                 info[i][columnIndex] = values[i];
-                // A cycle in which the variable does not exist has no value
-                boolean hasValue = temporalEvolutionValues.containsKey(cycle) || (isUtility && isCumulative);
+                // A cycle in which the variable does not exist has no value, and neither has an option of the
+                // decision under which the evidence is impossible
+                boolean hasValue = (temporalEvolutionValues.containsKey(cycle) || (isUtility && isCumulative))
+                        && !(!isUtility && temporalEvolutionValues.containsKey(cycle) && isInAColumnOfZeros(
+                                temporalEvolutionValues.get(cycle), i, variableOfInterest.getNumStates()));
                 model.setValueAt(hasValue ? values[i] : "-", i, columnIndex);
             }
         }
@@ -298,5 +301,19 @@ public class TemporalEvolutionTablePane extends JScrollPane {
         @Override public boolean isCellEditable(int row, int column) {
             return false;
         }
+    }
+
+    /**
+     * @return whether the probabilities of the column that holds {@code index} are all zero: the evidence is
+     * impossible under that option of the decision
+     */
+    static boolean isInAColumnOfZeros(double[] probabilities, int index, int numStates) {
+        int first = index - index % numStates;
+        for (int state = 0; state < numStates && first + state < probabilities.length; state++) {
+            if (probabilities[first + state] != 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
