@@ -80,7 +80,7 @@ public final class ColumnsThatDoNotAddUpToOne {
         }
     }
 
-    private static boolean isProbabilityTable(TablePotential table) {
+    static boolean isProbabilityTable(TablePotential table) {
         PotentialRole role = table.getPotentialRole();
         List<Variable> variables = table.getVariables();
         return (role == PotentialRole.CONDITIONAL_PROBABILITY || role == PotentialRole.POLICY) && !variables.isEmpty()
@@ -212,7 +212,7 @@ public final class ColumnsThatDoNotAddUpToOne {
     }
 
     /** The states of the conditioning variables in this column; the first one changes fastest. */
-    private static String configuration(List<Variable> variables, int column) {
+    static String configuration(List<Variable> variables, int column) {
         List<String> parts = new ArrayList<>();
         int rest = column;
         for (Variable variable : variables.subList(1, variables.size())) {

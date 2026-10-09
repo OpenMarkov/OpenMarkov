@@ -13,20 +13,17 @@ import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.modelUncertainty.BetaFunction;
 import org.openmarkov.core.model.network.modelUncertainty.ComplementFamily;
 import org.openmarkov.core.model.network.modelUncertainty.ComplementFunction;
 import org.openmarkov.core.model.network.modelUncertainty.DirichletFamily;
 import org.openmarkov.core.model.network.modelUncertainty.DirichletFunction;
-import org.openmarkov.core.model.network.modelUncertainty.ExactFunction;
 import org.openmarkov.core.model.network.modelUncertainty.FamilyDistribution;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunction;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionManager;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionType;
-import org.openmarkov.core.model.network.modelUncertainty.RangeFunction;
 import org.openmarkov.core.model.network.modelUncertainty.Tools;
-import org.openmarkov.core.model.network.modelUncertainty.TriangularFunction;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
+import org.openmarkov.core.model.network.potential.DistributionsOfAColumn;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.TableWithEvents;
@@ -316,16 +313,6 @@ public class UncertainValuesDialog extends OkCancelDialog {
         return filtered;
     }
     
-    private static boolean thereAreExactValuesGreaterThanZero(List<UncertainValue> arrayUncertain) {
-        boolean thereAre = false;
-        for (int i = 0; (i < arrayUncertain.size()) && !thereAre; i++) {
-            UncertainValue aux = arrayUncertain.get(i);
-            ProbDensFunction probDensityFunction = aux.getProbDensFunction();
-            thereAre = (probDensityFunction instanceof ExactFunction) && probDensityFunction.getMean() > 0;
-        }
-        return thereAre;
-    }
-    
     /**
      * @param uncertainValues the uncertain values
      * @param types the types
@@ -520,7 +507,7 @@ public class UncertainValuesDialog extends OkCancelDialog {
      * @return true if the dialog box can be closed.
      */
     @Override
-    protected boolean doOkClickBeforeHide() throws FamilyDistributionRuleBrokenException.Rule2Broken, FamilyDistributionRuleBrokenException.Rule3Broken, FamilyDistributionRuleBrokenException.Rule1Broken {
+    protected boolean doOkClickBeforeHide() {
         TableCellEditor currentEditor = distributionTable.getCellEditor();
         if (currentEditor != null) {
             currentEditor.stopCellEditing();
@@ -542,7 +529,12 @@ public class UncertainValuesDialog extends OkCancelDialog {
             return false;
         }
         if (isChanceVariable) {
-            verifyGlobalConstraintUncertainty(uncertainValues);
+            String wrong = DistributionsOfAColumn.whatIsWrong(uncertainValues, statesOfTheTable());
+            if (wrong != null) {
+                JOptionPane.showMessageDialog(this, wrong, "These distributions cannot go together",
+                                              JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         }
         uncertainColumn = reverse(uncertainValues);
         valuesColumn = calculateReferenceValues();
@@ -575,103 +567,6 @@ public class UncertainValuesDialog extends OkCancelDialog {
         }
     }
     
-    static boolean verifyGlobalConstraintUncertainty(List<UncertainValue> uncertainValues) throws FamilyDistributionRuleBrokenException.Rule3Broken, FamilyDistributionRuleBrokenException.Rule2Broken, FamilyDistributionRuleBrokenException.Rule1Broken {
-        @ToCheck(reasonKind = ToCheck.ReasonKind.CODE_QUALITY,
-                reasonDescription = "Rules verified are 1, 2 and 3, but the method doVerifyRule4 is never used")
-        FamilyDistribution family = new FamilyDistribution(uncertainValues);
-        return (doVerifyRule1(family) && doVerifyRule2(family) && doVerifyRule3(family));
-    }
-    
-    /*
-     * If one of the distributions is Exact, Range, or Triangular, then:
-     * • all of the others must be either exact, or range, or triangular, or complement;
-     * • at least one of the others must be Complement;
-     * • the sum of the maxima of all the distributions (different from Complement)
-     * cannot be greater than 1.
-     */
-    private static boolean doVerifyRule1(FamilyDistribution family) throws FamilyDistributionRuleBrokenException.Rule1Broken {
-        List<UncertainValue> exactRangeOrUncertain;
-        List<Class<? extends ProbDensFunction>> rangeOrTriangTypes = new ArrayList<>();
-        rangeOrTriangTypes.add(RangeFunction.class);
-        rangeOrTriangTypes.add(TriangularFunction.class);
-        List<UncertainValue> uncertainFamily = family.getFamily();
-        List<UncertainValue> exactUncertain = getUncertainValuesOfClass(uncertainFamily, ExactFunction.class);
-        int totalSizeFamily = uncertainFamily.size();
-        List<UncertainValue> rangeOrTriangUncertain = getUncertainValuesOfClasses(uncertainFamily, rangeOrTriangTypes);
-        int sizeRangeOrTriang = rangeOrTriangUncertain.size();
-        int sizeExact = exactUncertain.size();
-        if (sizeRangeOrTriang > 0 || thereAreExactValuesGreaterThanZero(exactUncertain)) {
-            int numComplement = getUncertainValuesOfClass(uncertainFamily, ComplementFunction.class).size();
-            exactRangeOrUncertain = new ArrayList<UncertainValue>(rangeOrTriangUncertain);
-            exactRangeOrUncertain.addAll(exactUncertain);
-            boolean verify = ((numComplement > 0) && (sizeExact + sizeRangeOrTriang + numComplement == totalSizeFamily)) && (
-                    Tools.sum(new FamilyDistribution(exactRangeOrUncertain).getMaximum()) <= 1.0
-            );
-            if (!verify) {
-                throw new FamilyDistributionRuleBrokenException.Rule1Broken(family);
-            }
-        }
-        return true;
-    }
-    
-    /*
-     * If one of the distributions is a Beta, then:
-     * • all the others must be Exact, with v = 0, or Complement;
-     * • at least one of the others must be Complement.
-     */
-    private static boolean doVerifyRule2(FamilyDistribution family) throws FamilyDistributionRuleBrokenException.Rule2Broken {
-        List<UncertainValue> uncertainFamily = family.getFamily();
-        int totalSizeFamily = uncertainFamily.size();
-        List<UncertainValue> betaUncertain = getUncertainValuesOfClass(uncertainFamily, BetaFunction.class);
-        switch (betaUncertain.size()) {
-            case 0 -> {
-            }
-            case 1 -> {
-                List<UncertainValue> exactUncertain = getUncertainValuesOfClass(uncertainFamily, ExactFunction.class);
-                List<UncertainValue> compUncertain = getUncertainValuesOfClass(uncertainFamily, ComplementFunction.class);
-                int numExact = exactUncertain.size();
-                int numComp = compUncertain.size();
-                boolean verify = (
-                        (numExact + numComp + 1 == totalSizeFamily) && areAllZero(
-                                new FamilyDistribution(exactUncertain).getMean()) && (numComp >= 1)
-                );
-                if (!verify) {
-                    throw new FamilyDistributionRuleBrokenException.Rule2Broken(family);
-                }
-            }
-            default -> {
-                throw new FamilyDistributionRuleBrokenException.Rule2Broken(family);
-            }
-        }
-        return true;
-    }
-    
-    private static boolean doVerifyRule3(FamilyDistribution family) throws FamilyDistributionRuleBrokenException.Rule3Broken {
-        List<UncertainValue> uncertainFamily = family.getFamily();
-        int totalSizeFamily = uncertainFamily.size();
-        List<UncertainValue> dirUncertain = getUncertainValuesOfClass(uncertainFamily, DirichletFunction.class);
-        int numDirichlet = dirUncertain.size();
-        switch (numDirichlet) {
-            case 0 -> {
-            }
-            case 1 -> {
-                throw new FamilyDistributionRuleBrokenException.Rule3Broken(family);
-            }
-            default -> {
-                List<UncertainValue> exactUncertain = getUncertainValuesOfClass(uncertainFamily, ExactFunction.class);
-                int numExact = exactUncertain.size();
-                boolean verify = (
-                        (numExact + numDirichlet == totalSizeFamily) && areAllZero(
-                                new FamilyDistribution(exactUncertain).getMean())
-                );
-                if (!verify) {
-                    throw new FamilyDistributionRuleBrokenException.Rule3Broken(family);
-                }
-            }
-        }
-        return true;
-    }
-    
     @SuppressWarnings("unused")
     private static void doVerifyRule4(FamilyDistribution family) throws FamilyDistributionRuleBrokenException.Rule4Broken {
         List<UncertainValue> uncertainFamily = family.getFamily();
@@ -683,12 +578,13 @@ public class UncertainValuesDialog extends OkCancelDialog {
         }
     }
     
-    private static boolean areAllZero(double[] x) {
-        boolean allZero = true;
-        for (int i = 0; (i < x.length) && allZero; i++) {
-            allZero = x[i] == 0.0;
+    /** The names of the states, in the order of the rows of the table. */
+    private List<String> statesOfTheTable() {
+        List<String> states = new ArrayList<>();
+        for (int row = 0; row < distributionTableModel.getRowCount(); row++) {
+            states.add(distributionTableModel.getValueAt(row, STATE_COLUMN_INDEX).toString());
         }
-        return allZero;
+        return states;
     }
     
     public boolean isChanceVariable() {

@@ -46,12 +46,6 @@
                   value="You are trying to change the domain of a TreeADD, but that is not allowed."/>
     <Localization class="org.openmarkov.gui.exception.CorruptNetworkFile"
                   value="Network from {fileToRead} is corrupted and could not be loaded."/>
-    <Localization class="org.openmarkov.gui.exception.FamilyDistributionRuleBrokenException$Rule1Broken"
-                  value="Family rule nº1 has been broken.\nIf one of the distributions is Exact with v != 0, Range, or Triangular, then:\n· all the others must be either Exact, Range, Triangular, or Complement\n· at least one of the others must be Complement;\n· the sum of the maxima of all the distributions (different from Complement) cannot be greater than 1;"/>
-    <Localization class="org.openmarkov.gui.exception.FamilyDistributionRuleBrokenException$Rule2Broken"
-                  value="Family rule nº2 has been broken.\nIf one of the distributions is a Beta, then:\n· all the others must be Exact with v = 0 or Complement\n· at least one of the others must be Complement."/>
-    <Localization class="org.openmarkov.gui.exception.FamilyDistributionRuleBrokenException$Rule3Broken"
-                  value="Family rule nº3 has been broken.\nIf one of the distributions is a Dirichlet, then:\n· all the others must be Exact with v = 0 or Dirichlet.\n· at least one of the others must also be a Dirichlet."/>
     <Localization class="org.openmarkov.gui.exception.FamilyDistributionRuleBrokenException$Rule4Broken"
                   value="Family rule nº4 has been broken.\nThe specification of sensitivity analysis in ProbModelXML has been violated. Please, check the distributions and its parameters."/>
     <Localization class="org.openmarkov.gui.exception.InvalidLimitInTreeADDException"
