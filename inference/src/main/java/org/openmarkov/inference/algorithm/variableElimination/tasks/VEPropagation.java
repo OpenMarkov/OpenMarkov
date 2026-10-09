@@ -120,6 +120,9 @@ public class VEPropagation extends VariableElimination implements Propagation {
         }
     }
     
+    /** The network with its numeric variables already made discrete and no node absorbed yet. */
+    private ProbNet beforeAbsorbing;
+
     /** Whether the findings are possible; null until it is asked. */
     private Boolean evidenceIsPossible;
 
@@ -141,7 +144,6 @@ public class VEPropagation extends VariableElimination implements Propagation {
         generalPreprocessing();
 //		unicriterionPreprocess();
         // TODO - Implement: For each super-value node, create a new node whose parents are all chance or decision nodes
-        ProbNet beforeAbsorbing = probNet.copy();
         exactAlgorithmsPreprocessing();
         // Straight to the field, not through setPostResolutionEvidence: this is preprocessing
         // replacing its own evidence with a derived one, not a caller supplying evidence.
@@ -266,8 +268,7 @@ public class VEPropagation extends VariableElimination implements Propagation {
             }
         }
         descendants.forEach(copy::removeNode);
-        copy = TaskUtilities.discretizeNonObservedNumericVariables(copy, getPreResolutionEvidence());
-        return TaskUtilities.absorbAllIntermediateNumericNodes(copy, getPreResolutionEvidence());
+        return TaskUtilities.absorbAllIntermediateNumericNodes(copy, getAllEvidence());
     }
 
     /** @return whether the findings, taken together, have a probability greater than zero */
@@ -351,6 +352,7 @@ public class VEPropagation extends VariableElimination implements Propagation {
     @Override void exactAlgorithmsPreprocessing() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException {
         EvidenceCase allEvidence = getAllEvidence();
         probNet = TaskUtilities.discretizeNonObservedNumericVariables(probNet, allEvidence);
+        beforeAbsorbing = probNet.copy();
         probNet = TaskUtilities.absorbAllIntermediateNumericNodes(probNet, allEvidence);
         replacePreResolutionEvidence(findingsOn(getPreResolutionEvidence(), allEvidence));
         if (postResolutionEvidence != null) {
