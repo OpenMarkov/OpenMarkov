@@ -9,9 +9,11 @@ package org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evalua
 
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.inference.tasks.Evaluation;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.potential.StrategyCarrier;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANInference;
@@ -65,10 +67,11 @@ public abstract class DANEvaluation implements Evaluation {
 				"setConditioningVariables not implemented for " + getClass().getSimpleName());
 	}
 
+	/** The optimal strategy, or null when what is known beforehand leaves nothing to decide. */
 	@Override
-	public StrategyTree getOptimalStrategyTree() {
-		throw new UnsupportedOperationException(
-				"getOptimalStrategyTree not implemented for " + getClass().getSimpleName());
+	public @Nullable StrategyTree getOptimalStrategyTree() {
+		StrategyTree[] strategyTrees = getUtility() instanceof StrategyCarrier carrier ? carrier.getStrategyTrees() : null;
+		return strategyTrees == null || strategyTrees.length == 0 ? null : strategyTrees[0];
 	}
 
 

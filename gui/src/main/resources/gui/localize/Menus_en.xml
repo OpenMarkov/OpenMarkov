@@ -315,6 +315,7 @@
         <ShowOptimalPolicy value="Show optimal policy"/>
         <ShowOptimalStrategy>
             <Title value="Optimal strategy"/>
+            <NothingToDecide value="With what is already known, there is nothing left to decide."/>
         </ShowOptimalStrategy>
         <Intervention>
             <Title value="Intervention"/>

@@ -25,7 +25,6 @@ import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.TemporalNetOperations;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
-import org.openmarkov.core.model.network.potential.StrategyCarrier;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
@@ -43,6 +42,7 @@ import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluat
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEOptimalIntervention;
 import org.openmarkov.java.swing.ComponentUtilities;
 
+import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingUtilities;
 import java.io.File;
@@ -230,7 +230,15 @@ class InferenceHandler {
             DANEvaluation eval = new DANDecompositionIntoSymmetricDANsEvaluation(probNet, networkPanel.getEditorPanel()
                                                                                                       .getEvidenceManager()
                                                                                                       .getPreResolutionEvidence());
-            StrategyTree strategyTree = ((StrategyCarrier) eval.getUtility()).getStrategyTrees()[0];
+            StrategyTree strategyTree = eval.getOptimalStrategyTree();
+            if (strategyTree == null) {
+                StringDatabase stringDatabase = StringDatabase.getUniqueInstance();
+                JOptionPane.showMessageDialog(ComponentUtilities.getOwner(mainPanel),
+                                              stringDatabase.getString("Decision.ShowOptimalStrategy.NothingToDecide"),
+                                              stringDatabase.getString("Decision.ShowOptimalStrategy.Title"),
+                                              JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             strategyTree.pruneAndGraftNode("OD");
             OptimalStrategyDialog optimalStrategyDialog = new OptimalStrategyDialog(ComponentUtilities.getOwner(mainPanel),
                                                                                     probNet, strategyTree);
