@@ -575,7 +575,7 @@ public class UncertainValuesDialog extends OkCancelDialog {
         }
     }
     
-    private static boolean verifyGlobalConstraintUncertainty(List<UncertainValue> uncertainValues) throws FamilyDistributionRuleBrokenException.Rule3Broken, FamilyDistributionRuleBrokenException.Rule2Broken, FamilyDistributionRuleBrokenException.Rule1Broken {
+    static boolean verifyGlobalConstraintUncertainty(List<UncertainValue> uncertainValues) throws FamilyDistributionRuleBrokenException.Rule3Broken, FamilyDistributionRuleBrokenException.Rule2Broken, FamilyDistributionRuleBrokenException.Rule1Broken {
         @ToCheck(reasonKind = ToCheck.ReasonKind.CODE_QUALITY,
                 reasonDescription = "Rules verified are 1, 2 and 3, but the method doVerifyRule4 is never used")
         FamilyDistribution family = new FamilyDistribution(uncertainValues);
@@ -655,6 +655,9 @@ public class UncertainValuesDialog extends OkCancelDialog {
             case 0 -> {
             }
             case 1 -> {
+                throw new FamilyDistributionRuleBrokenException.Rule3Broken(family);
+            }
+            default -> {
                 List<UncertainValue> exactUncertain = getUncertainValuesOfClass(uncertainFamily, ExactFunction.class);
                 int numExact = exactUncertain.size();
                 boolean verify = (
@@ -664,9 +667,6 @@ public class UncertainValuesDialog extends OkCancelDialog {
                 if (!verify) {
                     throw new FamilyDistributionRuleBrokenException.Rule3Broken(family);
                 }
-            }
-            default -> {
-                throw new FamilyDistributionRuleBrokenException.Rule3Broken(family);
             }
         }
         return true;
