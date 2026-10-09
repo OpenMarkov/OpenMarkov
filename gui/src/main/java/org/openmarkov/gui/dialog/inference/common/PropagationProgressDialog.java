@@ -48,6 +48,9 @@ public final class PropagationProgressDialog {
 
     private static final int MILLISECONDS_BETWEEN_UPDATES = 200;
 
+    /** The part of a stage that must be done before the time left is estimated. */
+    private static final double LEAST_FRACTION_TO_ESTIMATE = 0.02;
+
     private PropagationProgressDialog() {
     }
 
@@ -124,15 +127,20 @@ public final class PropagationProgressDialog {
             stop.setEnabled(false);
             stage.setText(texts.getString("InferenceMode.Progress.Stopping"));
         });
+        JLabel timeLeft = new JLabel(" ");
+        timeLeft.setName("timeLeftLabel");
         JPanel content = new JPanel(new BorderLayout(0, 8));
         content.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
         content.add(stage, BorderLayout.NORTH);
         content.add(bar, BorderLayout.CENTER);
+        JPanel south = new JPanel(new BorderLayout(0, 6));
+        south.add(timeLeft, BorderLayout.NORTH);
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttons.add(stop);
-        content.add(buttons, BorderLayout.SOUTH);
+        south.add(buttons, BorderLayout.SOUTH);
+        content.add(south, BorderLayout.SOUTH);
         dialog.setContentPane(content);
-        dialog.setSize(420, 150);
+        dialog.setSize(420, 175);
         dialog.setLocationRelativeTo(owner);
         Timer timer = new Timer(MILLISECONDS_BETWEEN_UPDATES, _ -> {
             if (!worker.isAlive()) {
@@ -140,6 +148,7 @@ public final class PropagationProgressDialog {
                 return;
             }
             bar.setValue((int) Math.round(100 * progress.getFraction()));
+            timeLeft.setText(textOfTheTimeLeft(progress, texts));
             if (stop.isEnabled()) {
                 stage.setText(textOf(progress.getStage(), texts));
             }
@@ -150,6 +159,30 @@ public final class PropagationProgressDialog {
         } finally {
             timer.stop();
         }
+    }
+
+    /**
+     * @return the seconds left of a stage of which {@code fraction} has been done in {@code milliseconds}, or -1
+     * while too little has been done to tell
+     */
+    static long secondsLeft(long milliseconds, double fraction) {
+        if (fraction < LEAST_FRACTION_TO_ESTIMATE || fraction >= 1) {
+            return -1;
+        }
+        return Math.round(milliseconds / 1000.0 * (1 - fraction) / fraction);
+    }
+
+    /** The time left is given only for the stage whose progress is measured by the work done. */
+    private static String textOfTheTimeLeft(InferenceProgress progress, StringDatabase texts) {
+        long seconds = progress.getStage() == InferenceProgress.Stage.OPTIMAL_STRATEGY
+                ? secondsLeft(progress.getMillisecondsInTheStage(), progress.getFraction()) : -1;
+        if (seconds < 0) {
+            return " ";
+        }
+        return seconds < 90
+                ? texts.getString("InferenceMode.Progress.SecondsLeft").replace("~", String.valueOf(seconds))
+                : texts.getString("InferenceMode.Progress.MinutesLeft")
+                       .replace("~", String.valueOf(Math.round(seconds / 60.0)));
     }
 
     private static String textOf(InferenceProgress.Stage stage, StringDatabase texts) {

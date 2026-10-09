@@ -25,11 +25,28 @@ public class InferenceProgress {
     private volatile Stage stage = Stage.PROPAGATION;
     private volatile double fraction;
     private volatile boolean stopAsked;
+    private volatile boolean followed;
+    private volatile long startOfTheStage = System.currentTimeMillis();
+
+    /** Says that somebody will show this progress, so it is worth measuring it well. */
+    public void follow() {
+        followed = true;
+    }
+
+    public boolean isFollowed() {
+        return followed;
+    }
+
+    /** @return the milliseconds the current stage has taken so far */
+    public long getMillisecondsInTheStage() {
+        return System.currentTimeMillis() - startOfTheStage;
+    }
 
     /** Begins a stage, with nothing of it done yet. */
     public void start(Stage stage) {
         this.stage = stage;
         this.fraction = 0;
+        this.startOfTheStage = System.currentTimeMillis();
     }
 
     /** @param fraction the part of the current stage that is done, from 0 to 1; it never goes back */

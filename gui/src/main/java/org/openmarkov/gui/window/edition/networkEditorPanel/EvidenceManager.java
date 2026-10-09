@@ -607,6 +607,7 @@ public class EvidenceManager {
             vePosteriorValues.setVariablesOfInterest(this.networkEditorPanel.getVisualNetwork().getProbNet().getVariables());
             vePosteriorValues.setPreResolutionEvidence(this.preResolutionEvidence);
             vePosteriorValues.setPostResolutionEvidence(evidenceCase);
+            vePosteriorValues.getProgress().follow();
             individualProbabilities = PropagationProgressDialog.posteriorValues(
                     SwingUtilities.getWindowAncestor(this.networkEditorPanel), vePosteriorValues,
                     vePosteriorValues.getProgress());

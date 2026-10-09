@@ -8,6 +8,8 @@
             <Propagation value="Computing the values of the nodes..."/>
             <Stop value="Stop"/>
             <Stopping value="Stopping..."/>
+            <SecondsLeft value="About ~ seconds left"/>
+            <MinutesLeft value="About ~ minutes left"/>
         </Progress>
     </InferenceMode>
     <GenericError>

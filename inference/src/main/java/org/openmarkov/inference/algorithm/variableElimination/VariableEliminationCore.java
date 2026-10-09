@@ -66,6 +66,10 @@ public class VariableEliminationCore {
     /** Where the progress is written and a request to stop is read; null when nobody follows it. */
     private InferenceProgress progress;
     
+    private double totalWork;
+    
+    private double workDone;
+    
     /**
      * Decision variables with their policies.
      */
@@ -97,14 +101,17 @@ public class VariableEliminationCore {
     /**
      * Initialize data structures and executes the algorithm, telling how far it has got.
      *
-     * @param progress where the part of the elimination that is done is written, and where a request to stop
-     *                 is read
+     * @param progress  where the part of the elimination that is done is written, and where a request to stop
+     *                  is read
+     * @param totalWork the work of all the eliminations, as {@link EliminationPlan} gives it; 0 if it is not known,
+     *                  and then the progress is the part of the variables that are eliminated
      */
     public VariableEliminationCore(ProbNet markovDecisionNetwork, EliminationHeuristic heuristic,
-                                   boolean isUnicriterion, InferenceProgress progress) {
+                                   boolean isUnicriterion, InferenceProgress progress, double totalWork) {
         this.lambdaMin = defLambdaMin;
         this.lambdaMax = defLambdaMax;
         this.progress = progress;
+        this.totalWork = totalWork;
         initialize(markovDecisionNetwork, heuristic, isUnicriterion);
         try {
             performVariableElimination();
@@ -153,10 +160,17 @@ public class VariableEliminationCore {
             }
             Variable variableToDelete = heuristic.getVariableToDelete();
             if (variableToDelete == null) break;
+            if (totalWork > 0) {
+                workDone += EliminationPlan.workOf(
+                        markovDecisionNetwork.getProbPotentials(variableToDelete).stream()
+                                             .map(Potential::getVariables).toList(),
+                        markovDecisionNetwork.getUtilityPotentials(variableToDelete).stream()
+                                             .map(Potential::getVariables).toList());
+            }
             eliminateVariable(variableToDelete);
             eliminated++;
             if (progress != null) {
-                progress.advanceTo((double) eliminated / toEliminate);
+                progress.advanceTo(totalWork > 0 ? workDone / totalWork : (double) eliminated / toEliminate);
             }
         }
     }

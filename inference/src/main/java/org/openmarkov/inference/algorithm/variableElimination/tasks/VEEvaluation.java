@@ -26,6 +26,7 @@ import org.openmarkov.core.model.network.potential.StrategyCarrier;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
+import org.openmarkov.inference.algorithm.variableElimination.EliminationPlan;
 import org.openmarkov.inference.algorithm.variableElimination.VariableEliminationCore;
 
 import java.util.*;
@@ -87,8 +88,13 @@ public class VEEvaluation extends VariableElimination implements Evaluation, Opt
 		EliminationHeuristic heuristic = heuristicFactory(markovNetworkInference, new ArrayList<>(),
 				getPreResolutionEvidence().getVariables(), getConditioningVariables(), variablesToEliminate);
 
+		// When somebody follows the progress, the work of the eliminations is worked out first, to measure it by
+		double totalWork = getProgress().isFollowed() ? EliminationPlan.totalWork(markovNetworkInference,
+				copy -> heuristicFactory(copy, new ArrayList<>(), getPreResolutionEvidence().getVariables(),
+										 getConditioningVariables(), new ArrayList<>(variablesToEliminate))) : 0;
 		getProgress().start(InferenceProgress.Stage.OPTIMAL_STRATEGY);
-		variableEliminationCore = new VariableEliminationCore(markovNetworkInference, heuristic, true, getProgress());
+		variableEliminationCore = new VariableEliminationCore(markovNetworkInference, heuristic, true, getProgress(),
+															  totalWork);
 	}
 
 	@Override public TablePotential getProbability()
