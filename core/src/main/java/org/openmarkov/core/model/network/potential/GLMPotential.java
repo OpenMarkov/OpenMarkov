@@ -205,7 +205,9 @@ public abstract class GLMPotential extends Potential {
         return choleskyDecomposition;
     }
     
+    /** Gives the uncertainty as a Cholesky decomposition, in place of the covariance matrix there may be. */
     public void setCholeskyDecomposition(double[] choleskyDecomposition) {
+        this.covarianceMatrix = null;
         this.choleskyDecomposition = choleskyDecomposition;
     }
     
