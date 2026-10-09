@@ -1406,7 +1406,7 @@ public class TraceTemporalEvolutionDialog extends JDialog {
             for (int j = 0; j < arraySeries.size(); j++) {
                 yCoordinate += arraySeries.get(j).getY(i).doubleValue();
             }
-            series.add(i, yCoordinate);
+            series.add(arraySeries.get(0).getX(i), yCoordinate);
         }
         return series;
     }
@@ -1438,6 +1438,11 @@ public class TraceTemporalEvolutionDialog extends JDialog {
                 tablePotentialDiscount = temporalEvolutionDiscount.get(variableInSliceJ);
             }
             
+            if (tablePotential == null) { // the variable does not exist in this cycle
+                listOfPotentials.add(null);
+                listOfPotentialsDiscount.add(null);
+                continue;
+            }
             if (tablePotential.getValues().length < numberOfCombinations) {
                 double[] values = new double[numberOfCombinations];
                 double[] valuesDiscount = new double[numberOfCombinations];

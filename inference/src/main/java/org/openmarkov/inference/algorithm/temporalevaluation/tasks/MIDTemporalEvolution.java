@@ -550,18 +550,14 @@ public class MIDTemporalEvolution extends VariableElimination implements Tempora
         
     }
     
-    /**
-     * Returns the first slice for which this variable exists (that is, the variable existence makes sense)
-     * FIXME I don't know if there is a straightforward way to do this.
-     *
-     * @param temporalVariable @link{Variable} whose first slice whe want to know
-     *
-     * @return the first slice for which this variable exists
-     */
+    /** The first slice in which the network has a variable with the base name of this one. */
     private static int getFirstSlice(Variable temporalVariable, ProbNet probNet) {
-        int timeSlice = 0;
-        probNet.getVariable(temporalVariable.getBaseName(), timeSlice);
-        return timeSlice;
+        return probNet.getVariables().stream()
+                      .filter(variable -> variable.isTemporal()
+                              && variable.getBaseName().equals(temporalVariable.getBaseName()))
+                      .mapToInt(Variable::getTimeSlice)
+                      .min()
+                      .orElse(temporalVariable.getTimeSlice());
     }
     
     /**

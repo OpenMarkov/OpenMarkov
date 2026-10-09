@@ -179,7 +179,9 @@ public class TemporalEvolutionTablePane extends JScrollPane {
                     // cell(row, column) = cell(i+1, j+1)
                 }
                 info[i][columnIndex] = values[i];
-                model.setValueAt(values[i], i, columnIndex);
+                // A cycle in which the variable does not exist has no value
+                boolean hasValue = temporalEvolutionValues.containsKey(cycle) || (isUtility && isCumulative);
+                model.setValueAt(hasValue ? values[i] : "-", i, columnIndex);
             }
         }
 
