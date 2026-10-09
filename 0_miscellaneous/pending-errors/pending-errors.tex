@@ -557,7 +557,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:174]{174} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Aceptar los criterios estándar sin marcar nada borra los criterios de la red & \texttt{gui} & S \hfill No\\
 \hyperref[err:175]{175} & «OpenMarkov configuration» edita unas preferencias que el programa no usa & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:176]{176} & Las escalas de criterio se redondean a tres decimales y pueden quedar en 0 & \texttt{gui} & S \hfill No\\
-\hyperref[err:201]{201} & El modo inferencia solo se ofrece a diagramas de influencia y redes bayesianas & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:201]{201} & El modo inferencia solo se ofrece a diagramas de influencia y redes bayesianas & \texttt{gui} & S \hfill No\\
 \hyperref[err:203]{203} & «Select all» está apagada hasta que se elige una herramienta de edición & \texttt{gui} & S \hfill No\\
 \hyperref[err:204]{204} & La ventana «About» se abre con 24 píxeles de ancho & \texttt{gui} & S \hfill No\\
 \hyperref[err:206]{206} & «Delete» sigue encendido sin ninguna fila señalada, y pulsarlo da un error & \texttt{gui} & S \hfill No\\
@@ -14683,13 +14683,13 @@ Prueba de regresión: sin ventana, con la tabla del diálogo o con el cálculo e
 \setcounter{subsection}{200}
 \subsection[El modo inferencia solo se ofrece a diagramas de influencia y redes bayesianas]{El botón que pasa a modo inferencia está apagado en toda red que no sea un diagrama de influencia o una red bayesiana}\label{err:201}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Presente. Desde el commit \texttt{a1e8859} (09-10-2026) el botón y la entrada de menú apagados lo explican en su ayuda emergente («Inference mode is offered only for Bayesian networks and influence diagrams»). El modo se irá ofreciendo a los MID y a las redes de análisis de decisiones a medida que se arregle su propagación. Medido ese día con la propagación del modo inferencia, sin evidencia, sobre las redes del repositorio: propagan 20 de 20 redes bayesianas, 30 de 30 diagramas de influencia, 66 de 68 redes de análisis de decisiones (falla \texttt{DAN-reactor} en sus dos formatos) y 14 de 26 MID (fallan \texttt{MID-CHD-Walker}, \texttt{MID-Colorectal} y \texttt{MID-mammography}, porque la relación uniforme de «Age {[}0{]}» no se convierte en tabla; \texttt{MID-CHAP-Ryan-Griffin}, por una expresión que usa «Age {[}0{]}» sin valor; \texttt{MID-HPV}, con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} al podar la red; y \texttt{MID-Cochlear}, que no termina en 60 segundos); el algoritmo rechaza las LIMID y los POMDP
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:242-247, 361-369}
 \fichakey{Comprobado}Leyendo el código; visto en la ventana con un MID
 \fichakey{Esfuerzo}Pequeño (horas)
-\fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si es intencionado que el modo inferencia no se ofrezca a los demás tipos de red y, si no lo es, a cuáles debe ofrecerse
+\fichakey{Decisión de equipo}No. Pedía decidir si es intencionado y a qué tipos debe ofrecerse. Manuel Arias lo decidió el 09-10-2026: se ofrecerá también a los MID y a las redes de análisis de decisiones, que son los tipos que el algoritmo de propagación declara, pero no antes de arreglar las propagaciones que fallan
 \fichakey{Relacionados}\hyperref[err:66]{error~66}
 \end{ficha}
 \paragraph{Qué pasa}
