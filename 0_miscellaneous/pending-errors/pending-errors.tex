@@ -215,6 +215,13 @@ Los \hyperref[err:44]{errores~44} y \hyperref[err:64]{64} llevan la marca \textc
 \paragraph{Errores añadidos el 30 de septiembre}
 Los \hyperref[err:195]{errores~195} a \hyperref[err:199]{199}, del exportador a Amua (sección~\ref{sec:amua}), se anotaron el 28 de septiembre en una copia aparte de esta lista; se han pasado a ella tras comprobar que siguen presentes.
 
+\paragraph{Errores añadidos el 9 de octubre}
+Los \hyperref[err:202]{errores~202} a \hyperref[err:224]{224} y las \hyperref[nota:187]{notas~187} a \hyperref[nota:191]{191} se encontraron al portar OpenMarkov a C++ y Qt, es decir, al escribir una segunda versión del programa traduciendo esta clase por clase y comparando lo que hacen las dos: unos al traducir una clase o al llevar allí los arreglos del 30 de septiembre al 8 de octubre, y otros al poner las ventanas de las dos versiones una al lado de la otra. Cada uno se ha vuelto a comprobar contra \texttt{6312fd4}, el último commit a día de hoy, y la fila \emph{Comprobado} de su ficha dice cómo. Lo que no se pudo confirmar, lo que ya estaba en la lista y lo que una decisión de equipo deja fuera no se ha añadido.
+
+Varias de esas fichas dicen «visto en una captura automática». El 8 de octubre se arrancó el programa con un guion que abre redes, pulsa las entradas de los menús y guarda de cada ventana que se abre una imagen, su título y el texto de sus componentes. Las capturas son del commit \texttt{b2e4c1f}; de las clases que nombran esas fichas, entre ese commit y \texttt{6312fd4} solo ha cambiado \texttt{Main\allowbreak{}Panel\allowbreak{}Menu\allowbreak{}Assistant}, que se ha vuelto a leer. Nadie ha repetido esos pasos a mano en la ventana.
+
+Con lo visto en esa comparación se han ampliado además tres fichas que ya estaban: los \hyperref[err:42]{errores~42}, \hyperref[err:51]{51} y \hyperref[err:153]{153}.
+
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
 en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
@@ -270,10 +277,10 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{200 errores}; 56 de ellos son defectos nuevos, encontrados al
-comprobar los demás. \textbf{48} necesitan antes una decisión del equipo. Por esfuerzo estimado: 164 pequeños, 36 medios y 0 grandes.
-De los 200, 58 están ya corregidos, 10 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
-El apéndice recoge además 186 notas con lo que se comprobó y no entra en la lista.
+La lista tiene \textbf{223 errores}; 79 de ellos son defectos nuevos: 56 encontrados al
+comprobar los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{48} necesitan antes una decisión del equipo. Por esfuerzo estimado: 187 pequeños, 36 medios y 0 grandes.
+De los 223, 58 están ya corregidos, 10 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
+El apéndice recoge además 191 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
 \begin{tabular}{@{}lr@{}}
@@ -286,16 +293,16 @@ El apéndice recoge además 186 notas con lo que se comprobó y no entra en la l
 \ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 12 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 11 \\
-\ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 18 \\
-\ref{sec:temporal}. Modelos temporales y evolución temporal & 7 \\
+\ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 22 \\
+\ref{sec:temporal}. Modelos temporales y evolución temporal & 8 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 21 \\
-\ref{sec:des}. Simulación de sucesos discretos & 16 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 7 \\
-\ref{sec:casos}. Bases de casos & 7 \\
-\ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 25 \\
-\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 21 \\
-\ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 7 \\
-\ref{sec:textos}. Textos y títulos que se ven mal & 12 \\
+\ref{sec:des}. Simulación de sucesos discretos & 17 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 8 \\
+\ref{sec:casos}. Bases de casos & 8 \\
+\ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 29 \\
+\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 23 \\
+\ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 12 \\
+\ref{sec:textos}. Textos y títulos que se ven mal & 16 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
 \ref{sec:amua}. Exportación a Amua & 5 \\
 \bottomrule
@@ -428,6 +435,10 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:65]{65} & \textcolor{corregidoverde}{\textbf{Corregido}} · La estrategia óptima de una red sin decisiones lanza una excepción & \texttt{gui} & S \hfill No\\
 \hyperref[err:66]{66} & \textcolor{corregidoverde}{\textbf{Corregido}} · El botón del árbol de decisión se enciende en redes que no admiten árbol & \texttt{gui} & S \hfill No\\
 \hyperref[err:200]{200} & Una rama de una red de decisiones suma como utilidad el factor de un producto borrado & \texttt{inference} & S \hfill No\\
+\hyperref[err:210]{210} & Alt+clic sobre una decisión sin política impuesta da un error inesperado & \texttt{gui} & S \hfill No\\
+\hyperref[err:222]{222} & En una red de análisis de decisiones, saber qué se eligió en una decisión no cambia nada & \texttt{inference} & S \hfill No\\
+\hyperref[err:223]{223} & La estrategia óptima de una DAN no se abre si ya se sabe qué se eligió en su única decisión & \texttt{gui} & S \hfill No\\
+\hyperref[err:224]{224} & En una DAN, un hallazgo previo sobre una variable que restringe a otras impide evaluarla & \texttt{inference} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:temporal}.\ Modelos temporales y evolución temporal}}\\
 \hyperref[err:67]{67} & Con evidencia, las curvas de la evolución temporal no suman uno & \texttt{inference} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:68]{68} & La evolución temporal de una variable que empieza en el ciclo 1 falla & \texttt{inference} & S \hfill No\\
@@ -436,6 +447,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:71]{71} & Al expandir un modelo temporal, las regresiones siguen nombrando el ciclo 0 & \texttt{core} & S \hfill No\\
 \hyperref[err:72]{72} & Pasar una variable a atemporal puede dejar dos con el mismo nombre & \texttt{core} & S \hfill No\\
 \hyperref[err:73]{73} & La duración del ciclo escrita en las propiedades de la red no se aplica & \texttt{gui} & S \hfill No\\
+\hyperref[err:211]{211} & Al sumar los estados, el nombre de la curva sale cortado: «Therapy {[}0» & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:coste}.\ Coste-efectividad y análisis de sensibilidad}}\\
 \hyperref[err:74]{74} & El jar publicado mezcla dos JFreeChart y muchas gráficas no se abren & \texttt{full} & S \hfill No\\
 \hyperref[err:75]{75} & La araña de coste-efectividad reescribe la red abierta con las medias & \texttt{core} & M \hfill No\\
@@ -475,6 +487,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:108]{108} & La propagación estocástica no rechaza nodos numéricos: falla sin explicarlo & \texttt{stochastic\allowbreak{}Propagation\allowbreak{}Output} & S \hfill No\\
 \hyperref[err:109]{109} & Las casillas de estadísticos del panel de Monte Carlo no hacen nada & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:110]{110} & «Sort probnet» falla en una red de sucesos con un nodo enlazado a sí mismo & \texttt{full} & S \hfill No\\
+\hyperref[err:214]{214} & «Cost effectiveness analysis» del menú Tools no sabe evaluar una red de sucesos & \texttt{cost\allowbreak{}Effectiveness} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:ficheros}.\ Abrir y guardar redes}}\\
 \hyperref[err:111]{111} & Un .pgmx mal escrito se abre sin aviso y con todas las tablas uniformes & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:112]{112} & \textcolor{corregidoverde}{\textbf{Corregido en parte}} · Guardar en formato 1.0 deja la red sin poder evaluarse al reabrirla & \texttt{io} & M \hfill \textcolor{decisionrojo}{Sí}\\
@@ -483,6 +496,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:115]{115} & Una distribución desconocida en una red de sucesos falla lejos de la causa & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:116]{116} & Una tabla de sucesos con incertidumbre en el fichero impide abrir la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:117]{117} & Abrir un .xml que no es ProbModelXML falla con una excepción de índice & \texttt{io} & S \hfill No\\
+\hyperref[err:202]{202} & El aviso de agente desconocido no dice de qué ciclo es la variable & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -491,6 +505,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:122]{122} & Una base con una columna de números guardada en Weka no se puede reabrir & \texttt{io} & S \hfill No\\
 \hyperref[err:123]{123} & Un fichero de Weka en una carpeta con tilde, «ñ» o «+» no se puede reabrir & \texttt{io} & S \hfill No\\
 \hyperref[err:124]{124} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Una línea de CSV con campos de menos, de más o en blanco inventa casos & \texttt{io} & S \hfill No\\
+\hyperref[err:218]{218} & En el generador de casos, cancelar «Load Net from file» deja «Open» apagado & \texttt{db\allowbreak{}Generator} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:aprendizaje}.\ Aprendizaje y evaluación de redes}}\\
 \hyperref[err:125]{125} & \textcolor{corregidoverde}{\textbf{Corregido}} · La exactitud del Bayes ingenuo selectivo usa el caso evaluado al entrenar & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:126]{126} & \textcolor{corregidoverde}{\textbf{Corregido}} · El Bayes ingenuo selectivo elige características sin el alfa del diálogo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
@@ -517,6 +532,10 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:147]{147} & \textcolor{corregidoverde}{\textbf{Corregido}} · Quedarse sin memoria al aprender sale como error no previsto & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
 \hyperref[err:148]{148} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una variable de la red modelo que falta en los datos da error no previsto & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
 \hyperref[err:149]{149} & \textcolor{corregidoverde}{\textbf{Corregido}} · Red modelo sin alguna columna de la base: error no previsto al cargarla & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
+\hyperref[err:215]{215} & En «Data preprocessing» no se ve la lista «Outliers», y «Cross validation» sale cortada & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
+\hyperref[err:216]{216} & El rótulo «Classification variable» se queda gris con la base de casos cargada & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
+\hyperref[err:217]{217} & «Reset values» de la ventana de aprender deja «Learn» encendido, y pulsarlo dice que no hay datos & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
+\hyperref[err:219]{219} & Al cargar otra base en «Data preprocessing», las casillas de las variables salen apagadas & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:editor}.\ Interfaz: editor de red y paneles de las relaciones}}\\
 \hyperref[err:150]{150} & Volver a elegir la clase de relación que ya tiene un nodo borra sus números & \texttt{gui} & S \hfill No\\
 \hyperref[err:151]{151} & En una regresión, lo escrito como Cholesky se pierde al guardar la red & \texttt{gui} & S \hfill No\\
@@ -539,6 +558,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:168]{168} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Tras alejar el zoom, los nombres de estado siguen recortados al acercarlo & \texttt{gui} & S \hfill No\\
 \hyperref[err:169]{169} & Con precisión 0.0, 2.0 o 0.5, los límites de los tramos acaban en punto & \texttt{gui} & S \hfill No\\
 \hyperref[err:170]{170} & Tras A, B y C, el nodo de azar nuevo se llama «E», la letra de los sucesos & \texttt{core} & S \hfill No\\
+\hyperref[err:207]{207} & El selector de precisión enseña «1» si la precisión es 0.0001 o no está en su lista & \texttt{gui} & S \hfill No\\
+\hyperref[err:209]{209} & «Distribution» y «Parametrization» se quedan a la vista sin lista al lado & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:menus}.\ Interfaz: menús, diálogos y herramientas}}\\
 \hyperref[err:171]{171} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir una red desde internet apaga «Guardar» para todas las redes & \texttt{gui} & M \hfill No\\
 \hyperref[err:172]{172} & «Edits history» deja un núcleo al cien por cien y puede colgar el programa & \texttt{full} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -547,6 +568,11 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:175]{175} & «OpenMarkov configuration» edita unas preferencias que el programa no usa & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:176]{176} & Las escalas de criterio se redondean a tres decimales y pueden quedar en 0 & \texttt{gui} & S \hfill No\\
 \hyperref[err:201]{201} & El modo inferencia solo se ofrece a diagramas de influencia y redes bayesianas & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:203]{203} & «Select all» está apagada hasta que se elige una herramienta de edición & \texttt{gui} & S \hfill No\\
+\hyperref[err:204]{204} & La ventana «About» se abre con 24 píxeles de ancho & \texttt{gui} & S \hfill No\\
+\hyperref[err:206]{206} & «Delete» sigue encendido sin ninguna fila señalada, y pulsarlo da un error & \texttt{gui} & S \hfill No\\
+\hyperref[err:220]{220} & En el tema oscuro hay cinco cosas que no se ven o no se leen & \texttt{gui} & S \hfill No\\
+\hyperref[err:221]{221} & Tras pasar por otro tema, «Sync with OS» puede dejar de seguir al sistema & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:textos}.\ Textos y títulos que se ven mal}}\\
 \hyperref[err:177]{177} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La ayuda de atajos da dos teclas equivocadas, y una cierra el programa & \texttt{gui} & S \hfill No\\
 \hyperref[err:178]{178} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Pegar un nodo de sucesos donde no se admite da «\textgreater\textgreater\textgreater{} eventNode is null \textless\textless\textless» & \texttt{core} & S \hfill No\\
@@ -560,6 +586,10 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:186]{186} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · El mensaje de evidencia incompatible dice «old evidente» y es ilegible & \texttt{core} & S \hfill No\\
 \hyperref[err:187]{187} & El error de muestras sin peso dice «Samples weigth is 0» & \texttt{core} & S \hfill No\\
 \hyperref[err:188]{188} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La ayuda de «Unique superparent» dice «commont» & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
+\hyperref[err:205]{205} & Sin ninguna red abierta, el menú Edit dice «Switch to edition mode» & \texttt{gui} & S \hfill No\\
+\hyperref[err:208]{208} & Varios selectores dicen «Cost criterion named …» y «state no» en vez del nombre & \texttt{gui}, \texttt{cost\allowbreak{}Effectiveness} & S \hfill No\\
+\hyperref[err:212]{212} & El diálogo del análisis de sensibilidad se abre sin título & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
+\hyperref[err:213]{213} & El título de las opciones de la evolución temporal pega el nombre: «of:MID-…» & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:rendimiento}.\ Rendimiento}}\\
 \hyperref[err:189]{189} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Entrar en modo inferencia con una red grande congela la ventana & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:190]{190} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Cada resultado de una operación sobre tablas reserva una tabla que tira & \texttt{core} & S \hfill No\\
@@ -3914,6 +3944,8 @@ Medido con un pequeño programa de prueba que hace las mismas llamadas que \text
 
 En otras nueve (entre ellas \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-HPV.\allowbreak{}pgmx}) el cálculo de rangos falla antes (\hyperref[err:46]{error~46}); arreglado ese, llegarían a este. Las versiones con dos criterios (\texttt{ID-arthronet-ce.\allowbreak{}pgmx}, \texttt{ID-mediastinet-ce.\allowbreak{}pgmx}) no tienen nodos de utilidad intermedios y se propagan bien.
 
+Añadido el 09-10-2026: le pasa también a \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}1-0/\allowbreak{}ID-mediastinet-1-0.\allowbreak{}pgmx}, la misma red en formato 1.0. Medido sin ventana, pidiendo todas las variables a \texttt{VEPropagation}: \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} en \texttt{Prob\allowbreak{}Net\allowbreak{}Operations.\allowbreak{}get\allowbreak{}Node\allowbreak{}Ancestors} (línea 1059), llamado desde \texttt{VEPropagation.\allowbreak{}prune\allowbreak{}Network} (línea 235).
+
 Hay una segunda forma de llegar, sin ninguna red del repositorio que la tenga: un nodo numérico de azar sin hallazgo cuyo valor se pueda enumerar a partir de sus padres. Medido con una red bayesiana construida por programa, Disease (estados finitos) → N (numérico, relación exacta 3 o 7): pedir todas las variables lanza la misma excepción; pedir solo Disease devuelve {[}0,9, 0,1{]}. Si la red tiene además un nodo de utilidad que depende de N, el cálculo de rangos falla antes (\hyperref[err:46]{error~46}).
 
 Por qué pasa. \texttt{VEPropagation.\allowbreak{}resolve} trabaja sobre una copia de la red que \texttt{Variable\allowbreak{}Elimination.\allowbreak{}exact\allowbreak{}Algorithms\allowbreak{}Preprocessing} (líneas 95-97) modifica de dos maneras que dejan fuera variables de la red del usuario:
@@ -4621,7 +4653,7 @@ Prueba: construir con \texttt{Decision\allowbreak{}Tree\allowbreak{}Manager\allo
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el tipo de política (óptima, determinista, probabilista) debe poder elegirse en la interfaz o si se retira \texttt{Policy\allowbreak{}Type\allowbreak{}Panel}
-\fichakey{Relacionados}\hyperref[err:52]{error~52}, \hyperref[err:55]{error~55}, \hyperref[err:56]{error~56}, \hyperref[nota:32]{nota~32}
+\fichakey{Relacionados}\hyperref[err:52]{error~52}, \hyperref[err:55]{error~55}, \hyperref[err:56]{error~56}, \hyperref[nota:32]{nota~32}, \hyperref[err:210]{error~210}
 \end{ficha}
 \paragraph{Qué pasa}
 En modo inferencia, con la evidencia compilada, el menú contextual de un nodo de decisión ofrece «Show expected utility» y «Show optimal policy» (\texttt{Node\allowbreak{}Contextual\allowbreak{}Menu}, líneas 191-203). Pedir cualquiera de las dos saca el diálogo de «error inesperado» con un \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}, y la ventana de la política o de la utilidad esperada no llega a mostrarse.
@@ -4633,6 +4665,8 @@ El camino desde el menú, seguido en el código: las acciones (\texttt{Main\allo
 Medido con un pequeño programa de prueba: sobre un \texttt{Potential\allowbreak{}Edit\allowbreak{}Panel} con un nodo de decisión de política óptima (instancia creada sin ejecutar el constructor, porque el constructor crea un editor de comentarios que es un \texttt{JDialog} y no se puede construir sin pantalla), \texttt{set\allowbreak{}Enabled\allowbreak{}Decision\allowbreak{}Options} lanza \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception:\ Cannot\ invoke\ "Policy\allowbreak{}Type\allowbreak{}Panel.\allowbreak{}set\allowbreak{}Enabled\allowbreak{}Decision\allowbreak{}Options(\allowbreak{}boolean)"\ because\ the\ return\ value\ of\ "Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}get\allowbreak{}Politicy\allowbreak{}Type\allowbreak{}Panel(\allowbreak{})"\ is\ null}, en la línea 620. En la aplicación, la excepción no está envuelta y llega al manejador global.
 
 No se ha ejecutado el camino completo desde el menú (la evaluación previa y la construcción de la ventana no se pueden probar sin pantalla), así que en alguna red la petición puede fallar antes por otro motivo: por ejemplo, \hyperref[err:52]{error~52} salta durante el cálculo de la utilidad esperada, antes de abrir la ventana.
+
+Añadido el 09-10-2026. El 08-10-2026 se pidieron las dos entradas en la ventana con un guion automático, sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}1-0/\allowbreak{}ID-mediastinet-1-0.\allowbreak{}pgmx} en modo inferencia y con la decisión \texttt{Decision\_\allowbreak{}TBNA} señalada, y las dos acabaron en la ventana de error inesperado. «Show optimal policy» falla como se describe arriba, con ese mismo \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}. «Show expected utility» falla antes y por otra causa: \texttt{show\allowbreak{}Expected\allowbreak{}Utility\allowbreak{}Of\allowbreak{}Node} pone la utilidad calculada en un nodo auxiliar de una red recién creada y vacía (\texttt{Network\allowbreak{}Editor\allowbreak{}Panel}, líneas 574-575), y el constructor de \texttt{Potential\allowbreak{}Edit\allowbreak{}Panel} empieza copiando ese potencial a la red del nodo con \texttt{deep\allowbreak{}Copy} (línea 150). Desde el commit \texttt{38e9782} (\hyperref[err:3]{error~3}) esa copia se niega cuando a la red de destino le falta una variable, en vez de dejar nulos, y lanza \texttt{Invalid\allowbreak{}Argument\allowbreak{}Exception:\ Argument\ copy\allowbreak{}Net\ (\allowbreak{}Decision\_\allowbreak{}TBNA)\ is\ invalid\ because\ network\ null\ has\ no\ such\ variable}. Quitar la última línea de \texttt{set\allowbreak{}Enabled\allowbreak{}Decision\allowbreak{}Options} no basta, por tanto, para que se abra «Show expected utility»: hay que dar al nodo auxiliar una red con las variables de la utilidad, como hace \texttt{show\allowbreak{}Optimal\allowbreak{}Policy\allowbreak{}Of\allowbreak{}Node} con la suya, o no copiar el potencial en un diálogo de solo lectura. No se ha comprobado volviendo al commit anterior a \texttt{38e9782}.
 
 El tipo de política no se puede elegir en ninguna parte de la interfaz, pero hoy eso no tiene otra consecuencia: fuera de la interfaz, el tipo de política solo lo lee \texttt{Remove\allowbreak{}Policy\allowbreak{}Edit} (ver \hyperref[err:56]{error~56}); ni la inferencia ni el formato \texttt{.\allowbreak{}pgmx} lo usan.
 \paragraph{El código}
@@ -5573,7 +5607,7 @@ Prueba de regresión: instanciar «Therapy today=no» en \texttt{0\_\allowbreak{
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
-\fichakey{Relacionados}\hyperref[err:66]{error~66}, \hyperref[err:92]{error~92}
+\fichakey{Relacionados}\hyperref[err:66]{error~66}, \hyperref[err:92]{error~92}, \hyperref[err:223]{error~223}
 \end{ficha}
 \paragraph{Qué pasa}
 El botón de la barra de herramientas «Show optimal strategy» (\texttt{DECISION\_\allowbreak{}SHOW\_\allowbreak{}OPTIMAL\_\allowbreak{}STRATEGY}) está activo en los diagramas de influencia, las redes de análisis de decisiones, los MID (diagramas de influencia de Markov) y demás tipos con decisiones aunque la red no tenga ninguna decisión, incluido un diagrama de influencia recién creado y vacío. Al pulsarlo, el gestor global muestra el diálogo de «excepción inesperada» pidiendo que se envíe a los desarrolladores; el programa no se cierra. En las redes del repositorio no hay diagramas de influencia ni redes de análisis de decisiones sin decisiones, pero cualquier modelo a medio construir lo es.
@@ -5726,6 +5760,147 @@ Hay que decidir qué vale un nodo que combina utilidades (suma o producto) cuand
 \end{itemize}
 
 Prueba de regresión: instanciar «Realizar Implante = no» en \texttt{DAN-arthronet.\allowbreak{}pgmx} y evaluar lo que queda debe dar 0.
+
+\setcounter{subsection}{209}
+\subsection[Alt+clic sobre una decisión sin política impuesta da un error inesperado]{El gesto que abre la relación de un nodo (Alt+clic) da un error inesperado sobre una decisión sin política impuesta, que no tiene relación que enseñar}\label{err:210}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog.node; org.openmarkov.gui.window.edition.networkEditorPanel
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:228-233} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:437-452} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:450-457} \newline \path{gui/src/main/java/org/openmarkov/gui/bindings/Bindings.java:227-237} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:653-663} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:149-157}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (llamando al método que abre el diálogo; el gesto no se ha hecho en la ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:51]{error~51}, \hyperref[err:28]{error~28}
+\end{ficha}
+\paragraph{Qué pasa}
+El gesto «Edit relation» (por omisión Alt+clic sobre un nodo; se puede reasignar) abre el diálogo de la relación del nodo. Sobre una decisión a la que no se ha impuesto ninguna política, que es como está casi toda decisión, termina en un \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} y sale el diálogo de error inesperado.
+
+Los menús no tienen el problema: para una decisión sin política no encienden «Edit probability» sino «Impose policy» (\texttt{Main\allowbreak{}Panel\allowbreak{}Menu\allowbreak{}Assistant}, líneas 653-663). El gesto, en cambio, solo comprueba que haya un nodo bajo el ratón (\texttt{Editor\allowbreak{}Command\allowbreak{}Handler\allowbreak{}Generator}, líneas 437-439) y llama a \texttt{Network\allowbreak{}Editor\allowbreak{}Panel.\allowbreak{}show\allowbreak{}Potential\allowbreak{}Dialog}.
+
+Medido el 8-10-2026 con el guion de las capturas automáticas, que llama a ese mismo \texttt{show\allowbreak{}Potential\allowbreak{}Dialog} con la decisión \texttt{Decision\_\allowbreak{}TBNA} de \texttt{ID-mediastinet-1-0.\allowbreak{}pgmx} señalada:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+NullPointerException: Cannot invoke "Object.getClass()" because the return value of "org.openmarkov.core.model.network.Node.getPotential()" is null
+    at PotentialEditPanel.getPotentialTypeJCombobox(PotentialEditPanel.java:233)
+    at PotentialEditPanel.getPotentialTypePanel(PotentialEditPanel.java:290)
+    at PotentialEditPanel.configureComponentsPanel(PotentialEditPanel.java:183)
+    at PotentialEditPanel.<init>(PotentialEditPanel.java:169)
+\end{Verbatim}
+
+Por qué pasa: \texttt{get\allowbreak{}Potential\allowbreak{}Type\allowbreak{}JCombobox} da por hecho que, si el nodo no tiene relación, se le puede poner la relación por omisión de su tipo (líneas 230-232). Para una decisión, \texttt{Potential\allowbreak{}Utils.\allowbreak{}generate\allowbreak{}Default\allowbreak{}Potential} devuelve nulo (línea 152), y la línea 233 usa ese nulo. Medido aparte: para la decisión \texttt{Therapy} de \texttt{ID-decide-test.\allowbreak{}pgmx}, \texttt{get\allowbreak{}Potential(\allowbreak{})} y \texttt{generate\allowbreak{}Default\allowbreak{}Potential} devuelven nulo.
+
+El gesto en sí no se ha hecho en la ventana; que llega a ese método se ha establecido leyendo.
+\paragraph{Cómo arreglarlo}
+Que el gesto siga la misma regla que el menú: para una decisión sin política, no hacer nada o abrir «Impose policy», que es la acción equivalente. La regla de qué se puede abrir para cada nodo está hoy repetida en \texttt{Main\allowbreak{}Panel\allowbreak{}Menu\allowbreak{}Assistant.\allowbreak{}objects\allowbreak{}Selected} y en \texttt{Node\allowbreak{}Contextual\allowbreak{}Menu}; conviene que el gesto pregunte al mismo sitio.
+
+Prueba: con la regla extraída a un método, comprobar que para una decisión sin política la acción de editar la relación no está permitida.
+
+\setcounter{subsection}{221}
+\subsection[En una red de análisis de decisiones, saber qué se eligió en una decisión no cambia nada]{En una red de análisis de decisiones, un hallazgo previo sobre una decisión no cuenta: la utilidad y la estrategia óptima salen como si no se supiera, y la estrategia puede contradecirlo}\label{err:222}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}inference
+\fichakey{Paquete}org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANDecompositionIntoSymmetricDANsInference.java:54-68} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANOperations.java:328-355} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/DecisionTreeExpansion.java:276} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:229-237}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:53]{error~53}, \hyperref[err:54]{error~54}, \hyperref[err:223]{error~223}, \hyperref[err:224]{error~224}, \hyperref[err:201]{error~201}
+\end{ficha}
+\paragraph{Qué pasa}
+En una red de análisis de decisiones (DAN, del inglés \emph{decision analysis network}), «Show optimal strategy» evalúa la red descomponiéndola en redes simétricas (\texttt{DANDecomposition\allowbreak{}Into\allowbreak{}Symmetric\allowbreak{}DANs\allowbreak{}Evaluation}) y le pasa los hallazgos que el usuario haya puesto en modo edición, que son la evidencia previa a la resolución. Si uno de esos hallazgos es sobre una decisión, es decir, se sabe qué opción se eligió, no cuenta: la utilidad y la estrategia son las mismas que sin él.
+
+Medido con un pequeño programa de prueba que hace lo que hace la ventana, con \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}dan/\allowbreak{}DAN-dating.\allowbreak{}pgmx}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+sabido de antemano   utilidad    lo que la estrategia dice de Ask?
+nada                 9.407584    no
+Ask? = yes           9.407584    no
+Ask? = no            9.407584    no
+NClub? = yes         9.407584    (la misma estrategia que sin saber nada)
+\end{Verbatim}
+
+La segunda línea es la que más se nota: la ventana dice «Ask? → no» a quien acaba de decirle que la respuesta fue «yes». En un diagrama de influencia no pasa. Medido igual con \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-decide-test.\allowbreak{}pgmx}: con \texttt{Do\ test?\ =\ no} sabido, la estrategia ya no pregunta por esa decisión y empieza en \texttt{Therapy}.
+
+Por qué pasa: cuando la descomposición busca qué decisiones se pueden tomar primero llama a \texttt{DANOperations.\allowbreak{}get\allowbreak{}Next\allowbreak{}Decisions(\allowbreak{}dan)} (línea 56), sin la evidencia. Existe la otra versión, \texttt{get\allowbreak{}Next\allowbreak{}Decisions(\allowbreak{}prob\allowbreak{}Net,\allowbreak{}\ evidence)} (líneas 345-355), que quita de las candidatas las decisiones sobre las que hay un hallazgo, y la usa el árbol de decisión (\texttt{Decision\allowbreak{}Tree\allowbreak{}Expansion}, línea 276). Aquí la decisión se abre en todas sus opciones y se maximiza sobre ellas.
+
+En la ventana, una red de este tipo no entra en modo inferencia (\hyperref[err:201]{error~201}), así que estos hallazgos solo pueden ser los del modo edición.
+\paragraph{El código}
+inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANDecompositionIntoSymmetricDANsInference.java:54-58
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{\}} \ControlFlowTok{else} \OperatorTok{\{}\CommentTok{// If O\_A is empty, then some variable introduces asymmetries}
+\NormalTok{    Variable rootDecision}\OperatorTok{;}
+    \BuiltInTok{List}\OperatorTok{\textless{}}\BuiltInTok{Node}\OperatorTok{\textgreater{}}\NormalTok{ nextDecisions }\OperatorTok{=}\NormalTok{ DANOperations}\OperatorTok{.}\FunctionTok{getNextDecisions}\OperatorTok{(}\NormalTok{dan}\OperatorTok{);}
+    \ControlFlowTok{if} \OperatorTok{(}\NormalTok{nextDecisions}\OperatorTok{.}\FunctionTok{size}\OperatorTok{()} \OperatorTok{==} \DecValTok{1}\OperatorTok{)} \OperatorTok{\{} \CommentTok{// If exactly one decision D can be made first}
+\NormalTok{        rootDecision }\OperatorTok{=}\NormalTok{ nextDecisions}\OperatorTok{.}\FunctionTok{get}\OperatorTok{(}\DecValTok{0}\OperatorTok{).}\FunctionTok{getVariable}\OperatorTok{();}
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Pasar la evidencia a \texttt{get\allowbreak{}Next\allowbreak{}Decisions}, y tratar la decisión con hallazgo como lo que es, una variable de valor conocido: instanciarla en esa opción en vez de abrirla. Hay que mirar junto con esto los otros dos sitios en que la descomposición no mira la evidencia (\hyperref[err:223]{errores~223} y \hyperref[err:224]{224}).
+
+Prueba de regresión: con \texttt{DAN-dating.\allowbreak{}pgmx} y \texttt{Ask?\ =\ yes} sabido, la utilidad debe ser la de la rama «yes» (la que da el árbol de decisión para esa rama) y la estrategia no debe proponer otra opción para \texttt{Ask?}.
+
+\setcounter{subsection}{222}
+\subsection[La estrategia óptima de una DAN no se abre si ya se sabe qué se eligió en su única decisión]{«Show optimal strategy» de una red de análisis de decisiones lanza ClassCastException cuando, con lo que se sabe de antemano, no queda nada que decidir}\label{err:223}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.window
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:229-237} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEOptimalIntervention.java:64-90}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:65]{error~65}, \hyperref[err:222]{error~222}, \hyperref[err:224]{error~224}
+\end{ficha}
+\paragraph{Qué pasa}
+Con una red de análisis de decisiones (DAN) y un hallazgo previo que deja la red sin nada que decidir, «Show optimal strategy» no abre la ventana: lanza un \texttt{Class\allowbreak{}Cast\allowbreak{}Exception}, que sale como error inesperado.
+
+Medido con un pequeño programa de prueba que hace lo que hace la ventana, con \texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks/\allowbreak{}dan/\allowbreak{}DAN-one-decision.\allowbreak{}pgmx}, que tiene una sola decisión, \texttt{D}: sin hallazgos, la estrategia sale («D → no»); con \texttt{D\ =\ yes} o con \texttt{D\ =\ no} sabido de antemano, \texttt{Class\allowbreak{}Cast\allowbreak{}Exception}.
+
+Por qué pasa: la rama de las DAN de \texttt{Inference\allowbreak{}Handler.\allowbreak{}show\allowbreak{}Optimal\allowbreak{}Strategy} convierte la utilidad a \texttt{Strategy\allowbreak{}Carrier} (un potencial que lleva la estrategia al lado de cada número) y toma su primer árbol de estrategia (línea 233), sin comprobar nada. Cuando no se ha maximizado sobre ninguna decisión, la utilidad que devuelve la evaluación es un potencial corriente, sin estrategia. La otra rama, la de las redes que no son DAN, sí contempla el caso: \texttt{VEOptimal\allowbreak{}Intervention} envuelve la utilidad en un potencial con estrategia y, si no trae ninguna, la construye.
+
+Es la conversión que el \hyperref[err:65]{error~65} describía para una red sin decisiones. Aquel se corrigió apagando el botón cuando la red no tiene decisiones, sin tocar el cálculo; esta red tiene una, el botón está encendido y el fallo se alcanza.
+\paragraph{El código}
+gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:229-234
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if} \OperatorTok{(}\NormalTok{networkPanel}\OperatorTok{.}\FunctionTok{getProbNet}\OperatorTok{().}\FunctionTok{getNetworkType}\OperatorTok{().}\FunctionTok{equals}\OperatorTok{(}\NormalTok{DecisionAnalysisNetworkType}\OperatorTok{.}\FunctionTok{getUniqueInstance}\OperatorTok{()))} \OperatorTok{\{}
+\NormalTok{    DANEvaluation eval }\OperatorTok{=} \KeywordTok{new} \FunctionTok{DANDecompositionIntoSymmetricDANsEvaluation}\OperatorTok{(}\NormalTok{probNet}\OperatorTok{,} \KeywordTok{...}\FunctionTok{getPreResolutionEvidence}\OperatorTok{());}
+\NormalTok{    StrategyTree strategyTree }\OperatorTok{=} \OperatorTok{((}\NormalTok{StrategyCarrier}\OperatorTok{)}\NormalTok{ eval}\OperatorTok{.}\FunctionTok{getUtility}\OperatorTok{()).}\FunctionTok{getStrategyTrees}\OperatorTok{()[}\DecValTok{0}\OperatorTok{];}
+\NormalTok{    strategyTree}\OperatorTok{.}\FunctionTok{pruneAndGraftNode}\OperatorTok{(}\StringTok{"OD"}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Comprobar el tipo antes de convertir y, si la utilidad no trae estrategia, abrir la ventana diciendo que no queda nada que decidir. Lo mismo si \texttt{get\allowbreak{}Strategy\allowbreak{}Trees(\allowbreak{})} viene vacío.
+
+Prueba de regresión: con \texttt{DAN-one-decision.\allowbreak{}pgmx} y \texttt{D\ =\ yes} sabido, el cálculo que alimenta la ventana no lanza ninguna excepción.
+
+\setcounter{subsection}{223}
+\subsection[En una DAN, un hallazgo previo sobre una variable que restringe a otras impide evaluarla]{En una red de análisis de decisiones, un hallazgo previo sobre una variable que decide qué puede pasar después hace fallar la evaluación con «evidencia incompatible», sea cual sea el estado visto}\label{err:224}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}inference
+\fichakey{Paquete}org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANDecompositionIntoSymmetricDANsInference.java:34-53} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANOperations.java:482, 548-553, 614} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:229-237}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:222]{error~222}, \hyperref[err:223]{error~223}, \hyperref[err:186]{error~186}, \hyperref[err:48]{error~48}
+\end{ficha}
+\paragraph{Qué pasa}
+En \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}dan/\allowbreak{}DAN-dating.\allowbreak{}pgmx}, la variable \texttt{Accept} (si la otra persona acepta la invitación) se conoce al preguntar y decide qué se puede hacer después. Si el usuario la pone como hallazgo previo, con cualquiera de sus dos estados, la red no se puede evaluar: «Show optimal strategy» termina en \texttt{Evidence\allowbreak{}Is\allowbreak{}Incompatible\allowbreak{}With\allowbreak{}Other}, el aviso de evidencia incompatible, aunque el hallazgo no es incompatible con nada.
+
+Medido con un pequeño programa de prueba que hace lo que hace la ventana: con \texttt{Accept\ =\ yes} sabido de antemano y con \texttt{Accept\ =\ no}, la evaluación lanza esa excepción; sin hallazgos, o con hallazgos sobre otras variables, termina.
+
+Por qué pasa: la descomposición trata aparte las variables que se ven desde el principio y además restringen a otras (las que introducen asimetrías). La lista de las que se ven desde el principio se calcula quitando las que ya tienen hallazgo (\texttt{get\allowbreak{}Variables\allowbreak{}Observed\allowbreak{}From\allowbreak{}The\allowbreak{}Begginning}), pero la de las que restringen se pide sin mirar la evidencia (\texttt{DANOperations.\allowbreak{}get\allowbreak{}Asymmetric\allowbreak{}Observable\allowbreak{}Variables(\allowbreak{}dan)}, línea 36). Si una de ellas tiene hallazgo, la descomposición la abre igualmente en todos sus estados y, para cada uno, añade «vale este estado» a lo que se sabe (\texttt{extend\allowbreak{}Evidence\allowbreak{}Case}, línea 51). En cuanto llega a un estado distinto del que se sabía, \texttt{Evidence\allowbreak{}Case.\allowbreak{}add\allowbreak{}Finding} rechaza el segundo hallazgo sobre la misma variable y la evaluación entera se acaba ahí.
+\paragraph{Cómo arreglarlo}
+Quitar de las variables que restringen las que ya tienen hallazgo, e instanciar cada una de esas en el estado que se sabe en vez de abrirla en todos. Conviene hacerlo a la vez que el \hyperref[err:222]{error~222}, que es el mismo descuido con las decisiones.
+
+Prueba de regresión: con \texttt{DAN-dating.\allowbreak{}pgmx}, \texttt{Accept\ =\ yes} y \texttt{Accept\ =\ no} sabidos de antemano deben evaluarse sin excepción, y dar la utilidad de la rama correspondiente del árbol de decisión.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Modelos temporales y evolución temporal}\label{sec:temporal}
@@ -6305,6 +6480,41 @@ En ambos casos hay que validar el número (positivo, bien escrito) y avisar si n
 \texttt{Cycle\allowbreak{}Length\allowbreak{}Edit} es una de las ediciones de opciones de la red que ejecutan su cambio dos veces al rehacer (\hyperref[nota:66]{nota~66}); allí no hay nada que corregir mientras nadie la use, pero antes de usarla desde la interfaz hay que revisar su \texttt{redo(\allowbreak{})}.
 
 Prueba de regresión: construir el panel sin pantalla sobre una red MID, cambiar el texto y la unidad, aceptar y comprobar \texttt{prob\allowbreak{}Net.\allowbreak{}get\allowbreak{}Cycle\allowbreak{}Length(\allowbreak{})}; y comprobar que cancelar y deshacer lo devuelven.
+
+\setcounter{subsection}{210}
+\subsection[Al sumar los estados, el nombre de la curva sale cortado: «Therapy {[}0»]{En la evolución temporal, con «Sum» y una decisión temporal, el nombre de cada curva sale cortado en el corchete del ciclo: «Therapy {[}0» en vez de «Therapy {[}0{]} = yes»}\label{err:211}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog.inference.temporalevolution
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TraceTemporalEvolutionDialog.java:1397-1412, 1495-1512}
+\fichakey{Comprobado}Leyendo el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:67]{error~67}, \hyperref[err:69]{error~69}
+\end{ficha}
+\paragraph{Qué pasa}
+En la ventana de la evolución temporal de una variable de azar, la opción «Sum» reúne en una sola curva las de los estados marcados, una por cada opción de la decisión con la que se mira. Cuando esa decisión es temporal, y su nombre lleva por tanto el ciclo entre corchetes, el nombre de cada curva sumada sale cortado: «Therapy {[}0», sin el cierre del corchete y sin la opción. Las curvas de las distintas opciones se quedan con el mismo nombre y no se sabe cuál es cuál.
+
+Por qué pasa: cada curva se llama \texttt{estado\ {[}Decisión\ =\ opción{]}} (líneas 1495-1512), por ejemplo \texttt{healthy\ {[}Therapy\ {[}0{]}\ =\ yes{]}}. Para nombrar la suma, \texttt{sum\allowbreak{}Series} se queda con lo que hay entre el primer \texttt{{[}} y el primer \texttt{{]}} (línea 1400), y el primer \texttt{{]}} es el del ciclo, no el que cierra. Evaluada aparte, la expresión da «Therapy {[}0» para ese nombre, y «Therapy = yes» cuando el nombre de la decisión no lleva corchetes.
+
+Comprobado solo leyendo: la ventana no se ha abierto en ese caso.
+\paragraph{El código}
+gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TraceTemporalEvolutionDialog.java:1397-1401
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{private}\NormalTok{ XYSeries }\FunctionTok{sumSeries}\OperatorTok{(}\BuiltInTok{ArrayList}\OperatorTok{\textless{}}\NormalTok{XYSeries}\OperatorTok{\textgreater{}}\NormalTok{ arraySeries}\OperatorTok{)} \OperatorTok{\{}
+    \BuiltInTok{String}\NormalTok{ seriesName }\OperatorTok{=} \OperatorTok{(}\BuiltInTok{String}\OperatorTok{)}\NormalTok{ arraySeries}\OperatorTok{.}\FunctionTok{get}\OperatorTok{(}\DecValTok{0}\OperatorTok{).}\FunctionTok{getKey}\OperatorTok{();}
+    \ControlFlowTok{if} \OperatorTok{(!}\NormalTok{conditioningVariables}\OperatorTok{.}\FunctionTok{isEmpty}\OperatorTok{())} \OperatorTok{\{}
+\NormalTok{        seriesName }\OperatorTok{=}\NormalTok{ seriesName}\OperatorTok{.}\FunctionTok{substring}\OperatorTok{(}\NormalTok{seriesName}\OperatorTok{.}\FunctionTok{indexOf}\OperatorTok{(}\CharTok{\textquotesingle{}[\textquotesingle{}}\OperatorTok{)} \OperatorTok{+} \DecValTok{1}\OperatorTok{,}\NormalTok{ seriesName}\OperatorTok{.}\FunctionTok{indexOf}\OperatorTok{(}\CharTok{\textquotesingle{}]\textquotesingle{}}\OperatorTok{));}
+    \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Cortar en el último \texttt{{]}} (\texttt{last\allowbreak{}Index\allowbreak{}Of}), o mejor no desmontar un texto: construir el nombre de la suma a partir de la decisión y la opción, que el método que crea las curvas ya conoce.
+
+Prueba: con el cálculo del nombre extraído a un método, comprobar que para \texttt{healthy\ {[}Therapy\ {[}0{]}\ =\ yes{]}} devuelve \texttt{Therapy\ {[}0{]}\ =\ yes}.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Coste-efectividad y análisis de sensibilidad}\label{sec:coste}
@@ -8754,7 +8964,7 @@ Prueba: construir un \texttt{Tree\allowbreak{}With\allowbreak{}Excluded\allowbre
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si una red de sucesos debe admitir nodos de azar discretizados (y entonces la simulación los trata como de estados) o si el editor no debe ofrecer ese tipo en una red de sucesos
-\fichakey{Relacionados}\hyperref[err:97]{error~97}, \hyperref[err:99]{error~99}, \hyperref[err:105]{error~105}, \hyperref[nota:55]{nota~55}
+\fichakey{Relacionados}\hyperref[err:97]{error~97}, \hyperref[err:99]{error~99}, \hyperref[err:105]{error~105}, \hyperref[nota:55]{nota~55}, \hyperref[err:202]{error~202}
 \end{ficha}
 \paragraph{Qué pasa}
 En una red DES (simulación de eventos discretos), el usuario abre las propiedades de un nodo de azar y, en la pestaña del dominio, cambia el tipo de variable a «Discretized» (el selector ofrece a todo nodo de azar los tipos de \texttt{Variable\allowbreak{}Type.\allowbreak{}of(\allowbreak{}CHANCE)}: estados finitos, discretizada y numérica, en cualquier tipo de red). La edición se acepta. Al lanzar la simulación (botón o menú de coste-efectividad), no se simula nada y sale el diálogo de error inesperado.
@@ -9116,6 +9326,43 @@ Saltarse en el bucle los enlaces cuyo origen y destino son el mismo nodo (no apo
 El mismo método lo usan \texttt{graphically\allowbreak{}Sort\allowbreak{}Network} y \texttt{graphically\allowbreak{}Sort\allowbreak{}Network\allowbreak{}As\allowbreak{}Move\allowbreak{}Edit}, así que el arreglo en \texttt{get\allowbreak{}Sorted\allowbreak{}Coordinates} cubre las dos.
 
 Prueba: construir el grafo con la lista de enlaces de una red DES con un enlace de un nodo a sí mismo (conviene extraer la construcción del grafo a un método que reciba nodos y enlaces, para probarlo sin ventana) y comprobar que la disposición se calcula y da una posición a cada nodo.
+
+\setcounter{subsection}{213}
+\subsection[«Cost effectiveness analysis» del menú Tools no sabe evaluar una red de sucesos]{Con una red de sucesos abierta, «Cost effectiveness analysis» del menú Tools pide sus opciones y acaba en «This algorithm cannot evaluate DESNet», mientras que el botón de la barra lanza la simulación}\label{err:214}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}costEffectiveness
+\fichakey{Paquete}org.openmarkov.costEffectiveness; org.openmarkov.gui.window
+\fichakey{Ficheros}\path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CostEffectivenessPlugin.java:53-61, 64-110} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:260-266}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (los dos algoritmos, sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:92]{error~92}, \hyperref[err:102]{error~102}, \hyperref[err:201]{error~201}
+\end{ficha}
+\paragraph{Qué pasa}
+Con una red de simulación de sucesos discretos abierta, hay dos maneras de pedir el coste-efectividad y hacen cosas distintas:
+
+\begin{itemize}
+\tightlist
+\item
+  el botón de la barra lanza la simulación de Monte Carlo, que es lo que una red de sucesos admite (\texttt{Inference\allowbreak{}Handler.\allowbreak{}show\allowbreak{}Cost\allowbreak{}Effectiveness\allowbreak{}Deterministic}, líneas 263-266);
+\item
+  la entrada Tools → «Cost effectiveness analysis» no mira el tipo de red: abre las opciones de inferencia, luego el diálogo del ámbito y, al aceptar, intenta evaluar la red con los algoritmos exactos, que la rechazan.
+\end{itemize}
+
+Medido con un pequeño programa de prueba y una red de sucesos pequeña hecha para la ocasión, \texttt{DES-illness.\allowbreak{}pgmx} (el repositorio no guarda ninguna red de este tipo), construyendo sobre ella los dos algoritmos que usa la entrada, \texttt{VECEAnalysis} (ámbito de una decisión) y \texttt{DANDecomposition\allowbreak{}Into\allowbreak{}Symmetric\allowbreak{}DANs\allowbreak{}CEA} (ámbito global). Los dos lanzan \texttt{Not\allowbreak{}Evaluable\allowbreak{}Network\allowbreak{}Exception.\allowbreak{}Not\allowbreak{}Applicable\allowbreak{}Network}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+This algorithm cannot evaluate DESNet network named DES-illness.pgmx, as it can only evaluate networks of type: [Bayesian, Influence diagram, Markov Influence Diagram, Decision analysis].
+\end{Verbatim}
+
+Por qué pasa: \texttt{Cost\allowbreak{}Effectiveness\allowbreak{}Plugin} enciende su entrada en cuanto hay una red abierta, sea del tipo que sea (líneas 53-61), y \texttt{on\allowbreak{}Click} solo distingue diagramas de influencia y MID; todo lo demás va a la descomposición de redes de análisis de decisiones (línea 103).
+
+Por lo mismo la entrada está encendida con una red bayesiana. En una captura automática del 8-10-2026 con \texttt{BN-asia.\allowbreak{}pgmx}, aceptar los dos diálogos abre una tabla «Cost-effectiveness intervals» con una sola fila: coste 0, efectividad 0, intervención «-\/-\/-».
+\paragraph{Cómo arreglarlo}
+Que la entrada del menú y el botón de la barra vayan por el mismo camino: lo más simple es que \texttt{Cost\allowbreak{}Effectiveness\allowbreak{}Plugin.\allowbreak{}on\allowbreak{}Click} llame a lo mismo que el botón, que ya distingue la red de sucesos. Y que la entrada se encienda con la misma regla que el botón, no con «hay una red abierta».
+
+Prueba: con una red de sucesos, comprobar que la entrada del menú no llega a construir \texttt{VECEAnalysis}; y con una red bayesiana sin criterios de coste y efectividad, que está apagada.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Abrir y guardar redes}\label{sec:ficheros}
@@ -9794,6 +10041,35 @@ La solución de fondo, reconocer el formato por el contenido y no solo por la ex
 
 Prueba de regresión: en \texttt{io/\allowbreak{}src/\allowbreak{}test}, abrir \texttt{net\allowbreak{}AB.\allowbreak{}xml} con \texttt{Format\allowbreak{}Manager.\allowbreak{}get\allowbreak{}Instance(\allowbreak{}).\allowbreak{}get\allowbreak{}Prob\allowbreak{}Net\allowbreak{}Reader(\allowbreak{}url)} y con \texttt{new\ PGMXReader(\allowbreak{}).\allowbreak{}read(\allowbreak{}url)} y comprobar que ambos lanzan una \texttt{Prob\allowbreak{}Net\allowbreak{}Parser\allowbreak{}Exception} (no una excepción de índice ni de nulo).
 
+\setcounter{subsection}{201}
+\subsection[El aviso de agente desconocido no dice de qué ciclo es la variable]{Al abrir una red temporal en la que una variable nombra un agente que la red no tiene, el aviso nombra la variable sin su ciclo y no se sabe cuál de ellas es}\label{err:202}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:666-677, 687-690, 708, 753-756} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/exception/PGMXParserException.java:63-72} \newline \path{io/src/main/resources/io/localize/io_class_localizations_en.xml:17}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:60]{error~60}, \hyperref[err:37]{error~37}, \hyperref[err:106]{error~106}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde el commit \texttt{341e1ed} (\hyperref[err:60]{error~60}) el lector de \texttt{.\allowbreak{}pgmx} rechaza un fichero en el que una variable nombra, en su \texttt{\textless{}Agent\textgreater{}}, un agente que no está en la lista de agentes de la red. El aviso dice qué variable es, pero en una red temporal lo dice sin el ciclo (el instante al que pertenece la variable, que va entre corchetes al final de su nombre): hay una «State {[}0{]}» y una «State {[}1{]}», y el texto no deja saber cuál de las dos hay que corregir.
+
+Medido con un pequeño programa de prueba: en una copia de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-Chancellor-corrected.\allowbreak{}pgmx} se añadió \texttt{\textless{}Agent\ name="Nadie"\ /\allowbreak{}\textgreater{}} a la variable \texttt{State} del ciclo 1. El lector la rechaza con \texttt{PGMXParser\allowbreak{}Exception.\allowbreak{}Unknown\allowbreak{}Agent} y este texto:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+Variable State has the agent Nadie, which is not in the list of agents of the network.
+\end{Verbatim}
+
+Por qué pasa: \texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}load\allowbreak{}Variable\allowbreak{}Advanced\allowbreak{}Information} quita el ciclo del nombre nada más empezar (líneas 687-690), porque lo necesita así para construir la variable, y ese nombre recortado es el que pasa después a \texttt{agent\allowbreak{}Of\allowbreak{}The\allowbreak{}Network} (línea 755), que lo mete en la excepción (línea 676). Le pasa lo mismo, por lectura, al aviso de una variable sin estados (\texttt{Variable\allowbreak{}Has\allowbreak{}No\allowbreak{}States}, línea 708).
+
+Un fichero así sale de escribirlo a mano o con otra herramienta: el programa escribe en cada decisión un agente de la lista.
+\paragraph{Cómo arreglarlo}
+Guardar el ciclo antes de recortar el nombre y pasar a las dos excepciones el nombre completo (el nombre base más \texttt{{[}ciclo{]}} cuando el elemento trae \texttt{time\allowbreak{}Slice}).
+
+Prueba de regresión: en \texttt{Agents\allowbreak{}Test}, leer una red temporal con un agente desconocido en la variable de un ciclo distinto de cero y comprobar que \texttt{variable\allowbreak{}Name} de la excepción lleva el ciclo.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
 
@@ -10285,6 +10561,37 @@ Rellenar los campos que faltan con un estado de «valor desconocido» sería otr
 Es el único sitio: los lectores de Excel del mismo paquete (\texttt{Excel\allowbreak{}Data\allowbreak{}Base\allowbreak{}IO}, \texttt{Old\allowbreak{}Excel\allowbreak{}Data\allowbreak{}Base\allowbreak{}IO}) recorren las columnas de la cabecera y no los campos de la fila, así que no tienen esta forma del defecto.
 
 Prueba de regresión: ampliar \texttt{CSVData\allowbreak{}Base\allowbreak{}IOEmpty\allowbreak{}Fields\allowbreak{}Test} (\texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}java/\allowbreak{}org/\allowbreak{}openmarkov/\allowbreak{}io/\allowbreak{}database/\allowbreak{}excel/\allowbreak{}}) con cuatro ficheros ---línea corta, línea larga, línea en blanco intermedia y línea en blanco final--- y comprobar que las líneas en blanco no crean casos ni estados y que las otras dos producen una excepción cuyo mensaje contiene el número de línea.
+
+\setcounter{subsection}{217}
+\subsection[En el generador de casos, cancelar «Load Net from file» deja «Open» apagado]{En «Generate dataset randomly», elegir «Load Net from file» abre el selector de ficheros sin pedirlo; si se cancela, «Open» queda apagado y «Generate» sigue usando la red abierta}\label{err:218}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}dbGenerator
+\fichakey{Paquete}org.openmarkov.dbgenerator.gui
+\fichakey{Ficheros}\path{dbGenerator/src/main/java/org/openmarkov/dbgenerator/gui/DBGeneratorGUI.java:105-113, 157-177, 192-206}
+\fichakey{Comprobado}Leyendo el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[nota:33]{nota~33}
+\end{ficha}
+\paragraph{Qué pasa}
+La ventana «Generate dataset randomly» genera una base de casos a partir de una red, que puede ser la que está abierta o una que se carga de un fichero. Con una red abierta, la ventana se abre con «Use network already open» elegido y el botón «Open» apagado. Al elegir «Load Net from file»:
+
+\begin{itemize}
+\tightlist
+\item
+  se abre de inmediato el selector de ficheros, sin que el usuario haya pulsado «Open»;
+\item
+  si lo cancela, «Load Net from file» queda elegido, «Open» sigue apagado y «Generate» sigue encendido; pulsarlo genera los casos con la red que estaba abierta, no con una cargada de un fichero. Para volver a intentarlo hay que pulsar otra vez sobre la opción ya elegida.
+\end{itemize}
+
+Por qué pasa: el oyente de «Load Net from file» (líneas 157-177) pide el fichero él mismo cuando todavía no hay ninguno, y solo enciende «Open» si se ha elegido uno. Si se cancela no toca nada: ni «Open», ni la red que la ventana tenía apuntada (la abierta, líneas 105-109).
+
+Comprobado solo leyendo: la ventana no se puede construir sin pantalla.
+\paragraph{Cómo arreglarlo}
+Que elegir «Load Net from file» solo encienda «Open» y apague «Generate» hasta que haya una red cargada, y que el selector de ficheros se abra únicamente con «Open».
+
+Prueba: con pantalla, elegir «Load Net from file», cancelar y comprobar que «Open» está encendido y «Generate» apagado.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Aprendizaje y evaluación de redes}\label{sec:aprendizaje}
@@ -12183,6 +12490,135 @@ Es el único sitio de la ventana que pide a la red modelo el nodo de una columna
 
 Prueba: una prueba de interfaz con pantalla (AssertJ-Swing) que cargue \texttt{Head\allowbreak{}To\allowbreak{}Head2.\allowbreak{}csv} y después \texttt{Three\allowbreak{}Nodes\allowbreak{}Ato\allowbreak{}Bto\allowbreak{}C.\allowbreak{}pgmx} sin excepción y compruebe que \texttt{get\allowbreak{}Selected\allowbreak{}Variables} da A, B y C; y en el orden contrario, que la base queda cargada y «Learn» activo. Si se prefiere una prueba sin pantalla, sacar el cuerpo del bucle a un método que no dependa de Swing.
 
+\setcounter{subsection}{214}
+\subsection[En «Data preprocessing» no se ve la lista «Outliers», y «Cross validation» sale cortada]{En «Data preprocessing» no se ve la lista que acompaña a «Outliers:», y en «Cross validation» salen cortadas la casilla «Show individual probabilities» y la última fila de medidas}\label{err:215}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.component; org.openmarkov.bnEvaluation.dialog
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/component/PreprocessingOptionsPanel.java:84-87, 329-334} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/DataPreprocessingDialog.java:94} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/component/MeasuresPanel.java:47, 52} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/CrossValidationDialog.java:105}
+\fichakey{Comprobado}Leyendo el código; visto en capturas automáticas de las dos ventanas
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[nota:140]{nota~140}
+\end{ficha}
+\paragraph{Qué pasa}
+Dos ventanas del menú Tools enseñan controles que no caben en ellas. Visto el 8-10-2026 en capturas automáticas, sin base de casos cargada:
+
+\begin{itemize}
+\tightlist
+\item
+  «Data preprocessing»: en el primer renglón se lee el rótulo «Outliers:» y a su derecha no hay nada. La lista en la que se elige qué hacer con los valores anómalos (los que se apartan mucho del resto) no se ve, así que no se puede cambiar esa opción.
+\item
+  «Cross validation»: en el recuadro «Measures», la casilla «Show individual probabilities» sale cortada («Show individ») y la última fila de las puntuaciones (AIC y MDL) queda por debajo del borde.
+\end{itemize}
+
+Por qué pasa, por lectura. En \texttt{Preprocessing\allowbreak{}Options\allowbreak{}Panel} (líneas 329-334), el rótulo de la variable de clase, su lista, el rótulo «Outliers:» y su lista van en un \texttt{Flow\allowbreak{}Layout}, la disposición de Swing que pone un componente detrás de otro y pasa al renglón siguiente lo que no cabe; el renglón tiene sitio para una sola fila, y la lista, que es ancha (359 píxeles de ancho preferido, medido construyendo el panel sin ventana), cae a una segunda fila que no se ve. En «Cross validation», \texttt{Measures\allowbreak{}Panel} pide 840×220 píxeles (línea 47) y la ventana se fija en 720×700 (\texttt{Cross\allowbreak{}Validation\allowbreak{}Dialog}, línea 105).
+
+No se ha medido con una base cargada ni con otra escala de la interfaz.
+\paragraph{Cómo arreglarlo}
+En «Data preprocessing», dar a «Outliers:» y su lista un renglón propio, o usar una disposición que no parta el renglón. En «Cross validation», no fijar el tamaño de la ventana por debajo del que pide su contenido (quitar el \texttt{set\allowbreak{}Size} y dejar el \texttt{pack(\allowbreak{})}), o meter el panel en uno con barra de desplazamiento.
+
+Prueba: construir cada ventana con pantalla y comprobar que todos los componentes visibles quedan dentro del recuadro de su contenedor.
+
+\setcounter{subsection}{215}
+\subsection[El rótulo «Classification variable» se queda gris con la base de casos cargada]{En «Cross validation» y «Bayesian network evaluation», el rótulo «Classification variable» se queda apagado para siempre, también cuando la lista de al lado ya se puede usar}\label{err:216}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.component
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/component/MeasuresPanel.java:51, 246-255} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/CrossValidationDialog.java:318, 344} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/BNEvaluationDialog.java:103, 294-299}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:215]{error~215}
+\end{ficha}
+\paragraph{Qué pasa}
+Las dos ventanas comparten el recuadro «Measures» (\texttt{Measures\allowbreak{}Panel}), que nace apagado y se enciende al cargar la base de casos. Sus casillas se encienden; el rótulo «Classification variable» sigue en gris, como si la lista de variables que tiene al lado no se pudiera usar, también después de marcar «Predictive capacity», que es lo que enciende esa lista.
+
+Medido construyendo el panel sin ventana:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+recién construido:        rótulo encendido
+tras setEnabled(false):   rótulo apagado
+tras setEnabled(true):    rótulo apagado
+\end{Verbatim}
+
+Por qué pasa: \texttt{Measures\allowbreak{}Panel.\allowbreak{}set\allowbreak{}Enabled} apaga todos sus componentes cuando se le pide apagar, y cuando se le pide encender solo enciende las casillas.
+\paragraph{El código}
+bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/component/MeasuresPanel.java:246-255
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\AttributeTok{@Override} \KeywordTok{public} \DataTypeTok{void} \FunctionTok{setEnabled}\OperatorTok{(}\DataTypeTok{boolean}\NormalTok{ enabled}\OperatorTok{)} \OperatorTok{\{}
+    \KeywordTok{super}\OperatorTok{.}\FunctionTok{setEnabled}\OperatorTok{(}\NormalTok{enabled}\OperatorTok{);}
+    \ControlFlowTok{if} \OperatorTok{(}\NormalTok{enabled}\OperatorTok{)} \OperatorTok{\{}
+        \KeywordTok{this}\OperatorTok{.}\FunctionTok{allMeasureRelatedCheckboxes}\OperatorTok{().}\FunctionTok{forEach}\OperatorTok{(}\NormalTok{checkbox }\OperatorTok{{-}\textgreater{}}\NormalTok{ checkbox}\OperatorTok{.}\FunctionTok{setEnabled}\OperatorTok{(}\KeywordTok{true}\OperatorTok{));}
+    \OperatorTok{\}} \ControlFlowTok{else} \OperatorTok{\{}
+        \ControlFlowTok{for} \OperatorTok{(}\BuiltInTok{Component}\NormalTok{ component }\OperatorTok{:} \KeywordTok{this}\OperatorTok{.}\FunctionTok{getComponents}\OperatorTok{())} \OperatorTok{\{}
+\NormalTok{            component}\OperatorTok{.}\FunctionTok{setEnabled}\OperatorTok{(}\KeywordTok{false}\OperatorTok{);}
+        \OperatorTok{\}}
+    \OperatorTok{\}}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Encender también el rótulo en la rama de encender. La lista de variables y «Show individual probabilities» deben seguir dependiendo de «Predictive capacity».
+
+Prueba de regresión: la medida de arriba; tras \texttt{set\allowbreak{}Enabled(\allowbreak{}false)} y \texttt{set\allowbreak{}Enabled(\allowbreak{}true)} el rótulo está encendido.
+
+\setcounter{subsection}{216}
+\subsection[«Reset values» de la ventana de aprender deja «Learn» encendido, y pulsarlo dice que no hay datos]{«Reset values» de la ventana de aprender borra el nombre de la base de casos y la lista de variables, pero deja «Learn» encendido; pulsarlo acaba en «No dataset is present»}\label{err:217}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}learning.gui
+\fichakey{Paquete}org.openmarkov.learning.gui
+\fichakey{Ficheros}\path{learning.gui/src/main/java/org/openmarkov/learning/gui/LearningDialog.java:762-770, 864-868, 991-1000, 1138-1153} \newline \path{learning.gui/src/main/resources/learning/gui/localize/learning_gui_class_localizations_en.xml:7-8}
+\fichakey{Comprobado}Leyendo el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:148]{error~148}, \hyperref[err:149]{error~149}
+\end{ficha}
+\paragraph{Qué pasa}
+En la ventana «Learning», con una base de casos cargada, «Reset values» vacía el campo con el nombre del fichero y la lista de variables, y deja el botón «Learn» encendido. Pulsar «Learn» abre un aviso, «No dataset is present. Please, select a dataset.», y no aprende nada. La ventana ofrece una acción que no puede hacer.
+
+Por qué pasa: \texttt{reset\allowbreak{}Button\allowbreak{}Action\allowbreak{}Performed} (líneas 991-1000) pone a nulo la ruta y el nombre de la base y limpia los paneles, pero no apaga \texttt{learn\allowbreak{}Button}. \texttt{learn\allowbreak{}Button\allowbreak{}Action\allowbreak{}Performed} empieza comprobando la ruta (líneas 866-868) y lanza \texttt{Learning\allowbreak{}Exception.\allowbreak{}No\allowbreak{}Database\allowbreak{}Present}. El método que sí deja la ventana como si no hubiera base, \texttt{reset\allowbreak{}Case\allowbreak{}Database\allowbreak{}File} (líneas 762-770), apaga «Learn» y los selectores de variables, y no se llama desde aquí.
+
+Comprobado solo leyendo: la ventana no se puede construir sin pantalla.
+\paragraph{Cómo arreglarlo}
+Que «Reset values» llame a \texttt{reset\allowbreak{}Case\allowbreak{}Database\allowbreak{}File}, además de limpiar lo que ya limpia. Otra opción, si se prefiere que «Reset values» devuelva las opciones a su valor inicial sin descargar la base, es que no borre la ruta ni el nombre; hay que elegir una de las dos.
+
+Prueba: con pantalla, cargar una base, pulsar «Reset values» y comprobar que «Learn» queda apagado (o que la base sigue nombrada, según lo que se elija).
+
+\setcounter{subsection}{218}
+\subsection[Al cargar otra base en «Data preprocessing», las casillas de las variables salen apagadas]{En «Data preprocessing», con «Selected variables» elegido, cargar otra base de casos deja apagadas las casillas de todas las variables: no se pueden marcar ni desmarcar}\label{err:219}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.component
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/component/PreprocessingOptionsPanel.java:359-362, 451-466, 477-507}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:215]{error~215}
+\end{ficha}
+\paragraph{Qué pasa}
+La ventana enseña una fila por variable, con una casilla para elegir cuáles se conservan. Las casillas solo se pueden tocar con «Selected variables» elegido. Si con esa opción elegida se carga otra base de casos (o la misma otra vez), las filas nuevas salen con la casilla apagada aunque «Selected variables» siga elegido. Para poder tocarlas hay que pasar a «All variables» y volver.
+
+Medido construyendo el panel sin ventana y cargándole dos veces una base de ocho variables:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+primera carga («All variables»):          casillas apagadas (correcto)
+se elige «Selected variables»:            casillas encendidas
+segunda carga:                            «Selected variables» sigue elegido, casillas apagadas
+\end{Verbatim}
+
+Por qué pasa: \texttt{rebuild\allowbreak{}Variable\allowbreak{}Rows} crea cada casilla apagada (línea 507) sin mirar cuál de las dos opciones está elegida; las casillas solo se encienden en el oyente de «Selected variables» (líneas 461-466), que no se ejecuta al cargar.
+\paragraph{Cómo arreglarlo}
+Crear cada casilla con \texttt{set\allowbreak{}Enabled(\allowbreak{}selected\allowbreak{}Variables\allowbreak{}Radio\allowbreak{}Button.\allowbreak{}is\allowbreak{}Selected(\allowbreak{}))}, o devolver la ventana a «All variables» al cargar una base.
+
+Prueba de regresión: la medida de arriba; tras la segunda carga, las casillas están encendidas si «Selected variables» sigue elegido.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: editor de red y paneles de las relaciones}\label{sec:editor}
 
@@ -12448,6 +12884,8 @@ Prueba: construir el panel sobre una tabla que empiece en 0, añadir una fila, g
 \end{ficha}
 \paragraph{Qué pasa}
 Al abrir el editor de la relación de un nodo cuya distribución univariante se leyó de un fichero que no trae \texttt{\textless{}Functions\textgreater{}}, el usuario ve «1» en cada casilla de parámetro en lugar de los números del fichero. Por ejemplo, en \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}1-0/\allowbreak{}ID-CEA-minimal-1-0.\allowbreak{}pgmx}, la relación de «Effectiveness» enseña «1» en las dos casillas en lugar de 0.8 y 1.3. No se ha abierto el diálogo: la conclusión sale de la lectura del panel y de la medida sobre el potencial leído.
+
+Añadido el 09-10-2026: visto el 08-10-2026 en una captura automática del diálogo. En \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}1-0/\allowbreak{}ID-mediastinet-1-0.\allowbreak{}pgmx}, la relación del nodo de utilidad \texttt{Survivors\_\allowbreak{}QALE} enseña «1» en sus seis casillas, y el fichero trae 2.0833, 0.4167, 2.64, 1.25, 5.75 y 1.1667.
 
 Además, si el usuario escribe en una casilla, cambia solo una de las dos copias de los parámetros, y el fichero guardado puede acabar diciendo cosas distintas en cada una.
 
@@ -13563,7 +14001,7 @@ Prueba: pintar un \texttt{Visual\allowbreak{}State} con escala 0,5 y luego con e
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
-\fichakey{Relacionados}\hyperref[err:40]{error~40}
+\fichakey{Relacionados}\hyperref[err:40]{error~40}, \hyperref[err:207]{error~207}
 \end{ficha}
 \paragraph{Qué pasa}
 En la pestaña de dominio del diálogo de propiedades de un nodo numérico o discretizado, la tabla de tramos muestra los límites como texto. Si la precisión de la variable no contiene un «1» (por ejemplo 0.0, 2.0 o 0.5), cada límite finito sale con un punto final colgando: \texttt{5.\allowbreak{}}, \texttt{10.\allowbreak{}}, \texttt{1234.\allowbreak{}}.
@@ -13652,6 +14090,67 @@ core/src/main/java/org/openmarkov/core/model/network/Util.java:390-400
 Cambiar el \texttt{if} por un \texttt{while} que avance mientras la letra sea D, E o U (o comprobar la reserva antes de probar cada candidata, lo que además cubre el caso de empezar por una letra reservada), y corregir el javadoc para que diga las tres letras.
 
 Prueba: \texttt{get\allowbreak{}Next\allowbreak{}Node\allowbreak{}Name(\allowbreak{}CHANCE,\allowbreak{}\ \{A,\allowbreak{}\ B,\allowbreak{}\ C\})} debe dar «F»; \texttt{\{\}} debe dar «A»; \texttt{\{A…T\}} sin D ni E debe dar «V».
+
+\setcounter{subsection}{206}
+\subsection[El selector de precisión enseña «1» si la precisión es 0.0001 o no está en su lista]{En la pestaña Domain de un nodo numérico, el selector de precisión enseña «1» cuando la precisión de la variable es 0.0001 o un valor que no está en su lista (2, 0.5, 0…)}\label{err:207}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog.node
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanel.java:296, 506-516, 959-963}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo; visto en una captura automática de la ventana
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:40]{error~40}, \hyperref[err:169]{error~169}
+\end{ficha}
+\paragraph{Qué pasa}
+El selector «Precision» de la pestaña Domain ofrece cinco valores: 1, 0.1, 0.01, 0.001 y 0.0001. Para una variable cuya precisión es 0.0001, la última de la lista, enseña «1». Lo mismo para cualquier precisión que no esté en la lista. El usuario ve una precisión que la variable no tiene, y no hay otro sitio de la ventana donde ver la verdadera.
+
+Visto el 8-10-2026 en una captura automática de la ventana: el nodo de utilidad \texttt{Survivors\_\allowbreak{}QALE} de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}1-0/\allowbreak{}ID-mediastinet-1-0.\allowbreak{}pgmx}, cuyo fichero dice \texttt{\textless{}Precision\textgreater{}2.\allowbreak{}0\textless{}/\allowbreak{}Precision\textgreater{}}, enseña «1».
+
+Por qué pasa: la línea 296 elige en la lista el texto \texttt{String.\allowbreak{}value\allowbreak{}Of(\allowbreak{}precision)}, y \texttt{set\allowbreak{}Selected\allowbreak{}Item} no hace nada cuando ese texto no es uno de los de la lista. Medido aparte con una lista igual:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+precisión 1.0    -> "1.0"     -> la lista enseña 1   (no coincide; acierta porque 1 es la primera)
+precisión 0.1    -> "0.1"     -> 0.1
+precisión 0.01   -> "0.01"    -> 0.01
+precisión 0.001  -> "0.001"   -> 0.001
+precisión 0.0001 -> "1.0E-4"  -> 1
+precisión 2.0    -> "2.0"     -> 1
+precisión 0.0    -> "0.0"     -> 1
+precisión 0.5    -> "0.5"     -> 1
+\end{Verbatim}
+
+\texttt{String.\allowbreak{}value\allowbreak{}Of} de un número menor que 0,001 lo escribe en notación científica (es lo mismo que rompe las regresiones en el \hyperref[err:12]{error~12}). Las precisiones que no están en la lista no son raras: muchos nodos de utilidad de las redes de ejemplo tienen 0.0 (\hyperref[err:169]{error~169}).
+
+La precisión de la variable no cambia por abrir la ventana: el cambio solo se guarda cuando el usuario elige otro valor (líneas 959-963).
+\paragraph{Cómo arreglarlo}
+Elegir comparando números y no textos: recorrer la lista y señalar la entrada cuyo valor numérico es el de la variable. Si la precisión no está en la lista, añadirla como una entrada más para que se vea, en vez de enseñar otra.
+
+Prueba: con el cálculo de la entrada elegida extraído a un método, comprobar que 0.0001 elige «0.0001» y que 2.0 no elige «1».
+
+\setcounter{subsection}{208}
+\subsection[«Distribution» y «Parametrization» se quedan a la vista sin lista al lado]{En el panel de la relación de un nodo, los rótulos «Distribution» y «Parametrization» se quedan a la vista aunque la relación sea una tabla y sus listas estén escondidas}\label{err:209}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog.node
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:179-198, 285-296, 582-600}
+\fichakey{Comprobado}Leyendo el código; visto en una captura automática de la ventana
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:179]{error~179}, \hyperref[err:150]{error~150}
+\end{ficha}
+\paragraph{Qué pasa}
+Al abrir la relación de un nodo cuya relación es una tabla (pestaña Probability de sus propiedades, o «Edit probability»), junto al selector «Relation Type» se leen dos palabras sueltas, «Distribution» y «Parametrization», sin nada al lado. Son los rótulos de dos listas que solo tienen sentido cuando la relación es una distribución con parámetros (\texttt{Univariate\allowbreak{}Distr}), y que en una tabla están escondidas.
+
+Visto el 8-10-2026 en una captura automática de la pestaña Probability del nodo \texttt{Dyspnea} de \texttt{BN-asia.\allowbreak{}pgmx}.
+
+Por qué pasa: al construirse, \texttt{Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}configure\allowbreak{}Components\allowbreak{}Panel} (líneas 186-198) esconde las dos listas y no sus rótulos. \texttt{update\allowbreak{}Potential\allowbreak{}Panel} (líneas 587-600), que se ejecuta cuando el usuario cambia el tipo de relación, sí esconde las cuatro cosas, así que los rótulos desaparecen en cuanto se cambia de tipo y se vuelve.
+\paragraph{Cómo arreglarlo}
+Que \texttt{configure\allowbreak{}Components\allowbreak{}Panel} y \texttt{update\allowbreak{}Potential\allowbreak{}Panel} llamen a un mismo método que enseñe o esconda juntos los dos rótulos y las dos listas.
+
+Prueba: con un nodo de tabla, comprobar tras construir el panel que los dos rótulos no son visibles. El panel necesita pantalla, porque crea un editor de comentarios que es una ventana.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: menús, diálogos y herramientas}\label{sec:menus}
@@ -14161,6 +14660,230 @@ Otras fichas de esta lista describen pasos «en modo inferencia» con redes de e
 \paragraph{Cómo arreglarlo}
 Depende de la decisión. Si no es intencionado, la regla debería decir qué tipos de red pueden propagar evidencia, y no nombrar dos tipos concretos. Si lo es, conviene que la ventana lo explique, porque el botón apagado no dice por qué.
 
+\setcounter{subsection}{202}
+\subsection[«Select all» está apagada hasta que se elige una herramienta de edición]{La entrada «Select all» del menú Edit, y su atajo Ctrl+E, están apagados con una red abierta hasta que se pulsa una de las herramientas de edición de la barra}\label{err:203}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.window
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:139-144, 553-557} \newline \path{gui/src/main/java/org/openmarkov/gui/window/EditAndViewHandler.java:68-72} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/MainMenu.java:218, 276}
+\fichakey{Comprobado}Leyendo el código; visto en una captura automática del menú
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:201]{error~201}
+\end{ficha}
+\paragraph{Qué pasa}
+Con una red recién abierta, llena de nodos, la entrada «Select all» del menú Edit está apagada, y su atajo de teclado, Ctrl+E, no hace nada. Pasa a poderse usar en cuanto se pulsa en la barra una de las herramientas de edición (seleccionar, crear un nodo de azar, crear un enlace\ldots), que no tienen nada que ver con ella, y ya se queda encendida mientras haya alguna red abierta.
+
+Visto el 8-10-2026 en una captura automática del menú Edit con \texttt{BN-asia.\allowbreak{}pgmx} abierta y sin haber tocado la barra: «Select all (off)».
+
+Por qué pasa: el único sitio que apaga la entrada es \texttt{Main\allowbreak{}Panel\allowbreak{}Menu\allowbreak{}Assistant.\allowbreak{}update\allowbreak{}Options\allowbreak{}All\allowbreak{}Network\allowbreak{}Closed} (línea 144), que se ejecuta al arrancar y al cerrar la última red, y el único que la enciende es \texttt{set\allowbreak{}Edition\allowbreak{}Option} (línea 555), al que solo llama \texttt{Edit\allowbreak{}And\allowbreak{}View\allowbreak{}Handler.\allowbreak{}activate\allowbreak{}Edition\allowbreak{}Mode} cuando se elige una herramienta. Ni \texttt{update\allowbreak{}Options\allowbreak{}New\allowbreak{}Network\allowbreak{}Open} ni \texttt{update\allowbreak{}Options\allowbreak{}Network\allowbreak{}Dependent}, que son los que ponen al día el menú al abrir una red o cambiar de pestaña, la nombran.
+\paragraph{El código}
+gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:553-557
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{public} \DataTypeTok{void} \FunctionTok{setEditionOption}\OperatorTok{(}\BuiltInTok{String}\NormalTok{ newEditionMode}\OperatorTok{,} \DataTypeTok{boolean}\NormalTok{ canPaste}\OperatorTok{)} \OperatorTok{\{}
+    \FunctionTok{setOptionSelected}\OperatorTok{(}\NormalTok{newEditionMode}\OperatorTok{,} \KeywordTok{true}\OperatorTok{);}
+    \FunctionTok{setOptionEnabled}\OperatorTok{(}\NormalTok{ActionCommands}\OperatorTok{.}\FunctionTok{SELECT\_ALL}\OperatorTok{,} \KeywordTok{true}\OperatorTok{);}
+    \FunctionTok{setOptionEnabled}\OperatorTok{(}\NormalTok{ActionCommands}\OperatorTok{.}\FunctionTok{CLIPBOARD\_PASTE}\OperatorTok{,}\NormalTok{ canPaste}\OperatorTok{);}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Encender \texttt{SELECT\_\allowbreak{}ALL} donde se encienden las demás entradas que dependen de que haya una red, en \texttt{update\allowbreak{}Options\allowbreak{}Network\allowbreak{}Dependent}, y quitar la línea de \texttt{set\allowbreak{}Edition\allowbreak{}Option}. Conviene decidir de paso si debe estar encendida en modo inferencia.
+
+Prueba: con el ayudante del menú y una red abierta, sin elegir ninguna herramienta, comprobar que \texttt{SELECT\_\allowbreak{}ALL} está encendida; y apagada sin redes abiertas.
+
+\setcounter{subsection}{203}
+\subsection[La ventana «About» se abre con 24 píxeles de ancho]{La ventana «About» del menú Help se abre con 24 píxeles de ancho, porque toma el ancho de un cartel que se carga encogido al tamaño de un icono}\label{err:204}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog; org.openmarkov.gui.loader.element
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/AboutBox.java:33, 71-101, 130} \newline \path{gui/src/main/java/org/openmarkov/gui/loader/element/ImageLoader.java:61-63, 99-112, 118-126} \newline \path{gui/src/main/resources/gui/localize/Dialogs_en.xml:776-781}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo; visto en una captura automática de la ventana
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\end{ficha}
+\paragraph{Qué pasa}
+Help → «About» abre una ventana de 24 píxeles de ancho y 224 de alto: una raya en la que no se lee nada (de cada rótulo se ve una letra y puntos suspensivos). Hay que ensancharla a mano para ver la versión y el resto.
+
+Visto el 8-10-2026 en una captura automática de la ventana: mide 24×224. Medido después sin ventana: \texttt{Image\allowbreak{}Loader.\allowbreak{}load(\allowbreak{}"/\allowbreak{}images/\allowbreak{}Open\allowbreak{}Markov\allowbreak{}Splash.\allowbreak{}jpg")} devuelve un icono de 24×24, y el fichero mide 512×256.
+
+Por qué pasa: \texttt{About\allowbreak{}Box} fija su tamaño con el del cartel (\texttt{width\ =\ open\allowbreak{}Markov\allowbreak{}Logo.\allowbreak{}get\allowbreak{}Icon\allowbreak{}Width(\allowbreak{})}, \texttt{height\ =\ get\allowbreak{}Icon\allowbreak{}Height(\allowbreak{})\ +\ 200}, líneas 95-101) y lo carga con \texttt{Image\allowbreak{}Loader.\allowbreak{}load}, que está pensado para los iconos de los botones: \texttt{create\allowbreak{}Image} reduce toda imagen a un cuadrado cuyo lado depende de la escala de la interfaz (24 píxeles con la escala por omisión, líneas 99-112 y 118-126), salvo que se le pida \texttt{Image\allowbreak{}Options.\allowbreak{}Skip\allowbreak{}Auto\allowbreak{}Scale}.
+
+Otras tres cosas de la misma ventana, leídas en el código:
+
+\begin{itemize}
+\tightlist
+\item
+  la versión está escrita a mano, «0.4.0-SNAPSHOT» (línea 33), y el \texttt{pom.\allowbreak{}xml} dice 0.3.0-SNAPSHOT;
+\item
+  el texto de los autores se lee de la base de textos (línea 79) y no se pone en ningún rótulo: \texttt{j\allowbreak{}Label\allowbreak{}Authors} se añade vacío (línea 130);
+\item
+  el texto de derechos dice «(c) UNED - 2008-2019».
+\end{itemize}
+\paragraph{Cómo arreglarlo}
+Cargar el cartel sin encoger (\texttt{Image\allowbreak{}Loader.\allowbreak{}load(\allowbreak{}url,\allowbreak{}\ Image\allowbreak{}Options.\allowbreak{}Skip\allowbreak{}Auto\allowbreak{}Scale)}) o, mejor, no hacer depender el tamaño de la ventana de una imagen: componerla y llamar a \texttt{pack(\allowbreak{})}. Tomar la versión de donde la toma el resto del programa, y poner el texto de los autores en su rótulo o quitar la clave.
+
+Prueba: construir el icono del cartel como lo hace la ventana y comprobar que mide lo que el fichero. La ventana entera necesita pantalla.
+
+\setcounter{subsection}{205}
+\subsection[«Delete» sigue encendido sin ninguna fila señalada, y pulsarlo da un error]{En las listas de criterios, agentes y estados, «Delete» se enciende por el número de filas y no porque haya una señalada: tras borrar una fila sigue encendido, y pulsarlo otra vez lanza una excepción}\label{err:206}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog.common; org.openmarkov.gui.dialog.network
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/common/KeyTablePanel.java:392-395, 420-443} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/DecisionCriteriaTablePanel.java:101-108, 135-142} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkAgentsTablePanel.java:107-116} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PrefixedKeyTablePanel.java:171-174}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:173]{error~173}, \hyperref[err:174]{error~174}, \hyperref[nota:36]{nota~36}, \hyperref[nota:81]{nota~81}
+\end{ficha}
+\paragraph{Qué pasa}
+En la pestaña «Decision criteria» de las propiedades de la red, con tres criterios: se señala uno y se pulsa «Delete». Quedan dos criterios, ninguno señalado, y «Delete» sigue encendido. Pulsarlo de nuevo lanza una excepción de índice fuera de rango; como no es una excepción prevista, por lectura sale en la ventana de error inesperado.
+
+Medido con un pequeño programa de prueba que construye el panel de criterios (\texttt{Decision\allowbreak{}Criteria\allowbreak{}Table\allowbreak{}Panel}) sin ventana, con \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-CEA-test-2therapies-3criteria.\allowbreak{}pgmx}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+recién abierto, tres filas, ninguna señalada:   Delete apagado
+se señala la fila 1:                           Delete encendido
+se quita la señal:                             Delete encendido
+se pulsa Delete sin fila señalada:             IndexOutOfBoundsException (índice -1)
+se borra la fila 0; quedan dos, sin señalar:   Delete encendido
+se pulsa Delete otra vez:                      IndexOutOfBoundsException (índice -1)
+\end{Verbatim}
+
+Por qué pasa: \texttt{Key\allowbreak{}Table\allowbreak{}Panel.\allowbreak{}value\allowbreak{}Changed}, que decide cuándo se pueden pulsar los botones, calcula bien «Delete», «Up» y «Down» según la fila señalada (líneas 422-441) y termina pisando lo calculado para «Delete» con \texttt{remove\allowbreak{}Value\allowbreak{}Button.\allowbreak{}set\allowbreak{}Enabled(\allowbreak{}row\allowbreak{}Count\ \textgreater{}\ 2)} (línea 442). \texttt{Decision\allowbreak{}Criteria\allowbreak{}Table\allowbreak{}Panel} lo enciende además siempre que haya dos filas (líneas 135-142). Los métodos que borran piden la fila señalada y la usan sin mirar si es −1.
+
+\texttt{Key\allowbreak{}Table\allowbreak{}Panel} es la base de la lista de criterios y de la de agentes de la red, y de la de estados de un nodo (\texttt{Prefixed\allowbreak{}Key\allowbreak{}Table\allowbreak{}Panel}). Solo se ha ejecutado la de criterios; las otras dos comparten \texttt{value\allowbreak{}Changed}. Por la misma línea 442, y por lectura, en la lista de agentes no se puede borrar un agente cuando solo quedan dos.
+\paragraph{El código}
+gui/src/main/java/org/openmarkov/gui/dialog/common/KeyTablePanel.java:420-443
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\AttributeTok{@Override} \KeywordTok{public} \DataTypeTok{void} \FunctionTok{valueChanged}\OperatorTok{(}\BuiltInTok{ListSelectionEvent}\NormalTok{ e}\OperatorTok{)} \OperatorTok{\{}
+    \DataTypeTok{int}\NormalTok{ index }\OperatorTok{=}\NormalTok{ valuesTable}\OperatorTok{.}\FunctionTok{getSelectedRow}\OperatorTok{();}
+    \DataTypeTok{int}\NormalTok{ rowCount }\OperatorTok{=}\NormalTok{ valuesTable}\OperatorTok{.}\FunctionTok{getRowCount}\OperatorTok{();}
+    \ControlFlowTok{if} \OperatorTok{((}\NormalTok{rowCount }\OperatorTok{==} \DecValTok{0}\OperatorTok{)} \OperatorTok{||} \OperatorTok{(}\NormalTok{index }\OperatorTok{==} \OperatorTok{{-}}\DecValTok{1}\OperatorTok{))} \OperatorTok{\{}
+\NormalTok{        removeValueButton}\OperatorTok{.}\FunctionTok{setEnabled}\OperatorTok{(}\KeywordTok{false}\OperatorTok{);}
+        \KeywordTok{...}
+    \OperatorTok{\}} \ControlFlowTok{else} \OperatorTok{\{}
+\NormalTok{        removeValueButton}\OperatorTok{.}\FunctionTok{setEnabled}\OperatorTok{(}\KeywordTok{true}\OperatorTok{);}
+        \KeywordTok{...}
+    \OperatorTok{\}}
+\NormalTok{    removeValueButton}\OperatorTok{.}\FunctionTok{setEnabled}\OperatorTok{(}\NormalTok{rowCount }\OperatorTok{\textgreater{}} \DecValTok{2}\OperatorTok{);}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Que «Delete» dependa de las dos cosas: hay una fila señalada y la lista admite perder una (el mínimo de filas es de cada lista: dos estados, un criterio; decidir el de los agentes). La regla del mínimo debería ser un método que cada subclase redefina, en vez de la última línea de \texttt{value\allowbreak{}Changed} y el parche de \texttt{Decision\allowbreak{}Criteria\allowbreak{}Table\allowbreak{}Panel}. Tras borrar, dejar señalada la fila vecina, como ya hace la lista de estados.
+
+Prueba de regresión: el programa de prueba de arriba, como prueba del panel: sin fila señalada «Delete» está apagado, y tras borrar una fila no queda encendido sin fila señalada.
+
+\setcounter{subsection}{219}
+\subsection[En el tema oscuro hay cinco cosas que no se ven o no se leen]{En el tema oscuro no se ven el rectángulo de selección ni el nombre de una pestaña con cambios, y no se leen las casillas con incertidumbre, el recuadro de una expresión ni los estados de las ramas de un árbol}\label{err:220}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.configuration; org.openmarkov.gui.graphic; org.openmarkov.gui.window; org.openmarkov.gui.component; org.openmarkov.gui.dialog.common; org.openmarkov.gui.dialog.treeadd
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/graphic/SelectionRectangle.java:155-160} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanel.java:519-524} \newline \path{gui/src/main/java/org/openmarkov/gui/component/ValuesTableCellRenderer.java:279-292} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/ArithmeticExpressionDialog.java:222-225} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/VariableExpressionTextField.java:103-104} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/TreeADDCellRenderer.java:196-245} \newline \path{gui/src/main/java/org/openmarkov/gui/configuration/GUIColors.java:15-21, 56-57, 179} \newline \path{gui/src/main/java/org/openmarkov/gui/configuration/UserPreferences.java:92-93}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (colores y contraste calculados sin ventana; el texto de las ramas, pintado sin ventana y visto en capturas automáticas)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:221]{error~221}, \hyperref[nota:11]{nota~11}, \hyperref[nota:12]{nota~12}
+\end{ficha}
+\paragraph{Qué pasa}
+El tema oscuro es el que el programa pone a quien tiene el sistema en oscuro, porque la preferencia por omisión es «Sync with OS» (\texttt{User\allowbreak{}Preferences}, línea 93); también se puede elegir a mano, como «Dark (Beta)». En él, cinco cosas se pintan con un color pensado para un fondo claro. El commit \texttt{008cd39} (1-09-2026) dio colores propios del tema oscuro a los enlaces y a lo demás que se dibuja sobre el lienzo; estas cinco quedaron fuera.
+
+El contraste entre dos colores va de 1 (el mismo color) a 21 (negro sobre blanco); por debajo de 3 una línea se pierde, y por debajo de 4,5 un texto pequeño cuesta de leer. Los de la lista están calculados con los colores que declara \texttt{GUIColors} y los que da el aspecto oscuro del programa, \texttt{Flat\allowbreak{}Darcula\allowbreak{}Laf}, en la versión 3.7.1 del \texttt{pom.\allowbreak{}xml} (texto 221, 221, 221; fondo de los paneles 60, 63, 65), leídos sin ventana:
+
+\begin{itemize}
+\tightlist
+\item
+  el rectángulo de trazos con que se señalan varios nodos se pinta en negro (\texttt{General.\allowbreak{}TEXT}) sobre el lienzo, que en oscuro es 69, 72, 74: contraste 2,3;
+\item
+  el nombre de la pestaña de una red con cambios sin guardar se pinta en rojo, 212, 56, 56 (\texttt{General.\allowbreak{}ATTENTION\_\allowbreak{}BG}, un color de fondo usado aquí como color de letra), sobre la pestaña, 60, 63, 65: contraste 2,2;
+\item
+  una casilla de la tabla de probabilidades cuya columna lleva incertidumbre tiene fondo blanco (\texttt{UNCERTAINTY\_\allowbreak{}BACKGROUND}) y la letra del tema, 221, 221, 221: contraste 1,4;
+\item
+  el recuadro en que se escribe una expresión se pone verde, 0, 255, 0 (\texttt{General.\allowbreak{}CORRECT}), mientras la expresión es válida, y rojo, 255, 0, 0 (\texttt{General.\allowbreak{}WRONG}), cuando no lo es, con la letra del tema: contraste 1,0 sobre el verde y 2,9 sobre el rojo;
+\item
+  los estados de cada rama de un árbol (estrategia óptima, intervenciones del coste-efectividad, pestaña del árbol de un nodo) salen en negro sobre el fondo del árbol, 70, 73, 75: contraste 2,3.
+\end{itemize}
+
+En el tema claro las cinco se leen: el rojo de la pestaña queda a 4,8 sobre un fondo blanco, y la letra negra a 15,3 sobre el verde y a 5,3 sobre el rojo.
+
+El caso que más estorba es el del recuadro de una expresión: lo que se escribe deja de leerse justo cuando está bien escrito. \texttt{Arithmetic\allowbreak{}Expression\allowbreak{}Dialog.\allowbreak{}validate\allowbreak{}Expression} cambia el fondo y no toca el color de la letra (línea 225); el campo gemelo, \texttt{Variable\allowbreak{}Expression\allowbreak{}Text\allowbreak{}Field}, pone los dos colores juntos (líneas 103-104).
+
+El texto de las ramas es distinto de los otros cuatro, porque nadie le pone el negro: \texttt{Tree\allowbreak{}ADDCell\allowbreak{}Renderer.\allowbreak{}get\allowbreak{}Branch\allowbreak{}Descriptiont\allowbreak{}HTML} lo mete en una celda de tabla de HTML (\texttt{\textless{}td\ align=center\ border=0\textgreater{}}), y a una celda no le llega el color de letra del rótulo que la contiene. Medido pintando sin ventana un rótulo con cada texto, en cada tema:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+tema claro:   <html>yes</html>  letra (0,0,0)        <html><td ...>yes</td></html>  letra (2,2,2)
+tema oscuro:  <html>yes</html>  letra (221,221,221)  <html><td ...>yes</td></html>  letra (0,0,1)
+\end{Verbatim}
+
+y visto el 8-10-2026 en capturas automáticas de la ventana de la estrategia óptima en oscuro, con \texttt{ID-decide-test.\allowbreak{}pgmx}. Los otros cuatro no se han visto en una captura.
+\paragraph{Cómo arreglarlo}
+Los cuatro primeros: dar a cada uso un color con valor para los dos temas, como hizo \texttt{008cd39} con \texttt{in\allowbreak{}Dark}, y decir siempre el color de la letra junto con el del fondo. Para el rectángulo y la pestaña valen colores que el tema oscuro ya tiene (los de un enlace que se puede o no se puede trazar: 178, 188, 255 y 255, 143, 143). Para la casilla y el recuadro, que tienen un fondo fijo, basta fijar también la letra en negro. El texto de las ramas: quitar la celda de tabla, o escribir en ella el color del tema.
+
+Conviene una prueba que recorra los pares de colores que se usan juntos y exija un contraste mínimo en los dos temas; \texttt{008cd39} ya midió así los del lienzo.
+
+\setcounter{subsection}{220}
+\subsection[Tras pasar por otro tema, «Sync with OS» puede dejar de seguir al sistema]{Con el tema «Sync with OS», el programa puede quedarse en oscuro con el sistema en claro (o al revés) si el sistema cambió de tema mientras estaba elegido otro}\label{err:221}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.configuration
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/configuration/Theme.java:52-71}
+\fichakey{Comprobado}Leyendo el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:220]{error~220}
+\end{ficha}
+\paragraph{Qué pasa}
+Con «Sync with OS» elegido, el programa debe ponerse claro u oscuro cuando lo hace el sistema. Hay una secuencia en la que deja de hacerlo:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  el sistema está en claro al arrancar y el usuario tiene elegido «Light»;
+\item
+  el sistema pasa a oscuro;
+\item
+  el usuario elige «Sync with OS»: el programa se pone oscuro, bien;
+\item
+  el sistema vuelve a claro: el programa se queda en oscuro, hasta el siguiente cambio del sistema.
+\end{enumerate}
+
+Por qué pasa: \texttt{Theme} recuerda en \texttt{last\allowbreak{}Was\allowbreak{}Dark} cómo estaba el sistema la última vez, para no repintar si no ha cambiado. Pero cuando la preferencia no es «Sync with OS» el oyente sale antes de apuntarlo (líneas 55-57), así que en el paso 2 no se entera. En el paso 3 se pregunta al sistema directamente y el tema sale bien, sin tocar \texttt{last\allowbreak{}Was\allowbreak{}Dark}. En el paso 4 el oyente compara «claro» con su \texttt{last\allowbreak{}Was\allowbreak{}Dark}, que sigue diciendo «claro» desde el arranque, y concluye que no ha cambiado nada.
+
+Comprobado solo leyendo: hace falta un escritorio que cambie de tema.
+\paragraph{El código}
+gui/src/main/java/org/openmarkov/gui/configuration/Theme.java:52-62
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DataTypeTok{static} \OperatorTok{\{}
+    \BuiltInTok{AtomicBoolean}\NormalTok{ lastWasDark }\OperatorTok{=} \KeywordTok{new} \BuiltInTok{AtomicBoolean}\OperatorTok{(}\NormalTok{Theme}\OperatorTok{.}\FunctionTok{OSisDark}\OperatorTok{());}
+\NormalTok{    com}\OperatorTok{.}\FunctionTok{jthemedetecor}\OperatorTok{.}\FunctionTok{OsThemeDetector}\OperatorTok{.}\FunctionTok{getDetector}\OperatorTok{().}\FunctionTok{registerListener}\OperatorTok{(}\NormalTok{newIsDark }\OperatorTok{{-}\textgreater{}} \OperatorTok{\{}
+        \ControlFlowTok{if} \OperatorTok{(}\NormalTok{UserPreferences}\OperatorTok{.}\FunctionTok{PREFERRED\_THEME}\OperatorTok{.}\FunctionTok{get}\OperatorTok{()} \OperatorTok{!=}\NormalTok{ Theme}\OperatorTok{.}\FunctionTok{SYNC\_OS}\OperatorTok{)} \OperatorTok{\{}
+            \ControlFlowTok{return}\OperatorTok{;}
+        \OperatorTok{\}}
+        \ControlFlowTok{if} \OperatorTok{(}\NormalTok{lastWasDark}\OperatorTok{.}\FunctionTok{get}\OperatorTok{()} \OperatorTok{==}\NormalTok{ newIsDark}\OperatorTok{)} \OperatorTok{\{}
+            \ControlFlowTok{return}\OperatorTok{;}
+        \OperatorTok{\}}
+\NormalTok{        lastWasDark}\OperatorTok{.}\FunctionTok{set}\OperatorTok{(}\NormalTok{newIsDark}\OperatorTok{);}
+        \KeywordTok{...}
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Apuntar el estado del sistema antes de mirar la preferencia; o no guardarlo, y comparar lo que dice el sistema con el tema que el programa tiene puesto, que es lo que importa.
+
+Prueba: con la decisión extraída a un método sin interfaz (tema puesto, preferencia, lo que avisa el sistema), repetir la secuencia de arriba y comprobar que en el paso 4 se pide el cambio.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Textos y títulos que se ven mal}\label{sec:textos}
 
@@ -14333,7 +15056,7 @@ Prueba: para cada clase concreta anotada con \texttt{@Potential\allowbreak{}Type
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
-\fichakey{Relacionados}\hyperref[err:173]{error~173}, \hyperref[err:174]{error~174}, \hyperref[err:181]{error~181}
+\fichakey{Relacionados}\hyperref[err:173]{error~173}, \hyperref[err:174]{error~174}, \hyperref[err:181]{error~181}, \hyperref[err:212]{error~212}
 \end{ficha}
 \paragraph{Qué pasa}
 Al pulsar «Standard domains» en la pestaña de dominio del diálogo de un nodo, la ventana \texttt{Standard\allowbreak{}Domains\allowbreak{}Dialog} se abre con la barra de título vacía.
@@ -14357,7 +15080,7 @@ Prueba: construir el diálogo sin mostrarlo y comprobar que \texttt{get\allowbre
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
-\fichakey{Relacionados}\hyperref[err:161]{error~161}, \hyperref[err:180]{error~180}, \hyperref[err:182]{error~182}, \hyperref[nota:125]{nota~125}
+\fichakey{Relacionados}\hyperref[err:161]{error~161}, \hyperref[err:180]{error~180}, \hyperref[err:182]{error~182}, \hyperref[nota:125]{nota~125}, \hyperref[err:212]{error~212}
 \end{ficha}
 \paragraph{Qué pasa}
 Varias operaciones del menú contextual del editor de árboles (\texttt{Tree\allowbreak{}ADDEditor\allowbreak{}Panel}, módulo \texttt{gui}) abren una ventanilla antes de actuar. En seis de ellas la barra de la ventana aparece vacía, y el usuario no ve qué operación está confirmando:
@@ -14735,6 +15458,107 @@ learning.gui/src/main/resources/learning/gui/localize/Learning\_en.xml:154-156
 \paragraph{Cómo arreglarlo}
 Cambiar «commont» por «common» en la línea 155 de \texttt{Learning\_\allowbreak{}en.\allowbreak{}xml}. No hace falta prueba.
 
+\setcounter{subsection}{204}
+\subsection[Sin ninguna red abierta, el menú Edit dice «Switch to edition mode»]{Sin ninguna red abierta, la entrada del menú Edit que cambia de modo dice «Switch to edition mode», como si se estuviera en modo inferencia}\label{err:205}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.menutoolbar.menu; org.openmarkov.gui.window
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/MainMenu.java:231, 289, 626-632} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:361-367} \newline \path{gui/src/main/resources/gui/localize/Menus_en.xml:70, 149}
+\fichakey{Comprobado}Leyendo el código; visto en una captura automática del menú
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:201]{error~201}
+\end{ficha}
+\paragraph{Qué pasa}
+Con el programa recién arrancado y ninguna red abierta, la entrada del menú Edit que cambia de modo dice «Switch to edition mode» (apagada). No se está en ningún modo, y el modo en que se abre toda red es el de edición, así que lo que cabría ofrecer es pasar al de inferencia.
+
+Visto el 8-10-2026 en capturas automáticas del menú: sin red, «Switch to edition mode (off)»; con \texttt{BN-asia.\allowbreak{}pgmx} abierta en modo edición, «Switch to inference mode».
+
+Por qué pasa: el menú tiene una sola entrada para los dos sentidos del cambio, y \texttt{Main\allowbreak{}Menu} la crea con el texto de la clave \texttt{Inference.\allowbreak{}Switch\allowbreak{}To\allowbreak{}Edition} (línea 231). El texto correcto para cada modo lo pone \texttt{Main\allowbreak{}Panel\allowbreak{}Menu\allowbreak{}Assistant.\allowbreak{}update\allowbreak{}Options\allowbreak{}Network\allowbreak{}Dependent} (líneas 361-367), que solo se ejecuta cuando hay una red.
+\paragraph{Cómo arreglarlo}
+Crear la entrada con el texto de \texttt{Edit.\allowbreak{}Switch\allowbreak{}To\allowbreak{}Inference}, que es el del modo en que se abre una red.
+
+Prueba: construir el menú sin redes y comprobar el texto de la entrada.
+
+\setcounter{subsection}{207}
+\subsection[Varios selectores dicen «Cost criterion named …» y «state no» en vez del nombre]{El selector del criterio de un nodo de utilidad dice «Cost criterion named …», y los que eligen una opción en el análisis de coste-efectividad dicen «state no» y «state yes», en vez del nombre}\label{err:208}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui, costEffectiveness, sensitivityAnalysis
+\fichakey{Paquete}org.openmarkov.gui.dialog.node; org.openmarkov.costEffectiveness; org.openmarkov.sensitivityanalysis.dialog; org.openmarkov.gui.desnets
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDefinitionPanel.java:753-772} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CEDecisionResults.java:698-701} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:412-415} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:706-710} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/CEDESDialog.java:401-404} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Criterion.java:171-173} \newline \path{core/src/main/java/org/openmarkov/core/model/network/State.java:85-87} \newline \path{core/src/main/resources/core/localize/core_class_localizations_en.xml:334-335, 351}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo; visto en capturas automáticas de dos de las ventanas
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:179]{error~179}, \hyperref[nota:132]{nota~132}
+\end{ficha}
+\paragraph{Qué pasa}
+Dos familias de selectores enseñan la descripción interna de un objeto donde debería ir su nombre:
+
+\begin{itemize}
+\tightlist
+\item
+  en la pestaña Definition de un nodo de utilidad, el selector «Decision criterion» dice «Cost criterion named -\/-\/-» para el criterio que se llama «-\/-\/-» (en una red con costes y efectividad, «Cost criterion named Cost» y «Effectiveness criterion named Effectiveness»). Visto el 8-10-2026 en una captura automática, con \texttt{ID-mediastinet-1-0.\allowbreak{}pgmx};
+\item
+  en la ventana de resultados del análisis de coste-efectividad por decisión (\texttt{CEDecision\allowbreak{}Results}), el selector que acompaña a «Relative to:» dice «state no» y «state yes». Visto en otra captura, con \texttt{ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx}. Por lectura, le pasa lo mismo a los selectores de opción de \texttt{CEProbabilistic\allowbreak{}Dialog}, \texttt{Tornado\allowbreak{}Spider\allowbreak{}Dialog} y \texttt{CEDESDialog}, que se llenan igual.
+\end{itemize}
+
+Por qué pasa: esos selectores se llenan con los objetos \texttt{Criterion} y \texttt{State} y los pintan con su \texttt{to\allowbreak{}String(\allowbreak{})}, que devuelve el texto de la clase en el fichero de textos: \texttt{\{ce\allowbreak{}Criterion\}\ criterion\ named\ \{criterion\allowbreak{}Name\}} y \texttt{state\ \{name\}}. Medido: \texttt{new\ Criterion(\allowbreak{}"-\/-\/-").\allowbreak{}to\allowbreak{}String(\allowbreak{})} da «Cost criterion named -\/-\/-» y \texttt{new\ State(\allowbreak{}"no").\allowbreak{}to\allowbreak{}String(\allowbreak{})}, «state no».
+
+\texttt{CESpider\allowbreak{}Dialog} no lo sufre: pone a su selector un pintor que pide el nombre (\texttt{new\ JCombo\allowbreak{}Box\allowbreak{}Function\allowbreak{}Render\textless{}\textgreater{}(\allowbreak{}State::get\allowbreak{}Name)}, línea 576), y en su captura se lee «yes» y «no».
+\paragraph{Cómo arreglarlo}
+Poner el mismo pintor a los demás: \texttt{JCombo\allowbreak{}Box\allowbreak{}Function\allowbreak{}Render\textless{}\textgreater{}(\allowbreak{}State::get\allowbreak{}Name)} en los cuatro selectores de opción y \texttt{JCombo\allowbreak{}Box\allowbreak{}Function\allowbreak{}Render\textless{}\textgreater{}(\allowbreak{}Criterion::get\allowbreak{}Criterion\allowbreak{}Name)} en el del criterio. No conviene cambiar \texttt{to\allowbreak{}String(\allowbreak{})}, que usan los mensajes de registro.
+
+Prueba: construir cada selector sin ventana y comprobar que el componente que pinta la primera entrada lleva el nombre del estado o del criterio.
+
+\setcounter{subsection}{211}
+\subsection[El diálogo del análisis de sensibilidad se abre sin título]{El diálogo en que se pide un análisis de sensibilidad se abre con la barra de título vacía}\label{err:212}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}sensitivityAnalysis
+\fichakey{Paquete}org.openmarkov.sensitivityanalysis.dialog
+\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/SensitivityAnalysisDialog.java:99-101} \newline \path{sensitivityAnalysis/src/main/resources/sensitivityanalysis/localize/sensitivityanalysis_en.xml:3-4}
+\fichakey{Comprobado}Leyendo el código; visto en capturas automáticas de la ventana
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:180]{error~180}, \hyperref[err:181]{error~181}, \hyperref[err:92]{error~92}
+\end{ficha}
+\paragraph{Qué pasa}
+Tools → «Sensitivity analysis» (o el botón de la barra) abre, tras las opciones de inferencia, el diálogo en que se eligen el tipo de análisis y los parámetros. Su barra de título está vacía.
+
+Visto el 8-10-2026 en las capturas automáticas de la ventana, con todas las redes con que se abrió (entre ellas \texttt{BN-asia.\allowbreak{}pgmx}, \texttt{ID-decide-test.\allowbreak{}pgmx} e \texttt{ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx}): el título es siempre la cadena vacía.
+
+Por qué pasa: el constructor de \texttt{Sensitivity\allowbreak{}Analysis\allowbreak{}Dialog} llama a \texttt{super(\allowbreak{}owner)} y nadie llama a \texttt{set\allowbreak{}Title}, ni en la clase ni en sus bases (es el mismo caso que los \hyperref[err:180]{errores~180} y \hyperref[err:181]{181}). Las ventanas de resultados sí se titulan, con «OpenMarkov - Sensitivity analysis - » y el nombre de la red.
+\paragraph{Cómo arreglarlo}
+Añadir en el constructor \texttt{set\allowbreak{}Title(\allowbreak{}String\allowbreak{}Database.\allowbreak{}get\allowbreak{}Unique\allowbreak{}Instance(\allowbreak{}).\allowbreak{}get\allowbreak{}String(\allowbreak{}"Sensitivity\allowbreak{}Analysis.\allowbreak{}Title"))}, que hoy da «Sensitivity analysis» y es la clave que ya usan las ventanas de resultados.
+
+Prueba: no se puede construir sin pantalla; con una, comprobar que \texttt{get\allowbreak{}Title(\allowbreak{})} no está vacío.
+
+\setcounter{subsection}{212}
+\subsection[El título de las opciones de la evolución temporal pega el nombre: «of:MID-…»]{La ventana de opciones de la evolución temporal se titula «Temporal Evolution of:» seguido del nombre de la red sin espacio en medio}\label{err:213}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog.inference.temporalevolution
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TemporalEvolutionDialog.java:103-104} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/temporalevolution/TraceTemporalEvolutionDialog.java:859-860} \newline \path{gui/src/main/resources/gui/localize/Dialogs_en.xml:8}
+\fichakey{Comprobado}Leyendo el código; visto en una captura automática de la ventana
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\end{ficha}
+\paragraph{Qué pasa}
+Al pedir la evolución temporal de un nodo se abre primero una ventana de opciones (número de ciclos). Su título es «Temporal Evolution of:MID-Chancellor-corrected.pgmx», con el nombre pegado a los dos puntos.
+
+Visto el 8-10-2026 en capturas automáticas con \texttt{MID-Chancellor-corrected.\allowbreak{}pgmx} y con otra red temporal.
+
+Por qué pasa: \texttt{Temporal\allowbreak{}Evolution\allowbreak{}Dialog} (línea 103) une el texto de la clave \texttt{Temporal\allowbreak{}Evolution\allowbreak{}Result\allowbreak{}Dialog.\allowbreak{}Title}, «Temporal Evolution of:», con el nombre de la red sin nada entre los dos. La ventana de resultados, \texttt{Trace\allowbreak{}Temporal\allowbreak{}Evolution\allowbreak{}Dialog} (línea 859), usa la misma clave y sí pone el espacio: «Temporal Evolution of: State».
+
+Además, lo que la ventana de opciones nombra es la red, y lo que se va a calcular es la evolución de una variable.
+\paragraph{Cómo arreglarlo}
+Poner el espacio, y decidir si la ventana de opciones debe nombrar la variable, como la de resultados.
+
+Prueba: no se puede construir sin pantalla; con una, comprobar el título.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Rendimiento}\label{sec:rendimiento}
 
@@ -15098,6 +15922,8 @@ cambia algo (por ejemplo, un código que hoy no llama nadie empieza a usarse), s
 \textbf{26}\phantomsection\label{nota:26} & \textbf{El recolector de violaciones de restricciones no quita repetidos, pero el mensaje final sí}\newline \texttt{Constraint\allowbreak{}Checker} guarda las excepciones en un \texttt{Hash\allowbreak{}Set} que no las funde, pero \texttt{Multiple\allowbreak{}Constraints\allowbreak{}Violateds} las agrupa por su texto, así que un mensaje idéntico sale una sola vez (medido con \texttt{No\allowbreak{}Multiple\allowbreak{}Links}). Que \texttt{No\allowbreak{}Cycle} nombre cada enlace de un ciclo es información, no un repetido, y hoy solo lo ve quien abre desde un fichero una red con ciclo (\hyperref[err:37]{error~37}). \\[3pt]
 \textbf{27}\phantomsection\label{nota:27} & \textbf{Varias operaciones copian la lista de variables de cada potencial dentro de sus bucles}\newline \texttt{Potential.\allowbreak{}get\allowbreak{}Variables(\allowbreak{})} devuelve una copia en cada llamada y varios bucles la piden una vez por potencial, no por casilla, así que el coste es pequeño y acotado. Es una observación de rendimiento, no un fallo; si algún día se busca velocidad, dar acceso de solo lectura a la lista interna sería una vía barata. \\[3pt]
 \textbf{28}\phantomsection\label{nota:28} & \textbf{Tres modelos con «Age {[}0{]}» uniforme no se analizan sin darle un valor: lo exige la red}\newline En \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-CHD-Walker.\allowbreak{}pgmx}, \texttt{MID-Colorectal.\allowbreak{}pgmx} y \texttt{MID-mammography.\allowbreak{}pgmx}, «Age {[}0{]}» es un nodo numérico sin distribución que el modelo espera recibir como hallazgo, y sin él no se puede discretizar: \texttt{MID-Colorectal.\allowbreak{}pgmx} guarda ese hallazgo en el fichero y su coste-efectividad global termina (medido: un tramo, coste 1837 y efectividad 23,11). \texttt{MID-mammography.\allowbreak{}pgmx} no lo guarda, y con «Age {[}0{]} = 50» falla más adelante por \hyperref[err:13]{error~13}; \texttt{MID-CHD-Walker.\allowbreak{}pgmx} es un esqueleto cuyos siete nodos de utilidad son uniformes, sin números que calcular. --- cambios --- \\[3pt]
+\textbf{189}\phantomsection\label{nota:189} & \textbf{El superpadre desempata por la última candidata, y el Bayes ingenuo selectivo por la primera}\newline \texttt{Super\allowbreak{}Parent\allowbreak{}NBAlgorithm.\allowbreak{}get\allowbreak{}Optimal\allowbreak{}Edit} elige el superpadre con \texttt{add\allowbreak{}Score\ \textgreater{}=\ best\allowbreak{}Parent\allowbreak{}Score} (línea 104), así que entre candidatas de igual exactitud gana la última; \texttt{Selective\allowbreak{}NBAlgorithm} hace ganar a la primera desde el commit \texttt{1bd8c38} (\hyperref[err:135]{error~135}). Las candidatas se recorren en el orden de los nodos de la red (\texttt{Metric\allowbreak{}Utils.\allowbreak{}get\allowbreak{}Non\allowbreak{}Root\allowbreak{}Nodes}), que es fijo, así que el modelo aprendido es el mismo en cada ejecución: son dos reglas de desempate distintas, no un resultado que cambie. Comprobado leyendo el código. \\[3pt]
+\textbf{190}\phantomsection\label{nota:190} & \textbf{La lista de unidades de las opciones de inferencia sale en el orden de un \texttt{Hash\allowbreak{}Map}}\newline \texttt{Inference\allowbreak{}Options\allowbreak{}Dialog.\allowbreak{}get\allowbreak{}Units\allowbreak{}Panel} (líneas 795-802) llena la lista «Unit» recorriendo un \texttt{Hash\allowbreak{}Map\textless{}String,\allowbreak{}\ String\textgreater{}} con las unidades de los criterios. Las claves son textos, cuyo \texttt{hash\allowbreak{}Code} es el mismo en cada ejecución, así que el orden es fijo, aunque no sea el de los criterios: medido en cuatro redes con el coste en € y la efectividad en QALY (años de vida ajustados por calidad), sale siempre «QALY, €». La unidad elegida al abrir es la que guarda la red (\texttt{Multicriteria\allowbreak{}Options.\allowbreak{}get\allowbreak{}Main\allowbreak{}Unit}); la primera de la lista solo se toma si la red no guarda ninguna. \\[3pt]
 \end{longtable}
 
 \subsection*{Defectos sin consecuencia visible hoy}\addcontentsline{toc}{subsection}{Defectos sin consecuencia visible hoy}
@@ -15109,6 +15935,9 @@ cambia algo (por ejemplo, un código que hoy no llama nadie empieza a usarse), s
 \textbf{33}\phantomsection\label{nota:33} & \textbf{El generador de bases de casos propone 5000 casos y el comentario del código dice 1000}\newline \texttt{DBGenerator\allowbreak{}GUI} hace \texttt{case\allowbreak{}Number.\allowbreak{}set\allowbreak{}Selected\allowbreak{}Index(\allowbreak{}2);\ /\allowbreak{}/\allowbreak{}\ 1000\ cases}, y el índice 2 de la lista es «5000». El número está a la vista en la ventana, así que el usuario no queda engañado; lo que hay es una contradicción entre comentario y código, y decidir cuál de los dos vale. \\[3pt]
 \textbf{185}\phantomsection\label{nota:185} & \textbf{Multiplicar deja fuera las variables de un solo estado de los potenciales constantes}\newline \texttt{Table\allowbreak{}Potential\allowbreak{}Arithmetic.\allowbreak{}multiply} trata como constante cualquier potencial de una sola casilla y deja fuera del producto sus variables, que tienen un estado cada una; por lo mismo, el árbol de estrategia de un potencial de una casilla con variables no llega al resultado. La suma, la marginalización, la maximización y la evaluación de fórmulas solo tratan como constante el potencial sin variables, y conservan esas variables. No cambia ningún número, porque una variable de un estado no añade ninguna dimensión a la tabla. Comprobado el 23 de septiembre en las 165 redes distintas del repositorio que tienen nodos numéricos de azar o son de tipo DAN (propagación, evaluación, políticas, árbol de estrategia, coste-efectividad y evaluación de DAN, con evidencia en los nodos numéricos y sin ella): hoy ningún resultado lleva una variable de un estado. Conservarlas rompe dos cosas que hoy funcionan: «Absorb parents» sobre un producto con dos padres de regresión sin padres propios (\hyperref[err:193]{error~193}) y la utilidad esperada de \texttt{DAN-dating.\allowbreak{}pgmx}, que sale con el mismo valor pero con la variable \texttt{U\ mExp} (\hyperref[nota:186]{nota~186}). Era lo que quedaba del \hyperref[err:1]{error~1}. \\[3pt]
 \textbf{186}\phantomsection\label{nota:186} & \textbf{La evaluación de una DAN deja una utilidad a cero sin criterio, que cuenta como probabilidad}\newline Cuando una restricción deja un nodo sin estados posibles y la utilidad que habría que quitar es la última de la red, \texttt{DAN\allowbreak{}Operations.\allowbreak{}replace\allowbreak{}Utility\allowbreak{}Potential\allowbreak{}With\allowbreak{}Zero} (líneas 231-238, llamado en las líneas 136 y 198) la deja con una tabla a cero sobre su propia variable y sin criterio. Sin criterio, la eliminación de variables la cuenta como una probabilidad: \texttt{Variable\allowbreak{}Elimination\allowbreak{}Core.\allowbreak{}get\allowbreak{}Probability} (línea 322) la multiplica con las demás. Pasa al evaluar \texttt{DAN-dating.\allowbreak{}pgmx}, y el resultado es el correcto: \texttt{DAN\allowbreak{}Evaluation\allowbreak{}Test.\allowbreak{}test\allowbreak{}DAN\allowbreak{}Dating\allowbreak{}Ask\allowbreak{}No} fija a mano 9,407584 y la evaluación lo da. No se ha comprobado si ese cero cambia el resultado de otra red. Hoy el producto deja fuera la variable de esa utilidad (\hyperref[nota:185]{nota~185}); si la conservara, la utilidad esperada de \texttt{DAN-dating} saldría con la variable \texttt{U\ mExp}. \\[3pt]
+\textbf{187}\phantomsection\label{nota:187} & \textbf{Eliminar una decisión de la que no depende ninguna utilidad deja en cero la probabilidad de la evidencia}\newline Cuando ninguna utilidad depende de la decisión que se elimina, \texttt{Decision\allowbreak{}Variable\allowbreak{}Elimination} suma una lista vacía, que \texttt{Table\allowbreak{}Potential\allowbreak{}Arithmetic.\allowbreak{}sum} convierte en una constante cero, y el máximo que sale es una constante cero sin criterio (medido: \texttt{Strategic\allowbreak{}Table\allowbreak{}Potential} de valor 0, no aditivo). Sin criterio, la eliminación de variables la cuenta como una probabilidad y la multiplica con las demás; es el mismo mecanismo de la \hyperref[nota:186]{nota~186}. Medido el 9 de octubre sin ventana: \texttt{VEEvaluation.\allowbreak{}get\allowbreak{}Probability(\allowbreak{})} da 0, sin ningún hallazgo, en \texttt{DAN-dating.\allowbreak{}pgmx} y \texttt{DAN-reactor.\allowbreak{}pgmx}, y 1 en las otras 47 redes con decisiones de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id} y \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}dan} que se leen. No se ha encontrado nada que un usuario vea por su causa: las utilidades no cambian, el árbol de decisión de las dos redes sale con probabilidad 1 en la raíz y probabilidades coherentes en las ramas, y ninguna ventana enseña esa probabilidad. No se ha comprobado si ese cero puede cambiar el peso de una rama en otra red. \\[3pt]
+\textbf{188}\phantomsection\label{nota:188} & \textbf{La exactitud del Bayes ingenuo suma sus logaritmos en un orden que depende de la memoria}\newline \texttt{Accuracy.\allowbreak{}score\allowbreak{}NB} reúne las características en un \texttt{Hash\allowbreak{}Set\textless{}Variable\textgreater{}}, y \texttt{Variable} no redefine \texttt{hash\allowbreak{}Code}, así que \texttt{predict\allowbreak{}Class\allowbreak{}Value} las recorre en un orden que puede cambiar de una ejecución a otra. Lo que acumula al recorrerlas es una suma de logaritmos, y una suma en coma flotante depende del orden en su último decimal. Solo podría cambiar la clase predicha en un empate casi exacto entre dos clases. Comprobado leyendo el código; no se ha observado ningún cambio (la medida de 80 clasificadores hecha el 8 de octubre al portar OpenMarkov a C++/Qt dio los mismos números en dos ejecuciones). Es de la familia del \hyperref[err:135]{error~135} y de la segunda fuente de variación del \hyperref[err:136]{error~136}. \\[3pt]
+\textbf{191}\phantomsection\label{nota:191} & \textbf{El orden de la lista de tipos de red es el del descubrimiento de clases}\newline \texttt{Network\allowbreak{}Definition\allowbreak{}Panel.\allowbreak{}get\allowbreak{}JCombo\allowbreak{}Box\allowbreak{}Network\allowbreak{}Types} llena el selector del tipo de red con \texttt{Network\allowbreak{}Type\allowbreak{}Utils.\allowbreak{}NETWORK\_\allowbreak{}TYPE\_\allowbreak{}CLASSES} sin ordenar, en el orden en que \texttt{Plugin\allowbreak{}Search} encuentra las clases; es lo mismo que la \hyperref[nota:31]{nota~31}, en otra lista. Visto el 8 de octubre en una captura automática, ejecutando desde directorios de clases: los catorce tipos salen sin orden reconocible (LIMID, MDP, \ldots, con la red bayesiana en el puesto doce). No se ha mirado el orden en el jar publicado. Nada falla: el tipo elegido al crear una red se fija aparte, y es la red bayesiana. \\[3pt]
 \end{longtable}
 
 \subsection*{Defectos que hoy no alcanza nadie}\addcontentsline{toc}{subsection}{Defectos que hoy no alcanza nadie}
@@ -15281,7 +16110,7 @@ Cada error y cada nota salen de uno o de varios de estos dos documentos internos
 \emph{registro de fallos} (con el número de su entrada). Cuando dos entradas describían el mismo
 defecto se han juntado en una sola ficha. Los \emph{hallazgos nuevos} no estaban en ninguno de los
 dos: se vieron al comprobar otro error de la lista, que se indica, y se comprobaron después con los
-mismos criterios.
+mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a C++/Qt, y se comprobaron igual.
 
 {\small
 \begin{longtable}{@{}p{1.8cm}p{\dimexpr\linewidth-1.8cm-2\tabcolsep\relax}@{}}
@@ -15490,6 +16319,29 @@ mismos criterios.
 \hyperref[err:199]{Error 199} & hallazgo nuevo, al revisar el exportador a Amua tras enlazarlo al menú (\hyperref[nota:51]{nota~51}) \\
 \hyperref[err:200]{Error 200} & hallazgo nuevo, al corregir el \hyperref[err:63]{error~63} \\
 \hyperref[err:201]{Error 201} & hallazgo nuevo, visto en la ventana al comprobar el \hyperref[err:66]{error~66} \\
+\hyperref[err:202]{Error 202} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 30 de septiembre al 8 de octubre \\
+\hyperref[err:203]{Error 203} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:204]{Error 204} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:205]{Error 205} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:206]{Error 206} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:207]{Error 207} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:208]{Error 208} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:209]{Error 209} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:210]{Error 210} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:211]{Error 211} & hallazgo nuevo, al portar OpenMarkov a C++/Qt \\
+\hyperref[err:212]{Error 212} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:213]{Error 213} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:214]{Error 214} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:215]{Error 215} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:216]{Error 216} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:217]{Error 217} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:218]{Error 218} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:219]{Error 219} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[err:220]{Error 220} & hallazgo nuevo, al portar OpenMarkov a C++/Qt \\
+\hyperref[err:221]{Error 221} & hallazgo nuevo, al portar OpenMarkov a C++/Qt \\
+\hyperref[err:222]{Error 222} & hallazgo nuevo, al portar OpenMarkov a C++/Qt \\
+\hyperref[err:223]{Error 223} & hallazgo nuevo, al portar OpenMarkov a C++/Qt \\
+\hyperref[err:224]{Error 224} & hallazgo nuevo, al portar OpenMarkov a C++/Qt \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
@@ -15675,6 +16527,11 @@ mismos criterios.
 \hyperref[nota:183]{Nota 183} & plan de cambios, F8-g \\
 \hyperref[nota:185]{Nota 185} & hallazgo nuevo, visto junto al \hyperref[err:1]{error~1} \\
 \hyperref[nota:186]{Nota 186} & hallazgo nuevo, visto junto al \hyperref[err:1]{error~1} \\
+\hyperref[nota:187]{Nota 187} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 30 de septiembre al 8 de octubre \\
+\hyperref[nota:188]{Nota 188} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 30 de septiembre al 8 de octubre \\
+\hyperref[nota:189]{Nota 189} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 30 de septiembre al 8 de octubre \\
+\hyperref[nota:190]{Nota 190} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[nota:191]{Nota 191} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
 \bottomrule
 \end{longtable}
 }
