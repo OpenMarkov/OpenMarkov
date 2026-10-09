@@ -120,6 +120,18 @@ public class VEPropagation extends VariableElimination implements Propagation {
         }
     }
     
+    private boolean momentOfTheTransitionsApplies = false;
+
+    /** Each utility node gets the value of its own cycle, whatever the moment of the transitions, unless asked. */
+    @Override boolean accumulatesOverTheCycles() {
+        return momentOfTheTransitionsApplies;
+    }
+
+    /** Makes the moment of the transitions apply, as it does when the cycles are added up. */
+    void applyTheMomentOfTheTransitions() {
+        momentOfTheTransitionsApplies = true;
+    }
+
     /** The network with its numeric variables already made discrete and no node absorbed yet. */
     private ProbNet beforeAbsorbing;
 

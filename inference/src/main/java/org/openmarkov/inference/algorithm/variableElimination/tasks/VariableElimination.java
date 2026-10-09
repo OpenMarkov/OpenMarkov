@@ -81,8 +81,18 @@ public abstract class VariableElimination extends InferenceAlgorithm {
 		// 5. If the network has temporal nodes, apply discounts.
 		if (isTemporal) {
 			probNet = TaskUtilities.applyDiscounts(probNet, true);
-			probNet = TaskUtilities.applyTransitionTime(probNet, true);
+			if (accumulatesOverTheCycles()) {
+				probNet = TaskUtilities.applyTransitionTime(probNet, true);
+			}
 		}
+	}
+
+	/**
+	 * @return whether the task adds up the utilities of the cycles, which is what the moment of the transitions
+	 * (beginning, half or end of the cycle) applies to
+	 */
+	boolean accumulatesOverTheCycles() {
+		return true;
 	}
 
 	/**

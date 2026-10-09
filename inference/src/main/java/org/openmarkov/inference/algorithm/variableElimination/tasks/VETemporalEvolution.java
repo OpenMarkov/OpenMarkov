@@ -63,6 +63,7 @@ public class VETemporalEvolution extends VariableElimination implements Temporal
 			vePosteriorValues.setVariablesOfInterest(variablesOfInterest);
 			vePosteriorValues.setPreResolutionEvidence(getPreResolutionEvidence());
 		}
+		vePosteriorValues.applyTheMomentOfTheTransitions();
 		temporalEvolution = vePosteriorValues.getPosteriorValues();
 	}
 
