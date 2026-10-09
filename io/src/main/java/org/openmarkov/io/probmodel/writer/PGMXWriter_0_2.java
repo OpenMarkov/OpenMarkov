@@ -774,6 +774,8 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
      */
     protected static void getPotentialAttributesAndVariables(ProbNet probNet, Potential potential, Element potentialElement) {
         // TODO - Change in new version. compatibility with this version of pgmx  format
+        // The parents of a utility node that adds or multiplies them
+        List<Variable> parents = null;
         if (potential instanceof ExactDistrPotential exactDistrPotential) {
             potential = exactDistrPotential.getTablePotential();
             Variable utilityVariable = exactDistrPotential.getChildVariable(); // it could be null in Branches potentials
@@ -781,9 +783,8 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
             
         } else if (potential instanceof SumPotential || potential instanceof ProductPotential) {
             if (potential.getPotentialRole() != PotentialRole.CONDITIONAL_PROBABILITY) {
-                Variable utilityVariable = potential.getVariable(0); // it could be null in Branches potentials
-                potential = potential.removeVariable(utilityVariable);
-                getUtilityElement(potentialElement, utilityVariable);
+                parents = potential.getVariables();
+                getUtilityElement(potentialElement, parents.removeFirst());
             }
         }
         
@@ -799,7 +800,11 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
         
         // TODO add aditionalProperties child
         
-        getPotentialVariables(potential, potentialElement, probNet);
+        if (parents == null) {
+            getPotentialVariables(potential, potentialElement, probNet);
+        } else if (!parents.isEmpty()) {
+            writePotentialVariables(parents, potentialElement);
+        }
     }
     
     /**
