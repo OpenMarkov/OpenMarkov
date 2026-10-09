@@ -216,8 +216,10 @@
     <Localization class="org.openmarkov.core.exception.EmptyDatabaseException" value="Dataset from {source} is empty."/>
     <Localization class="org.openmarkov.core.exception.ParsingSourceException$RepeatedVariableNames"
                   value="Dataset from {source} has more than one column named {variableName}. A case could not say which of them it means, so the dataset cannot be read. Give each column a different name."/>
+    <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$EvidenceIsImpossible"
+                  value="These findings are impossible in this network: together they have probability zero."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$EvidenceIsIncompatibleWithOther"
-                  value="The new evidence {newFinding} is not compatible with an old evidente: {oldFinding}"/>
+                  value="The new evidence {newFinding} is not compatible with an old evidence: {oldFinding}"/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$FindingVariableIsMissingAState"
                   value="The variable {variable.getName} has no state {state}, so this finding cannot be translated."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$SamplesWeigthIsZero"

@@ -188,7 +188,7 @@ public class VEPropagation extends VariableElimination implements Propagation {
     // Methods
     
     private void InvokeVariableEliminationCore(ProbNet network, EvidenceCase evidence, Variable variableOfInterest,
-                                               NodeType typeOfTheNode) throws CannotNormalizePotentialException {
+                                               NodeType typeOfTheNode) throws IncompatibleEvidenceException.EvidenceIsImpossible {
         // From the network the elimination will run on, which is the one passed in - not from the
         // field, which is the network before its potentials were projected. The two hold the same
         // chance and decision variables today, so this changes nothing; they stop holding the same
@@ -225,7 +225,11 @@ public class VEPropagation extends VariableElimination implements Propagation {
                 }
                 // TODO - Realizar la normalización condicionada
                 if (getConditioningVariables() == null || getConditioningVariables().isEmpty()) {
-                    DiscretePotentialOperations.normalize(posteriorValue);
+                    try {
+                        DiscretePotentialOperations.normalize(posteriorValue);
+                    } catch (CannotNormalizePotentialException e) {
+                        throw new IncompatibleEvidenceException.EvidenceIsImpossible();
+                    }
                 }
             }
         }

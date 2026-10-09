@@ -182,10 +182,10 @@ public class EvidenceManager {
                 this.doPropagation(this.postResolutionEvidence.get(this.currentCase), this.currentCase);
             }
         } catch (NotEvaluableNetworkException | NonProjectablePotentialException | NotEnoughMemoryException |
-                 IncompatibleEvidenceException | CannotNormalizePotentialException | ConstraintViolatedException e) {
+                 CannotNormalizePotentialException | ConstraintViolatedException e) {
             this.networkEditorPanel.setPropagationActive(false);
             throw new UnreachableException(e);
-        } catch (ThereIsNoPotentialInNodeException e) {
+        } catch (IncompatibleEvidenceException | ThereIsNoPotentialInNodeException e) {
             this.networkEditorPanel.setPropagationActive(false);
             throw new UnrecoverableException(e);
         } finally {

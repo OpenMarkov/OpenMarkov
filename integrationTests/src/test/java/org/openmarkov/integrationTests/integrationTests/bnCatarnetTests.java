@@ -127,18 +127,7 @@ public class bnCatarnetTests {
 				Assertions.assertArrayEquals(posteriorVales.get(variable).getValues(), expectedValues, deltaEquals);
 			}
 	}
-	/**
-	 * Evidence that cannot occur must make the propagation fail rather than return numbers.
-	 * <p>
-	 * It does fail, but note which exception. Exact propagation lets
-	 * CannotNormalizePotentialException out of TablePotentialTransform.normalize, which says "all
-	 * the values are 0.0 in potential P(av_sin_catar)" - it names a potential, and says nothing
-	 * about the user's evidence being contradictory. Sampling reports the same situation as
-	 * IncompatibleEvidenceException.SamplesWeightIsZero (StochasticPropagation:180). So the two
-	 * families of algorithm answer the same question differently, and the name of this test says
-	 * which of the two its author expected. Unifying them would change what callers catch, so it is
-	 * left as it is and written down here.
-	 */
+	/** Evidence that cannot occur makes the propagation fail, saying that the findings are impossible. */
     @Test
 	public void vePropagationIncompatibleEvidence() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
 		VEPropagation vePropagation;
@@ -161,7 +150,7 @@ public class bnCatarnetTests {
 		vePropagation.setPreResolutionEvidence(preResolutionEvidence);
 		vePropagation.setPostResolutionEvidence(postResolutionEvidence);
 
-		Assertions.assertThrows(CannotNormalizePotentialException.class, vePropagation::getPosteriorValues);
+		Assertions.assertThrows(IncompatibleEvidenceException.EvidenceIsImpossible.class, vePropagation::getPosteriorValues);
 	}
 
 }

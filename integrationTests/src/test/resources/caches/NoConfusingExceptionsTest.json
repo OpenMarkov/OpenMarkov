@@ -43,6 +43,7 @@
     "EmptyModelNetException",
     "EventIsNotParentOf",
     "EvidenceIncompatibleInFile",
+    "EvidenceIsImpossible",
     "EvidenceIsIncompatibleWithOther",
     "FamilyDistributionRuleBrokenException",
     "FewUncertainParameters",

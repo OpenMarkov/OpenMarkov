@@ -54,6 +54,10 @@ public abstract class IncompatibleEvidenceException extends UserInputException {
         public final String state;
     }
     
+    /** The findings, taken together, have probability zero in the network. */
+    public static final class EvidenceIsImpossible extends IncompatibleEvidenceException {
+    }
+    
     public static final class SamplesWeightIsZero extends IncompatibleEvidenceException {
         public SamplesWeightIsZero(double[][] samples) {
             this.samples = samples;

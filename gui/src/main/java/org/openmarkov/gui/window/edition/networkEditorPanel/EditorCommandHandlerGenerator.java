@@ -269,7 +269,9 @@ public class EditorCommandHandlerGenerator {
                                        try {
                                            this.networkEditorPanel.getEvidenceManager()
                                                                   .toggleFinding(visualNode, visualState);
-                                       } catch (IncompatibleEvidenceException | NotEvaluableNetworkException |
+                                       } catch (IncompatibleEvidenceException ex) {
+                                           throw new UnrecoverableException(ex);
+                                       } catch (NotEvaluableNetworkException |
                                                 NonProjectablePotentialException | NotEnoughMemoryException |
                                                 DoEditException | CannotNormalizePotentialException |
                                                 ConstraintViolatedException | ThereIsNoPotentialInNodeException ex) {
