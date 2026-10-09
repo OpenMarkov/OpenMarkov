@@ -224,8 +224,6 @@
     "io.github.classgraph.classgraph:4.8.184",
     "io.github.g00fy2.versioncompare:1.4.1",
     "io.github.jorgericovivas.rust_essentials:1.0.0",
-    "jfree.jcommon:1.0.15",
-    "jfree.jfreechart:1.0.12",
     "net.bytebuddy.byte-buddy:1.17.1",
     "net.java.dev.jna.jna:5.14.0",
     "net.java.dev.jna.jna-platform:5.14.0",

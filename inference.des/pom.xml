@@ -25,6 +25,13 @@
             <groupId>ca.umontreal.iro.simul</groupId>
             <artifactId>ssj</artifactId>
             <version>3.3.1</version>
+            <exclusions>
+                <!-- SSJ draws its charts with JFreeChart 1.0.12, which has the classes of the 1.5.6 that OpenMarkov uses -->
+                <exclusion>
+                    <groupId>jfree</groupId>
+                    <artifactId>jfreechart</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
