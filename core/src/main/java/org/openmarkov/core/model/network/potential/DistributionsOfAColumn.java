@@ -8,6 +8,8 @@
 package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
@@ -20,12 +22,17 @@ import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionType;
 import org.openmarkov.core.model.network.modelUncertainty.RangeFunction;
 import org.openmarkov.core.model.network.modelUncertainty.TriangularFunction;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
+import org.openmarkov.core.model.network.potential.treeadd.Threshold;
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Which distributions can share a column of probabilities, so that sampling them gives probabilities that add up
@@ -120,16 +127,51 @@ public final class DistributionsOfAColumn {
         List<String> found = new ArrayList<>();
         for (Node node : probNet.getNodes()) {
             for (Potential potential : node.getPotentials()) {
-                if (potential instanceof TablePotential table && table.isUncertain()
-                        && ColumnsThatDoNotAddUpToOne.isProbabilityTable(table)) {
-                    checkTable(node, table, found);
-                }
+                check(node, potential, "", found);
             }
         }
         return found;
     }
 
-    private static void checkTable(Node node, TablePotential table, List<String> found) {
+    /** Checks a table, or the tables in the branches of a tree; the branch is the path of states that leads to one. */
+    private static void check(Node node, Potential potential, String branch, List<String> found) {
+        switch (potential) {
+            case TreeADDPotential tree -> {
+                for (TreeADDBranch treeBranch : tree.getBranches()) {
+                    if (treeBranch.getPotential() != null) {
+                        String step = tree.getRootVariable().getName() + " " + (treeBranch.getStates() != null
+                                ? "= " + treeBranch.getStates().stream().map(State::getName)
+                                               .collect(Collectors.joining(" or "))
+                                : "from " + limit(treeBranch.getLowerBound()) + " to "
+                                        + limit(treeBranch.getUpperBound()));
+                        check(node, treeBranch.getPotential(), branch.isEmpty() ? step : branch + ", " + step, found);
+                    }
+                }
+            }
+            case TablePotential table when table.isUncertain() && ColumnsThatDoNotAddUpToOne.isProbabilityTable(table) ->
+                    checkTable(node, table, branch, found);
+            default -> {
+            }
+        }
+    }
+
+    /** Stops an analysis that samples the network, if some of its columns have distributions that cannot go together. */
+    public static void mustGoTogetherIn(ProbNet probNet) {
+        List<String> wrongColumns = wrongIn(probNet);
+        if (!wrongColumns.isEmpty()) {
+            throw new UnrecoverableException(
+                    new NotEvaluableNetworkException.DistributionsCannotGoTogether(probNet, wrongColumns));
+        }
+    }
+
+    private static String limit(@Nullable Threshold threshold) {
+        if (threshold == null || Double.isInfinite(threshold.getLimit())) {
+            return threshold != null && threshold.getLimit() < 0 ? "-∞" : "∞";
+        }
+        return number(threshold.getLimit());
+    }
+
+    private static void checkTable(Node node, TablePotential table, String branch, List<String> found) {
         List<String> states = Arrays.stream(table.getVariable(0).getStates()).map(State::getName).toList();
         int numStates = states.size();
         int numCells = Math.min(table.getValues().length, table.getUncertainValues().length);
@@ -137,7 +179,9 @@ public final class DistributionsOfAColumn {
             List<UncertainValue> cells = table.getUncertainColumn(column * numStates, numStates);
             String wrong = cells.getFirst() == null ? null : whatIsWrong(cells, states);
             if (wrong != null) {
-                String configuration = ColumnsThatDoNotAddUpToOne.configuration(table.getVariables(), column);
+                String configuration = Stream.of(branch, ColumnsThatDoNotAddUpToOne.configuration(table.getVariables(), column))
+                                             .filter(part -> !part.isEmpty())
+                                             .collect(Collectors.joining(", "));
                 String where = configuration.isEmpty() ? node.getName() : node.getName() + " (" + configuration + ")";
                 found.add(where + ": " + wrong.replace('\n', ' '));
             }

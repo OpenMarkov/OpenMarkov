@@ -36,6 +36,7 @@
     "DeltaPotentialWithoutState",
     "DifferentSizesInPotentialsAndStates",
     "DirectedLinkCannotMatchAnUndirectedLink",
+    "DistributionsCannotGoTogether",
     "DoEditException",
     "EmptyCaseDatabaseException",
     "EmptyDatabaseException",

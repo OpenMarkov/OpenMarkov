@@ -39,6 +39,16 @@ public abstract sealed class NotEvaluableNetworkException extends OpenMarkovExce
         public final List<PNConstraint> unsatisfiedConstraints;
     }
 	
+	public static final class DistributionsCannotGoTogether extends NotEvaluableNetworkException {
+		public DistributionsCannotGoTogether(ProbNet probNet, List<String> wrongColumns) {
+            this.networkName = probNet.getName();
+            this.wrongColumns = String.join("\n", wrongColumns);
+        }
+        
+        public final String networkName;
+        public final String wrongColumns;
+    }
+	
 	public static final class VariableIsNotTemporal extends NotEvaluableNetworkException {
 		public VariableIsNotTemporal(Variable variable) {
             this.variable = variable;

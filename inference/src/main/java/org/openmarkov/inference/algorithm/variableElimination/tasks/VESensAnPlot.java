@@ -18,6 +18,7 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
 import org.openmarkov.core.model.network.modelUncertainty.SystematicSampling;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
+import org.openmarkov.core.model.network.potential.DistributionsOfAColumn;
 import org.openmarkov.core.model.network.potential.TablePotential;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class VESensAnPlot implements SensitivityAnalysis {
 	public VESensAnPlot(ProbNet probNet, EvidenceCase preResolutionEvidence, UncertainParameter uncertainParameter,
 			AxisVariation axisVariation, int numberOfIntervals, Variable decisionVariable)
 			throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+		DistributionsOfAColumn.mustGoTogetherIn(probNet);
 		this.probNet = probNet.copy();
 		uncertainParametersPotentials = new HashMap<>();
 

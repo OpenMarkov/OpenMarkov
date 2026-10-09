@@ -13,6 +13,7 @@ import org.openmarkov.core.inference.tasks.CE_PSA;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.potential.DistributionsOfAColumn;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.Potential;
 
@@ -50,7 +51,7 @@ public class VECEPSA extends VariableElimination implements CE_PSA {
      */
     public VECEPSA(ProbNet network) throws NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
         super(network);
-        
+        DistributionsOfAColumn.mustGoTogetherIn(network);
     }
     
     private void resolve()

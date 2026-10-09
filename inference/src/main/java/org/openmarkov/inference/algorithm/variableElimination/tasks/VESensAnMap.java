@@ -18,6 +18,7 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
 import org.openmarkov.core.model.network.modelUncertainty.SystematicSampling;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
+import org.openmarkov.core.model.network.potential.DistributionsOfAColumn;
 import org.openmarkov.core.model.network.potential.TablePotential;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class VESensAnMap implements SensitivityAnalysis {
 			int numberOfIntervals, Variable decisionVariable)
 			throws IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NonProjectablePotentialException, ConstraintViolatedException {
 
+		DistributionsOfAColumn.mustGoTogetherIn(probNet);
 		this.probNet = probNet.copy();
 		uncertainParametersPotentials = new HashMap<>();
 

@@ -19,6 +19,7 @@ import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
 import org.openmarkov.core.model.network.modelUncertainty.DomainInterval;
 import org.openmarkov.core.model.network.modelUncertainty.SystematicSampling;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
+import org.openmarkov.core.model.network.potential.DistributionsOfAColumn;
 import org.openmarkov.core.model.network.potential.TablePotential;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class VESensAnTornadoSpider implements SensitivityAnalysis {
 	public VESensAnTornadoSpider(ProbNet network, EvidenceCase preResolutionEvidence,
 			List<UncertainParameter> uncertainParameters, AxisVariation axisVariation, int numberOfIntervals,
 								 Variable decisionVariable) throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+		DistributionsOfAColumn.mustGoTogetherIn(network);
 		this.probNet = network.copy();
 		uncertainParametersPotentials = new HashMap<>();
 		

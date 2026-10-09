@@ -257,6 +257,8 @@
                   value="There was no top variable value was not within any domain (Domains: {branches})"/>
     <Localization class="org.openmarkov.core.exception.NotAllNodesHavePoliciesException"
                   value="Since there is the conditioning decision node {conditioningDecision}, the following nodes should have policies:\n{this.nodesWithoutPolicy}"/>
+    <Localization class="org.openmarkov.core.exception.NotEvaluableNetworkException$DistributionsCannotGoTogether"
+                  value="The uncertainty of the network {networkName} cannot be sampled, because in these probability columns the distributions cannot go together:\n{wrongColumns}"/>
     <Localization class="org.openmarkov.core.exception.NotEvaluableNetworkException$NotApplicableNetwork"
                   value="This algorithm cannot evaluate {probNet}, as it can only evaluate networks of type: {possibleNetworkTypes}."/>
     <Localization class="org.openmarkov.core.exception.NotEvaluableNetworkException$UnsatisfiedContraints"

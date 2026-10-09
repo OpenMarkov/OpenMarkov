@@ -17,6 +17,7 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
 import org.openmarkov.core.model.network.modelUncertainty.SystematicSampling;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
+import org.openmarkov.core.model.network.potential.DistributionsOfAColumn;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,7 +49,8 @@ public class VECESensAnSpider extends VariableElimination  {
 	 * @param network a symmetric network having at least two criteria (and usually decisions and utility nodes)
 	 */
 	public VECESensAnSpider(ProbNet network) throws NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
-		super(network);		
+		super(network);
+		DistributionsOfAColumn.mustGoTogetherIn(network);
 	}
 	
 	/**
