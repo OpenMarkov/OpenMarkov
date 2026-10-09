@@ -93,7 +93,8 @@ class InferenceHandler {
         }
         boolean requiredInferenceOptions = isTemporal || isMulticriteria;
 
-        if (currentWorkingMode == NetworkEditorPanel.WorkingMode.EDITION && requiredInferenceOptions) {
+        if (currentWorkingMode == NetworkEditorPanel.WorkingMode.EDITION
+                && newWorkingMode == NetworkEditorPanel.WorkingMode.INFERENCE && requiredInferenceOptions) {
             InferenceOptionsDialog dialog = new InferenceOptionsDialog(probNet, ComponentUtilities.getOwner(mainPanel), MulticriteriaOptions.Type.UNICRITERION);
 
             if (dialog.getSelectedOption() == OkCancelDialog.ChosenOption.Cancel) {

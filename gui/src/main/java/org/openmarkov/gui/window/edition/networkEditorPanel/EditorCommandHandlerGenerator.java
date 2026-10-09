@@ -11,6 +11,7 @@ import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
+import org.openmarkov.core.exception.InferenceStoppedException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Criterion;
@@ -269,6 +270,8 @@ public class EditorCommandHandlerGenerator {
                                        try {
                                            this.networkEditorPanel.getEvidenceManager()
                                                                   .toggleFinding(visualNode, visualState);
+                                       } catch (InferenceStoppedException ex) {
+                                           // The user stopped the propagation: the finding is already undone
                                        } catch (IncompatibleEvidenceException ex) {
                                            throw new UnrecoverableException(ex);
                                        } catch (NotEvaluableNetworkException |

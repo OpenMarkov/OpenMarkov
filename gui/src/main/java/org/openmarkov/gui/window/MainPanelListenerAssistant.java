@@ -9,6 +9,7 @@ package org.openmarkov.gui.window;
 
 import org.openmarkov.core.action.base.linkEdits.InvertLinkAndUpdatePotentialsEdit;
 import org.openmarkov.core.action.core.AddNodeEdit;
+import org.openmarkov.core.exception.InferenceStoppedException;
 import org.openmarkov.core.exception.CannotNormalizePotentialException;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
@@ -160,6 +161,9 @@ public class MainPanelListenerAssistant extends WindowAdapter
                         throw new UnreachableException(exc);
                     } catch (ThereIsNoPotentialInNodeException exception) {
                         throw new UnrecoverableException(exception);
+                    }
+                    if (ex instanceof InferenceStoppedException) {
+                        return; // the user stopped the propagation: the mode is back as it was
                     }
                     throw new UnrecoverableException(ex);
                 }

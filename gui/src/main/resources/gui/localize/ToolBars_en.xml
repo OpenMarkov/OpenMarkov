@@ -37,7 +37,7 @@
     </ClipboardPaste>
     <ChangeWorkingMode>
         <ToolTip value="Inference/Edition mode"/>
-        <NotOffered value="Inference mode is offered only for Bayesian networks, influence diagrams and decision analysis networks"/>
+        <NotOffered value="Inference mode is offered only for Bayesian networks, influence diagrams, decision analysis networks and Markov influence diagrams"/>
     </ChangeWorkingMode>
     <MCSimulateNetwork>
         <ToolTip value="DES Simulation"/>

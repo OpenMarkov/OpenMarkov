@@ -8,6 +8,7 @@
 package org.openmarkov.inference.algorithm.variableElimination.tasks;
 
 import org.apache.logging.log4j.LogManager;
+import org.openmarkov.core.inference.InferenceProgress;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.inference.annotation.InferenceAnnotation;
@@ -103,6 +104,7 @@ public class VEPropagation extends VariableElimination implements Propagation {
         // If there are any remaining decision nodes in the network, they do not have imposed policies
         if (TaskUtilities.hasDecisionsWithoutImposedPolicy(probNet)) {
             VEEvaluation veEvaluation = new VEEvaluation(probNet);
+            veEvaluation.shareProgressOf(this);
             veEvaluation.setPreResolutionEvidence(preResolutionEvidence);
             
             // TODO - Remove
@@ -166,7 +168,11 @@ public class VEPropagation extends VariableElimination implements Propagation {
         List<Variable> evidenceVariables = evidence.getVariables();
         
         if (variablesOfInterest != null) {
+            getProgress().start(InferenceProgress.Stage.PROPAGATION);
+            int computed = 0;
             for (Variable variableOfInterest : variablesOfInterest) {
+                getProgress().checkNotStopped();
+                getProgress().advanceTo((double) computed++ / variablesOfInterest.size());
                 Variable variableOfInterestInProbnet = probNet.getVariable(variableOfInterest.getName());
                 if (evidenceVariables.contains(variableOfInterestInProbnet)) {
                     variablesOfInterestBelongingToEvidence.add(variableOfInterestInProbnet);

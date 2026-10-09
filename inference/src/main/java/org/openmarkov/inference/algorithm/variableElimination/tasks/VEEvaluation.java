@@ -8,6 +8,7 @@
 package org.openmarkov.inference.algorithm.variableElimination.tasks;
 
 import org.apache.logging.log4j.LogManager;
+import org.openmarkov.core.inference.InferenceProgress;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
@@ -86,7 +87,8 @@ public class VEEvaluation extends VariableElimination implements Evaluation, Opt
 		EliminationHeuristic heuristic = heuristicFactory(markovNetworkInference, new ArrayList<>(),
 				getPreResolutionEvidence().getVariables(), getConditioningVariables(), variablesToEliminate);
 
-		variableEliminationCore = new VariableEliminationCore(markovNetworkInference, heuristic, true);
+		getProgress().start(InferenceProgress.Stage.OPTIMAL_STRATEGY);
+		variableEliminationCore = new VariableEliminationCore(markovNetworkInference, heuristic, true, getProgress());
 	}
 
 	@Override public TablePotential getProbability()

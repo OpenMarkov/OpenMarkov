@@ -53,6 +53,7 @@
     "FoundUnknownState",
     "ICIModelNotSupportedByElvira",
     "IncompatibleEvidenceException",
+    "InferenceStoppedException",
     "InfinityInIntervalNotAllowed",
     "IntervalsAreNotEvenException",
     "IntervalsAreNotMultipleOf3Exception",

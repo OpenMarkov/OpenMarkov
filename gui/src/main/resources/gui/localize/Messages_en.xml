@@ -2,6 +2,13 @@
 <properties>
     <InferenceMode>
         <VariableDoesNotExist value="does not exist"/>
+        <Progress>
+            <Title value="Propagating evidence"/>
+            <OptimalStrategy value="Computing the optimal strategy..."/>
+            <Propagation value="Computing the values of the nodes..."/>
+            <Stop value="Stop"/>
+            <Stopping value="Stopping..."/>
+        </Progress>
     </InferenceMode>
     <GenericError>
         <Text value="An error occurred. Check the Message Window for further details."/>

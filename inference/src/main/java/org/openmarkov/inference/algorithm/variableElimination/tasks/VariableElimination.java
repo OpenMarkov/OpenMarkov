@@ -11,6 +11,7 @@ import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.inference.InferenceProgress;
 import org.openmarkov.core.inference.BasicOperations;
 import org.openmarkov.core.inference.InferenceAlgorithm;
 import org.openmarkov.core.inference.heuristic.EliminationHeuristic;
@@ -42,6 +43,18 @@ public abstract class VariableElimination extends InferenceAlgorithm {
 	 * Elimination heuristic factory
 	 **/
 	private HeuristicFactory heuristicFactory;
+
+	/** How far the task has got, for whoever shows it, and whether it has been asked to stop. */
+	private InferenceProgress progress = new InferenceProgress();
+
+	public InferenceProgress getProgress() {
+		return progress;
+	}
+
+	/** Makes this task write its progress where another one does. */
+	void shareProgressOf(VariableElimination task) {
+		this.progress = task.progress;
+	}
 
 	/*
 	 * Policies set by the user. The optimal policy would only be calculated for the decisions

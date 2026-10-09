@@ -1,5 +1,7 @@
 package org.openmarkov.gui.window.edition.networkEditorPanel;
 
+import org.openmarkov.gui.dialog.inference.common.PropagationProgressDialog;
+import javax.swing.SwingUtilities;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.InferenceAlgorithm;
 import org.openmarkov.core.inference.annotation.InferenceManager;
@@ -526,7 +528,7 @@ public class EvidenceManager {
             }
         } catch (NonProjectablePotentialException | NotEnoughMemoryException | NotEvaluableNetworkException |
                  IncompatibleEvidenceException | CannotNormalizePotentialException | ConstraintViolatedException |
-                 ThereIsNoPotentialInNodeException e) {
+                 ThereIsNoPotentialInNodeException | InferenceStoppedException e) {
             evidenceCase.removeFinding(variable);
             if (alreadyHasFinding) {
                 try {
@@ -601,11 +603,13 @@ public class EvidenceManager {
         Map<Variable, TablePotential> individualProbabilities = null;
         try {
             this.calculateMinAndMaxUtilityRanges();
-            Propagation vePosteriorValues = new VEPropagation(this.networkEditorPanel.getVisualNetwork().getProbNet());
+            VEPropagation vePosteriorValues = new VEPropagation(this.networkEditorPanel.getVisualNetwork().getProbNet());
             vePosteriorValues.setVariablesOfInterest(this.networkEditorPanel.getVisualNetwork().getProbNet().getVariables());
             vePosteriorValues.setPreResolutionEvidence(this.preResolutionEvidence);
             vePosteriorValues.setPostResolutionEvidence(evidenceCase);
-            individualProbabilities = vePosteriorValues.getPosteriorValues();
+            individualProbabilities = PropagationProgressDialog.posteriorValues(
+                    SwingUtilities.getWindowAncestor(this.networkEditorPanel), vePosteriorValues,
+                    vePosteriorValues.getProgress());
         } catch (OutOfMemoryError e) {
             boolean approximateInferenceWarningGiven = false;
             if (!approximateInferenceWarningGiven) {

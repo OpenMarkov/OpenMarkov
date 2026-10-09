@@ -10,6 +10,7 @@ package org.openmarkov.inference.algorithm.variableElimination;
 import org.openmarkov.core.action.base.PNESupport;
 import org.openmarkov.core.action.core.RemoveNodeEdit;
 import org.openmarkov.core.exception.*;
+import org.openmarkov.core.inference.InferenceProgress;
 import org.openmarkov.core.inference.heuristic.EliminationHeuristic;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.NodeType;
@@ -62,6 +63,9 @@ public class VariableEliminationCore {
     
     private EliminationHeuristic heuristic;
     
+    /** Where the progress is written and a request to stop is read; null when nobody follows it. */
+    private InferenceProgress progress;
+    
     /**
      * Decision variables with their policies.
      */
@@ -88,6 +92,26 @@ public class VariableEliminationCore {
     public VariableEliminationCore(ProbNet markovDecisionNetwork, EliminationHeuristic heuristic,
                                    boolean isUnicriterion) {
         this(markovDecisionNetwork, heuristic, isUnicriterion, defLambdaMin, defLambdaMax);
+    }
+    
+    /**
+     * Initialize data structures and executes the algorithm, telling how far it has got.
+     *
+     * @param progress where the part of the elimination that is done is written, and where a request to stop
+     *                 is read
+     */
+    public VariableEliminationCore(ProbNet markovDecisionNetwork, EliminationHeuristic heuristic,
+                                   boolean isUnicriterion, InferenceProgress progress) {
+        this.lambdaMin = defLambdaMin;
+        this.lambdaMax = defLambdaMax;
+        this.progress = progress;
+        initialize(markovDecisionNetwork, heuristic, isUnicriterion);
+        try {
+            performVariableElimination();
+        } catch (DoEditException | IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther |
+                 NonProjectablePotentialException e) {
+            throw new UnreachableException(e);
+        }
     }
     
     /**
@@ -121,10 +145,19 @@ public class VariableEliminationCore {
      * the next variable to eliminate until none remain.
      */
     private void performVariableElimination() throws DoEditException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException {
+        int toEliminate = markovDecisionNetwork.getChanceAndDecisionVariables().size();
+        int eliminated = 0;
         while (true) {
+            if (progress != null) {
+                progress.checkNotStopped();
+            }
             Variable variableToDelete = heuristic.getVariableToDelete();
             if (variableToDelete == null) break;
             eliminateVariable(variableToDelete);
+            eliminated++;
+            if (progress != null) {
+                progress.advanceTo((double) eliminated / toEliminate);
+            }
         }
     }
     

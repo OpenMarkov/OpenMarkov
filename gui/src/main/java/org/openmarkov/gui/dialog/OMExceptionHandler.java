@@ -1,5 +1,6 @@
 package org.openmarkov.gui.dialog;
 
+import org.openmarkov.core.exception.InferenceStoppedException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.logging.OpenMarkovLogger;
@@ -27,6 +28,9 @@ public class OMExceptionHandler implements Thread.UncaughtExceptionHandler {
             }
             ThrowableUtils.transferStackTrace(throwable, throwable.getCause());
             throwable = throwable.getCause();
+        }
+        if (throwable instanceof InferenceStoppedException) {
+            return; // the user asked for it: there is nothing to tell
         }
         if (throwable instanceof RuntimeException) {
             exceptionType = ExceptionType.RUNTIME;
