@@ -596,19 +596,7 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
     public static String[] convertToStringLimitValues(double[] limits, String precision) {
         String[] tableLimits = new String[limits.length];
         String rounded;
-        int numDecimals;
-        int indexE = precision.indexOf('E');
-        if (indexE != -1) {
-            numDecimals = Integer.parseInt(precision.substring(indexE + 2, indexE + 3));
-        } else {
-            int decimalPoint = precision.indexOf('.');
-            int one = precision.indexOf('1');
-            if (decimalPoint != -1 && one != -1) {
-                numDecimals = one - decimalPoint;
-            } else {
-                numDecimals = 0;
-            }
-        }
+        int numDecimals = Util.numDecimalsOf(precision);
         for (int i = 0; i < limits.length; i++) {
             if (limits[i] == Double.POSITIVE_INFINITY) {
                 tableLimits[i] = INFINITY;
@@ -622,7 +610,8 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
                     rounded += ".0";
                 }
                 roundedStringDecimalPlace = rounded.indexOf('.');
-                int finalLength = roundedStringDecimalPlace + numDecimals + 1;
+                int finalLength = numDecimals == 0 ? roundedStringDecimalPlace
+                        : roundedStringDecimalPlace + numDecimals + 1;
                 if (finalLength <= rounded.length()) {
                     rounded = rounded.substring(0, finalLength);
                 } else {

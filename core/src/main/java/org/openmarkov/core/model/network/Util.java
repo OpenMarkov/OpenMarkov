@@ -167,6 +167,11 @@ public class Util {
         return roundedString;
     }
     
+    /** The number of decimals that a precision such as 0.01 asks for; none for 1, 2 or 10. */
+    public static int numDecimalsOf(String precision) {
+        return Math.max(0, new BigDecimal(precision).stripTrailingZeros().scale());
+    }
+    
     /**
      * @param value     Value
      * @param precision Precision
@@ -188,18 +193,7 @@ public class Util {
             numDecimals = precision.length() - precisionStringDecimalPlace - 1;
         } else {
             
-            int indexE = precision.indexOf('E');
-            if (indexE != -1) {
-                numDecimals = Integer.parseInt(precision.substring(indexE + 2, indexE + 3));
-            } else {
-                int decimalPoint = precision.indexOf('.');
-                int one = precision.indexOf('1');
-                if (decimalPoint != -1 && one != -1) {
-                    numDecimals = one - decimalPoint;
-                } else {
-                    numDecimals = 0;
-                }
-            }
+            numDecimals = numDecimalsOf(precision);
             
             String pattern = "#.";
             for (int i = 0; i < numDecimals; i++) {
