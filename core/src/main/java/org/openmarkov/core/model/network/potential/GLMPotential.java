@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * Generalised Linear Model potential
@@ -341,9 +343,30 @@ public abstract class GLMPotential extends Potential {
         return constantIndex;
     }
     
+    /** Shifts the variables and, with them, the ones the covariates are written on. */
     @Override public void shift(ProbNet probNet, int timeDifference) {
+        List<Variable> before = new ArrayList<>(variables);
         super.shift(probNet, timeDifference);
+        if (covariates == null) {
+            return;
+        }
+        Map<String, String> shiftedNames = new HashMap<>();
+        for (int i = 0; i < before.size(); i++) {
+            shiftedNames.put(before.get(i).getName(), variables.get(i).getName());
+        }
+        VariableExpression[] shifted = new VariableExpression[covariates.length];
+        for (int i = 0; i < covariates.length; i++) {
+            String expression = covariates[i].asStringExpression();
+            String withShiftedNames = REFERENCE.matcher(expression).replaceAll(reference -> Matcher.quoteReplacement(
+                    "{" + shiftedNames.getOrDefault(reference.group(1), reference.group(1)) + "}"));
+            shifted[i] = withShiftedNames.equals(expression) ? covariates[i]
+                    : new VariableExpression(variables, withShiftedNames);
+        }
+        covariates = shifted;
     }
+
+    /** A variable in an expression: its name between braces. */
+    private static final Pattern REFERENCE = Pattern.compile("\\{([^{}]+)\\}");
     
     protected abstract TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions,
                                                          double[] coefficients, String[] covariates, List<Variable> evidencelessVariables,

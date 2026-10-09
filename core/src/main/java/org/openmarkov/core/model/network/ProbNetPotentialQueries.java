@@ -119,6 +119,9 @@ public final class ProbNetPotentialQueries {
                     potential.tableProjectToFactors(evidenceCase, inferenceOptions, projectedPotentials);
             Criterion criterion = criterionOfUtilityNode(probNet, potential);
             if (criterion != null) {
+                factors = factors.stream()
+                                 .map(factor -> withoutTheUtilityVariable(factor, potential.getConditionedVariable()))
+                                 .toList();
                 for (TablePotential factor : factors) {
                     if (factor.getCriterion() == null) {
                         factor.setCriterion(criterion);
@@ -128,6 +131,18 @@ public final class ProbNetPotentialQueries {
             projectedPotentials.addAll(factors);
         }
         return projectedPotentials;
+    }
+
+    /** A table of utilities is on the variables the utility depends on, not on the utility variable itself. */
+    private static TablePotential withoutTheUtilityVariable(TablePotential factor, Variable utility) {
+        if (!factor.getVariables().contains(utility) || utility.getNumStates() != 1) {
+            return factor;
+        }
+        List<Variable> rest = new ArrayList<>(factor.getVariables());
+        rest.remove(utility);
+        TablePotential table = new TablePotential(rest, factor.getPotentialRole(), factor.getValues().clone());
+        table.setCriterion(factor.getCriterion());
+        return table;
     }
 
     /** The criterion of the utility node the potential belongs to, or null if it does not belong to one. */
