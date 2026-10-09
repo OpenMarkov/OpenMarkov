@@ -142,6 +142,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         setOptionEnabled(EDITING_ACTION_COMMANDS, false);
         setOptionEnabled(INFERENCE_ACTION_COMMANDS, false);
         setOptionEnabled(ActionCommands.SELECT_ALL, false);
+        sayWhyInferenceModeIsNotOffered();
         setOptionEnabled(ActionCommands.CHANGE_WORKING_MODE, false);
         setOptionEnabled(ActionCommands.CHANGE_TO_INFERENCE_MODE, false);
         setOptionEnabled(ActionCommands.CHANGE_TO_EDITION_MODE, false);
@@ -208,6 +209,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
             setOptionEnabled(EDITING_ACTION_COMMANDS, true);
             setOptionEnabled(INFERENCE_ACTION_COMMANDS, false);
         }
+        sayWhyInferenceModeIsNotOffered();
         setOptionEnabled(ActionCommands.CHANGE_WORKING_MODE, getEnableWorkingModeButton());
         setOptionEnabled(ActionCommands.PROPAGATION_OPTIONS, true);
         
@@ -237,6 +239,14 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                             && currentNetworkEditorPanel.getProbNet().getDecisionCriteria().size() > 1
             ));
         }
+    }
+    
+    /** When the open network is of a type that cannot go into inference mode, the button and the menu item say so. */
+    private void sayWhyInferenceModeIsNotOffered() {
+        boolean offered = getCurrentNetworkEditorPanel() == null || getEnableWorkingModeButton();
+        mainPanel.getStandardToolBar().setInferenceModeOffered(offered);
+        mainPanel.getMainMenu().getSwitchWorkingMode().setToolTipText(offered ? null
+                : StringDatabase.getUniqueInstance().getString(ActionCommands.CHANGE_WORKING_MODE + ".NotOffered"));
     }
     
     private boolean getEnableWorkingModeButton() {
@@ -364,6 +374,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                     case EDITION -> MenuItemNames.EDIT_SWITCH_TO_INFERENCE_MODE_MENUITEM;
                     case INFERENCE -> MenuItemNames.INFERENCE_SWITCH_TO_EDITION_MODE_MENUITEM;
                 }));
+        sayWhyInferenceModeIsNotOffered();
         setOptionEnabled(ActionCommands.CHANGE_WORKING_MODE, isInferenceEnabled);
         setOptionEnabled(ActionCommands.CHANGE_TO_INFERENCE_MODE, isInferenceEnabled);
         setOptionEnabled(ActionCommands.CHANGE_TO_EDITION_MODE, isInferenceEnabled);

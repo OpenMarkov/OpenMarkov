@@ -234,14 +234,15 @@ public class StandardToolBar extends ToolBarBasic implements ZoomMenuToolBar, Mo
      *
      * @return a working mode button.
      */
+    private boolean inferenceModeOffered = true;
+    
     private JToggleButton getWorkingModeButton() {
         if (workingModeButton == null) {
             workingModeButton = new JToggleButton();
             workingModeButton.setIcon(IconBind.INFERENCE_MODE_ENABLED.icon());
             workingModeButton.setFocusable(false);
             workingModeButton.setActionCommand(ActionCommands.CHANGE_WORKING_MODE.getCommandName());
-            workingModeButton.setToolTipText(
-                    stringDatabase.getString(ActionCommands.CHANGE_WORKING_MODE + STRING_TOOLTIP_SUFFIX));
+            workingModeButton.setToolTipText(workingModeToolTip());
             workingModeButton.addActionListener(listener);
             workingModeButton.addMouseMotionListener(this);
         }
@@ -385,9 +386,19 @@ public class StandardToolBar extends ToolBarBasic implements ZoomMenuToolBar, Mo
             getZoomOutButton()
                     .setToolTipText(stringDatabase.getString(ActionCommands.ZOOM_OUT + STRING_TOOLTIP_SUFFIX));
         } else if (e.getSource().equals(getWorkingModeButton())) {
-            getWorkingModeButton().setToolTipText(
-                    stringDatabase.getString(ActionCommands.CHANGE_WORKING_MODE + STRING_TOOLTIP_SUFFIX));
+            getWorkingModeButton().setToolTipText(workingModeToolTip());
         }
+    }
+    
+    /** @param offered whether the open network can go into inference mode; if not, the button says why */
+    public void setInferenceModeOffered(boolean offered) {
+        inferenceModeOffered = offered;
+        getWorkingModeButton().setToolTipText(workingModeToolTip());
+    }
+    
+    private String workingModeToolTip() {
+        return stringDatabase.getString(ActionCommands.CHANGE_WORKING_MODE
+                                                + (inferenceModeOffered ? STRING_TOOLTIP_SUFFIX : ".NotOffered"));
     }
     
 }
