@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
+    <InferenceMode>
+        <VariableDoesNotExist value="does not exist"/>
+    </InferenceMode>
     <GenericError>
         <Text value="An error occurred. Check the Message Window for further details."/>
     </GenericError>

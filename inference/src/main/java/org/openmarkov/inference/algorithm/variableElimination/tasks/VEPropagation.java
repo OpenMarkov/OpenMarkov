@@ -120,6 +120,9 @@ public class VEPropagation extends VariableElimination implements Propagation {
         }
     }
     
+    /** Whether the findings are possible; null until it is asked. */
+    private Boolean evidenceIsPossible;
+
     private void resolve() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
         LogManager.getLogger(getClass()).trace("Resolving VEPropagation");
         posteriorValues = new HashMap<>();
@@ -188,7 +191,8 @@ public class VEPropagation extends VariableElimination implements Propagation {
     // Methods
     
     private void InvokeVariableEliminationCore(ProbNet network, EvidenceCase evidence, Variable variableOfInterest,
-                                               NodeType typeOfTheNode) throws IncompatibleEvidenceException.EvidenceIsImpossible {
+                                               NodeType typeOfTheNode)
+            throws IncompatibleEvidenceException, NonProjectablePotentialException {
         // From the network the elimination will run on, which is the one passed in - not from the
         // field, which is the network before its potentials were projected. The two hold the same
         // chance and decision variables today, so this changes nothing; they stop holding the same
@@ -228,7 +232,11 @@ public class VEPropagation extends VariableElimination implements Propagation {
                     try {
                         DiscretePotentialOperations.normalize(posteriorValue);
                     } catch (CannotNormalizePotentialException e) {
-                        throw new IncompatibleEvidenceException.EvidenceIsImpossible();
+                        // Every state has probability zero: either the evidence is impossible, or the variable
+                        // does not exist, which is left as zeros
+                        if (!evidenceIsPossible(evidence)) {
+                            throw new IncompatibleEvidenceException.EvidenceIsImpossible();
+                        }
                     }
                 }
             }
@@ -260,6 +268,40 @@ public class VEPropagation extends VariableElimination implements Propagation {
         descendants.forEach(copy::removeNode);
         copy = TaskUtilities.discretizeNonObservedNumericVariables(copy, getPreResolutionEvidence());
         return TaskUtilities.absorbAllIntermediateNumericNodes(copy, getPreResolutionEvidence());
+    }
+
+    /** @return whether the findings, taken together, have a probability greater than zero */
+    private boolean evidenceIsPossible(EvidenceCase evidence)
+            throws IncompatibleEvidenceException, NonProjectablePotentialException {
+        if (evidenceIsPossible == null) {
+            evidenceIsPossible = evidence.getFindings().isEmpty() || probabilityOf(evidence) > 0;
+        }
+        return evidenceIsPossible;
+    }
+
+    /** The probability of the findings, computed on the findings and their ancestors alone. */
+    private double probabilityOf(EvidenceCase evidence)
+            throws IncompatibleEvidenceException, NonProjectablePotentialException {
+        ProbNet network = probNet.copy();
+        List<Variable> variablesNotToBePruned = new ArrayList<>();
+        for (Finding finding : evidence.getFindings()) {
+            Node node = network.getNode(finding.getVariable().getName());
+            if (node != null && !variablesNotToBePruned.contains(node.getVariable())) {
+                variablesNotToBePruned.add(node.getVariable());
+                for (Node ancestor : ProbNetOperations.getNodeAncestors(node)) {
+                    if (!variablesNotToBePruned.contains(ancestor.getVariable())) {
+                        variablesNotToBePruned.add(ancestor.getVariable());
+                    }
+                }
+            }
+        }
+        ProbNet markovNetwork = TaskUtilities.projectTablesAndBuildMarkovDecisionNetwork(
+                ProbNetOperations.getPruned(network, variablesNotToBePruned, evidence), evidence);
+        EliminationHeuristic heuristic = heuristicFactory(markovNetwork, new ArrayList<Variable>(),
+                                                          evidence.getVariables(), getConditioningVariables(),
+                                                          markovNetwork.getChanceAndDecisionVariables());
+        TablePotential probability = new VariableEliminationCore(markovNetwork, heuristic, true).getProbability();
+        return probability == null ? 1 : Arrays.stream(probability.getValues()).sum();
     }
 
     private ProbNet pruneNetwork(ProbNet preprocessedNetwork, Variable variableOfInterest)

@@ -253,7 +253,8 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         NetworkEditorPanel currentNetworkEditorPanel = getCurrentNetworkEditorPanel();
         if (currentNetworkEditorPanel == null) return false;
         NetworkType networkType = currentNetworkEditorPanel.getProbNet().getNetworkType();
-        return networkType instanceof InfluenceDiagramType || networkType instanceof BayesianNetworkType;
+        return networkType instanceof InfluenceDiagramType || networkType instanceof BayesianNetworkType
+                || networkType instanceof DecisionAnalysisNetworkType;
     }
     
     public void updateInferenceButtons() {

@@ -12,6 +12,7 @@ import org.openmarkov.gui.graphic.NumericVariableBox;
 import org.openmarkov.gui.graphic.VisualNode;
 import org.openmarkov.gui.graphic.VisualState;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -103,11 +104,13 @@ class InferencePresenter {
                 }
                 case 1 -> {
                     double[] values = tablePotential.getValues();
+                    // A variable whose states all have probability zero does not exist: it has no values
+                    boolean exists = Arrays.stream(values).anyMatch(value -> value != 0);
                     if ((visualNode.getInnerBox()) instanceof FSVariableBox) {
                         FSVariableBox innerBox = (FSVariableBox) visualNode.getInnerBox();
                         for (int i = 0; i < innerBox.getNumStates(); i++) {
                             VisualState visualState = innerBox.getVisualState(i);
-                            visualState.setStateValue(caseNumber, values[i]);
+                            visualState.setStateValue(caseNumber, exists ? values[i] : Double.NaN);
                         }
                     }
                     // PROVISIONAL2: Currently the propagation

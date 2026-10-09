@@ -8,6 +8,7 @@
 package org.openmarkov.gui.graphic;
 
 import org.openmarkov.gui.configuration.GUIFonts;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.gui.configuration.GUIColors;
 
@@ -336,7 +337,7 @@ public final class VisualState extends VisualElement {
                     double value = this.stateValues.get(i) - minRange;
                     barLength = (value / range) * barFullLength;
                 } else {
-                    barLength = this.stateValues.get(i) * barFullLength;
+                    barLength = Double.isNaN(this.stateValues.get(i)) ? 0 : this.stateValues.get(i) * barFullLength;
                 }
                 g.fill(new Rectangle2D.Double(xBar, yFirstBar + (i * InnerBox.BAR_HEIGHT), barLength,
                                               InnerBox.BAR_HEIGHT));
@@ -344,6 +345,13 @@ public final class VisualState extends VisualElement {
                 
                 if (!Double.isNaN(this.stateValues.get(this.currentStateValue))) {
                     g.drawString(formatValue(this.stateValues.get(this.currentStateValue)), ((int) xValue), (int) yText);
+                } else if (!isNumeric) {
+                    // The variable does not exist: its first row says so and none has a value
+                    g.drawString("-", ((int) xValue), (int) yText);
+                    if (this.stateIndex == innerBox.getNumStates() - 1) {
+                        g.drawString(StringDatabase.getUniqueInstance().getString("InferenceMode.VariableDoesNotExist"),
+                                     (int) xBar + 2, (int) yText);
+                    }
                 }
             }
         } else {
