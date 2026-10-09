@@ -209,7 +209,7 @@ commits. El error~1 se da por corregido sin tocar lo que quedaba de él, por lo 
 \hyperref[nota:186]{nota~186}.
 
 \paragraph{Correcciones marcadas desde el 29 de septiembre}
-Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54}, \hyperref[err:56]{56}, \hyperref[err:57]{57}, \hyperref[err:59]{59}, \hyperref[err:62]{62}, \hyperref[err:61]{61}, \hyperref[err:60]{60}, \hyperref[err:63]{63}, \hyperref[err:65]{65}, \hyperref[err:66]{66}, \hyperref[err:113]{113} y \hyperref[err:117]{117}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}, y al corregir el 63, el \hyperref[err:200]{error~200}. El \hyperref[err:201]{error~201} lo vio Manuel Arias en la ventana al comprobar el 66.
+Se marcan del mismo modo, cada una con el commit que la hace: \hyperref[err:15]{errores~15}, \hyperref[err:193]{193}, \hyperref[err:26]{26}, \hyperref[err:29]{29}, \hyperref[err:30]{30}, \hyperref[err:35]{35}, \hyperref[err:36]{36}, \hyperref[err:41]{41}, \hyperref[err:43]{43}, \hyperref[err:46]{46}, \hyperref[err:47]{47}, \hyperref[err:49]{49}, \hyperref[err:50]{50}, \hyperref[err:125]{125}, \hyperref[err:126]{126}, \hyperref[err:127]{127}, \hyperref[err:128]{128}, \hyperref[err:129]{129}, \hyperref[err:130]{130}, \hyperref[err:131]{131}, \hyperref[err:132]{132}, \hyperref[err:133]{133}, \hyperref[err:135]{135}, \hyperref[err:137]{137}, \hyperref[err:138]{138}, \hyperref[err:142]{142}, \hyperref[err:143]{143}, \hyperref[err:144]{144}, \hyperref[err:145]{145}, \hyperref[err:146]{146}, \hyperref[err:147]{147}, \hyperref[err:148]{148}, \hyperref[err:149]{149}, \hyperref[err:52]{52}, \hyperref[err:53]{53}, \hyperref[err:85]{85}, \hyperref[err:54]{54}, \hyperref[err:56]{56}, \hyperref[err:57]{57}, \hyperref[err:59]{59}, \hyperref[err:62]{62}, \hyperref[err:61]{61}, \hyperref[err:60]{60}, \hyperref[err:63]{63}, \hyperref[err:65]{65}, \hyperref[err:66]{66}, \hyperref[err:113]{113}, \hyperref[err:117]{117} y \hyperref[err:151]{151}. Al corregir el 41 apareció el \hyperref[err:194]{error~194}, y al corregir el 63, el \hyperref[err:200]{error~200}. El \hyperref[err:201]{error~201} lo vio Manuel Arias en la ventana al comprobar el 66.
 Los \hyperref[err:44]{errores~44} y \hyperref[err:64]{64} llevan la marca \textcolor{corregidoverde}{\textbf{Cerrado sin arreglo}}: el defecto sigue en el código, pero no se ha encontrado nada que un usuario pueda ver por su causa, y la fila \emph{Estado} de cada ficha dice qué se midió.
 
 \paragraph{Errores añadidos el 30 de septiembre}
@@ -279,7 +279,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{223 errores}; 79 de ellos son defectos nuevos: 56 encontrados al
 comprobar los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{48} necesitan antes una decisión del equipo. Por esfuerzo estimado: 187 pequeños, 36 medios y 0 grandes.
-De los 223, 60 están ya corregidos, 10 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
+De los 223, 61 están ya corregidos, 10 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 191 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -538,7 +538,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:219]{219} & Al cargar otra base en «Data preprocessing», las casillas de las variables salen apagadas & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:editor}.\ Interfaz: editor de red y paneles de las relaciones}}\\
 \hyperref[err:150]{150} & Volver a elegir la clase de relación que ya tiene un nodo borra sus números & \texttt{gui} & S \hfill No\\
-\hyperref[err:151]{151} & En una regresión, lo escrito como Cholesky se pierde al guardar la red & \texttt{gui} & S \hfill No\\
+\hyperref[err:151]{151} & \textcolor{corregidoverde}{\textbf{Corregido}} · En una regresión, lo escrito como Cholesky se pierde al guardar la red & \texttt{gui} & S \hfill No\\
 \hyperref[err:152]{152} & Añadir una fila a la tabla de vida y aceptar borra el primer tramo & \texttt{gui} & S \hfill No\\
 \hyperref[err:153]{153} & El editor de una distribución univariante enseña «1» en cada parámetro & \texttt{core} & M \hfill No\\
 \hyperref[err:154]{154} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · En la tabla de utilidad, una restricción de enlace bloquea otras casillas & \texttt{core} & S \hfill No\\
@@ -12701,9 +12701,9 @@ La comprobación debe estar en \texttt{potential\allowbreak{}Type\allowbreak{}Ch
 Prueba de regresión: construir el panel sobre el nodo \texttt{ggtp} de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}bn/\allowbreak{}BN-hepar.\allowbreak{}pgmx}, elegir otra vez «Table» y comprobar que los 384 valores no cambian y que \texttt{potential\allowbreak{}Has\allowbreak{}Changed(\allowbreak{})} devuelve \texttt{false}; y lo mismo con un nodo «Hazard (Weibull)», como el de la medida.
 
 \setcounter{subsection}{150}
-\subsection[En una regresión, lo escrito como Cholesky se pierde al guardar la red]{Cambiar en el panel de una regresión de la matriz de covarianzas a su descomposición de Cholesky no borra la matriz vieja, y al guardar la red se pierde lo escrito}\label{err:151}
+\subsection[En una regresión, lo escrito como Cholesky se pierde al guardar la red]{\textcolor{corregidoverde}{[Corregido]} Cambiar en el panel de una regresión de la matriz de covarianzas a su descomposición de Cholesky no borra la matriz vieja, y al guardar la red se pierde lo escrito}\label{err:151}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{ee2121c} (09-10-2026): \texttt{GLMPotential.\allowbreak{}set\allowbreak{}Cholesky\allowbreak{}Decomposition} borra la matriz de covarianzas (opción (b), en el modelo, para que valga para cualquier llamador; el lector ProbModelXML y el constructor de copia llaman a uno solo de los dos métodos y hacen lo mismo que antes). Con prueba de las tres consecuencias, construyendo el panel sin mostrarlo: el nodo se queda solo con la descomposición, el panel reabierto dice «Cholesky decomposition» con los números escritos, el fichero guardado los lleva, y desmarcar «Uncertainty» quita la incertidumbre. No se ha probado en la ventana.
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.dialog.common
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/common/GLMPotentialPanel.java:123-127,141-173} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/GLMPotential.java:180-191} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:1107-1115}
