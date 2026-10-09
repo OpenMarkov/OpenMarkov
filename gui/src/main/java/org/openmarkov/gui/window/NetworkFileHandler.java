@@ -35,6 +35,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.core.model.network.potential.ColumnsThatDoNotAddUpToOne;
+import org.openmarkov.core.model.network.potential.DistributionsOfAColumn;
 import org.openmarkov.gui.configuration.LastOpenFiles;
 import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.UserPreferences;
@@ -242,24 +243,33 @@ public class NetworkFileHandler {
         mainPanel.getMainMenu().rechargeFileMenu();
         List<String> wrongColumns = ColumnsThatDoNotAddUpToOne.in(netReadFrom);
         if (!wrongColumns.isEmpty()) {
-            this.showColumnsThatDoNotAddUpToOne(netReadFrom, wrongColumns);
+            this.showColumns(netReadFrom, wrongColumns, "ColumnsDoNotAddUpToOne");
+        }
+        List<String> wrongDistributions = DistributionsOfAColumn.wrongIn(netReadFrom);
+        if (!wrongDistributions.isEmpty()) {
+            this.showColumns(netReadFrom, wrongDistributions, "DistributionsCannotGoTogether");
         }
         if (netReadFrom.getShowCommentWhenOpening()) {
             this.showNetworkComment(netReadFrom);
         }
     }
     
-    private void showColumnsThatDoNotAddUpToOne(ProbNet probNet, List<String> wrongColumns) {
+    /** Warns about some columns of a network, with the title and the text that the messages have under a key. */
+    private void showColumns(ProbNet probNet, List<String> wrongColumns, String messageKey) {
         JTextArea columns = new JTextArea(String.join("\n", wrongColumns));
         columns.setEditable(false);
+        columns.setLineWrap(true);
+        columns.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(columns);
         scrollPane.setPreferredSize(new Dimension(600, 250));
         JPanel panel = new JPanel(new BorderLayout(0, 8));
-        panel.add(new JLabel(stringDatabase.getFormattedString("ColumnsDoNotAddUpToOne.Text", probNet.getName())),
+        panel.add(new JLabel("<html><body style='width: 450px'>"
+                                     + stringDatabase.getFormattedString(messageKey + ".Text", probNet.getName())
+                                     + "</body></html>"),
                   BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
         JOptionPane.showMessageDialog(ComponentUtilities.getOwner(mainPanel), panel,
-                                      stringDatabase.getString("ColumnsDoNotAddUpToOne.Title"),
+                                      stringDatabase.getString(messageKey + ".Title"),
                                       JOptionPane.WARNING_MESSAGE);
     }
     

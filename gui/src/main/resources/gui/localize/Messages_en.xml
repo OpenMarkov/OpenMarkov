@@ -122,6 +122,10 @@
         <Title value="Probabilities that do not add up to one"/>
         <Text value="These probability columns of the network &quot;~&quot; do not add up to one. Sampling and exact inference will give different results."/>
     </ColumnsDoNotAddUpToOne>
+    <DistributionsCannotGoTogether>
+        <Title value="Distributions that cannot go together"/>
+        <Text value="In these probability columns of the network &quot;~&quot; the distributions of the uncertainty cannot go together. Sensitivity analysis will not run until they are corrected, in the uncertainty dialog of each column."/>
+    </DistributionsCannotGoTogether>
     <NotEnoughMemoryForExactInference>
         <Title value="Not enough memory for exact inference"/>
         <Text value="There is not enough memory available "/>
