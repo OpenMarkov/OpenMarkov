@@ -871,6 +871,7 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
             topVariable = convertedParentVariable;
         }
         for (TreeADDBranch branch : branches) {
+            branch.replaceParentVariableNamedAs(convertedParentVariable);
             branch.getPotential().replaceNumericVariable(convertedParentVariable);
         }
     }

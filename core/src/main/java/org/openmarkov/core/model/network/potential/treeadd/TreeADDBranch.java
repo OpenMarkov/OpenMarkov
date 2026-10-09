@@ -379,6 +379,13 @@ public class TreeADDBranch implements ClassLocalizable {
         return statesBranch;
     }
     
+    /** Puts {@code variable} in place of the parent variable of this branch that has its name. */
+    void replaceParentVariableNamedAs(Variable variable) {
+        if (parentVariables != null) {
+            parentVariables.replaceAll(parent -> parent.getName().equals(variable.getName()) ? variable : parent);
+        }
+    }
+    
     public TreeADDBranch deepCopy(ProbNet copyNet) {
         List<State> newStates = null;
         if (states != null) {
