@@ -277,9 +277,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{231 errores}; 87 de ellos son defectos nuevos: 64 encontrados al
-comprobar o corregir los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{40} necesitan antes una decisión del equipo. Por esfuerzo estimado: 193 pequeños, 38 medios y 0 grandes.
-De los 231, 84 están ya corregidos, 11 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{232 errores}; 88 de ellos son defectos nuevos: 65 encontrados al
+comprobar o corregir los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{41} necesitan antes una decisión del equipo. Por esfuerzo estimado: 193 pequeños, 39 medios y 0 grandes.
+De los 232, 84 están ya corregidos, 11 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 191 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -292,7 +292,7 @@ El apéndice recoge además 191 notas con lo que se comprobó y no entra en la l
 \ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 18 \\
 \ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 12 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
-\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 17 \\
+\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 18 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 22 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 8 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 21 \\
@@ -418,6 +418,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:230]{230} & MID-CHAP-Ryan-Griffin no propaga: una expresión usa la edad sin valor & \texttt{inference} & S \hfill No\\
 \hyperref[err:231]{231} & La propagación de MID-Cochlear no termina en un minuto & \texttt{inference} & M \hfill No\\
 \hyperref[err:232]{232} & \textcolor{corregidoverde}{\textbf{Corregido}} · La red desplegada con «Expand network» no entra en modo inferencia & \texttt{gui} & S \hfill No\\
+\hyperref[err:233]{233} & Con transiciones a medio ciclo no se evalúa una red con una utilidad dada por un árbol & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:decisiones}.\ Decisiones: políticas, criterios, agentes y árbol de decisión}}\\
 \hyperref[err:50]{50} & \textcolor{corregidoverde}{\textbf{Corregido}} · El árbol de decisión falla en casi todas las redes en formato 1.0 & \texttt{inference} & M \hfill No\\
 \hyperref[err:51]{51} & «Show optimal policy» y «Show expected utility» no llegan a abrirse & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -4663,6 +4664,28 @@ Importa para el \hyperref[err:201]{error~201}: se decidió que el modo inferenci
 Primero, localizar la excepción: el texto apunta a una operación que copia un nodo («copyNet») y encuentra una variable numérica, «Time in treatment {[}0{]}», que no espera en esa red. Sin esa lectura no se puede proponer nada.
 
 Prueba: la red desplegada de \texttt{MID-Chancellor} propaga.
+
+\subsection[Con transiciones a medio ciclo no se evalúa una red con una utilidad dada por un árbol]{Con la opción de transiciones a medio ciclo, la evaluación falla si alguna utilidad temporal está dada por un árbol}\label{err:233}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/TemporalNetOperations.java:296-330}
+\fichakey{Comprobado}Ejecutándolo por programa; no en la ventana
+\fichakey{Esfuerzo}Medio (días)
+\fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué hace la opción de medio ciclo cuando la utilidad de un estado no es constante: el artículo de Pérez-Martín, Bermejo y Díez (2019) dice que la corrección de medio ciclo no se puede aplicar a ese modelo y propone otra cosa
+\fichakey{Relacionados}\hyperref[err:201]{error~201}
+\end{ficha}
+\paragraph{Qué pasa}
+Medido el 09-10-2026: en \texttt{MID-Chancellor.pgmx}, con la opción de transición puesta a medio ciclo («Half»), calcular las políticas óptimas (\texttt{VE\allowbreak{}Evaluation.\allowbreak{}get\allowbreak{}Optimal\allowbreak{}Policies}) termina con \texttt{Class\allowbreak{}Cast\allowbreak{}Exception}: «TreeADDPotential cannot be cast to ExactDistrPotential», en \texttt{Temporal\allowbreak{}Net\allowbreak{}Operations.\allowbreak{}apply\allowbreak{}Transition\allowbreak{}Time} (línea 311). Con «Beginning» y con «End» la misma red se evalúa. El usuario llega eligiendo «Half» en las opciones de inferencia y pidiendo cualquier análisis de esa red; no se ha hecho en la ventana.
+
+Para el medio ciclo, ese método pone en cada nodo de utilidad la media de su tabla y la del ciclo anterior, y para eso convierte la relación a \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential} sin mirar de qué clase es. En esa red el coste de la lamivudina está dado por un árbol, porque depende del tiempo en tratamiento. El código lleva un comentario de 2022 que ya lo dice: «cast to ExactDistrPotential but not every utility potential is ExactDistrPotential».
+
+El artículo de Pérez-Martín, Bermejo y Díez («Evaluation of Markov models with discontinuities», \emph{Medical Decision Making}, 2019), cuyo ejemplo es esta misma red, dice que la corrección de medio ciclo «cannot be applied to this model because it assumes that the cost function for each state is constant», y propone, para los modelos con discontinuidades, aplicar la regla del trapecio a un modelo en el que el coste en el punto de discontinuidad es la media de sus límites por la izquierda y por la derecha.
+\paragraph{Cómo arreglarlo}
+Como mínimo, que la opción no termine en una excepción de conversión: o se hace la media también con árboles, o se responde que esa opción no vale para esa red. Qué debe hacer es la decisión, y el artículo citado es la referencia.
+
+Prueba: \texttt{MID-Chancellor.pgmx} con «Half» se evalúa, o da el mensaje que se decida.
 
 \setcounter{subsection}{49}
 
@@ -14836,7 +14859,7 @@ Prueba de regresión: sin ventana, con la tabla del diálogo o con el cálculo e
 \setcounter{subsection}{200}
 \subsection[El modo inferencia solo se ofrece a diagramas de influencia y redes bayesianas]{El botón que pasa a modo inferencia está apagado en toda red que no sea un diagrama de influencia o una red bayesiana}\label{err:201}
 \begin{ficha}
-\fichakey{Estado}Presente en parte. Probado el 09-10-2026 en la aplicación con el botón encendido para los MID, sin confirmarlo: de las 10 redes de \texttt{mid} (sin \texttt{MID-Cochlear}), entran en modo inferencia las tres \texttt{MID-Chancellor}, \texttt{MID-hip-Briggs} y las dos \texttt{MID-HPV}, en 3 a 5 segundos; \texttt{MID-Colorectal} entra pero deja la aplicación parada 163 segundos; \texttt{MID-CHAP-Ryan-Griffin}, \texttt{MID-CHD-Walker} y \texttt{MID-mammography} dan un diálogo de error normal y vuelven a edición. En \texttt{MID-Chancellor} todos los nodos de utilidad muestran 0,0000. Antes: desde el commit \texttt{ac0cc81} (09-10-2026) el modo inferencia se ofrece también a las redes de análisis de decisiones (\hyperref[err:227]{error~227}); faltan los MID. Desde el commit \texttt{a1e8859} (09-10-2026) el botón y la entrada de menú apagados lo explican en su ayuda emergente («Inference mode is offered only for Bayesian networks and influence diagrams»). El modo se irá ofreciendo a los MID y a las redes de análisis de decisiones a medida que se arregle su propagación. Medido ese día con la propagación del modo inferencia, sin evidencia, sobre las redes del repositorio: propagan 20 de 20 redes bayesianas, 30 de 30 diagramas de influencia, 66 de 68 redes de análisis de decisiones (falla \texttt{DAN-reactor} en sus dos formatos) y 14 de 26 MID (fallan \texttt{MID-CHD-Walker}, \texttt{MID-Colorectal} y \texttt{MID-mammography}, porque la relación uniforme de «Age {[}0{]}» no se convierte en tabla; \texttt{MID-CHAP-Ryan-Griffin}, por una expresión que usa «Age {[}0{]}» sin valor; \texttt{MID-HPV}, con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} al podar la red; y \texttt{MID-Cochlear}, que no termina en 60 segundos); el algoritmo rechaza las LIMID y los POMDP
+\fichakey{Estado}Presente en parte. Probado el 09-10-2026 en la aplicación con el botón encendido para los MID, sin confirmarlo: de las 10 redes de \texttt{mid} (sin \texttt{MID-Cochlear}), entran en modo inferencia las tres \texttt{MID-Chancellor}, \texttt{MID-hip-Briggs} y las dos \texttt{MID-HPV}, en 3 a 5 segundos; \texttt{MID-Colorectal} entra pero deja la aplicación parada 163 segundos; \texttt{MID-CHAP-Ryan-Griffin}, \texttt{MID-CHD-Walker} y \texttt{MID-mammography} dan un diálogo de error normal y vuelven a edición. En \texttt{MID-Chancellor} todos los nodos de utilidad mostraban 0,0000, porque con transiciones al principio o a medio ciclo la propagación quitaba antes los nodos de utilidad del ciclo 0; desde el commit \texttt{654ea8f} (09-10-2026) cada nodo de utilidad recibe el valor descontado de su propio ciclo, sea cual sea la opción de transición (decidido por Manuel Arias a la vista de Pérez-Martín, Bermejo y Díez, «Evaluation of Markov models with discontinuities», \emph{Medical Decision Making} 39(4), 2019: su ecuación~1 define el coste instantáneo en cada frontera entre ciclos, y las opciones de transición son formas de sumarlos). La red desplegada con «Expand network» entra ya en modo inferencia (\hyperref[err:232]{error~232}). Antes: desde el commit \texttt{ac0cc81} (09-10-2026) el modo inferencia se ofrece también a las redes de análisis de decisiones (\hyperref[err:227]{error~227}); faltan los MID. Desde el commit \texttt{a1e8859} (09-10-2026) el botón y la entrada de menú apagados lo explican en su ayuda emergente («Inference mode is offered only for Bayesian networks and influence diagrams»). El modo se irá ofreciendo a los MID y a las redes de análisis de decisiones a medida que se arregle su propagación. Medido ese día con la propagación del modo inferencia, sin evidencia, sobre las redes del repositorio: propagan 20 de 20 redes bayesianas, 30 de 30 diagramas de influencia, 66 de 68 redes de análisis de decisiones (falla \texttt{DAN-reactor} en sus dos formatos) y 14 de 26 MID (fallan \texttt{MID-CHD-Walker}, \texttt{MID-Colorectal} y \texttt{MID-mammography}, porque la relación uniforme de «Age {[}0{]}» no se convierte en tabla; \texttt{MID-CHAP-Ryan-Griffin}, por una expresión que usa «Age {[}0{]}» sin valor; \texttt{MID-HPV}, con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} al podar la red; y \texttt{MID-Cochlear}, que no termina en 60 segundos); el algoritmo rechaza las LIMID y los POMDP
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:242-247, 361-369}
@@ -16546,6 +16569,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:230]{Error 230} & hallazgo nuevo, al medir la propagación de cada tipo de red para el \hyperref[err:201]{error~201} \\
 \hyperref[err:231]{Error 231} & hallazgo nuevo, al medir la propagación de cada tipo de red para el \hyperref[err:201]{error~201} \\
 \hyperref[err:232]{Error 232} & hallazgo nuevo, visto en la aplicación al probar el modo inferencia con los MID para el \hyperref[err:201]{error~201} \\
+\hyperref[err:233]{Error 233} & hallazgo nuevo, al probar las tres opciones de transición para el \hyperref[err:201]{error~201} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
