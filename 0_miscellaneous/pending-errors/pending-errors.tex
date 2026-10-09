@@ -4549,9 +4549,9 @@ Medido: en \texttt{DAN-reactor.pgmx} y en su versión en formato 1.0, \texttt{VE
 
 La red del reactor tiene cuatro restricciones en sus enlaces. El artículo que define estas redes (Díez, Luque, König y Bermejo, «Decision analysis networks», sección II.B) dice que una restricción $(x, y)$ sobre una variable de azar equivale a poner a cero la probabilidad correspondiente. La probabilidad de alguna variable sale así toda a ceros, y la propagación lo toma por evidencia imposible desde el commit \texttt{dd3a7bc} (antes lanzaba «All the values are 0.0 in potential \ldots»).
 
-No se ha mirado qué variable es ni por qué camino llega a cero.
+Medido después, pidiendo las variables una a una: fallan «Result of test» y «Result of advanced reactor»; las demás propagan. La propagación resuelve antes las decisiones con su política óptima, que aquí es no hacer la prueba («Test decision» = {[}0, 1{]}) y construir el reactor convencional («Build decision» = {[}0, 1, 0{]}). Con esa estrategia la prueba no se hace y el reactor avanzado no se construye, así que sus resultados no tienen ningún valor posible: son restricciones totales. El artículo lo dice así: una restricción total $(x, Y)$ «implies that in some scenarios the variable Y does not exist». Lo que la propagación llama evidencia imposible es una variable que, con esa estrategia, no existe.
 \paragraph{Cómo arreglarlo}
-Primero, localizar la variable cuya probabilidad sale a ceros y la restricción que lo causa. Después hay dos cosas distintas que resolver: que la propagación no llame evidencia imposible a lo que no lo es, y qué debe enseñar el modo inferencia en ese nodo. El artículo define el significado de una DAN por su árbol de decisión equivalente (sección III) y no se ha encontrado que diga qué es la probabilidad de una variable suelta; esa es la decisión.
+Hay dos cosas distintas que resolver: que la propagación no llame evidencia imposible a lo que no lo es, y qué debe enseñar el modo inferencia en ese nodo. El artículo define el significado de una DAN por su árbol de decisión equivalente (sección III) y no se ha encontrado que diga qué es la probabilidad de una variable suelta; esa es la decisión.
 
 Prueba: la propagación de \texttt{DAN-reactor.pgmx} sin evidencia termina, y con dos hallazgos imposibles sigue dando el mensaje del \hyperref[err:48]{error~48}.
 
