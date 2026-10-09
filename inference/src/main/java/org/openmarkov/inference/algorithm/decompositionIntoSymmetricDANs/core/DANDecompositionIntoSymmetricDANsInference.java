@@ -11,6 +11,7 @@ import org.openmarkov.core.exception.*;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.ProbNetOperations;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 
@@ -43,7 +44,13 @@ public class DANDecompositionIntoSymmetricDANsInference extends DANInference {
                                                                                                newConditioningVariablesList, evidenceCase, isCEA);
             setProbabilityAndUtilityFromEvaluation(evaluation);
         } else {// The DAN is asymmetric
-            if (!asymmetricObservedVariables
+            Variable knownDecision = decisionWhoseOptionIsKnown(dan, evidenceCase);
+            if (knownDecision != null) { // It is not made: the network is the one of that option
+                State option = knownDecision.getStates()[evidenceCase.getFinding(knownDecision).getStateIndex()];
+                setProbabilityAndUtilityFromEvaluation(new DANDecompositionIntoSymmetricDANsInference(
+                        DANOperations.instantiate(dan, knownDecision, option), newConditioningVariablesList,
+                        evidenceCase, isCEA));
+            } else if (!asymmetricObservedVariables
                     .isEmpty()) { // If O_A is not empty, then some always-observed variable introduces asymmetries
                 Variable x = DANOperations.selectVariableWithoutAncestorsInVariables(asymmetricObservedVariables, dan);
                 for (State state : x.getStates()) {
@@ -77,6 +84,18 @@ public class DANDecompositionIntoSymmetricDANsInference extends DANInference {
         }
     }
     
+    /** A decision that could be made now and has a finding, or null if there is none. */
+    private static Variable decisionWhoseOptionIsKnown(ProbNet dan, EvidenceCase evidenceCase) {
+        if (evidenceCase != null) {
+            for (Node decision : ProbNetOperations.getParentlessDecisions(dan)) {
+                if (evidenceCase.contains(decision.getVariable())) {
+                    return decision.getVariable();
+                }
+            }
+        }
+        return null;
+    }
+
     private void prioritizeDANAndChildEvaluationDecompositionIntoSymmetricDANs(ProbNet dan, EvidenceCase evidenceCase,
                                                                                List<Variable> newConditioningVariablesList, Node decision) throws NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints {
         ProbNet prioritizedDAN = DANOperations.prioritize(dan, decision);
