@@ -278,7 +278,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \addcontentsline{toc}{section}{Resumen}
 
 La lista tiene \textbf{224 errores}; 80 de ellos son defectos nuevos: 57 encontrados al
-comprobar o corregir los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{48} necesitan antes una decisión del equipo. Por esfuerzo estimado: 188 pequeños, 36 medios y 0 grandes.
+comprobar o corregir los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 188 pequeños, 36 medios y 0 grandes.
 De los 224, 64 están ya corregidos, 10 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 191 notas con lo que se comprobó y no entra en la lista.
 
@@ -454,7 +454,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:coste}.\ Coste-efectividad y análisis de sensibilidad}}\\
 \hyperref[err:74]{74} & El jar publicado mezcla dos JFreeChart y muchas gráficas no se abren & \texttt{full} & S \hfill No\\
 \hyperref[err:75]{75} & La araña de coste-efectividad reescribe la red abierta con las medias & \texttt{core} & M \hfill No\\
-\hyperref[err:76]{76} & Una columna con incertidumbre solo en algunas casillas se sortea mal & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:76]{76} & Una columna con incertidumbre solo en algunas casillas se sortea mal & \texttt{core} & S \hfill No\\
 \hyperref[err:77]{77} & El análisis probabilístico de sensibilidad no se puede repetir & \texttt{core} & M \hfill No\\
 \hyperref[err:78]{78} & El diálogo de incertidumbre rechaza toda Dirichlet sobre dos o más estados & \texttt{gui} & S \hfill No\\
 \hyperref[err:79]{79} & Editor y muestreador reparten distinto el complemento junto a una Dirichlet & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -6720,7 +6720,7 @@ Pruebas:
 \fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/TablePotentialSampler.java:60-77} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/Sampler.java:56-82,126-179} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1324-1356} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VECEPSA.java:105-113} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/CEProbabilisticDialog.java:152-164}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
-\fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué significa una columna de probabilidad en la que unas casillas llevan distribución y otras un número fijo (prohibirla al leer y al editar, o sortear las inciertas conservando las fijas)
+\fichakey{Decisión de equipo}No. Hasta el 09-10-2026 pedía decidir qué significa una columna en la que unas casillas llevan distribución y otras un número fijo. Manuel Arias la retiró ese día: el modelo ya lo dice, porque un número fijo es la distribución «Exact» en ese número (\texttt{new\ Uncertain\allowbreak{}Value(\allowbreak{}double)} construye justo eso), y el sorteo la trata bien
 \fichakey{Relacionados}\hyperref[err:77]{error~77}, \hyperref[err:116]{error~116}, \hyperref[err:167]{error~167}, \hyperref[nota:58]{nota~58}, \hyperref[nota:110]{nota~110}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -6775,7 +6775,7 @@ core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/TablePoten
 \paragraph{Cómo arreglarlo}
 La columna tiene incertidumbre si alguna de sus casillas la tiene.
 
-Qué hacer con las casillas fijas de una columna incierta es la decisión de equipo. Una opción es rechazar la columna a medias al leer el fichero (y en \texttt{Uncertain\allowbreak{}Values\allowbreak{}Edit}); otra es tratar cada casilla fija como un valor exacto que resta masa al complemento.
+Una casilla sin distribución en una columna que tiene alguna se trata como la distribución «Exact» en su número, que resta masa al complemento. Medido el 09-10-2026 con la columna {[}Beta(2,5), 0,3, Complement{]}, cuatro sorteos de cada manera: con la casilla del medio escrita como «Exact(0.3)» sale siempre 0,3 y el complemento se queda con el resto (por ejemplo 0,147, 0,3 y 0,553); sin distribución sale siempre 0,0 (por ejemplo 0,053, 0,0 y 0,947). Rechazar la columna a medias al leer dejaría fuera ficheros que el formato admite y que tienen ese significado. Queda por elegir dónde se hace la conversión (al leer el fichero o en el sorteo). Si los números fijos y los sorteados suman más de 1, pasa lo mismo que hoy con una casilla «Exact» escrita a mano.
 
 La misma pregunta, «¿tiene incertidumbre esta columna?», se decide también en la tabla de la ventana (\texttt{Table\allowbreak{}Potential.\allowbreak{}has\allowbreak{}Uncertainty}, que mira solo la primera casilla: ver \hyperref[err:167]{error~167}) y en \texttt{Uncertain\allowbreak{}Values\allowbreak{}Dialog.\allowbreak{}has\allowbreak{}Uncertain\allowbreak{}Values}. Conviene que los tres sitios usen un único método.
 
@@ -13910,7 +13910,7 @@ Prueba de regresión en \texttt{core}: la de la medida (cambiar el tipo y compro
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
-\fichakey{Corregir antes}\hyperref[err:76]{error~76}: allí se decide qué significa una columna con incertidumbre en solo algunas casillas; si se prohíbe al leer el fichero, este error deja de alcanzarse, y si se admite, los dos deben usar la misma comprobación.
+\fichakey{Corregir antes}\hyperref[err:76]{error~76}: a la vez, como mínimo: los dos preguntan si una columna tiene incertidumbre y deben usar la misma comprobación.
 \fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n76) at (0.00,0.00) {\hyperref[err:76]{76}}; \node[errnodo,erreste] (n167) at (1.50,0.00) {\hyperref[err:167]{167}}; \draw[->,black!70] (n76) -- (n167); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:76]{error~76}
 \end{ficha}
