@@ -23,8 +23,8 @@ public class ReaderFactory {
      */
     public static PGMXReader_0_2 getReader(String strVersion) throws ProbNetParserException.WrongVersion {
         Version version = Arrays.stream(Version.values())
-                                .filter(
-                                        iteratorVersion -> strVersion.startsWith(iteratorVersion.toString()))
+                                .filter(iteratorVersion -> strVersion != null
+                                        && strVersion.startsWith(iteratorVersion.toString()))
                                 .findFirst()
                                 .orElse(null);
         return switch (version) {

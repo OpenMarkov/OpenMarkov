@@ -14,6 +14,7 @@ import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.format.annotation.FormatType;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.io.probmodel.exception.PGMXParserException;
 import org.openmarkov.io.probmodel.strings.XMLAttributes;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_0_2;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_1_0;
@@ -31,6 +32,9 @@ public class PGMXReader implements ProbNetReader {
     
     @Override public ProbNetInfo read(URL networkSource) throws IOException, ProbNetParserException {
         Element root = PGMXReader_0_2.getRootElement(networkSource);
+        if (!root.getName().equals("ProbModelXML")) {
+            throw new PGMXParserException.NotAProbModelXMLFile(networkSource.getFile(), root);
+        }
         String formatVersion = root.getAttributeValue(XMLAttributes.FORMAT_VERSION.toString());
         PGMXReader_0_2 reader = ReaderFactory.getReader(formatVersion);
         NetworkAndEvidence networkAndEvidence = reader.read(networkSource);

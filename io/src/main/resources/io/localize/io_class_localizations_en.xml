@@ -14,6 +14,7 @@
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TreeADDWithoutPotentialOrReferenfe" value="TreeADD branch should specify either a potential or a reference."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TreeADDWithoutTwoThresholds" value="TreeADD branch has {thresholds.size} thresholds, but it should have only 2."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownNetworkType" value="There is no network type matching {unknownType}."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$NotAProbModelXMLFile" value="File {fileName} is not a ProbModelXML network: its root element is {rootName}."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownAgent" value="Variable {variableName} has the agent {agentName}, which is not in the list of agents of the network."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$VariableHasNoStates" value="Variable {variableName} has no states, while a list of states must be provided."/>
     <Localization

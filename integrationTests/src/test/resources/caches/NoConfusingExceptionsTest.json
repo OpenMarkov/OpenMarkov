@@ -108,6 +108,7 @@
     "NodeMustBeEvent",
     "NodeMustBeUtility",
     "NonProjectablePotentialException",
+    "NotAProbModelXMLFile",
     "NotAllNodesHavePoliciesException",
     "NotAllowedType",
     "NotApplicableNetwork",

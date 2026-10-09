@@ -154,7 +154,10 @@ public class FormatManager {
             }
             fileVersion = doc.getDocumentElement().getAttribute("formatVersion");
             //Removing the last index of the version
-            fileVersion = fileVersion.substring(0, fileVersion.lastIndexOf('.'));
+            int lastDot = fileVersion.lastIndexOf('.');
+            if (lastDot >= 0) {
+                fileVersion = fileVersion.substring(0, lastDot);
+            }
         }
         return fileVersion;
     }

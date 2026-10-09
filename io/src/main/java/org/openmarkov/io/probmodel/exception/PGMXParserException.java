@@ -60,6 +60,17 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String variableName;
     }
     
+    public static final class NotAProbModelXMLFile extends PGMXParserException {
+        public NotAProbModelXMLFile(String fileName, Element root) {
+            super(root);
+            this.fileName = fileName;
+            this.rootName = root.getName();
+        }
+        
+        public final String fileName;
+        public final String rootName;
+    }
+    
     public static final class UnknownAgent extends PGMXParserException {
         public UnknownAgent(String variableName, String agentName, Element element) {
             super(element);
