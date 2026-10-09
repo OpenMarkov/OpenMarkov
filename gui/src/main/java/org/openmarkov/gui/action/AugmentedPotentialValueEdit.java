@@ -237,7 +237,11 @@ import static org.openmarkov.core.expression.VariableExpression.Common.COMPLEMEN
                 newAugmentedValues[tableIndex] = valuesOfColumn[valueIndex];
             }
         }
-        newAugmentedValues[indexSelected] = newValue;
+        if (isAugmentedProbTablePotential) {
+            newAugmentedValues[indexSelected] = newValue;
+        } else {
+            newUnivariateDistrPotential.setParameter(indexSelected, newValue);
+        }
     }
     
     /**

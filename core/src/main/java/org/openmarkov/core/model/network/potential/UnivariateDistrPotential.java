@@ -10,6 +10,7 @@ package org.openmarkov.core.model.network.potential;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.expression.ReferencedExpression;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -342,6 +343,31 @@ public class UnivariateDistrPotential extends TableWithEvents
         Arrays.fill(functionValues, INITIALIZATION_VALUE);
     }
     
+    /** Sets the numbers of the parameters, and the expression of each parameter that is not a formula. */
+    public void setParameters(double[] numbers) {
+        distributionTable.setValues(numbers);
+        VariableExpression[] expressions = distributionTable.getFunctionValues();
+        for (int i = 0; i < Math.min(numbers.length, expressions.length); i++) {
+            if (expressions[i] == null || expressions[i].references().isEmpty()) {
+                expressions[i] = new VariableExpression(Collections.emptyList(),
+                                                        ReferencedExpression.toExpression(numbers[i]));
+            }
+        }
+    }
+
+    /** Sets the expression of a parameter, and its number when the expression is a number. */
+    public void setParameter(int index, VariableExpression expression) {
+        distributionTable.getFunctionValues()[index] = expression;
+        if (expression.references().isEmpty()) {
+            try {
+                distributionTable.getValues()[index] = Double.parseDouble(expression.evaluateWith(Collections.emptyMap()));
+            } catch (NonProjectablePotentialException.CannotEvaluate
+                     | NonProjectablePotentialException.CannotResolveVariable | NumberFormatException notANumber) {
+                // the number stays as it was
+            }
+        }
+    }
+
     /**
      * Verifies that the given values are valid parameters for the configured probability
      * density function, delegating to the function's own parameter check.
@@ -436,6 +462,7 @@ public class UnivariateDistrPotential extends TableWithEvents
             for (int i = 0; i < values.length; i++) {
                 values[i] *= scale;
             }
+            setParameters(values);
         } else {
             this.getDistributionTable().scalePotential(scale);
         }

@@ -160,7 +160,7 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         }
         // After the table read from <Functions>, so that the numbers land on the table the
         // potential keeps and not on the one just replaced.
-        potential.getAugmentedProbTable().setValues(table);
+        potential.setParameters(table);
         
         return potential;
     }
