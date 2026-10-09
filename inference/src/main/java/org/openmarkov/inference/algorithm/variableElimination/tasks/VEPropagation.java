@@ -30,11 +30,14 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.operation.DiscretePotentialOperations;
 import org.openmarkov.inference.algorithm.variableElimination.VariableEliminationCore;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -135,6 +138,7 @@ public class VEPropagation extends VariableElimination implements Propagation {
         generalPreprocessing();
 //		unicriterionPreprocess();
         // TODO - Implement: For each super-value node, create a new node whose parents are all chance or decision nodes
+        ProbNet beforeAbsorbing = probNet.copy();
         exactAlgorithmsPreprocessing();
         // Straight to the field, not through setPostResolutionEvidence: this is preprocessing
         // replacing its own evidence with a derived one, not a caller supplying evidence.
@@ -150,10 +154,19 @@ public class VEPropagation extends VariableElimination implements Propagation {
                 if (evidenceVariables.contains(variableOfInterestInProbnet)) {
                     variablesOfInterestBelongingToEvidence.add(variableOfInterestInProbnet);
                 } else {
-                    ProbNet preprocessedNetwork = pruneNetwork(probNet.copy(), variableOfInterest);
-                    ProbNet markovNetwork = TaskUtilities
-                            .projectTablesAndBuildMarkovDecisionNetwork(preprocessedNetwork, evidence);
-                    InvokeVariableEliminationCore(markovNetwork, evidence, variableOfInterest);
+                    // A utility node absorbed by the one that adds or multiplies it is computed where it is the
+                    // last one. A numeric chance node that was made discrete is not computed.
+                    Node absorbed = beforeAbsorbing.getNode(variableOfInterest);
+                    boolean wasAbsorbed = probNet.getNode(variableOfInterest) == null && absorbed != null
+                            && absorbed.getNodeType() == NodeType.UTILITY;
+                    if (probNet.getNode(variableOfInterest) != null || wasAbsorbed) {
+                        ProbNet network = wasAbsorbed ? whereItIsTheLast(beforeAbsorbing, variableOfInterest)
+                                : probNet.copy();
+                        ProbNet markovNetwork = TaskUtilities.projectTablesAndBuildMarkovDecisionNetwork(
+                                pruneNetwork(network, variableOfInterest), evidence);
+                        InvokeVariableEliminationCore(markovNetwork, evidence, variableOfInterest,
+                                                      network.getNode(variableOfInterest).getNodeType());
+                    }
                 }
             }
         }
@@ -174,7 +187,8 @@ public class VEPropagation extends VariableElimination implements Propagation {
     
     // Methods
     
-    private void InvokeVariableEliminationCore(ProbNet network, EvidenceCase evidence, Variable variableOfInterest) throws CannotNormalizePotentialException {
+    private void InvokeVariableEliminationCore(ProbNet network, EvidenceCase evidence, Variable variableOfInterest,
+                                               NodeType typeOfTheNode) throws CannotNormalizePotentialException {
         // From the network the elimination will run on, which is the one passed in - not from the
         // field, which is the network before its potentials were projected. The two hold the same
         // chance and decision variables today, so this changes nothing; they stop holding the same
@@ -191,7 +205,7 @@ public class VEPropagation extends VariableElimination implements Propagation {
         variableEliminationCore = new VariableEliminationCore(network, heuristic, true);
         
         TablePotential posteriorValue;
-        if (probNet.getNode(variableOfInterest).getNodeType() == NodeType.UTILITY) {
+        if (typeOfTheNode == NodeType.UTILITY) {
             posteriorValue = variableEliminationCore.getUtility();
             if (posteriorValue == null) {
                 posteriorValue = new TablePotential(Arrays.asList(variableOfInterest), PotentialRole.UNSPECIFIED);
@@ -227,6 +241,23 @@ public class VEPropagation extends VariableElimination implements Propagation {
      *
      * @throws IncompatibleEvidenceException if the evidence is incompatible with the network
      */
+    /** A copy of the network without the descendants of a utility node, prepared as the whole network was. */
+    private ProbNet whereItIsTheLast(ProbNet network, Variable utilityVariable)
+            throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException {
+        ProbNet copy = network.copy();
+        Deque<Node> pending = new ArrayDeque<>(copy.getNode(utilityVariable).getChildren());
+        Set<Node> descendants = new LinkedHashSet<>();
+        while (!pending.isEmpty()) {
+            Node node = pending.pop();
+            if (descendants.add(node)) {
+                pending.addAll(node.getChildren());
+            }
+        }
+        descendants.forEach(copy::removeNode);
+        copy = TaskUtilities.discretizeNonObservedNumericVariables(copy, getPreResolutionEvidence());
+        return TaskUtilities.absorbAllIntermediateNumericNodes(copy, getPreResolutionEvidence());
+    }
+
     private ProbNet pruneNetwork(ProbNet preprocessedNetwork, Variable variableOfInterest)
             throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
         //Prune all the nodes except the variable of interest and its ancestors (and the corresponding findings).
