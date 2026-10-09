@@ -277,9 +277,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{230 errores}; 86 de ellos son defectos nuevos: 63 encontrados al
-comprobar o corregir los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{40} necesitan antes una decisión del equipo. Por esfuerzo estimado: 192 pequeños, 38 medios y 0 grandes.
-De los 230, 83 están ya corregidos, 11 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{231 errores}; 87 de ellos son defectos nuevos: 64 encontrados al
+comprobar o corregir los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{40} necesitan antes una decisión del equipo. Por esfuerzo estimado: 193 pequeños, 38 medios y 0 grandes.
+De los 231, 83 están ya corregidos, 11 lo están en parte y 2 están cerrados sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 191 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -292,7 +292,7 @@ El apéndice recoge además 191 notas con lo que se comprobó y no entra en la l
 \ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 18 \\
 \ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 12 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
-\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 16 \\
+\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 17 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 22 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 8 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 21 \\
@@ -332,6 +332,7 @@ asignados a Jorge Rico. Los demás errores sin corregir no esperan a ninguno.
 \node[err] (e229) at (4.8,0.0) {\hyperref[err:229]{229}};
 \node[err] (e230) at (6.0,0.0) {\hyperref[err:230]{230}};
 \node[err] (e231) at (7.2,0.0) {\hyperref[err:231]{231}};
+\node[err] (e232) at (8.4,0.0) {\hyperref[err:232]{232}};
 \node[err] (e201) at (4.8,-1.6) {\hyperref[err:201]{201}};
 \draw[->,thick,black!70] (e19) -- (e20);
 \draw[->,thick,black!70] (e19) -- (e21);
@@ -343,6 +344,7 @@ asignados a Jorge Rico. Los demás errores sin corregir no esperan a ninguno.
 \draw[->,thick,black!70] (e229) -- (e201);
 \draw[->,thick,black!70] (e230) -- (e201);
 \draw[->,thick,black!70] (e231) -- (e201);
+\draw[->,thick,black!70] (e232) -- (e201);
 
 \end{tikzpicture}
 \end{center}
@@ -417,6 +419,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:229]{229} & Tres MID no propagan porque la edad inicial es uniforme & \texttt{inference} & M \hfill No\\
 \hyperref[err:230]{230} & MID-CHAP-Ryan-Griffin no propaga: una expresión usa la edad sin valor & \texttt{inference} & S \hfill No\\
 \hyperref[err:231]{231} & La propagación de MID-Cochlear no termina en un minuto & \texttt{inference} & M \hfill No\\
+\hyperref[err:232]{232} & La red desplegada con «Expand network» no entra en modo inferencia & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:decisiones}.\ Decisiones: políticas, criterios, agentes y árbol de decisión}}\\
 \hyperref[err:50]{50} & \textcolor{corregidoverde}{\textbf{Corregido}} · El árbol de decisión falla en casi todas las redes en formato 1.0 & \texttt{inference} & M \hfill No\\
 \hyperref[err:51]{51} & «Show optimal policy» y «Show expected utility» no llegan a abrirse & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -4640,6 +4643,28 @@ El artículo que define los MID dice que la complejidad de la evaluación crece 
 Lo que hay que mirar es la evaluación de la red desplegada a 100 ciclos: qué tamaño alcanzan las tablas al eliminar y si los nodos de utilidad se mantienen separados hasta eliminar la decisión, que es la condición que pone el artículo para que el coste no crezca exponencialmente con el horizonte («value nodes should be kept separate until the moment of eliminating the first decision»). No se ha mirado todavía.
 
 Prueba: la propagación de \texttt{MID-Cochlear.pgmx} sin evidencia termina en un tiempo que se pueda esperar en la ventana.
+
+\subsection[La red desplegada con «Expand network» no entra en modo inferencia]{La red que abre «Expand network» no entra en modo inferencia: sale el diálogo de error no previsto}\label{err:232}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui, core
+\fichakey{Paquete}org.openmarkov.gui.window; org.openmarkov.core.model.network
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:176-200} \newline \path{core/src/main/java/org/openmarkov/core/model/network/TemporalNetOperations.java:440-500}
+\fichakey{Comprobado}En la aplicación, con un guion que lanza las acciones de menú
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:201]{error~201}
+\end{ficha}
+\paragraph{Qué pasa}
+Camino del usuario: abrir \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-Chancellor.\allowbreak{}pgmx}, clic derecho sobre el fondo de la red → «Expand network», aceptar las opciones de inferencia. Se abre en otra pestaña la red desplegada, convertida en diagrama de influencia, con 148 nodos. Al pulsar en ella el botón de modo inferencia sale el diálogo «Unexpected error \ldots{} Please, send this to the developers of OpenMarkov», con el texto «Argument is invalid: Argument copyNet (Time in treatment {[}0{]}) is invalid because network MID-Chancellor\_extended \ldots», y la red se queda en modo edición.
+
+Visto el 09-10-2026 con un guion, no con el ratón. El mensaje se cortó en la medida y no se ha mirado dónde se lanza. Solo se ha probado con esa red.
+
+Importa para el \hyperref[err:201]{error~201}: se decidió que el modo inferencia de un MID enseñe la red de dos ciclos por omisión y la desplegada cuando el usuario la pida, y esta es la acción que ya existe para pedirla.
+\paragraph{Cómo arreglarlo}
+Primero, localizar la excepción: el texto apunta a una operación que copia un nodo («copyNet») y encuentra una variable numérica, «Time in treatment {[}0{]}», que no espera en esa red. Sin esa lectura no se puede proponer nada.
+
+Prueba: la red desplegada de \texttt{MID-Chancellor} propaga.
 
 \setcounter{subsection}{49}
 
@@ -14813,15 +14838,15 @@ Prueba de regresión: sin ventana, con la tabla del diálogo o con el cálculo e
 \setcounter{subsection}{200}
 \subsection[El modo inferencia solo se ofrece a diagramas de influencia y redes bayesianas]{El botón que pasa a modo inferencia está apagado en toda red que no sea un diagrama de influencia o una red bayesiana}\label{err:201}
 \begin{ficha}
-\fichakey{Estado}Presente en parte: desde el commit \texttt{ac0cc81} (09-10-2026) el modo inferencia se ofrece también a las redes de análisis de decisiones (\hyperref[err:227]{error~227}); faltan los MID. Desde el commit \texttt{a1e8859} (09-10-2026) el botón y la entrada de menú apagados lo explican en su ayuda emergente («Inference mode is offered only for Bayesian networks and influence diagrams»). El modo se irá ofreciendo a los MID y a las redes de análisis de decisiones a medida que se arregle su propagación. Medido ese día con la propagación del modo inferencia, sin evidencia, sobre las redes del repositorio: propagan 20 de 20 redes bayesianas, 30 de 30 diagramas de influencia, 66 de 68 redes de análisis de decisiones (falla \texttt{DAN-reactor} en sus dos formatos) y 14 de 26 MID (fallan \texttt{MID-CHD-Walker}, \texttt{MID-Colorectal} y \texttt{MID-mammography}, porque la relación uniforme de «Age {[}0{]}» no se convierte en tabla; \texttt{MID-CHAP-Ryan-Griffin}, por una expresión que usa «Age {[}0{]}» sin valor; \texttt{MID-HPV}, con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} al podar la red; y \texttt{MID-Cochlear}, que no termina en 60 segundos); el algoritmo rechaza las LIMID y los POMDP
+\fichakey{Estado}Presente en parte. Probado el 09-10-2026 en la aplicación con el botón encendido para los MID, sin confirmarlo: de las 10 redes de \texttt{mid} (sin \texttt{MID-Cochlear}), entran en modo inferencia las tres \texttt{MID-Chancellor}, \texttt{MID-hip-Briggs} y las dos \texttt{MID-HPV}, en 3 a 5 segundos; \texttt{MID-Colorectal} entra pero deja la aplicación parada 163 segundos; \texttt{MID-CHAP-Ryan-Griffin}, \texttt{MID-CHD-Walker} y \texttt{MID-mammography} dan un diálogo de error normal y vuelven a edición. En \texttt{MID-Chancellor} todos los nodos de utilidad muestran 0,0000. Antes: desde el commit \texttt{ac0cc81} (09-10-2026) el modo inferencia se ofrece también a las redes de análisis de decisiones (\hyperref[err:227]{error~227}); faltan los MID. Desde el commit \texttt{a1e8859} (09-10-2026) el botón y la entrada de menú apagados lo explican en su ayuda emergente («Inference mode is offered only for Bayesian networks and influence diagrams»). El modo se irá ofreciendo a los MID y a las redes de análisis de decisiones a medida que se arregle su propagación. Medido ese día con la propagación del modo inferencia, sin evidencia, sobre las redes del repositorio: propagan 20 de 20 redes bayesianas, 30 de 30 diagramas de influencia, 66 de 68 redes de análisis de decisiones (falla \texttt{DAN-reactor} en sus dos formatos) y 14 de 26 MID (fallan \texttt{MID-CHD-Walker}, \texttt{MID-Colorectal} y \texttt{MID-mammography}, porque la relación uniforme de «Age {[}0{]}» no se convierte en tabla; \texttt{MID-CHAP-Ryan-Griffin}, por una expresión que usa «Age {[}0{]}» sin valor; \texttt{MID-HPV}, con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} al podar la red; y \texttt{MID-Cochlear}, que no termina en 60 segundos); el algoritmo rechaza las LIMID y los POMDP
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:242-247, 361-369}
 \fichakey{Comprobado}Leyendo el código; visto en la ventana con un MID
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No. Pedía decidir si es intencionado y a qué tipos debe ofrecerse. Manuel Arias lo decidió el 09-10-2026: se ofrecerá también a los MID y a las redes de análisis de decisiones, que son los tipos que el algoritmo de propagación declara, pero no antes de arreglar las propagaciones que fallan
-\fichakey{Corregir antes}\hyperref[err:229]{errores~229}, \hyperref[err:230]{230} y \hyperref[err:231]{231}: el modo inferencia se ofrecerá a los MID cuando sus redes propaguen.
-\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n229) at (3.00,0.00) {\hyperref[err:229]{229}}; \node[errnodo] (n230) at (4.50,0.00) {\hyperref[err:230]{230}}; \node[errnodo] (n231) at (6.00,0.00) {\hyperref[err:231]{231}}; \node[errnodo,erreste] (n201) at (3.00,-1.30) {\hyperref[err:201]{201}}; \draw[->,black!70] (n229) -- (n201); \draw[->,black!70] (n230) -- (n201); \draw[->,black!70] (n231) -- (n201); \end{tikzpicture}
+\fichakey{Corregir antes}\hyperref[err:229]{errores~229}, \hyperref[err:230]{230}, \hyperref[err:231]{231} y \hyperref[err:232]{232}: el modo inferencia se ofrecerá a los MID cuando sus redes propaguen y la desplegada entre en él.
+\fichakey{Grafo}\begin{tikzpicture}[baseline=-0.6ex,>=stealth] \node[errnodo] (n229) at (3.00,0.00) {\hyperref[err:229]{229}}; \node[errnodo] (n230) at (4.50,0.00) {\hyperref[err:230]{230}}; \node[errnodo] (n231) at (6.00,0.00) {\hyperref[err:231]{231}}; \node[errnodo] (n232) at (7.50,0.00) {\hyperref[err:232]{232}}; \node[errnodo,erreste] (n201) at (3.00,-1.30) {\hyperref[err:201]{201}}; \draw[->,black!70] (n232) -- (n201); \draw[->,black!70] (n229) -- (n201); \draw[->,black!70] (n230) -- (n201); \draw[->,black!70] (n231) -- (n201); \end{tikzpicture}
 \fichakey{Relacionados}\hyperref[err:66]{error~66}
 \end{ficha}
 \paragraph{Qué pasa}
@@ -16522,6 +16547,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:229]{Error 229} & hallazgo nuevo, al medir la propagación de cada tipo de red para el \hyperref[err:201]{error~201} \\
 \hyperref[err:230]{Error 230} & hallazgo nuevo, al medir la propagación de cada tipo de red para el \hyperref[err:201]{error~201} \\
 \hyperref[err:231]{Error 231} & hallazgo nuevo, al medir la propagación de cada tipo de red para el \hyperref[err:201]{error~201} \\
+\hyperref[err:232]{Error 232} & hallazgo nuevo, visto en la aplicación al probar el modo inferencia con los MID para el \hyperref[err:201]{error~201} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
