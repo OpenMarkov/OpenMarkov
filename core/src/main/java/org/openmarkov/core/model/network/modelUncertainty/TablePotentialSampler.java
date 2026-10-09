@@ -59,7 +59,7 @@ public class TablePotentialSampler extends Sampler {
 			// iterates over the configurations
 			for (int configurationIndex = 0; configurationIndex < numConfigurations; configurationIndex++) {
 				int configurationBasePosition = numStates * configurationIndex;
-				uncertainValues = getUncertainValuesChance(uTable, configurationBasePosition, numStates);
+				uncertainValues = inputTablePotential.getUncertainColumn(configurationBasePosition, numStates);
 				hasUncertainty = uncertainValues.get(0) != null;
 				if (hasUncertainty) {
 					sampledConfigurationValues = generateSample(uncertainValues, numStates, functionTypes);

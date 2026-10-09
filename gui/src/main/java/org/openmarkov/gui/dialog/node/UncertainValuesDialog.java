@@ -415,7 +415,7 @@ public class UncertainValuesDialog extends OkCancelDialog {
         // Get the table of uncertain values
         UncertainValue[] uncertainTable = !hasUncertainValues(projectedUncertainTable) ?
                 createExactUncertainValuesFromDouble(projectedPotential) :
-                projectedPotential.getUncertainValues();
+                projectedPotential.getUncertainColumn(0, projectedUncertainTable.length).toArray(UncertainValue[]::new);
         // Fill the table for the dialog
         
         String[] englishColumnNames = new String[]{"State", "Distribution", "Parameters", "Name"};

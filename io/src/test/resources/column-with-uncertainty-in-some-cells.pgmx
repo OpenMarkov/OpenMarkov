@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="BayesianNetwork">
+    <DecisionCriteria>
+      <Criterion name="Cost" unit="€" />
+      <Criterion name="Effectiveness" unit="QALY" />
+    </DecisionCriteria>
+    <Variables>
+      <Variable name="Y" type="finiteStates" role="chance">
+        <Coordinates x="100" y="100" />
+        <States>
+          <State name="y0" />
+          <State name="y1" />
+          <State name="y2" />
+        </States>
+      </Variable>
+      <Variable name="X" type="finiteStates" role="chance">
+        <Coordinates x="100" y="100" />
+        <States>
+          <State name="x0" />
+          <State name="x1" />
+          <State name="x2" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Y" />
+        <Variable name="X" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Y" />
+        </Variables>
+        <Values>0.4 0.3 0.3</Values>
+      </Potential>
+      <Potential type="ProbTable" role="conditionalProbability">
+        <Variables>
+          <Variable name="X" />
+          <Variable name="Y" />
+        </Variables>
+        <Values>0.2 0.2 0.6 0.4 0.3 0.3 0.1 0.2 0.7</Values>
+        <UncertainValues>
+          <Value />
+          <Value distribution="Range">0.1 0.3</Value>
+          <Value distribution="Complement">1.0</Value>
+          <Value distribution="Range">0.3 0.5</Value>
+          <Value />
+          <Value distribution="Complement">1.0</Value>
+          <Value />
+          <Value />
+          <Value />
+        </UncertainValues>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Effectiveness" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Effectiveness" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="Cost" Value="Cost" />
+          <CE_Criterion Criterion="Effectiveness" Value="Effectiveness" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+  <DefaultStates>
+    <State name="absent" />
+    <State name="present" />
+  </DefaultStates>
+</ProbModelXML>

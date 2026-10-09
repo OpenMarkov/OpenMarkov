@@ -13,7 +13,6 @@ import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -110,12 +109,6 @@ public abstract class Sampler {
 	
 	public static int numElementsInColumn(Potential originalSubpotential) {
 		return numElementsInColumn(originalSubpotential, false);
-	}
-
-	protected static List<UncertainValue> getUncertainValuesChance(UncertainValue[] uTable, int basePos,
-			int numStates) {
-        List<UncertainValue> uv = new ArrayList<>(Arrays.asList(uTable).subList(basePos, numStates + basePos));
-		return uv;
 	}
 
 	/**

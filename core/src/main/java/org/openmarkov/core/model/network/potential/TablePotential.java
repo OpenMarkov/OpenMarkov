@@ -416,7 +416,26 @@ public class TablePotential extends AbstractIndexedPotential
             return false;
         }
         int positionConfiguration = getPosition(configuration);
-        return uv[positionConfiguration] != null;
+        boolean isAColumn = getVariables().size() != configuration.getFindings().size();
+        int size = isAColumn ? getVariable(0).getNumStates() : 1;
+        return getUncertainColumn(positionConfiguration, size).getFirst() != null;
+    }
+
+    /**
+     * The uncertain values of the cells from a position on. When only some of them have a distribution, each of
+     * the others comes with the exact distribution at its number; when none has, all are null.
+     */
+    public List<UncertainValue> getUncertainColumn(int basePosition, int size) {
+        List<UncertainValue> column =
+                new ArrayList<>(Arrays.asList(getUncertainValues()).subList(basePosition, basePosition + size));
+        if (column.stream().anyMatch(Objects::nonNull)) {
+            for (int i = 0; i < size; i++) {
+                if (column.get(i) == null) {
+                    column.set(i, new UncertainValue(getValues()[basePosition + i]));
+                }
+            }
+        }
+        return column;
     }
     
     // TODO revisar para que no use tableProject(...)

@@ -211,8 +211,8 @@ public class SystematicSampling extends Sampler {
 				double pointsDistance = (parameter.max - min) / numIntervals;
 				int numStates = numElementsInColumn(originalSubPotential);
 				int configurationBasePositionInitColumn = position - posUncertainInColumn;
-				List<UncertainValue> columnUncertainValues = getUncertainValuesChance(
-						originalSubPotentialTable.getUncertainValues(), configurationBasePositionInitColumn, numStates);
+				List<UncertainValue> columnUncertainValues =
+						originalSubPotentialTable.getUncertainColumn(configurationBasePositionInitColumn, numStates);
 				Sampler sampler = new SystematicSampling();
 				double[] sampledConfigurationValues = sampler.generateSample(columnUncertainValues, numStates, functionTypes);
 				double[] auxSampledConfigurationValues = new double[numStates];
@@ -287,8 +287,8 @@ public class SystematicSampling extends Sampler {
 				double pointsDistance = (parameter.max - min) / numIntervals;
 				int numStates = numElementsInColumn(originalSubPotential);
 				int configurationBasePositionInitColumn = position - posUncertainInColumn;
-				List<UncertainValue> columnUncertainValues = getUncertainValuesChance(
-						originalSubPotentialTable.getUncertainValues(), configurationBasePositionInitColumn, numStates);
+				List<UncertainValue> columnUncertainValues =
+						originalSubPotentialTable.getUncertainColumn(configurationBasePositionInitColumn, numStates);
 				Sampler sampler = new SystematicSampling();
 				double[] sampledConfigurationValues = sampler.generateSample(columnUncertainValues, numStates, functionTypes);
 				double[] auxSampledConfigurationValues = new double[numStates];
