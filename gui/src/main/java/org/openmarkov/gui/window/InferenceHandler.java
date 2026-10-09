@@ -170,6 +170,7 @@ class InferenceHandler {
     void setInferenceOptions(NetworkEditorPanel networkPanel) {
         InferenceOptionsDialog dialog = new InferenceOptionsDialog(networkPanel.getProbNet(),
                                                                    ComponentUtilities.getOwner(mainPanel), null);
+        networkPanel.getEvidenceManager().forgetOptimalPolicies();
     }
 
     // ── Network expansion ─────────────────────────────────────────

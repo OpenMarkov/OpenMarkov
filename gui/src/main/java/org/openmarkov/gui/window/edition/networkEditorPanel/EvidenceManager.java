@@ -1,5 +1,6 @@
 package org.openmarkov.gui.window.edition.networkEditorPanel;
 
+import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.gui.dialog.inference.common.PropagationProgressDialog;
 import javax.swing.SwingUtilities;
 import org.openmarkov.core.exception.*;
@@ -49,6 +50,12 @@ public class EvidenceManager {
      * Pre resolution evidence
      */
     private EvidenceCase preResolutionEvidence;
+    
+    /**
+     * The optimal policies of the last propagation. They depend on the network and on the evidence before the
+     * resolution, not on the findings set in inference mode, so they are kept from one propagation to the next.
+     */
+    private HashMap<Variable, Potential> optimalPolicies;
     /**
      * Array of Evidence cases treated for this editor panel
      */
@@ -280,6 +287,7 @@ public class EvidenceManager {
      * @param postResolutionInference a list of evidence case.
      */
     public void setEvidence(EvidenceCase preResolutionEvidence, List<EvidenceCase> postResolutionInference) {
+        forgetOptimalPolicies();
         this.postResolutionEvidence = (postResolutionInference == null) ?
                 new ArrayList<>() :
                 postResolutionInference;
@@ -323,7 +331,13 @@ public class EvidenceManager {
      * This method updates the value of each state for each node in the network
      * with the current individual probabilities.
      */
+    /** Makes the next propagation compute the optimal policies again. */
+    public void forgetOptimalPolicies() {
+        this.optimalPolicies = null;
+    }
+
     public void updateIndividualProbabilitiesAndUtilities() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
+        forgetOptimalPolicies();
         // if some visualNode has a number of values different from the
         // number of evidence cases in memory, we need to recreate its
         // visual states and consider that the network has been changed.
@@ -603,7 +617,8 @@ public class EvidenceManager {
         Map<Variable, TablePotential> individualProbabilities = null;
         try {
             this.calculateMinAndMaxUtilityRanges();
-            VEPropagation vePosteriorValues = new VEPropagation(this.networkEditorPanel.getVisualNetwork().getProbNet());
+            VEPropagation vePosteriorValues = new VEPropagation(
+                    this.networkEditorPanel.getVisualNetwork().getProbNet(), this.optimalPolicies);
             vePosteriorValues.setVariablesOfInterest(this.networkEditorPanel.getVisualNetwork().getProbNet().getVariables());
             vePosteriorValues.setPreResolutionEvidence(this.preResolutionEvidence);
             vePosteriorValues.setPostResolutionEvidence(evidenceCase);
@@ -611,6 +626,7 @@ public class EvidenceManager {
             individualProbabilities = PropagationProgressDialog.posteriorValues(
                     SwingUtilities.getWindowAncestor(this.networkEditorPanel), vePosteriorValues,
                     vePosteriorValues.getProgress());
+            this.optimalPolicies = vePosteriorValues.getOptimalPolicies();
         } catch (OutOfMemoryError e) {
             boolean approximateInferenceWarningGiven = false;
             if (!approximateInferenceWarningGiven) {

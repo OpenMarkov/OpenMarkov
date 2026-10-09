@@ -92,6 +92,10 @@ public class VEPropagation extends VariableElimination implements Propagation {
                .setMulticriteriaType(MulticriteriaOptions.Type.UNICRITERION);
     }
     
+    /**
+     * @param optimalPolicies the optimal policies of the network, as a propagation of it with the same evidence
+     *                        before the resolution gave them; they are not computed again
+     */
     public VEPropagation(ProbNet network, HashMap<Variable, Potential> optimalPolicies) throws NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
         super(network);
         probNet.getInferenceOptions().getMultiCriteriaOptions()
@@ -101,6 +105,9 @@ public class VEPropagation extends VariableElimination implements Propagation {
     
     private void calculateOptimalPolicies(ProbNet probNet, EvidenceCase preResolutionEvidence, List<Node> decisionNodes)
             throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+        if (optimalPolicies != null) {
+            return;
+        }
         // If there are any remaining decision nodes in the network, they do not have imposed policies
         if (TaskUtilities.hasDecisionsWithoutImposedPolicy(probNet)) {
             VEEvaluation veEvaluation = new VEEvaluation(probNet);
@@ -122,6 +129,11 @@ public class VEPropagation extends VariableElimination implements Propagation {
         }
     }
     
+    /** @return the optimal policy of each decision without an imposed one; null before the propagation is made */
+    public HashMap<Variable, Potential> getOptimalPolicies() {
+        return optimalPolicies;
+    }
+
     private boolean momentOfTheTransitionsApplies = false;
 
     /** Each utility node gets the value of its own cycle, whatever the moment of the transitions, unless asked. */
