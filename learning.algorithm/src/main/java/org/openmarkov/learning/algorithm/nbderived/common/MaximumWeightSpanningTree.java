@@ -39,34 +39,31 @@ public class MaximumWeightSpanningTree {
         undirectedEdges.clear();
         directedEdges.clear();
 
-        Map<Set<Node>, Double> scores = new HashMap<>();
+        // The pairs, in the order of the features, each with its score
+        List<Map.Entry<List<Node>, Double>> scores = new ArrayList<>();
         Graph<Node> auxTree = new Graph<>();
 
-        for (Node n1 : features) {
+        for (int first = 0; first < features.size(); first++) {
+            Node n1 = features.get(first);
             auxTree.addNode(n1);
-            for (Node n2 : features) {
-                if (n2 == n1) continue;
-                Set<Node> pair = new HashSet<>(Arrays.asList(n1, n2));
-                if (!scores.containsKey(pair)) {
-                    scores.put(pair, metric.getScore(
-                            new AddLinkEdit(probNet, n1.getVariable(), n2.getVariable(), false)));
-                }
+            for (int second = first + 1; second < features.size(); second++) {
+                Node n2 = features.get(second);
+                scores.add(Map.entry(List.of(n1, n2), metric.getScore(
+                        new AddLinkEdit(probNet, n1.getVariable(), n2.getVariable(), false))));
             }
         }
 
-        // Kruskal: add edges in decreasing score order, skipping those that would form a cycle
-        scores.entrySet().stream()
-                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new))
-                .keySet().forEach(pair -> {
-                    List<Node> nodes = new ArrayList<>(pair);
-                    if (!auxTree.existsPath(nodes.get(0), nodes.get(1), false, Collections.emptyList())) {
-                        auxTree.addLink(nodes.get(0), nodes.get(1), false);
-                        undirectedEdges.add(new AddLinkEdit(probNet,
-                                nodes.get(0).getVariable(), nodes.get(1).getVariable(), false));
-                    }
-                });
+        // Kruskal: add edges in decreasing score order, skipping those that would form a cycle.
+        // Pairs with the same score keep the order of the features.
+        scores.sort(Collections.reverseOrder(Map.Entry.comparingByValue()));
+        for (Map.Entry<List<Node>, Double> score : scores) {
+            List<Node> nodes = score.getKey();
+            if (!auxTree.existsPath(nodes.get(0), nodes.get(1), false, Collections.emptyList())) {
+                auxTree.addLink(nodes.get(0), nodes.get(1), false);
+                undirectedEdges.add(new AddLinkEdit(probNet,
+                        nodes.get(0).getVariable(), nodes.get(1).getVariable(), false));
+            }
+        }
     }
 
     /**

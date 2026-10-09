@@ -149,7 +149,7 @@ public class TreeAugmentedNBAlgorithmTest {
         }
 
         @Override
-        protected Variable getRandomVariable() {
+        protected Variable getRootOfTheTree() {
             return fixedRoot;
         }
 

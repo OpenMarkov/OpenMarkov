@@ -17,7 +17,6 @@ import org.openmarkov.learning.algorithm.nbderived.common.MaximumWeightSpanningT
 import org.openmarkov.learning.metric.cmi.mutualInformation.MutualInformationMetric;
 
 import java.util.List;
-import java.util.Random;
 
 
 @LearningAlgorithmType(name = "Tree augmented naive bayes", discriminative = true, supportsUnobservedVariables = false,
@@ -37,8 +36,7 @@ public class TreeAugmentedNBAlgorithm extends DiscriminativeAlgorithm {
         }
         if (!mwst.isBuilt()) {
             mwst.build(probNet, metric, getNonRootNodes());
-            Variable randomRoot = getRandomVariable();
-            mwst.redirect(randomRoot, probNet);
+            mwst.redirect(getRootOfTheTree(), probNet);
         }
         setRelationsForRootVariable();
 
@@ -47,12 +45,9 @@ public class TreeAugmentedNBAlgorithm extends DiscriminativeAlgorithm {
         this.probNet.addConstraint(maxNumParentsConstraint);
     }
 
-    /**
-     * Selects a random non-root variable to use as the root for MWST redirect.
-     * Overrideable for testing determinism.
-     */
-    protected Variable getRandomVariable() {
-        return getNonRootVariables().get(new Random().nextInt(getNonRootVariables().size()));
+    /** @return the feature the links of the tree are directed away from: the first one of the network */
+    protected Variable getRootOfTheTree() {
+        return getNonRootVariables().getFirst();
     }
 
 
