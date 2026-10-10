@@ -241,6 +241,13 @@ public class NetworkFileHandler {
         }
         System.out.println(stringDatabase.getString("NetworkLoaded.Text"));
         mainPanel.getMainMenu().rechargeFileMenu();
+        List<String> schemaProblems = FormatManager.getInstance().schemaProblems(switch (source) {
+            case NetworkSource.SourceFile sourceFile -> sourceFile.file.toURI().toURL();
+            case NetworkSource.SourceURL sourceURL -> sourceURL.url;
+        });
+        if (!schemaProblems.isEmpty()) {
+            this.showColumns(netReadFrom, schemaProblems, "FileDoesNotFollowTheSchema");
+        }
         List<String> wrongColumns = ColumnsThatDoNotAddUpToOne.in(netReadFrom);
         if (!wrongColumns.isEmpty()) {
             this.showColumns(netReadFrom, wrongColumns, "ColumnsDoNotAddUpToOne");
@@ -254,7 +261,7 @@ public class NetworkFileHandler {
         }
     }
     
-    /** Warns about some columns of a network, with the title and the text that the messages have under a key. */
+    /** Warns about some lines on a network, with the title and the text that the messages have under a key. */
     private void showColumns(ProbNet probNet, List<String> wrongColumns, String messageKey) {
         JTextArea columns = new JTextArea(String.join("\n", wrongColumns));
         columns.setEditable(false);

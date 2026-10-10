@@ -130,6 +130,10 @@
         <Text value="The network &quot;~&quot; has been modified. Do you want to save the changes?"/>
         <Title value="Save network"/>
     </NetworkNotSaved>
+    <FileDoesNotFollowTheSchema>
+        <Title value="File that does not follow the format"/>
+        <Text value="The file of the network &quot;~&quot; does not follow the ProbModelXML format in these places. What is written there may have been read as something else, or not read at all."/>
+    </FileDoesNotFollowTheSchema>
     <ColumnsDoNotAddUpToOne>
         <Title value="Probabilities that do not add up to one"/>
         <Text value="These probability columns of the network &quot;~&quot; do not add up to one. Sampling and exact inference will give different results."/>

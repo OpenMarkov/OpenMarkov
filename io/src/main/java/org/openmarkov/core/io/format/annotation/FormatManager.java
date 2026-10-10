@@ -15,6 +15,7 @@ import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.plugin.PluginSearch;
 import org.w3c.dom.Document;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -33,8 +34,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 /**
@@ -226,6 +229,46 @@ public class FormatManager {
     }
     
     
+    /**
+     * @return one line for each place where the file does not follow the schema of ProbModelXML,
+     * with its line number; empty for a file in another format
+     */
+    public List<String> schemaProblems(URL url) throws IOException {
+        if (url.getFile().toLowerCase().endsWith(".elv")) {
+            return List.of();
+        }
+        List<String> problems = new ArrayList<>();
+        try (InputStream xsd = getClass().getClassLoader().getResourceAsStream("val_v4.xsd");
+             InputStream file = url.openStream()) {
+            Validator validator = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+                                               .newSchema(new StreamSource(xsd))
+                                               .newValidator();
+            validator.setProperty("http://apache.org/xml/properties/locale", Locale.ROOT); // messages in English
+            validator.setErrorHandler(new ErrorHandler() {
+                @Override public void warning(SAXParseException exception) {
+                }
+
+                @Override public void error(SAXParseException exception) {
+                    problems.add(describe(exception));
+                }
+
+                @Override public void fatalError(SAXParseException exception) throws SAXParseException {
+                    throw exception;
+                }
+            });
+            validator.validate(new StreamSource(file));
+        } catch (SAXParseException e) {
+            problems.add(describe(e));
+        } catch (SAXException e) {
+            throw new UnreachableException("Cannot load XML schema val_v4.xsd", e);
+        }
+        return problems;
+    }
+
+    private static String describe(SAXParseException exception) {
+        return "Line " + exception.getLineNumber() + ": " + exception.getMessage().replaceFirst("^cvc-[\\w.-]+: ", "");
+    }
+
     public void checkStructure(String name, InputStream inputStream) throws SAXException, IOException, ProbNetParserException.BadlyStructuredFile {
         InputStream xsd = getClass().getClassLoader().getResourceAsStream("val_v4.xsd");
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
