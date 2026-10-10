@@ -657,8 +657,9 @@ public class Variable implements Cloneable, Comparable<Variable>, ClassLocalizab
         this.decisionCriterion = decisionCriterion;
     }
     
+    /** @return the value rounded to the precision; unchanged if the precision is zero */
     public double round(double value) {
-        return Math.round(value / precision) * precision;
+        return precision > 0 ? Math.round(value / precision) * precision : value;
     }
     
     @Override public int compareTo(Variable o) {

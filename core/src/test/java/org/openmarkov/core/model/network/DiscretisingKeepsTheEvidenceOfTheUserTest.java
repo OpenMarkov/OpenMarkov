@@ -70,4 +70,14 @@ class DiscretisingKeepsTheEvidenceOfTheUserTest {
 		assertEquals(2, converted.getVariable("N").getNumStates(),
 				"Evidence on the parent changed the states the numeric node was given");
 	}
+
+	@Test
+	void aNumericNodeWithPrecisionZeroKeepsItsValues() throws Exception {
+		probNet.getVariable("N").setPrecision(0.0);
+
+		ProbNet converted = ProbNetOperations.convertNumericalVariablesToFS(probNet, new EvidenceCase());
+
+		assertEquals(2, converted.getVariable("N").getNumStates(),
+				"Precision zero rounded the values of the numeric node to a single one");
+	}
 }
