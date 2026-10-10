@@ -763,6 +763,10 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
      * @param potentialElement the potential element
      */
     protected void getPotential(ProbNet probNet, Potential potential, Element potentialElement) {
+        // This format has no distributions: an "Exact" one with numbers is written as the exact relation
+        if (potential instanceof UnivariateDistrPotential distribution && distribution.exactRelation() != null) {
+            potential = distribution.exactRelation();
+        }
         getPotentialAttributesAndVariables(probNet, potential, potentialElement);
         getPotentialBody(probNet, potential, potentialElement);
     }

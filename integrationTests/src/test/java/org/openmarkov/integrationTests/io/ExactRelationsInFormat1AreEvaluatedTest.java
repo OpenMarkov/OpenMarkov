@@ -13,6 +13,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEEvaluation;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
+import org.openmarkov.io.probmodel.writer.PGMXWriter_0_2;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_1_0;
 
 import java.net.URL;
@@ -83,5 +84,13 @@ public class ExactRelationsInFormat1AreEvaluatedTest {
     @Test public void decideTestInFormat1() throws Exception {
         URL url = Networks.getNetworks().filter(u -> u.getPath().endsWith("/id/1-0/ID-decide-test-1-0.pgmx")).findFirst().orElseThrow();
         assertEquals(9.3289, utility(read(url))[0], 1E-9);
+    }
+
+    @Tag(TestSpeed.MEDIUM)
+    @Test public void decideTestInFormat1SavedInFormat02IsOpenedAgain() throws Exception {
+        URL url = Networks.getNetworks().filter(u -> u.getPath().endsWith("/id/1-0/ID-decide-test-1-0.pgmx")).findFirst().orElseThrow();
+        Path written = Files.createTempFile("format-0-2", ".pgmx");
+        new PGMXWriter_0_2().write(written.toString(), read(url), List.of());
+        assertEquals(9.3289, utility(read(written.toUri().toURL()))[0], 1E-9);
     }
 }

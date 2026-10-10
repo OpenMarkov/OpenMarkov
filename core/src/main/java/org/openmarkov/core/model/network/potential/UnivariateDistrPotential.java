@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.expression.ReferencedExpression;
@@ -396,8 +397,17 @@ public class UnivariateDistrPotential extends TableWithEvents
      * @throws NonProjectablePotentialException.PotentialCannotBeConvertedToATable for any other distribution
      */
     private ExactDistrPotential asExactDistribution() throws NonProjectablePotentialException.PotentialCannotBeConvertedToATable {
-        if (!isExactWithNumbers()) {
+        ExactDistrPotential exact = exactRelation();
+        if (exact == null) {
             throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
+        }
+        return exact;
+    }
+
+    /** @return the exact relation that an "Exact" distribution with numbers stands for; null for any other */
+    public @Nullable ExactDistrPotential exactRelation() {
+        if (!isExactWithNumbers()) {
+            return null;
         }
         List<Variable> exactVariables = new ArrayList<>(finiteStatesVariables);
         exactVariables.addFirst(variables.getFirst());
