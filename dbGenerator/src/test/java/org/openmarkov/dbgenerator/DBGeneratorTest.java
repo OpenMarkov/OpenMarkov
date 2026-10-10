@@ -70,4 +70,20 @@ public class DBGeneratorTest {
         assertFalse(java.util.Arrays.deepEquals(first.getCases(), second.getCases()),
                 "two different seeds produced the same 500-case database");
     }
+
+    @Test public void columnsOffByRoundingAreSampledAsNormalized() {
+        ProbNet rounded = oneNodeWith(0.5005, 0.5);
+        ProbNet exact = oneNodeWith(0.5005 / 1.0005, 0.5 / 1.0005);
+        assertArrayEquals(DBGenerator.generate(exact, 100_000, 12345L).getCases(),
+                DBGenerator.generate(rounded, 100_000, 12345L).getCases());
+    }
+
+    private static ProbNet oneNodeWith(double... probabilities) {
+        Variable variable = new Variable("A", "absent", "present");
+        ProbNet net = new ProbNet();
+        net.addNode(variable, NodeType.CHANCE);
+        net.addPotential(new TablePotential(java.util.List.of(variable), PotentialRole.CONDITIONAL_PROBABILITY,
+                probabilities));
+        return net;
+    }
 }

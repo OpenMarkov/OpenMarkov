@@ -11,6 +11,7 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.ProbNetOperations;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.potential.ColumnsThatDoNotAddUpToOne;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +54,9 @@ public class DBGenerator  {
 		List<Node> nodes = probNet.getNodes();
 		int[][] cases = new int[numberOfCases][nodes.size()];
 		List<Node> sortedNodes = ProbNetOperations.sortTopologically(probNet);
+		// Columns off by rounding are normalized in a copy, as inference does
+		ProbNet normalized = probNet.copy();
+		ColumnsThatDoNotAddUpToOne.normalizeWithinTolerance(normalized);
 		List<Integer> sortedNodeIndexes = new ArrayList<>();
 		for (Node node : sortedNodes) {
 			sortedNodeIndexes.add(nodes.indexOf(node));
@@ -62,7 +66,8 @@ public class DBGenerator  {
 			
 			for (int j = 0; j < sortedNodeIndexes.size(); ++j) {
 				Node node = sortedNodes.get(j);
-				int sampledIndex = node.getPotentials().get(0).sampleConditionedVariable(randomGenerator, sampledStateIndexes);
+				int sampledIndex = normalized.getNode(node.getVariable()).getPotentials().get(0)
+						.sampleConditionedVariable(randomGenerator, sampledStateIndexes);
 				sampledStateIndexes.put(node.getVariable(), sampledIndex);
 				cases[i][sortedNodeIndexes.get(j)] = sampledIndex;
 			}
