@@ -307,7 +307,7 @@
           <Variable name="Chance_FiniteStates_Parent1 [0]" timeSlice="0" />
           <Variable name="Chance_FiniteStates_Parent2 [0]" timeSlice="0" />
         </Variables>
-        <Functions>"1" "Complement" "1" "Complement" "1" "Complement" "1" "Complement"</Functions>
+        <Functions>"1" "#" "1" "#" "1" "#" "1" "#"</Functions>
       </Potential>
       <Potential type="Uniform">
         <Variables>
