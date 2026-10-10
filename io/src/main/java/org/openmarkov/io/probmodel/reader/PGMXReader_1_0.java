@@ -287,7 +287,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
      *
      */
     private final Potential getTransitionTablePotential
-    (Element xmlPotential, ProbNet probNet, PotentialRole xmlRole, List<Variable> variables) {
+    (Element xmlPotential, ProbNet probNet, PotentialRole xmlRole, List<Variable> variables) throws PGMXParserException.UncertaintyInAnEventTable {
+        rejectUncertainty(xmlPotential, variables);
         Element xmlRootTable = this.getXMLRootTable(xmlPotential);
         double[] table = PGMXReader_0_2.parseDoubles(xmlRootTable.getTextNormalize());
         TransitionTablePotential potential;
@@ -299,6 +300,12 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         
     }
     
+    private static void rejectUncertainty(Element xmlPotential, List<Variable> variables) throws PGMXParserException.UncertaintyInAnEventTable {
+        if (xmlPotential.getChild(XMLTags.UNCERTAIN_VALUES.toString()) != null) {
+            throw new PGMXParserException.UncertaintyInAnEventTable(variables.getFirst().getName(), xmlPotential);
+        }
+    }
+
     /**
      * Reads an EventTablePotential from the Element xmlPotential
      *
@@ -310,7 +317,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
      *
      */
     protected Potential getDistributionTablePotential
-    (Element xmlPotential, ProbNet probNet, PotentialRole xmlRole, List<Variable> variables) throws PGMXParserException.UnknownDistribution {
+    (Element xmlPotential, ProbNet probNet, PotentialRole xmlRole, List<Variable> variables) throws PGMXParserException {
+        rejectUncertainty(xmlPotential, variables);
         Element distribution = xmlPotential.getChild(XMLTags.VALUE.toString());
         String distributionName = distribution.getAttributeValue(XMLAttributes.DISTRIBUTION.toString());
         //08/10/2020 -parametrization added

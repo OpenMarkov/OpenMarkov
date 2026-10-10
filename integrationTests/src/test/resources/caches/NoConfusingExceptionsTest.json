@@ -176,6 +176,7 @@
     "TryingToWriteANullProbNet",
     "TryingToWriteAProbNetWithoutName",
     "UncertainParameterException",
+    "UncertaintyInAnEventTable",
     "UnexpectedInferenceException",
     "UnexpectedMenuActionException",
     "UnknownAgent",

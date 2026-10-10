@@ -87,6 +87,15 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String parametrization;
     }
     
+    public static final class UncertaintyInAnEventTable extends PGMXParserException {
+        public UncertaintyInAnEventTable(String variableName, Element element) {
+            super(element);
+            this.variableName = variableName;
+        }
+        
+        public final String variableName;
+    }
+    
     public static final class UnknownAgent extends PGMXParserException {
         public UnknownAgent(String variableName, String agentName, Element element) {
             super(element);
