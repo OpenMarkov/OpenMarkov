@@ -71,6 +71,22 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String rootName;
     }
     
+    public static final class UnknownDistribution extends PGMXParserException {
+        public UnknownDistribution(String variableName, String distributionName, @Nullable String parametrizationName,
+                                   Element element) {
+            super(element);
+            this.variableName = variableName;
+            this.distributionName = distributionName;
+            this.parametrization = parametrizationName == null ? "without a parametrization"
+                    : "with the parametrization " + parametrizationName;
+        }
+        
+        public final String variableName;
+        public final String distributionName;
+        /** How the file names the parametrization, as the message says it. */
+        public final String parametrization;
+    }
+    
     public static final class UnknownAgent extends PGMXParserException {
         public UnknownAgent(String variableName, String agentName, Element element) {
             super(element);

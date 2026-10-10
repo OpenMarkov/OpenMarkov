@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 import org.jdom2.Element;
 import org.openmarkov.core.expression.VariableExpression;
+import org.openmarkov.core.model.network.modelUncertainty.ParametrizedFunction.ParametrizedFunctionManager;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.VariableType;
@@ -309,7 +310,7 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
      *
      */
     protected Potential getDistributionTablePotential
-    (Element xmlPotential, ProbNet probNet, PotentialRole xmlRole, List<Variable> variables) {
+    (Element xmlPotential, ProbNet probNet, PotentialRole xmlRole, List<Variable> variables) throws PGMXParserException.UnknownDistribution {
         Element distribution = xmlPotential.getChild(XMLTags.VALUE.toString());
         String distributionName = distribution.getAttributeValue(XMLAttributes.DISTRIBUTION.toString());
         //08/10/2020 -parametrization added
@@ -319,6 +320,10 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         Element xmlRootTable = this.getXMLRootTable(xmlPotential);
         Element xmlUncertain = xmlPotential.getChild(XMLTags.UNCERTAIN_VALUES.toString());
         
+        if (ParametrizedFunctionManager.getUniqueInstance().getParameters(distributionName, distributionParametrization) == null) {
+            throw new PGMXParserException.UnknownDistribution(variables.getFirst().getName(), distributionName,
+                                                              distributionParametrization, xmlPotential);
+        }
         double[] table = parseDoubles(xmlRootTable.getTextNormalize());
         DistributionTablePotential potential;
         potential = new DistributionTablePotential(variables, xmlRole, distributionName, distributionParametrization);

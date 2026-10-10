@@ -179,6 +179,7 @@
     "UnexpectedInferenceException",
     "UnexpectedMenuActionException",
     "UnknownAgent",
+    "UnknownDistribution",
     "UnknownNetworkType",
     "UnknownNetworkType",
     "UnlocalizedJavaException",
