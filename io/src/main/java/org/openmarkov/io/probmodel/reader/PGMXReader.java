@@ -47,5 +47,4 @@ public class PGMXReader implements ProbNetReader {
     
     public record NetworkAndEvidence(ProbNet probNet, List<EvidenceCase> evidence) {
     }
-    
 }

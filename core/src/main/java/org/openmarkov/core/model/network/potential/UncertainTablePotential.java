@@ -92,7 +92,7 @@ public class UncertainTablePotential extends TablePotential implements Uncertain
      * <p>The returned copy is an {@code UncertainTablePotential} with its own uncertain values.
      */
     @Override
-    public Potential copy() {
+    public UncertainTablePotential copy() {
         return new UncertainTablePotential(this);
     }
 

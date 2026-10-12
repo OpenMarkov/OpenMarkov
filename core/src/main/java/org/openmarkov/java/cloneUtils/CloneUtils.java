@@ -27,7 +27,12 @@ public class CloneUtils {
             if (specialHandleCase.isPresent()) {
                 return (ToClone) specialHandleCase.get().uncheckedApply(toClone);
             }
-            var cloneMethod = cloneableClass.getMethod("clone");
+            java.lang.reflect.Method cloneMethod;
+            try {
+                cloneMethod = cloneableClass.getMethod("clone");
+            } catch (NoSuchMethodException _) {
+                cloneMethod = cloneableClass.getDeclaredMethod("clone");
+            }
             cloneMethod.setAccessible(true);
             ToClone cloned = cloneableClass.cast(cloneMethod.invoke(toClone));
             if (cloned == toClone) {

@@ -79,7 +79,7 @@ public class StrategicTablePotential extends TablePotential implements StrategyC
     }
 
     @Override
-    public Potential copy() {
+    public StrategicTablePotential copy() {
         return new StrategicTablePotential(this);
     }
 

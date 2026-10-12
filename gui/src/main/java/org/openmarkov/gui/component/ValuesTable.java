@@ -146,10 +146,10 @@ public class ValuesTable extends KeyTable implements PNEditListener {
             node.getProbNet().getPNESupport().addListener(this);
             this.node = node;
             this.probNet = node.getProbNet();
-            this.potential = node.getPotentials().getFirst();
+            this.potential = node.getPotential();
             //Adding the initialisation of getExactDistrPotential
             
-            this.isExactDistrPotential = (node.getPotentials().getFirst() instanceof ExactDistrPotential);
+            this.isExactDistrPotential = (node.getPotential() instanceof ExactDistrPotential);
             if (this.potential instanceof ExactDistrPotential exactDistr) {
                 this.tablePotential = exactDistr.getTablePotential();
             } else if (this.potential instanceof TablePotential table) {
@@ -190,7 +190,11 @@ public class ValuesTable extends KeyTable implements PNEditListener {
         // Chance, decision and utility
         
         try {
-            new TablePotentialValueEdit(this.node, (Double) newValue, row, column, this.priorityList,
+            var realRow = switch (this) {
+                case LinkRestrictionValuesTable _ -> row - 1;
+                default -> row;
+            };
+            new TablePotentialValueEdit(this.node, (Double) newValue, realRow, column, this.priorityList,
                                         this.getTableModel().getNotEditablePositions())
                     .executeEdit();
         } catch (DoEditException e) {

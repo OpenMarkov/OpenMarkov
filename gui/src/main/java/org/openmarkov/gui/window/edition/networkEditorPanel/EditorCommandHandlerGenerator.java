@@ -7,11 +7,11 @@ import org.openmarkov.core.exception.CannotNormalizePotentialException;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.InferenceStoppedException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
-import org.openmarkov.core.exception.InferenceStoppedException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Criterion;
@@ -285,7 +285,10 @@ public class EditorCommandHandlerGenerator {
                 
                 BindingCommandGroup.of(Bindings.Network.SELECTION_ELEMENT, Binding.MeetCondition.ON_GAIN, false, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_PRESSED))
                                    .processIf((_, _) -> this.selectionState == SelectionState.NOTHING &&
-                                           this.visualNetwork.getElementInPosition(this.cursorPosition, this.graphics) != null)
+                                           this.visualNetwork.getElementInPosition(this.cursorPosition, this.graphics) instanceof VisualElement element
+                                           && !this.visualNetwork.isSelected(element)
+                                   
+                                   )
                                    .withAction((_, _) -> {
                                        VisualElement selectedElement = this.visualNetwork.getElementInPosition(this.cursorPosition, this.graphics);
                                        this.networkEditorPanel.getVisualNetwork().setSelectedAllObjects(false);

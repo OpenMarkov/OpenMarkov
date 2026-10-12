@@ -13,10 +13,13 @@ import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.java.cloneUtils.CloneUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -40,7 +43,7 @@ import java.util.Set;
  * @since OpenMarkov 1.0
  */
 @ConsiderAutoLocalizationIsValid
-public class Link<T> implements ClassLocalizable {
+public class Link<T> implements ClassLocalizable, Cloneable {
     
     // Attributes
     /**
@@ -73,7 +76,7 @@ public class Link<T> implements ClassLocalizable {
      * List of revealing values of type interval
      */
     private List<PartitionedInterval> revealingIntervals;
-
+    
     /**
      * Midpoint used to read a compatibility value. The restrictions potential holds, by
      * construction, exactly 0 (incompatible) or 1 (compatible) — see
@@ -83,7 +86,7 @@ public class Link<T> implements ClassLocalizable {
      * the two instead of silently counting as a restriction.
      */
     private static final double COMPATIBILITY_MIDPOINT = 0.5;
-
+    
     // Constructors
     
     /**
@@ -169,7 +172,7 @@ public class Link<T> implements ClassLocalizable {
                 while (i < valuesSize && valueRestrictsVariable) {
                     if (isCompatible(restrictionsPotential.getValues()[i])) {
                         valueRestrictsVariable = false;
-
+                        
                     }
                     i += numStates;
                 }
@@ -224,7 +227,7 @@ public class Link<T> implements ClassLocalizable {
     private static boolean isCompatible(double compatibilityValue) {
         return compatibilityValue >= COMPATIBILITY_MIDPOINT;
     }
-
+    
     /*****
      * Assigns a null value to the restrictionsPotential if the restrictions
      * potential does not contain restrictions
@@ -261,9 +264,9 @@ public class Link<T> implements ClassLocalizable {
         indexes[0] = restrictionsPotential.getVariable(0).getStateIndex(state1);
         indexes[1] = restrictionsPotential.getVariable(1).getStateIndex(state2);
         List<Variable> variables = restrictionsPotential.getVariables();
-
+        
         return isCompatible(restrictionsPotential.getValue(variables, indexes)) ? 1 : 0;
-
+        
     }
     
     /****
@@ -303,7 +306,7 @@ public class Link<T> implements ClassLocalizable {
     public List<State> getRevealingStates() {
         return revealingStates;
     }
-
+    
     /**
      * Stores a defensive copy, so the link neither shares nor is later mutated through the caller's
      * list (S4).
@@ -313,7 +316,7 @@ public class Link<T> implements ClassLocalizable {
     public void setRevealingStates(List<State> revealingStates) {
         this.revealingStates = new ArrayList<>(revealingStates);
     }
-
+    
     /**
      * Returns the link's <em>live</em> list of revealing intervals (not a copy): some callers, such
      * as {@code RevelationIntervalEdit}, edit them in place through it.
@@ -323,7 +326,7 @@ public class Link<T> implements ClassLocalizable {
     public List<PartitionedInterval> getRevealingIntervals() {
         return revealingIntervals;
     }
-
+    
     /**
      * Stores a defensive copy, so the link does not share the caller's list (S4).
      *
@@ -370,5 +373,27 @@ public class Link<T> implements ClassLocalizable {
     public void removeRevealingInterval(PartitionedInterval interval) {
         this.revealingIntervals.remove(interval);
     }
-
+    
+    @Override protected Object clone() throws CloneNotSupportedException {
+        var cloned = new Link<>(this.from, this.to, this.directed);
+        cloned.restrictionsPotential = Optional.ofNullable(this.restrictionsPotential)
+                                               .map(TablePotential::copy)
+                                               .orElse(null);
+        cloned.revealingStates = new ArrayList<>(this.revealingStates.stream().map(CloneUtils::safeClone).toList());
+        cloned.revealingIntervals = new ArrayList<>(this.revealingIntervals.stream()
+                                                                           .map(CloneUtils::safeClone)
+                                                                           .toList());
+        return super.clone();
+    }
+    
+    @Override public boolean equals(Object o) {
+        if (!(o instanceof Link<?> link)) return false;
+        return this.directed == link.directed
+                && Objects.equals(this.from, link.from)
+                && Objects.equals(this.to, link.to)
+                && Objects.equals(this.restrictionsPotential, link.restrictionsPotential)
+                && Objects.equals(this.revealingStates, link.revealingStates)
+                && Objects.equals(this.revealingIntervals, link.revealingIntervals);
+    }
+    
 }

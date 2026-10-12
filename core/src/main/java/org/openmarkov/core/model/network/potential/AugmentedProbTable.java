@@ -212,7 +212,7 @@ public class AugmentedProbTable extends UncertainTablePotential {
         throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
     }
     
-    @Override public Potential copy() {
+    @Override public AugmentedProbTable copy() {
         return new AugmentedProbTable(this);
     }
     

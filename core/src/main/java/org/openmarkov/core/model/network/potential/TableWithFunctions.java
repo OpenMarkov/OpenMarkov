@@ -241,8 +241,8 @@ public class TableWithFunctions extends TablePotential {
 	                                                      List<TablePotential> alreadyProjectedPotentials) throws NonProjectablePotentialException.PotentialCannotBeConvertedToATable {
 		throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
 	}
-
-	@Override public Potential copy() {
+	
+	@Override public TableWithFunctions copy() {
 		return new TableWithFunctions(this);
 	}
 

@@ -1,8 +1,6 @@
 package networks;
 
-import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.integrationTests.Resources;
 
 import java.io.File;
@@ -44,14 +42,6 @@ public class Networks {
         getNetworks();
     }
     
-    public static Stream<URL> getNetworks() {
-        return Networks.getNetworks((String) null);
-    }
-    
-    public static Stream<URL> getNetworks(@NotNull NetworkType networkType) {
-        return Networks.getNetworks(networkType.codeName());
-    }
-    
     /**
      * Method to obtain filtered networks in the repository by it network type
      *
@@ -59,12 +49,19 @@ public class Networks {
      *
      * @return List of filtered url networks
      */
-    private static Stream<URL> getNetworks(String networkFilterType) {
+    public static Stream<URL> getNetworks(NetworkPredicate... conditions) {
         var networks = Networks.NETWORK_FILES.stream();
-        if (networkFilterType != null) {
-            networks = networks.filter(networkFile -> networkFile.getParentFile()
-                                                                 .getName()
-                                                                 .equals(networkFilterType));
+        for (NetworkPredicate predicate : conditions) {
+            switch (predicate) {
+                case NetworkPredicate.Named named -> networks =
+                        networks.filter(networkFile -> networkFile
+                                .getName()
+                                .equals(named.fileName()));
+                case NetworkPredicate.OfType ofType -> networks =
+                        networks.filter(networkFile -> networkFile.getParentFile()
+                                                                  .getName()
+                                                                  .equals(ofType.networkType().codeName()));
+            }
         }
         return networks.map(file -> {
             try {
@@ -73,6 +70,10 @@ public class Networks {
                 throw new UnreachableException(e);
             }
         });
+    }
+    
+    public static URL findNetwork(NetworkPredicate... conditions) {
+        return Networks.getNetworks(conditions).findFirst().get();
     }
     
 }

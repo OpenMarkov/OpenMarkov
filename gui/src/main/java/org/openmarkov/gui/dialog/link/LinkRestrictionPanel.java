@@ -7,6 +7,7 @@
 
 package org.openmarkov.gui.dialog.link;
 
+import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -85,6 +86,7 @@ public class LinkRestrictionPanel extends ProbabilityTablePanel {
 	protected ValuesTable getLinkRestrictionValuesTable() {
 		if (valuesTable == null) {
 			valuesTable = new LinkRestrictionValuesTable(link, getTableModel(), modifiable);
+			valuesTable.onTables(t -> t.canGenerateEditorWhen((integer, integer2) -> false));
 			valuesTable.setName("LinkRestrictionPanel.valuesTable");
 		}
 		return valuesTable;
@@ -137,21 +139,27 @@ public class LinkRestrictionPanel extends ProbabilityTablePanel {
 
 		setData(tableData, newColumns, firstEditableRow, lastEditableRow, node2.getNodeType());
 		setCellRenderers();
-		valuesTable.addMouseListener(new java.awt.event.MouseAdapter() {
-
-			@Override public void mouseClicked(java.awt.event.MouseEvent e) {
-
-				int row = valuesTable.rowAtPoint(e.getPoint(), e.getSource());
-				int column = valuesTable.columnAtPoint(e.getPoint(), e.getSource());
-				if ((row > 0) && (column > 0)) {
-					Integer value = (Integer) valuesTable.getValueAt(row, column, e.getSource());
-					Integer newValue = (value.equals(1) ? 0 : 1);
-					valuesTable.setValueAt(newValue, row, column, e.getSource());
+		valuesTable.onScrollableTable(t -> {
+			t.addMouseListener(new java.awt.event.MouseAdapter() {
+				
+				@Override public void mouseClicked(java.awt.event.MouseEvent e) {
+					
+					int row = t.rowAtPoint(e.getPoint());
+					int column = t.columnAtPoint(e.getPoint());
+					OpenMarkovLogger.LOGGER.debug("Row: " + row + ", column: " + column);
+					if ((row > 0)) {
+						Integer value = (Integer) t.getValueAt(row, column);
+						Integer newValue = (value.equals(1) ? 0 : 1);
+						OpenMarkovLogger.LOGGER.debug("Value: " + value + ", new value: " + newValue);
+						t.setValueAt(newValue, row, column);
+					}
+					
 				}
-
-			}
-
+				
+			});
 		});
+		
+
 
 	}
 
