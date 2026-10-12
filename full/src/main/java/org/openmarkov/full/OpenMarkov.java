@@ -69,6 +69,7 @@ public class OpenMarkov {
      * @param baseArgs Arguments
      */
     public static void main(String[] baseArgs) {
+
         try {
             OpenMarkov.onSingleInstance(baseArgs);
         } catch (AlreadyLockedException e) {
