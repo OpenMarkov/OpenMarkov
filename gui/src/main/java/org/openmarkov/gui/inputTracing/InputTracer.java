@@ -2,19 +2,25 @@ package org.openmarkov.gui.inputTracing;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.gui.bindings.Input;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.lang.invoke.MethodHandles;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class InputTracer {
-    
+
+    static {
+        try {
+            MethodHandles.lookup().ensureInitialized(GlobalInputTracker.class);
+        } catch (IllegalAccessException _) {
+            OpenMarkovLogger.LOGGER.error("Could not force to initialize the Global Input Tracker, meaning global inputs might not be read.");
+        }
+    }
+
     public static final InputTracer INSTANCE = new InputTracer();
     
     public @NotNull InputStack currentInput;

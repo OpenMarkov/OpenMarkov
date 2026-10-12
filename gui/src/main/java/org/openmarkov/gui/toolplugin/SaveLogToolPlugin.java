@@ -8,9 +8,8 @@ import org.openmarkov.gui.dialog.io.FileFilterByExtension;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.gui.window.MainGUI;
 
-import javax.swing.JFileChooser;
-import javax.swing.JMenuItem;
-import java.awt.Component;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,7 +37,10 @@ public class SaveLogToolPlugin implements ToolPlugin {
     public static final OMFileChooser LOG_SAVE_FILE_CHOOSER = new OMFileChooser();
     
     static {
-        SaveLogToolPlugin.LOG_SAVE_FILE_CHOOSER.setCurrentDirectory(UserPreferences.LATEST_LOGS_DIRECTORY.get());
+        try {
+            SaveLogToolPlugin.LOG_SAVE_FILE_CHOOSER.setCurrentDirectory(UserPreferences.LATEST_LOGS_DIRECTORY.get());
+        } catch (IndexOutOfBoundsException _) {
+        }
     }
     
     public static boolean requestSaveLog(Component parent, String defaultLogFileName) throws IOException {

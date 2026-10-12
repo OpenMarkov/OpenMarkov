@@ -4,13 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.java.initialization.Lazy;
 
-import java.awt.Component;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +29,9 @@ public class BindingCommandReactor {
                 continue;
             }
             boolean isInputInstance = command.inputKind.isInstance(inputEvent);
-            if (isInputInstance && command.isTriggered() && command.allowsProcessing(inputEvent)) {
+            boolean isTriggered = command.isTriggered();
+            boolean triggered = isInputInstance && isTriggered && command.allowsProcessing(inputEvent);
+            if (triggered) {
                 OpenMarkovLogger.LOGGER.debug("Triggering command " + command.bindings.name());
                 command.triggerAction(inputEvent);
                 if (command.isBlocker) {
