@@ -70,6 +70,7 @@ public class OpenMarkov {
      */
     public static void main(String[] baseArgs) {
 
+
         try {
             OpenMarkov.onSingleInstance(baseArgs);
         } catch (AlreadyLockedException e) {
