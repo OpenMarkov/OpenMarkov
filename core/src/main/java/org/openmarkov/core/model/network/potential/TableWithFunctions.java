@@ -246,6 +246,24 @@ public class TableWithFunctions extends TablePotential {
 		return new TableWithFunctions(this);
 	}
 
+	/**
+	 * Writes the functions on {@code newVariable} wherever they named {@code oldVariable}. The
+	 * functions are kept as text, so they follow a variable only by its name.
+	 *
+	 * @param numericVariables the variables the functions may name, the old one among them
+	 */
+	public void replaceVariableInFunctions(List<Variable> numericVariables, Variable oldVariable, Variable newVariable) {
+		if (oldVariable.getName().equals(newVariable.getName())) {
+			return;
+		}
+		for (int i = 0; i < functionValues.length; i++) {
+			if (functionValues[i] != null) {
+				functionValues[i] = new VariableExpression(numericVariables, functionValues[i])
+						.replacing(oldVariable, newVariable).asStringExpression();
+			}
+		}
+	}
+
 	@Override public boolean isUncertain() {
 		// TODO Auto-generated method stub
 		return false;

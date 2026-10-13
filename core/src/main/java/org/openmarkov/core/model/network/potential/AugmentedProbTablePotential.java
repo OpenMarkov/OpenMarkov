@@ -152,6 +152,15 @@ public class AugmentedProbTablePotential extends Potential {
         return new AugmentedProbTablePotential(this);
     }
 
+    /** {@inheritDoc} The two lists the variables are sorted into, the inner table and its functions follow. */
+    @Override public void replaceVariable(int position, Variable variable) {
+        Variable oldVariable = variables.get(position);
+        super.replaceVariable(position, variable);
+        classifyVariables();
+        augmentedProbTable.replaceVariable(oldVariable, variable);
+        augmentedProbTable.replaceVariableInFunctions(oldVariable, variable);
+    }
+
     /**
      * Everything this potential holds beyond {@code variables} is derived from them, and
      * {@link Potential#deepCopy} only re-points {@code variables} itself: it builds the copy through

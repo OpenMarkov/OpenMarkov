@@ -341,6 +341,9 @@ public class DistributionTablePotential extends Potential implements DESSimulabl
     public void replaceVariable(int position, Variable variable) {
         Variable oldVariable = variables.get(position);
         super.replaceVariable(position, variable);
+        if (numericVariables.contains(oldVariable) && tableWithEvents.getTableWithFunctions() != null) {
+            tableWithEvents.getTableWithFunctions().replaceVariableInFunctions(numericVariables, oldVariable, variable);
+        }
         numericVariables.replaceAll(numeric -> numeric == oldVariable ? variable : numeric);
         tableWithEvents.replaceVariable(oldVariable, variable);
     }

@@ -343,6 +343,19 @@ public abstract class GLMPotential extends Potential {
         return constantIndex;
     }
     
+    /** {@inheritDoc} The covariates follow: they keep the variables they are written on. */
+    @Override public void replaceVariable(int position, Variable variable) {
+        Variable oldVariable = variables.get(position);
+        super.replaceVariable(position, variable);
+        if (covariates != null) {
+            VariableExpression[] replaced = new VariableExpression[covariates.length];
+            for (int i = 0; i < covariates.length; i++) {
+                replaced[i] = covariates[i].replacing(oldVariable, variable);
+            }
+            covariates = replaced;
+        }
+    }
+    
     /** Shifts the variables and, with them, the ones the covariates are written on. */
     @Override public void shift(ProbNet probNet, int timeDifference) {
         List<Variable> before = new ArrayList<>(variables);

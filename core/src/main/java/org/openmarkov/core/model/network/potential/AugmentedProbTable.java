@@ -185,6 +185,15 @@ public class AugmentedProbTable extends UncertainTablePotential {
         return functionValues;
     }
     
+    /** Writes the functions of the cells on {@code newVariable} wherever they were written on {@code oldVariable}. */
+    public void replaceVariableInFunctions(Variable oldVariable, Variable newVariable) {
+        VariableExpression[] replaced = new VariableExpression[functionValues.length];
+        for (int i = 0; i < functionValues.length; i++) {
+            replaced[i] = functionValues[i] == null ? null : functionValues[i].replacing(oldVariable, newVariable);
+        }
+        functionValues = replaced;
+    }
+    
     public void setFunctionValues(VariableExpression[] functionValues) {
         this.functionValues = functionValues;
     }

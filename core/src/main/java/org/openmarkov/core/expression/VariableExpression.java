@@ -2,6 +2,7 @@ package org.openmarkov.core.expression;
 
 import org.openmarkov.core.model.network.Variable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,6 +21,31 @@ public class VariableExpression extends ReferencedExpression<Variable> {
                 Variable::getName,
                 v -> null
         );
+    }
+
+    /**
+     * @return this expression written on {@code newVariable} wherever it was written on
+     * {@code oldVariable}, whether it held the variable itself or only its name between braces;
+     * this very expression when it does not mention it. An expression keeps the variables it
+     * refers to, so replacing a variable in a potential does not reach its expressions by itself.
+     */
+    public VariableExpression replacing(Variable oldVariable, Variable newVariable) {
+        List<Variable> references = references();
+        boolean holdsTheVariable = references.stream().anyMatch(reference -> reference == oldVariable);
+        String expression = asStringExpression();
+        String replaced = expression.replace("{" + oldVariable.getName() + "}", "{" + newVariable.getName() + "}");
+        if (!holdsTheVariable && replaced.equals(expression)) {
+            return this;
+        }
+        List<Variable> possibleVariables = new ArrayList<>();
+        possibleVariables.add(newVariable);
+        for (Variable reference : references) {
+            if (reference != oldVariable && possibleVariables.stream()
+                                                             .noneMatch(v -> v.getName().equals(reference.getName()))) {
+                possibleVariables.add(reference);
+            }
+        }
+        return new VariableExpression(possibleVariables, replaced);
     }
 
     private static final Pattern BRACED = Pattern.compile("\\{[^\\{]+?\\}");

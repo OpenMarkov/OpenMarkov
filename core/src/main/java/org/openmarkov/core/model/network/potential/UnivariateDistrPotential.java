@@ -425,6 +425,20 @@ public class UnivariateDistrPotential extends TableWithEvents
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * <p>The two lists the parents are sorted into, the table of the distribution and the functions
+     * of its parameters follow.
+     */
+    @Override public void replaceVariable(int position, Variable variable) {
+        Variable oldVariable = variables.get(position);
+        super.replaceVariable(position, variable);
+        classifyVariables();
+        distributionTable.replaceVariable(oldVariable, variable);
+        distributionTable.replaceVariableInFunctions(oldVariable, variable);
+    }
+
+    /**
      * Sorts the parents into the finite-state ones, which give the distribution table its shape, and
      * the numeric parameter ones, whose values feed the density function. The conditioned variable
      * belongs to neither list.

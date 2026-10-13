@@ -298,6 +298,14 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 	}
 	
 	
+	/** {@inheritDoc} The list of numeric parents and the function that gives the initial time follow. */
+	@Override public void replaceVariable(int position, Variable variable) {
+		Variable oldVariable = variables.get(position);
+		super.replaceVariable(position, variable);
+		numericVariables.replaceAll(numeric -> numeric == oldVariable ? variable : numeric);
+		initTimeFunction.replaceVariable(oldVariable, variable);
+	}
+
 	@Override public Potential copy() {
 		return new PiecewiseExponentialPotential(this);
 	}
