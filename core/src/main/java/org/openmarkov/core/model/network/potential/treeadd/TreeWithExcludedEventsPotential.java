@@ -178,8 +178,13 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
     }
     
     
+    /** {@inheritDoc} The lists of parents and the tree follow. */
     @Override public void replaceVariable(int position, Variable variable) {
-        //TODO
+        Variable oldVariable = variables.get(position);
+        super.replaceVariable(position, variable);
+        events.replaceAll(event -> event == oldVariable ? variable : event);
+        noEvents.replaceAll(noEvent -> noEvent == oldVariable ? variable : noEvent);
+        noEventTree.replaceVariable(oldVariable, variable);
     }
     
     /**

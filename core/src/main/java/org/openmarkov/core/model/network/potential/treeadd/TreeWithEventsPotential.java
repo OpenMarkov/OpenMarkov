@@ -227,8 +227,19 @@ public class TreeWithEventsPotential extends Potential implements DESSimulablePo
     }
     
     
+    /** {@inheritDoc} The lists of parents and every tree follow, and so does the key of the tree of a replaced event. */
     @Override public void replaceVariable(int position, Variable variable) {
-        //TODO
+        Variable oldVariable = variables.get(position);
+        super.replaceVariable(position, variable);
+        events.replaceAll(event -> event == oldVariable ? variable : event);
+        noEvents.replaceAll(noEvent -> noEvent == oldVariable ? variable : noEvent);
+        TreeADDPotential treeOfTheReplacedEvent = trees.remove(oldVariable);
+        if (treeOfTheReplacedEvent != null) {
+            trees.put(variable, treeOfTheReplacedEvent);
+        }
+        for (TreeADDPotential tree : trees.values()) {
+            tree.replaceVariable(oldVariable, variable);
+        }
     }
     
     /**

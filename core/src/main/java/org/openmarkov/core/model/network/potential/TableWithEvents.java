@@ -119,13 +119,23 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
         this.hasImpossibleConfigurations = potential.hasImpossibleConfigurations;
         this.impossibleConfigurations = potential.impossibleConfigurations == null
                 ? new ArrayList<>() : new ArrayList<>(potential.impossibleConfigurations);
+        // The copied tables still name the events variable of the original, which nobody will
+        // ever give a finding for: they have to be put on the one built for this copy.
+        putTablesOnTheVariablesOfThisPotential();
+    }
+    
+    /**
+     * Works out again everything that is derived from the variables of this potential - the
+     * variable standing for the event parents and the list of variables the table is built on -
+     * and puts the table, and the table of functions if there is one, on them. To be called
+     * whenever the variables change underneath.
+     */
+    private void putTablesOnTheVariablesOfThisPotential() {
         setEventAsStates(variables.subList(1, variables.size()));
         rebuildTableVariables();
-        // The copied tables still name the events variable of the original, which nobody will
-        // ever give a finding for: they have to be put on the one just built for this copy.
-        this.tablePotential.setVariables(tableVariables);
-        if (this.tableWithFunctions != null) {
-            this.tableWithFunctions.setVariables(tableVariables);
+        tablePotential.setVariables(tableVariables);
+        if (tableWithFunctions != null) {
+            tableWithFunctions.setVariables(tableVariables);
         }
     }
     
@@ -262,7 +272,19 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     
     @Override public void setVariables(List<Variable> variables) {
         super.setVariables(variables);
-        this.getTablePotential().setVariables(variables);
+        putTablesOnTheVariablesOfThisPotential();
+    }
+    
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The table inside has to follow, or it would keep asking for the variable that has just
+     * been replaced. The variable of the events is built again because its states are the names
+     * of the event parents, and the new parent may not be called like the old one.
+     */
+    @Override public void replaceVariable(int position, Variable variable) {
+        super.replaceVariable(position, variable);
+        putTablesOnTheVariablesOfThisPotential();
     }
     
     /**
@@ -450,12 +472,7 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
      */
     @Override public Potential deepCopy(ProbNet copyNet) {
         TableWithEvents potential = (TableWithEvents) super.deepCopy(copyNet);
-        potential.setEventAsStates(potential.variables.subList(1, potential.variables.size()));
-        potential.rebuildTableVariables();
-        potential.tablePotential.setVariables(potential.tableVariables);
-        if (potential.tableWithFunctions != null) {
-            potential.tableWithFunctions.setVariables(potential.tableVariables);
-        }
+        potential.putTablesOnTheVariablesOfThisPotential();
         return potential;
     }
     

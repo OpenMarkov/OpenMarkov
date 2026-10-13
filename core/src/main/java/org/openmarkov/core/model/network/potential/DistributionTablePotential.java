@@ -331,6 +331,20 @@ public class DistributionTablePotential extends Potential implements DESSimulabl
         return new DistributionTablePotential(this);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The table of parameters and the list of numeric parents follow, or the parameters would
+     * keep being looked up with the variable that has just been replaced.
+     */
+    @Override
+    public void replaceVariable(int position, Variable variable) {
+        Variable oldVariable = variables.get(position);
+        super.replaceVariable(position, variable);
+        numericVariables.replaceAll(numeric -> numeric == oldVariable ? variable : numeric);
+        tableWithEvents.replaceVariable(oldVariable, variable);
+    }
+
     //Scale potential
     //TODO
     /**

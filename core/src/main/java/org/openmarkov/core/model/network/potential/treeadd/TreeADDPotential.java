@@ -845,7 +845,19 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
             topVariable = variable;
         }
         for (TreeADDBranch branch : branches) {
-            branch.getPotential().replaceVariable(oldVariable, variable);
+            if (branch.getRootVariable() == oldVariable) {
+                branch.setRootVariable(variable);
+            }
+            // A new list: a copied branch shares the list of parents with the branch it was copied from
+            if (branch.getParentVariables() != null && branch.getParentVariables().contains(oldVariable)) {
+                List<Variable> parentVariables = new ArrayList<>(branch.getParentVariables());
+                parentVariables.replaceAll(parent -> parent == oldVariable ? variable : parent);
+                branch.setParentVariables(parentVariables);
+            }
+            // A branch that refers to another one has no potential of its own
+            if (branch.getPotential() != null) {
+                branch.getPotential().replaceVariable(oldVariable, variable);
+            }
         }
     }
     

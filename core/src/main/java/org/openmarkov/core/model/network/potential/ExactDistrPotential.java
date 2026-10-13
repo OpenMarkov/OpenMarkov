@@ -169,6 +169,13 @@ import java.util.Random;
         this.tablePotential.setVariables(variables.subList(1, variables.size()));
     }
     
+    /** {@inheritDoc} The table inside follows, or it would keep asking for the replaced variable. */
+    @Override public void replaceVariable(int position, Variable variable) {
+        Variable oldVariable = variables.get(position);
+        super.replaceVariable(position, variable);
+        this.tablePotential.replaceVariable(oldVariable, variable);
+    }
+    
     @Override public void setComment(String comment) {
         super.setComment(comment);
         this.tablePotential.setComment(comment);
