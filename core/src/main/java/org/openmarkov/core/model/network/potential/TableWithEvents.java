@@ -121,6 +121,12 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
                 ? new ArrayList<>() : new ArrayList<>(potential.impossibleConfigurations);
         setEventAsStates(variables.subList(1, variables.size()));
         rebuildTableVariables();
+        // The copied tables still name the events variable of the original, which nobody will
+        // ever give a finding for: they have to be put on the one just built for this copy.
+        this.tablePotential.setVariables(tableVariables);
+        if (this.tableWithFunctions != null) {
+            this.tableWithFunctions.setVariables(tableVariables);
+        }
     }
     
     

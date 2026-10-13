@@ -49,6 +49,11 @@ public class TransitionTablePotential extends TableWithEvents implements DESSimu
         this(variables,PotentialRole.CONDITIONAL_PROBABILITY);
     }
 
+    /** A copy has to be a transition table too: the one of the parent class cannot be sampled. */
+    @Override public Potential copy() {
+        return new TransitionTablePotential(this);
+    }
+
 
     /**
      * Returns true  if certain Potential type makes sense given the
