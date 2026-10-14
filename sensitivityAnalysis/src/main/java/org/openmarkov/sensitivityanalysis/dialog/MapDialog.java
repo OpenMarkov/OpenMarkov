@@ -362,7 +362,8 @@ public class MapDialog extends JDialog {
             // winner decision state
             DefaultDrawingSupplier defaultDrawingSupplier = new DefaultDrawingSupplier();
             LegendItemCollection chartLegend = new LegendItemCollection();
-            LookupPaintScale paintScale = new LookupPaintScale();
+            LookupPaintScale paintScale = new LookupPaintScale(-1.0, decisionVariableStates - 1,
+                    GUIColors.SensitivityAnalysis.CHART_BACKGROUND.getColor());
             Shape shape = new Rectangle(10, 10);
             LegendItem drawLegendItem = new LegendItem(stringDatabase.getString("SensitivityAnalysis.General.Draw"),
                                                        // Legend label
