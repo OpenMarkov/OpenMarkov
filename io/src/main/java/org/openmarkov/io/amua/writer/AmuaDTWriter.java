@@ -215,8 +215,7 @@ public class AmuaDTWriter {
         } else if ( amuaNode instanceof AmuaDTCENode ceNode){
             AmuaCEvalue cost = ceNode.getCost();
             if(cost != null){
-                addElement(nodeElem, "cost", df.format(cost.getCost()));
-                addElement(nodeElem, "cost", df.format(cost.getEffectiveness()));
+                addInDimensionOrder(nodeElem, "cost", cost);
             }
         }
     }
@@ -234,9 +233,26 @@ public class AmuaDTWriter {
         } else if ( amuaNode instanceof AmuaDTCENode ceNode){
             AmuaCEvalue payoff = ceNode.getPayoff();
             if (payoff != null) {
-                addElement(nodeElem, "payoff", df.format(payoff.getCost()));
-                addElement(nodeElem, "payoff", df.format(payoff.getEffectiveness()));
+                addInDimensionOrder(nodeElem, "payoff", payoff);
             }
+        }
+    }
+
+
+    /**
+     * Adds an element per dimension, in the order in which the dimensions are declared: the network may declare the
+     * effectiveness before the cost.
+     *
+     * @param parent the parent XML element
+     * @param name the tag name of the elements
+     * @param value the cost and the effectiveness
+     */
+    private void addInDimensionOrder(Element parent, String name, AmuaCEvalue value) {
+        String[] values = new String[2];
+        values[amuaDimInfo.getCostDim()] = df.format(value.getCost());
+        values[amuaDimInfo.getEffectDim()] = df.format(value.getEffectiveness());
+        for (String dimensionValue : values) {
+            addElement(parent, name, dimensionValue);
         }
     }
 

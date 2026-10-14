@@ -169,6 +169,43 @@ class AmuaDTWriterTest {
     }
 
 
+    /**
+     * The network declares the effectiveness before the cost: each value must go to the dimension named after it
+     * (error 195).
+     */
+    @Test
+    void ceValuesFollowTheOrderOfTheDimensions() throws Exception {
+        assertLeafValuesInOrder(effectivenessFirstDimensions(), List.of("5", "50"), List.of("8", "0"));
+    }
+
+
+    @Test
+    void ceValuesWithTheCostFirstAreWrittenAsBefore() throws Exception {
+        assertLeafValuesInOrder(ceDimensions(), List.of("50", "5"), List.of("0", "8"));
+    }
+
+
+    /**
+     * Writes a decision with a leaf whose payoff is a cost of 50 and an effectiveness of 5, and whose cost is a cost of
+     * 0 and an effectiveness of 8.
+     */
+    private void assertLeafValuesInOrder(AmuaDTDimensions dimensions, List<String> payoffs, List<String> costs)
+            throws Exception {
+        AmuaDTCENode root = ceNode("RootNode", DECISION, 0);
+        AmuaDTCENode terminal = terminalCE("Terminal", 1, root, 1, 0, 50, 5);
+        terminal.setCost(new AmuaCEvalue(0, 8));
+        root.setChildNodes(List.of(terminal));
+
+        File file = File.createTempFile("CEDimensionOrderTest", ".amua");
+        file.deleteOnExit();
+        writeTree(root, dimensions, file);
+
+        Element leaf = findNode(loadXML(file), "Terminal");
+        assertEquals(payoffs, leaf.getChildren("payoff").stream().map(Element::getText).toList());
+        assertEquals(costs, leaf.getChildren("cost").stream().map(Element::getText).toList());
+    }
+
+
     private Element findNode(Document doc, String name) {
         return doc.getRootElement().getChild("tree").getChildren("Node").stream().filter(n -> name.equals(n.getChildText("name"))).findFirst().orElseThrow();
     }
@@ -195,6 +232,11 @@ class AmuaDTWriterTest {
 
     private AmuaDTDimensions ceDimensions() {
         return new AmuaDTDimensions(List.of(dimCost, dimEffectiveness), 1, 0, 0, 0, 1, null, 10000, 0);
+    }
+
+
+    private AmuaDTDimensions effectivenessFirstDimensions() {
+        return new AmuaDTDimensions(List.of(dimEffectiveness, dimCost), 1, 0, 0, 1, 0, null, 10000, 0);
     }
 
 
