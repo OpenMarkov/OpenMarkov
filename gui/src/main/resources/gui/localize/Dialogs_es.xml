@@ -298,6 +298,7 @@
                 <CYCLE value="por ciclo"/>
             </DiscountUnit>
         </TemporalOptions>
+        <InvalidCycleLength value="La duración del ciclo tiene que ser un número positivo."/>
     </NetworkTemporalOptionsPanel>
     <NetworkOtherPropertiesPanel>
         <OtherPropertiesTablePanel>

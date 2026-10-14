@@ -27,7 +27,8 @@ public class CycleLengthEdit extends PNEdit {
 
 	public CycleLengthEdit(ProbNet probNet, CycleLength newTemporalUnit) {
 		super(probNet);
-		this.oldTemporalUnit = probNet.getCycleLength().clone();
+		// A network may have no cycle length yet: undoing gives it none again
+		this.oldTemporalUnit = probNet.getCycleLength() == null ? null : probNet.getCycleLength().clone();
 		this.newTemporalUnit = newTemporalUnit;
 	}
 	

@@ -301,6 +301,7 @@
                 <CYCLE value="per cycle"/>
             </DiscountUnit>
         </TemporalOptions>
+        <InvalidCycleLength value="The cycle length must be a positive number."/>
     </NetworkTemporalOptionsPanel>
     <NetworkOtherPropertiesPanel>
         <OtherPropertiesTablePanel>

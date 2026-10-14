@@ -14,6 +14,7 @@ import org.openmarkov.gui.util.PropertyNames;
 import org.openmarkov.gui.window.OMTabbedPane;
 import org.openmarkov.java.swing.ComponentUtilities;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import java.awt.Component;
 import java.awt.Window;
@@ -268,6 +269,12 @@ public class NetworkPropertiesDialog extends OkCancelDialog implements PropertyN
      * @return true always
      */
     @Override protected boolean doOkClickBeforeHide() {
+        if (networkTemporalOptionsPanel != null && !networkTemporalOptionsPanel.applyCycleLength()) {
+            StringDatabase strings = StringDatabase.getUniqueInstance();
+            JOptionPane.showMessageDialog(this, strings.getString("NetworkTemporalOptionsPanel.InvalidCycleLength"),
+                                          strings.getString("ErrorWindow.Title"), JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
         probNet.getPNESupport().closeSubEditHistory();
         return NetworkDefinitionPanel.checkName();
     }

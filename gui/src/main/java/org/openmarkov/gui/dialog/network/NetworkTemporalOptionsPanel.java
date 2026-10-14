@@ -13,6 +13,9 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.openmarkov.core.action.core.CycleLengthEdit;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.network.CycleLength;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.CycleLength.Unit;
@@ -56,13 +59,8 @@ public class NetworkTemporalOptionsPanel extends JPanel {
 		add(getUnitScale());
 		add(getTemporalUnits());
 		
-		CycleLength temporalUnit;
-		if (probNet.getCycleLength() != null) {
-			temporalUnit = probNet.getCycleLength();
-		} else {
-			temporalUnit = new CycleLength();
-			probNet.setCycleLength(temporalUnit);
-		}
+		// Opening the tab does not change the network: a network without a cycle length shows the default one
+		CycleLength temporalUnit = probNet.getCycleLength() != null ? probNet.getCycleLength() : new CycleLength();
 		probNetUnit = temporalUnit.getUnit();
 		probNetScale = temporalUnit.getValue();
 
@@ -78,6 +76,7 @@ public class NetworkTemporalOptionsPanel extends JPanel {
 	private Component getTemporalUnits() {
 		if (temporalUnits == null) {
 			temporalUnits = new JComboBox<String>();
+			temporalUnits.setName("cycleLengthUnit");
 			for (Unit unit : Unit.values()) {
 				String newUnit = StringDatabase.getUniqueInstance()
 						.getString("NetworkTemporalOptionsPanel.TemporalOptions.Unit." + unit.toString());
@@ -90,6 +89,7 @@ public class NetworkTemporalOptionsPanel extends JPanel {
 	private Component getUnitScale() {
 		if (unitScale == null) {
 			unitScale = new JTextField();
+			unitScale.setName("cycleLengthValue");
 		}
 		return unitScale;
 	}
@@ -103,6 +103,37 @@ public class NetworkTemporalOptionsPanel extends JPanel {
 	 *
 	 * @return
 	 */
+	/**
+	 * Gives the network the cycle length written in the panel, if it is a different one, through an edit that can be
+	 * undone.
+	 *
+	 * @return false, without changing the network, if the length is not a positive number
+	 */
+	public boolean applyCycleLength() {
+		if (unitScale == null || probNet.hasConstraintOfClass(OnlyAtemporalVariables.class)) {
+			return true;
+		}
+		double value;
+		try {
+			value = Double.parseDouble(unitScale.getText().trim());
+		} catch (NumberFormatException e) {
+			value = Double.NaN;
+		}
+		if (!(value > 0) || Double.isInfinite(value)) {
+			return false;
+		}
+		Unit unit = Unit.values()[temporalUnits.getSelectedIndex()];
+		CycleLength current = probNet.getCycleLength();
+		if (current == null || current.getUnit() != unit || current.getValue() != value) {
+			try {
+				new CycleLengthEdit(probNet, new CycleLength(unit, value)).executeEdit();
+			} catch (DoEditException e) {
+				throw new UnreachableException(e);
+			}
+		}
+		return true;
+	}
+
 	public boolean update(ProbNet probNet) {
 		this.probNet = probNet;
 		reset();
