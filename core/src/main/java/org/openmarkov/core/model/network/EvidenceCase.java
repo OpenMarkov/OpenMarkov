@@ -10,7 +10,6 @@ package org.openmarkov.core.model.network;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.model.network.potential.Potential;
 
@@ -32,7 +31,8 @@ public class EvidenceCase implements ClassLocalizable {
     // Attribute
     /**
      * List of findings {@code HashMap} of key={@code Variable} and
-     * value={@code Finding}.
+     * value={@code Finding}. The constructors that create it keep the findings in the order they were added, so that
+     * {@link #getVariables()} and {@link #getFindings()} give the same order in every run.
      */
     protected final HashMap<Variable, Finding> findings;
     
@@ -58,14 +58,14 @@ public class EvidenceCase implements ClassLocalizable {
      */
     public EvidenceCase(List<Finding> findings)
             throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
-        this.findings = new HashMap<>();
+        this.findings = new LinkedHashMap<>();
         for (Finding finding : findings) {
             this.addFinding(finding);
         }
     }
     
     public EvidenceCase() {
-        findings = new HashMap<>();
+        findings = new LinkedHashMap<>();
     }
     
     /**
@@ -74,7 +74,7 @@ public class EvidenceCase implements ClassLocalizable {
      * @param evidenceCase Evidence case
      */
     public EvidenceCase(EvidenceCase evidenceCase) {
-        this.findings = evidenceCase == null ? new HashMap<>() : new HashMap<>(evidenceCase.findings);
+        this.findings = evidenceCase == null ? new LinkedHashMap<>() : new LinkedHashMap<>(evidenceCase.findings);
     }
     
     // Methods
@@ -120,12 +120,8 @@ public class EvidenceCase implements ClassLocalizable {
      *
      */
     public void changeFinding(Finding finding) {
-        try {
-            findings.remove(finding.getVariable());
-            addFinding(finding);
-        } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther e) {
-            throw new UnrecoverableException(e);
-        }
+        // Replaced where it was, so that the finding keeps its place in the order
+        findings.put(finding.getVariable(), finding);
     }
     
     /**
