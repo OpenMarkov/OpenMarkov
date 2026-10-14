@@ -254,14 +254,11 @@ public class SystematicSampling extends Sampler {
 		ProbNet net = originalNet.copy();
 
 		UncertainParameter uncertainParameter;
-		int numPoints = numIntervals + 1;
 		List<Class<? extends ProbDensFunction>> functionTypes = initializeTypeFunctions();
 
 		for (ParameterAnalysisInformation parameter : parameters) {
 			uncertainParameter = parameter.uncertainParameter;
 			if (uncertainParameter != null) {
-				String iterationVariableName = parameter.iterationVariableName;
-				Variable iterVariable = new Variable(iterationVariableName, numPoints);
 				Potential originalPotential = uncertainParameter.potential;
 				Potential newPotential = originalPotential.copy();
 				Potential originalSubPotential = uncertainParameter.subPotential;
@@ -279,7 +276,7 @@ public class SystematicSampling extends Sampler {
 				}
 				newSubPotentialVariables.addAll(newTablePotentialVariables);
 				newSubPotential.setVariables(newSubPotentialVariables);
-				TablePotential newSubPotentialTable = originalSubPotentialTable;
+				TablePotential newSubPotentialTable = getPotentialTable(newSubPotential);
 				if (newSubPotentialTable != newSubPotential) {
 					newSubPotentialTable.setVariables(newTablePotentialVariables);
 				}
@@ -293,12 +290,6 @@ public class SystematicSampling extends Sampler {
 				double[] sampledConfigurationValues = sampler.generateSample(columnUncertainValues, numStates, functionTypes);
 				double[] auxSampledConfigurationValues = new double[numStates];
 				double auxValueToAssign = min+(pointsDistance*interval);
-				//Returns the net to its original potentials (after giving the last net with the last intervals potentials)
-				//for the next uncertainParameter. This is necessary because even if you operate on a copy of the original network
-				//with "net.copy()", the changes are transferred to the original network. 
-				if(interval > numIntervals) {
-					auxValueToAssign = uncertainParameter.getBaseLineValue();
-				}
 				double[] newSubpotentialTableValues = newSubPotentialTable.getValues();
 								
 				System.arraycopy(sampledConfigurationValues, 0, auxSampledConfigurationValues, 0, numStates);
@@ -312,9 +303,10 @@ public class SystematicSampling extends Sampler {
 				auxTablePotential.setUncertainValues(new UncertainValue[newSubpotentialTableValues.length]);
 				
 				if (isOriginalPotentialATreeADD) {
-					newPotential.addVariable(iterVariable);
 					replace((TreeADDPotential)originalPotential, (TreeADDPotential) newPotential, originalSubPotential, newSubPotential);
-				}				
+				}
+				net.removePotential(originalPotential);
+				net.addPotential(newPotential);
 			}
 		}
 		return net;

@@ -71,16 +71,14 @@ public class VECESensAnSpider extends VariableElimination  {
 			double hMax = axisVariation.getMaxValue(uncertainParameter);
 			String iterationVariableName = "***Iteration***";
 			
-			for (int i = 0; i <= (iterations+1); ++i) {
+			for (int i = 0; i <= iterations; ++i) {
 				ProbNet net = SystematicSampling.networkSample(probnet, uncertainParameter, hMin, hMax,
 					iterations, iterationVariableName, i);
                 logger.debug("Potentials: {}", net.getPotentials());
                 CEAnalysis veEvaluation = new VECEAnalysis(net);
 				veEvaluation.setPreResolutionEvidence(getPreResolutionEvidence());
 				veEvaluation.setDecisionVariable(this.decisionVariable);
-				if(i<=iterations) {
-					ceaResults.add(veEvaluation.getUtility());
-				}							
+				ceaResults.add(veEvaluation.getUtility());
 			}
 			uncertainParametersPotentials.put(uncertainParameter, ceaResults);			
 		}
