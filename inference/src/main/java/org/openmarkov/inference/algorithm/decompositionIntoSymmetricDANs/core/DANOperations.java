@@ -28,6 +28,7 @@ import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
+import org.openmarkov.core.model.network.potential.SumPotential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.operation.DiscretePotentialOperations;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
@@ -41,6 +42,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class DANOperations {
@@ -109,10 +111,7 @@ public class DANOperations {
                 
                 if (nonRestrictedStates.isEmpty()) {
                     // Remove destination originalNode and its descendants!
-                    Deque<Node> disposableNodes = new ArrayDeque<>();
-                    disposableNodes.push(destinationNode);
-                    while (!disposableNodes.isEmpty()) {
-                        Node disposableNode = disposableNodes.pop();
+                    removeWithDescendants(instantiatedNet, destinationNode, disposableNode -> {
                         // A decision is spared when a decision still reaches it: it can
                         // be made even though this branch removed the node that
                         // restricted it. The path must survive in the copy - a path
@@ -123,24 +122,12 @@ public class DANOperations {
                         // the copy alone the answer depended on the order in which the
                         // links happened to be iterated.
                         Node originalDisposable = originalDAN.getNode(disposableNode.getVariable().getName());
-                        boolean sparedDecision = disposableNode != destinationNode
+                        return disposableNode != destinationNode
                                 && disposableNode.getNodeType() == NodeType.DECISION
                                 && (ProbNetOperations.hasPredecessorDecision(disposableNode, instantiatedNet)
                                         || (originalDisposable != null
                                                 && originalDAN.getChildren(originalNode).contains(originalDisposable)));
-                        if (!sparedDecision) {
-                            for (Node descendant : instantiatedNet.getChildren(disposableNode)) {
-                                disposableNodes.push(descendant);
-                            }
-                            // Guarantee that the DAN has at least a utility node
-                            if (disposableNode.getNodeType() != NodeType.UTILITY
-                                    || instantiatedNet.getNodes(NodeType.UTILITY).size() > 1) {
-                                instantiatedNet.removeNode(disposableNode);
-                            } else {//If the node of utility should be removed, then we leave it in the network with a zero value
-                                replaceUtilityPotentialWithZero(instantiatedNet, disposableNode);
-                            }
-                        }
-                    }
+                    });
                     
                     //                    }else if(nonRestrictedStates.size () == 1) // Remove variables with a single variable
                     //                    {
@@ -186,28 +173,68 @@ public class DANOperations {
             for (Node node : new ArrayList<>(net.getNodes(NodeType.CHANCE))) {
                 if (hasAllZeroProbability(node)) {
                     // Remove this node and its descendants (same logic as restriction pruning)
-                    Deque<Node> disposableNodes = new ArrayDeque<>();
-                    disposableNodes.push(node);
-                    while (!disposableNodes.isEmpty()) {
-                        Node disposableNode = disposableNodes.pop();
-                        if (disposableNode.getNodeType() != NodeType.DECISION
-                                || !ProbNetOperations.hasPredecessorDecision(disposableNode, net)) {
-                            for (Node descendant : net.getChildren(disposableNode)) {
-                                disposableNodes.push(descendant);
-                            }
-                            if (disposableNode.getNodeType() != NodeType.UTILITY
-                                    || net.getNodes(NodeType.UTILITY).size() > 1) {
-                                net.removeNode(disposableNode);
-                            } else {
-                                replaceUtilityPotentialWithZero(net, disposableNode);
-                            }
-                        }
-                    }
+                    removeWithDescendants(net, node, disposableNode -> disposableNode.getNodeType() == NodeType.DECISION
+                            && ProbNetOperations.hasPredecessorDecision(disposableNode, net));
                     changed = true;
                     break; // restart iteration since the node list changed
                 }
             }
         }
+    }
+
+    /**
+     * Removes a node that this branch rules out, and the nodes that depend on it, except those that {@code spared}
+     * keeps. A removed node is worth zero in the nodes that combine utilities: a sum just loses that term, and a
+     * product becomes zero, so it is removed in turn, and so are the factors that only fed it. Otherwise those
+     * factors would be left as utilities of their own and added to the result.
+     */
+    private static void removeWithDescendants(ProbNet net, Node start, Predicate<Node> spared) {
+        Deque<Node> disposableNodes = new ArrayDeque<>();
+        disposableNodes.push(start);
+        while (!disposableNodes.isEmpty()) {
+            Node disposableNode = disposableNodes.pop();
+            if (!net.getNodes().contains(disposableNode) || spared.test(disposableNode)) {
+                continue;
+            }
+            for (Node child : net.getChildren(disposableNode)) {
+                if (!dropTermOfSum(net, child, disposableNode.getVariable())) {
+                    disposableNodes.push(child);
+                }
+            }
+            List<Node> utilityParents = net.getParents(disposableNode).stream()
+                    .filter(parent -> parent.getNodeType() == NodeType.UTILITY).toList();
+            // Guarantee that the DAN has at least a utility node
+            if (disposableNode.getNodeType() != NodeType.UTILITY || net.getNodes(NodeType.UTILITY).size() > 1) {
+                net.removeNode(disposableNode);
+            } else {//If the node of utility should be removed, then we leave it in the network with a zero value
+                replaceUtilityPotentialWithZero(net, disposableNode);
+            }
+            for (Node parent : utilityParents) {
+                if (net.getChildren(parent).isEmpty()) {
+                    disposableNodes.push(parent);
+                }
+            }
+        }
+    }
+
+    /**
+     * Removes {@code term} from {@code node} when it is a sum of utilities with other terms left.
+     *
+     * @return whether it did
+     */
+    private static boolean dropTermOfSum(ProbNet net, Node node, Variable term) {
+        if (node.getNodeType() != NodeType.UTILITY || node.getPotentials().size() != 1
+                || !(node.getPotentials().getFirst() instanceof SumPotential sum)) {
+            return false;
+        }
+        List<Variable> variables = sum.getVariables();
+        variables.remove(term);
+        if (variables.stream().noneMatch(variable -> variable != node.getVariable())) {
+            return false;
+        }
+        net.removePotentials(node);
+        net.addPotential(new SumPotential(variables, sum.getPotentialRole()));
+        return true;
     }
 
     private static boolean hasAllZeroProbability(Node node) {
