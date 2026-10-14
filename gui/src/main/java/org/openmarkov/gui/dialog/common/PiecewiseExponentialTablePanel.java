@@ -21,6 +21,9 @@ import java.util.regex.Pattern;
 
 public class PiecewiseExponentialTablePanel extends KeyTablePanel {
 
+    /** Column of the time where each stretch starts; the first column is hidden. */
+    private static final int TIME_COLUMN = 1;
+
     protected JFileChooser chooser = new JFileChooser();
 //    protected Pattern dataPattern = Pattern.compile(".*(\\d+)\\s*;\\s*(\\d+\\.?\\d*).*");
     protected Pattern dataPattern = Pattern.compile("(\\d+\\.?\\d*)\\s*[;,]\\s*(\\d+\\.?\\d*)");
@@ -58,7 +61,8 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
     }
 
     /**
-     * This method initializes buttonPanel.
+     * This method initializes buttonPanel. There are no buttons to move a row up or down: the stretches are saved
+     * in the order of their times, whatever the order of the rows.
      *
      * @return a new button panel.
      */
@@ -75,18 +79,13 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
                                     .addComponent(getLoadButton(), GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
                                     .addComponent(getAddValueButton(), GroupLayout.Alignment.LEADING,
                                             GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
-                                    .addComponent(getDownValueButton(), GroupLayout.Alignment.LEADING,
-                                            GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
-                                    .addComponent(getUpValueButton(), GroupLayout.Alignment.LEADING,
-                                            GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
                                     .addComponent(getRemoveValueButton(), GroupLayout.Alignment.LEADING,
                                             GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)).addContainerGap()));
             groupLayout.setVerticalGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
                     groupLayout.createSequentialGroup()
                             .addComponent(getLoadButton()).addGap(5, 5, 5)
                             .addComponent(getAddValueButton()).addGap(5, 5, 5)
-                            .addComponent(getRemoveValueButton()).addGap(5, 5, 5).addComponent(getUpValueButton())
-                            .addGap(5, 5, 5).addComponent(getDownValueButton()).addGap(88, 88, 88)));
+                            .addComponent(getRemoveValueButton()).addGap(88, 88, 88)));
             buttonPanel.setLayout(groupLayout);
         }
         return buttonPanel;
@@ -143,7 +142,66 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
      */
     @Override
     protected void actionPerformedAddValue(ActionEvent e) {
-        tableModel.addRow(new Object[]{0, 0, 0});
+        // A time no other row has, so that the new row does not replace a stretch when saving
+        double nextTime = times(-1).stream().mapToDouble(Double::doubleValue).map(time -> time + 1).max().orElse(0);
+        tableModel.addRow(new Object[]{0, nextTime, 0.0});
+    }
+
+    /**
+     * The table, which refuses a time that another row already has: the cell keeps its value and the user is told.
+     */
+    @Override
+    public KeyTable getValuesTable() {
+        if (valuesTable == null) {
+            valuesTable = new KeyTable(getTableModel(), true, true, true) {
+                @Override
+                public void setValueAt(Object newValue, int row, int column, Object source) {
+                    if (column == TIME_COLUMN && times(row).contains(number(newValue))) {
+                        warnRepeatedTime();
+                        return;
+                    }
+                    super.setValueAt(newValue, row, column, source);
+                }
+            };
+            valuesTable.setName("KeyTablePanel.valuesTable");
+            valuesTable.onTables(omjTable -> omjTable.setListSelectionListener(this));
+        }
+        return valuesTable;
+    }
+
+    /**
+     * @param skippedRow a row whose time is left out, or -1
+     *
+     * @return the times of the rows that are numbers; the others are left out
+     */
+    private List<Double> times(int skippedRow) {
+        List<Double> times = new ArrayList<>();
+        for (int row = 0; row < tableModel.getRowCount(); row++) {
+            Double time = number(tableModel.getValueAt(row, TIME_COLUMN));
+            if (row != skippedRow && time != null) {
+                times.add(time);
+            }
+        }
+        return times;
+    }
+
+    /** The number in a cell, or null if it is not a number. */
+    private static Double number(Object value) {
+        try {
+            return value == null ? null : Double.valueOf(value.toString().strip());
+        } catch (NumberFormatException notANumber) {
+            return null;
+        }
+    }
+
+    /**
+     * Tells the user that the time was refused because another row already has it. In a method of its own so tests
+     * can silence the dialog.
+     */
+    protected void warnRepeatedTime() {
+        JOptionPane.showMessageDialog(this, stringDatabase.getString("RepeatedLifeTableTime.Text"),
+                                      stringDatabase.getString("RepeatedLifeTableTime.Title"),
+                                      JOptionPane.WARNING_MESSAGE);
     }
 
     /**
@@ -160,41 +218,7 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
      * @param e selection event information.
      */
     public void valueChanged(ListSelectionEvent e) {
-
-        int index = valuesTable.getSelectedRow();
-        int rowCount = valuesTable.getRowCount();
-        if ((rowCount == 0) || (index == -1)) {
-            removeValueButton.setEnabled(false);
-            upValueButton.setEnabled(false);
-            downValueButton.setEnabled(false);
-        } else {
-            removeValueButton.setEnabled(true);
-            if (index == 0) {
-                upValueButton.setEnabled(false);
-                if (index == (rowCount - 1)) {
-                    downValueButton.setEnabled(false);
-                } else {
-                    downValueButton.setEnabled(true);
-                }
-            } else if (index == (valuesTable.getRowCount() - 1)) {
-                downValueButton.setEnabled(false);
-                if (index == 0) {
-                    upValueButton.setEnabled(false);
-                } else {
-                    upValueButton.setEnabled(true);
-                }
-                upValueButton.setEnabled(true);
-            } else {
-                upValueButton.setEnabled(true);
-                downValueButton.setEnabled(true);
-            }
-        }
-        if (rowCount <= 1) {
-            removeValueButton.setEnabled(false);
-        } else {
-            removeValueButton.setEnabled(true);
-        }
+        removeValueButton.setEnabled(valuesTable.getRowCount() > 1);
     }
-
 
 }

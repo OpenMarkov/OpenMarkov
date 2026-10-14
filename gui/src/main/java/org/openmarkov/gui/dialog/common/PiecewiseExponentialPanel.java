@@ -91,11 +91,16 @@ public class PiecewiseExponentialPanel
         upperPanel.add(checksPanel, BorderLayout.NORTH);
         upperPanel.add(functionPanel, BorderLayout.SOUTH);
         this.add(upperPanel, BorderLayout.NORTH);
-        piecewiseExponentialTablePanel = new PiecewiseExponentialTablePanel(data);
+        piecewiseExponentialTablePanel = createTablePanel(data);
         this.add(piecewiseExponentialTablePanel, BorderLayout.SOUTH);
         repaint();
     }
 
+
+    /** The table of the stretches; in a method of its own so tests can silence its warnings. */
+    protected PiecewiseExponentialTablePanel createTablePanel(Object[][] data) {
+        return new PiecewiseExponentialTablePanel(data);
+    }
 
     @Override public boolean saveChanges() throws DoEditException, BinomialPotentialWrongValueException.ThetaValueIsWrong, BinomialPotentialWrongValueException.NValuesIsWrong {
         boolean result = super.saveChanges();

@@ -80,6 +80,10 @@
         <Title value="Estado duplicado"/>
         <Text value="Cada estado sólo puede aparecer una vez"/>
     </DuplicatedState>
+    <RepeatedLifeTableTime>
+        <Title value="Tiempo repetido"/>
+        <Text value="Otra fila de la tabla de vida ya empieza en ese tiempo"/>
+    </RepeatedLifeTableTime>
     <ClipboardNotSet>
         <Text value="Este panel no tiene acceso al portapapeles"/>
     </ClipboardNotSet>
