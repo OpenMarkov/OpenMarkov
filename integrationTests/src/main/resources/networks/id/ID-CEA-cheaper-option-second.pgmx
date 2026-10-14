@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="InfluenceDiagram">
+    <Comment showWhenOpeningNetwork="false"><![CDATA[The cheaper option of the decision is the second one, and both lead to a chance node (error 196).]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="Cost" unit="€" />
+      <Criterion name="Effectiveness" unit="QALY" />
+    </DecisionCriteria>
+    <AdditionalProperties>
+      <Property name="Version" value="1.0" />
+      <Property name="VisualPrecision" value="0.0" />
+      <Property name="KindOfGraph" value="directed" />
+    </AdditionalProperties>
+    <Variables>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="252" y="87" />
+        <States>
+          <State name="surgery" />
+          <State name="medication" />
+        </States>
+      </Variable>
+      <Variable name="Outcome" type="finiteStates" role="chance">
+        <Coordinates x="158" y="160" />
+        <States>
+          <State name="good" />
+          <State name="bad" />
+        </States>
+      </Variable>
+      <Variable name="Effectiveness" type="numeric" role="utility">
+        <Coordinates x="158" y="234" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Effectiveness" />
+      </Variable>
+      <Variable name="Cost" type="numeric" role="utility">
+        <Coordinates x="391" y="234" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Cost" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Outcome" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Outcome" />
+        <Variable name="Effectiveness" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Cost" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Outcome" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>0.9 0.1 0.6 0.4</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Effectiveness" />
+        <Variables>
+          <Variable name="Outcome" />
+        </Variables>
+        <Values>1.0 0.4</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost" />
+        <Variables>
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>9000.0 2000.0</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>COST_EFFECTIVENESS</SelectedAnalysisType>
+      <Unicriterion>
+        <Unit>€</Unit>
+        <Scales>
+          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Effectiveness" Value="30000.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Effectiveness" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="Cost" Value="Cost" />
+          <CE_Criterion Criterion="Effectiveness" Value="Effectiveness" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

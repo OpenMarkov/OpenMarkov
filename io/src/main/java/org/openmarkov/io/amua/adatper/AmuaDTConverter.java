@@ -166,10 +166,8 @@ public class AmuaDTConverter {
                 amuaNode.getType() == 2 ? eff : 0
             );
 
-            AmuaCEvalue partialValues = new AmuaCEvalue(
-                    amuaNode.getType() == 2 ? cost : 0,
-                    amuaNode.getType() == 2 ? eff : 0
-            );
+            // Every node keeps its evaluated values: the base scenario compares those of the options
+            AmuaCEvalue partialValues = new AmuaCEvalue(cost, eff);
 
             ceNode.setPayoff(payoffValues);
             ceNode.setPartialUtility(partialValues);
