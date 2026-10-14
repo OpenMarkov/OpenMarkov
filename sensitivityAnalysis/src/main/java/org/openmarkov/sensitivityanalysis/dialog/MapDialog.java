@@ -346,6 +346,8 @@ public class MapDialog extends JDialog {
         yAxis.setNumberFormatOverride(vDecimalFormat);
         
         XYBlockRenderer renderer = new XYBlockRenderer();
+        renderer.setBlockWidth(hVariationInterval);
+        renderer.setBlockHeight(vVariationInterval);
         
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
         plot.setBackgroundPaint(GUIColors.SensitivityAnalysis.PLOT_BACKGROUND.getColor());
