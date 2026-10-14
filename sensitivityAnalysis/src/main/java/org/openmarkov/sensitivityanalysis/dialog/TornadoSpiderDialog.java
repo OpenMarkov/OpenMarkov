@@ -338,34 +338,14 @@ public class TornadoSpiderDialog extends JDialog {
             // Get min and max values
             double minValue = Double.MAX_VALUE;
             double maxValue = Double.MIN_VALUE;
-            double minInterventionUtility = Double.MAX_VALUE;
-            double maxInterventionUtility = Double.MIN_VALUE;
-            double minReferenceUtility = Double.MAX_VALUE;
-            double maxReferenceUtility = Double.MIN_VALUE;
-            
+            double[] values = potential.getValues();
             if (decisionVariable != null) {
-                int interventionDecisionIndex = interventionTornadoDecisionSelector.getSelectedIndex();
-                int relativeDecisionIndex = relativeTornadoDecisionSelector.getSelectedIndex();
-                // For intervention utility values
-                for (int i = 0; i <= iterations; i++) {
-                    double value = potential.getValues()[i + (interventionDecisionIndex * (iterations + 1))];
-                    minInterventionUtility = Math.min(minInterventionUtility, value);
-                    maxInterventionUtility = Math.max(maxInterventionUtility, value);
-                }
-                // For reference utility values
-                for (int j = 0; j <= iterations; j++) {
-                    double value = potential.getValues()[j + (relativeDecisionIndex * (iterations + 1))];
-                    minReferenceUtility = Math.min(minReferenceUtility, value);
-                    maxReferenceUtility = Math.max(maxReferenceUtility, value);
-                }
-                minValue = Math.min(minInterventionUtility - minReferenceUtility, maxInterventionUtility - maxReferenceUtility);
-                maxValue = Math.max(maxInterventionUtility - maxReferenceUtility, minInterventionUtility - minReferenceUtility);
-                
-            } else {
-                for (double value : potential.getValues()) {
-                    minValue = Math.min(minValue, value);
-                    maxValue = Math.max(maxValue, value);
-                }
+                values = differences(values, iterations, interventionTornadoDecisionSelector.getSelectedIndex(),
+                                     relativeTornadoDecisionSelector.getSelectedIndex());
+            }
+            for (double value : values) {
+                minValue = Math.min(minValue, value);
+                maxValue = Math.max(maxValue, value);
             }
             
             TornadoBar tornadoBar = new TornadoBar(uncertainParameter, minValue, maxValue);
@@ -375,6 +355,18 @@ public class TornadoSpiderDialog extends JDialog {
         Collections.sort(tornadoBars);
         
         return tornadoBars;
+    }
+    
+    /**
+     * The expected utility of the intervention minus that of the reference at each point of the sweep of a parameter.
+     * The values hold the iterations + 1 points of each option of the decision, one option after another.
+     */
+    public static double[] differences(double[] values, int iterations, int intervention, int reference) {
+        double[] differences = new double[iterations + 1];
+        for (int point = 0; point <= iterations; point++) {
+            differences[point] = values[point + intervention * (iterations + 1)] - values[point + reference * (iterations + 1)];
+        }
+        return differences;
     }
     
     /**
@@ -567,17 +559,12 @@ public class TornadoSpiderDialog extends JDialog {
             // Get the count of the iteration
             int horizontalIteration = 0;
             double[] potentials = uncertainParameterPotential.getValues();
+            if (decisionVariable != null) {
+                potentials = differences(potentials, iterations, interventionSpiderDecisionSelector.getSelectedIndex(),
+                                         relativeSpiderDecisionSelector.getSelectedIndex());
+            }
             for (int i = 0; i <= iterations; i++) {
-                double value;
-                //Global utility
-                if (decisionVariable == null) {
-                    value = potentials[i];
-                    //OneDecsion utility
-                } else {
-                    double valueIntervention = potentials[i + (interventionSpiderDecisionSelector.getSelectedIndex() * (iterations + 1))];
-                    double valueReference = potentials[i + (relativeSpiderDecisionSelector.getSelectedIndex() * (iterations + 1))];
-                    value = valueIntervention - valueReference;
-                }
+                double value = potentials[i];
                 // Update minimum and maximum utility found
                 minRangeUtility = Math.min(minRangeUtility, value);
                 maxRangeUtility = Math.max(maxRangeUtility, value);
