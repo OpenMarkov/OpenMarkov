@@ -22,6 +22,7 @@ import org.openmarkov.core.action.core.ChangeNetworkTypeEdit;
 import org.openmarkov.core.action.core.CycleLengthEdit;
 import org.openmarkov.core.action.core.DecisionCriteriaEdit;
 import org.openmarkov.core.action.core.DecisionCriterionUnitEdit;
+import org.openmarkov.core.action.core.EventNodeAlwaysAppendEdit;
 import org.openmarkov.core.action.core.MonteCarloOptionsEdit;
 import org.openmarkov.core.action.core.MulticriteriaEdit;
 import org.openmarkov.core.action.core.NetworkCommentEdit;
@@ -64,6 +65,7 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.model.network.type.DECPOMDPType;
+import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
 
@@ -96,7 +98,6 @@ final class EditUndoCases {
         WITHOUT_A_CASE.put("UncertainValuesEdit", "needs a table of uncertain values; pending");
         WITHOUT_A_CASE.put("UncertainValuesRemoveEdit", "needs a table of uncertain values; pending");
         WITHOUT_A_CASE.put("RemoveMarkovNetNodeEdit", "only reached from a Markov network projection; pending");
-        WITHOUT_A_CASE.put("EventNodeAlwaysAppendEdit", "needs an event node of a simulation network; pending");
         WITHOUT_A_CASE.put("ICIPotentialEdit", "needs a canonical model in the network; pending");
         WITHOUT_A_CASE.put("AbsorbParentsEdit", "absorbs intermediate utility nodes; needs a network with a "
                                                 + "super-value node, pending");
@@ -199,6 +200,11 @@ final class EditUndoCases {
                 () -> new TimeSliceEdit(bayesianNetwork().getNode("A"), 1)));
         cases.add(passes(NodeAlwaysObservedEdit.class, "marking the node as always observed",
                 () -> new NodeAlwaysObservedEdit(bayesianNetwork().getNode("A"), true)));
+        // Undo used to write in «always append» the value of «always observed»
+        cases.add(passes(EventNodeAlwaysAppendEdit.class, "no longer always appending an event",
+                () -> new EventNodeAlwaysAppendEdit(eventNetwork(true, false).getNode("E"), false)));
+        cases.add(passes(EventNodeAlwaysAppendEdit.class, "always appending an event that is always observed",
+                () -> new EventNodeAlwaysAppendEdit(eventNetwork(false, true).getNode("E"), true)));
         cases.add(passes(NodeReplaceStatesEdit.class, "replacing the states",
                 () -> new NodeReplaceStatesEdit(bayesianNetwork().getNode("A"),
                         new State[] { new State("low"), new State("high") })));
@@ -318,6 +324,22 @@ final class EditUndoCases {
 
         new AddLinkEdit(net, net.getVariable("A"), net.getVariable("C"), true).executeEdit();
         new AddLinkEdit(net, net.getVariable("B"), net.getVariable("C"), true).executeEdit();
+        return net;
+    }
+
+    /**
+     * A simulation network with one event, E, with the given marks.
+     */
+    static ProbNet eventNetwork(boolean alwaysAppend, boolean alwaysObserved) throws Exception {
+        ProbNet net = new ProbNet(DESNetworkType.getUniqueInstance());
+        net.setName("undo");
+        Variable event = new Variable("E", "no", "yes");
+        event.setVariableType(VariableType.EVENT);
+        new AddNodeEdit(net, event, NodeType.EVENT, null).executeEdit();
+        Node node = net.getNode("E");
+        new SetPotentialEdit(node, PotentialUtils.generateDefaultPotential(node)).executeEdit();
+        node.setAlwaysAppend(alwaysAppend);
+        node.setAlwaysObserved(alwaysObserved);
         return net;
     }
 

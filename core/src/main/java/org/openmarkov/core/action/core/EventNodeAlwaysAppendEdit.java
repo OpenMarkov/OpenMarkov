@@ -26,15 +26,15 @@ import org.openmarkov.core.model.network.Node;
 	private Node node;
 
 	/**
-	 * Creates a new <code>AlwaysAppendEdit</code> with the node and new 'alwaysObserved'
+	 * Creates a new <code>AlwaysAppendEdit</code> with the node and new 'alwaysAppend'
 	 * specified.
 	 *
 	 * @param node              the node that will be edited
-	 * @param newAlwaysAppend the new alwaysObserved
+	 * @param newAlwaysAppend the new alwaysAppend
 	 */
 	public EventNodeAlwaysAppendEdit(Node node, boolean newAlwaysAppend) {
 		super(node.getProbNet());
-		this.lastAlwaysAppend = node.isAlwaysObserved();
+		this.lastAlwaysAppend = node.isAlwaysAppend();
 		this.newAlwaysAppend = newAlwaysAppend;
 		this.node = node;
 	}
