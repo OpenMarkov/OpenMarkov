@@ -276,7 +276,8 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                     if (potential instanceof SameAsPrevious) {
                         Potential originalPotential = ((SameAsPrevious) potential)
                                 .getOriginalPotential(probNet);
-                        if (originalPotential.isUncertain()) {
+                        // No earlier cycle to copy from: nothing uncertain
+                        if (originalPotential != null && originalPotential.isUncertain()) {
                             hasUncertainty = true;
                         }
                     } else {

@@ -68,8 +68,14 @@ public class TemporalNetOperations {
                     Variable variable = probNet.getShiftedVariable(generatingNode.getVariable(), 1);
                     Node node = probNet.getNode(variable);
                     if (!node.getPotentials().isEmpty() && node.getPotentials().get(0) instanceof SameAsPrevious) {
-                        Potential newPotential = ((SameAsPrevious) node.getPotentials().get(0))
-                                .getOriginalPotential(probNet).copy();
+                        Potential originalPotential = ((SameAsPrevious) node.getPotentials().get(0))
+                                .getOriginalPotential(probNet);
+                        if (originalPotential == null) {
+                            throw new NotSupportedOperationException(
+                                    "«" + variable.getName() + "» is «Same as previous», but no earlier cycle has "
+                                    + "a relation for it to copy");
+                        }
+                        Potential newPotential = originalPotential.copy();
                         newPotential.shift(probNet,
                                            variable.getTimeSlice() - newPotential.getConditionedVariable()
                                                                                  .getTimeSlice());

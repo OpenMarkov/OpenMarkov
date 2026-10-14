@@ -75,7 +75,11 @@ import java.util.Random;
         throw new NotSupportedOperationException();
     }
 
-    public Potential getOriginalPotential(ProbNet probNet) {
+    /**
+     * @return the relation of the same variable in the latest earlier cycle that has one other than «Same as
+     * previous», or null if there is none
+     */
+    public @Nullable Potential getOriginalPotential(ProbNet probNet) {
         return getOriginalPotential(probNet, getConditionedVariable());
     }
     
@@ -84,23 +88,19 @@ import java.util.Random;
     }
     
     private static @Nullable Potential getOriginalPotential(ProbNet probNet, Variable variable) {
-        Potential previousPotential = null;
         if (!variable.isTemporal()) {
             return null;
         }
-        int timeSlice = variable.getTimeSlice();
-        @Nullable Variable previousVariable = null;
-        while (timeSlice > 0 && previousVariable == null) {
-            previousVariable = probNet.getVariable(variable.getBaseName(), --timeSlice);
-            previousPotential = probNet.getNode(previousVariable).getPotentials().getFirst();
-            if (previousPotential instanceof SameAsPrevious) {
-                previousVariable = null;
+        // A cycle without the variable, or whose node has no relation, is skipped
+        for (int timeSlice = variable.getTimeSlice() - 1; timeSlice >= 0; timeSlice--) {
+            @Nullable Variable previousVariable = probNet.getVariable(variable.getBaseName(), timeSlice);
+            @Nullable Node previousNode = previousVariable == null ? null : probNet.getNode(previousVariable);
+            if (previousNode != null && !previousNode.getPotentials().isEmpty()
+                && !(previousNode.getPotentials().getFirst() instanceof SameAsPrevious)) {
+                return previousNode.getPotentials().getFirst();
             }
         }
-        if (previousVariable == null) {// There is no previous variable
-            return null;
-        }
-        return previousPotential;
+        return null;
     }
     
     @Override public Potential copy() {
