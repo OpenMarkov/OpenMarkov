@@ -9,6 +9,7 @@ import org.openmarkov.io.amua.model.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -203,6 +204,85 @@ class AmuaDTWriterTest {
         Element leaf = findNode(loadXML(file), "Terminal");
         assertEquals(payoffs, leaf.getChildren("payoff").stream().map(Element::getText).toList());
         assertEquals(costs, leaf.getChildren("cost").stream().map(Element::getText).toList());
+    }
+
+
+    /**
+     * A chance node with three branches of 1/3 and a leaf with an effectiveness of 0.000001. Amua reads each number
+     * with Double.parseDouble and requires the probabilities of the branches to add up to exactly one, unless one of
+     * them is "C", the complement; then the others must add up to one at most (error 198).
+     */
+    private Document thirdsAndATinyEffectiveness() throws Exception {
+        AmuaDTCENode root = ceNode("RootNode", DECISION, 0);
+        AmuaDTCENode chance = ceNode("Chance", CHANCE, 1);
+        chance.setParentNode(root);
+        root.setChildNodes(List.of(chance));
+        AmuaDTCENode first = terminalCE("First", 2, chance, 1.0 / 3, 0, 100, 0.000001);
+        AmuaDTCENode second = terminalCE("Second", 3, chance, 1.0 / 3, 0, 200, 2);
+        AmuaDTCENode third = terminalCE("Third", 4, chance, 1.0 / 3, 0, 300, 3);
+        chance.setChildNodes(List.of(first, second, third));
+
+        File file = File.createTempFile("CEPrecisionTest", ".amua");
+        file.deleteOnExit();
+        writeTree(root, ceDimensions(), file);
+        return loadXML(file);
+    }
+
+
+    @Test
+    void numbersAreWrittenWithAllTheirPrecision() throws Exception {
+        Document doc = thirdsAndATinyEffectiveness();
+
+        assertEquals("0.000001", findNode(doc, "First").getChildren("payoff").get(1).getText());
+        assertEquals(1.0 / 3, Double.parseDouble(findNode(doc, "Second").getChildText("prob")));
+        assertEquals(1.0 / 3, Double.parseDouble(findNode(doc, "Third").getChildText("prob")));
+    }
+
+
+    @Test
+    void theProbabilitiesOfAChanceNodeAddUpToOneAsAmuaChecksIt() throws Exception {
+        Document doc = thirdsAndATinyEffectiveness();
+
+        assertEquals("C", findNode(doc, "First").getChildText("prob"));
+        double others = Double.parseDouble(findNode(doc, "Second").getChildText("prob"))
+                + Double.parseDouble(findNode(doc, "Third").getChildText("prob"));
+        assertTrue(others >= 0 && others <= 1, "The branches that are not the complement add up to " + others);
+    }
+
+
+    /** Amua reads a branch of a chance node without probability as an error of the whole model. */
+    @Test
+    void aBranchThatCannotHappenHasProbabilityZero() throws Exception {
+        AmuaDTCENode root = ceNode("RootNode", DECISION, 0);
+        AmuaDTCENode chance = ceNode("Chance", CHANCE, 1);
+        chance.setParentNode(root);
+        root.setChildNodes(List.of(chance));
+        AmuaDTCENode possible = terminalCE("Possible", 2, chance, 1, 0, 100, 1);
+        AmuaDTCENode impossible = terminalCE("Impossible", 3, chance, 0, 0, 200, 2);
+        chance.setChildNodes(List.of(possible, impossible));
+
+        File file = File.createTempFile("CEZeroTest", ".amua");
+        file.deleteOnExit();
+        writeTree(root, ceDimensions(), file);
+        Document doc = loadXML(file);
+
+        assertEquals("C", findNode(doc, "Possible").getChildText("prob"));
+        assertEquals("0", findNode(doc, "Impossible").getChildText("prob"));
+        assertNull(findNode(doc, "Chance").getChild("prob"), "The options of a decision have no probability");
+    }
+
+
+    /** Amua cannot read a decimal comma. */
+    @Test
+    void theDecimalSeparatorIsAPointWhateverTheLanguageOfTheSystem() throws Exception {
+        Locale previous = Locale.getDefault();
+        try {
+            Locale.setDefault(Locale.of("es", "ES"));
+            assertEquals("0.000001", findNode(thirdsAndATinyEffectiveness(), "First").getChildren("payoff").get(1)
+                                                                                          .getText());
+        } finally {
+            Locale.setDefault(previous);
+        }
     }
 
 

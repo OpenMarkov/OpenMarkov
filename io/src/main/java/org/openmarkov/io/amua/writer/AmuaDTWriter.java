@@ -7,7 +7,7 @@ import org.openmarkov.io.amua.model.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -26,7 +26,8 @@ public class AmuaDTWriter {
     private final AmuaModel amuaModel;
     private final File outputFile;
 
-    private static final DecimalFormat df = new DecimalFormat("#.####");
+    /** What Amua reads as the probability that completes the branches of a chance node up to one. */
+    private static final String COMPLEMENT = "C";
 
 
     /**
@@ -184,8 +185,9 @@ public class AmuaDTWriter {
         addElement(nodeElem, "visible", amuaNode.isVisible());
         addElement(nodeElem, "collapsed", amuaNode.isCollapsed());
 
-        if (amuaNode.getProbability() != 0) {
-            addElement(nodeElem, "prob", df.format(amuaNode.getProbability()));
+        // Amua needs a probability in every branch of a chance node, and their sum to be exactly one
+        if (parent != null && parent.getType() != 0) {
+            addElement(nodeElem, "prob", isComplement(amuaNode) ? COMPLEMENT : number(amuaNode.getProbability()));
         }
 
         // delegates to write the cost and payoff
@@ -211,7 +213,7 @@ public class AmuaDTWriter {
      */
     private void writeNodeCost(AmuaDTNode<?> amuaNode, Element nodeElem) {
         if (amuaNode instanceof AmuaDTUnicriteriaNode unicriteriaNode) {
-            addElement(nodeElem, "cost", unicriteriaNode.getCost());
+            addElement(nodeElem, "cost", number(unicriteriaNode.getCost()));
         } else if ( amuaNode instanceof AmuaDTCENode ceNode){
             AmuaCEvalue cost = ceNode.getCost();
             if(cost != null){
@@ -229,7 +231,7 @@ public class AmuaDTWriter {
      */
     private void writeNodePayoff(AmuaDTNode<?> amuaNode, Element nodeElem){
         if (amuaNode instanceof AmuaDTUnicriteriaNode unicriteriaNode) {
-            addElement(nodeElem, "payoff", unicriteriaNode.getPayoff());
+            addElement(nodeElem, "payoff", number(unicriteriaNode.getPayoff()));
         } else if ( amuaNode instanceof AmuaDTCENode ceNode){
             AmuaCEvalue payoff = ceNode.getPayoff();
             if (payoff != null) {
@@ -249,11 +251,42 @@ public class AmuaDTWriter {
      */
     private void addInDimensionOrder(Element parent, String name, AmuaCEvalue value) {
         String[] values = new String[2];
-        values[amuaDimInfo.getCostDim()] = df.format(value.getCost());
-        values[amuaDimInfo.getEffectDim()] = df.format(value.getEffectiveness());
+        values[amuaDimInfo.getCostDim()] = number(value.getCost());
+        values[amuaDimInfo.getEffectDim()] = number(value.getEffectiveness());
         for (String dimensionValue : values) {
             addElement(parent, name, dimensionValue);
         }
+    }
+
+
+    /**
+     * Whether the node is the most probable branch of its parent (the first one, if several are): Amua completes its
+     * probability so that the branches add up to exactly one. The others then add up to less than one, which Amua
+     * also requires.
+     */
+    private static boolean isComplement(AmuaDTNode<?> amuaNode) {
+        AmuaDTNode<?> mostProbable = null;
+        for (AmuaDTNode<?> sibling : amuaNode.getParentNode().getChildNodes()) {
+            if (mostProbable == null || sibling.getProbability() > mostProbable.getProbability()) {
+                mostProbable = sibling;
+            }
+        }
+        return mostProbable == amuaNode;
+    }
+
+
+    /**
+     * Writes a number with all its precision, with a decimal point and without an exponent, which Amua reads back as
+     * the same number. Nothing for no number, so that no element is written.
+     */
+    static String number(Double value) {
+        if (value == null) {
+            return null;
+        }
+        if (!Double.isFinite(value)) {
+            return String.valueOf(value);
+        }
+        return BigDecimal.valueOf(value).stripTrailingZeros().toPlainString();
     }
 
 
