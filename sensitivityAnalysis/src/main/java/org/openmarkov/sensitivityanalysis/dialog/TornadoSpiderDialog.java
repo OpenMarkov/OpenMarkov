@@ -335,26 +335,31 @@ public class TornadoSpiderDialog extends JDialog {
         
         for (UncertainParameter uncertainParameter : uncertainParameters) {
             TablePotential potential = veSensAnTornadoSpider.getUncertainParametersPotentials().get(uncertainParameter);
-            // Get min and max values
-            double minValue = Double.MAX_VALUE;
-            double maxValue = Double.MIN_VALUE;
             double[] values = potential.getValues();
             if (decisionVariable != null) {
                 values = differences(values, iterations, interventionTornadoDecisionSelector.getSelectedIndex(),
                                      relativeTornadoDecisionSelector.getSelectedIndex());
             }
-            for (double value : values) {
-                minValue = Math.min(minValue, value);
-                maxValue = Math.max(maxValue, value);
-            }
+            double[] range = range(values);
             
-            TornadoBar tornadoBar = new TornadoBar(uncertainParameter, minValue, maxValue);
+            TornadoBar tornadoBar = new TornadoBar(uncertainParameter, range[0], range[1]);
             tornadoBars.add(tornadoBar);
         }
         // Order tornado bars (first the largest)
         Collections.sort(tornadoBars);
         
         return tornadoBars;
+    }
+    
+    /** The least and the greatest of the values. */
+    public static double[] range(double[] values) {
+        double min = Double.POSITIVE_INFINITY;
+        double max = Double.NEGATIVE_INFINITY;
+        for (double value : values) {
+            min = Math.min(min, value);
+            max = Math.max(max, value);
+        }
+        return new double[]{ min, max };
     }
     
     /**
@@ -400,8 +405,8 @@ public class TornadoSpiderDialog extends JDialog {
                     minValue -= reductionCoef;
                     maxValue += reductionCoef;
                 } else {
-                    minValue = minValue - minValue * reductionCoef;
-                    maxValue = maxValue + maxValue * reductionCoef;
+                    minValue = minValue - Math.abs(minValue) * reductionCoef;
+                    maxValue = maxValue + Math.abs(maxValue) * reductionCoef;
                 }
             }
             min = Math.min(minValue, min);
@@ -533,8 +538,8 @@ public class TornadoSpiderDialog extends JDialog {
             variationInterval = (maxVariationValue - minVariationValue) / iterations;
         }
         
-        double minRangeUtility = Double.MAX_VALUE;
-        double maxRangeUtility = Double.MIN_VALUE;
+        double minRangeUtility = Double.POSITIVE_INFINITY;
+        double maxRangeUtility = Double.NEGATIVE_INFINITY;
         double[] minVariationValues = new double[uncertainParameters.size()];
         double[] maxVariationValues = new double[uncertainParameters.size()];
         int iParam = 0;
@@ -613,7 +618,8 @@ public class TornadoSpiderDialog extends JDialog {
         
         // Set the range axis
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setRange(minRangeUtility * 0.999, maxRangeUtility * 1.001);
+        double[] axisRange = PlotDialog.axisRange(minRangeUtility, maxRangeUtility);
+        rangeAxis.setRange(axisRange[0], axisRange[1]);
         if (decisionVariable == null) {
             // Set the horizontal axis reference utility line
             ValueMarker referenceMarker = new ValueMarker(utilityReference);

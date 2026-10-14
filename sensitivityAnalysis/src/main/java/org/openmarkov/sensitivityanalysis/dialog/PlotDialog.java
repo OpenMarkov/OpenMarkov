@@ -177,6 +177,18 @@ public class PlotDialog extends JDialog {
     }
     
     /**
+     * The range of a vertical axis that holds the values from min to max: beyond each end, a thousandth of the
+     * largest of them in absolute value, or one unit when both are zero.
+     */
+    public static double[] axisRange(double min, double max) {
+        double margin = Math.max(Math.abs(min), Math.abs(max)) / 1000;
+        if (margin == 0) {
+            margin = 1;
+        }
+        return new double[]{ min - margin, max + margin };
+    }
+    
+    /**
      * Build the chart
      *
      * @return
@@ -209,8 +221,8 @@ public class PlotDialog extends JDialog {
         // Size of every horizontal interval
         double variationInterval = (maxVariationValue - minVariationValue) / iterations;
         
-        double minRangeUtility = Double.MAX_VALUE;
-        double maxRangeUtility = Double.MIN_VALUE;
+        double minRangeUtility = Double.POSITIVE_INFINITY;
+        double maxRangeUtility = Double.NEGATIVE_INFINITY;
         
         TablePotential uncertainParameterPotential = veSensAnPlot.getUncertainParametersPotentials()
                                                                  .get(uncertainParameter);
@@ -278,7 +290,8 @@ public class PlotDialog extends JDialog {
         
         // Set the range axis
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setRange(minRangeUtility * 0.999, maxRangeUtility * 1.001);
+        double[] axisRange = axisRange(minRangeUtility, maxRangeUtility);
+        rangeAxis.setRange(axisRange[0], axisRange[1]);
         
         // Set the domain axis
         NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
