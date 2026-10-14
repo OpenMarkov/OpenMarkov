@@ -323,24 +323,26 @@ public class Util {
     /**
      * This method returns the name of a new node with a specified type. The
      * name of the nodes starts with a letter that depends on its type: - Chance
-     * nodes name starts with any capital letter except 'D' and 'U'. - Decision
-     * nodes name starts with 'D'. - Utility nodes name starts with 'U'. Then
-     * the name continues with an index. If there are already a node that starts
-     * with a desired letter, an index is added to the letter to form the new
-     * name of the node.
+     * nodes name starts with any capital letter except 'D' and 'U', and 'E' in
+     * a network that can have event nodes. - Decision nodes name starts with
+     * 'D'. - Utility nodes name starts with 'U'. - Event nodes name starts with
+     * 'E'. Then the name continues with an index. If there are already a node
+     * that starts with a desired letter, an index is added to the letter to
+     * form the new name of the node.
      *
      * @param type          type of the new node.
      * @param existingNames array that contains all the existing names of nodes.
+     * @param eventsAllowed whether the network can have event nodes, whose letter is then kept for them.
      *
      * @return the name of the next node that is going to be created.
      */
-    public static String getNextNodeName(NodeType type, HashSet<String> existingNames) {
+    public static String getNextNodeName(NodeType type, HashSet<String> existingNames, boolean eventsAllowed) {
         
         String name = null;
         
         switch (type) {
             case CHANCE: {
-                name = getNextChanceNodeName(existingNames);
+                name = getNextChanceNodeName(existingNames, eventsAllowed);
                 break;
             }
             case DECISION: {
@@ -365,37 +367,25 @@ public class Util {
      * This method returns the name of the next chance node. If exists the node
      * 'A', then checks if exists the node 'B'. If this node already exists 'B',
      * then checks the node 'C', and so on until 'Z'. If exists the node 'Z',
-     * then checks 'A1', 'B1', etc. If exists 'Z1' then checks 'A2'. The only
-     * letters that this method never returns are 'D' and 'U'.
+     * then checks 'A1', 'B1', etc. If exists 'Z1' then checks 'A2'. The
+     * letters that this method never returns are 'D' and 'U', and also 'E' if
+     * the network can have event nodes.
      *
      * @param existingNames names of the nodes that exist.
+     * @param eventsAllowed whether the network can have event nodes.
      *
      * @return the name of the next chance node.
      */
-    private static String getNextChanceNodeName(HashSet<String> existingNames) {
-        
-        char letter;
-        boolean found = false;
-        String name = "";
-        
-        int index = 0;
-        while (!found) {
-            letter = 'A';
-            while (!found && (letter <= 'Z')) {
-                name = letter + ((index > 0) ? Integer.toString(index) : "");
-                if (!existingNames.contains(name)) {
-                    found = true;
-                } else {
-                    letter++;
-                    
-                    if ((letter == 'D') || (letter == 'U') /*Events added*/ || (letter == 'E')) {
-                        letter++;
-                    }
+    private static String getNextChanceNodeName(HashSet<String> existingNames, boolean eventsAllowed) {
+        String reservedLetters = eventsAllowed ? "DEU" : "DU";
+        for (int index = 0; ; index++) {
+            for (char letter = 'A'; letter <= 'Z'; letter++) {
+                String name = letter + ((index > 0) ? Integer.toString(index) : "");
+                if (reservedLetters.indexOf(letter) < 0 && !existingNames.contains(name)) {
+                    return name;
                 }
             }
-            index++;
         }
-        return name;
     }
     
     /**

@@ -760,7 +760,9 @@ public class EditorCommandHandlerGenerator {
                 existingNames.add(node.getName());
             }
         }
-        String nodeName = Util.getNextNodeName(nodeType, existingNames);
+        // The letter of the events is kept for them only where there can be events
+        String nodeName = Util.getNextNodeName(nodeType, existingNames,
+                                               NodeTypeInfo.of(NodeType.EVENT).canBeUsedInProbnet(currentNetwork));
         State[] states = DefaultStates.getStatesNodeType(nodeType, currentNetwork.getDefaultStates());
         for (int i = 0; i < states.length; i++) {
             states[i] = new State(GUIDefaultStates.getString(states[i].getName()));
