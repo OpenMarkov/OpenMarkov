@@ -131,7 +131,8 @@ public class Node implements Cloneable, ClassLocalizable {
         this.nodeType = nodeType;
         potentials = Collections.synchronizedList(new ArrayList<>());
         additionalProperties = new LinkedHashMap<>();  // mutable backing map
-        hashCode = 31 * variable.hashCode() + 17 * nodeType.hashCode();
+        // Neither the type nor a later variable count: both can change while the node is in the network
+        hashCode = variable.hashCode();
     }
     
     /**
@@ -146,7 +147,8 @@ public class Node implements Cloneable, ClassLocalizable {
         potentials = Collections.synchronizedList(new ArrayList<>(node.getPotentials()));
         additionalProperties = new LinkedHashMap<>(node.getAdditionalProperties());
         alwaysObserved = node.isAlwaysObserved();
-        hashCode = 31 * variable.hashCode() + 17 * nodeType.hashCode();
+        // The same as the original, so that the network finds the copy even if the variable has been replaced
+        hashCode = node.hashCode;
     }
     
     //Methods
@@ -429,7 +431,8 @@ public class Node implements Cloneable, ClassLocalizable {
         boolean equals = obj instanceof Node;
         if (equals) {
             Node otherNode = (Node) obj;
-            equals = variable.equals(otherNode.variable) && probNet.equals(otherNode.probNet) && nodeType == otherNode.nodeType;
+            // The type does not count: it can change, and a node is still the same node
+            equals = variable.equals(otherNode.variable) && probNet.equals(otherNode.probNet);
         }
         return equals;
     }
