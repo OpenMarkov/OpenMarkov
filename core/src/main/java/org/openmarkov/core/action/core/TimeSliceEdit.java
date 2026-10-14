@@ -89,9 +89,12 @@ import java.util.List;
     /**
      * Gets the new name of the node
      *
-     * @return the new name of the node
+     * @return the new name of the node: the base name alone if it becomes atemporal
      */
     public String getNewName() {
+        if (newTimeSlice == Variable.noTemporalTimeSlice) {
+            return lastBaseName;
+        }
         return lastBaseName + " " + "[" + String.valueOf(newTimeSlice) + "]";
     }
     
@@ -101,6 +104,6 @@ import java.util.List;
      * @return the previous name of the node
      */
     public String getPreviousName() {
-        return lastBaseName + " " + "[" + String.valueOf(lastTimeSlice) + "]";
+        return lastName;
     }
 }
