@@ -7,23 +7,19 @@
 
 package org.openmarkov.io.database.weka;
 
-import antlr.RecognitionException;
-import antlr.TokenStreamException;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseFormat;
-import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 
 import java.io.*;
-import java.util.LinkedHashMap;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.List;
-import java.util.Map.Entry;
 
 /**
  * This class contains some routines to load a database from a '.arff' file
@@ -38,33 +34,22 @@ import java.util.Map.Entry;
 @CaseDatabaseFormat(extension = "arff", name = "WekaDB")
 public class ArffDataBaseIO implements CaseDatabaseReader, CaseDatabaseWriter {
     
-    private HashMap<String, Object> ioNet;
-    
     /**
-     * Opens a database file (in '.arff' format) and creates the associated
-     * network
+     * Opens a database file (in '.arff' format), as {@link ArffReader} describes.
      *
-     * @return {@code int[][]} matrix with the cases in the database.
+     * @return the variables and the cases of the database.
      *
-     * @throws IOException if the file does not exist or the file format is not
-     *                     correct.
+     * @throws IOException if the file cannot be read.
+     * @throws ParsingSourceException.CouldNotParseSourceException if the file is not a case database in this format,
+     *         with the line where it fails.
      */
     @Override
     public @NotNull CaseDatabase load(File file)
             throws IOException, ParsingSourceException.CouldNotParseSourceException,
             ParsingSourceException.RepeatedVariableNames {
-        try (FileInputStream fileStream = new FileInputStream(file)) {
-            ArffParser parser = new ArffParser(new ArffLexer(fileStream));
-            ioNet = parser.relation();
-            ProbNet probNet = (ProbNet) ioNet.get("ProbNet");
-            LinkedHashMap<String, String> properties = new LinkedHashMap<String, String>();
-            for (Entry<String, Object> property : ioNet.entrySet()) {
-                properties.put(property.getKey(), property.getValue().toString());
-            }
-            probNet.setAdditionalProperties(properties);
-            return CaseDatabaseReader.withDistinctVariableNames(file,
-                    new CaseDatabase(probNet.getVariables(), parser.getCases()));
-        } catch (TokenStreamException | RecognitionException e) {
+        try {
+            return CaseDatabaseReader.withDistinctVariableNames(file, ArffReader.read(file.toPath()));
+        } catch (ParseException e) {
             throw new ParsingSourceException.CouldNotParseSourceException(e);
         }
     }
@@ -79,7 +64,7 @@ public class ArffDataBaseIO implements CaseDatabaseReader, CaseDatabaseWriter {
      */
     @Override public void save(File file, CaseDatabase database) throws IOException {
         FileOutputStream stream = new FileOutputStream(file);
-        OutputStreamWriter output = new OutputStreamWriter(stream);
+        OutputStreamWriter output = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
         /* Relation name */
         String relationName = file.getAbsolutePath();
         output.write("\n@RELATION \"" + relationName + "\"\n");

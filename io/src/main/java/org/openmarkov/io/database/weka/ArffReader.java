@@ -1,0 +1,217 @@
+/*
+ * Copyright (c) CISIAD, UNED, Spain, 2026. Licensed under the GPLv3 licence
+ * Unless required by applicable law or agreed to in writing,
+ * this code is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OF ANY KIND.
+ */
+
+package org.openmarkov.io.database.weka;
+
+import org.openmarkov.core.model.database.CaseDatabase;
+import org.openmarkov.core.model.network.Variable;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * Reads a case database in ARFF, the format of Weka: a header with {@code @relation}, an {@code @attribute} line per
+ * column and {@code @data}, followed by one case per line, its values separated by commas. Only nominal columns,
+ * those that list their values between braces, can be read. The keywords may be written in any case, a line that
+ * starts with {@code %} is a comment, and a name or a value may be quoted with {@code '} or {@code "}.
+ * <p>
+ * A {@code ?} stands for an unknown value: the column gets a state {@code ?}, as in the other readers of case
+ * databases. Anything else that does not fit, such as a value that its column does not declare or a line with more
+ * or fewer values than columns, makes the whole file be refused, with the line where it happens.
+ *
+ * @author Manuel Arias
+ */
+final class ArffReader {
+
+    private static final String MISSING = "?";
+
+    private final List<String> names = new ArrayList<>();
+    private final List<List<String>> states = new ArrayList<>();
+    private final List<int[]> cases = new ArrayList<>();
+
+    private ArffReader() {
+    }
+
+    /**
+     * @param file a file in UTF-8, or else in ISO-8859-1, as older files were written
+     *
+     * @throws ParseException with the number of the line that cannot be read
+     */
+    static CaseDatabase read(Path file) throws IOException, ParseException {
+        ArffReader reader = new ArffReader();
+        reader.readLines(text(file).lines().toList());
+        List<Variable> variables = new ArrayList<>();
+        for (int column = 0; column < reader.names.size(); column++) {
+            variables.add(new Variable(reader.names.get(column), reader.states.get(column).toArray(new String[0])));
+        }
+        return new CaseDatabase(variables, reader.cases.toArray(new int[0][]));
+    }
+
+    private static String text(Path file) throws IOException {
+        byte[] bytes = Files.readAllBytes(file);
+        try {
+            return StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
+                                         .onUnmappableCharacter(CodingErrorAction.REPORT)
+                                         .decode(ByteBuffer.wrap(bytes)).toString();
+        } catch (CharacterCodingException notUtf8) {
+            return new String(bytes, StandardCharsets.ISO_8859_1);
+        }
+    }
+
+    private void readLines(List<String> lines) throws ParseException {
+        boolean inData = false;
+        for (int index = 0; index < lines.size(); index++) {
+            int lineNumber = index + 1;
+            String line = lines.get(index).strip();
+            if (line.isEmpty() || line.startsWith("%")) {
+                continue;
+            }
+            if (inData) {
+                readCase(line, lineNumber);
+                continue;
+            }
+            String keyword = line.split("\\s", 2)[0].toLowerCase(Locale.ROOT);
+            switch (keyword) {
+                case "@relation" -> { }
+                case "@attribute" -> readAttribute(line.substring(keyword.length()).strip(), lineNumber);
+                case "@data" -> {
+                    if (names.isEmpty()) {
+                        throw new ParseException("Line " + lineNumber + ": there is no @attribute before @data", lineNumber);
+                    }
+                    inData = true;
+                }
+                default -> throw new ParseException("Line " + lineNumber + ": expected @relation, @attribute or @data, "
+                                                    + "found «" + line + "»", lineNumber);
+            }
+        }
+        if (!inData) {
+            throw new ParseException("There is no @data line", lines.size());
+        }
+    }
+
+    /**
+     * @param declaration what follows {@code @attribute}: the name and, between braces, the values
+     */
+    private void readAttribute(String declaration, int lineNumber) throws ParseException {
+        int nameEnd = endOfName(declaration, lineNumber);
+        String name = unquote(declaration.substring(0, nameEnd));
+        String type = declaration.substring(nameEnd).strip();
+        if (name.isEmpty()) {
+            throw new ParseException("Line " + lineNumber + ": the attribute has no name", lineNumber);
+        }
+        if (!type.startsWith("{") || !type.endsWith("}")) {
+            throw new ParseException("Line " + lineNumber + ": the attribute «" + name + "» is of type «" + type
+                                     + "»; only attributes that list their values between braces can be read",
+                                     lineNumber);
+        }
+        List<String> values = new ArrayList<>();
+        for (String field : fields(type.substring(1, type.length() - 1), lineNumber)) {
+            String value = unquote(field);
+            if (value.isEmpty() || values.contains(value)) {
+                throw new ParseException("Line " + lineNumber + ": the attribute «" + name + "» has an empty or a "
+                                         + "repeated value", lineNumber);
+            }
+            values.add(value);
+        }
+        names.add(name);
+        states.add(values);
+    }
+
+    /** Where the name of an attribute ends: at its closing quote, or else at the first blank or brace. */
+    private static int endOfName(String declaration, int lineNumber) throws ParseException {
+        if (declaration.startsWith("'") || declaration.startsWith("\"")) {
+            return closingQuote(declaration, 0, lineNumber) + 1;
+        }
+        int end = 0;
+        while (end < declaration.length() && !Character.isWhitespace(declaration.charAt(end))
+               && declaration.charAt(end) != '{') {
+            end++;
+        }
+        return end;
+    }
+
+    private void readCase(String line, int lineNumber) throws ParseException {
+        if (line.startsWith("{")) {
+            throw new ParseException("Line " + lineNumber + ": cases in sparse format cannot be read", lineNumber);
+        }
+        List<String> fields = fields(line, lineNumber);
+        if (fields.size() != names.size()) {
+            throw new ParseException("Line " + lineNumber + ": " + fields.size() + " values for " + names.size()
+                                     + " attributes", lineNumber);
+        }
+        int[] example = new int[names.size()];
+        for (int column = 0; column < example.length; column++) {
+            String field = fields.get(column);
+            List<String> values = states.get(column);
+            if (field.equals(MISSING)) {
+                if (!values.contains(MISSING)) {
+                    values.add(MISSING);
+                }
+                example[column] = values.indexOf(MISSING);
+                continue;
+            }
+            String value = unquote(field);
+            example[column] = values.indexOf(value);
+            if (example[column] == -1) {
+                throw new ParseException("Line " + lineNumber + ": the value «" + value + "» is not one of those of the "
+                                         + "attribute «" + names.get(column) + "»: " + values, lineNumber);
+            }
+        }
+        cases.add(example);
+    }
+
+    /**
+     * Splits a list of values at the commas that are not quoted, and strips the blanks around each value. A quoted
+     * value keeps its quotes, so that a quoted {@code ?} is not taken for an unknown value.
+     */
+    private static List<String> fields(String list, int lineNumber) throws ParseException {
+        List<String> fields = new ArrayList<>();
+        int start = 0;
+        for (int position = 0; position <= list.length(); position++) {
+            if (position == list.length() || list.charAt(position) == ',') {
+                fields.add(list.substring(start, position).strip());
+                start = position + 1;
+            } else if (list.charAt(position) == '\'' || list.charAt(position) == '"') {
+                position = closingQuote(list, position, lineNumber);
+            }
+        }
+        return fields;
+    }
+
+    /** The position of the quote that closes the one at {@code open}; a backslash escapes a quote or itself. */
+    private static int closingQuote(String text, int open, int lineNumber) throws ParseException {
+        char quote = text.charAt(open);
+        for (int position = open + 1; position < text.length(); position++) {
+            char character = text.charAt(position);
+            if (character == '\\' && position + 1 < text.length()
+                && (text.charAt(position + 1) == quote || text.charAt(position + 1) == '\\')) {
+                position++;
+            } else if (character == quote) {
+                return position;
+            }
+        }
+        throw new ParseException("Line " + lineNumber + ": a quote is not closed", lineNumber);
+    }
+
+    private static String unquote(String field) {
+        if (field.length() >= 2 && (field.startsWith("'") || field.startsWith("\""))
+            && field.endsWith(field.substring(0, 1))) {
+            String quote = field.substring(0, 1);
+            return field.substring(1, field.length() - 1).replace("\\" + quote, quote).replace("\\\\", "\\");
+        }
+        return field;
+    }
+}
