@@ -126,8 +126,7 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
 
     /**
      * Initializes the algorithm. Resets phase and cache so that a fresh run
-     * (e.g. via the "Finish" button in the interactive dialog) is not affected
-     * by phase pollution caused by the table-population peeking calls.
+     * (e.g. via the "Finish" button in the interactive dialog) starts from the beginning.
      */
     @Override
     public void init(ModelNetUse modelNetUse) {
@@ -154,14 +153,15 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
     		boolean onlyPositiveEdits) {
 
     	resetHistory();
+        skeleton.resetState();
 
-        return getNextEdit(onlyAllowedEdits, onlyPositiveEdits);
+        return nextEdit(onlyAllowedEdits, onlyPositiveEdits);
     }
 
     /**
-     * Method that returns the next best edit in each step of the algorithm
-     * or null if there are no more edits to consider (depending on the
-     * arguments it receives).
+     * Method that returns the next best edit of the current phase, or null
+     * if there are no more edits to consider in it (depending on the
+     * arguments it receives). It does not move the algorithm to the next phase.
      *
      * @param onlyAllowedEdits  if true, only allowed edits are considered
      * @param onlyPositiveEdits if true, only positive edits are considered
@@ -171,7 +171,16 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
     public LearningEditProposal getNextEdit(
     		boolean onlyAllowedEdits,
     		boolean onlyPositiveEdits) {
+        Phase currentPhase = phase;
+        LearningEditProposal bestEditProposal = nextEdit(onlyAllowedEdits, onlyPositiveEdits);
+        if (phase != currentPhase) {
+            phase = currentPhase;
+            return null;
+        }
+        return bestEditProposal;
+    }
 
+    private LearningEditProposal nextEdit(boolean onlyAllowedEdits, boolean onlyPositiveEdits) {
         LearningEditProposal bestEditProposal;
         do {
             bestEditProposal = getOptimalEdit(onlyAllowedEdits, onlyPositiveEdits);
@@ -299,15 +308,10 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
             phase = Phase.INITIAL_PHASE;
             skeleton.resetState();
         } else if (edit instanceof COrientLinksEdit) {
-            // After applying a v-structure orientation, reset to HEAD_TO_HEAD_ORIENTATION.
-            // During interactive table population, getNextEdit() peeks ahead and may advance
-            // the phase all the way to ORIENTATION_FINISHED via transitionToNextPhase().
-            // Without this reset, the phase would remain ORIENTATION_FINISHED after the user
-            // accepts the edit, causing getBestEdit() to return null and the list to appear empty.
+            // After applying a v-structure orientation, the search goes on in HEAD_TO_HEAD_ORIENTATION.
             phase = Phase.HEAD_TO_HEAD_ORIENTATION;
         } else if (edit instanceof OrientLinkEdit) {
-            // After applying a remaining-link orientation, reset to REMAINING_LINKS_ORIENTATION.
-            // Same peeking issue can advance the phase to ORIENTATION_FINISHED prematurely.
+            // After applying a remaining-link orientation, the search goes on in REMAINING_LINKS_ORIENTATION.
             //
             // Guard: when flattenEdit notifies sub-edits of a COrientLinksEdit, the compound
             // handler above fires first and sets HEAD_TO_HEAD_ORIENTATION.  The sub-edits

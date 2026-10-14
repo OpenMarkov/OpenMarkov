@@ -98,7 +98,7 @@ public class PCAlgorithmIntegrationTest {
      * @throws Exception if the resource cannot be read or if any parsing problem occurs.
      */
 
-    private static CaseDatabase loadCsvDatabase(String resourcePath, List<Variable> variables) throws Exception {
+    static CaseDatabase loadCsvDatabase(String resourcePath, List<Variable> variables) throws Exception {
         InputStream is = PCAlgorithmIntegrationTest.class.getClassLoader().getResourceAsStream(resourcePath);
         assertNotNull(is, "Test resource not found: " + resourcePath);
 
@@ -162,7 +162,7 @@ public class PCAlgorithmIntegrationTest {
      * @param variables variables that will become the nodes of the network.
      * @return a probabilistic network initialized as a complete undirected graph.
      */
-    private static ProbNet buildCompleteUndirectedGraph(List<Variable> variables) {
+    static ProbNet buildCompleteUndirectedGraph(List<Variable> variables) {
         ProbNet probNet = new ProbNet();
         List<Node> nodes = new ArrayList<>();
         for (Variable var : variables) {
