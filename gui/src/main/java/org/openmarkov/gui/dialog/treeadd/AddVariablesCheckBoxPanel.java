@@ -21,6 +21,7 @@ import java.util.List;
 @SuppressWarnings("serial") public class AddVariablesCheckBoxPanel extends JPanel {
 
 	private final ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
+	private final List<Variable> variables = new ArrayList<>();
 	private final TreeADDBranch branch;
 	private final TreeADDPotential treeADD;
 
@@ -40,8 +41,20 @@ import java.util.List;
 		for (Variable variable : possibleVariables) {
 			JCheckBox checkBox = new JCheckBox(variable.getName());
 			checkBoxes.add(checkBox);
+			variables.add(variable);
 			add(checkBox, CENTER_ALIGNMENT);
 		}
+	}
+
+	/** The variables whose boxes are checked. */
+	public List<Variable> getSelectedVariables() {
+		List<Variable> selected = new ArrayList<>();
+		for (int i = 0; i < checkBoxes.size(); i++) {
+			if (checkBoxes.get(i).isSelected()) {
+				selected.add(variables.get(i));
+			}
+		}
+		return selected;
 	}
 
 	public TreeADDBranch getBranch() {

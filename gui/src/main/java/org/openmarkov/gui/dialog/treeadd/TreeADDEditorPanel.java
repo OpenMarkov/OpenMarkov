@@ -771,22 +771,8 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         AddVariablesDialog dialog = new AddVariablesDialog(ComponentUtilities.getOwner(this), branch, parentTreeADD);
         TreeADDModel model = (TreeADDModel) jTree.getModel();
         if (dialog.requestValues() == OkCancelDialog.ChosenOption.Ok) {
-            AddVariablesCheckBoxPanel panel = dialog.getJPanelVariables();
-            List<JCheckBox> checkBoxes = panel.getCheckBoxes();
-            List<Variable> newVariables = new ArrayList<Variable>();
-            for (JCheckBox checkBox : checkBoxes) {
-                if (checkBox.isSelected()) {
-                    String variableName = checkBox.getText();
-                    for (Variable variable : parentTreeADD.getVariables()) {
-                        if (variable.getName().equals(variableName)) {
-                            newVariables.add(variable);
-                        }
-                        break;
-                    }
-                }
-            }
             Potential potential = branch.getPotential();
-            for (Variable newVariable : newVariables) {
+            for (Variable newVariable : dialog.getJPanelVariables().getSelectedVariables()) {
                 potential = potential.addVariable(newVariable);
             }
             branch.setPotential(potential);
