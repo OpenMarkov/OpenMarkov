@@ -487,6 +487,9 @@ public class PotentialEditPanel extends JPanel {
         Class<? extends Potential> potentialType = (Class<? extends Potential>) this.potentialTypeComboBox.getSelectedItem();
         Potential newPotential = null;
         var currentPotential = this.node.getPotential();
+        if (currentPotential != null && potentialType == currentPotential.getClass()) {
+            return;
+        }
         if (potentialType == TablePotential.class && (currentPotential instanceof TablePotential || currentPotential instanceof UniformPotential)) {
             var variables = this.node.getParents()
                                      .stream()
