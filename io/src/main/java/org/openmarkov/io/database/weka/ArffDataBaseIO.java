@@ -19,7 +19,10 @@ import org.openmarkov.core.model.network.Variable;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  * This class contains some routines to load a database from a '.arff' file
@@ -33,6 +36,9 @@ import java.util.List;
  */
 @CaseDatabaseFormat(extension = "arff", name = "WekaDB")
 public class ArffDataBaseIO implements CaseDatabaseReader, CaseDatabaseWriter {
+
+    /** The unknown value. */
+    private static final String MISSING = "?";
     
     /**
      * Opens a database file (in '.arff' format), as {@link ArffReader} describes.
@@ -55,7 +61,9 @@ public class ArffDataBaseIO implements CaseDatabaseReader, CaseDatabaseWriter {
     }
     
     /**
-     * Saves a case database to a file in ARFF format.
+     * Saves a case database to a file in ARFF format, which {@link ArffReader} and Weka read back. Every column lists
+     * its states between braces; a state {@code ?} is not declared, and its cases are written as {@code ?}, the
+     * unknown value. The relation is named after the file, not its folder.
      *
      * @param file     the output file
      * @param database the case database to save
@@ -63,78 +71,38 @@ public class ArffDataBaseIO implements CaseDatabaseReader, CaseDatabaseWriter {
      * @throws IOException if writing to the file fails
      */
     @Override public void save(File file, CaseDatabase database) throws IOException {
-        FileOutputStream stream = new FileOutputStream(file);
-        OutputStreamWriter output = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
-        /* Relation name */
-        String relationName = file.getAbsolutePath();
-        output.write("\n@RELATION \"" + relationName + "\"\n");
-        /* Attributes and values */
-        State[] states;
-        for (Variable variable : database.getVariables()) {
-            String nodeName = variable.getName();
-            if (nodeName.contains(" "))
-                output.write("\n@ATTRIBUTE \"" + nodeName + "\" ");
-            else
-                output.write("\n@ATTRIBUTE " + nodeName + " ");
-            states = variable.getStates();
-            /*
-             * Before printing the states of the node, we have to know if the
-             * node is numeric or not.
-             */
-            boolean numeric = true;
-            for (int i = 0; i < states.length; i++) {
-                try {
-                    if (!states[i].getName().equals("?")) {
-                        Integer.parseInt(states[i].getName());
-                    }
-                } catch (NumberFormatException e) {
-                    numeric = false;
+        try (Writer output = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+            String fileName = file.getName();
+            int dot = fileName.lastIndexOf('.');
+            output.write("@RELATION " + quoted(dot > 0 ? fileName.substring(0, dot) : fileName) + "\n\n");
+            List<Variable> variables = database.getVariables();
+            for (Variable variable : variables) {
+                String states = Arrays.stream(variable.getStates()).map(State::getName)
+                                      .filter(name -> !name.equals(MISSING)).map(ArffDataBaseIO::quoted)
+                                      .collect(Collectors.joining(","));
+                output.write("@ATTRIBUTE " + quoted(variable.getName()) + " {" + states + "}\n");
+            }
+            output.write("\n@DATA\n");
+            for (int[] example : database.getCases()) {
+                StringJoiner line = new StringJoiner(",", "", "\n");
+                for (int column = 0; column < example.length; column++) {
+                    String state = variables.get(column).getStates()[example[column]].getName();
+                    line.add(state.equals(MISSING) ? MISSING : quoted(state));
                 }
+                output.write(line.toString());
             }
-            if (numeric) {
-                output.write("numeric {");
-            } else {
-                output.write("{");
-            }
-            for (int i = 0; i < states.length; i++) {
-                if (states[i].getName().equals("?")) {
-                    if (i != 0 && i != states.length - 1) {
-                        output.write(",");
-                    }
-                } else {
-                    if (states[i].getName().contains(" ")) {
-                        output.write("\"" + states[i].getName() + "\"");
-                    } else {
-                        output.write(states[i].getName());
-                    }
-                    if ((i != states.length - 1) && (!states[i + 1].getName().equals("?"))) {
-                        output.write(",");
-                    }
-                }
-            }
-            output.write("}\n");
         }
-        /*
-         * Data. If any of the attributes is "String", then we have to get the
-         * correct index.
-         */
-        output.write("\n@DATA\n");
-        List<Variable> variables = database.getVariables();
-        int[][] cases = database.getCases();
-        for (int i = 0; i < cases.length; i++) {
-            for (int j = 0; j < cases[i].length; j++) {
-                states = variables.get(j).getStates();
-                if (states[cases[i][j]].getName().contains(" ")) {
-                    output.write("\"" + states[cases[i][j]].getName() + "\"");
-                } else {
-                    output.write(states[cases[i][j]].getName());
-                }
-                if (j != cases[i].length - 1) {
-                    output.write(",");
-                }
-            }
-            output.write("\n");
+    }
+
+    /**
+     * Quotes a name or a value that has a character with a meaning in the format, escaping the quotes and the
+     * backslashes in it, as Weka does.
+     */
+    private static String quoted(String text) {
+        if (!text.isEmpty() && !text.equals(MISSING) && text.chars().noneMatch(
+                character -> Character.isWhitespace(character) || ",'\"{}%\\".indexOf(character) >= 0)) {
+            return text;
         }
-        output.close();
+        return "'" + text.replace("\\", "\\\\").replace("'", "\\'") + "'";
     }
 }

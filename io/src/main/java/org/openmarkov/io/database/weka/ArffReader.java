@@ -118,7 +118,9 @@ final class ArffReader {
                                      lineNumber);
         }
         List<String> values = new ArrayList<>();
-        for (String field : fields(type.substring(1, type.length() - 1), lineNumber)) {
+        String list = type.substring(1, type.length() - 1);
+        // No values: every case of the column is unknown
+        for (String field : list.isBlank() ? List.<String>of() : fields(list, lineNumber)) {
             String value = unquote(field);
             if (value.isEmpty() || values.contains(value)) {
                 throw new ParseException("Line " + lineNumber + ": the attribute «" + name + "» has an empty or a "
@@ -207,11 +209,21 @@ final class ArffReader {
     }
 
     private static String unquote(String field) {
-        if (field.length() >= 2 && (field.startsWith("'") || field.startsWith("\""))
-            && field.endsWith(field.substring(0, 1))) {
-            String quote = field.substring(0, 1);
-            return field.substring(1, field.length() - 1).replace("\\" + quote, quote).replace("\\\\", "\\");
+        if (field.length() < 2 || (field.charAt(0) != '\'' && field.charAt(0) != '"')
+            || field.charAt(field.length() - 1) != field.charAt(0)) {
+            return field;
         }
-        return field;
+        char quote = field.charAt(0);
+        StringBuilder text = new StringBuilder();
+        for (int position = 1; position < field.length() - 1; position++) {
+            char character = field.charAt(position);
+            if (character == '\\' && position + 2 < field.length()
+                && (field.charAt(position + 1) == quote || field.charAt(position + 1) == '\\')) {
+                position++;
+                character = field.charAt(position);
+            }
+            text.append(character);
+        }
+        return text.toString();
     }
 }
