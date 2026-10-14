@@ -35,12 +35,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
-import java.util.Locale;
 
 /**
  * Dialog for configuring inference options, including multi-criteria weights,
@@ -644,9 +641,6 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                         if (scale.indexOf(' ') != -1) {
                             scale = scale.substring(0, scale.indexOf(' '));
                         }
-                        DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
-                        format.applyLocalizedPattern("#.###");
-                        scale = format.format(Double.parseDouble(scale));
                         decisionCriteria.get(row - 1).setCeScale(Double.parseDouble(scale));
                     }
                     
@@ -657,9 +651,6 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                             if (discount.indexOf(' ') != -1) {
                                 discount = discount.substring(0, discount.indexOf(' '));
                             }
-                            DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
-                            format.applyLocalizedPattern("#.###");
-                            discount = format.format(Double.parseDouble(discount));
                             double discountDouble = Double.parseDouble(discount);
                             discountDouble /= 100;
                             decisionCriteria.get(row - 1).setDiscount(discountDouble);
@@ -684,9 +675,6 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                         if (scale.indexOf(' ') != -1) {
                             scale = scale.substring(0, scale.indexOf(' '));
                         }
-                        DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
-                        format.applyLocalizedPattern("#.###");
-                        scale = format.format(Double.parseDouble(scale));
                         decisionCriteria.get(row - 1).setUnicriterizationScale(Double.parseDouble(scale));
                     }
                     
@@ -697,9 +685,6 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                             if (discount.indexOf(' ') != -1) {
                                 discount = discount.substring(0, discount.indexOf(' '));
                             }
-                            DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
-                            format.applyLocalizedPattern("#.###");
-                            discount = format.format(Double.parseDouble(discount));
                             double discountDouble = Double.parseDouble(discount);
                             discountDouble /= 100;
                             decisionCriteria.get(row - 1).setDiscount(discountDouble);
