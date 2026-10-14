@@ -18,6 +18,7 @@ import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -237,10 +238,13 @@ public class TreeADDBranch implements ClassLocalizable {
     
     public List<Variable> getAddableVariables() {
         List<Variable> addableVariables = new ArrayList<>(parentVariables);
-        boolean selfLoop = addableVariables.contains(potential.getConditionedVariable());
+        // A node that is a parent of itself, as in a network of events, has its variable twice in the tree
+        Variable conditionedVariable = potential.getConditionedVariable();
+        boolean selfLoop = Collections.frequency(parentVariables, conditionedVariable)
+                > Collections.frequency(potential.getVariables(), conditionedVariable);
         addableVariables.removeAll(potential.getVariables());
         if (selfLoop) {
-            addableVariables.add(potential.getConditionedVariable());
+            addableVariables.add(conditionedVariable);
         }
         if (potential instanceof ExactDistrPotential) {
             addableVariables.remove(potential.getVariable(0));
