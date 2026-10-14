@@ -12,7 +12,6 @@ import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
@@ -27,9 +26,7 @@ import org.openmarkov.core.model.network.type.DESNetworkType;
 
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -163,21 +160,6 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
         return false;
     }
     
-    /**
-     * Generates a sampled potential
-     */
-    @Override public Potential sample(Random randomGenerator) {
-        //TODO
-        return null;
-    }
-    
-    
-    @Override public Collection<Finding> getInducedFindings(EvidenceCase evidenceCase) {
-        //TODO
-        return null;
-    }
-    
-    
     /** {@inheritDoc} The lists of parents and the tree follow. */
     @Override public void replaceVariable(int position, Variable variable) {
         Variable oldVariable = variables.get(position);
@@ -210,9 +192,24 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
         
     }
     
+    /**
+     * {@inheritDoc} The tree used when no event happens is copied too. The copy refers to the variables of
+     * {@code copyNet}.
+     */
     @Override public Potential deepCopy(ProbNet copyNet) {
-        //TODO
-        return null;
+        TreeWithExcludedEventsPotential copy = new TreeWithExcludedEventsPotential(variablesIn(copyNet), role);
+        copy.noEventTree = (TreeADDPotential) noEventTree.deepCopy(copyNet);
+        copy.setComment(comment);
+        return copy;
+    }
+
+    /** The variables of this relation, taken from {@code copyNet}. */
+    private List<Variable> variablesIn(ProbNet copyNet) {
+        List<Variable> copied = new ArrayList<>();
+        for (Variable variable : variables) {
+            copied.add(findVariableToCopy(copyNet, variable, this.toString()));
+        }
+        return copied;
     }
     
     //03/01/2023; added after merge because it was added to Potential as an abstract method
@@ -227,12 +224,6 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
         return null;
     }
     
-    
-    // Methods for toString()
-    public String toString() {
-        //TODO
-        return "";
-    }
     
     /**
      * TreeADDPotential without events

@@ -14,7 +14,6 @@ import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.exception.ThereMustBeJustOneEventInConfiguration;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
@@ -28,10 +27,8 @@ import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -212,21 +209,6 @@ public class TreeWithEventsPotential extends Potential implements DESSimulablePo
         return false;
     }
     
-    /**
-     * Generates a sampled potential
-     */
-    @Override public Potential sample(Random randomGenerator) {
-        //TODO
-        return null;
-    }
-    
-    
-    @Override public Collection<Finding> getInducedFindings(EvidenceCase evidenceCase) {
-        //TODO
-        return null;
-    }
-    
-    
     /** {@inheritDoc} The lists of parents and every tree follow, and so does the key of the tree of a replaced event. */
     @Override public void replaceVariable(int position, Variable variable) {
         Variable oldVariable = variables.get(position);
@@ -265,9 +247,26 @@ public class TreeWithEventsPotential extends Potential implements DESSimulablePo
         
     }
     
+    /**
+     * {@inheritDoc} The tree of each event is copied too. The copy refers to the variables of {@code copyNet}.
+     */
     @Override public Potential deepCopy(ProbNet copyNet) {
-        //TODO
-        return null;
+        TreeWithEventsPotential copy = new TreeWithEventsPotential(variablesIn(copyNet), role);
+        for (Variable event : events) {
+            copy.trees.put(findVariableToCopy(copyNet, event, "the tree of " + event + " in " + this),
+                           (TreeADDPotential) trees.get(event).deepCopy(copyNet));
+        }
+        copy.setComment(comment);
+        return copy;
+    }
+
+    /** The variables of this relation, taken from {@code copyNet}. */
+    private List<Variable> variablesIn(ProbNet copyNet) {
+        List<Variable> copied = new ArrayList<>();
+        for (Variable variable : variables) {
+            copied.add(findVariableToCopy(copyNet, variable, this.toString()));
+        }
+        return copied;
     }
     
     //03/01/2023; added after merge because it was added to Potential as an abstract method
@@ -282,11 +281,5 @@ public class TreeWithEventsPotential extends Potential implements DESSimulablePo
         return null;
     }
     
-    
-    // Methods for toString()
-    public String toString() {
-        //TODO
-        return "";
-    }
     
 }
