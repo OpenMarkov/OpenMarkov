@@ -7,6 +7,7 @@
 package org.openmarkov.gui.dialog.node;
 
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.condition.DisabledIf;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openmarkov.core.model.network.Node;
@@ -34,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
  * @author Manuel Arias
  */
 @Tag(TestSpeed.FAST)
+@DisabledIf(value = "java.awt.GraphicsEnvironment#isHeadless", disabledReason = "The editor builds a dialog for the comment, which needs a screen")
 class OpeningTheEditorOfATreeWithEventsDoesNotDeleteItTest {
 
     /** X, whose parents are an event E and a chance node Y, with a tree with events or with excluded events. */
