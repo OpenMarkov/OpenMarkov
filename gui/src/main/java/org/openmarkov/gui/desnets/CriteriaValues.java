@@ -202,7 +202,7 @@ public class CriteriaValues {
 
 
         String result = "";
-        for (EqualCriterion key : criteriaValuesHashMap.keySet()) {
+        for (EqualCriterion key : criteria) {
             result += key.getCriterionName() + ";" + criteriaValuesHashMap.get(key).toString() + ";";
         }
         return result;
