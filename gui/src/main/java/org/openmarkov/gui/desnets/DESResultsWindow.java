@@ -95,35 +95,7 @@ public class DESResultsWindow {
     }
 
     private static void saveCsv(String simulationResults) {
-        Scanner scanner = new Scanner(simulationResults);
-        StringBuilder sb = new StringBuilder();
-        sb.append("SERIES;");
-        // TODO: skip discounted values when there is no discount.
-        interventions.forEach(intervention -> {
-            criteria.forEach(criterion -> {
-                sb.append("Mean ")
-                        .append(criterion)
-                        .append(" for ")
-                        .append(intervention)
-                        .append(",");
-                sb.append("Disc. Mean ")
-                        .append(criterion)
-                        .append(" for ")
-                        .append(intervention)
-                        .append(",");
-            });
-        });
-        sb.append("\n");
-
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            line = line.replaceAll(";ICER.+", "")
-                    .replaceAll("[a-zA-Z].*?;", "")
-                    .replaceAll(",", ".")
-                    .replaceAll(";+", ";")
-                    .replaceAll(";", ",");
-            sb.append(line).append("\n");
-        }
+        String csv = csv(simulationResults, interventions, criteria);
 
         File exportDir = new File(MonteCarloOptions.DESNET_RESULTS_DIRECTORY, MonteCarloOptions.EXPORT_DIRECTORY);
         if (!exportDir.exists()) exportDir.mkdir();
@@ -134,11 +106,44 @@ public class DESResultsWindow {
             try {
                 String chosenFile = fileChooser.getSelectedFile().getAbsolutePath();
                 if (!chosenFile.toLowerCase().endsWith(".csv")) chosenFile += ".csv";
-                Files.write(Paths.get(chosenFile), sb.toString().getBytes(StandardCharsets.UTF_8));
+                Files.write(Paths.get(chosenFile), csv.getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Could not save CSV: " + e, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    /** The results as comma-separated values: a row of titles and then a row for each series. */
+    static String csv(String simulationResults, List<String> interventions, List<String> criteria) {
+        Scanner scanner = new Scanner(simulationResults);
+        StringBuilder sb = new StringBuilder();
+        sb.append("SERIES");
+        // TODO: skip discounted values when there is no discount.
+        interventions.forEach(intervention -> {
+            criteria.forEach(criterion -> {
+                sb.append(",Mean ")
+                        .append(criterion)
+                        .append(" for ")
+                        .append(intervention);
+                sb.append(",Disc. Mean ")
+                        .append(criterion)
+                        .append(" for ")
+                        .append(intervention);
+            });
+        });
+        sb.append("\n");
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            line = line.replaceAll(";ICER.+", "")
+                    .replaceAll("[a-zA-Z].*?;", "")
+                    .replaceAll(",", ".")
+                    .replaceAll(";+", ";")
+                    .replaceAll(";$", "")
+                    .replaceAll(";", ",");
+            sb.append(line).append("\n");
+        }
+        return sb.toString();
     }
 
     private static String generateTable(int numSims, String simulationResults, String decisionVariableName, int interventionsCount, boolean[] usingDiscount) {
