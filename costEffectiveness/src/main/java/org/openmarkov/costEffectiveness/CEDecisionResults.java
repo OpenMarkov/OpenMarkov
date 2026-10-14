@@ -537,12 +537,13 @@ public class CEDecisionResults extends JDialog {
 	 */
 	public JTable getFrontierInterventionsTable() {
 
-		List<CEP> frontierInterventions = calculateFrontierInterventions(AnalysisTab.FRONTIER_INTERVENTIONS);
+		// Named by position: two options with the same cost and effectiveness have equal partitions
+		List<Integer> frontierOptions = frontierOptions(decisionVariable, cepsForDecision,
+				selectedOptions(AnalysisTab.FRONTIER_INTERVENTIONS), meanThreshold);
+		List<CEP> frontierInterventions = frontierOptions.stream().map(option -> cepsForDecision[option]).toList();
 		String[] interventionsNames = new String[frontierInterventions.size()];
-		List<CEP> cepsForDecisionList = Arrays.asList(cepsForDecision);
 		for (int i = 0; i < frontierInterventions.size(); i++) {
-			int stateIndex = cepsForDecisionList.indexOf(frontierInterventions.get(i));
-			interventionsNames[i] = decisionVariable.getStateName(stateIndex);
+			interventionsNames[i] = decisionVariable.getStateName(frontierOptions.get(i));
 		}
 
 		int numRows = frontierInterventions.size();
@@ -604,7 +605,14 @@ public class CEDecisionResults extends JDialog {
 	 * @return List of frontier interventions (per-decision-state CEPs, in frontier order)
 	 */
 	public List<CEP> calculateFrontierInterventions(AnalysisTab analysisTab) {
-		// Collect selected intervention indices
+		return frontierOptions(decisionVariable, cepsForDecision, selectedOptions(analysisTab), meanThreshold).stream()
+				.map(option -> cepsForDecision[option]).toList();
+	}
+
+	/**
+	 * @return the indices of the options whose box is checked in the tab
+	 */
+	private List<Integer> selectedOptions(AnalysisTab analysisTab) {
 		List<Integer> selectedIndices = new ArrayList<>();
 		for (int cepIndex = 0; cepIndex < cepsForDecision.length; cepIndex++) {
 			boolean selected = (analysisTab == AnalysisTab.CEPLANE)
@@ -614,38 +622,48 @@ public class CEDecisionResults extends JDialog {
 				selectedIndices.add(cepIndex);
 			}
 		}
+		return selectedIndices;
+	}
 
+	/**
+	 * Calculates the frontier interventions using the same algorithm as the GLOBAL CEA path
+	 * (CEBaseOperations.deterministicCEA), ensuring consistent results between both analysis modes.
+	 *
+	 * @return the indices of the options on the frontier, in frontier order
+	 */
+	public static List<Integer> frontierOptions(Variable decisionVariable, CEP[] cepsForDecision,
+			List<Integer> selectedIndices, double threshold) {
 		if (selectedIndices.isEmpty()) {
 			return new ArrayList<>();
 		}
 
-		// Extract costs, effectivenesses, and strategy trees at meanThreshold
+		// Extract costs, effectivenesses, and strategy trees at the threshold
 		int n = selectedIndices.size();
 		double[] costs = new double[n];
 		double[] effectivenesses = new double[n];
 		StrategyTree[] strategyTrees = new StrategyTree[n];
 		for (int i = 0; i < n; i++) {
 			int idx = selectedIndices.get(i);
-			costs[i] = cepsForDecision[idx].getCost(meanThreshold);
-			effectivenesses[i] = cepsForDecision[idx].getEffectiveness(meanThreshold);
+			costs[i] = cepsForDecision[idx].getCost(threshold);
+			effectivenesses[i] = cepsForDecision[idx].getEffectiveness(threshold);
 			strategyTrees[i] = new StrategyTree(decisionVariable, decisionVariable.getStates()[idx]);
 		}
 
 		// Delegate to the same deterministic CEA algorithm used by the GLOBAL path
 		CEP resultCEP = CEBaseOperations.deterministicCEA(strategyTrees, costs, effectivenesses);
 
-		// Map frontier interventions back to original per-decision-state CEPs
-		List<CEP> frontierInterventions = new ArrayList<>();
+		// Map frontier interventions back to the options they come from
+		List<Integer> frontierOptions = new ArrayList<>();
 		for (int interval = 0; interval < resultCEP.getNumIntervals(); interval++) {
 			StrategyTree intervention = resultCEP.getIntervention(interval);
 			for (int j = 0; j < n; j++) {
 				if (intervention == strategyTrees[j]) {
-					frontierInterventions.add(cepsForDecision[selectedIndices.get(j)]);
+					frontierOptions.add(selectedIndices.get(j));
 					break;
 				}
 			}
 		}
-		return frontierInterventions;
+		return frontierOptions;
 	}
 
 	/**
