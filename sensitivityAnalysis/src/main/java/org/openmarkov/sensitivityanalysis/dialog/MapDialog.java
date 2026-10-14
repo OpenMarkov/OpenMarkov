@@ -204,6 +204,21 @@ public class MapDialog extends JDialog {
         return new double[]{ minUtility - margin, minUtility + margin };
     }
     
+    /** The index of the option of greatest utility, or -1 when two or more options share it. */
+    public static int bestOption(double[] utilities) {
+        int bestOption = 0;
+        boolean draw = false;
+        for (int option = 1; option < utilities.length; option++) {
+            if (utilities[option] > utilities[bestOption]) {
+                bestOption = option;
+                draw = false;
+            } else if (utilities[option] == utilities[bestOption]) {
+                draw = true;
+            }
+        }
+        return draw ? -1 : bestOption;
+    }
+    
     private JFreeChart getMapChart() {
         
         // Format domain axis
@@ -284,26 +299,13 @@ public class MapDialog extends JDialog {
                 
                 // If the result is conditioned on a decision, we need to confront the utilities of each state of the decision
                 if (decisionVariable != null) {
-                    
-                    // That variable stores the state index of the decision that gives greater utility
-                    int greatUtilityStateIndex = 0;
-                    
-                    // decisionVariableStateIndex skips "0" position because it was calculated in a before step (zAxisValue)
-                    for (int decisionVariableStateIndex = 1;
+                    double[] utilities = new double[decisionVariableStates];
+                    for (int decisionVariableStateIndex = 0;
                          decisionVariableStateIndex < decisionVariableStates; decisionVariableStateIndex++) {
-                        int dataPositionForThatDecision = dataPosition + (
-                                decisionVariableStateIndex * totalIterations * totalIterations
-                        );
-                        double zAxisValueForThatDecision = uncertainParameterPotential
-                                .getValues()[dataPositionForThatDecision];
-                        if (zAxisValueForThatDecision > zAxisValue) {
-                            greatUtilityStateIndex = decisionVariableStateIndex;
-                        } else if (zAxisValueForThatDecision == zAxisValue) {
-                            greatUtilityStateIndex = -1;
-                        }
+                        utilities[decisionVariableStateIndex] = uncertainParameterPotential.getValues()[
+                                dataPosition + decisionVariableStateIndex * totalIterations * totalIterations];
                     }
-                    
-                    zAxisValue = greatUtilityStateIndex;
+                    zAxisValue = bestOption(utilities);
                 }
                 
                 // Update minimum utility found
