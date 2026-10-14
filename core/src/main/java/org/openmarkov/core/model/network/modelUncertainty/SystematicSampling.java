@@ -19,8 +19,8 @@ import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -60,7 +60,8 @@ public class SystematicSampling extends Sampler {
 	 * @return A set of UncertainParameters built from the uncertain values appearing in "potential"
 	 */
 	private static Set<UncertainParameter> getUncertainParameters(Potential potential) {
-		Set<UncertainParameter> uncertainParams = new HashSet<>();
+		// In the order of the cells and the branches, the same in every run
+		Set<UncertainParameter> uncertainParams = new LinkedHashSet<>();
 
 		Map<UncertainValue, SubPotentialAndPositionInTablePotential> uncertainValues = getUncertainValues(potential);
 
@@ -78,7 +79,7 @@ public class SystematicSampling extends Sampler {
 	 * @return A hash table with the uncertain values appearing in potential, and for each one the hash value is the subpotential where appearing
 	 */
 	private static Map<UncertainValue, SubPotentialAndPositionInTablePotential> getUncertainValues(Potential potential) {
-		Map<UncertainValue, SubPotentialAndPositionInTablePotential> uncertainValuesHash = new HashMap<>();
+		Map<UncertainValue, SubPotentialAndPositionInTablePotential> uncertainValuesHash = new LinkedHashMap<>();
 
 		boolean isExactDistrPotential = potential instanceof ExactDistrPotential;
 		if (potential instanceof TablePotential || isExactDistrPotential) {
