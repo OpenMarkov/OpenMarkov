@@ -20,7 +20,7 @@ public class NetsIOSoftTest {
 
     @Test
     public void testURLConnection() throws java.io.IOException, ProbNetParserException, NoReaderForFileException, CorruptNetworkFile {
-        NetsIO.openNetworkURL(URI.create("https://bitbucket.org/cisiad/org.probmodelxml.networks/raw/master/bn/BN-asia.pgmx")
+        NetsIO.openNetworkURL(URI.create("https://raw.githubusercontent.com/OpenMarkov/probmodelxmlnetworks/main/bn/BN-asia.pgmx")
                                  .toURL());
     }
 }

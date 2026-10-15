@@ -5,7 +5,7 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package bitbucket;
+package github;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,13 +24,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * This class gets the networks available on the bitbucket repository
+ * This class gets the networks available on the GitHub repository OpenMarkov/probmodelxmlnetworks
  *
  * @author Jorge Pérez Martín
  */
 public class NetsRepository {
     
-    private static final List<NetsCache.BitbucketFile> NETWORK_FILES = NetsCache.resolveCache().toList();
+    private static final List<NetsCache.RepositoryFile> NETWORK_FILES = NetsCache.resolveCache().toList();
     
     /**
      * Method to obtain the complete list of URL of all networks in the repository
@@ -73,21 +73,21 @@ public class NetsRepository {
      */
     private static List<URL> getNetworks(String networkFilterType) {
         var networks = NETWORK_FILES.stream().filter(jsonFileRead
-                                                             -> jsonFileRead.bitbucketFileRef()
+                                                             -> jsonFileRead.gitHubFileRef()
                                                                             .relativePath()
                                                                             .getLast()
                                                                             .endsWith(".pgmx"));
 
         if (networkFilterType != null) {
-            networks = networks.filter(jsonFileRead -> jsonFileRead.bitbucketFileRef().relativePath()
+            networks = networks.filter(jsonFileRead -> jsonFileRead.gitHubFileRef().relativePath()
                                                                    .getFirst()
                                                                    .equals(networkFilterType));
         }
-        return new ArrayList<>(networks.map(NetsCache.BitbucketFile::resolveURL).toList());
+        return new ArrayList<>(networks.map(NetsCache.RepositoryFile::resolveURL).toList());
         
         /*
         try {
-            var networks = BitbucketApi.streamOfBitbucketFiles("cisiad/org.probmodelxml.networks", "master")
+            var networks = GitHubApi.streamOfGitHubFiles("OpenMarkov/probmodelxmlnetworks", "main")
                         .filter(jsonFileRead -> jsonFileRead.relativePath()
                                                             .getLast()
                                                             .endsWith(".pgmx"));
@@ -96,7 +96,7 @@ public class NetsRepository {
                                                                        .getFirst()
                                                                        .equals(networkFilterType));
             }
-            return new ArrayList<>(networks.map(BitbucketApi.BitbucketFileRef::href).toList());
+            return new ArrayList<>(networks.map(GitHubApi.GitHubFileRef::href).toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
