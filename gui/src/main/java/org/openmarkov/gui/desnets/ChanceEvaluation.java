@@ -54,6 +54,8 @@ public class ChanceEvaluation extends GenericEvaluation<ChanceRecord> {
        //Data From File
        //OrphanNodes and its descendants which haven't an Event node as ancestor
        addValuesOrphanNodes(dataIndex);
+       // A chance node with an event among its ancestors starts at its first state, or at 0 if it is numeric: the
+       // value clear() leaves. Its relation only says what happens when an event occurs.
    }
 
 

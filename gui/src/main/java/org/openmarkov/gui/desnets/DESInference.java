@@ -285,6 +285,21 @@ public class DESInference {
     }
     
     
+    /** Prepares the simulation of {@code probNet} without running it, to simulate one individual at a time. */
+    DESInference(ProbNet probNet) throws OpenMarkovException, IOException {
+        initialize(probNet);
+    }
+
+    /** Simulates one individual with the option {@code decisionState} of the decision, as a series does. */
+    CriteriaValues simulateOneIndividual(State decisionState) throws OpenMarkovException {
+        forAllRandomProviders(DESRandomProvider::setRandomGenerator);
+        forAllRandomProviders(DESRandomProvider::nextIndividual);
+        forAllRandomProviders(DESRandomProvider::resetIndex);
+        desRecords.forEach(record -> record.getRecordPotential().resetSimulation());
+        desLogTextWriter.newSimulation(0, 0, decisionVariable.getName(), decisionState.getName());
+        return evaluateIndividual(new Finding(decisionVariable, decisionState), -1);
+    }
+
     /**
      * Applies the given action to the random providers of all the DES records.
      *

@@ -50,15 +50,17 @@ public class UtilityEvaluation extends GenericEvaluation<UtilityRecord> {
     public void startSimulation(Finding decisionFinding) throws OpenMarkovException {
         desRecordHashMap.values().forEach(UtilityRecord::clear);
         this.decisionFinding = decisionFinding;
-        updateOrphanNodes();
+        valueCumulativeUtilities();
         previousEvaluationTime = 0;
     }
 
     /**
-     * Update orphan UTILITY nodes
+     * Gives every cumulative utility its value at the start, with the values its parents have then. Before, only the
+     * utilities without an event among their ancestors got one, and the others counted as 0 until the first event that
+     * reached them.
      */
-    void updateOrphanNodes() throws OpenMarkovException {
-        for (var utilityRecord : orphanRecords) {
+    void valueCumulativeUtilities() throws OpenMarkovException {
+        for (var utilityRecord : cumulativeRecords) {
                 Configuration configuration = new Configuration();
                 if (utilityRecord.hasDecisionParent()) {
                     configuration.addFinding(decisionFinding);
