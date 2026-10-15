@@ -224,6 +224,9 @@ Varias de esas fichas dicen «visto en una captura automática». El 8 de octubr
 
 Con lo visto en esa comparación se han ampliado además tres fichas que ya estaban: los \hyperref[err:42]{errores~42}, \hyperref[err:51]{51} y \hyperref[err:153]{153}.
 
+\paragraph{Errores añadidos el 15 de octubre}
+Los \hyperref[err:235]{errores~235} a \hyperref[err:239]{239} y las \hyperref[nota:192]{notas~192} a \hyperref[nota:195]{195} salen de revisar la rama \texttt{DES-development} de los antiguos repositorios por módulos, en la que Carmen Yago desarrolló la simulación de sucesos entre 2018 y 2026 y que nunca se fusionó. Jorge Rico trajo su trabajo a mano el 20-05-2026 y después se reorganizó la interfaz, así que se comparó cada función de la rama, no cada fichero, con el código de \texttt{9adb77b}. No se ha perdido ninguna función: lo que no llegó es código viejo o de prueba, o cosas que la rama dejó a medias. Lo que sí falta o llegó mal está en esos errores, comprobados uno a uno con la fila \emph{Comprobado} de su ficha; el \hyperref[err:99]{error~99} y el \hyperref[err:105]{105} ya lo recogían en parte. Lo que solo afectaba a los textos en castellano no se ha añadido.
+
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
 en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
@@ -279,10 +282,10 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{233 errores}; 89 de ellos son defectos nuevos: 66 encontrados al
-comprobar o corregir los demás y 23 al portar OpenMarkov a C++/Qt. \textbf{34} necesitan antes una decisión del equipo. Por esfuerzo estimado: 194 pequeños, 39 medios y 0 grandes.
-De los 233, 138 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
-El apéndice recoge además 191 notas con lo que se comprobó y no entra en la lista.
+La lista tiene \textbf{238 errores}; 94 de ellos son defectos nuevos: 66 encontrados al
+comprobar o corregir los demás, 23 al portar OpenMarkov a C++/Qt y 5 al revisar la rama \texttt{DES-development}. \textbf{35} necesitan antes una decisión del equipo. Por esfuerzo estimado: 199 pequeños, 39 medios y 0 grandes.
+De los 238, 138 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+El apéndice recoge además 195 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
 \begin{tabular}{@{}lr@{}}
@@ -292,17 +295,17 @@ El apéndice recoge además 191 notas con lo que se comprobó y no entra en la l
 \ref{sec:potenciales}. Operaciones con potenciales & 3 \\
 \ref{sec:canonicos}. Modelos canónicos y modelo de ajuste & 3 \\
 \ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 19 \\
-\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 12 \\
+\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 13 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 18 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 22 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 8 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 21 \\
 \ref{sec:des}. Simulación de sucesos discretos & 17 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 8 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 11 \\
 \ref{sec:casos}. Bases de casos & 8 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 29 \\
-\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 25 \\
+\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 26 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 12 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 16 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
@@ -380,6 +383,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:34]{34} & \textcolor{corregidoverde}{\textbf{Corregido}} · Deshacer o cancelar «Always append» de un suceso no devuelve su valor & \texttt{core} & S \hfill No\\
 \hyperref[err:35]{35} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una red expandida o aprendida no se marca como modificada ni pide guardar & \texttt{core} & S \hfill No\\
 \hyperref[err:36]{36} & \textcolor{corregidoverde}{\textbf{Corregido}} · En una red expandida o aprendida, deshacer no recuerda nada al principio & \texttt{core} & S \hfill No\\
+\hyperref[err:239]{239} & Quitar un padre a un nodo con fórmula la cambia por una uniforme que aún lo nombra & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:restricciones}.\ Restricciones de red}}\\
 \hyperref[err:37]{37} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir un fichero no comprueba las restricciones de la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:38]{38} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un estado puede quedarse con el nombre vacío o repetido & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -484,6 +488,9 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:116]{116} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una tabla de sucesos con incertidumbre en el fichero impide abrir la red & \texttt{io} & S \hfill No\\
 \hyperref[err:117]{117} & \textcolor{corregidoverde}{\textbf{Corregido}} · Abrir un .xml que no es ProbModelXML falla con una excepción de índice & \texttt{io} & S \hfill No\\
 \hyperref[err:202]{202} & \textcolor{corregidoverde}{\textbf{Corregido}} · El aviso de agente desconocido no dice de qué ciclo es la variable & \texttt{io} & S \hfill No\\
+\hyperref[err:235]{235} & Guardar una red de sucesos en formato 0.2 pierde sus relaciones y luego no se abre & \texttt{io}, \texttt{gui} & S \hfill No\\
+\hyperref[err:236]{236} & Un árbol con sucesos mal escrito en el fichero se abre sin aviso, con el árbol por omisión & \texttt{io} & S \hfill No\\
+\hyperref[err:237]{237} & Los ficheros guardados con la versión de la rama de sucesos no se abren & \texttt{io}, \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -549,6 +556,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:209]{209} & «Distribution» y «Parametrization» se quedan a la vista sin lista al lado & \texttt{gui} & S \hfill No\\
 \hyperref[err:225]{225} & \textcolor{corregidoverde}{\textbf{Corregido}} · En el panel de una distribución no se puede escribir ningún parámetro & \texttt{gui} & S \hfill No\\
 \hyperref[err:226]{226} & \textcolor{corregidoverde}{\textbf{Corregido}} · El diálogo de incertidumbre no acepta una columna con distribuciones de Dirichlet & \texttt{gui} & S \hfill No\\
+\hyperref[err:238]{238} & Marcar «Use first interval» no cambia la fórmula que se ve en el panel & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:menus}.\ Interfaz: menús, diálogos y herramientas}}\\
 \hyperref[err:171]{171} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir una red desde internet apaga «Guardar» para todas las redes & \texttt{gui} & M \hfill No\\
 \hyperref[err:172]{172} & «Edits history» deja un núcleo al cien por cien y puede colgar el programa & \texttt{full} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -3497,6 +3505,27 @@ Encender el deshacer en un único sitio por el que pasen todas las pestañas de 
 Las llamadas repartidas por diálogos (\texttt{Potential\allowbreak{}Edit\allowbreak{}Panel}, \texttt{Network\allowbreak{}Properties\allowbreak{}Dialog}, \texttt{Reorder\allowbreak{}Variables\allowbreak{}Dialog}, \texttt{Add\allowbreak{}Finding\allowbreak{}Dialog}, \texttt{Editor\allowbreak{}Input\allowbreak{}Handler}) quedarían redundantes; quitarlas es una limpieza aparte. Si se hace, la propuesta de diseño de \hyperref[nota:177]{nota~177} (extraer de la ventana un documento de red que lleve, entre otras cosas, el estado de modificado) es el lugar natural; allí no hay nada que corregir.
 
 Prueba: abrir en una pestaña una red copiada con \texttt{copy(\allowbreak{})}, ejecutar una edición y comprobar que \texttt{get\allowbreak{}Can\allowbreak{}Undo(\allowbreak{})} es verdadero.
+
+\setcounter{subsection}{238}
+\subsection[Quitar un padre a un nodo con fórmula la cambia por una uniforme que aún lo nombra]{Quitar un enlace hacia un nodo de azar definido por una fórmula cambia la fórmula por una relación uniforme, aunque la fórmula no use ese padre, y la uniforme sigue nombrando al padre quitado}\label{err:239}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.action.base.linkEdits; org.openmarkov.core.model.network.potential
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/RemoveLinkEdit.java:118-166} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/FunctionPotential.java:198-216}
+\fichakey{Comprobado}Ejecutándolo por programa; no en la ventana
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:99]{error~99}
+\end{ficha}
+\paragraph{Qué pasa}
+Medido el 15-10-2026 con un pequeño programa de prueba: una red bayesiana con tres nodos de azar numéricos, \texttt{A}, \texttt{B} y \texttt{N}, los enlaces A → N y B → N, y en \texttt{N} la fórmula «A + 1». Quitar el enlace B → N con \texttt{Remove\allowbreak{}Link\allowbreak{}Edit}, que es lo que hace el editor al borrar un enlace, deja en \texttt{N} un \texttt{Uniform\allowbreak{}Potential} sobre \texttt{N}, \texttt{A} y \texttt{B}. Se pierde la fórmula, sin aviso, aunque no usaba \texttt{B}, y la nueva relación nombra a \texttt{B}, que ya no es padre de \texttt{N}. Deshacer devuelve la fórmula.
+
+Por qué pasa: \texttt{Function\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable} (líneas 198-216) dice que conserva la fórmula si no usa la variable quitada, pero en ese caso devuelve una copia con las mismas variables, la quitada incluida (línea 215). Después \texttt{Remove\allowbreak{}Link\allowbreak{}Edit.\allowbreak{}do\allowbreak{}Edit} (líneas 152-163, un «Temporal patch») cambia por una uniforme toda relación que no se pueda pasar a tabla o cuya tabla sume cero. Una fórmula sobre variables numéricas no se puede pasar a tabla, así que acaba siempre uniforme, con las variables que traía. A las demás relaciones que no se pueden pasar a tabla les pasa lo mismo; en las redes de sucesos eso es parte del \hyperref[err:99]{error~99}.
+\paragraph{Cómo arreglarlo}
+Que \texttt{Function\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable} devuelva la fórmula sin la variable quitada, y que \texttt{Remove\allowbreak{}Link\allowbreak{}Edit} no cambie por uniforme lo que la propia relación ya ha resuelto: por ejemplo, aplicar el parche solo a las tablas.
+
+Prueba: el caso medido deja en \texttt{N} la fórmula «A + 1» sobre \texttt{N} y \texttt{A}; si la fórmula usa \texttt{B}, queda la fórmula por omisión sobre \texttt{N} y \texttt{A}, que es lo que dice el comentario de \texttt{remove\allowbreak{}Variable}; y deshacer y rehacer devuelven cada estado.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Restricciones de red}\label{sec:restricciones}
@@ -10253,6 +10282,85 @@ Guardar el ciclo antes de recortar el nombre y pasar a las dos excepciones el no
 
 Prueba de regresión: en \texttt{Agents\allowbreak{}Test}, leer una red temporal con un agente desconocido en la variable de un ciclo distinto de cero y comprobar que \texttt{variable\allowbreak{}Name} de la excepción lleva el ciclo.
 
+\setcounter{subsection}{234}
+\subsection[Guardar una red de sucesos en formato 0.2 pierde sus relaciones y luego no se abre]{Guardar una red de sucesos en el formato 0.2 la deja sin las relaciones de los sucesos y sin las opciones de Monte Carlo, sin avisar, y el fichero ya no se puede abrir}\label{err:235}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io; gui
+\fichakey{Paquete}org.openmarkov.io.probmodel.writer; org.openmarkov.gui.dialog.io
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:50, 872-899} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/io/NetworkOMFileChooser.java:52-58}
+\fichakey{Comprobado}Ejecutándolo por programa; no en la ventana
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:113]{error~113}, \hyperref[err:236]{error~236}, \hyperref[err:237]{error~237}
+\end{ficha}
+\paragraph{Qué pasa}
+Al guardar con «Save as», el selector de ficheros ofrece los dos escritores de \texttt{.\allowbreak{}pgmx}, «OpenMarkov.0.2» y «OpenMarkov.1.0» (\texttt{Network\allowbreak{}OMFile\allowbreak{}Chooser}, líneas 52-58, lista todos los escritores). El de 0.2 no sabe escribir las relaciones propias de las redes de sucesos: \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Potential\allowbreak{}Body} (líneas 872-899) solo escribe el contenido de las tablas, los árboles, los modelos canónicos, las fórmulas, las regresiones, la delta y la binomial; de cualquier otra relación escribe el tipo y las variables, y nada más. Tampoco escribe las opciones de Monte Carlo ni la casilla «Always append», que solo escribe \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0}.
+
+Medido el 15-10-2026 con un pequeño programa de prueba sobre \path{io/src/test/resources/DES-illness.pgmx}, la red de sucesos de las pruebas: guardada con \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2}, el fichero sale con \texttt{format\allowbreak{}Version="0.\allowbreak{}2.\allowbreak{}0"}, sin \texttt{\textless{}Monte\allowbreak{}Carlo\textgreater{}}, y con las tres tablas de distribuciones (\texttt{Onset}, \texttt{Checkup} y \texttt{Death}) y la tabla de transición de \texttt{Ill} reducidas a la lista de sus variables, sin distribuciones ni valores. No sale ningún aviso. Al abrirlo, el lector termina con «Potential type DistributionTable is not supported.» (\texttt{PGMXParser\allowbreak{}Exception.\allowbreak{}Potential\allowbreak{}Type\allowbreak{}Not\allowbreak{}Supported}); y aunque aceptara ese tipo, los datos ya no están en el fichero.
+
+La rama \texttt{DES-development} de Carmen Yago, de la que viene la simulación de sucesos, escondía ese escritor (con el comentario «FIXME remove; for evaluation jar»); al traer su trabajo no se trajo esa parte.
+\paragraph{Cómo arreglarlo}
+Que el escritor 0.2 se niegue, con un mensaje que diga qué nodo y qué relación no sabe guardar, a escribir una red con algo que caiga fuera de \texttt{get\allowbreak{}Potential\allowbreak{}Body} o con opciones que no sabe escribir, en vez de escribir el tipo sin contenido. Así quedan cubiertas también las otras relaciones que hoy no escribe (\texttt{Indicator}, \texttt{Piecewise\allowbreak{}Exponential}, \texttt{Increment}, \texttt{External} y los dos árboles con sucesos) y quien lo llame por programa. Dejar de ofrecer el formato 0.2 para las redes de sucesos sería un complemento, no un sustituto.
+
+Prueba: guardar \texttt{DES-illness.\allowbreak{}pgmx} con \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2} da el mensaje y no deja un fichero a medias; con \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0} se guarda y se vuelve a abrir con las mismas relaciones y opciones.
+
+\setcounter{subsection}{235}
+\subsection[Un árbol con sucesos mal escrito en el fichero se abre sin aviso, con el árbol por omisión]{Al abrir un .pgmx, un error dentro de un árbol con sucesos («Tree with Events» o «Tree with Excluded Events») solo se escribe en la consola: la red se abre sin aviso con ese árbol vacío o a medias}\label{err:236}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:436-471, 475-508}
+\fichakey{Comprobado}Ejecutándolo por programa; no en la ventana
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:111]{error~111}, \hyperref[err:235]{error~235}, \hyperref[err:105]{error~105}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0.\allowbreak{}get\allowbreak{}Tree\allowbreak{}With\allowbreak{}Events\allowbreak{}Potential} y \texttt{get\allowbreak{}Tree\allowbreak{}With\allowbreak{}Excluded\allowbreak{}Events\allowbreak{}Potential} envuelven toda la lectura del árbol en un \texttt{try} que captura cualquier excepción, la escribe en la consola con \texttt{print\allowbreak{}Stack\allowbreak{}Trace} (líneas 467 y 504) y devuelve la relación tal como esté: la que crea el constructor, con un árbol por omisión por cada suceso padre, o un árbol a medio llenar. El resto del lector, desde el arreglo del \hyperref[err:111]{error~111}, rechaza un fichero mal escrito con un mensaje.
+
+Medido el 15-10-2026 con un pequeño programa de prueba: en \path{io/src/test/resources/DES-illness.pgmx} se puso en \texttt{Death} un «Tree with Events» sobre \texttt{Death}, \texttt{Onset} e \texttt{Ill}, se guardó con \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0} y se volvió a abrir bien. Después se abrieron dos copias dañadas de ese fichero:
+\begin{itemize}
+\tightlist
+\item con \texttt{\textless{}Top\allowbreak{}Variable\ name="Onsett"/\textgreater{}}, una variable que no existe: en la consola sale un \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} de \texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Tree\allowbreak{}ADDBranches} (línea 1237), y la red se abre con el árbol por omisión en \texttt{Death};
+\item con «abc» en vez de un número en una rama: en la consola sale un \texttt{Number\allowbreak{}Format\allowbreak{}Exception}, y la red se abre igual.
+\end{itemize}
+En los dos casos el usuario no ve ningún mensaje. Además, según el código, el lector va quitando hijos del elemento por su posición (\texttt{remove\allowbreak{}Content(\allowbreak{}1)}), así que depende del orden exacto de los elementos; esto no se ha medido. Ninguna red del repositorio tiene estos árboles, así que ninguna prueba recorre este código.
+\paragraph{Cómo arreglarlo}
+Quitar los dos \texttt{try} y dejar que el fallo salga como una \texttt{PGMXParser\allowbreak{}Exception} que nombre el nodo, como las demás relaciones; y leer \texttt{TopVariable} y \texttt{Branches} por su nombre en vez de por su posición.
+
+Prueba: las dos copias dañadas se rechazan con un mensaje que nombra el nodo, y un árbol de cada uno de los dos tipos, guardado con \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0}, se vuelve a abrir igual.
+
+\setcounter{subsection}{236}
+\subsection[Los ficheros guardados con la versión de la rama de sucesos no se abren]{Los .pgmx que guardaba la versión de la simulación de sucesos de Carmen Yago (formato 0.5.0) no se abren: el programa no conoce esa versión, ni el nombre con que guardaba un tipo de árbol, ni la distribución exponencial de un parámetro incierto}\label{err:237}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io; core
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.core.model.network.potential.treeadd; org.openmarkov.core.model.network.modelUncertainty
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/ReaderFactory.java:24-35} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/Version.java:7-13} \newline \path{core/src/main/resources/version.xsd:11-12} \newline \path{io/src/test/resources/version.xsd:11-12} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/treeadd/TreeWithExcludedEventsPotential.java:39} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/ExponentialFunction.java:17}
+\fichakey{Comprobado}Ejecutándolo por programa (la versión) y leyendo el código (el nombre del árbol y la exponencial); no hay redes reales de esa versión
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el programa debe abrir los ficheros de esa versión. Para comprobarlo hacen falta las redes de Carmen Yago (Osteo, Cochlear, TSD-15\ldots), que no están en el repositorio
+\fichakey{Relacionados}\hyperref[err:235]{error~235}, \hyperref[err:236]{error~236}
+\end{ficha}
+\paragraph{Qué pasa}
+Carmen Yago desarrolló la simulación de sucesos entre 2018 y 2026 en la rama \texttt{DES-development} de los antiguos repositorios por módulos, que nunca se fusionó; Jorge Rico trajo su trabajo a mano el 20-05-2026. Su escritor guardaba \texttt{format\allowbreak{}Version="0.\allowbreak{}5.\allowbreak{}0"}: en su rama se llamaba aún \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}5}; en \texttt{development} pasó a llamarse 1.0 en 2021 (commit \texttt{61e8fbf} del antiguo repositorio \texttt{io.\allowbreak{}probmodelxml}), y la rama nunca recibió ese cambio.
+
+Hoy \texttt{Version} solo conoce 0.2 y 1.0, \texttt{Reader\allowbreak{}Factory.\allowbreak{}get\allowbreak{}Reader} rechaza cualquier otra con «Version 0.5.0 is not supported.», y los dos \texttt{version.\allowbreak{}xsd} solo admiten 0.2.0 y 1.0.0. Medido el 15-10-2026: \texttt{DES-illness.\allowbreak{}pgmx} con la versión cambiada a 0.5.0 da \texttt{Prob\allowbreak{}Net\allowbreak{}Parser\allowbreak{}Exception.\allowbreak{}Wrong\allowbreak{}Version}.
+
+Aunque se aceptara la versión, quedan dos diferencias, vistas leyendo el código:
+\begin{itemize}
+\tightlist
+\item Su rama guardaba el árbol de sucesos excluidos con el nombre «Tree with Exclued Events», con una errata, que al traerlo se corrigió a «Tree with Excluded Events» (línea 39). El lector busca la clase por ese nombre, así que esos ficheros darían «Potential type Tree with Exclued Events is not supported.».
+\item Su rama registraba la distribución exponencial poniendo en la clase \texttt{Exponential\allowbreak{}Function} la anotación \texttt{@Prob\allowbreak{}Dens\allowbreak{}Function\allowbreak{}Type}, con el nombre «Exponential» y el parámetro \texttt{lambda}, y al traer la clase no se trajo la anotación. Sin ella, un parámetro incierto con distribución exponencial no se puede leer (\texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2}, línea 1367, busca la distribución por su nombre), y la exponencial tampoco se ofrece en el diálogo de incertidumbre.
+\end{itemize}
+Según el código, el resto de lo que escribía su versión lo entiende el lector 1.0: usa las mismas etiquetas, y las tablas simples que guardaba como \texttt{Univariate\allowbreak{}Distr} «exact» se traducen hoy igual. No hay en el repositorio ninguna red de sucesos de esa versión; la única 0.5.0, \path{0_miscellaneous/networks/id/ID-decide-test-0.5.0.pgmx}, no es de sucesos, y \texttt{Nets\allowbreak{}IOTest} la excluye («only for 'Augmented bayesian networks' branch»).
+\paragraph{Cómo arreglarlo}
+Si se decide abrirlos: añadir 0.5 a \texttt{Version} y enviarlo a \texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0} en \texttt{Reader\allowbreak{}Factory}; añadir 0.5.0 a los dos \texttt{version.\allowbreak{}xsd}; añadir «Tree with Exclued Events» como segundo nombre en la anotación de \texttt{Tree\allowbreak{}With\allowbreak{}Excluded\allowbreak{}Events\allowbreak{}Potential}; y poner a \texttt{Exponential\allowbreak{}Function} la anotación de su rama, comprobando antes si entonces sale también en la lista de distribuciones de \texttt{Univariate\allowbreak{}Distr}, que se indexa por nombre, y si debe salir.
+
+Prueba: abrir las redes de Carmen Yago y comparar los resultados de su simulación con los que daba su versión.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
 
@@ -14387,6 +14495,29 @@ El mensaje de las tres reglas no dice qué estado de la columna las incumple ni 
 
 Prueba: la columna de «State {[}1{]}» se acepta, una Dirichlet sola se rechaza, dos Dirichlet con otra distribución se rechazan y una Beta con complemento se sigue aceptando.
 
+\setcounter{subsection}{237}
+\subsection[Marcar «Use first interval» no cambia la fórmula que se ve en el panel]{En el panel de la relación exponencial por tramos, marcar «Use first interval» cambia por dentro la fórmula del instante de entrada, pero el cuadro sigue enseñando la anterior, y desmarcarla no deshace el cambio}\label{err:238}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog.common
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/common/PiecewiseExponentialPanel.java:80-82, 118} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/FunctionPotentialPanel.java:125-142}
+\fichakey{Comprobado}Leyendo el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:152]{error~152}
+\end{ficha}
+\paragraph{Qué pasa}
+Al marcar la casilla, \texttt{Piecewise\allowbreak{}Exponential\allowbreak{}Panel} (líneas 81-82) llama a \texttt{Function\allowbreak{}Potential\allowbreak{}Panel.\allowbreak{}set\allowbreak{}Function} con el tiempo del primer tramo. \texttt{set\allowbreak{}Function} (líneas 140-142) solo cambia el campo \texttt{function}; no toca el cuadro de texto, que sigue enseñando la fórmula anterior. Al aceptar se guarda la nueva (\texttt{save\allowbreak{}Changes} usa \texttt{get\allowbreak{}Function}, línea 118), así que se guarda algo distinto de lo que se veía. Desmarcar la casilla no hace nada, porque la acción solo actúa si está marcada, así que la fórmula no vuelve a la anterior.
+
+Además, \texttt{set\allowbreak{}Function} construye la expresión sobre todas las variables de la relación, incluida la del propio nodo, mientras que el diálogo de la fórmula, que se abre con doble clic en el cuadro, solo admite a los padres (líneas 128-129).
+
+En la rama \texttt{DES-development} de Carmen Yago, \texttt{Function\allowbreak{}Panel.\allowbreak{}set\allowbreak{}Function} cambiaba también el texto; se perdió al juntar \texttt{Function\allowbreak{}Panel} con \texttt{Function\allowbreak{}Potential\allowbreak{}Panel}.
+\paragraph{Cómo arreglarlo}
+Que \texttt{set\allowbreak{}Function} ponga también el texto en el cuadro y construya la expresión solo sobre los padres, como el diálogo; y que al desmarcar vuelva la fórmula que había antes de marcar.
+
+Prueba: en el panel de una relación exponencial por tramos, marcar la casilla enseña el tiempo del primer tramo; desmarcarla devuelve la fórmula anterior; y lo que se guarda al aceptar es lo que se ve.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: menús, diálogos y herramientas}\label{sec:menus}
 
@@ -16159,6 +16290,8 @@ cambia algo (por ejemplo, un código que hoy no llama nadie empieza a usarse), s
 \textbf{28}\phantomsection\label{nota:28} & \textbf{Tres modelos con «Age {[}0{]}» uniforme no se analizan sin darle un valor: lo exige la red}\newline En \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-CHD-Walker.\allowbreak{}pgmx}, \texttt{MID-Colorectal.\allowbreak{}pgmx} y \texttt{MID-mammography.\allowbreak{}pgmx}, «Age {[}0{]}» es un nodo numérico sin distribución que el modelo espera recibir como hallazgo, y sin él no se puede discretizar: \texttt{MID-Colorectal.\allowbreak{}pgmx} guarda ese hallazgo en el fichero y su coste-efectividad global termina (medido: un tramo, coste 1837 y efectividad 23,11). \texttt{MID-mammography.\allowbreak{}pgmx} no lo guarda, y con «Age {[}0{]} = 50» falla más adelante por \hyperref[err:13]{error~13}; \texttt{MID-CHD-Walker.\allowbreak{}pgmx} es un esqueleto cuyos siete nodos de utilidad son uniformes, sin números que calcular. --- cambios --- \\[3pt]
 \textbf{189}\phantomsection\label{nota:189} & \textbf{El superpadre desempata por la última candidata, y el Bayes ingenuo selectivo por la primera}\newline \texttt{Super\allowbreak{}Parent\allowbreak{}NBAlgorithm.\allowbreak{}get\allowbreak{}Optimal\allowbreak{}Edit} elige el superpadre con \texttt{add\allowbreak{}Score\ \textgreater{}=\ best\allowbreak{}Parent\allowbreak{}Score} (línea 104), así que entre candidatas de igual exactitud gana la última; \texttt{Selective\allowbreak{}NBAlgorithm} hace ganar a la primera desde el commit \texttt{1bd8c38} (\hyperref[err:135]{error~135}). Las candidatas se recorren en el orden de los nodos de la red (\texttt{Metric\allowbreak{}Utils.\allowbreak{}get\allowbreak{}Non\allowbreak{}Root\allowbreak{}Nodes}), que es fijo, así que el modelo aprendido es el mismo en cada ejecución: son dos reglas de desempate distintas, no un resultado que cambie. Comprobado leyendo el código. \\[3pt]
 \textbf{190}\phantomsection\label{nota:190} & \textbf{La lista de unidades de las opciones de inferencia sale en el orden de un \texttt{Hash\allowbreak{}Map}}\newline \texttt{Inference\allowbreak{}Options\allowbreak{}Dialog.\allowbreak{}get\allowbreak{}Units\allowbreak{}Panel} (líneas 795-802) llena la lista «Unit» recorriendo un \texttt{Hash\allowbreak{}Map\textless{}String,\allowbreak{}\ String\textgreater{}} con las unidades de los criterios. Las claves son textos, cuyo \texttt{hash\allowbreak{}Code} es el mismo en cada ejecución, así que el orden es fijo, aunque no sea el de los criterios: medido en cuatro redes con el coste en € y la efectividad en QALY (años de vida ajustados por calidad), sale siempre «QALY, €». La unidad elegida al abrir es la que guarda la red (\texttt{Multicriteria\allowbreak{}Options.\allowbreak{}get\allowbreak{}Main\allowbreak{}Unit}); la primera de la lista solo se toma si la red no guarda ninguna. \\[3pt]
+\textbf{193}\phantomsection\label{nota:193} & \textbf{«Distribution table» se ofrece también fuera de las redes de sucesos}\newline \texttt{Distribution\allowbreak{}Table\allowbreak{}Potential.\allowbreak{}validate} (líneas 128-131) la admite para cualquier nodo numérico de cualquier red desde el commit \texttt{d6cfb0e} del antiguo repositorio de \texttt{core}, de José Andrés (10-06-2026), que quitó la condición «solo en redes de sucesos», marcada como provisional en la rama de Carmen Yago. No es un error: una tabla con una distribución por cada configuración de los padres es una relación válida para un nodo numérico, y en la propagación exacta de una red bayesiana falla con el mensaje normal, «Potential P(N | P) cannot be converted to a table», igual que «Function», «Uniform» o «UnivariateDistr» (medido para el \hyperref[err:108]{error~108}). \\[3pt]
+\textbf{194}\phantomsection\label{nota:194} & \textbf{En las redes de sucesos, la simulación se lanza desde «Cost-effectiveness analysis»}\newline \texttt{Inference\allowbreak{}Handler.\allowbreak{}show\allowbreak{}Cost\allowbreak{}Effectiveness\allowbreak{}Deterministic} (líneas 270-276) lanza la simulación si la red es de sucesos, así que se llega a ella por «Cost-effectiveness analysis → Deterministic analysis». La rama de Carmen Yago tenía un botón propio, «DES Simulation»; José Andrés lo unificó a propósito (commit \texttt{7913cc4}, «DES simulation button unified and bug fixed»). El texto «DES Simulation» (\texttt{MCSimulate\allowbreak{}Network} en \texttt{Tool\allowbreak{}Bars\_\allowbreak{}en.\allowbreak{}xml}) ya no lo usa nadie (\hyperref[nota:195]{nota~195}). \\[3pt]
 \end{longtable}
 
 \subsection*{Defectos sin consecuencia visible hoy}\addcontentsline{toc}{subsection}{Defectos sin consecuencia visible hoy}
@@ -16255,6 +16388,7 @@ cambia algo (por ejemplo, un código que hoy no llama nadie empieza a usarse), s
 \textbf{109}\phantomsection\label{nota:109} & \textbf{Hugin usa como probabilidades la tabla de un nodo numérico, escrita a mano en el fichero}\newline En una red bayesiana P → N con N numérico de azar y un \texttt{Table\allowbreak{}Potential} con los valores 3 y 7, \texttt{Hugin\allowbreak{}Propagation} devuelve P = {[}0,3, 0,7{]} (multiplica esos valores como si fueran probabilidades), el muestreo ≈ {[}0,5, 0,5{]} y \texttt{VEPropagation} falla con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} (\hyperref[err:42]{error~42}). Esa tabla solo la trae un \texttt{.\allowbreak{}pgmx} escrito a mano, porque el lector acepta \texttt{Table} sobre una variable numérica; el editor no la crea (pone una relación uniforme y \texttt{Table\allowbreak{}Potential.\allowbreak{}validate} excluye las variables numéricas), guardar con \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2} o \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0} y reabrir da \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential} o \texttt{Univariate\allowbreak{}Distr\allowbreak{}Potential}, y ninguna red bayesiana del repositorio tiene nodos numéricos. Con las relaciones que ofrece el editor («Exact», «UnivariateDistr») la herramienta de propagación estocástica falla antes, sin dar números distintos ni decir que no admite nodos numéricos (\hyperref[err:108]{error~108}). \\[3pt]
 \textbf{110}\phantomsection\label{nota:110} & \textbf{Escalar una utilidad de regresión ya muestreada no la cambia, pero hoy ningún análisis llega}\newline \texttt{scale\allowbreak{}Potential} de \texttt{Exponential\allowbreak{}Potential} y de \texttt{Linear\allowbreak{}Combination\allowbreak{}Potential} solo cambia \texttt{coefficients}, y \texttt{GLMPotential.\allowbreak{}table\allowbreak{}Project} usa \texttt{sampled\allowbreak{}Coefficients} cuando existen; como \texttt{VECEPSA} muestrea antes de que \texttt{VECEAnalysis} descuente y aplique la escala de coste-efectividad, esas dos operaciones se perderían (medido en el potencial: muestreado y escalado por 0,5 sigue valiendo 100). Hoy no se llega: las únicas redes con utilidades de regresión inciertas, \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-CHAP-Ryan-Griffin.\allowbreak{}pgmx} y sus copias, no pasan de la discretización, y una utilidad de regresión en un nodo hace fallar el análisis de coste-efectividad con \texttt{Class\allowbreak{}Cast\allowbreak{}Exception} antes de muestrear (medido con \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-CEA-minimal.\allowbreak{}pgmx} y \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-hip-Briggs.\allowbreak{}pgmx}). \\[3pt]
 \textbf{111}\phantomsection\label{nota:111} & \textbf{La casilla «Results Per Series (.xlsx file)» no hace nada, pero está siempre desactivada}\newline \texttt{Monte\allowbreak{}Carlo\allowbreak{}Options\allowbreak{}Panel.\allowbreak{}get\allowbreak{}JCheck\allowbreak{}Box\allowbreak{}Excel\allowbreak{}Results\allowbreak{}Per\allowbreak{}Series} desactiva siempre la casilla (línea 333, «Provisional for paper .jar»), y \texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0} no lee esa opción, así que en la ventana de la simulación de sucesos sale gris y desmarcada (medido construyendo el panel). Aunque se marcara, nadie lee \texttt{Monte\allowbreak{}Carlo\allowbreak{}Options.\allowbreak{}is\allowbreak{}Results\allowbreak{}To\allowbreak{}Excel(\allowbreak{})} y la clase que escribiría el Excel, \texttt{DESResults\allowbreak{}Excel\allowbreak{}Writer}, no tiene ninguna referencia. Si se decide retirar controles del mismo panel (\hyperref[err:109]{error~109}), esta casilla y esa clase van con ellos. \\[3pt]
+\textbf{192}\phantomsection\label{nota:192} & \textbf{El análisis de sensibilidad probabilístico de una red de sucesos no se puede pedir, y el código que lo haría está mal}\newline La simulación sabe repetir las series sorteando los parámetros inciertos (\texttt{DESInference}, líneas 118-200, con la opción \texttt{psa} de \texttt{Monte\allowbreak{}Carlo\allowbreak{}Options}), pero nada permite activarlo: la casilla «Perfom PSA» existe (\texttt{Monte\allowbreak{}Carlo\allowbreak{}Options\allowbreak{}Panel.\allowbreak{}get\allowbreak{}Psa\allowbreak{}Check\allowbreak{}Box}, líneas 257-266), pero no se añade al panel; la opción no se guarda en el \texttt{.\allowbreak{}pgmx}, y los paneles de las tablas con sucesos no abren el diálogo de incertidumbre. Ya estaba a medias en la rama \texttt{DES-development} de Carmen Yago, que lo daba por preliminar. Si se activara tal como está: \texttt{DESInference.\allowbreak{}sample\allowbreak{}PSATable\allowbreak{}Potential} (líneas 191-200) cambia cada valor incierto por un valor fijo, en vez de poner cada muestra en la tabla, y la copia de la red comparte las relaciones con la red del editor (\texttt{Prob\allowbreak{}Net.\allowbreak{}copy} es \texttt{Prob\allowbreak{}Net\allowbreak{}Copier.\allowbreak{}shallow\allowbreak{}Copy}), así que todas las series usarían los mismos números y se borraría la incertidumbre de la red abierta; \texttt{Uncertain\allowbreak{}Values\allowbreak{}Edit.\allowbreak{}prepare\allowbreak{}Uncertain\allowbreak{}Potential} (líneas 151-170) lanza \texttt{Unsupported\allowbreak{}Operation\allowbreak{}Exception} con la tabla interna de una \texttt{Table\allowbreak{}With\allowbreak{}Events}; y el constructor para sucesos de \texttt{Uncertain\allowbreak{}Values\allowbreak{}Dialog} (línea 97), que no llama nadie, ha perdido el filtro de las distribuciones válidas para sucesos (\texttt{get\allowbreak{}DESValid\allowbreak{}Prob\allowbreak{}Dens\allowbreak{}Functions}). Hay que decidir si se termina o se borra. \\[3pt]
 \end{longtable}
 
 \subsection*{Fuera de alcance por decisión de equipo}\addcontentsline{toc}{subsection}{Fuera de alcance por decisión de equipo}
@@ -16335,6 +16469,7 @@ cambia algo (por ejemplo, un código que hoy no llama nadie empieza a usarse), s
 \textbf{181}\phantomsection\label{nota:181} & \textbf{Decidir qué es el módulo \texttt{resttemplate}, hoy un ejemplo que responde «Hello, World!»}\newline Hay que decidir el destino de \texttt{resttemplate}, un envoltorio REST (interfaz de programación por HTTP) con Spring Boot cuyo único controlador ofrece \texttt{GET\ /\allowbreak{}hello} y dos \texttt{POST} de juguete sobre \texttt{Example\allowbreak{}Data}. No expone ninguna función de OpenMarkov, así que no hay nada que falle; si se decide que vaya en serio, necesita un \texttt{core} sin escritorio (\hyperref[nota:170]{nota~170}) y leer redes desde un flujo (\hyperref[nota:173]{nota~173}). \\[3pt]
 \textbf{182}\phantomsection\label{nota:182} & \textbf{Congelar la biblioteca interna \texttt{org.\allowbreak{}openmarkov.\allowbreak{}java} y revisar qué paquetes exporta \texttt{core}}\newline Propuesta: dejar escrita la regla de mirar la biblioteca estándar de Java y Apache Commons antes de añadir utilidades a \texttt{org.\allowbreak{}openmarkov.\allowbreak{}java} (18 ficheros, con duplicados como \texttt{Null\allowbreak{}Utils.\allowbreak{}equals}, que hace lo mismo que \texttt{Objects.\allowbreak{}equals}), y estudiar cuáles de los 48 paquetes que exporta el \texttt{module-info.\allowbreak{}java} de \texttt{core} son de verdad interfaz pública. Es una norma de mantenimiento sin consecuencia visible. \\[3pt]
 \textbf{183}\phantomsection\label{nota:183} & \textbf{Dejar escrito que el sistema de módulos de Java se usa solo para declarar dependencias}\newline Propuesta: documentar que los descriptores son \texttt{open\ module} porque el descubrimiento de complementos por reflexión lo exige, y que la aplicación corre en el camino de clases, así que en ejecución no hay encapsulación; si algún día se quiere, el camino sería \texttt{java.\allowbreak{}util.\allowbreak{}Service\allowbreak{}Loader}. Es una nota de documentación, no trabajo sobre el código. \\[3pt]
+\textbf{195}\phantomsection\label{nota:195} & \textbf{Restos sin uso de la rama de la simulación de sucesos}\newline Propuesta de limpieza: borrar lo que llegó de la rama \texttt{DES-development} y no usa nadie: \texttt{Function\allowbreak{}Potential\allowbreak{}Old} (su \texttt{validate} devuelve falso) y \texttt{Data\allowbreak{}From\allowbreak{}File\allowbreak{}Old}; \texttt{Edition\allowbreak{}Tool\allowbreak{}Bar.\allowbreak{}get\allowbreak{}Event\allowbreak{}Creation\allowbreak{}Button}, \texttt{Standard\allowbreak{}Tool\allowbreak{}Bar.\allowbreak{}monte\allowbreak{}Carlo\allowbreak{}Simulation\allowbreak{}Button}, \texttt{Icon\allowbreak{}Bind.\allowbreak{}SIMULATION\_\allowbreak{}ENABLED} y \texttt{Icon\allowbreak{}Factory.\allowbreak{}create\allowbreak{}Event\allowbreak{}Icon}; las entradas de menú «establecer como imposible o posible», que la propia rama dejó comentadas en \texttt{Table\allowbreak{}With\allowbreak{}Events\allowbreak{}Contextual\allowbreak{}Menu} (líneas 84-104), con sus constantes en \texttt{Action\allowbreak{}Commands} y \texttt{Menu\allowbreak{}Item\allowbreak{}Names} y sus textos; \texttt{MCSimulate\allowbreak{}Network} de los ficheros de textos de la barra de herramientas; los ficheros \path{gui/src/main/resources/cursors/event.gif} y \path{gui/src/main/resources/icons/simulate.png}; y \path{evaluation-message.html}, \path{message-expired.html} y \path{message-not-expired.html}, de la versión de evaluación con fecha de caducidad. La casilla «Perfom PSA» depende de lo que se decida en la \hyperref[nota:192]{nota~192}. No es un error: nada de eso se ejecuta. \\[3pt]
 \end{longtable}
 
 
@@ -16345,7 +16480,7 @@ Cada error y cada nota salen de uno o de varios de estos dos documentos internos
 \emph{registro de fallos} (con el número de su entrada). Cuando dos entradas describían el mismo
 defecto se han juntado en una sola ficha. Los \emph{hallazgos nuevos} no estaban en ninguno de los
 dos: se vieron al comprobar otro error de la lista, que se indica, y se comprobaron después con los
-mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a C++/Qt, y se comprobaron igual.
+mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a C++/Qt, y los del 15 de octubre al revisar la rama \texttt{DES-development}; todos se comprobaron igual.
 
 {\small
 \begin{longtable}{@{}p{1.8cm}p{\dimexpr\linewidth-1.8cm-2\tabcolsep\relax}@{}}
@@ -16587,6 +16722,11 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:232]{Error 232} & hallazgo nuevo, visto en la aplicación al probar el modo inferencia con los MID para el \hyperref[err:201]{error~201} \\
 \hyperref[err:233]{Error 233} & hallazgo nuevo, al probar las tres opciones de transición para el \hyperref[err:201]{error~201} \\
 \hyperref[err:234]{Error 234} & hallazgo nuevo, al corregir el \hyperref[err:21]{error~21}; ampliado al corregirlo \\
+\hyperref[err:235]{Error 235} & hallazgo nuevo, al revisar la rama \texttt{DES-development} de Carmen Yago, que nunca se fusionó \\
+\hyperref[err:236]{Error 236} & hallazgo nuevo, al revisar la rama \texttt{DES-development} de Carmen Yago, que nunca se fusionó \\
+\hyperref[err:237]{Error 237} & hallazgo nuevo, al revisar la rama \texttt{DES-development} de Carmen Yago, que nunca se fusionó \\
+\hyperref[err:238]{Error 238} & hallazgo nuevo, al revisar la rama \texttt{DES-development} de Carmen Yago, que nunca se fusionó \\
+\hyperref[err:239]{Error 239} & hallazgo nuevo, al revisar la rama \texttt{DES-development} de Carmen Yago, que nunca se fusionó \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
@@ -16777,6 +16917,10 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[nota:189]{Nota 189} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 30 de septiembre al 8 de octubre \\
 \hyperref[nota:190]{Nota 190} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
 \hyperref[nota:191]{Nota 191} & hallazgo nuevo, al comparar las ventanas con las de la versión en C++/Qt \\
+\hyperref[nota:192]{Nota 192} & hallazgo nuevo, al revisar la rama \texttt{DES-development} de Carmen Yago, que nunca se fusionó \\
+\hyperref[nota:193]{Nota 193} & hallazgo nuevo, al revisar la rama \texttt{DES-development} de Carmen Yago, que nunca se fusionó \\
+\hyperref[nota:194]{Nota 194} & hallazgo nuevo, al revisar la rama \texttt{DES-development} de Carmen Yago, que nunca se fusionó \\
+\hyperref[nota:195]{Nota 195} & hallazgo nuevo, al revisar la rama \texttt{DES-development} de Carmen Yago, que nunca se fusionó \\
 \bottomrule
 \end{longtable}
 }
