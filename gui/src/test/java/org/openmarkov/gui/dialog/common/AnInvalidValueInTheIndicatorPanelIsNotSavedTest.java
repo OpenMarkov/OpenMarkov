@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * An event node whose relation is an indicator: time to the event 2 and probability of occurrence 0.25. In its panel
@@ -102,6 +105,29 @@ class AnInvalidValueInTheIndicatorPanelIsNotSavedTest {
         panel.saveChanges();
         assertEquals(2, indicator().getTte());
         assertEquals(0.25, indicator().getpOccurrence());
+    }
+
+    /**
+     * «NaN» and «∞» are how the English format writes them, and «1E400» does not fit in a double: the box of the time
+     * took the three, and with any of them the event never happened (error 265 of the pending list).
+     */
+    @ParameterizedTest
+    @ValueSource(strings = { "NaN", "∞", "1E400" })
+    void aTimeThatIsNotAFiniteNumberIsNotSaved(String tte) throws Exception {
+        write(tteSpinner, tte);
+        panel.saveChanges();
+        assertEquals(2, indicator().getTte());
+        assertEquals(0.25, indicator().getpOccurrence());
+    }
+
+    /** The relation itself refuses them too, whoever gives them. */
+    @Test void theRelationRefusesNumbersThatAreNotValid() {
+        IndicatorPotential indicator = indicator();
+        assertThrows(InvalidArgumentException.class, () -> indicator.setTte(Double.NaN));
+        assertThrows(InvalidArgumentException.class, () -> indicator.setTte(Double.POSITIVE_INFINITY));
+        assertThrows(InvalidArgumentException.class, () -> indicator.setpOccurrence(Double.NaN));
+        assertEquals(2, indicator.getTte());
+        assertEquals(0.25, indicator.getpOccurrence());
     }
 
     @Test void aValidValueIsSaved() throws Exception {

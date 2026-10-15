@@ -41,8 +41,18 @@ public class IndicatorPotential extends Potential implements DESSimulablePotenti
     
     public IndicatorPotential(List<Variable> variables, PotentialRole role, double tte, double pOccurrence) {
         this(variables, role);
-        this.tte = tte;
-        this.pOccurrence = pOccurrence;
+        setTte(tte);
+        setpOccurrence(pOccurrence);
+    }
+    
+    /** Whether {@code tte} is a valid time to the event: a finite number not below 0. */
+    public static boolean isValidTte(double tte) {
+        return tte >= 0 && tte < Double.POSITIVE_INFINITY;
+    }
+    
+    /** Whether {@code pOccurrence} is a valid probability of occurrence: a number between 0 and 1. */
+    public static boolean isValidPOccurrence(double pOccurrence) {
+        return pOccurrence >= 0 && pOccurrence <= 1;
     }
     
     public IndicatorPotential(List<Variable> variables, PotentialRole role) {
@@ -153,11 +163,10 @@ public class IndicatorPotential extends Potential implements DESSimulablePotenti
     }
     
     public void setpOccurrence(double pOccurrence) {
-        //"Probability of ocurrence has to be in [0,1]"
-        if (pOccurrence < 0 || pOccurrence > 1) {
-            throw new InvalidArgumentException("Occurrence out of range 0<=pOccurrence <=1");
+        // Written so that NaN does not pass either
+        if (!isValidPOccurrence(pOccurrence)) {
+            throw new InvalidArgumentException(pOccurrence, "probability of occurrence", "must be a number between 0 and 1");
         }
-        ;
         this.pOccurrence = pOccurrence;
     }
     
@@ -169,10 +178,10 @@ public class IndicatorPotential extends Potential implements DESSimulablePotenti
     }
     
     public void setTte(double tte) {
-        if (tte < 0) {
-            throw new InvalidArgumentException("Time to event  out of range 0..");
+        // NaN and infinity used to pass: the event never happened, without a warning. A probability 0 says that
+        if (!isValidTte(tte)) {
+            throw new InvalidArgumentException(tte, "time to event", "must be a finite number not below 0");
         }
-        ;
         this.tte = tte;
     }
     

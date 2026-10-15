@@ -57,13 +57,13 @@ import java.text.ParseException;
 //		namelessPanel.setBorder(new EtchedBorder());
 
 		// The spinners only accept valid values: a time not below 0 and a probability between 0 and 1
-		tteSpinner = numberSpinner(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		tteSpinner = numberSpinner(finiteNumbers(0, 0, null, 1));
 
 		JLabel tteLabel = new JLabel("Time-to-event:");
 		tteLabel.setLabelFor(tteSpinner);
 		namelessPanel.add(tteLabel);
 		namelessPanel.add(tteSpinner);
-		pOccurrenceSpinner = numberSpinner(new SpinnerNumberModel(0, 0, 1, 0.01));
+		pOccurrenceSpinner = numberSpinner(finiteNumbers(0, 0, 1.0, 0.01));
 		JLabel probabilityTextLabel = new JLabel("Probability of ocurrence:");
 		probabilityTextLabel.setLabelFor(pOccurrenceSpinner);
 		namelessPanel.add(probabilityTextLabel);
@@ -77,6 +77,22 @@ import java.text.ParseException;
 		this.node = node;
 		tteSpinner.setValue(((IndicatorPotential)(node.getPotentials().get(0))).getTte());
 		pOccurrenceSpinner.setValue(((IndicatorPotential)(node.getPotentials().get(0))).getpOccurrence());
+	}
+
+	/**
+	 * A model of numbers from {@code minimum} to {@code maximum}, or without a top if it is null, that refuses what is
+	 * not a finite number: «NaN», «∞» and «1E400» are numbers for the format, and NaN is not below any minimum. The
+	 * editor of the spinner goes back then to the last valid value.
+	 */
+	private static SpinnerNumberModel finiteNumbers(double value, double minimum, Double maximum, double step) {
+		return new SpinnerNumberModel(Double.valueOf(value), Double.valueOf(minimum), maximum, Double.valueOf(step)) {
+			@Override public void setValue(Object value) {
+				if (value instanceof Number number && !Double.isFinite(number.doubleValue())) {
+					throw new IllegalArgumentException("Not a finite number: " + value);
+				}
+				super.setValue(value);
+			}
+		};
 	}
 
 	/**
