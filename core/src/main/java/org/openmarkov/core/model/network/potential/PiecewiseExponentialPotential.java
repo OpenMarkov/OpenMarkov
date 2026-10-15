@@ -178,6 +178,7 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 				new TreeMap<>(potential.getPiecewiseTable()),
 				(FunctionPotential) potential.initTimeFunction.copy(),
 				potential.useRates);
+		copyAttributesFrom(potential);
 	}
 
 	// Methods

@@ -109,6 +109,7 @@ public class DistributionTablePotential extends Potential implements DESSimulabl
         // same object in copy and original, so writing a parameter in one wrote it in both.
         this.distributionVariable = potential.distributionVariable;
         this.setTableWithEvents((TableWithEvents) potential.getTableWithEvents().copy());
+        copyAttributesFrom(potential);
     }
 
     public DistributionTablePotential(List<Variable> variables) {

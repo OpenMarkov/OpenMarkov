@@ -89,6 +89,7 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
         // assigned - so the copy kept the fresh empty tree of the delegated constructor
         // instead of the tree of the original.
         noEventTree = (TreeADDPotential) treeWithExcludedEvents.getNoEventTree().copy();
+        copyAttributesFrom(treeWithExcludedEvents);
     }
     
     /**
@@ -197,7 +198,7 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
     @Override public Potential deepCopy(ProbNet copyNet) {
         TreeWithExcludedEventsPotential copy = new TreeWithExcludedEventsPotential(variablesIn(copyNet), role);
         copy.noEventTree = (TreeADDPotential) noEventTree.deepCopy(copyNet);
-        copy.setComment(comment);
+        copy.copyAttributesFrom(this);
         return copy;
     }
 

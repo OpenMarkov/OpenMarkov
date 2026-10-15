@@ -93,7 +93,7 @@ public class TreeWithEventsPotential extends Potential implements DESSimulablePo
         for (Variable event : treeWithEvents.getEvents()) {
             trees.put(event, (TreeADDPotential) treesToCopy.get(event).copy());
         }
-        
+        copyAttributesFrom(treeWithEvents);
     }
     
     /**
@@ -256,7 +256,7 @@ public class TreeWithEventsPotential extends Potential implements DESSimulablePo
             copy.trees.put(findVariableToCopy(copyNet, event, "the tree of " + event + " in " + this),
                            (TreeADDPotential) trees.get(event).deepCopy(copyNet));
         }
-        copy.setComment(comment);
+        copy.copyAttributesFrom(this);
         return copy;
     }
 

@@ -65,6 +65,7 @@ public class AugmentedProbTablePotential extends Potential {
         this(AugmentedProbTablePotential.variables, AugmentedProbTablePotential.getPotentialRole());
         //UNCLEAR Should I copy Functions?
         this.augmentedProbTable = new AugmentedProbTable(AugmentedProbTablePotential.getAugmentedProbTable());
+        copyAttributesFrom(AugmentedProbTablePotential);
     }
     
     /**
