@@ -211,6 +211,11 @@ public class FunctionPotential extends GLMPotential implements DESSimulablePoten
             if (covariates[0].references().contains(variable)) {
                 return new FunctionPotential(newVariables, this.role);
             }
+            // The function stays, on the variables that remain: the copy used to keep the removed one
+            FunctionPotential newPotential = new FunctionPotential(
+                    newVariables, this.role, new VariableExpression(newVariables, covariates[0].asStringExpression()));
+            newPotential.setComment(this.getComment());
+            return newPotential;
         }
         return new FunctionPotential(this);
     }

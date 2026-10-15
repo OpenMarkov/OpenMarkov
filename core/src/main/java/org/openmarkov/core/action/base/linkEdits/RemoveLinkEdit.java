@@ -7,7 +7,6 @@
 
 package org.openmarkov.core.action.base.linkEdits;
 
-import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.DoEditException;
@@ -151,14 +150,17 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
 					};
 					 */
                     
-                    // Temporal patch to be removed when the above TO-DO is implemented
-                    @Nullable Boolean sumIs0;
+                    // Temporal patch to be removed when the above TO-DO is implemented: a table that adds up to
+                    // zero without the parent becomes uniform. A relation that cannot be projected to a table
+                    // stays as its removeVariable left it - a formula or a regression without the parent, or a
+                    // uniform for the relations that cannot drop one - instead of always becoming uniform
+                    boolean sumIs0;
                     try {
                         sumIs0 = Arrays.stream(newPotential.getCPT().getValues()).sum() == 0;
                     } catch (NonProjectablePotentialException e) {
-                        sumIs0 = null;
+                        sumIs0 = false;
                     }
-                    if (sumIs0 == null || sumIs0) {
+                    if (sumIs0) {
                         newPotential = new UniformPotential(newPotential.getVariables(), newPotential.getPotentialRole());
                     }
                     newPotentials.add(newPotential);
