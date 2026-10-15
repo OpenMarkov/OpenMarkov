@@ -4,8 +4,13 @@ import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.java.initialization.Lazy;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Component;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +28,9 @@ public class BindingCommandReactor {
         if (event == null) {
             return;
         }
-        OpenMarkovLogger.LOGGER.debug("Processing event " + event);
+        if (!event.isMovement()) {
+            OpenMarkovLogger.LOGGER.debug("Processing event " + event);
+        }
         for (var command : this.bindingCommandGroups) {
             if (!command.eventsToReact.contains(event)) {
                 continue;
@@ -40,7 +47,9 @@ public class BindingCommandReactor {
                 }
             }
         }
-        OpenMarkovLogger.LOGGER.debug("Finished processing event ");
+        if (!event.isMovement()) {
+            OpenMarkovLogger.LOGGER.debug("Finished processing event ");
+        }
     }
     
     public final Lazy<MouseAdapter> mouseAdapter = new Lazy<>(() -> new MouseAdapter() {

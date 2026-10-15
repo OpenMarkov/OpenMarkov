@@ -146,7 +146,7 @@ public class PotentialEditPanel extends JPanel {
         this.node = node;
         this.onPotentialTypeChanges = new ArrayList<>();
         Potential lastPotential = this.node.getPotential();
-        if (lastPotential != null) {
+        if (!readOnly && lastPotential != null) {
             this.originalPotential = this.node.getPotential().deepCopy(this.node.getProbNet());
         } else {
             this.originalPotential = null;
@@ -167,6 +167,7 @@ public class PotentialEditPanel extends JPanel {
             this.getCommentPane().setCommentHTMLTextPaneText(potentials.getFirst().getComment());
         }
         this.configureComponentsPanel();
+        this.updatePotentialPanel();
     }
     
     protected void initializePotential() {
@@ -629,7 +630,7 @@ public class PotentialEditPanel extends JPanel {
                 }
             }
         }
-        this.getPoliticyTypePanel().setEnabledDecisionOptions(true);
+        //this.getPoliticyTypePanel().setEnabledDecisionOptions(true);
     }
     
     private void actionPerformedReorderVariables() throws DoEditException {

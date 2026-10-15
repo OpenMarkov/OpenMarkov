@@ -3,7 +3,16 @@ package org.openmarkov.gui.window.edition.networkEditorPanel;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.core.AddNodeEdit;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.CannotNormalizePotentialException;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.NotSupportedOperationException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.DefaultStates;
 import org.openmarkov.core.model.network.Node;
@@ -575,7 +584,7 @@ public class EditorInputHandler implements MouseListener, MouseMotionListener, K
         if (this.isMovingNodes()) {
             return;
         }
-        List<VisualNode> movedNodes = this.networkEditorPanel.getVisualNetwork().fillVisualNodesSelected();
+        List<VisualNode> movedNodes = this.networkEditorPanel.getVisualNetwork().selectedVisualNodes();
         new MoveNodeEdit(movedNodes).executeEdit();
         this.networkEditorPanel.adjustPanelDimension();
         this.setSelectionState(SelectionState.NOTHING);

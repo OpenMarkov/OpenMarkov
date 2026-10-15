@@ -7,19 +7,21 @@
 
 package org.openmarkov.gui.dialog.network;
 
-import org.openmarkov.core.action.core.DecisionCriteriaEdit;
 import org.openmarkov.core.action.base.StateAction;
+import org.openmarkov.core.action.core.DecisionCriteriaEdit;
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.Criterion.CECriterion;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import java.awt.BorderLayout;
+import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,7 +135,15 @@ public class StandardCriteriaDialog extends OkCancelDialog {
             }
         }
         
-        if (selectedDefaultCriteria.equals(stringDatabase.getString("defaultCriteria.costBenefitEuros.Text"))) {
+        if (selectedDefaultCriteria.equals(stringDatabase.getString("defaultCriteria.costBenefitQALY.Text"))) {
+            Criterion costCriterion = new Criterion(stringDatabase.getString("defaultCriteria.cost.Text"),
+                                                    stringDatabase.getString("defaultCriteria.qaly.Text"));
+            Criterion benefitCriterion = new Criterion(stringDatabase.getString("defaultCriteria.benefit.Text"),
+                                                       stringDatabase.getString("defaultCriteria.qaly.Text"));
+            costCriterion.setUnicriterizationScale(-1);
+            defaultCriteria.add(costCriterion);
+            defaultCriteria.add(benefitCriterion);
+        } else if (selectedDefaultCriteria.equals(stringDatabase.getString("defaultCriteria.costBenefitEuros.Text"))) {
             Criterion costCriterion = new Criterion(stringDatabase.getString("defaultCriteria.cost.Text"),
                                                     stringDatabase.getString("defaultCriteria.euros.Text"));
             Criterion benefitCriterion = new Criterion(stringDatabase.getString("defaultCriteria.benefit.Text"),

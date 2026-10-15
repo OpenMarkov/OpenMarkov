@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -49,6 +50,8 @@ public class BindingCommandGroup<TInputEvent extends InputEvent, BindGroup exten
         MOUSE_DRAGGED,
         MOUSE_MOVED;
         
+        public static final List<OnEvent> ALL = Arrays.stream(OnEvent.values()).toList();
+        
         static @Nullable OnEvent of(InputEvent inputEvent) {
             return switch (inputEvent) {
                 case KeyEvent keyEvent when keyEvent.getClass() == KeyEvent.class -> switch (keyEvent.getID()) {
@@ -71,6 +74,14 @@ public class BindingCommandGroup<TInputEvent extends InputEvent, BindGroup exten
                             default -> null;
                         };
                 default -> null;
+            };
+        }
+        
+        public boolean isMovement() {
+            return switch (this) {
+                case KEY_PRESSED, MOUSE_EXITED, MOUSE_ENTERED, MOUSE_RELEASED, MOUSE_PRESSED, MOUSE_CLICKED,
+                     MOUSE_WHEEL_MOVED, KEY_TYPED, KEY_RELEASED -> false;
+                case MOUSE_DRAGGED, MOUSE_MOVED -> true;
             };
         }
     }

@@ -68,7 +68,6 @@ class EditAndViewHandler {
     void activateEditionMode(String newEditionMode) {
         NetworkEditorPanel networkPanel = getCurrentNetworkEditorPanel();
         networkPanel.setBaseTool(newEditionMode);
-        mainPanel.getMainPanelMenuAssistant().setEditionOption(newEditionMode, networkPanel.isThereDataStored());
     }
 
     // ── View: by title / by name ──────────────────────────────────

@@ -724,7 +724,7 @@ public class VisualNetwork implements PNEditListener {
      *
      * @return list where are the moved nodes information.
      */
-    public List<VisualNode> fillVisualNodesSelected() {
+    public List<VisualNode> selectedVisualNodes() {
         return this.visualNodes.stream()
                                .filter(VisualElement::isSelected)
                                .collect(Collectors.toList());

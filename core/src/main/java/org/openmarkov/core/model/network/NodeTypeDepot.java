@@ -96,7 +96,8 @@ public class NodeTypeDepot {
         for (NodeType nodeType : NodeType.values()) {
             Collection<Node> nodes = nodesHashMaps.get(nodeType).values();
             for (Node node : nodes) {
-                if (node.getVariable().getName().contentEquals(nameOfVariable)) {
+                String varName = node.getVariable().getName();
+                if (varName.contentEquals(nameOfVariable)) {
                     return node;
                 }
             }

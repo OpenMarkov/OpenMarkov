@@ -8,7 +8,11 @@ import org.openmarkov.gui.bindings.Input;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.lang.invoke.MethodHandles;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class InputTracer {
@@ -103,6 +107,8 @@ public class InputTracer {
         this.currentInput = new InputStack(heldKeys, heldClicks, wheel);
         this.changeCausingEvent = event;
         updateChangeState();
+        
+        OpenMarkovLogger.LOGGER.debug("Input tracer updated: " + this);
     }
     
     private void updateChangeState() {

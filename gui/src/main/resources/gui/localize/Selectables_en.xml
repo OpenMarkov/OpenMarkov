@@ -92,6 +92,9 @@
         </low>
     </defaultStates>
     <defaultCriteria>
+        <costBenefitQALY>
+            <Text value="Cost-benefit (QALY)"/>
+        </costBenefitQALY>
         <costBenefitEuros>
             <Text value="Cost-benefit (€)"/>
         </costBenefitEuros>

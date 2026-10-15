@@ -9,8 +9,11 @@ package org.openmarkov.gui.dialog.network;
 
 import org.openmarkov.core.localize.StringDatabase;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 
 /**
@@ -38,7 +41,8 @@ public class StandardCriteriaPanel extends JPanel {
 	public void initialize() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		// ButtonGroup buttonGroup = new ButtonGroup();
-		String[] defaultStates = { stringDatabase.getString("defaultCriteria.costBenefitEuros.Text"),
+		String[] defaultStates = {stringDatabase.getString("defaultCriteria.costBenefitQALY.Text"),
+				stringDatabase.getString("defaultCriteria.costBenefitEuros.Text"),
 				stringDatabase.getString("defaultCriteria.costBenefitPounds.Text"),
 				stringDatabase.getString("defaultCriteria.costBenefitDollars.Text"),
 				stringDatabase.getString("defaultCriteria.costEffectivenessEurosQALY.Text"),

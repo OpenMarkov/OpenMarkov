@@ -10,6 +10,8 @@ package org.openmarkov.gui.menutoolbar.menu;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Point2D;
+import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.graphic.VisualNetwork;
 import org.openmarkov.gui.graphic.VisualNode;
@@ -26,6 +28,8 @@ import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.io.Serial;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class implements a contextual menu that is displayed when the user
@@ -159,7 +163,9 @@ public class NodeContextualMenu extends ContextualMenu {
         }
         if (workingMode == NetworkEditorPanel.WorkingMode.EDITION) {
             add(getAbsorbNodeMenuItem());
-            add(getAbsorbParentsMenuItem());
+            if (!this.selectedNode.getNode().getParents().isEmpty()) {
+                add(getAbsorbParentsMenuItem());
+            }
             addSeparator();
         }
         
@@ -347,6 +353,15 @@ public class NodeContextualMenu extends ContextualMenu {
         if (absorbNodeMenuItem == null) {
             absorbNodeMenuItem = new LocalizedMenuItem(MenuItemNames.EDIT_ABSORBNODE_MENUITEM, ActionCommands.ABSORB_NODE.getCommandName());
             absorbNodeMenuItem.addActionListener(listener);
+            var allParentsAreFiniteAndHaveTablePotentials = this.selectedNode.getNode()
+                                                                             .getParents()
+                                                                             .stream()
+                                                                             .allMatch(parent -> parent.getVariable()
+                                                                                                       .getVariableType() == VariableType.FINITE_STATES && parent.getPotential() instanceof TablePotential);
+            if (!allParentsAreFiniteAndHaveTablePotentials) {
+                absorbNodeMenuItem.setEnabled(false);
+                absorbNodeMenuItem.setToolTipText("Not all parents have a finite states domain and a table relation, hence, this node cannot be absorbed.");
+            }
         }
         return absorbNodeMenuItem;
     }
@@ -526,6 +541,15 @@ public class NodeContextualMenu extends ContextualMenu {
         if (absorbParentsMenuItem == null) {
             absorbParentsMenuItem = new LocalizedMenuItem(MenuItemNames.EDIT_ABSORBPARENTS_MENUITEM, ActionCommands.ABSORB_PARENTS.getCommandName());
             absorbParentsMenuItem.addActionListener(listener);
+            var parentsHaveNoOtherChildren = this.selectedNode.getNode().getParents().stream().allMatch(parent -> {
+                List<Node> children = new ArrayList<>(parent.getChildren());
+                children.remove(this.selectedNode.getNode());
+                return children.isEmpty();
+            });
+            if (!parentsHaveNoOtherChildren) {
+                absorbParentsMenuItem.setEnabled(false);
+                absorbParentsMenuItem.setToolTipText("Parents of this node cannot have other children than this node in order to absorb them.");
+            }
         }
         
         return absorbParentsMenuItem;
