@@ -89,6 +89,29 @@ public abstract sealed class NonProjectablePotentialException extends OpenMarkov
         public final String value;
     }
 
+    /**
+     * A finding on a numeric node whose distribution, in some configuration of its parents, has parameters that do
+     * not make a distribution, such as a normal of deviation 0.
+     */
+    public static final class ParametersAreNotADistribution extends NonProjectablePotentialException {
+        /**
+         * @param where      the configuration of the parents, such as "with Disease = absent, ", or "" if there are
+         *                   no parents
+         * @param parameters the parameters, such as "mu = 5 and sigma = 0"
+         */
+        public ParametersAreNotADistribution(Variable variable, String distribution, String where, String parameters) {
+            this.variable = variable;
+            this.distribution = distribution;
+            this.where = where;
+            this.parameters = parameters;
+        }
+
+        public final Variable variable;
+        public final String distribution;
+        public final String where;
+        public final String parameters;
+    }
+
     /** A utility node has no numbers: its relation is the uniform one it was created with. */
     public static final class UtilityIsNotDefined extends NonProjectablePotentialException {
         public UtilityIsNotDefined(Variable utilityVariable) {

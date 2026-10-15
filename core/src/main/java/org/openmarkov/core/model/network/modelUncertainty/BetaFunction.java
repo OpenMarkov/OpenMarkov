@@ -85,6 +85,11 @@ import java.util.Random;
     }
     
     @Override public double getDensity(double x) {
+        // At 0 with alpha below 1, and at 1 with beta below 1, the density grows without bound: Commons Math refuses
+        // to give it instead of answering infinity
+        if (alpha > 0 && beta > 0 && ((x == 0 && alpha < 1) || (x == 1 && beta < 1))) {
+            return Double.POSITIVE_INFINITY;
+        }
         return new BetaDistribution(null, alpha, beta).density(x);
     }
 

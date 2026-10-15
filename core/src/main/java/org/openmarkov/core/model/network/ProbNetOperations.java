@@ -7,15 +7,18 @@
 
 package org.openmarkov.core.model.network;
 
+import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.expression.ReferencedExpression;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.inference.PartialOrderDAN;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.modelUncertainty.ExactFunction;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunction;
+import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionManager;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -644,7 +647,15 @@ public class ProbNetOperations {
         if (potential instanceof UnivariateDistrPotential distribution) {
             ProbDensFunction function = distribution.probDensFunction(configuration);
             if (!(function instanceof ExactFunction)) {
-                double density = function.getDensity(observedValue);
+                double density;
+                try {
+                    density = function.getDensity(observedValue);
+                } catch (MathIllegalArgumentException impossibleParameters) {
+                    // Commons Math refuses to build the distribution with the parameters of this configuration
+                    throw new NonProjectablePotentialException.ParametersAreNotADistribution(
+                            variable, distribution.getProbDensFunctionName(),
+                            whereIn(potential, configuration), parametersOf(function));
+                }
                 if (Double.isNaN(density)) {
                     throw new NonProjectablePotentialException.DensityCannotBeCalculated(
                             variable, distribution.getProbDensFunctionName());
@@ -661,6 +672,35 @@ public class ProbNetOperations {
             value = potential.tableProject(configuration, inferenceOptions).getValues()[0];
         }
         return isTheSameValue(variable, value, observedValue) ? 1 : 0;
+    }
+    
+    /** @return the configuration of the parents of {@code potential}, such as "with A = a0 and B = b1, " */
+    private static String whereIn(Potential potential, EvidenceCase configuration) {
+        List<String> parents = new ArrayList<>();
+        for (Variable parent : potential.getVariables().subList(1, potential.getNumVariables())) {
+            Finding finding = configuration.getFinding(parent);
+            if (finding != null) {
+                parents.add(parent.getName() + " = " + (parent.getVariableType() == VariableType.NUMERIC
+                        ? ReferencedExpression.toExpression(finding.getNumericalValue()) : finding.getState()));
+            }
+        }
+        if (parents.isEmpty()) {
+            return "";
+        }
+        String last = parents.removeLast();
+        return "with " + (parents.isEmpty() ? last : String.join(", ", parents) + " and " + last) + ", ";
+    }
+    
+    /** @return the parameters of {@code function} with their names, such as "mu = 5 and sigma = 0" */
+    private static String parametersOf(ProbDensFunction function) {
+        String[] names = ProbDensFunctionManager.getUniqueInstance().info(function.getClass()).parameters();
+        double[] values = function.getParameters();
+        List<String> parameters = new ArrayList<>();
+        for (int i = 0; i < values.length; i++) {
+            parameters.add((i < names.length ? names[i] + " = " : "") + ReferencedExpression.toExpression(values[i]));
+        }
+        String last = parameters.removeLast();
+        return parameters.isEmpty() ? last : String.join(", ", parameters) + " and " + last;
     }
     
     /** Whether two values of a numeric variable are equal once rounded to its precision, but for rounding errors. */

@@ -143,6 +143,7 @@
     "OtherPropertyAlreadyExistsException",
     "PGMXInvalid",
     "PGMXParserException",
+    "ParametersAreNotADistribution",
     "ParsingSourceException",
     "PartitionsAndProbabilitiesHaveDifferentSizes",
     "PotentialCannotBeConvertedToATable",

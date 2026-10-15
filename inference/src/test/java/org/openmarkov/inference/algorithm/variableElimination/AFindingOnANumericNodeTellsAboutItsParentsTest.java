@@ -18,11 +18,14 @@ import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.ProbNetOperations;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.modelUncertainty.BetaFunction;
 import org.openmarkov.core.model.network.modelUncertainty.DirichletFunction;
 import org.openmarkov.core.model.network.modelUncertainty.ExactFunction;
 import org.openmarkov.core.model.network.modelUncertainty.GammaFunction;
 import org.openmarkov.core.model.network.modelUncertainty.NormalFunction;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunction;
+import org.openmarkov.core.model.network.modelUncertainty.RangeFunction;
+import org.openmarkov.core.model.network.modelUncertainty.TriangularFunction;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
@@ -196,6 +199,31 @@ class AFindingOnANumericNodeTellsAboutItsParentsTest {
             propagation.getPosteriorValues();
         });
         assertEquals(message, after.getExceptionMessage());
+    }
+
+    /**
+     * Parameters that do not make a distribution in one configuration of the parents used to make the resolution die
+     * with an exception of Commons Math, shown as an unexpected error (error 268 of the pending list); now the
+     * finding is refused with a message that says where and which.
+     */
+    @Test void parametersThatDoNotMakeADistributionAreRefusedWithAMessage() {
+        var refused = assertThrows(NonProjectablePotentialException.ParametersAreNotADistribution.class,
+                                   () -> probabilityOfTheDisease(network(NormalFunction.class, 5, 0, 8, 1), observed(8)));
+        assertEquals("The finding on N cannot be used: with Disease = absent, the parameters of its Normal "
+                             + "distribution, mu = 5 and sigma = 0, do not make a distribution.",
+                     refused.getExceptionMessage());
+        assertThrows(NonProjectablePotentialException.ParametersAreNotADistribution.class,
+                     () -> probabilityOfTheDisease(network(RangeFunction.class, 6, 2, 4, 12), observed(5)));
+        assertThrows(NonProjectablePotentialException.ParametersAreNotADistribution.class,
+                     () -> probabilityOfTheDisease(network(TriangularFunction.class, 0, 4, 5, 2, 10, 6), observed(3)));
+    }
+
+    /** A beta of parameter below 1 has an infinite density at 0, as the gamma above, and ends the same way. */
+    @Test void aBetaSeenWhereItsDensityIsInfiniteEndsAsTheGamma() {
+        var refused = assertThrows(NonProjectablePotentialException.DensityIsInfinite.class,
+                                   () -> probabilityOfTheDisease(network(BetaFunction.class, 0.5, 0.5, 2, 2), observed(0)));
+        assertEquals("The finding on N cannot be used: at 0, the density of its Beta distribution is infinite.",
+                     refused.getExceptionMessage());
     }
 
     /** Elsewhere the same gamma has a finite density, and the finding is used. */
