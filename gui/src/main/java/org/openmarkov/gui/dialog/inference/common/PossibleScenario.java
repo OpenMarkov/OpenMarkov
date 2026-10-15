@@ -34,6 +34,8 @@ public class PossibleScenario {
 
     private final ProbNet probNet;
     private final EvidenceCase evidence;
+    /** The state chosen for each variable in a previous scenario, which its selector starts from. */
+    private final Map<Variable, String> previousChoices = new LinkedHashMap<>();
     private final LinkedHashMap<JComboBox<String>, Variable> selectors = new LinkedHashMap<>();
     /** Whether the selectors are being changed here, and not by the user. */
     private boolean adjusting = false;
@@ -43,8 +45,21 @@ public class PossibleScenario {
      * @param evidence the findings before the resolution
      */
     public PossibleScenario(ProbNet probNet, EvidenceCase evidence) {
+        this(probNet, evidence, List.of());
+    }
+    
+    /**
+     * @param probNet         the network
+     * @param evidence        the findings before the resolution
+     * @param previousChoices the states chosen in a previous scenario of the same decision: each selector starts
+     *                        from its state, and keeps it while it is possible with {@code evidence}
+     */
+    public PossibleScenario(ProbNet probNet, EvidenceCase evidence, List<Finding> previousChoices) {
         this.probNet = probNet;
         this.evidence = evidence;
+        for (Finding choice : previousChoices) {
+            this.previousChoices.put(choice.getVariable(), choice.getState());
+        }
     }
 
     /**
@@ -56,6 +71,8 @@ public class PossibleScenario {
         if (evidence.contains(variable)) {
             selector.setSelectedItem(evidence.getFinding(variable).getState());
             selector.setEnabled(false);
+        } else if (previousChoices.containsKey(variable)) {
+            selector.setSelectedItem(previousChoices.get(variable));
         }
         selector.addActionListener(e -> {
             if (!adjusting) {

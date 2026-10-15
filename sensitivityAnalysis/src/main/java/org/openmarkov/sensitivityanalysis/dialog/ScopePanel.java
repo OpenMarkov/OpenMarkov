@@ -262,12 +262,20 @@ public class ScopePanel extends JPanel {
      * @return
      */
     public JPanel getDecisionScenarioPanel() {
+        return getDecisionScenarioPanel(List.of());
+    }
+    
+    /**
+     * Builds the decision scenario panel, each selector starting from its state in {@code previousChoices} while it
+     * is possible
+     */
+    private JPanel getDecisionScenarioPanel(List<Finding> previousChoices) {
         decisionScenarioPanel = new JPanel();
         decisionScenarioPanel.setLayout(new BoxLayout(decisionScenarioPanel, BoxLayout.PAGE_AXIS));
         decisionScenarioPanel.setBorder(new TitledBorder(stringDatabase.getString("ScopeSelector.Scenario")));
         
         if (decisionSelected != null && scopeType == ScopeType.DECISION) {
-            selectedScenario = new PossibleScenario(probNet, controller.getPreResolutionEvidence());
+            selectedScenario = new PossibleScenario(probNet, controller.getPreResolutionEvidence(), previousChoices);
             controller.getSensitivityAnalysisModel().setSelectedScenario(new ArrayList<Finding>());
             
             for (Variable variable : ProbNetOperations.getInformationalPredecessors(probNet, decisionSelected)) {
@@ -298,7 +306,9 @@ public class ScopePanel extends JPanel {
      * evidence since the panel was built shows its state and can no longer be chosen.
      */
     public void refreshScenarioFromEvidence() {
-        refreshScenario();
+        // The scenario chosen by the user is kept while it is still possible: rebuilding it from scratch put every
+        // selector back to its first state, and the analysis was made with a scenario the user had not chosen
+        refreshScenario(selectedScenario == null ? List.of() : selectedScenario.findings());
         // With a global scope there is no scenario to update.
         if (selectedScenario != null) {
             updateSelectedScenario();
@@ -309,10 +319,18 @@ public class ScopePanel extends JPanel {
      * Rebuilds the scenario panel
      */
     private void refreshScenario() {
+        refreshScenario(List.of());
+    }
+    
+    /**
+     * Rebuilds the scenario panel, each selector starting from its state in {@code previousChoices} while it is
+     * possible
+     */
+    private void refreshScenario(List<Finding> previousChoices) {
         mainPanel.setVisible(false);
         if (decisionScenarioPanel != null) {
             mainPanel.remove(decisionScenarioPanel);
-            mainPanel.add(getDecisionScenarioPanel());
+            mainPanel.add(getDecisionScenarioPanel(previousChoices));
         }
         mainPanel.setVisible(true);
     }
