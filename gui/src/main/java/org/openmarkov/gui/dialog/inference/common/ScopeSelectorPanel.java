@@ -13,7 +13,6 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.ProbNetOperations;
-import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.localize.StringDatabase;
@@ -24,7 +23,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -33,7 +31,8 @@ import java.util.List;
  */
 public class ScopeSelectorPanel extends JPanel {
     
-    HashMap<JComboBox<String>, Variable> selectedScenario;
+    /** The selectors of the scenario; null with a global scope. */
+    private PossibleScenario selectedScenario;
     private final StringDatabase stringDatabase = StringDatabase.getUniqueInstance();
     private JPanel scopeTypePanel;
     private ButtonGroup scopeTypeSelector;
@@ -231,7 +230,7 @@ public class ScopeSelectorPanel extends JPanel {
         decisionScenarioPanel.setBorder(new TitledBorder(stringDatabase.getString("ScopeSelector.Scenario")));
         
         if (decisionSelected != null && scopeType == ScopeType.DECISION) {
-            selectedScenario = new HashMap<>();
+            selectedScenario = new PossibleScenario(probNet, preResolutionEvidence);
             this.selectedFindings = new ArrayList<>();
             
             List<Variable> informationalPredecessors = ProbNetOperations
@@ -241,47 +240,18 @@ public class ScopeSelectorPanel extends JPanel {
                 informationalPredecessorPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
                 if (!variable.equals(decisionSelected)) {
                     informationalPredecessorPanel.add(new JLabel(variable.getName()));
-                    JComboBox<String> stateSelector = new JComboBox<>();
-                    for (State state : variable.getStates()) {
-                        stateSelector.addItem(state.getName());
-                    }
-                    if (preResolutionEvidence.contains(variable)) {
-                        stateSelector.setSelectedItem(preResolutionEvidence.getFinding(variable).getState());
-                        stateSelector.setEnabled(false);
-                    }
-                    selectedScenario.put(stateSelector, variable);
-                    
-                    stateSelector.addActionListener(e -> {
-                        JComboBox<String> stateSelector1 = (JComboBox<String>) e.getSource();
-                        String selectedStateString = stateSelector1.getSelectedItem().toString();
-                        Variable selectedVariable = selectedScenario.get(stateSelector1);
-                        State selectedState = selectedVariable.getState(selectedStateString);
-                        if (selectedState != null) {
-                            updateSelectedScenario();
-                        }
-                    });
-                    
-                    informationalPredecessorPanel.add(stateSelector);
+                    informationalPredecessorPanel.add(selectedScenario.selector(variable, this::updateSelectedScenario));
                 }
                 decisionScenarioPanel.add(informationalPredecessorPanel);
             }
+            selectedScenario.offerPossibleStates();
             updateSelectedScenario();
         }
         return decisionScenarioPanel;
     }
     
     private void updateSelectedScenario() {
-        List<Finding> selectedFindings = new ArrayList<>();
-        
-        for (JComboBox<String> comboBox : selectedScenario.keySet()) {
-            Variable variable = selectedScenario.get(comboBox);
-            State state = variable.getState(comboBox.getSelectedItem().toString());
-            if (state == null) continue;
-            Finding finding = new Finding(variable, state);
-            selectedFindings.add(finding);
-        }
-        
-        this.selectedFindings = selectedFindings;
+        this.selectedFindings = selectedScenario.findings();
     }
     
     private void refreshScenario() {

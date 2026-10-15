@@ -23,7 +23,6 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.ProbNetOperations;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.potential.DeltaPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
@@ -152,10 +151,15 @@ public class VEPropagation extends VariableElimination implements Propagation {
     /** Whether the findings are possible; null until it is asked. */
     private Boolean evidenceIsPossible;
 
-    private void resolve() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
-        LogManager.getLogger(getClass()).trace("Resolving VEPropagation");
-        posteriorValues = new HashMap<>();
-        boolean isTemporal = !probNet.hasConstraintOfClass(OnlyAtemporalVariables.class);
+    /** Whether the network has been prepared for the propagation. */
+    private boolean prepared = false;
+
+    /** Gives the decisions their policies and prepares the network and the evidence, once. */
+    private void prepare() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+        if (prepared) {
+            return;
+        }
+        prepared = true;
         List<Node> decisionNodes = probNet.getNodes(NodeType.DECISION);
         
         calculateOptimalPolicies(probNet, getPreResolutionEvidence(), decisionNodes);
@@ -174,6 +178,52 @@ public class VEPropagation extends VariableElimination implements Propagation {
         // Straight to the field, not through setPostResolutionEvidence: this is preprocessing
         // replacing its own evidence with a derived one, not a caller supplying evidence.
         this.postResolutionEvidence = TaskUtilities.extendPostResolutionEvidence(probNet, getPostResolutionEvidence());
+    }
+
+    /** @return whether the findings before and after the resolution can happen together: their probability is not zero */
+    public boolean isEvidencePossible() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+        prepare();
+        return evidenceIsPossible(getAllEvidence());
+    }
+
+    /**
+     * Whether some findings can happen together in a network, whatever its decisions without a policy choose: each of
+     * them chooses at random among its options. Only the findings and their ancestors are kept to compute it.
+     */
+    public static boolean findingsArePossible(ProbNet network, EvidenceCase findings) throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+        if (findings.getFindings().isEmpty()) {
+            return true;
+        }
+        List<Variable> kept = new ArrayList<>();
+        for (Finding finding : findings.getFindings()) {
+            Node node = network.getNode(finding.getVariable().getName());
+            if (node != null && !kept.contains(node.getVariable())) {
+                kept.add(node.getVariable());
+                for (Node ancestor : ProbNetOperations.getNodeAncestors(node)) {
+                    if (!kept.contains(ancestor.getVariable())) {
+                        kept.add(ancestor.getVariable());
+                    }
+                }
+            }
+        }
+        ProbNet pruned = ProbNetOperations.getPruned(network, kept, findings);
+        for (Node decision : pruned.getNodes(NodeType.DECISION)) {
+            if (decision.getPotentials().isEmpty()) {
+                Variable variable = decision.getVariable();
+                double[] atRandom = new double[variable.getNumStates()];
+                Arrays.fill(atRandom, 1.0 / atRandom.length);
+                decision.setPotential(new TablePotential(List.of(variable), PotentialRole.POLICY, atRandom));
+            }
+        }
+        VEPropagation propagation = new VEPropagation(pruned);
+        propagation.setPreResolutionEvidence(findings);
+        return propagation.isEvidencePossible();
+    }
+
+    private void resolve() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
+        LogManager.getLogger(getClass()).trace("Resolving VEPropagation");
+        posteriorValues = new HashMap<>();
+        prepare();
         
         List<Variable> variablesOfInterestBelongingToEvidence = new ArrayList<>();
         EvidenceCase evidence = getAllEvidence();

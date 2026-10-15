@@ -12,9 +12,9 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.ProbNetOperations;
-import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.gui.dialog.inference.common.PossibleScenario;
 import org.openmarkov.sensitivityanalysis.model.ScopeType;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisConfiguration;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisController;
@@ -25,7 +25,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -78,7 +77,8 @@ public class ScopePanel extends JPanel {
     /**
      * Selected scenario
      */
-    private HashMap<JComboBox<String>, Variable> selectedScenario;
+    /** The selectors of the scenario; null with a global scope. */
+    private PossibleScenario selectedScenario;
     
     /**
      * Controller
@@ -267,7 +267,7 @@ public class ScopePanel extends JPanel {
         decisionScenarioPanel.setBorder(new TitledBorder(stringDatabase.getString("ScopeSelector.Scenario")));
         
         if (decisionSelected != null && scopeType == ScopeType.DECISION) {
-            selectedScenario = new HashMap<>();
+            selectedScenario = new PossibleScenario(probNet, controller.getPreResolutionEvidence());
             controller.getSensitivityAnalysisModel().setSelectedScenario(new ArrayList<Finding>());
             
             for (Variable variable : ProbNetOperations.getInformationalPredecessors(probNet, decisionSelected)) {
@@ -275,27 +275,11 @@ public class ScopePanel extends JPanel {
                 informationalPredecessorPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
                 if (!variable.equals(decisionSelected)) {
                     informationalPredecessorPanel.add(new JLabel(variable.getName()));
-                    JComboBox<String> stateSelector = new JComboBox<>();
-                    for (State state : variable.getStates()) {
-                        stateSelector.addItem(state.getName());
-                    }
-                    if (controller.getPreResolutionEvidence().contains(variable)) {
-                        stateSelector
-                                .setSelectedItem(controller.getPreResolutionEvidence().getFinding(variable).getState());
-                        stateSelector.setEnabled(false);
-                    }
-                    selectedScenario.put(stateSelector, variable);
-                    
-                    stateSelector.addActionListener(new ActionListener() {
-                        @Override public void actionPerformed(ActionEvent e) {
-                            updateSelectedScenario();
-                        }
-                    });
-                    
-                    informationalPredecessorPanel.add(stateSelector);
+                    informationalPredecessorPanel.add(selectedScenario.selector(variable, this::updateSelectedScenario));
                 }
                 decisionScenarioPanel.add(informationalPredecessorPanel);
             }
+            selectedScenario.offerPossibleStates();
             updateSelectedScenario();
         }
         
@@ -306,16 +290,7 @@ public class ScopePanel extends JPanel {
      * Updates the selected scenario
      */
     private void updateSelectedScenario() {
-        List<Finding> selectedFindings = new ArrayList<>();
-        
-        for (JComboBox<String> comboBox : selectedScenario.keySet()) {
-            Variable variable = selectedScenario.get(comboBox);
-            State state = variable.getState(comboBox.getSelectedItem().toString());
-            if (state == null) continue;
-            Finding finding = new Finding(variable, state);
-            selectedFindings.add(finding);
-        }
-        controller.getSensitivityAnalysisModel().setSelectedScenario(selectedFindings);
+        controller.getSensitivityAnalysisModel().setSelectedScenario(selectedScenario.findings());
     }
     
     /**
