@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network.modelUncertainty;
 
+import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.openmarkov.core.exception.InvalidArgumentException;
 
 /**
@@ -60,6 +61,10 @@ import org.openmarkov.core.exception.InvalidArgumentException;
         upperBound = params[1];
     }
     
+    @Override public double getDensity(double x) {
+        return new UniformRealDistribution(null, lowerBound, upperBound).density(x);
+    }
+
     @Override public double getMaximum() {
         return upperBound;
     }

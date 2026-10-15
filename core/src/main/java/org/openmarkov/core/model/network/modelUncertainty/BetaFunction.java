@@ -84,6 +84,10 @@ import java.util.Random;
         initializePdfForSampling();
     }
     
+    @Override public double getDensity(double x) {
+        return new BetaDistribution(null, alpha, beta).density(x);
+    }
+
     @Override public double getMaximum() {
         return 1;
     }

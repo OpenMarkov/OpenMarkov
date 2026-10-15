@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network.modelUncertainty;
 
+import org.apache.commons.math3.distribution.TriangularDistribution;
 import org.openmarkov.core.exception.InvalidArgumentException;
 
 /**
@@ -76,6 +77,10 @@ import org.openmarkov.core.exception.InvalidArgumentException;
         mode = params[2];
     }
     
+    @Override public double getDensity(double x) {
+        return new TriangularDistribution(null, minimum, mode, maximum).density(x);
+    }
+
     @Override public double getMaximum() {
         return maximum;
     }

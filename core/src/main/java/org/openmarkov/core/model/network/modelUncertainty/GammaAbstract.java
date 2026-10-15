@@ -25,6 +25,10 @@ public abstract class GammaAbstract extends ProbDensFunction {
 	protected double kAbstract;
 	protected double thetaAbstract;
 
+	@Override public final double getDensity(double x) {
+		return new GammaDistribution(null, kAbstract, thetaAbstract).density(x);
+	}
+
 	@Override public final double getMaximum() {
 		return Double.POSITIVE_INFINITY;
 	}

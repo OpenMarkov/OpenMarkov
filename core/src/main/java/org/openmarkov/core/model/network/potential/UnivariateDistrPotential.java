@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -420,6 +421,30 @@ public class UnivariateDistrPotential extends TableWithEvents
                 .allMatch(function -> function == null || function.references().isEmpty());
     }
     
+    /**
+     * The distribution of the conditioned variable for a configuration of its parents: its parameters are the column
+     * of the finite-state parents in {@code configuration}, with the formulas worked out with the values that the
+     * numeric parents have there.
+     */
+    public ProbDensFunction probDensFunction(EvidenceCase configuration)
+            throws NonProjectablePotentialException.CannotEvaluate, NonProjectablePotentialException.CannotResolveVariable {
+        List<Variable> tableVariables = distributionTable.getVariables();
+        int[] offsets = distributionTable.getOffsets();
+        int column = 0;
+        for (int i = 1; i < tableVariables.size(); i++) {
+            column += configuration.getState(tableVariables.get(i)) * offsets[i];
+        }
+        Map<Variable, String> values = configuration.getFindingsMap();
+        double[] parameters = new double[pseudoVariableDistribution.getNumStates()];
+        for (int i = 0; i < parameters.length; i++) {
+            VariableExpression expression = distributionTable.getFunctionValues()[column + i];
+            parameters[i] = expression == null || expression.references().isEmpty()
+                    ? distributionTable.getValues()[column + i]
+                    : Double.parseDouble(expression.evaluateWith(values));
+        }
+        return getProbDensFunctionManager().newInstance(probDensFunctionName, parameters);
+    }
+
     @Override public Potential copy() {
         return new UnivariateDistrPotential(this);
     }

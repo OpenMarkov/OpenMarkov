@@ -14,10 +14,14 @@ import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.inference.PartialOrderDAN;
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.modelUncertainty.ExactFunction;
+import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunction;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UncertainTablePotential;
+import org.openmarkov.core.model.network.potential.UniformPotential;
+import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -452,83 +456,46 @@ public class ProbNetOperations {
                     Finding finding = configuration.removeFinding(oldVariable);
                     if (finding != null) {
                         double value = finding.numericalValue;
+                        // What the finding tells about the parents: how likely the observed value is in each of
+                        // their configurations
+                        List<Double> likelihoods = new ArrayList<>();
+                        InferenceOptions inferenceOptions = new InferenceOptions(convertedNet, null);
+                        forEachConfigurationOfParents(node, originalVariables, configuration, parentConfiguration ->
+                                likelihoods.add(likelihoodOfObservedValue(oldPotential, oldVariable, value,
+                                                                          parentConfiguration, inferenceOptions)));
                         Variable newVariable = new Variable(oldVariable.getName(), String.valueOf(value));
+                        List<Variable> potentialVariables = new ArrayList<>();
+                        potentialVariables.add(newVariable);
+                        for (Node parent : node.getParents()) {
+                            potentialVariables.add(parent.getVariable());
+                        }
                         node.setVariable(newVariable);
                         originalVariables.put(newVariable, oldVariable);
                         convertedVariables.put(oldVariable, newVariable);
                         convertedNodes.add(node);
-                        TablePotential potential = new TablePotential(Arrays.asList(newVariable),
+                        TablePotential potential = new TablePotential(potentialVariables,
                                                                       oldPotential.getPotentialRole());
-                        potential.getValues()[0] = 1;
+                        for (int i = 0; i < likelihoods.size(); i++) {
+                            potential.getValues()[i] = likelihoods.get(i);
+                        }
                         node.setPotential(potential);
                     }
                 } else {
                     List<Double> newStates = new ArrayList<>();
-                    // For each configuration x, add f(x) to the list (if it is
-                    // not already in)
+                    List<Double> projectedValues = new ArrayList<>();
                     List<Node> parents = node.getParents();
-                    // Set initial configuration
-                    int numConfigurations = 1;
-                    int[] parentIndices = new int[parents.size()];
-                    for (int i = 0; i < parents.size(); ++i) {
-                        Variable parentVariable = parents.get(i).getVariable();
-                        numConfigurations *= parentVariable.getNumStates();
-                        parentIndices[i] = 0;
-                        // The walk starts at the first state of every parent, replacing the evidence
-                        // the user may have set on it: the states given to the numeric node are the
-                        // same with evidence and without it.
-                        if (originalVariables.containsKey(parentVariable)) {
-                            Variable originalVariable = originalVariables.get(parentVariable);
-                            double numericalValue = Double.parseDouble(parentVariable.getStates()[0].getName());
-                            configuration.changeFinding(new Finding(originalVariable, numericalValue));
-                        } else if (parentVariable.getVariableType() == VariableType.FINITE_STATES) {
-                            configuration.changeFinding(new Finding(parentVariable, 0));
-                        } else {
-                            // TODO throw some exception
-                        }
-                    }
-                    boolean nextConfiguration = true;
-                    double[] projectedValues = new double[numConfigurations];
-                    int index = 0;
-                    int parentIndex;
                     InferenceOptions inferenceOptions = new InferenceOptions(convertedNet, null);
-                    while (nextConfiguration) {
-                        
-                        // Calculate scalar value projecting configuration
-                        double scalarValue = Double.NEGATIVE_INFINITY;
-                        scalarValue = oldPotential.tableProject(configuration, inferenceOptions).getValues()[0];
+                    // For each configuration x, add f(x) to the list (if it is not already in)
+                    forEachConfigurationOfParents(node, originalVariables, configuration, parentConfiguration -> {
+                        double scalarValue = oldPotential.tableProject(parentConfiguration, inferenceOptions)
+                                                         .getValues()[0];
                         scalarValue = oldVariable.round(scalarValue);
-                        projectedValues[index++] = scalarValue;
+                        projectedValues.add(scalarValue);
                         if (!newStates.contains(scalarValue)) {
                             newStates.add(scalarValue);
                         }
-                        
-                        // Get next configuration
-                        nextConfiguration = false;
-                        parentIndex = 0;
-                        while (!nextConfiguration && parentIndex < parents.size()) {
-                            Node parent = parents.get(parentIndex);
-                            Variable parentVariable = parent.getVariable();
-                            Variable findingVariable = (originalVariables.containsKey(parent.getVariable())) ?
-                                    originalVariables.get(parent.getVariable()) :
-                                    parent.getVariable();
-                            int nextStateIndex = ++parentIndices[parentIndex];
-                            if (nextStateIndex < parent.getVariable().getNumStates()) {
-                                nextConfiguration = true;
-                                if (originalVariables.containsKey(parentVariable)) {
-                                    Variable originalVariable = originalVariables.get(parentVariable);
-                                    double numericalValue = Double
-                                            .parseDouble(parentVariable.getStates()[nextStateIndex].getName());
-                                    configuration.changeFinding(new Finding(originalVariable, numericalValue));
-                                } else if (parentVariable.getVariableType() == VariableType.FINITE_STATES) {
-                                    configuration.changeFinding(new Finding(findingVariable, nextStateIndex));
-                                }
-                            } else {
-                                parentIndices[parentIndex] = 0;
-                                parentIndex++;
-                            }
-                        }
-                    }
+                    });
+                    int numConfigurations = projectedValues.size();
                     
                     Collections.sort(newStates);
                     State[] states = new State[newStates.size()];
@@ -556,7 +523,7 @@ public class ProbNetOperations {
                     double[] values = newPotential.getValues();
                     int newVariableNumStates = newVariable.getNumStates();
                     for (int i = 0; i < numConfigurations; i++) {
-                        int stateIndex = stateIndices.get(projectedValues[i]);
+                        int stateIndex = stateIndices.get(projectedValues.get(i));
                         for (int j = 0; j < newVariableNumStates; j++) {
                             values[i * newVariableNumStates + j] = (stateIndex == j) ? 1 : 0;
                         }
@@ -583,16 +550,119 @@ public class ProbNetOperations {
             Variable originalVariable = finding.getVariable();
             if (convertedVariables.containsKey(originalVariable)) {
                 evidence.removeFinding(originalVariable);
-                Variable convertedVariable = convertedVariables.get(originalVariable);
-                double numericalValue = convertedVariable.round(finding.getNumericalValue());
-                int stateIndex = convertedVariable.getStateIndex(String.valueOf(numericalValue));
-                if (stateIndex != -1) {
-                    evidence.addFinding(new Finding(convertedVariable, stateIndex));
-                }
+                // The variable of an observed node has a single state, the observed value
+                evidence.addFinding(new Finding(convertedVariables.get(originalVariable), 0));
             }
         }
         
         return convertedNet;
+    }
+    
+    /** What is done with each configuration of the parents of a numeric node that is converted. */
+    @FunctionalInterface
+    private interface ConfigurationOfParentsAction {
+        void accept(EvidenceCase configuration) throws NonProjectablePotentialException;
+    }
+    
+    /**
+     * Calls {@code action} with each configuration of the parents of {@code node}, written in
+     * {@code configuration}, the first parent changing fastest, as in the tables of the node. A numeric parent
+     * already converted takes as values the names of its states.
+     */
+    private static void forEachConfigurationOfParents(Node node, Map<Variable, Variable> originalVariables,
+                                                      EvidenceCase configuration,
+                                                      ConfigurationOfParentsAction action)
+            throws NonProjectablePotentialException {
+        List<Node> parents = node.getParents();
+        // Set initial configuration
+        int[] parentIndices = new int[parents.size()];
+        for (int i = 0; i < parents.size(); ++i) {
+            Variable parentVariable = parents.get(i).getVariable();
+            parentIndices[i] = 0;
+            // The walk starts at the first state of every parent, replacing the evidence
+            // the user may have set on it: the states given to the numeric node are the
+            // same with evidence and without it.
+            if (originalVariables.containsKey(parentVariable)) {
+                Variable originalVariable = originalVariables.get(parentVariable);
+                double numericalValue = Double.parseDouble(parentVariable.getStates()[0].getName());
+                configuration.changeFinding(new Finding(originalVariable, numericalValue));
+            } else if (parentVariable.getVariableType() == VariableType.FINITE_STATES) {
+                configuration.changeFinding(new Finding(parentVariable, 0));
+            } else {
+                // TODO throw some exception
+            }
+        }
+        boolean nextConfiguration = true;
+        int parentIndex;
+        while (nextConfiguration) {
+            action.accept(configuration);
+            
+            // Get next configuration
+            nextConfiguration = false;
+            parentIndex = 0;
+            while (!nextConfiguration && parentIndex < parents.size()) {
+                Node parent = parents.get(parentIndex);
+                Variable parentVariable = parent.getVariable();
+                Variable findingVariable = (originalVariables.containsKey(parent.getVariable())) ?
+                        originalVariables.get(parent.getVariable()) :
+                        parent.getVariable();
+                int nextStateIndex = ++parentIndices[parentIndex];
+                if (nextStateIndex < parent.getVariable().getNumStates()) {
+                    nextConfiguration = true;
+                    if (originalVariables.containsKey(parentVariable)) {
+                        Variable originalVariable = originalVariables.get(parentVariable);
+                        double numericalValue = Double
+                                .parseDouble(parentVariable.getStates()[nextStateIndex].getName());
+                        configuration.changeFinding(new Finding(originalVariable, numericalValue));
+                    } else if (parentVariable.getVariableType() == VariableType.FINITE_STATES) {
+                        configuration.changeFinding(new Finding(findingVariable, nextStateIndex));
+                    }
+                } else {
+                    parentIndices[parentIndex] = 0;
+                    parentIndex++;
+                }
+            }
+        }
+    }
+    
+    /**
+     * How likely {@code observedValue} of {@code variable} is in a configuration of its parents: the density of its
+     * distribution there or, if its relation gives a single value, 1 if it is the observed one and 0 if it is not. A
+     * uniform relation, which needs the finding to have a value, makes every configuration equally likely.
+     *
+     * @throws NonProjectablePotentialException.DensityCannotBeCalculated if the distribution cannot give its density
+     */
+    private static double likelihoodOfObservedValue(Potential potential, Variable variable, double observedValue,
+                                                    EvidenceCase configuration, InferenceOptions inferenceOptions)
+            throws NonProjectablePotentialException {
+        if (potential instanceof UniformPotential) {
+            // The same density for every value: the finding tells nothing about the parents
+            return 1;
+        }
+        double value;
+        if (potential instanceof UnivariateDistrPotential distribution) {
+            ProbDensFunction function = distribution.probDensFunction(configuration);
+            if (!(function instanceof ExactFunction)) {
+                double density = function.getDensity(observedValue);
+                if (Double.isNaN(density)) {
+                    throw new NonProjectablePotentialException.DensityCannotBeCalculated(
+                            variable, distribution.getProbDensFunctionName());
+                }
+                return density;
+            }
+            value = function.getMean();
+        } else {
+            value = potential.tableProject(configuration, inferenceOptions).getValues()[0];
+        }
+        return isTheSameValue(variable, value, observedValue) ? 1 : 0;
+    }
+    
+    /** Whether two values of a numeric variable are equal once rounded to its precision, but for rounding errors. */
+    private static boolean isTheSameValue(Variable variable, double value, double otherValue) {
+        double rounded = variable.round(value);
+        double otherRounded = variable.round(otherValue);
+        return Math.abs(rounded - otherRounded)
+                <= 1e-9 * Math.max(1, Math.max(Math.abs(rounded), Math.abs(otherRounded)));
     }
     
     public static ProbNet convertNumericalVariablesToFS(ProbNet probNet) throws NonProjectablePotentialException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {

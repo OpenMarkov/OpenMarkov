@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network.modelUncertainty;
 
+import org.apache.commons.math3.distribution.NormalDistribution;
 import org.openmarkov.core.exception.InvalidArgumentException;
 
 import java.util.Random;
@@ -75,6 +76,10 @@ import java.util.Random;
 	@Override public void setParameters(double[] args) {
 		mu = args[0];
 		sigma = args[1];
+	}
+
+	@Override public double getDensity(double x) {
+		return new NormalDistribution(null, mu, sigma).density(x);
 	}
 
 	@Override public double getMaximum() {

@@ -35,6 +35,7 @@
     "CycleWithoutAnEvent",
     "DataCouldNotBeConverted",
     "DeltaPotentialWithoutState",
+    "DensityCannotBeCalculated",
     "DifferentSizesInPotentialsAndStates",
     "DirectedLinkCannotMatchAnUndirectedLink",
     "DistributionsCannotGoTogether",

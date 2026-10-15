@@ -56,6 +56,20 @@ public abstract sealed class NonProjectablePotentialException extends OpenMarkov
         public final Variable variable;
     }
 
+    /**
+     * A finding on a numeric node whose relation is a distribution that cannot give its density at the observed
+     * value: the finding could not tell anything about the parents of the node.
+     */
+    public static final class DensityCannotBeCalculated extends NonProjectablePotentialException {
+        public DensityCannotBeCalculated(Variable variable, String distribution) {
+            this.variable = variable;
+            this.distribution = distribution;
+        }
+
+        public final Variable variable;
+        public final String distribution;
+    }
+
     /** A utility node has no numbers: its relation is the uniform one it was created with. */
     public static final class UtilityIsNotDefined extends NonProjectablePotentialException {
         public UtilityIsNotDefined(Variable utilityVariable) {

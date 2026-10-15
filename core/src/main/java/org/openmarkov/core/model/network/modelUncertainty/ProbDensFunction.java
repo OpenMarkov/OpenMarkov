@@ -59,6 +59,16 @@ public abstract class ProbDensFunction {
         return out;
 	}
 
+	/**
+	 * Density at {@code x}: how likely this distribution makes the value {@code x}. A finding on a numeric node whose
+	 * relation is this distribution weighs each configuration of its parents with it.
+	 *
+	 * @return the density, or {@code NaN} if this function cannot give one
+	 */
+	public double getDensity(double x) {
+		return Double.NaN;
+	}
+
 	public abstract DomainInterval getInterval(double p);
 
 	public abstract ProbDensFunction copy();

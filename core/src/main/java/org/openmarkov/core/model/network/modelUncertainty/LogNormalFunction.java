@@ -62,6 +62,10 @@ import java.util.Random;
 		normal = new NormalFunction(mu, sigma);
 	}
 
+	@Override public double getDensity(double x) {
+		return new LogNormalDistribution(null, mu, sigma).density(x);
+	}
+
 	@Override public double getMaximum() {
 		return Double.POSITIVE_INFINITY;
 	}
