@@ -16,13 +16,21 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.potential.DistributionTablePotential;
 import org.openmarkov.core.model.network.potential.FunctionPotential;
+import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
+import org.openmarkov.core.model.network.type.BayesianNetworkType;
+import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.gui.window.edition.SelectedContent;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -63,6 +71,68 @@ public class PastedFormulasNameThePastedParentsTest {
         assertEquals("{Age'}*3", pasted.getFunction().asStringExpression());
         assertEquals(120, costAt40(probNet, "Cost'", "Age'"));
         assertEquals(120, costAt40(probNet, "Cost", "Age"), "the original keeps its own");
+    }
+
+    /**
+     * Pastes X, X' and Child, whose relation, made by {@code relation} on its variables, names both, in a network
+     * that already has an X: X is pasted as X' and X' as X''.
+     *
+     * @return the network pasted into
+     */
+    private static ProbNet pasteXAndXPrimeWith(ProbNet source, ProbNet target, NodeType childType,
+                                               Function<List<Variable>, Potential> relation) throws Exception {
+        Node x = source.addNode(new Variable("X"), NodeType.CHANCE);
+        Node xPrime = source.addNode(new Variable("X'"), NodeType.CHANCE);
+        Variable childVariable = new Variable("Child");
+        if (childType == NodeType.EVENT) {
+            childVariable = new Variable("Child", "no", "yes");
+            childVariable.setVariableType(VariableType.EVENT);
+        }
+        Node child = source.addNode(childVariable, childType);
+        source.addLink(x, child, true);
+        source.addLink(xPrime, child, true);
+        child.setPotentials(List.of(relation.apply(new ArrayList<>(List.of(child.getVariable(), x.getVariable(),
+                                                                          xPrime.getVariable())))));
+        target.addNode(new Variable("X"), NodeType.CHANCE);
+        new PasteEdit(target, new SelectedContent(List.of(x, xPrime, child),
+                                                  List.of(source.getLink(x, child, true), source.getLink(xPrime, child, true))),
+                      null).executeEdit();
+        return target;
+    }
+
+    /**
+     * The variables of a pasted relation used to be replaced in the order of its list: X -> X' left {X'}+2*{X'}, where
+     * the two could no longer be told apart, and X' -> X'' turned both into X'' (error 258 of the pending list).
+     */
+    @Test
+    void aFormulaOnXAndXPrimeKeepsThemApart() throws Exception {
+        ProbNet target = pasteXAndXPrimeWith(new ProbNet(BayesianNetworkType.getUniqueInstance()),
+                                             new ProbNet(BayesianNetworkType.getUniqueInstance()), NodeType.CHANCE,
+                                             variables -> new FunctionPotential(variables, PotentialRole.CONDITIONAL_PROBABILITY,
+                                                                                new VariableExpression(variables, "{X}+2*{X'}")));
+
+        FunctionPotential pasted = (FunctionPotential) target.getNode("Child").getPotential();
+        assertEquals("{X'}+2*{X''}", pasted.getFunction().asStringExpression());
+        EvidenceCase evidence = new EvidenceCase();
+        evidence.addFinding(new Finding(target.getVariable("X'"), 1.0));
+        evidence.addFinding(new Finding(target.getVariable("X''"), 10.0));
+        assertEquals(21, pasted.sampleConditionedVariable(new double[]{0}, evidence));
+    }
+
+    /** The same formula in a distribution table made the paste die half done, with two variables named X'. */
+    @Test
+    void aDistributionTableOnXAndXPrimeIsPasted() throws Exception {
+        ProbNet target = assertDoesNotThrow(() -> pasteXAndXPrimeWith(
+                new ProbNet(DESNetworkType.getUniqueInstance()), new ProbNet(DESNetworkType.getUniqueInstance()),
+                NodeType.EVENT, variables -> {
+                    DistributionTablePotential table = new DistributionTablePotential(
+                            variables, PotentialRole.CONDITIONAL_PROBABILITY, "Exact", "Nu");
+                    table.getTableWithEvents().getTableWithFunctions().setFunctionValues(new String[]{"{X}+2*{X'}"});
+                    return table;
+                }));
+
+        DistributionTablePotential pasted = (DistributionTablePotential) target.getNode("Child").getPotential();
+        assertEquals("{X'}+2*{X''}", pasted.getTableWithEvents().getTableWithFunctions().getFunctionValues()[0]);
     }
 
     @Test

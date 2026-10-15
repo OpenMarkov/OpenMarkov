@@ -25,6 +25,7 @@ import org.openmarkov.gui.window.edition.SelectedContent;
 
 import java.awt.geom.Rectangle2D;
 import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * Compound edit that pastes previously copied nodes and links into a network.
@@ -117,7 +118,16 @@ public class PasteEdit extends MultiStepEdit {
                     for (Potential originalPotential : originalNode.getPotentials()) {
                         Potential potential = originalPotential.copy();
                         List<Variable> externalVars = new ArrayList<>();
-                        for (int i = 0; i < potential.getNumVariables(); ++i) {
+                        // Longest names first. A pasted name is the old one with apostrophes, so a variable whose
+                        // new name is the old name of another one is replaced after it: replaced in the order of
+                        // the list, X -> X' and X' -> X'' made the formulas of the relation confuse them
+                        Potential copied = potential;
+                        List<Integer> positions = IntStream.range(0, potential.getNumVariables()).boxed()
+                                .sorted(Comparator.comparingInt((Integer position) -> copied.getVariable(position)
+                                                                                           .getName().length())
+                                                  .reversed())
+                                .toList();
+                        for (int i : positions) {
                             String variableName = potential.getVariable(i).getName();
                             if (PasteEdit.this.newVariables.containsKey(variableName)) {
                                 Variable variable = this.probNet.getVariable(PasteEdit.this.newVariables.get(variableName));
