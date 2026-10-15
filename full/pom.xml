@@ -21,13 +21,16 @@
              msi and exe exist only on Windows, deb and rpm only on Linux. The Installer profile
              therefore skips them all by default, and each detect-* profile below turns off the
              skipping of the formats its own operating system can build. -->
-        <skip.installer.windows>true</skip.installer.windows>
-        <skip.installer.linux>true</skip.installer.linux>
-        <skip.installer.macos>true</skip.installer.macos>
+        <installer.windows.skip>true</installer.windows.skip>
+        <installer.windows.resources.dir>${project.basedir}/installer-resources/windows
+        </installer.windows.resources.dir>
+        <installer.windows.upgrade.uuid>7c1f3a52-9d4e-4b86-a1f0-3e5b2c8d9a47</installer.windows.upgrade.uuid>
+        <installer.linux.skip>true</installer.linux.skip>
+        <installer.macos.skip>true</installer.macos.skip>
         <!-- The portable application image is the one format jpackage builds anywhere, so it is
              enabled on both Windows and Linux. It stays skipped on macOS, whose icon format
              (icns) is not in the repository and which nobody in the team can test on. -->
-        <skip.installer.portable>true</skip.installer.portable>
+        <installer.portable.skip>true</installer.portable.skip>
         <!-- Outside Windows jpackage only accepts a PNG icon: given the ico file it stops with an
              error and leaves the application image half built. -->
         <installer.icon>${maven.multiModuleProjectDirectory}/gui/src/main/resources/icons/openmarkov.png</installer.icon>
@@ -158,8 +161,8 @@
                 </os>
             </activation>
             <properties>
-                <skip.installer.windows>false</skip.installer.windows>
-                <skip.installer.portable>false</skip.installer.portable>
+                <installer.windows.skip>false</installer.windows.skip>
+                <installer.portable.skip>false</installer.portable.skip>
                 <installer.icon>${maven.multiModuleProjectDirectory}/gui/src/main/resources/icons/openmarkov.ico</installer.icon>
             </properties>
         </profile>
@@ -171,8 +174,8 @@
                 </os>
             </activation>
             <properties>
-                <skip.installer.linux>false</skip.installer.linux>
-                <skip.installer.portable>false</skip.installer.portable>
+                <installer.linux.skip>false</installer.linux.skip>
+                <installer.portable.skip>false</installer.portable.skip>
             </properties>
         </profile>
         <profile>
@@ -183,8 +186,8 @@
                 </os>
             </activation>
             <properties>
-                <skip.installer.macos>false</skip.installer.macos>
-                <skip.installer.portable>false</skip.installer.portable>
+                <installer.macos.skip>false</installer.macos.skip>
+                <installer.portable.skip>false</installer.portable.skip>
                 <installer.icon>${maven.multiModuleProjectDirectory}/gui/src/main/resources/icons/openmarkov.icns
                 </installer.icon>
             </properties>
@@ -248,7 +251,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>${skip.installer.windows}</skip>
+                                    <skip>${installer.windows.skip}</skip>
                                     <executable>${java.home}/bin/jpackage</executable>
                                     <arguments>
                                         <argument>--type</argument>
@@ -290,6 +293,13 @@
                                         <argument>--file-associations</argument>
                                         <argument>${project.basedir}/associations/pgmx.properties</argument>
                                         <!--<argument>&#45;&#45;win-console</argument>-->
+                                        <!--                                        <argument>&#45;&#45;temp</argument>-->
+                                        <!--                                        <argument>${project.build.directory}/jpackage-temp</argument>-->
+                                        <!--                                        <argument>&#45;&#45;verbose</argument>-->
+                                        <argument>--win-upgrade-uuid</argument>
+                                        <argument>${installer.windows.upgrade.uuid}</argument>
+                                        <argument>--resource-dir</argument>
+                                        <argument>${installer.windows.resources.dir}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -300,7 +310,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>${skip.installer.windows}</skip>
+                                    <skip>${installer.windows.skip}</skip>
                                     <executable>${java.home}/bin/jpackage</executable>
                                     <arguments>
                                         <argument>--type</argument>
@@ -342,6 +352,10 @@
                                         <argument>--file-associations</argument>
                                         <argument>${project.basedir}/associations/pgmx.properties</argument>
                                         <!--<argument>&#45;&#45;win-console</argument>-->
+                                        <argument>--win-upgrade-uuid</argument>
+                                        <argument>${installer.windows.upgrade.uuid}</argument>
+                                        <argument>--resource-dir</argument>
+                                        <argument>${installer.windows.resources.dir}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -352,7 +366,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>${skip.installer.portable}</skip>
+                                    <skip>${installer.portable.skip}</skip>
                                     <executable>${java.home}/bin/jpackage</executable>
                                     <arguments>
                                         <argument>--type</argument>
@@ -399,7 +413,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>${skip.installer.linux}</skip>
+                                    <skip>${installer.linux.skip}</skip>
                                     <executable>${java.home}/bin/jpackage</executable>
                                     <arguments>
                                         <argument>--type</argument>
@@ -460,7 +474,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>${skip.installer.linux}</skip>
+                                    <skip>${installer.linux.skip}</skip>
                                     <executable>${java.home}/bin/jpackage</executable>
                                     <arguments>
                                         <argument>--type</argument>
@@ -531,7 +545,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>${skip.installer.macos}</skip>
+                                    <skip>${installer.macos.skip}</skip>
                                     <executable>${java.home}/bin/jpackage</executable>
                                     <arguments>
                                         <argument>--type</argument>
@@ -585,7 +599,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>${skip.installer.macos}</skip>
+                                    <skip>${installer.macos.skip}</skip>
                                     <executable>${java.home}/bin/jpackage</executable>
                                     <arguments>
                                         <argument>--type</argument>

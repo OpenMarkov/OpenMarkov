@@ -69,8 +69,6 @@ public class OpenMarkov {
      * @param baseArgs Arguments
      */
     public static void main(String[] baseArgs) {
-
-
         try {
             OpenMarkov.onSingleInstance(baseArgs);
         } catch (AlreadyLockedException e) {
@@ -88,11 +86,11 @@ public class OpenMarkov {
             }
         };
         boolean canBeStandAloneInstance = OpenMarkov.readArguments(baseArgs).isEmpty();
-        STARTED_AS_MAIN_INSTANCE = true;
+        OpenMarkov.STARTED_AS_MAIN_INSTANCE = true;
         try {
             JUnique.acquireLock(OpenMarkov.JUNIQUE_ID, instanceMessageHandler);
         } catch (AlreadyLockedException e) {
-            STARTED_AS_MAIN_INSTANCE = false;
+            OpenMarkov.STARTED_AS_MAIN_INSTANCE = false;
             if (!canBeStandAloneInstance) {
                 throw e;
             }
@@ -111,7 +109,6 @@ public class OpenMarkov {
                 }
             }).start();
         }
-
         if (UserPreferences.UI_SCALE.isSet()) {
             System.setProperty("sun.java2d.uiScale", UserPreferences.UI_SCALE.get().toString());
         }

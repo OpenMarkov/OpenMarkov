@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<Wix xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR"></Property>
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.JpLicenseRtf)"></WixVariable>
+
+    <!-- NEW: checkbox on the final screen, ticked by default -->
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch OpenMarkov"></Property>
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1"></Property>
+
+    <!-- NEW: starts the installed launcher -->
+    <CustomAction Id="LaunchOpenMarkov"
+                  Directory="INSTALLDIR"
+                  ExeCommand="&quot;[INSTALLDIR]OpenMarkov.exe&quot;"
+                  Return="asyncNoWait"></CustomAction>
+
+    <UI Id="JpUI">
+      <UIRef Id="WixUI_InstallDir"></UIRef>
+      <!--<DialogRef Id="InstallDirNotEmptyDlg"></DialogRef>-->
+
+      <!-- NEW: run the action when Finish is clicked with the box ticked -->
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchOpenMarkov">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 AND NOT Installed</Publish>
+    </UI>
+  </Fragment>
+</Wix>
