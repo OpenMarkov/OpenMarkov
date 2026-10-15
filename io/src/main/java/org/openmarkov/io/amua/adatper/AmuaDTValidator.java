@@ -18,6 +18,7 @@ public class AmuaDTValidator {
 
     private final List<Criterion> criteria;
     private int decisionNodeCount = 0;
+    private DecisionTreeNode<?> decisionNode;
 
     public AmuaDTValidator(List<Criterion> criteria) {
         this.criteria = criteria;
@@ -41,7 +42,9 @@ public class AmuaDTValidator {
         if (hasCE) {
             try {
                 decisionNodeCount = 0;
+                decisionNode = null;
                 hasValidStructure(treeNode, 1, true);
+                checkDecisionIsTheRoot(treeNode);
                 return AmuaModel.COST_EFFECTIVENESS_DT;
             } catch (IllegalStateException e) {
                 if (isCriticalError(e)) { // critical error
@@ -121,6 +124,26 @@ public class AmuaDTValidator {
             if (decisionNodeCount > maxDecisionNodes) {
                 throw new IllegalStateException("Amua supports only one decision node.");
             }
+            decisionNode = node;
+        }
+    }
+
+
+    /**
+     * Checks that the tree begins with its decision, whose options Amua takes as the strategies to compare.
+     *
+     * @throws IllegalStateException if the tree has no decision or the decision is below the root.
+     */
+    private void checkDecisionIsTheRoot(DecisionTreeNode<?> root) {
+        if (decisionNode == null) {
+            throw new IllegalStateException("The tree has no decision. Amua compares the options of the first node "
+                                            + "as strategies, so the tree must begin with a decision.");
+        }
+        if (decisionNode != root) {
+            throw new IllegalStateException("The decision \"" + decisionNode.getVariable().getName()
+                                            + "\" must be the first node of the tree, but the tree begins with \""
+                                            + root.getVariable().getName()
+                                            + "\". Amua compares the options of the first node as strategies.");
         }
     }
 
