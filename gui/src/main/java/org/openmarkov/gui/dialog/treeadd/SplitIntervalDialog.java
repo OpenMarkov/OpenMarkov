@@ -9,6 +9,7 @@ package org.openmarkov.gui.dialog.treeadd;
 
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 
+import javax.swing.JOptionPane;
 import java.awt.*;
 
 /**
@@ -72,13 +73,27 @@ import java.awt.*;
 
 	/**
 	 * This method carries out the actions when the user press the Ok button
-	 * before hide the dialog.
+	 * before hide the dialog: it is closed only if the threshold is a number.
 	 *
 	 * @return true if the dialog box can be closed.
 	 */
 	@Override protected boolean doOkClickBeforeHide() {
-        return getJPanelSplitInterval().getLimit().getText() != null;
-    }
+		if (isANumber(getJPanelSplitInterval().getLimit().getText())) {
+			return true;
+		}
+		JOptionPane.showMessageDialog(this, "The threshold value must be a number, such as 1.5.", "Invalid number",
+		                              JOptionPane.ERROR_MESSAGE);
+		return false;
+	}
+
+	/** Whether the editor of the tree can read {@code text} as a number. */
+	static boolean isANumber(String text) {
+		try {
+			return !Double.isNaN(Double.parseDouble(text));
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
 
 	/**
 	 * This method carries out the actions when the user press the Cancel button

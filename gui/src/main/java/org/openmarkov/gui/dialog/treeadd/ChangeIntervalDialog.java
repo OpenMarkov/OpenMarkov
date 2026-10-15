@@ -10,6 +10,7 @@ package org.openmarkov.gui.dialog.treeadd;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 
+import javax.swing.JOptionPane;
 import java.awt.*;
 
 /**
@@ -80,12 +81,19 @@ import java.awt.*;
 
 	/**
 	 * This method carries out the actions when the user press the Ok button
-	 * before hide the dialog.
+	 * before hide the dialog: it is closed only if both limits are numbers.
 	 *
 	 * @return true if the dialog box can be closed.
 	 */
 	@Override protected boolean doOkClickBeforeHide() {
-		return true;
+		ChangeIntervalPanel panel = getChangeIntervalPanel();
+		if (SplitIntervalDialog.isANumber(panel.getMin().getText())
+		    && SplitIntervalDialog.isANumber(panel.getMax().getText())) {
+			return true;
+		}
+		JOptionPane.showMessageDialog(this, "The limits of the interval must be numbers, such as 1.5.", "Invalid number",
+		                              JOptionPane.ERROR_MESSAGE);
+		return false;
 	}
 
 	/**
