@@ -1440,21 +1440,34 @@ public class PGMXReader_0_2 {
     public final Potential autoGetPotential(String sXmlPotentialType, Element xmlPotential, ProbNet probNet,
                                             PotentialRole potentialRole, List<Variable> variables)
             throws PGMXParserException {
-        Class<? extends Potential> potentialClass = PotentialUtils.getClassByName(sXmlPotentialType);
-        if (potentialClass == null) {
-            throw new PGMXParserException.PotentialTypeNotSupported(sXmlPotentialType, xmlPotential);
-        }
-        // Walk up the hierarchy: subclasses that inherit a parent's @PotentialType name
-        // (e.g. UncertainTablePotential inheriting "Table") may not have their own entry.
-        PotentialParser parser = null;
-        for (Class<?> c = potentialClass; c != null && c != Object.class; c = c.getSuperclass()) {
-            parser = this.potentialParsers.get(c);
-            if (parser != null) break;
-        }
+        PotentialParser parser = this.parserOf(sXmlPotentialType);
         if (parser == null) {
             throw new PGMXParserException.PotentialTypeNotSupported(sXmlPotentialType, xmlPotential);
         }
         return parser.parse(xmlPotential, probNet, potentialRole, variables);
+    }
+    
+    /**
+     * @param sXmlPotentialType the type of a relation, as a file names it
+     *
+     * @return whether this reader can read a relation of that type
+     */
+    public boolean canReadPotentialType(String sXmlPotentialType) {
+        return this.parserOf(sXmlPotentialType) != null;
+    }
+    
+    /** @return the parser of the relations of the type {@code sXmlPotentialType}, or null if there is none */
+    private PotentialParser parserOf(String sXmlPotentialType) {
+        Class<? extends Potential> potentialClass = PotentialUtils.getClassByName(sXmlPotentialType);
+        // Walk up the hierarchy: subclasses that inherit a parent's @PotentialType name
+        // (e.g. UncertainTablePotential inheriting "Table") may not have their own entry.
+        for (Class<?> c = potentialClass; c != null && c != Object.class; c = c.getSuperclass()) {
+            PotentialParser parser = this.potentialParsers.get(c);
+            if (parser != null) {
+                return parser;
+            }
+        }
+        return null;
     }
     
     protected String getStringXMLPotentialType(Element xmlPotential) {

@@ -48,6 +48,33 @@ public abstract sealed class WriterException extends UserInputException {
         public final ICIModelType modelType;
     }
     
+    /**
+     * A relation that the reader of the format could not read back, so the network is not saved. The type is the
+     * one the file would have.
+     */
+    public static final class RelationNotSupportedByFormat extends WriterException {
+        public RelationNotSupportedByFormat(String nodeName, String relationType, String formatVersion) {
+            this.nodeName = nodeName;
+            this.relationType = relationType;
+            this.formatVersion = formatVersion;
+        }
+        
+        public final String nodeName;
+        public final String relationType;
+        public final String formatVersion;
+    }
+    
+    /** A type of network whose options or relations the format cannot save, so the network is not saved. */
+    public static final class NetworkTypeNotSupportedByFormat extends WriterException {
+        public NetworkTypeNotSupportedByFormat(NetworkType networkType, String formatVersion) {
+            this.networkType = networkType;
+            this.formatVersion = formatVersion;
+        }
+        
+        public final NetworkType networkType;
+        public final String formatVersion;
+    }
+    
     public static final class TryingToWriteANullProbNet extends WriterException {
     }
     

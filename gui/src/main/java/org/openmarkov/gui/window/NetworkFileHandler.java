@@ -21,6 +21,8 @@ import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.io.ProbNetInfo;
+import org.openmarkov.core.io.ProbNetReader;
+import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
 import org.openmarkov.core.io.exception.NoWriterForExtensionException;
@@ -312,6 +314,11 @@ public class NetworkFileHandler {
             return false;
         }
         String fileFormat = (String) fileNameAndFormat.get(1);
+        // If the network cannot be saved in that format, the tab keeps its file and its format
+        String previousFile = networkPanel.getNetworkFile();
+        String previousName = networkPanel.getProbNet().getName();
+        ProbNetWriter previousWriter = networkPanel.getWriter();
+        ProbNetReader previousReader = networkPanel.getReader();
         networkPanel.setNetworkFile(fileName);
         networkPanel.getProbNet().setName(new File(fileName).getName());
         var formatInfo = FormatManager.info((Class<?>) fileNameAndFormat.get(2));
@@ -325,7 +332,15 @@ public class NetworkFileHandler {
                              .filter(probNetReader -> FormatManager.formatEquals(formatInfo, FormatManager.info(probNetReader)))
                              .findFirst()
                              .orElse(null));
-        return this.saveNetworkActions(networkPanel, fileName, fileFormat);
+        try {
+            return this.saveNetworkActions(networkPanel, fileName, fileFormat);
+        } catch (WriterException notSaved) {
+            networkPanel.setNetworkFile(previousFile);
+            networkPanel.getProbNet().setName(previousName);
+            networkPanel.setWriter(previousWriter);
+            networkPanel.setReader(previousReader);
+            throw notSaved;
+        }
     }
     
     void saveOpenNetwork(NetworkEditorPanel networkPanel) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile, WriterException {

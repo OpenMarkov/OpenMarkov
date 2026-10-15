@@ -325,6 +325,10 @@
                   value="Can not create file {filename}."/>
     <Localization class="org.openmarkov.core.exception.WriterException$ICIModelNotSupportedByElvira"
                   value="ICI Model {modelType} is not supported by Elvira."/>
+    <Localization class="org.openmarkov.core.exception.WriterException$RelationNotSupportedByFormat"
+                  value="The network is not saved: the relation of {nodeName}, of type {relationType}, cannot be saved in format {formatVersion}, which could not read it back. Save the network in another format."/>
+    <Localization class="org.openmarkov.core.exception.WriterException$NetworkTypeNotSupportedByFormat"
+                  value="The network is not saved: a network of type {networkType} cannot be saved in format {formatVersion}. Save it in another format."/>
     <Localization class="org.openmarkov.core.exception.WriterException$TryingToWriteANullProbNet"
                   value="Tried to write a null Probabilistic Network"/>
     <Localization class="org.openmarkov.core.exception.WriterException$TryingToWriteAProbNetWithoutName"

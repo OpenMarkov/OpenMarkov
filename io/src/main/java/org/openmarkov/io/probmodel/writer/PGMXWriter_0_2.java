@@ -10,6 +10,7 @@ package org.openmarkov.io.probmodel.writer;
 import org.jdom2.CDATA;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.openmarkov.core.exception.WriterException;
@@ -32,8 +33,10 @@ import org.openmarkov.core.model.network.potential.canonical.ICIPotential;
 import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
+import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.core.model.network.type.plugin.NetworkTypeUtils;
+import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
 import org.openmarkov.io.probmodel.strings.XMLAttributes;
 import org.openmarkov.io.probmodel.strings.XMLTags;
 import org.openmarkov.io.probmodel.strings.XMLValues;
@@ -69,12 +72,15 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
      */
     @SuppressWarnings("ThrowInsideCatchBlockWhichIgnoresCaughtException")
     @Override
-    public void write(String netName, ProbNet probNet, List<EvidenceCase> evidences) throws WriterException.TryingToWriteANullProbNet, WriterException.TryingToWriteAProbNetWithoutName, WriterException.CannotCreateFile {
+    public void write(String netName, ProbNet probNet, List<EvidenceCase> evidences) throws WriterException.TryingToWriteANullProbNet, WriterException.TryingToWriteAProbNetWithoutName, WriterException.CannotCreateFile, WriterException.NetworkTypeNotSupportedByFormat, WriterException.RelationNotSupportedByFormat {
         if (probNet == null) {
             throw new WriterException.TryingToWriteANullProbNet();
         }
         if (netName == null) {
             throw new WriterException.TryingToWriteAProbNetWithoutName(probNet);
+        }
+        if (probNet.getNetworkType() instanceof DESNetworkType && !this.savesNetworksOfEvents()) {
+            throw new WriterException.NetworkTypeNotSupportedByFormat(probNet.getNetworkType(), formatVersion);
         }
         // PrintWriter out = new PrintWriter(new FileOutputStream(netName));
         Element root = new Element("ProbModelXML");
@@ -85,6 +91,7 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
         writeEvidence(probNet, evidences, root);
         writeVariableType(probNet, root);
         writeDefaultStates(probNet,root);
+        this.checkTheRelationsCanBeReadBack(root);
         Document document = new Document(root);
         XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
         
@@ -94,6 +101,51 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
         } catch (IOException e) {
             throw new WriterException.CannotCreateFile(netName);
         }
+    }
+    
+    /** Whether this format saves the networks of discrete events, with their Monte Carlo options. */
+    protected boolean savesNetworksOfEvents() {
+        return false;
+    }
+    
+    /** @return the reader of this format, which has to be able to read back every relation saved */
+    protected PGMXReader_0_2 readerOfThisFormat() {
+        return new PGMXReader_0_2();
+    }
+    
+    /**
+     * Refuses to save a relation that the reader of this format could not read back: the file would lose it
+     * and could not be opened. Nothing is saved then.
+     *
+     * @param root the whole file, before it is saved
+     */
+    private void checkTheRelationsCanBeReadBack(Element root) throws WriterException.RelationNotSupportedByFormat {
+        PGMXReader_0_2 reader = this.readerOfThisFormat();
+        for (Element potential : root.getDescendants(Filters.element(XMLTags.POTENTIAL.toString()))) {
+            String type = potential.getAttributeValue(XMLAttributes.TYPE.toString());
+            if (type != null && !reader.canReadPotentialType(type)) {
+                throw new WriterException.RelationNotSupportedByFormat(nodeOf(potential), type, formatVersion);
+            }
+        }
+    }
+    
+    /** @return the node whose relation contains {@code potential}: the first variable that relation names */
+    private static String nodeOf(Element potential) {
+        Element relation = potential;
+        for (Element parent = potential.getParentElement(); parent != null; parent = parent.getParentElement()) {
+            if (parent.getName().equals(XMLTags.POTENTIAL.toString())) {
+                relation = parent;
+            }
+        }
+        Element variable = relation.getChild(XMLTags.UTILITY_VARIABLE.toString());
+        if (variable == null && relation.getChild(XMLTags.VARIABLES.toString()) != null) {
+            variable = relation.getChild(XMLTags.VARIABLES.toString()).getChild(XMLTags.VARIABLE.toString());
+        }
+        if (variable == null) {
+            return "?";
+        }
+        String timeSlice = variable.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
+        return variable.getAttributeValue(XMLAttributes.NAME.toString()) + (timeSlice == null ? "" : " [" + timeSlice + "]");
     }
     
     /**

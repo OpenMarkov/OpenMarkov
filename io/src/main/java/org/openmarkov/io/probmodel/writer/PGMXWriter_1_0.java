@@ -20,6 +20,8 @@ import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.potential.treeadd.TreeWithEventsPotential;
 import org.openmarkov.core.model.network.potential.treeadd.TreeWithExcludedEventsPotential;
 import org.openmarkov.core.model.network.type.DESNetworkType;
+import org.openmarkov.io.probmodel.reader.PGMXReader_0_2;
+import org.openmarkov.io.probmodel.reader.PGMXReader_1_0;
 import org.openmarkov.io.probmodel.strings.XMLAttributes;
 import org.openmarkov.io.probmodel.strings.XMLTags;
 
@@ -43,9 +45,17 @@ public class PGMXWriter_1_0 extends PGMXWriter_0_2 {
      * @param evidences list of evidence cases to include
      */
     @Override
-    public void write(String netName, ProbNet probNet, List<EvidenceCase> evidences) throws WriterException.CannotCreateFile, WriterException.TryingToWriteAProbNetWithoutName, WriterException.TryingToWriteANullProbNet {
+    public void write(String netName, ProbNet probNet, List<EvidenceCase> evidences) throws WriterException.CannotCreateFile, WriterException.TryingToWriteAProbNetWithoutName, WriterException.TryingToWriteANullProbNet, WriterException.NetworkTypeNotSupportedByFormat, WriterException.RelationNotSupportedByFormat {
         formatVersion = "1.0.0";
         super.write(netName, probNet, evidences);
+    }
+    
+    @Override protected boolean savesNetworksOfEvents() {
+        return true;
+    }
+    
+    @Override protected PGMXReader_0_2 readerOfThisFormat() {
+        return new PGMXReader_1_0();
     }
     
     /**
