@@ -24,7 +24,6 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 
-import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -128,15 +127,10 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
         //19/03/2023 - only one event in parents - FIXME throw exception without changing method signature; consider to add exception
         //31/05/2024 - treewithoutevents can be used with chance nodes and, therefore some of the configurations may not have events (see inEurHeart=
 //		if ( eventVariables.size()!=1) throw new RuntimeException("TreeWithEventsPotential#sampleConditionedVariable: There must be exactly one event in parents configuration");
-        try {
-            parents.removeFinding(eventVariables.get(0));
-            return noEventTree.sampleConditionedVariable(randomNumbers, parents);
-            
-        } catch (OpenMarkovException | RuntimeException e) {
-            //FIXME when completed this method coding this catch will be removed
-            JOptionPane.showMessageDialog(null, "TreeWithExcludeEventsPotential:Getting sample exception: " + this.getConditionedVariable());
-            throw e;
+        for (Variable event : eventVariables) {
+            parents.removeFinding(event);
         }
+        return noEventTree.sampleConditionedVariable(randomNumbers, parents);
     }
     
     @Override
