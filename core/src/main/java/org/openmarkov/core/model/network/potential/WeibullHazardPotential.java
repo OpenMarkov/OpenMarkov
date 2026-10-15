@@ -329,6 +329,18 @@ public class WeibullHazardPotential extends GLMPotential implements DESSimulable
         }
     }
     
+    /**
+     * Replaces a variable of the relation and, if it is the time variable, the one kept apart too: a pasted relation
+     * used to count the time with the variable of the original node.
+     */
+    @Override public void replaceVariable(int position, Variable variable) {
+        Variable oldVariable = variables.get(position);
+        super.replaceVariable(position, variable);
+        if (oldVariable.equals(timeVariable)) {
+            timeVariable = variable;
+        }
+    }
+    
     @Override
     protected TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions, double[] coefficients, String[] covariates, List<Variable> evidencelessVariables, Map<String, String> variableValues) throws NonProjectablePotentialException {
         throw new NonProjectablePotentialException.PotentialCannotBeConvertedToATable(this);
