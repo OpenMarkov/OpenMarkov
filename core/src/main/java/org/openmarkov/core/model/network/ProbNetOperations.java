@@ -577,20 +577,11 @@ public class ProbNetOperations {
         // Set initial configuration
         int[] parentIndices = new int[parents.size()];
         for (int i = 0; i < parents.size(); ++i) {
-            Variable parentVariable = parents.get(i).getVariable();
             parentIndices[i] = 0;
             // The walk starts at the first state of every parent, replacing the evidence
             // the user may have set on it: the states given to the numeric node are the
             // same with evidence and without it.
-            if (originalVariables.containsKey(parentVariable)) {
-                Variable originalVariable = originalVariables.get(parentVariable);
-                double numericalValue = Double.parseDouble(parentVariable.getStates()[0].getName());
-                configuration.changeFinding(new Finding(originalVariable, numericalValue));
-            } else if (parentVariable.getVariableType() == VariableType.FINITE_STATES) {
-                configuration.changeFinding(new Finding(parentVariable, 0));
-            } else {
-                // TODO throw some exception
-            }
+            writeStateOfParent(parents.get(i).getVariable(), 0, originalVariables, configuration);
         }
         boolean nextConfiguration = true;
         int parentIndex;
@@ -601,27 +592,36 @@ public class ProbNetOperations {
             nextConfiguration = false;
             parentIndex = 0;
             while (!nextConfiguration && parentIndex < parents.size()) {
-                Node parent = parents.get(parentIndex);
-                Variable parentVariable = parent.getVariable();
-                Variable findingVariable = (originalVariables.containsKey(parent.getVariable())) ?
-                        originalVariables.get(parent.getVariable()) :
-                        parent.getVariable();
+                Variable parentVariable = parents.get(parentIndex).getVariable();
                 int nextStateIndex = ++parentIndices[parentIndex];
-                if (nextStateIndex < parent.getVariable().getNumStates()) {
+                if (nextStateIndex < parentVariable.getNumStates()) {
                     nextConfiguration = true;
-                    if (originalVariables.containsKey(parentVariable)) {
-                        Variable originalVariable = originalVariables.get(parentVariable);
-                        double numericalValue = Double
-                                .parseDouble(parentVariable.getStates()[nextStateIndex].getName());
-                        configuration.changeFinding(new Finding(originalVariable, numericalValue));
-                    } else if (parentVariable.getVariableType() == VariableType.FINITE_STATES) {
-                        configuration.changeFinding(new Finding(findingVariable, nextStateIndex));
-                    }
+                    writeStateOfParent(parentVariable, nextStateIndex, originalVariables, configuration);
                 } else {
+                    // The parent goes back to its first state, in the configuration too: it used to stay in its
+                    // last one, so some configurations were never asked and others were asked twice
                     parentIndices[parentIndex] = 0;
+                    writeStateOfParent(parentVariable, 0, originalVariables, configuration);
                     parentIndex++;
                 }
             }
+        }
+    }
+    
+    /**
+     * Writes in {@code configuration} the state {@code stateIndex} of a parent: as a numeric finding on its
+     * original variable if it is a numeric parent already converted, whose states are named by their values.
+     */
+    private static void writeStateOfParent(Variable parentVariable, int stateIndex,
+                                           Map<Variable, Variable> originalVariables, EvidenceCase configuration) {
+        if (originalVariables.containsKey(parentVariable)) {
+            Variable originalVariable = originalVariables.get(parentVariable);
+            double numericalValue = Double.parseDouble(parentVariable.getStates()[stateIndex].getName());
+            configuration.changeFinding(new Finding(originalVariable, numericalValue));
+        } else if (parentVariable.getVariableType() == VariableType.FINITE_STATES) {
+            configuration.changeFinding(new Finding(parentVariable, stateIndex));
+        } else {
+            // TODO throw some exception
         }
     }
     

@@ -24,11 +24,14 @@ import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunction;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEPropagation;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -122,6 +125,52 @@ class AFindingOnANumericNodeTellsAboutItsParentsTest {
         propagation.setPostResolutionEvidence(observed(8));
         assertArrayEquals(probabilityOfTheDisease(probNet, observed(8)),
                           propagation.getPosteriorValues().get(probNet.getVariable("Disease")).getValues(), 1e-12);
+    }
+
+    /**
+     * N has two parents, A (0.5 / 0.5) and B (0.7 / 0.3), and is 1, 2, 3 or 4 in (a0, b0), (a1, b0), (a0, b1) and
+     * (a1, b1). The configurations of the parents used to be walked wrongly from the second parent on: (a0, b1) was
+     * never asked and took the value of (a1, b1), so N had no value 3 (error 267 of the pending list).
+     */
+    private ProbNet twoParents() {
+        ProbNet probNet = new ProbNet(BayesianNetworkType.getUniqueInstance());
+        Variable a = new Variable("A", "a0", "a1");
+        Variable b = new Variable("B", "b0", "b1");
+        n = new Variable("N", false, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, 0.01);
+        Node aNode = probNet.addNode(a, NodeType.CHANCE);
+        Node bNode = probNet.addNode(b, NodeType.CHANCE);
+        Node nNode = probNet.addNode(n, NodeType.CHANCE);
+        probNet.addLink(aNode, nNode, true);
+        probNet.addLink(bNode, nNode, true);
+        aNode.setPotential(new TablePotential(List.of(a), PotentialRole.CONDITIONAL_PROBABILITY, new double[] { 0.5, 0.5 }));
+        bNode.setPotential(new TablePotential(List.of(b), PotentialRole.CONDITIONAL_PROBABILITY, new double[] { 0.7, 0.3 }));
+        UnivariateDistrPotential relation = new UnivariateDistrPotential(List.of(n, a, b), ExactFunction.class,
+                                                                         PotentialRole.CONDITIONAL_PROBABILITY);
+        relation.setParameters(new double[] { 1, 2, 3, 4 });
+        nNode.setPotential(relation);
+        return probNet;
+    }
+
+    private double[] probabilityOfA(ProbNet probNet, EvidenceCase evidence) throws Exception {
+        VEPropagation propagation = new VEPropagation(probNet);
+        propagation.setVariablesOfInterest(List.of(probNet.getVariable("A")));
+        propagation.setPreResolutionEvidence(evidence);
+        return propagation.getPosteriorValues().get(probNet.getVariable("A")).getValues();
+    }
+
+    @Test void withTwoParentsEveryConfigurationGivesItsValue() throws Exception {
+        ProbNet converted = ProbNetOperations.convertNumericalVariablesToFS(twoParents(), new EvidenceCase());
+        Variable convertedN = converted.getVariable("N");
+        assertEquals(List.of("1.0", "2.0", "3.0", "4.0"),
+                     Arrays.stream(convertedN.getStates()).map(State::getName).map(Double::parseDouble).map(String::valueOf).toList());
+        // The value of N in (a0, b1), the third configuration, is 3
+        double[] table = ((TablePotential) converted.getNode(convertedN).getPotentials().getFirst()).getValues();
+        assertArrayEquals(new double[] { 0, 0, 1, 0 }, Arrays.copyOfRange(table, 8, 12), 1e-12);
+    }
+
+    @Test void withTwoParentsEachValueTellsWhichParentsGaveIt() throws Exception {
+        assertArrayEquals(new double[] { 1, 0 }, probabilityOfA(twoParents(), observed(3)), 1e-12);
+        assertArrayEquals(new double[] { 0, 1 }, probabilityOfA(twoParents(), observed(4)), 1e-12);
     }
 
     /** A Dirichlet is a distribution of probabilities: it cannot say how likely a value of N is. */
