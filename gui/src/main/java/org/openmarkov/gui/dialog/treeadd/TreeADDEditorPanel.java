@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * {@code JScrollPane} for creating and modifying {@code TreeADDPotential}s
@@ -293,20 +294,8 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         
         Potential potential = branch.getPotential();
         List<Variable> addableVariables = branch.getAddableVariables();
-        // Remove also those finite state variables that have a single state
-        TreePath parentPath = branchPath.getParentPath(); // treeADD
-        while (parentPath.getLastPathComponent() != rootTreeADDPotential) {
-            TreePath grandParentPath = parentPath.getParentPath();// branch
-            if (grandParentPath.getLastPathComponent() instanceof TreeADDBranch treeBranch) {
-                if ((
-                        treeBranch.getRootVariable().getVariableType() == VariableType.FINITE_STATES
-                                || treeBranch.getRootVariable().getVariableType() == VariableType.FINITE_STATES
-                ) && treeBranch.getBranchStates().size() == 1) {
-                    addableVariables.remove(treeBranch.getRootVariable());
-                }
-            }
-            parentPath = grandParentPath;
-        }
+        // Remove also those variables that a branch above has left with a single state
+        addableVariables.removeAll(variablesLeftWithASingleState(branchPath, rootTreeADDPotential));
         
         // Potential Edition, any case it is possible to edit branch's potential
         if (!(potential instanceof TreeADDPotential)) {
@@ -344,22 +333,55 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         possibleRootVariables.remove(branch.getRootVariable());
         possibleRootVariables.remove(branch.getPotential().getConditionedVariable());
         
-        // Remove also those finite state variables that have a single state
+        // Remove also those variables that a branch above has left with a single state
+        possibleRootVariables.removeAll(variablesLeftWithASingleState(branchPath, rootTreeADDPotential));
+        
+        return possibleRootVariables;
+    }
+    
+    /**
+     * The variables with states, or discretized, that a branch above the one at {@code branchPath} has left with a
+     * single state: asking for them again below adds nothing. The two menus that offer variables used to write this
+     * rule twice, both times comparing with FINITE_STATES twice, so a discretized variable was offered again and
+     * adding its subtree died (error 160 of the pending list).
+     *
+     * @param root the tree at the top of the path
+     */
+    static Set<Variable> variablesLeftWithASingleState(TreePath branchPath, TreeADDPotential root) {
+        Set<Variable> variables = new HashSet<>();
         TreePath parentPath = branchPath.getParentPath(); // treeADD
-        while (parentPath.getLastPathComponent() != rootTreeADDPotential) {
+        while (parentPath.getLastPathComponent() != root) {
             TreePath grandParentPath = parentPath.getParentPath();// branch
-            if (grandParentPath.getLastPathComponent() instanceof TreeADDBranch treeBranch) {
-                if ((
-                        treeBranch.getRootVariable().getVariableType() == VariableType.FINITE_STATES
-                                || treeBranch.getRootVariable().getVariableType() == VariableType.FINITE_STATES
-                ) && treeBranch.getBranchStates().size() == 1) {
-                    possibleRootVariables.remove(treeBranch.getRootVariable());
-                }
+            if (grandParentPath.getLastPathComponent() instanceof TreeADDBranch treeBranch
+                    && (treeBranch.getRootVariable().getVariableType() == VariableType.FINITE_STATES
+                        || treeBranch.getRootVariable().getVariableType() == VariableType.DISCRETIZED)
+                    && treeBranch.getBranchStates().size() == 1) {
+                variables.add(treeBranch.getRootVariable());
             }
             parentPath = grandParentPath;
         }
-        
-        return possibleRootVariables;
+        return variables;
+    }
+    
+    /**
+     * The states that {@code variable} has at the branch at {@code branchPath}: those of the nearest branch above
+     * that splits on it, whatever their number.
+     *
+     * @param root the tree at the top of the path
+     *
+     * @return those states, or null if no branch above splits on {@code variable}
+     */
+    static List<State> statesLeftAbove(TreePath branchPath, Variable variable, TreeADDPotential root) {
+        TreePath parentPath = branchPath.getParentPath(); // treeADD
+        while (parentPath.getLastPathComponent() != root) {
+            TreePath grandParentPath = parentPath.getParentPath();// branch
+            if (grandParentPath.getLastPathComponent() instanceof TreeADDBranch treeADDBranch
+                    && treeADDBranch.getRootVariable() == variable) {
+                return treeADDBranch.getBranchStates();
+            }
+            parentPath = grandParentPath;
+        }
+        return null;
     }
     
     /**
@@ -1033,27 +1055,11 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
             // restrict its number of states or the interval in which it is defined.
             if (newRootVariable.getVariableType() == VariableType.FINITE_STATES
                     || newRootVariable.getVariableType() == VariableType.DISCRETIZED) {
-                List<State> groupedStates = null;
-                TreePath parentPath = path.getParentPath(); // treeADD
-                while (parentPath.getLastPathComponent() != rootTreeADDPotential) {
-                    TreePath grandParentPath = parentPath.getParentPath();// branch
-                    if (grandParentPath.getLastPathComponent() instanceof TreeADDBranch treeADDBranch) {
-                        // if a branch has more then one state is possible to
-                        // offer, as top variable, the top variable of this
-                        // branch
-                        TreePath greatGrandFatherPath = grandParentPath.getParentPath();
-                        if (treeADDBranch.getBranchStates().size() > 1
-                                && ((TreeADDPotential) greatGrandFatherPath.getLastPathComponent()).getRootVariable()
-                                == newRootVariable) {
-                            groupedStates = treeADDBranch.getBranchStates();
-                            break;
-                        }
-                    }
-                    parentPath = grandParentPath;
-                }
-                branchingStates = new State[groupedStates.size()];
-                for (int i = 0; i < groupedStates.size(); i++) {
-                    branchingStates[i] = groupedStates.get(i);
+                // The states of the nearest branch of it above. It used to take the first one with more than one
+                // state, which may not be the nearest, and died if all of them had one
+                List<State> groupedStates = statesLeftAbove(path, newRootVariable, rootTreeADDPotential);
+                if (groupedStates != null) {
+                    branchingStates = groupedStates.toArray(new State[0]);
                 }
             } else if (newRootVariable.getVariableType() == VariableType.NUMERIC) {
                 TreePath parentPath = path.getParentPath(); // treeADD
