@@ -451,6 +451,22 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
             case ActionCommands.REMOVE_REFERENCE -> removeReference(ae, (TreeADDBranch) node, path);
             default -> throw new UnreachableException(new UnexpectedMenuActionException(actionComand));
         }
+        copyThePotentialOfReferencesWithoutLabel();
+    }
+    
+    /**
+     * Gives each branch that references a label no longer in the tree, because the label or its branch has been
+     * removed, its own copy of the potential it used.
+     */
+    private void copyThePotentialOfReferencesWithoutLabel() {
+        List<TreeADDBranch> referencesWithoutLabel = rootTreeADDPotential.getReferencesWithoutLabel();
+        if (!referencesWithoutLabel.isEmpty()) {
+            referencesWithoutLabel.forEach(TreeADDBranch::replaceReferenceWithACopy);
+            ((TreeADDModel) jTree.getModel()).notifyTreeStructureChanged(new TreePath(rootTreeADDPotential));
+            for (int i = 0; i < jTree.getRowCount(); i++) {
+                jTree.expandRow(i);
+            }
+        }
     }
     
     private void changeInterval(ActionEvent ae, TreeADDBranch branch, TreePath path) throws ChangeDomainOfTreeADDIsNotAllowedException {

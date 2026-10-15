@@ -183,6 +183,18 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         }
     }
     
+    /** A branch of a tree that references a label that no branch of that tree has. */
+    public static final class ReferenceWithoutLabel extends PGMXParserException {
+        public ReferenceWithoutLabel(String variableName, String reference, Element element) {
+            super(element);
+            this.variableName = variableName;
+            this.reference = reference;
+        }
+        
+        public final String variableName;
+        public final String reference;
+    }
+    
     public static final class TreeADDWithoutTwoThresholds extends PGMXParserException {
         public TreeADDWithoutTwoThresholds(List<Element> thresholds, Element element) {
             super(element);

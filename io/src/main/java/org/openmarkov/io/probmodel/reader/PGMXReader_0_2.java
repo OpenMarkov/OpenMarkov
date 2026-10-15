@@ -68,6 +68,8 @@ import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.potential.treeadd.Threshold;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
+import org.openmarkov.core.model.network.potential.treeadd.TreeWithEventsPotential;
+import org.openmarkov.core.model.network.potential.treeadd.TreeWithExcludedEventsPotential;
 import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.core.model.network.type.plugin.NetworkTypeUtils;
 import org.openmarkov.io.probmodel.exception.PGMXParserException;
@@ -80,10 +82,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class PGMXReader_0_2 {
     
@@ -1162,7 +1166,31 @@ public class PGMXReader_0_2 {
             List<Element> xmlPotentials = getPotentialsElements(xmlPotentialsRoot);
             for (Element xmlPotential : xmlPotentials) {
                 Potential potential = getPotential(xmlPotential, probNet);
+                checkEveryReferenceHasItsLabel(potential, xmlPotential);
                 probNet.addPotential(potential);
+            }
+        }
+    }
+    
+    /**
+     * @throws PGMXParserException.ReferenceWithoutLabel if a branch of a tree of {@code potential} references a label
+     *                                                   that no branch of that tree has
+     */
+    private static void checkEveryReferenceHasItsLabel(Potential potential, Element xmlPotential)
+            throws PGMXParserException.ReferenceWithoutLabel {
+        Collection<TreeADDPotential> trees = switch (potential) {
+            case TreeADDPotential tree -> List.of(tree);
+            case TreeWithEventsPotential treeWithEvents -> treeWithEvents.getTrees().values();
+            case TreeWithExcludedEventsPotential treeWithExcludedEvents ->
+                    Stream.ofNullable(treeWithExcludedEvents.getNoEventTree()).toList();
+            default -> List.of();
+        };
+        for (TreeADDPotential tree : trees) {
+            List<TreeADDBranch> referencesWithoutLabel = tree.getReferencesWithoutLabel();
+            if (!referencesWithoutLabel.isEmpty()) {
+                throw new PGMXParserException.ReferenceWithoutLabel(potential.getVariables().getFirst().getName(),
+                                                                    referencesWithoutLabel.getFirst().getReference(),
+                                                                    xmlPotential);
             }
         }
     }

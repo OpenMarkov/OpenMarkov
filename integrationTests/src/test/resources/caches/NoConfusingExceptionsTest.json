@@ -157,6 +157,7 @@
     "ProbabilisticNetworkTypeMissing",
     "ProbabilisticNetworkTypeNotRecognized",
     "ProbabilityOfOccurrenceOutOfRange",
+    "ReferenceWithoutLabel",
     "RelationNotSupportedByFormat",
     "RemovingAllStatesIsNotAllowedException",
     "RepeatedVariableNames",

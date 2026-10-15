@@ -610,6 +610,26 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
         }
     }
     
+    /** @return the branches of this tree, at any depth, that reference a label that no branch of this tree has */
+    public List<TreeADDBranch> getReferencesWithoutLabel() {
+        Set<String> labels = getLabeledBranches().keySet();
+        List<TreeADDBranch> referencesWithoutLabel = new ArrayList<>();
+        Deque<TreeADDPotential> subtrees = new ArrayDeque<>();
+        subtrees.push(this);
+        while (!subtrees.isEmpty()) {
+            for (TreeADDBranch branch : subtrees.pop().getBranches()) {
+                if (branch.isReference()) {
+                    if (!labels.contains(branch.getReference())) {
+                        referencesWithoutLabel.add(branch);
+                    }
+                } else if (branch.getPotential() instanceof TreeADDPotential subtree) {
+                    subtrees.push(subtree);
+                }
+            }
+        }
+        return referencesWithoutLabel;
+    }
+    
     //	@Override
     //	public void setUtilityVariable(Variable utilityVariable) {
     //		super.setUtilityVariable(utilityVariable);
