@@ -93,7 +93,7 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
     
     /**
      * Returns if an instance of a certain Potential type makes sense given the
-     * variables and the potential role
+     * variables and the potential role: in a network of events, with a parent that is an event and one that is not
      *
      * @param variables
      * @param role
@@ -102,11 +102,9 @@ public class TreeWithExcludedEventsPotential extends Potential implements DESSim
         if (!(node.getProbNet().getNetworkType() instanceof DESNetworkType)) return false;
 
 //		boolean validate =(variables.get(0).getVariableType() ==VariableType.EVENT) && variables.subList(1,variables.size()).stream().anyMatch(variable -> variable.getVariableType() ==VariableType.EVENT);
-        boolean validate = variables.subList(1, variables.size())
-                                    .stream()
-                                    .anyMatch(variable -> variable.getVariableType() == VariableType.EVENT);
-        
-        return validate;
+        List<Variable> parents = variables.subList(1, variables.size());
+        return parents.stream().anyMatch(variable -> variable.getVariableType() == VariableType.EVENT)
+               && parents.stream().anyMatch(variable -> variable.getVariableType() != VariableType.EVENT);
     }
     
     
