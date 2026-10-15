@@ -111,6 +111,32 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String topVariableName;
     }
     
+    /** A time to the event, in the indicator of an event, that is not a finite number not below 0. */
+    public static final class TimeToEventOutOfRange extends PGMXParserException {
+        public TimeToEventOutOfRange(String variableName, String value, Element element) {
+            super(element);
+            this.variableName = variableName;
+            this.value = value;
+        }
+        
+        public final String variableName;
+        /** The value as the file writes it. */
+        public final String value;
+    }
+    
+    /** A probability of occurrence, in the indicator of an event, that is not a number between 0 and 1. */
+    public static final class ProbabilityOfOccurrenceOutOfRange extends PGMXParserException {
+        public ProbabilityOfOccurrenceOutOfRange(String variableName, String value, Element element) {
+            super(element);
+            this.variableName = variableName;
+            this.value = value;
+        }
+        
+        public final String variableName;
+        /** The value as the file writes it. */
+        public final String value;
+    }
+    
     public static final class UnknownAgent extends PGMXParserException {
         public UnknownAgent(String variableName, String agentName, Element element) {
             super(element);

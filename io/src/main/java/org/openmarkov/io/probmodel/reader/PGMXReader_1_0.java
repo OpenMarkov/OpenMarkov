@@ -516,11 +516,30 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
      *
      */
     protected Potential getIndicatorPotential(Element xmlPotential, ProbNet probNet, PotentialRole role,
-                                              List<Variable> variables) {
+                                              List<Variable> variables) throws PGMXParserException {
         Element xmlTte = xmlPotential.getChild(XMLTags.TTE.toString());
         Element xmlPOcurrence = xmlPotential.getChild(XMLTags.P_OCCURRENCE.toString());
-        IndicatorPotential indicatorPotential = new IndicatorPotential(variables, role, Double.parseDouble(xmlTte.getText()), Double.parseDouble(xmlPOcurrence.getText()));
-        return indicatorPotential;
+        // The numbers follow the rule of the relation: the file used to be opened with any of them, without a warning
+        String variableName = variables.getFirst().getName();
+        double tte = numberIn(xmlTte);
+        if (!IndicatorPotential.isValidTte(tte)) {
+            throw new PGMXParserException.TimeToEventOutOfRange(variableName, xmlTte.getText().strip(), xmlTte);
+        }
+        double pOccurrence = numberIn(xmlPOcurrence);
+        if (!IndicatorPotential.isValidPOccurrence(pOccurrence)) {
+            throw new PGMXParserException.ProbabilityOfOccurrenceOutOfRange(variableName, xmlPOcurrence.getText().strip(),
+                                                                             xmlPOcurrence);
+        }
+        return new IndicatorPotential(variables, role, tte, pOccurrence);
+    }
+    
+    /** @return the number written in {@code element}, or NaN if it is not a number */
+    private static double numberIn(Element element) {
+        try {
+            return Double.parseDouble(element.getText().strip());
+        } catch (NumberFormatException notANumber) {
+            return Double.NaN;
+        }
     }
     
     //28/08/2023 ExternalPotential added
