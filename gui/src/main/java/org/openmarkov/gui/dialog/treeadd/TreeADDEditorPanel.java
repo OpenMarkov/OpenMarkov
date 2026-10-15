@@ -184,22 +184,15 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         // change root variable
         List<TreeADDBranch> branches = treeADD.getBranches();
         boolean hasSubTrees = false;
-        Variable currentRootVariable = treeADD.getRootVariable();
-        Variable conditionedVariable = treeADD.getConditionedVariable();
-        List<Variable> newPosibleRootVariables = new ArrayList<>();
-        for (Variable variable : treeADD.getVariables()) {
-            if (variable != currentRootVariable && variable != conditionedVariable) {
-                newPosibleRootVariables.add(variable);
-            }
-        }
+        List<Variable> newPosibleRootVariables =
+                TreeADDPotential.variablesToAskFor(treeADD.getVariables(), treeADD.getConditionedVariable());
+        newPosibleRootVariables.remove(treeADD.getRootVariable());
         if (!newPosibleRootVariables.isEmpty()) {
-            for (Variable variable : treeADD.getVariables()) {
-                if (variable != currentRootVariable && variable != conditionedVariable) {
-                    JMenuItem posibleRootVariable = new JMenuItem(variable.getName());
-                    posibleRootVariable.addActionListener(this);
-                    posibleRootVariable.setActionCommand(ActionCommands.CHANGE_ROOT_VARIABLE);
-                    changeRootVariable.add(posibleRootVariable);
-                }
+            for (Variable variable : newPosibleRootVariables) {
+                JMenuItem posibleRootVariable = new JMenuItem(variable.getName());
+                posibleRootVariable.addActionListener(this);
+                posibleRootVariable.setActionCommand(ActionCommands.CHANGE_ROOT_VARIABLE);
+                changeRootVariable.add(posibleRootVariable);
             }
             contextualMenu.add(changeRootVariable);
         }
@@ -321,17 +314,10 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
      * @return the list of variables that can be added to the potential
      */
     private List<Variable> possibleRootVariables(TreeADDBranch branch, TreePath branchPath) {
-        List<Variable> possibleRootVariables = new ArrayList<>();
-        
-        // Offer all the variables of the potential that are not utility variables
-        ProbNet probNet = node.getProbNet();
-        for (Variable variable : branch.getParentVariables()) {
-            //if (probNet.getNode(variable).getNodeType() != NodeType.UTILITY)
-                possibleRootVariables.add(variable);
-        }
-        // Except the current root variable and the conditioned variable
+        List<Variable> possibleRootVariables = TreeADDPotential.variablesToAskFor(
+                branch.getParentVariables(), branch.getPotential().getConditionedVariable());
+        // Except the current root variable
         possibleRootVariables.remove(branch.getRootVariable());
-        possibleRootVariables.remove(branch.getPotential().getConditionedVariable());
         
         // Remove also those variables that a branch above has left with a single state
         possibleRootVariables.removeAll(variablesLeftWithASingleState(branchPath, rootTreeADDPotential));

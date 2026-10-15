@@ -569,6 +569,17 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
         return sampledTree;
     }
     
+    /**
+     * @return the variables that a tree on {@code variables} can ask for: all of them but the one it defines. The
+     * variable of a node that is a parent of itself, as in a network of events, is twice among them, and its value as
+     * a parent can be asked for.
+     */
+    public static List<Variable> variablesToAskFor(List<Variable> variables, Variable conditionedVariable) {
+        List<Variable> variablesToAskFor = new ArrayList<>(variables);
+        variablesToAskFor.remove(conditionedVariable);
+        return variablesToAskFor;
+    }
+    
     public Map<String, TreeADDBranch> getLabeledBranches() {
         Map<String, TreeADDBranch> labeledBranches = new HashMap<>();
         Deque<TreeADDPotential> subtrees = new ArrayDeque<>();
