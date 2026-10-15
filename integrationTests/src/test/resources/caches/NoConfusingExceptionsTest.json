@@ -36,6 +36,7 @@
     "DataCouldNotBeConverted",
     "DeltaPotentialWithoutState",
     "DensityCannotBeCalculated",
+    "DensityIsInfinite",
     "DifferentSizesInPotentialsAndStates",
     "DirectedLinkCannotMatchAnUndirectedLink",
     "DistributionsCannotGoTogether",

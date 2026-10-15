@@ -247,6 +247,8 @@
                   value="The numeric variable {variable.getName} has a uniform distribution, so it has no value to compute with. Set a finding on it in edition mode and try again."/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$DensityCannotBeCalculated"
                   value="The finding on {variable.getName} cannot be used: its relation is a {distribution} distribution, which cannot say how likely the observed value is."/>
+    <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$DensityIsInfinite"
+                  value="The finding on {variable.getName} cannot be used: at {value}, the density of its {distribution} distribution is infinite."/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$UtilityIsNotDefined"
                   value="The utility of the node {utilityVariable.getName} is not defined: its relation is still the uniform one it was created with."/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$CannotResolveVariable"

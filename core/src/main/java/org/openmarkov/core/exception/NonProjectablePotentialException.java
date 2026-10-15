@@ -15,6 +15,7 @@ import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
 import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -68,6 +69,24 @@ public abstract sealed class NonProjectablePotentialException extends OpenMarkov
 
         public final Variable variable;
         public final String distribution;
+    }
+
+    /**
+     * A finding on a numeric node at a value where the density of its distribution is infinite, in some
+     * configuration of its parents, such as a gamma of shape below 1 at 0: how much each configuration weighs
+     * cannot be told.
+     */
+    public static final class DensityIsInfinite extends NonProjectablePotentialException {
+        public DensityIsInfinite(Variable variable, String distribution, double value) {
+            this.variable = variable;
+            this.distribution = distribution;
+            this.value = BigDecimal.valueOf(value).stripTrailingZeros().toPlainString();
+        }
+
+        public final Variable variable;
+        public final String distribution;
+        /** The observed value, as the message writes it. */
+        public final String value;
     }
 
     /** A utility node has no numbers: its relation is the uniform one it was created with. */

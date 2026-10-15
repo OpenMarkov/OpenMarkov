@@ -19,6 +19,7 @@ import org.openmarkov.core.model.network.ProbNetOperations;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.modelUncertainty.DirichletFunction;
 import org.openmarkov.core.model.network.modelUncertainty.ExactFunction;
+import org.openmarkov.core.model.network.modelUncertainty.GammaFunction;
 import org.openmarkov.core.model.network.modelUncertainty.NormalFunction;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunction;
 import org.openmarkov.core.model.network.potential.PotentialRole;
@@ -125,6 +126,35 @@ class AFindingOnANumericNodeTellsAboutItsParentsTest {
         propagation.setPostResolutionEvidence(observed(8));
         assertArrayEquals(probabilityOfTheDisease(probNet, observed(8)),
                           propagation.getPosteriorValues().get(probNet.getVariable("Disease")).getValues(), 1e-12);
+    }
+
+    /**
+     * N is a gamma of shape 0.5 and scale 1 if the disease is absent, whose density is infinite at 0, and of shape 2
+     * and scale 1 if it is present. Observing 0 used to weigh "absent" infinitely and leave the disease as NaN, without
+     * a warning (error 270 of the pending list); now the finding is refused with a message.
+     */
+    @Test void aFindingWhereTheDensityIsInfiniteIsRefusedWithAMessage() throws Exception {
+        ProbNet probNet = network(GammaFunction.class, 0.5, 1, 2, 1);
+        String message = "The finding on N cannot be used: at 0, the density of its Gamma distribution is infinite.";
+        var before = assertThrows(NonProjectablePotentialException.DensityIsInfinite.class,
+                                  () -> probabilityOfTheDisease(probNet, observed(0)));
+        assertEquals(message, before.getExceptionMessage());
+        VEPropagation propagation = new VEPropagation(probNet);
+        propagation.setVariablesOfInterest(List.of(disease));
+        var after = assertThrows(NonProjectablePotentialException.DensityIsInfinite.class, () -> {
+            propagation.setPostResolutionEvidence(observed(0));
+            propagation.getPosteriorValues();
+        });
+        assertEquals(message, after.getExceptionMessage());
+    }
+
+    /** Elsewhere the same gamma has a finite density, and the finding is used. */
+    @Test void aFindingWhereTheDensityIsFiniteIsUsed() throws Exception {
+        ProbNet probNet = network(GammaFunction.class, 0.5, 1, 2, 1);
+        double absent = 0.9 * Math.exp(-1) / Math.sqrt(Math.PI);
+        double present = 0.1 * Math.exp(-1);
+        assertArrayEquals(new double[] { absent / (absent + present), present / (absent + present) },
+                          probabilityOfTheDisease(probNet, observed(1)), 1e-9);
     }
 
     /**

@@ -631,6 +631,7 @@ public class ProbNetOperations {
      * uniform relation, which needs the finding to have a value, makes every configuration equally likely.
      *
      * @throws NonProjectablePotentialException.DensityCannotBeCalculated if the distribution cannot give its density
+     * @throws NonProjectablePotentialException.DensityIsInfinite if that density is infinite
      */
     private static double likelihoodOfObservedValue(Potential potential, Variable variable, double observedValue,
                                                     EvidenceCase configuration, InferenceOptions inferenceOptions)
@@ -647,6 +648,11 @@ public class ProbNetOperations {
                 if (Double.isNaN(density)) {
                     throw new NonProjectablePotentialException.DensityCannotBeCalculated(
                             variable, distribution.getProbDensFunctionName());
+                }
+                if (Double.isInfinite(density)) {
+                    // Infinite over infinite when the weights are normalized: the parents would be NaN
+                    throw new NonProjectablePotentialException.DensityIsInfinite(
+                            variable, distribution.getProbDensFunctionName(), observedValue);
                 }
                 return density;
             }
