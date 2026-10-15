@@ -230,6 +230,8 @@ Los \hyperref[err:235]{errores~235} a \hyperref[err:239]{239} y las \hyperref[no
 \paragraph{Más errores añadidos el 15 de octubre}
 Los \hyperref[err:240]{errores~240} a \hyperref[err:271]{271} y las \hyperref[nota:196]{notas~196} a \hyperref[nota:199]{199} se encontraron también al portar OpenMarkov a C++ y Qt, como los del 9 de octubre: al llevar a esa versión los arreglos del 9 al 15 de octubre y los cambios de Jorge Rico en el editor de red. Cada uno se ha vuelto a comprobar contra \texttt{9adb77b}, y la fila \emph{Comprobado} de su ficha dice cómo. Varios son lo que quedó de un error que ya está marcado como corregido, y lo citan en la fila \emph{Relacionados}. Lo que ya estaba en la lista, lo que ya se ha corregido, lo que una decisión de equipo deja fuera y lo que era un fallo de una prueba y no del programa no se ha añadido. Con lo visto se han ampliado además dos fichas que ya estaban: los \hyperref[err:114]{errores~114} y \hyperref[err:210]{210}.
 
+\paragraph{Errores añadidos la tarde del 15 de octubre}
+Los \hyperref[err:272]{errores~272} a \hyperref[err:278]{278} se encontraron al llevar a la versión en C++ y Qt los arreglos que esta lista recibió la tarde del 15 de octubre, de \texttt{208605c} a \texttt{aa4bcfb}. Cada uno se ha comprobado con el Java de ese momento ---el jar del 14 de octubre con las clases de esos commits delante---, y la fila \emph{Comprobado} de su ficha dice cómo. Tres son lo que dejaron atrás arreglos de ese día: el \hyperref[err:272]{error~272} el del \hyperref[err:268]{268}, los \hyperref[err:273]{273} y \hyperref[err:274]{274} el del \hyperref[err:235]{235}, y el \hyperref[err:275]{275} el del \hyperref[err:239]{239}.
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
 en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
@@ -285,9 +287,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{270 errores}; 126 de ellos son defectos nuevos: 66 encontrados al
-comprobar o corregir los demás, 55 al portar OpenMarkov a C++/Qt y 5 al revisar la rama \texttt{DES-development}. \textbf{39} necesitan antes una decisión del equipo. Por esfuerzo estimado: 231 pequeños, 39 medios y 0 grandes.
-De los 270, 150 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{277 errores}; 133 de ellos son defectos nuevos: 66 encontrados al
+comprobar o corregir los demás, 62 al portar OpenMarkov a C++/Qt y 5 al revisar la rama \texttt{DES-development}. \textbf{40} necesitan antes una decisión del equipo. Por esfuerzo estimado: 238 pequeños, 39 medios y 0 grandes.
+De los 277, 150 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -297,15 +299,15 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \midrule
 \ref{sec:potenciales}. Operaciones con potenciales & 3 \\
 \ref{sec:canonicos}. Modelos canónicos y modelo de ajuste & 3 \\
-\ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 21 \\
-\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 16 \\
+\ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 22 \\
+\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 17 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
-\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 22 \\
+\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 23 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 22 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 10 \\
-\ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 24 \\
+\ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 25 \\
 \ref{sec:des}. Simulación de sucesos discretos & 18 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 11 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 14 \\
 \ref{sec:casos}. Bases de casos & 13 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 32 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 32 \\
@@ -375,6 +377,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:234]{234} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un nodo pegado junto con su padre no se calcula si su fórmula lo nombra & \texttt{core} & S \hfill No\\
 \hyperref[err:257]{257} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un riesgo de Weibull pegado con su variable de tiempo sigue usando la del nodo original & \texttt{core} & S \hfill No\\
 \hyperref[err:260]{260} & Pegar un nodo o deshacer un cambio de estados borra el comentario de cinco clases de relación & \texttt{core} & S \hfill No\\
+\hyperref[err:278]{278} & Un riesgo de Weibull da «probabilidades» negativas, mayores que uno o que no son números, sin avisar & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:ediciones}.\ Ediciones de la red: deshacer, cancelar y pegar}}\\
 \hyperref[err:24]{24} & \textcolor{corregidoverde}{\textbf{Corregido en parte}} · \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un dominio estándar de otro tamaño borra tablas que «Cancel» no devuelve & \texttt{core} & M \hfill No\\
 \hyperref[err:25]{25} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Restringir un enlace cambia la tabla del hijo y deshacer no la devuelve & \texttt{gui} & S \hfill No\\
@@ -392,6 +395,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:243]{243} & Un dominio estándar de otro tamaño da un error inesperado en una decisión o en su padre & \texttt{core} & S \hfill No\\
 \hyperref[err:258]{258} & \textcolor{corregidoverde}{\textbf{Corregido}} · Pegar un trozo con \texttt{X} y \texttt{X\textquotesingle{}} en una red que ya tiene \texttt{X} confunde las dos en las fórmulas & \texttt{gui} & S \hfill No\\
 \hyperref[err:271]{271} & Un nodo temporal no se puede pegar en su propia red & \texttt{gui}, \texttt{core} & S \hfill No\\
+\hyperref[err:275]{275} & Quitarle un padre a un nodo le borra el comentario de su relación, salvo si es una fórmula o un modelo canónico & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:restricciones}.\ Restricciones de red}}\\
 \hyperref[err:37]{37} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir un fichero no comprueba las restricciones de la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:38]{38} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un estado puede quedarse con el nombre vacío o repetido & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -419,6 +423,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:268]{268} & \textcolor{corregidoverde}{\textbf{Corregido}} · Observar un nodo numérico con un parámetro imposible acaba en un error de Commons Math que nadie explica & \texttt{core} & S \hfill No\\
 \hyperref[err:269]{269} & \textcolor{corregidoverde}{\textbf{Corregido}} · Observar un nodo numérico con distribución muere si se ha visto otro número o tiene un padre numérico & \texttt{core} & S \hfill No\\
 \hyperref[err:270]{270} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un hallazgo donde la densidad es infinita deja la probabilidad de los padres en NaN & \texttt{core} & S \hfill No\\
+\hyperref[err:272]{272} & Una beta con un parámetro 0 solo se rechaza como tal en su extremo; dentro, el mensaje dice otra cosa & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:decisiones}.\ Decisiones: políticas, criterios, agentes y árbol de decisión}}\\
 \hyperref[err:50]{50} & \textcolor{corregidoverde}{\textbf{Corregido}} · El árbol de decisión falla en casi todas las redes en formato 1.0 & \texttt{inference} & M \hfill No\\
 \hyperref[err:51]{51} & «Show optimal policy» y «Show expected utility» no llegan a abrirse & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -478,6 +483,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:255]{255} & El mapa de dos parámetros estira sus ejes hasta el cero aunque el intervalo no llegue & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
 \hyperref[err:256]{256} & Un 0 \% o un intervalo sin anchura impide abrir «Plot», el tornado y la araña, y el mapa & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
 \hyperref[err:262]{262} & \textcolor{corregidoverde}{\textbf{Corregido}} · Aceptar el análisis de sensibilidad devuelve el escenario a su primer estado y analiza otro & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
+\hyperref[err:277]{277} & Después de un análisis de sensibilidad, el escenario de otra decisión sale fijo con lo elegido antes & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:des}.\ Simulación de sucesos discretos}}\\
 \hyperref[err:95]{95} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una utilidad acumulativa vale cero hasta el primer suceso que la alcanza & \texttt{gui}, \texttt{inference.\allowbreak{}des} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:96]{96} & La simulación se cae si un nodo espera a un padre de un suceso no ocurrido & \texttt{gui} & S \hfill No\\
@@ -509,6 +515,9 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:235]{235} & \textcolor{corregidoverde}{\textbf{Corregido}} · Guardar una red de sucesos en formato 0.2 pierde sus relaciones y luego no se abre & \texttt{io}, \texttt{gui} & S \hfill No\\
 \hyperref[err:236]{236} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un árbol con sucesos mal escrito en el fichero se abre sin aviso, con el árbol por omisión & \texttt{io} & S \hfill No\\
 \hyperref[err:237]{237} & Los ficheros guardados con la versión de la rama de sucesos no se abren & \texttt{io}, \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:273]{273} & El mensaje que se niega a guardar una relación nombra su nodo con el instante dos veces & \texttt{io} & S \hfill No\\
+\hyperref[err:274]{274} & El escritor de 0.2 guarda una tabla de fórmulas como una tabla, y al abrirla las fórmulas ya no están & \texttt{io} & S \hfill No\\
+\hyperref[err:276]{276} & Un indicador sin «TTE» o sin «ProbabilityOccurrence» en el fichero revienta con un puntero nulo & \texttt{io}, \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -2828,6 +2837,46 @@ Que los cinco constructores de copia llamen a \texttt{copy\allowbreak{}Attribute
 
 Prueba: para cada una de las cinco clases, poner las tres cosas, y comprobar que \texttt{copy(\allowbreak{})} y \texttt{deep\allowbreak{}Copy(\allowbreak{})} las conservan; y, con \texttt{Paste\allowbreak{}Edit} y con \texttt{Node\allowbreak{}Replace\allowbreak{}States\allowbreak{}Edit} deshecho, que el nodo pegado y el hijo conservan el comentario de su relación.
 
+\setcounter{subsection}{277}
+\subsection[Un riesgo de Weibull da «probabilidades» negativas, mayores que uno o que no son números, sin avisar]{La tabla de un riesgo de Weibull sale con probabilidades que no lo son, sin ningún aviso, si su tasa es negativa (lo que pasa sin el logaritmo, que es como nace la relación) o si el tiempo está entre 0 y 1}\label{err:278}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network.potential
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/WeibullHazardPotential.java:49, 136-222}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}Sí: qué hacer con una tasa negativa (rechazarla, o exigir el logaritmo) y con un tiempo entre 0 y 1 (rechazarlo, o tratarlo como el primer ciclo)
+\fichakey{Relacionados}\hyperref[err:257]{error~257}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Weibull\allowbreak{}Hazard\allowbreak{}Potential.\allowbreak{}table\allowbreak{}Project} (líneas 136-222) calcula la probabilidad de que el suceso pase en el ciclo que acaba en el instante t como p = 1 − exp(λ · ((t − 1)\textsuperscript{k} − t\textsuperscript{k})), donde k, la forma, es la exponencial del coeficiente de \texttt{Gamma}, y λ, la tasa, es la suma de las covariables por sus coeficientes, o la exponencial de esa suma si la relación está «en logaritmo» (el campo \texttt{log}). Nada comprueba que p quede entre 0 y 1, y hay dos maneras sencillas de que no quede:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Una tasa negativa.} Sin logaritmo, λ es la suma tal cual, y nada impide que sea negativa. Como (t − 1)\textsuperscript{k} − t\textsuperscript{k} es negativo, el exponente sale positivo, p queda por debajo de cero y su complemento por encima de uno. Y sin logaritmo es como nace la relación: el campo \texttt{log} vale \texttt{false} en la clase (línea 49); el lector del formato propio, en cambio, lo pone a \texttt{true} cuando el fichero no dice nada.
+\item
+  \textbf{Un tiempo entre 0 y 1.} t − 1 es negativo, y elevarlo a una forma que no es un número entero no da un número: p sale NaN, con logaritmo o sin él. Solo está previsto t ≤ 0, que da p = 0.
+\end{itemize}
+
+Medido el 15-10-2026 con la clase de \texttt{3228141} delante del jar del 14 de octubre, con un riesgo sobre una edad numérica, ln k = 0,3740968 y término constante −5,490935 (los números son {[}1 − p, p{]}):
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+sin logaritmo, edad 65     [8.991159255698918E22, -8.991159255698918E22]
+sin logaritmo, edad 2      [14031.13472108565, -14030.13472108565]
+sin logaritmo, edad 0,5    [NaN, NaN]
+sin logaritmo, edad 0      [1.0, 0.0]
+con logaritmo, edad 65     [0.9610820240119792, 0.038917975988020825]
+con logaritmo, edad 0,5    [NaN, NaN]
+\end{Verbatim}
+
+La tabla entra en la propagación como cualquier otra. La propia prueba del arreglo del \hyperref[err:257]{error~257} lo hace sin darse cuenta: toma los coeficientes del riesgo de revisión de una prótesis, que son los de un modelo cuyo término lineal es el logaritmo de la tasa, sin poner \texttt{log}, y las tablas que compara valen ±8,4·10³². La prueba sigue sirviendo, porque compara la relación pegada con la original, pero lo que compara no son probabilidades.
+\paragraph{Cómo arreglarlo}
+Hace falta decidir qué es una tasa negativa: si la relación sin logaritmo debe rechazarla al calcular (con un mensaje que nombre el nodo y la configuración de los padres), o si el logaritmo debe ser lo único admitido, como ya supone el lector cuando el fichero no dice nada. Y qué es un tiempo entre 0 y 1: rechazarlo, o tratarlo como el primer ciclo (p = 1 − exp(−λ · t\^{}k)). En los dos casos, comprobar al final que p está entre 0 y 1 y negarse con un mensaje si no.
+
+Prueba: un riesgo sin logaritmo con una tasa negativa y otro con un tiempo de 0,5: ninguno da una tabla con números fuera de {[}0, 1{]} ni NaN.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Ediciones de la red: deshacer, cancelar y pegar}\label{sec:ediciones}
 
@@ -3833,6 +3882,41 @@ Health     | pasted; nodes [Health, Health']
 Dar a la copia un nombre que \texttt{set\allowbreak{}Name} conserve. Para un nodo temporal, lo natural es añadir el apóstrofo al nombre base y no al nombre entero: «\texttt{Health\textquotesingle{}\ {[}1{]}}», que se lee como el nombre base «\texttt{Health\textquotesingle{}}» en el ciclo 1. Así la copia sigue siendo del mismo ciclo y el nombre que el usuario ve es el que se ha buscado libre. Conviene buscar el nombre libre con la misma regla con que se va a escribir (comprobando \texttt{contains\allowbreak{}Variable} sobre el nombre ya reconstruido), para que no vuelva a pasar con otro nombre que \texttt{set\allowbreak{}Name} cambie. Las fórmulas que nombran la variable pegada se reescriben con el nombre nuevo, así que el cambio debe llegar también allí (\hyperref[err:258]{error~258}).
 
 Prueba: en un MID con «Health {[}1{]}», pegar con \texttt{Paste\allowbreak{}Edit} ese nodo en la misma red: la edición se hace, la red tiene dos nodos y la copia está en el ciclo 1 con un nombre distinto del original.
+
+\setcounter{subsection}{274}
+\subsection[Quitarle un padre a un nodo le borra el comentario de su relación, salvo si es una fórmula o un modelo canónico]{Al borrar el enlace de un padre, la relación del hijo pierde el comentario que le escribió el usuario si es una tabla, una regresión o algo que se vuelve uniforme, y lo conserva si es una fórmula o un modelo canónico}\label{err:275}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network.potential; org.openmarkov.core.action.base.linkEdits
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/RemoveLinkEdit.java:137} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:161-175} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/LinearCombinationPotential.java:183-212} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/Potential.java:726-736} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/FunctionPotential.java:207-221}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:239]{error~239}, \hyperref[err:260]{error~260}
+\end{ficha}
+\paragraph{Qué pasa}
+Cuando se borra un enlace (o el nodo padre), la relación del hijo pierde a ese padre con su propio \texttt{remove\allowbreak{}Variable} (\texttt{Remove\allowbreak{}Link\allowbreak{}Edit}, línea 137), y lo que sale es una relación nueva. Que conserve el comentario que el usuario le escribió depende de su clase:
+
+\begin{itemize}
+\tightlist
+\item
+  una tabla lo pierde: \texttt{Table\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable} (líneas 161-175) es una proyección, que hace una tabla nueva sin comentario;
+\item
+  una regresión lo pierde: \texttt{Linear\allowbreak{}Combination\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable} (líneas 183-212) construye una regresión nueva con sus covariables y coeficientes, y nada más;
+\item
+  lo que se vuelve uniforme lo pierde (un árbol, una distribución, una regresión exponencial): \texttt{Potential.\allowbreak{}remove\allowbreak{}Variable} (líneas 726-736) hace un \texttt{Uniform\allowbreak{}Potential} nuevo;
+\item
+  una fórmula que no nombra al padre lo conserva desde \texttt{03ea0d9} (\hyperref[err:239]{error~239}), que se lo pone a mano (\texttt{Function\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable}, línea 217), pero no el criterio ni las propiedades; una que lo nombra pasa a la fórmula por omisión y lo pierde;
+\item
+  un modelo canónico lo conserva todo, con \texttt{copy\allowbreak{}Attributes\allowbreak{}From}.
+\end{itemize}
+
+Medido el 15-10-2026 con las clases de \texttt{03ea0d9} delante del jar del 14 de octubre: una tabla con el comentario «a note», al quitarle un padre, sale con el comentario vacío; una regresión, igual; una fórmula que no nombra al padre sale con «a note». Deshacer lo devuelve. El comentario se pierde sin aviso, y el fichero que se guarde después ya no lo lleva. Es de la familia del \hyperref[err:260]{error~260}, en el que lo pierden las copias de cinco clases de relación.
+\paragraph{Cómo arreglarlo}
+Que toda relación que sale de quitar una variable se lleve el comentario, el criterio y las propiedades de la que había, como ya hacen los modelos canónicos: \texttt{copy\allowbreak{}Attributes\allowbreak{}From(\allowbreak{}this)} en \texttt{Potential.\allowbreak{}remove\allowbreak{}Variable}, en \texttt{Table\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable} (sobre la tabla proyectada), en \texttt{Linear\allowbreak{}Combination\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable} y en \texttt{Function\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable}, en lugar de solo el comentario. Lo mismo conviene en \texttt{add\allowbreak{}Variable}.
+
+Prueba: en \texttt{Removing\allowbreak{}AParent\allowbreak{}Keeps\allowbreak{}AFormula\allowbreak{}Or\allowbreak{}ARegression\allowbreak{}Test}, poner un comentario a una tabla y a una regresión, quitarles un padre con \texttt{Remove\allowbreak{}Link\allowbreak{}Edit} y comprobar que lo conservan.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Restricciones de red}\label{sec:restricciones}
@@ -5256,6 +5340,48 @@ core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:646-
 Lo más simple, y de acuerdo con lo que se decidió para el \hyperref[err:45]{error~45} (usar la densidad y avisar donde no se pueda calcular): tratar una densidad infinita como una que no se puede calcular, \texttt{!Double.\allowbreak{}is\allowbreak{}Finite(\allowbreak{}density)} en lugar de \texttt{Double.\allowbreak{}is\allowbreak{}Na\allowbreak{}N(\allowbreak{}density)}, y rechazar el hallazgo con el aviso de siempre. La otra vía es dar el límite: si alguna configuración tiene densidad infinita, el hallazgo deja seguras esas configuraciones y descarta las demás. Pero si son varias, cuánto pesa cada una depende de lo deprisa que crece su densidad cerca del punto, que no se obtiene de \texttt{get\allowbreak{}Density}. La beta de parámetro menor que 1 vista en 0 o en 1 es el mismo caso, aunque hoy acaba en una excepción de Commons Math (\hyperref[err:268]{error~268}); conviene que las dos terminen igual.
 
 Prueba: en \texttt{AFinding\allowbreak{}On\allowbreak{}ANumeric\allowbreak{}Node\allowbreak{}Tells\allowbreak{}About\allowbreak{}Its\allowbreak{}Parents\allowbreak{}Test}, la red de arriba con N visto en 0: \texttt{VEPropagation} no devuelve un NaN; rechaza el hallazgo con \texttt{Density\allowbreak{}Cannot\allowbreak{}Be\allowbreak{}Calculated} (o, si se elige el límite, P(Disease = absent) = 1).
+
+\setcounter{subsection}{271}
+\subsection[Una beta con un parámetro 0 solo se rechaza como tal en su extremo; dentro, el mensaje dice otra cosa]{Observar un nodo numérico cuya beta tiene un parámetro que no es positivo se rechaza diciendo que los parámetros no hacen una distribución si se ve en el extremo, pero diciendo que la beta no sabe decir cómo de probable es el valor si se ve en cualquier otro punto}\label{err:272}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network.modelUncertainty; org.openmarkov.core.model.network
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/BetaFunction.java:87-93} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:639-670}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:268]{error~268}, \hyperref[err:270]{error~270}, \hyperref[err:45]{error~45}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{0841101} (\hyperref[err:268]{error~268}), un hallazgo sobre un nodo numérico de azar cuya distribución tiene parámetros imposibles se rechaza con un mensaje que dice dónde y cuáles. Con la beta no siempre: si un parámetro es 0 (o negativo), el mensaje depende de dónde se vea el número. En el extremo se rechaza bien; en cualquier otro punto, el mensaje dice que la beta es una distribución que no sabe decir cómo de probable es un valor, como se dice de una Dirichlet, cosa que no es verdad: lo que está mal es el parámetro, y el mensaje no lo nombra.
+
+Medido el 15-10-2026 con las clases de \texttt{0841101} delante del jar del 14 de octubre, sobre la red de la prueba de ese commit (Disease, padre de N), con N beta (0, 2) si ausente y (5, 1) si presente:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+visto en 0     ParametersAreNotADistribution: «The finding on N cannot be used: with Disease = absent, the
+               parameters of its Beta distribution, alpha = 0 and beta = 2, do not make a distribution.»
+visto en 0,5   DensityCannotBeCalculated: «The finding on N cannot be used: its relation is a Beta
+               distribution, which cannot say how likely the observed value is.»
+\end{Verbatim}
+
+Por qué pasa: la \texttt{Beta\allowbreak{}Distribution} de Commons Math no comprueba sus parámetros al construirse; solo mira alpha cuando se le pide la densidad en 0, y beta en 1, y entonces se niega, lo que \texttt{likelihood\allowbreak{}Of\allowbreak{}Observed\allowbreak{}Value} (líneas 639-670) convierte en «parámetros imposibles». \texttt{Beta\allowbreak{}Function.\allowbreak{}get\allowbreak{}Density} (líneas 87-93) contesta infinito en un extremo solo si los dos parámetros son positivos; con uno que no lo es, y fuera de los extremos, Commons Math devuelve «no es un número» ---el logaritmo de su función gamma lo da para todo número que no es positivo---, y \texttt{likelihood\allowbreak{}Of\allowbreak{}Observed\allowbreak{}Value} lo toma por una densidad que no se puede calcular. Por lectura, igual con un parámetro negativo. No se ha mirado por qué caminos llega una beta así desde la ventana (un parámetro escrito con una fórmula, un fichero).
+\paragraph{El código}
+core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/BetaFunction.java:87-93
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \AttributeTok{@Override} \KeywordTok{public} \DataTypeTok{double} \FunctionTok{getDensity}\OperatorTok{(}\DataTypeTok{double}\NormalTok{ x}\OperatorTok{)} \OperatorTok{\{}
+        \KeywordTok{...}
+        \ControlFlowTok{if} \OperatorTok{(}\NormalTok{alpha }\OperatorTok{\textgreater{}} \DecValTok{0} \OperatorTok{\&\&}\NormalTok{ beta }\OperatorTok{\textgreater{}} \DecValTok{0} \OperatorTok{\&\&} \OperatorTok{((}\NormalTok{x }\OperatorTok{==} \DecValTok{0} \OperatorTok{\&\&}\NormalTok{ alpha }\OperatorTok{\textless{}} \DecValTok{1}\OperatorTok{)} \OperatorTok{||} \OperatorTok{(}\NormalTok{x }\OperatorTok{==} \DecValTok{1} \OperatorTok{\&\&}\NormalTok{ beta }\OperatorTok{\textless{}} \DecValTok{1}\OperatorTok{)))} \OperatorTok{\{}
+            \ControlFlowTok{return} \BuiltInTok{Double}\OperatorTok{.}\FunctionTok{POSITIVE\_INFINITY}\OperatorTok{;}
+        \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Que \texttt{Beta\allowbreak{}Function.\allowbreak{}get\allowbreak{}Density} se niegue antes de llamar a Commons Math cuando alpha o beta no son positivos, con una \texttt{Not\allowbreak{}Strictly\allowbreak{}Positive\allowbreak{}Exception} (que \texttt{likelihood\allowbreak{}Of\allowbreak{}Observed\allowbreak{}Value} ya convierte en «parámetros imposibles») o directamente con \texttt{Parameters\allowbreak{}Are\allowbreak{}Not\allowbreak{}ADistribution}. La misma regla conviene en las demás distribuciones que Commons Math no comprueba al construirse.
+
+Prueba: en \texttt{AFinding\allowbreak{}On\allowbreak{}ANumeric\allowbreak{}Node\allowbreak{}Tells\allowbreak{}About\allowbreak{}Its\allowbreak{}Parents\allowbreak{}Test}, la red de arriba vista en 0,5: \texttt{VEPropagation} lanza \texttt{Parameters\allowbreak{}Are\allowbreak{}Not\allowbreak{}ADistribution} y no \texttt{Density\allowbreak{}Cannot\allowbreak{}Be\allowbreak{}Calculated}.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Decisiones: políticas, criterios, agentes y árbol de decisión}\label{sec:decisiones}
@@ -9090,6 +9216,48 @@ Rehacer el escenario \textbf{conservando lo elegido mientras siga siendo posible
 
 Prueba: con \texttt{ID-CEA-test-2therapies-new-test}, ámbito de «Therapy», elegir «Dec: Test = yes», llamar a \texttt{refresh\allowbreak{}Scenario\allowbreak{}From\allowbreak{}Evidence} y comprobar que el escenario sigue diciendo «Dec: Test = yes» y «Test = negative»; y que, si entretanto la evidencia gana «Test = not done», «Dec: Test» pasa a «no».
 
+\setcounter{subsection}{276}
+\subsection[Después de un análisis de sensibilidad, el escenario de otra decisión sale fijo con lo elegido antes]{En el análisis de sensibilidad, después de un análisis con el ámbito de una decisión, elegir otra decisión, o pasar al modelo entero y volver, enseña el escenario con las filas fijas en lo que se eligió para el análisis anterior, y no se pueden cambiar hasta volver a aceptar}\label{err:277}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}sensitivityAnalysis
+\fichakey{Paquete}org.openmarkov.sensitivityanalysis.dialog
+\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/SensitivityAnalysisDialog.java:572-597} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/ScopePanel.java:264-280}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (el panel del ámbito, sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:262]{error~262}, \hyperref[err:87]{error~87}
+\end{ficha}
+\paragraph{Qué pasa}
+Menú Tools → «Sensitivity analysis», ámbito «One decision». El diálogo se queda abierto entre análisis. Después de aceptar uno, si el usuario elige otra decisión, o pasa al modelo entero y vuelve a «One decision», el recuadro «Scenario» sale con las filas fijas y apagadas en lo que se eligió para el análisis anterior: no puede elegir el escenario de la decisión nueva. Solo al volver a aceptar se relee la evidencia de la red y las filas se sueltan; pero ese análisis ya se hace con los estados que se veían fijos. Para elegir otro escenario hay que aceptar una vez, con un análisis que no se quería, elegir y aceptar otra vez.
+
+Por qué pasa: al aceptar, \texttt{do\allowbreak{}Ok\allowbreak{}Click} (líneas 591-595) le añade al controlador el escenario elegido, como si fuera evidencia, y lo deja ahí. La próxima vez que se arma un escenario, \texttt{Scope\allowbreak{}Panel.\allowbreak{}get\allowbreak{}Decision\allowbreak{}Scenario\allowbreak{}Panel} (línea 278) lo arma con \texttt{controller.\allowbreak{}get\allowbreak{}Pre\allowbreak{}Resolution\allowbreak{}Evidence(\allowbreak{})}, que ahora lleva el escenario del análisis anterior, y \texttt{Possible\allowbreak{}Scenario} fija toda fila que esa evidencia nombra.
+
+Medido el 15-10-2026 ejecutando \texttt{Scope\allowbreak{}Panel} sin pantalla, con las clases de \texttt{7ebcb51} delante del jar del 14 de octubre (y con el jar solo, igual), en \texttt{ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx}: decisión «Therapy», eligiendo «Dec: Test = yes» y «Test = positive», aceptando y eligiendo después «Dec: New test» y otra vez «Therapy» (\texttt{!} es una fila fija):
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+elegido (Therapy):        Dec: New test=no,yes@0  Dec: Test=no,yes@1  New test=not done@0  Test=negative,positive@1
+evidencia del controlador tras aceptar: [Dec: New test:no, Dec: Test:yes, New test:not done, Test:positive]
+otra decisión (Dec: New test):  Dec: Test=no,yes@1!  Test=not done,negative,positive@2!
+otra vez Therapy:         Dec: New test=no,yes@0!  Dec: Test=no,yes@1!  New test=not done,negative,positive@0!  Test=not done,negative,positive@2!
+\end{Verbatim}
+\paragraph{El código}
+sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/SensitivityAnalysisDialog.java:591-595
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{            EvidenceCase newPreResolutionEvidence }\OperatorTok{=} \KeywordTok{new} \FunctionTok{EvidenceCase}\OperatorTok{(}\NormalTok{controller}\OperatorTok{.}\FunctionTok{getPreResolutionEvidence}\OperatorTok{());}
+            \ControlFlowTok{for} \OperatorTok{(}\NormalTok{Finding finding }\OperatorTok{:}\NormalTok{ controller}\OperatorTok{.}\FunctionTok{getSensitivityAnalysisModel}\OperatorTok{().}\FunctionTok{getSelectedScenario}\OperatorTok{())} \OperatorTok{\{}
+\NormalTok{                newPreResolutionEvidence}\OperatorTok{.}\FunctionTok{addFinding}\OperatorTok{(}\NormalTok{finding}\OperatorTok{);}
+            \OperatorTok{\}}
+\NormalTok{            controller}\OperatorTok{.}\FunctionTok{setPreResolutionEvidence}\OperatorTok{(}\NormalTok{newPreResolutionEvidence}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+No tocar la evidencia del controlador en \texttt{do\allowbreak{}Ok\allowbreak{}Click} y pasarle al análisis una copia con el escenario añadido; o, si el modelo necesita guardarla, que \texttt{Scope\allowbreak{}Panel} arme el escenario con la evidencia de la red (\texttt{read\allowbreak{}Pre\allowbreak{}Resolution\allowbreak{}Evidence\allowbreak{}From\allowbreak{}Network}) y no con la del controlador.
+
+Prueba: con el panel del ámbito sobre esa red, elegir un escenario de «Therapy», hacer lo que hace \texttt{do\allowbreak{}Ok\allowbreak{}Click} con la evidencia, elegir «Dec: New test» y comprobar que ninguna de sus filas sale fija.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Simulación de sucesos discretos}\label{sec:des}
 
@@ -11235,6 +11403,93 @@ Según el código, el resto de lo que escribía su versión lo entiende el lecto
 Si se decide abrirlos: añadir 0.5 a \texttt{Version} y enviarlo a \texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0} en \texttt{Reader\allowbreak{}Factory}; añadir 0.5.0 a los dos \texttt{version.\allowbreak{}xsd}; añadir «Tree with Exclued Events» como segundo nombre en la anotación de \texttt{Tree\allowbreak{}With\allowbreak{}Excluded\allowbreak{}Events\allowbreak{}Potential}; y poner a \texttt{Exponential\allowbreak{}Function} la anotación de su rama, comprobando antes si entonces sale también en la lista de distribuciones de \texttt{Univariate\allowbreak{}Distr}, que se indexa por nombre, y si debe salir.
 
 Prueba: abrir las redes de Carmen Yago y comparar los resultados de su simulación con los que daba su versión.
+
+\setcounter{subsection}{272}
+\subsection[El mensaje que se niega a guardar una relación nombra su nodo con el instante dos veces]{Cuando un escritor de .pgmx se niega a guardar una relación de un nodo temporal, el mensaje nombra el nodo con el instante dos veces: «UnivariateDistribution {[}0{]} {[}0{]}»}\label{err:273}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.probmodel.writer
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:133-149, 1244-1246}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:235]{error~235}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{208605c} (\hyperref[err:235]{error~235}), un escritor de \texttt{.\allowbreak{}pgmx} no guarda una relación que el lector de su formato no sabría leer, y lo dice con un mensaje que nombra el nodo. Si el nodo es de un ciclo, el nombre sale con el instante dos veces. Medido el 15-10-2026 guardando \texttt{Dynamic-LIMID-every-potential.\allowbreak{}pgmx} con el escritor de 0.2 de ese commit:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+The network is not saved: the relation of UnivariateDistribution [0] [0], of type UnivariateDistr,
+cannot be saved in format 0.2.0, which could not read it back. Save the network in another format.
+\end{Verbatim}
+
+Con un nodo que no es de un ciclo sale bien («the relation of Cost»).
+
+Por qué pasa: \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}node\allowbreak{}Of} (líneas 133-149) saca el nombre del fichero ya escrito: el atributo \texttt{name} de la primera variable de la relación y, si tiene el atributo \texttt{time\allowbreak{}Slice}, el instante entre corchetes. Pero el escritor ya pone el instante en el nombre: una variable de un ciclo se escribe con \texttt{name} igual a su nombre completo, «Health {[}1{]}», y además \texttt{time\allowbreak{}Slice="1"} (líneas 1244-1246).
+\paragraph{Cómo arreglarlo}
+En \texttt{node\allowbreak{}Of}, tomar el atributo \texttt{name} tal cual, sin añadirle el instante.
+
+Prueba: en \texttt{What\allowbreak{}AFormat\allowbreak{}Cannot\allowbreak{}Read\allowbreak{}Back\allowbreak{}Is\allowbreak{}Not\allowbreak{}Saved\allowbreak{}Test}, guardar en 0.2 una red con una relación que ese formato no lee en un nodo de un ciclo, y comprobar que el mensaje nombra el nodo una sola vez con su instante.
+
+\setcounter{subsection}{273}
+\subsection[El escritor de 0.2 guarda una tabla de fórmulas como una tabla, y al abrirla las fórmulas ya no están]{Una tabla de fórmulas guardada en formato 0.2 se escribe con el tipo «Table», así que la comprobación de lo que el formato puede leer no la ve, se guarda sin aviso y al abrir el fichero es una tabla de ceros}\label{err:274}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.probmodel.writer
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:848-849, 949-950, 1095-1107}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:235]{error~235}, \hyperref[err:259]{error~259}
+\end{ficha}
+\paragraph{Qué pasa}
+Una tabla de fórmulas (\texttt{Augmented\allowbreak{}Prob\allowbreak{}Table\allowbreak{}Potential}, la tabla cuyas casillas son fórmulas sobre padres numéricos) guardada con el formato 0.2 se pierde: el fichero se guarda sin ningún aviso, pero al abrirlo la relación es una tabla con incertidumbre y sin números, y las fórmulas no están. Es el mismo \hyperref[err:235]{error~235} por otro camino: desde \texttt{208605c} el escritor no guarda lo que el lector de su formato no sabría leer, pero esta relación se escribe con un nombre de tipo que sí sabe leer.
+
+Medido el 15-10-2026 con los escritores y lectores de \texttt{208605c}, con una tabla de fórmulas sobre «Age» con las casillas \texttt{1-\{Age\}/\allowbreak{}100} y \texttt{\{Age\}/\allowbreak{}100}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+guardada en 0.2 y abierta:  UncertainTablePotential values [0.0, 0.0]; proyectarla con Age = 30:
+                            ArrayIndexOutOfBoundsException: Index -2 out of bounds for length 2
+guardada en 1.0 y abierta:  AugmentedProbTablePotential formulas [1-{Age}/100, {Age}/100]
+\end{Verbatim}
+
+Por qué pasa: \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2} escribe una \texttt{Augmented\allowbreak{}Prob\allowbreak{}Table\allowbreak{}Potential} con el tipo \texttt{Table} (líneas 848-849, a propósito: \texttt{potential\ instanceof\ Augmented\allowbreak{}Prob\allowbreak{}Table\allowbreak{}Potential\ \textbar{}\textbar{}\ …}), y dentro sus fórmulas como parámetros inciertos de tipo función (líneas 949-950 y 1095-1107). La comprobación de \texttt{208605c} mira el tipo, y \texttt{Table} lo lee el lector de 0.2, que lo toma por una tabla con incertidumbre.
+\paragraph{Cómo arreglarlo}
+Escribir la tabla de fórmulas con su propio tipo, \texttt{Augmented\allowbreak{}Prob\allowbreak{}Table}, que el lector de 0.2 no lee: así la comprobación de \texttt{208605c} la ve y se niega a guardar en 0.2, como con las demás relaciones que ese formato no sabe leer. Si se quiere que 0.2 la guarde, el lector de 0.2 tendría que leerla.
+
+Prueba: en \texttt{What\allowbreak{}AFormat\allowbreak{}Cannot\allowbreak{}Read\allowbreak{}Back\allowbreak{}Is\allowbreak{}Not\allowbreak{}Saved\allowbreak{}Test}, guardar en 0.2 una red con una tabla de fórmulas: no se guarda, y el mensaje nombra el nodo y el tipo \texttt{Augmented\allowbreak{}Prob\allowbreak{}Table}.
+
+\setcounter{subsection}{275}
+\subsection[Un indicador sin «TTE» o sin «ProbabilityOccurrence» en el fichero revienta con un puntero nulo]{Un .pgmx cuyo indicador de un suceso no lleva la etiqueta del tiempo hasta el suceso o la de la probabilidad no se abre por un puntero nulo, y el mensaje solo dice que la red está corrompida, sin decir qué nodo ni qué falta}\label{err:276}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io, gui
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.gui.dialog.io
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:518-545}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (el lector, sin ventana); el mensaje de la ventana, leído en el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:266]{error~266}, \hyperref[err:265]{error~265}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{109ee86} (\hyperref[err:266]{error~266}), un indicador con un número fuera de rango no se abre, con un mensaje que dice el nodo y el número. Pero si al indicador le falta una de sus dos etiquetas, \texttt{\textless{}TTE\textgreater{}} o \texttt{\textless{}Probability\allowbreak{}Occurrence\textgreater{}}, el lector muere con un \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}. Según el código ---no se ha visto en la ventana---, \texttt{Nets\allowbreak{}IO} convierte cualquier \texttt{Runtime\allowbreak{}Exception} del lector en \texttt{Corrupt\allowbreak{}Network\allowbreak{}File}, cuyo texto es «Network from \ldots{} is corrupted and could not be loaded.»: el fichero no se abre, pero el mensaje no dice qué nodo ni qué le falta, que es justo lo que el error 266 quería para los números fuera de rango. El escritor del Java escribe siempre las dos etiquetas, así que solo pasa con un fichero escrito a mano o por otro programa.
+
+Por qué pasa: \texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0.\allowbreak{}get\allowbreak{}Indicator\allowbreak{}Potential} (líneas 518-534) busca las dos etiquetas con \texttt{get\allowbreak{}Child}, que contesta \texttt{null} cuando una falta, y \texttt{number\allowbreak{}In} (líneas 537-545) lee su texto sin mirarlo.
+
+Medido el 15-10-2026 con las clases de \texttt{109ee86} delante del jar del 14 de octubre, sobre la red de sucesos de \texttt{An\allowbreak{}Indicator\allowbreak{}Out\allowbreak{}Of\allowbreak{}Range\allowbreak{}Is\allowbreak{}Not\allowbreak{}Read\allowbreak{}Test} con cada etiqueta quitada:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+tte          missing   NullPointerException   Cannot invoke "org.jdom2.Element.getText()" because "<parameter1>" is null
+probability  missing   NullPointerException   Cannot invoke "org.jdom2.Element.getText()" because "<parameter1>" is null
+\end{Verbatim}
+
+Con el jar del 14 de octubre, sin el arreglo, el mismo puntero nulo («\texttt{because\ "xml\allowbreak{}Tte"\ is\ null}»).
+\paragraph{Cómo arreglarlo}
+Leer una etiqueta que falta como una escrita vacía: \texttt{number\allowbreak{}In} puede devolver NaN si el elemento es nulo, y entonces la regla de \texttt{Indicator\allowbreak{}Potential} la rechaza con el mensaje de siempre, que nombra el nodo. O un mensaje propio que diga qué etiqueta falta.
+
+Prueba: en \texttt{An\allowbreak{}Indicator\allowbreak{}Out\allowbreak{}Of\allowbreak{}Range\allowbreak{}Is\allowbreak{}Not\allowbreak{}Read\allowbreak{}Test}, un fichero sin \texttt{\textless{}TTE\textgreater{}} y otro sin \texttt{\textless{}Probability\allowbreak{}Occurrence\textgreater{}}: los dos se rechazan con una \texttt{PGMXParser\allowbreak{}Exception} que nombra Onset, y no con un \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
@@ -18554,6 +18809,13 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:269]{Error 269} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 de octubre \\
 \hyperref[err:270]{Error 270} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 de octubre \\
 \hyperref[err:271]{Error 271} & hallazgo nuevo, visto al comprobar el \hyperref[err:257]{error~257} \\
+\hyperref[err:272]{Error 272} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos de la tarde del 15 de octubre \\
+\hyperref[err:273]{Error 273} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos de la tarde del 15 de octubre \\
+\hyperref[err:274]{Error 274} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos de la tarde del 15 de octubre \\
+\hyperref[err:275]{Error 275} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos de la tarde del 15 de octubre \\
+\hyperref[err:276]{Error 276} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos de la tarde del 15 de octubre \\
+\hyperref[err:277]{Error 277} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos de la tarde del 15 de octubre \\
+\hyperref[err:278]{Error 278} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos de la tarde del 15 de octubre \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
