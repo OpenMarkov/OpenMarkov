@@ -10,6 +10,7 @@ package org.openmarkov.core.model.network;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.expression.ReferencedExpression;
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.model.network.potential.Potential;
 
@@ -212,12 +213,15 @@ public class EvidenceCase implements ClassLocalizable {
     }
     
     /**
-     * @return findings: {@code ArrayList} of {@code Finding}s.
+     * @return the value of each finding as a formula reads it: the number observed for a numeric variable, which
+     * has no state, and the name of the state for the others
      */
     public Map<Variable, String> getFindingsMap() {
         return this.findings.entrySet().stream().collect(
                 Collectors.toMap(Map.Entry::getKey,
-                                 entry -> entry.getValue().getState()));
+                                 entry -> entry.getKey().getVariableType() == VariableType.NUMERIC
+                                         ? ReferencedExpression.toExpression(entry.getValue().getNumericalValue())
+                                         : entry.getValue().getState()));
     }
     
     /**

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -24,6 +25,7 @@ import org.openmarkov.core.model.network.modelUncertainty.NormalFunction;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunction;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.core.model.network.potential.UniformPotential;
 import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
@@ -32,6 +34,7 @@ import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEPropagation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -126,6 +129,53 @@ class AFindingOnANumericNodeTellsAboutItsParentsTest {
         propagation.setPostResolutionEvidence(observed(8));
         assertArrayEquals(probabilityOfTheDisease(probNet, observed(8)),
                           propagation.getPosteriorValues().get(probNet.getVariable("Disease")).getValues(), 1e-12);
+    }
+
+    /**
+     * N2 is a numeric node with a uniform relation, so it needs a finding. Another numeric finding used to make the
+     * resolution die with an index out of bounds, because the values of the findings were written as the names of
+     * their states, which a numeric finding does not have (error 269 of the pending list).
+     */
+    @Test void anotherNumericFindingDoesNotStopIt() throws Exception {
+        ProbNet probNet = network(ExactFunction.class, 3, 7);
+        Variable n2 = new Variable("N2", false, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, 0.01);
+        probNet.addNode(n2, NodeType.CHANCE).setPotential(new UniformPotential(List.of(n2), PotentialRole.CONDITIONAL_PROBABILITY));
+        EvidenceCase evidence = observed(7);
+        evidence.addFinding(new Finding(n2, 5.0));
+        assertArrayEquals(new double[] { 0, 1 }, probabilityOfTheDisease(probNet, evidence), 1e-12);
+    }
+
+    /**
+     * M, a numeric child of the disease, is 3 if it is absent and 7 if it is present; N is normal with mean {M} and
+     * deviation 1. The formula of the mean has to read the number of M: it used to die, as in the test above.
+     */
+    @Test void aNumericParentGivesItsNumberToAFormula() throws Exception {
+        ProbNet probNet = new ProbNet(BayesianNetworkType.getUniqueInstance());
+        disease = new Variable("Disease", "absent", "present");
+        Variable m = new Variable("M", false, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, 0.01);
+        n = new Variable("N", false, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, 0.01);
+        Node diseaseNode = probNet.addNode(disease, NodeType.CHANCE);
+        Node mNode = probNet.addNode(m, NodeType.CHANCE);
+        Node nNode = probNet.addNode(n, NodeType.CHANCE);
+        probNet.addLink(diseaseNode, mNode, true);
+        probNet.addLink(mNode, nNode, true);
+        diseaseNode.setPotential(new TablePotential(List.of(disease), PotentialRole.CONDITIONAL_PROBABILITY,
+                                                    new double[] { 0.9, 0.1 }));
+        UnivariateDistrPotential relationOfM = new UnivariateDistrPotential(List.of(m, disease), ExactFunction.class,
+                                                                            PotentialRole.CONDITIONAL_PROBABILITY);
+        relationOfM.setParameters(new double[] { 3, 7 });
+        mNode.setPotential(relationOfM);
+        List<Variable> variablesOfN = new ArrayList<>(List.of(n, m));
+        UnivariateDistrPotential relationOfN = new UnivariateDistrPotential(variablesOfN, NormalFunction.class,
+                                                                            PotentialRole.CONDITIONAL_PROBABILITY);
+        relationOfN.setParameters(new double[] { 0, 1 });
+        relationOfN.setParameter(0, new VariableExpression(variablesOfN, "{M}"));
+        nNode.setPotential(relationOfN);
+
+        double absent = 0.9 * Math.exp(-8); // the density at 7 of a normal of mean 3, but for the same factor
+        double present = 0.1;               // and of mean 7
+        assertArrayEquals(new double[] { absent / (absent + present), present / (absent + present) },
+                          probabilityOfTheDisease(probNet, observed(7)), 1e-9);
     }
 
     /**

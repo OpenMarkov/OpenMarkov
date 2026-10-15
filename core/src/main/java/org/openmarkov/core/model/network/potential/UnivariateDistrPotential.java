@@ -434,13 +434,19 @@ public class UnivariateDistrPotential extends TableWithEvents
         for (int i = 1; i < tableVariables.size(); i++) {
             column += configuration.getState(tableVariables.get(i)) * offsets[i];
         }
-        Map<Variable, String> values = configuration.getFindingsMap();
+        // The values of what has been observed, only if some parameter is a formula
+        Map<Variable, String> values = null;
         double[] parameters = new double[pseudoVariableDistribution.getNumStates()];
         for (int i = 0; i < parameters.length; i++) {
             VariableExpression expression = distributionTable.getFunctionValues()[column + i];
-            parameters[i] = expression == null || expression.references().isEmpty()
-                    ? distributionTable.getValues()[column + i]
-                    : Double.parseDouble(expression.evaluateWith(values));
+            if (expression == null || expression.references().isEmpty()) {
+                parameters[i] = distributionTable.getValues()[column + i];
+            } else {
+                if (values == null) {
+                    values = configuration.getFindingsMap();
+                }
+                parameters[i] = Double.parseDouble(expression.evaluateWith(values));
+            }
         }
         return getProbDensFunctionManager().newInstance(probDensFunctionName, parameters);
     }
