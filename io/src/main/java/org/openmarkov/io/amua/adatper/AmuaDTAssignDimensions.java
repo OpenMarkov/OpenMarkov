@@ -40,7 +40,8 @@ public class AmuaDTAssignDimensions {
             case COST_EFFECTIVENESS_DT:
                 for (int i = 0; i < criteria.size(); i++) {
                     Criterion c = criteria.get(i);
-                    dimensions.add(new AmuaDimensionInfo(c.getCriterionName(), c.getCriterionUnit(), DEFAULT_DECIMALS));
+                    String symbol = Objects.requireNonNullElse(c.getCriterionUnit(), "");
+                    dimensions.add(new AmuaDimensionInfo(c.getCriterionName(), symbol, DEFAULT_DECIMALS));
 
                     if (c.getCECriterion() == Criterion.CECriterion.Cost) {
                         costDim = i;
