@@ -56,6 +56,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -293,7 +294,7 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
         (getDiscretizedStatesPanel().getStandardDomainButton()).removeActionListener(this);
         // jFormattedTextFieldPrecision.setValue( Double.valueOf(
         // properties.getVariable().getPrecision() ) );
-        getJComboBoxPrecision().setSelectedItem(String.valueOf(properties.getVariable().getPrecision()));
+        selectPrecision(getJComboBoxPrecision(), properties.getVariable().getPrecision());
         // getJComboBoxPrecision().setSelectedIndex(4);// initialized precision
         // to 0.01
         jFieldUnit.setText(properties.getVariable().getUnit().getString());
@@ -513,6 +514,25 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
             jComboBoxPrecision.addItemListener(this);
         }
         return jComboBoxPrecision;
+    }
+    
+    /**
+     * Selects the entry whose value is {@code precision}, comparing numbers and not texts
+     * ({@code String.valueOf(0.0001)} is "1.0E-4"). A precision that is not in the list is added
+     * to it, in order, so that the box never shows a precision the variable does not have.
+     *
+     * @param comboBox  precision combo box, with its entries from the largest to the smallest
+     * @param precision precision of the variable
+     */
+    static void selectPrecision(JComboBox<String> comboBox, double precision) {
+        int index = 0;
+        while (index < comboBox.getItemCount() && Double.parseDouble(comboBox.getItemAt(index)) > precision) {
+            index++;
+        }
+        if (index == comboBox.getItemCount() || Double.parseDouble(comboBox.getItemAt(index)) != precision) {
+            comboBox.insertItemAt(BigDecimal.valueOf(precision).stripTrailingZeros().toPlainString(), index);
+        }
+        comboBox.setSelectedIndex(index);
     }
     
     /**
@@ -956,7 +976,7 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
                 }
             }
             // PRECISION
-        } else if (comboBox.getName().equals("jComboBoxPrecision")) {
+        } else if (comboBox.getName().equals("jComboBoxPrecision") && !isUploadingData()) {
             if (itemSelected != null && itemEvent.getStateChange() == ItemEvent.SELECTED) {
                 if (node.getVariable().getPrecision() != Double.parseDouble(itemSelected)) {
                     PrecisionEdit precisionEdit = new PrecisionEdit(node, Double.parseDouble(itemSelected));

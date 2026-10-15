@@ -7,11 +7,16 @@
 
 package org.openmarkov.gui.dialog.node;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.*;
 
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.Variable;
 
 
 /**
@@ -77,6 +82,51 @@ public class NodeDomainValuesTablePanelTest {
 		assertEquals(0.15, result[3][4]);
 		assertEquals("]", result[3][5]);
 
+	}
+
+	/**
+	 * The precision box shows the precision of the variable, also when it is 0.0001
+	 * (written "1.0E-4") or a value that is not in the list.
+	 */
+	@Test public void thePrecisionBoxShowsThePrecisionOfTheVariable() throws Exception {
+		assertThat(precisionShownFor(0.0001)).isEqualTo("0.0001");
+		assertThat(precisionShownFor(0.01)).isEqualTo("0.01");
+		assertThat(precisionShownFor(2.0)).isEqualTo("2");
+		assertThat(precisionShownFor(0.5)).isEqualTo("0.5");
+		assertThat(precisionShownFor(0.0)).isEqualTo("0");
+	}
+
+	/** A precision that is not in the list is added in its place, keeping the list in order. */
+	@Test public void aPrecisionThatIsNotInTheListIsAddedInOrder() throws Exception {
+		NodeDomainValuesTablePanel panel = openPanel(numericNode(0.5));
+		var comboBox = panel.getJComboBoxPrecision();
+		var items = new java.util.ArrayList<String>();
+		for (int i = 0; i < comboBox.getItemCount(); i++) {
+			items.add(comboBox.getItemAt(i));
+		}
+		assertThat(items).containsExactly("1", "0.5", "0.1", "0.01", "0.001", "0.0001");
+	}
+
+	/** Opening the panel does not round the limits of the variable to its precision. */
+	@Test public void openingThePanelDoesNotChangeTheLimits() throws Exception {
+		Node node = numericNode(0.1);
+		openPanel(node);
+		assertThat(node.getVariable().getPartitionedInterval().getLimits()).containsExactly(0.25, 7.75);
+	}
+
+	private static String precisionShownFor(double precision) throws Exception {
+		return (String) openPanel(numericNode(precision)).getJComboBoxPrecision().getSelectedItem();
+	}
+
+	private static NodeDomainValuesTablePanel openPanel(Node node) throws Exception {
+		NodeDomainValuesTablePanel panel = new NodeDomainValuesTablePanel(node);
+		panel.setFieldsFromProperties(node);
+		return panel;
+	}
+
+	private static Node numericNode(double precision) {
+		Variable variable = new Variable("X", true, 0.25, 7.75, true, precision);
+		return new ProbNet().addNode(variable, NodeType.CHANCE);
 	}
 
 }
