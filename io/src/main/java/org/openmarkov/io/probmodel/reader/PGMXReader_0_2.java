@@ -1206,8 +1206,20 @@ public class PGMXReader_0_2 {
     protected List<TreeADDBranch> getTreeADDBranches(Element xmlPotential, ProbNet probNet, Variable rootVariable,
                                                      PotentialRole xmlRole, List<Variable> variables)
             throws PGMXParserException {
-        // get branches
-        Element xmlRootBranches = xmlPotential.getChild(XMLTags.BRANCHES.toString());
+        return this.getBranches(xmlPotential.getChild(XMLTags.BRANCHES.toString()), probNet, rootVariable, xmlRole,
+                                variables);
+    }
+    
+    /**
+     * @param xmlRootBranches the element with the branches of a tree, or null if it has none
+     *
+     * @return the branches of the tree split on {@code rootVariable}
+     *
+     * @throws PGMXParserException if the PGMX file cannot be parsed
+     */
+    protected List<TreeADDBranch> getBranches(Element xmlRootBranches, ProbNet probNet, Variable rootVariable,
+                                              PotentialRole xmlRole, List<Variable> variables)
+            throws PGMXParserException {
         List<TreeADDBranch> branches = new ArrayList<>();
         List<Variable> parentVariables = new ArrayList<>(variables);
         // List of variables referenced in this potential

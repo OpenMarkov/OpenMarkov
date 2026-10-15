@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.jdom2.Element;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.modelUncertainty.ParametrizedFunction.ParametrizedFunctionManager;
 import org.openmarkov.core.model.network.Node;
@@ -435,77 +437,73 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     
     protected Potential getTreeWithEventsPotential
             (Element xmlPotential, ProbNet probNet, PotentialRole xmlRole, List<Variable> variables) throws PGMXParserException {
-        Element xmlRootTable = this.getXMLRootTable(xmlPotential);
-        
-        TreeWithEventsPotential potential = null;
-        try {
-            potential = new TreeWithEventsPotential(variables, xmlRole);
-            List<Variable> noEventVariables = variables.subList(1, variables.size())
-                                                       .stream()
-                                                       .filter(variable -> variable.getVariableType() != VariableType.EVENT)
-                                                       .toList();
-            int i = 1;
-            while (xmlPotential.getChildren().size() > 1) {
-                // Each TreeADD is encoded by two elements: Top Variable and Branches
-                // It is coded this way to use getTreeADDBranches instead of repeating code. FIXME merge
-                //Top Variable + branches
-                Element xmlTopVariable = xmlPotential.getChild(XMLTags.TOP_VARIABLE.toString());
-                Variable topVariable = getVariable(xmlTopVariable, probNet);
-                xmlPotential.removeContent(1);
-                List<Variable> branchVariables = new ArrayList<>();
-                branchVariables.add(variables.get(0));
-                branchVariables.add(topVariable);
-                branchVariables.addAll(noEventVariables);
-                List<TreeADDBranch> branches = this.getTreeADDBranches(xmlPotential, probNet, topVariable, xmlRole, branchVariables);
-                xmlPotential.removeContent(1);
-                TreeADDPotential treeADDPotential = new TreeADDPotential(branchVariables, topVariable, xmlRole, branches);
-                potential.setTree(topVariable, treeADDPotential);
-                
+        TreeWithEventsPotential potential = new TreeWithEventsPotential(variables, xmlRole);
+        // One tree per event parent, each one written as the event it is split on followed by its branches
+        List<Element> xmlTopVariables = xmlPotential.getChildren(XMLTags.TOP_VARIABLE.toString());
+        List<Element> xmlBranches = xmlPotential.getChildren(XMLTags.BRANCHES.toString());
+        for (int i = 0; i < xmlTopVariables.size(); i++) {
+            Variable event = this.getTopVariable(xmlTopVariables.get(i), probNet, variables, potential.getEvents());
+            List<Variable> treeVariables = new ArrayList<>();
+            treeVariables.add(variables.getFirst());
+            treeVariables.add(event);
+            treeVariables.addAll(parentsThatAreNotEvents(variables));
+            List<TreeADDBranch> branches = this.getBranches(i < xmlBranches.size() ? xmlBranches.get(i) : null,
+                                                            probNet, event, xmlRole, treeVariables);
+            try {
+                potential.setTree(event, new TreeADDPotential(treeVariables, event, xmlRole, branches));
+            } catch (IncompatibleEvidenceException.VariableMustBeEvent unreachable) {
+                throw new UnreachableException(unreachable); // getTopVariable has checked that it is an event
             }
-        } catch (Exception e) {
-            //            throw new PGMXParserException("Exception in .", xmlPotential);
-            e.printStackTrace();
         }
         return potential;
-        
     }
     
     
     //14/03/2023 - Tree potential in events where events does not take part in computing the TTE FIXME Check
     protected Potential getTreeWithExcludedEventsPotential
     (Element xmlPotential, ProbNet probNet, PotentialRole xmlRole, List<Variable> variables) throws PGMXParserException {
-        Element xmlRootTable = this.getXMLRootTable(xmlPotential);
-        
-        TreeWithExcludedEventsPotential potential = null;
-        try {
-            potential = new TreeWithExcludedEventsPotential(variables, xmlRole);
-            List<Variable> noEventVariables = variables.subList(1, variables.size())
-                                                       .stream()
-                                                       .filter(variable -> variable.getVariableType() != VariableType.EVENT)
-                                                       .toList();
-            //TreeADD; only one child
-            // Each TreeADD is encoded by two elements: Top Variable and Branches
-            // It is coded this way to use getTreeADDBranches instead of repeating code. FIXME merge
-            //Top Variable + branches
-            Element xmlTopVariable = xmlPotential.getChild(XMLTags.TOP_VARIABLE.toString());
-            Variable topVariable = getVariable(xmlTopVariable, probNet);
-            xmlPotential.removeContent(1);
-            List<Variable> branchVariables = new ArrayList<>();
-            branchVariables.add(variables.get(0));
-            branchVariables.add(topVariable);
-            branchVariables.addAll(noEventVariables);
-            List<TreeADDBranch> branches = this.getTreeADDBranches(xmlPotential, probNet, topVariable, xmlRole, branchVariables);
-            xmlPotential.removeContent(1);
-            TreeADDPotential treeADDPotential = new TreeADDPotential(branchVariables, topVariable, xmlRole, branches);
-            potential.setNoEventTree(treeADDPotential);
-            
-        } catch (Exception e) {
-            //            throw new PGMXParserException("Exception in .", xmlPotential);
-            e.printStackTrace();
+        TreeWithExcludedEventsPotential potential = new TreeWithExcludedEventsPotential(variables, xmlRole);
+        // A single tree, on the parents that are not events, split on one of them
+        Element xmlTopVariable = xmlPotential.getChild(XMLTags.TOP_VARIABLE.toString());
+        if (xmlTopVariable != null) {
+            Variable topVariable = this.getTopVariable(xmlTopVariable, probNet, variables, parentsThatAreNotEvents(variables));
+            List<Variable> treeVariables = new ArrayList<>();
+            treeVariables.add(variables.getFirst());
+            treeVariables.addAll(parentsThatAreNotEvents(variables));
+            List<TreeADDBranch> branches = this.getBranches(xmlPotential.getChild(XMLTags.BRANCHES.toString()),
+                                                            probNet, topVariable, xmlRole, treeVariables);
+            potential.setNoEventTree(new TreeADDPotential(treeVariables, topVariable, xmlRole, branches));
         }
         return potential;
-        
     }
+    
+    /** @return the parents in {@code variables}, the child first, that are not events */
+    private static List<Variable> parentsThatAreNotEvents(List<Variable> variables) {
+        return variables.subList(1, variables.size()).stream()
+                        .filter(variable -> variable.getVariableType() != VariableType.EVENT)
+                        .toList();
+    }
+    
+    /**
+     * @param xmlTopVariable the variable a tree of a relation with events is split on
+     * @param variables      the variables of that relation, the child first
+     * @param allowed        the variables that tree can be split on
+     *
+     * @return the variable the tree is split on
+     *
+     * @throws PGMXParserException.TreeSplitOnAWrongVariable if it is not one of {@code allowed}
+     */
+    private Variable getTopVariable(Element xmlTopVariable, ProbNet probNet, List<Variable> variables,
+                                    List<Variable> allowed) throws PGMXParserException.TreeSplitOnAWrongVariable {
+        Variable topVariable = getVariable(xmlTopVariable, probNet);
+        if (topVariable == null || !allowed.contains(topVariable)) {
+            throw new PGMXParserException.TreeSplitOnAWrongVariable(
+                    variables.getFirst().getName(), xmlTopVariable.getAttributeValue(XMLAttributes.NAME.toString()),
+                    xmlTopVariable);
+        }
+        return topVariable;
+    }
+    
     //18/03/2023
     
     /**

@@ -175,6 +175,7 @@
     "TopVariableNotInDomain",
     "TreeADDWithoutPotentialOrReferenfe",
     "TreeADDWithoutTwoThresholds",
+    "TreeSplitOnAWrongVariable",
     "TriedToSplitIntervalOutsideBoundsException",
     "TryingToWriteANullProbNet",
     "TryingToWriteAProbNetWithoutName",

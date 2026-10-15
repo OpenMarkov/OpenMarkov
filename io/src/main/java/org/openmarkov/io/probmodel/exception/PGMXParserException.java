@@ -96,6 +96,21 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String variableName;
     }
     
+    /**
+     * A tree of a relation with events that is split on a variable it cannot be split on: a tree with events is
+     * split on one of the event parents, and a tree with excluded events on one of the other parents.
+     */
+    public static final class TreeSplitOnAWrongVariable extends PGMXParserException {
+        public TreeSplitOnAWrongVariable(String variableName, String topVariableName, Element element) {
+            super(element);
+            this.variableName = variableName;
+            this.topVariableName = topVariableName;
+        }
+        
+        public final String variableName;
+        public final String topVariableName;
+    }
+    
     public static final class UnknownAgent extends PGMXParserException {
         public UnknownAgent(String variableName, String agentName, Element element) {
             super(element);
