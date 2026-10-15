@@ -232,6 +232,9 @@ Los \hyperref[err:240]{errores~240} a \hyperref[err:271]{271} y las \hyperref[no
 
 \paragraph{Errores añadidos la tarde del 15 de octubre}
 Los \hyperref[err:272]{errores~272} a \hyperref[err:278]{278} se encontraron al llevar a la versión en C++ y Qt los arreglos que esta lista recibió la tarde del 15 de octubre, de \texttt{208605c} a \texttt{aa4bcfb}. Cada uno se ha comprobado con el Java de ese momento ---el jar del 14 de octubre con las clases de esos commits delante---, y la fila \emph{Comprobado} de su ficha dice cómo. Tres son lo que dejaron atrás arreglos de ese día: el \hyperref[err:272]{error~272} el del \hyperref[err:268]{268}, los \hyperref[err:273]{273} y \hyperref[err:274]{274} el del \hyperref[err:235]{235}, y el \hyperref[err:275]{275} el del \hyperref[err:239]{239}.
+\paragraph{Errores añadidos la noche del 15 de octubre}
+Los \hyperref[err:279]{errores~279} a \hyperref[err:287]{287} salen de revisar el código de la edición de redes ---las ediciones de \texttt{core/action} y de \texttt{gui/action}, el diálogo de propiedades del nodo y el portapapeles--- buscando defectos que no estuvieran ya en la lista. Cada uno se ha comprobado con el código de \texttt{3a93386}, ejecutando la edición sobre redes pequeñas construidas en código y, cuando la ficha lo dice, abriendo de verdad el diálogo; la fila \emph{Comprobado} de cada ficha dice cómo. El \hyperref[err:279]{error~279} afecta a todos los modelos temporales: las propiedades de un nodo con gemelo en otro ciclo no se pueden aceptar. Lo que ya estaba en la lista no se ha repetido; las fichas nuevas lo citan en \emph{Relacionados}.
+
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
 en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
@@ -287,9 +290,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{277 errores}; 133 de ellos son defectos nuevos: 66 encontrados al
-comprobar o corregir los demás, 62 al portar OpenMarkov a C++/Qt y 5 al revisar la rama \texttt{DES-development}. \textbf{40} necesitan antes una decisión del equipo. Por esfuerzo estimado: 238 pequeños, 39 medios y 0 grandes.
-De los 277, 157 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{286 errores}; 142 de ellos son defectos nuevos: 66 encontrados al
+comprobar o corregir los demás, 62 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{40} necesitan antes una decisión del equipo. Por esfuerzo estimado: 247 pequeños, 39 medios y 0 grandes.
+De los 286, 157 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -300,7 +303,7 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:potenciales}. Operaciones con potenciales & 3 \\
 \ref{sec:canonicos}. Modelos canónicos y modelo de ajuste & 3 \\
 \ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 22 \\
-\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 17 \\
+\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 25 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 23 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 22 \\
@@ -310,7 +313,7 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:ficheros}. Abrir y guardar redes & 14 \\
 \ref{sec:casos}. Bases de casos & 13 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 32 \\
-\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 32 \\
+\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 33 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 14 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 16 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
@@ -396,6 +399,14 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:258]{258} & \textcolor{corregidoverde}{\textbf{Corregido}} · Pegar un trozo con \texttt{X} y \texttt{X\textquotesingle{}} en una red que ya tiene \texttt{X} confunde las dos en las fórmulas & \texttt{gui} & S \hfill No\\
 \hyperref[err:271]{271} & Un nodo temporal no se puede pegar en su propia red & \texttt{gui}, \texttt{core} & S \hfill No\\
 \hyperref[err:275]{275} & Quitarle un padre a un nodo le borra el comentario de su relación, salvo si es una fórmula o un modelo canónico & \texttt{core} & S \hfill No\\
+\hyperref[err:280]{280} & Añadir o quitar un estado a una decisión con política impuesta deja la política con el tamaño viejo & \texttt{core} & S \hfill No\\
+\hyperref[err:281]{281} & Convertir un nodo de azar en decisión conserva su tabla de probabilidad como política impuesta & \texttt{gui}, \texttt{core} & S \hfill No\\
+\hyperref[err:282]{282} & Cambiar el tipo de variable de una decisión sin política le impone una política uniforme & \texttt{core} & S \hfill No\\
+\hyperref[err:283]{283} & El portapapeles guarda los nodos originales, no una copia: cortar y pegar deja las relaciones sin sus padres & \texttt{gui}, \texttt{core} & S \hfill No\\
+\hyperref[err:284]{284} & Pegar pierde las restricciones y las condiciones de revelación de los enlaces, y la marca «always observed» & \texttt{gui} & S \hfill No\\
+\hyperref[err:285]{285} & Quitar un padre a un nodo de utilidad deja una relación uniforme que impide evaluar la red & \texttt{core} & S \hfill No\\
+\hyperref[err:286]{286} & Pasar una variable de estados finitos a discretizada borra las restricciones y las revelaciones de sus enlaces & \texttt{core} & S \hfill No\\
+\hyperref[err:287]{287} & Deshacer un cambio en los criterios de decisión después de rehacerlo no lo deshace & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:restricciones}.\ Restricciones de red}}\\
 \hyperref[err:37]{37} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir un fichero no comprueba las restricciones de la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:38]{38} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un estado puede quedarse con el nombre vacío o repetido & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -598,6 +609,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:264]{264} & Una precisión «NaN» o «Infinity» en el fichero impide abrir las propiedades del nodo & \texttt{gui}, \texttt{io} & S \hfill No\\
 \hyperref[err:265]{265} & \textcolor{corregidoverde}{\textbf{Corregido}} · La casilla del tiempo del indicador acepta «NaN», «∞» y «1E400», y el suceso deja de ocurrir & \texttt{gui}, \texttt{core} & S \hfill No\\
 \hyperref[err:266]{266} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un indicador leído con un número fuera de rango hace fallar el diálogo del nodo & \texttt{io}, \texttt{core}, \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:279]{279} & En un modelo temporal, «OK» en las propiedades de un nodo con gemelo en otro ciclo se rechaza como nombre repetido & \texttt{gui}, \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:menus}.\ Interfaz: menús, diálogos y herramientas}}\\
 \hyperref[err:171]{171} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir una red desde internet apaga «Guardar» para todas las redes & \texttt{gui} & M \hfill No\\
 \hyperref[err:172]{172} & «Edits history» deja un núcleo al cien por cien y puede colgar el programa & \texttt{full} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -3917,6 +3929,261 @@ Medido el 15-10-2026 con las clases de \texttt{03ea0d9} delante del jar del 14 d
 Que toda relación que sale de quitar una variable se lleve el comentario, el criterio y las propiedades de la que había, como ya hacen los modelos canónicos: \texttt{copy\allowbreak{}Attributes\allowbreak{}From(\allowbreak{}this)} en \texttt{Potential.\allowbreak{}remove\allowbreak{}Variable}, en \texttt{Table\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable} (sobre la tabla proyectada), en \texttt{Linear\allowbreak{}Combination\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable} y en \texttt{Function\allowbreak{}Potential.\allowbreak{}remove\allowbreak{}Variable}, en lugar de solo el comentario. Lo mismo conviene en \texttt{add\allowbreak{}Variable}.
 
 Prueba: en \texttt{Removing\allowbreak{}AParent\allowbreak{}Keeps\allowbreak{}AFormula\allowbreak{}Or\allowbreak{}ARegression\allowbreak{}Test}, poner un comentario a una tabla y a una regresión, quitarles un padre con \texttt{Remove\allowbreak{}Link\allowbreak{}Edit} y comprobar que lo conservan.
+
+\setcounter{subsection}{279}
+\subsection[Añadir o quitar un estado a una decisión con política impuesta deja la política con el tamaño viejo]{Añadir o quitar un estado a una decisión con política impuesta, o a un padre de esa decisión, deja la tabla de la política con las casillas de antes: evaluar la red acaba en la ventana de error no previsto y la red guardada después ya no se abre}\label{err:280}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network; org.openmarkov.core.action.core
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/VariableStateOperations.java:116-128, 130-166, 251-272} \newline \path{core/src/main/java/org/openmarkov/core/model/network/VariableStateOperations.java:69-110} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:151-160} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:83-90} \newline \path{gui/src/main/java/org/openmarkov/gui/component/DiscretizeTablePanel.java:735, 773} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PrefixedKeyTablePanel.java:154, 174}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (la edición, la evaluación, y el guardado y la lectura del fichero, sin ventana; el diálogo de propiedades de la decisión se abrió de verdad y acepta sin aviso)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:243]{error~243}, \hyperref[err:29]{error~29}, \hyperref[err:30]{error~30}, \hyperref[err:24]{error~24}, \hyperref[err:56]{error~56}, \hyperref[err:38]{error~38}
+\end{ficha}
+\paragraph{Qué pasa}
+Una decisión puede tener una política impuesta: una tabla que dice qué opción se elige en cada caso, y que la evaluación usa en vez de optimizar. Si el usuario añade o quita un estado a esa decisión en la pestaña de dominio de sus propiedades (botones de añadir y quitar de la tabla de estados), la tabla de la política se queda como estaba, con las casillas de los estados de antes. Lo mismo si el estado se añade o se quita a un padre de la decisión, porque la política también depende de él. Nada avisa: el diálogo acepta. Después, evaluar la red (utilidad esperada, políticas óptimas, árbol de decisión) acaba en un \texttt{Array\allowbreak{}Index\allowbreak{}Out\allowbreak{}Of\allowbreak{}Bounds\allowbreak{}Exception} ---la ventana de error no previsto---, y si la red se guarda, el fichero no se vuelve a abrir, porque el lector rechaza una tabla cuyo tamaño no es el producto del número de estados de sus variables.
+
+Por qué pasa. \texttt{Node\allowbreak{}State\allowbreak{}Edit.\allowbreak{}do\allowbreak{}Edit} (líneas 151-160) llama a \texttt{Variable\allowbreak{}State\allowbreak{}Operations.\allowbreak{}modify\allowbreak{}State}; para añadir y quitar (\texttt{add\allowbreak{}State\allowbreak{}At}, líneas 116-128, y \texttt{remove\allowbreak{}State\allowbreak{}At}, líneas 130-166) la relación del nodo y las de sus hijos se sustituyen por uniformes en \texttt{set\allowbreak{}Uniform\allowbreak{}Potential} (líneas 251-272), pero ese método se salta los nodos de decisión (líneas 256 y 264), tanto el propio nodo como los hijos: una decisión sin política no tiene relación y no hay nada que cambiar, pero una con política impuesta se queda con la tabla antigua. El camino de los dominios estándar, \texttt{replace\allowbreak{}States} (líneas 69-110), no hace esa distinción: pone uniforme toda relación que exista, también la política.
+
+Medido el 15-10-2026 con el código de \texttt{3a93386}, sobre un diagrama de influencia X → D, D → U, X → U con la política impuesta D = X en D:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+ADD estado a D      | D pasa a [c, 0, 1]; la política sigue con dims [2, 2] y valores [1, 0, 0, 1]
+                    | evaluar: ArrayIndexOutOfBoundsException: Index 4 out of bounds for length 4
+                    | guardar y abrir: «Argument table (4) is invalid because its length must be 6, the product of the numbers of states of the variables»
+REMOVE estado de D  | D pasa a [0]; la política sigue con dims [2, 2]
+ADD estado a X      | X pasa a [c, 0, 1]; la política de D sigue con dims [2, 2]; evaluar: ArrayIndexOutOfBoundsException
+D sin política      | la decisión sigue sin relación: nada que corregir
+\end{Verbatim}
+
+El diálogo de propiedades de la decisión con la política desfasada se abre y acepta con «OK» sin avisar (medido abriéndolo de verdad). El rechazo al abrir el fichero lo da el constructor de \texttt{Table\allowbreak{}Potential} (líneas 83-90). Mover un estado arriba o abajo no tiene el fallo: \texttt{reorder\allowbreak{}States\allowbreak{}In\allowbreak{}Node\allowbreak{}And\allowbreak{}Children} sí reordena las políticas.
+\paragraph{Cómo arreglarlo}
+Que \texttt{set\allowbreak{}Uniform\allowbreak{}Potential} trate a una decisión que tiene relación como a los demás nodos: ponerle una política uniforme sobre los estados nuevos (lo que hace \texttt{replace\allowbreak{}States}) o quitarle la política impuesta; y lo mismo para los hijos que son decisiones con política. Deshacer ya repone las relaciones guardadas del nodo y de sus vecinos (\texttt{Node\allowbreak{}State\allowbreak{}Edit.\allowbreak{}undo}), así que no necesita cambios. Conviene que la \texttt{Node\allowbreak{}State\allowbreak{}Edit} y \texttt{Node\allowbreak{}Replace\allowbreak{}States\allowbreak{}Edit} compartan la regla, como pide el \hyperref[err:243]{error~243}.
+
+Prueba: en el diagrama de arriba, \texttt{Node\allowbreak{}State\allowbreak{}Edit} con \texttt{ADD} y con \texttt{REMOVE} sobre D y sobre X; después de cada una, la tabla de la política de D tiene el tamaño de sus estados y los de X, \texttt{VE\allowbreak{}Evaluation} termina, y la red escrita con \texttt{PGMX\allowbreak{}Writer\_\allowbreak{}1\_\allowbreak{}0} se vuelve a leer.
+
+\setcounter{subsection}{280}
+\subsection[Convertir un nodo de azar en decisión conserva su tabla de probabilidad como política impuesta]{Al cambiar un nodo de azar a decisión en sus propiedades, la tabla de probabilidad condicionada se queda como relación del nodo y todo el programa la toma por una política impuesta: la decisión no se optimiza y la utilidad esperada es la de elegir al azar con esas probabilidades}\label{err:281}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui, core
+\fichakey{Paquete}org.openmarkov.gui.action; org.openmarkov.core.model.network.potential; org.openmarkov.core.inference.tasks
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/action/ChangeNodeTypeEdit.java:48-63} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:145-152} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:118-135, 149-157} \newline \path{core/src/main/java/org/openmarkov/core/inference/tasks/TaskUtilities.java:214-238} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Node.java:574-576} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDefinitionPanel.java:331-347}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (la edición, la evaluación, y el guardado y la lectura del fichero, sin ventana); lo que enseña la pestaña de la política está leído en el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:166]{error~166}, \hyperref[err:282]{error~282}, \hyperref[err:56]{error~56}, \hyperref[err:243]{error~243}, \hyperref[nota:4]{nota~4}
+\end{ficha}
+\paragraph{Qué pasa}
+En la pestaña de definición de las propiedades de un nodo, los botones del tipo de nodo cambian un nodo de azar a decisión (\texttt{Node\allowbreak{}Definition\allowbreak{}Panel}, líneas 331-347, que ejecutan \texttt{Change\allowbreak{}Node\allowbreak{}Type\allowbreak{}Edit}). El nodo pasa a ser una decisión, pero conserva su tabla de probabilidad condicionada como relación. Para el programa, una decisión con relación es una decisión con política impuesta: \texttt{Node.\allowbreak{}has\allowbreak{}Policy} (líneas 574-576) y \texttt{Task\allowbreak{}Utilities.\allowbreak{}has\allowbreak{}Imposed\allowbreak{}Policy} (líneas 214-238) solo miran si hay relación. Así que la evaluación no calcula la política óptima de esa decisión, sino que la trata como si el usuario hubiera impuesto «elegir al azar con las probabilidades de antes», y la pestaña de la política enseña esa tabla como política impuesta por el usuario (\texttt{Table\allowbreak{}Potential\allowbreak{}Panel}, líneas 907-927; leído). Nada avisa.
+
+Por qué pasa. \texttt{Change\allowbreak{}Node\allowbreak{}Type\allowbreak{}Edit.\allowbreak{}do\allowbreak{}Multi\allowbreak{}Step\allowbreak{}Edit} (líneas 48-63) cambia el tipo de nodo, cambia el tipo de variable solo si el de antes no vale para el nuevo tipo de nodo (estados finitos vale para una decisión) y conserva la relación si su clase pasa \texttt{validate} para el nodo (líneas 56-62, con \texttt{Potential\allowbreak{}Utils.\allowbreak{}get\allowbreak{}Filtered\allowbreak{}Potential\allowbreak{}Classes}, líneas 118-135). \texttt{Table\allowbreak{}Potential.\allowbreak{}validate} (líneas 145-152) acepta una tabla para cualquier nodo que no sea un suceso, sin mirar el papel de la tabla (\texttt{conditional\allowbreak{}Probability}) ni el tipo de nodo. Una decisión creada como tal no tiene relación: \texttt{generate\allowbreak{}Default\allowbreak{}Potential} devuelve \texttt{null} para \texttt{DECISION} (líneas 149-157).
+
+Medido el 15-10-2026 con el código de \texttt{3a93386}, sobre un diagrama de influencia A → C → U, con P(C\,\textbar{}\,A) = (0,3; 0,7; 0,6; 0,4) y U(C) = (10, 20):
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+ChangeNodeTypeEdit(C, DECISION) | C sigue con TablePotential role=conditionalProbability vars=[C, A] valores [0.3, 0.7, 0.6, 0.4]
+                                | hasPolicy=true, hasImposedPolicy=true
+                                | VEEvaluation: no calcula ninguna política óptima (optimalPolicies=[])
+                                | guardada y vuelta a abrir: utilidad esperada 15,5 = 10·0,45 + 20·0,55, la de usar P(C|A) como política
+Lo mismo quitando antes la relación (una decisión creada como tal) | optimalPolicies=[C]; la utilidad óptima es 20 (elegir siempre C=1)
+\end{Verbatim}
+
+El paso contrario, de una decisión con política impuesta a nodo de azar, conserva la tabla con el papel «policy»; se guarda como probabilidad, se vuelve a leer bien y evalúa igual que un nodo de azar normal (medido), así que no es un fallo. Pasar de azar a utilidad sí sustituye la tabla por la relación por omisión de una utilidad, porque la variable pasa a numérica y la tabla deja de valer.
+\paragraph{Cómo arreglarlo}
+Que al pasar a decisión la relación de probabilidad se trate como no válida: \texttt{Change\allowbreak{}Node\allowbreak{}Type\allowbreak{}Edit} debe dejar la decisión sin relación, que es lo que \texttt{generate\allowbreak{}Default\allowbreak{}Potential} da para una decisión y lo que ya hace cuando la clase de la relación no vale (\texttt{Set\allowbreak{}Potential\allowbreak{}Edit} con la relación nueva). Si se quisiera conservar algo, solo una relación cuyo papel ya sea \texttt{POLICY}. La otra opción, que \texttt{Table\allowbreak{}Potential.\allowbreak{}validate} mire el papel de la tabla y el tipo de nodo, toca a todos los sitios que eligen clases de relación para un nodo y no hace falta.
+
+Prueba: sobre el diagrama de arriba, \texttt{Change\allowbreak{}Node\allowbreak{}Type\allowbreak{}Edit}(C, \texttt{DECISION}): \texttt{has\allowbreak{}Policy} da falso y \texttt{VE\allowbreak{}Evaluation} devuelve una política óptima para C; deshacer devuelve el nodo de azar con su tabla.
+
+\setcounter{subsection}{281}
+\subsection[Cambiar el tipo de variable de una decisión sin política le impone una política uniforme]{Cambiar en la pestaña de dominio el tipo de variable de una decisión sin política impuesta (a numérica, y si se quiere de vuelta a estados finitos) le deja una relación uniforme que el programa toma por política impuesta: la decisión deja de optimizarse y nada lo avisa}\label{err:282}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.action.core; org.openmarkov.core.model.network.potential.operation
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/VariableTypeEdit.java:79-134, 156-160, 186-189} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/operation/PotentialOperations.java:281-293} \newline \path{core/src/main/java/org/openmarkov/core/model/network/VariableStateOperations.java:251-272} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanel.java:906-931}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (la edición, la evaluación, y el guardado y la lectura del fichero, sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:281]{error~281}, \hyperref[err:28]{error~28}, \hyperref[err:243]{error~243}, \hyperref[err:56]{error~56}
+\end{ficha}
+\paragraph{Qué pasa}
+En la pestaña de dominio de las propiedades de un nodo, el desplegable del tipo de variable ejecuta \texttt{Variable\allowbreak{}Type\allowbreak{}Edit}(nodo, tipo, \texttt{true}) (\texttt{Node\allowbreak{}Domain\allowbreak{}Values\allowbreak{}Table\allowbreak{}Panel}, líneas 906-931). Si el nodo es una decisión sin política impuesta y el cambio pasa por «numérica» ---de estados finitos a numérica, o de vuelta---, la decisión sale con una relación uniforme. Como para el programa una decisión con relación tiene política impuesta (\hyperref[err:281]{error~281}), la evaluación deja de optimizar esa decisión y usa «elegir al azar»; el resultado cambia sin ningún aviso, y la pestaña de la política enseña una tabla uniforme como impuesta por el usuario (leído).
+
+Por qué pasa. \texttt{Variable\allowbreak{}Type\allowbreak{}Edit.\allowbreak{}do\allowbreak{}Multi\allowbreak{}Step\allowbreak{}Edit} (líneas 79-134) llama a \texttt{set\allowbreak{}Potentials\allowbreak{}Node\allowbreak{}And\allowbreak{}Children} (líneas 156-160) y, al salir de numérica, al bloque de las líneas 113-133; los dos ponen una relación uniforme al nodo con \texttt{set\allowbreak{}Uniform\allowbreak{}Potential\allowbreak{}To\allowbreak{}Node} (líneas 186-189) siempre que \texttt{update\allowbreak{}Potential} es cierto, sin mirar el tipo de nodo. Para una decisión, \texttt{Potential\allowbreak{}Operations.\allowbreak{}get\allowbreak{}Uniform\allowbreak{}Potential} (líneas 281-293) da un \texttt{Uniform\allowbreak{}Potential} con papel \texttt{POLICY}: una política impuesta. El camino de los estados, \texttt{Variable\allowbreak{}State\allowbreak{}Operations.\allowbreak{}set\allowbreak{}Uniform\allowbreak{}Potential} (líneas 251-272), se salta las decisiones justo para no hacer esto.
+
+Medido el 15-10-2026 con el código de \texttt{3a93386}, sobre un diagrama de influencia X → D, D → U, X → U con U = (1, 2, 3, 4) y D sin política:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+antes                                   | D sin relación; VEEvaluation calcula la política óptima de D (optimalPolicies=[D])
+VariableTypeEdit(D, NUMERIC)            | D: UniformPotential role=policy vars=[D, X]; hasImposedPolicy=true
+VariableTypeEdit(D, FINITE_STATES)      | D: estados [absent, present], sigue con la política uniforme
+guardada y vuelta a abrir               | utilidad esperada 2,5 (la media de las cuatro utilidades) y ninguna política óptima; optimizando D sería 3
+\end{Verbatim}
+
+El cambio a numérica deja además a los hijos con relaciones uniformes, como corresponde; eso no es un fallo.
+\paragraph{Cómo arreglarlo}
+Que \texttt{Variable\allowbreak{}Type\allowbreak{}Edit} no dé relación a una decisión que no la tenía: \texttt{set\allowbreak{}Uniform\allowbreak{}Potential\allowbreak{}To\allowbreak{}Node} debe saltarse las decisiones sin relación, como hace \texttt{Variable\allowbreak{}State\allowbreak{}Operations.\allowbreak{}set\allowbreak{}Uniform\allowbreak{}Potential}; si la decisión tenía una política impuesta, sí hay que sustituirla por una uniforme sobre los estados nuevos (hoy, al pasar por numérica, se sustituye; al pasar entre estados finitos y discretizada no se toca, y los estados tampoco cambian).
+
+Prueba: sobre el diagrama de arriba, \texttt{Variable\allowbreak{}Type\allowbreak{}Edit} a numérica y de vuelta a estados finitos: \texttt{has\allowbreak{}Policy} sigue siendo falso y \texttt{VE\allowbreak{}Evaluation} calcula la política óptima de D.
+
+\setcounter{subsection}{282}
+\subsection[El portapapeles guarda los nodos originales, no una copia: cortar y pegar deja las relaciones sin sus padres]{Copiar o cortar guarda en el portapapeles los propios nodos de la red, no una copia, y lo que se pega es lo que esos nodos tengan en ese momento: tras cortar dos nodos enlazados, el hijo pegado tiene el enlace pero su tabla ya no depende del padre, y la red se guarda así; copiar un nodo, editar su tabla y pegar pega la tabla editada}\label{err:283}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui, core
+\fichakey{Paquete}org.openmarkov.gui.window.edition; org.openmarkov.gui.graphic; org.openmarkov.gui.action; org.openmarkov.core.action.base.linkEdits
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/EditorPanelClipboardAssistant.java:16-41} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/SelectedContent.java:20-29} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/VisualNetwork.java:1153-1167} \newline \path{gui/src/main/java/org/openmarkov/gui/action/PasteEdit.java:71-78, 115-151} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:124-135} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/RemoveLinkEdit.java:117-168}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (lo que hacen «Cut», «Copy» y «Paste» con las ediciones, y el guardado y la lectura del fichero, sin ventana; el diálogo de propiedades del nodo pegado se abrió de verdad y no avisa)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:284]{error~284}, \hyperref[err:21]{error~21}, \hyperref[err:234]{error~234}, \hyperref[err:257]{error~257}, \hyperref[err:258]{error~258}, \hyperref[err:260]{error~260}, \hyperref[err:271]{error~271}, \hyperref[err:31]{error~31}, \hyperref[nota:184]{nota~184}
+\end{ficha}
+\paragraph{Qué pasa}
+«Edit → Copy» y «Edit → Cut» (\texttt{Main\allowbreak{}Panel\allowbreak{}Listener\allowbreak{}Assistant}, líneas 124-135) llaman a \texttt{Visual\allowbreak{}Network.\allowbreak{}export\allowbreak{}To\allowbreak{}Clipboard} (líneas 1153-1167), que mete en un \texttt{Selected\allowbreak{}Content} los propios objetos \texttt{Node} y \texttt{Link} de la red. \texttt{Editor\allowbreak{}Panel\allowbreak{}Clipboard\allowbreak{}Assistant} los guarda tal cual (líneas 22-24) y \texttt{paste} (líneas 29-31) devuelve una copia de las listas, no de los nodos. \texttt{Paste\allowbreak{}Edit} lee en el momento de pegar el nombre (línea 72), la variable, el tipo, la posición y las relaciones (líneas 115-151) de esos nodos, que son los de la red.
+
+Con «Cut» las consecuencias se ven enseguida. Tras copiar, los nodos se borran con \texttt{Remove\allowbreak{}Selected\allowbreak{}Edit} y \texttt{C\allowbreak{}Remove\allowbreak{}Node\allowbreak{}Edit}, que quita primero los enlaces con \texttt{Remove\allowbreak{}Link\allowbreak{}Edit}; esa edición sustituye la tabla del hijo por su proyección sin el padre (líneas 117-168: la tabla con el padre en su primer estado). Los nodos borrados siguen en el portapapeles con esas tablas recortadas. Al pegar, el hijo pegado tiene el enlace desde el padre pegado, pero su tabla ya no nombra al padre; el diálogo de propiedades del nodo pegado no avisa de nada, y la red se guarda con el enlace y una relación que no lo refleja. Con «Copy» el defecto es más silencioso: lo que se pega es el estado que tenga el original al pegar, no al copiar.
+
+Medido el 15-10-2026 con el código de \texttt{3a93386} (las mismas ediciones que ejecutan los menús, sin ventana):
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+Red bayesiana A -> C, P(C|A) = [0.3, 0.7, 0.6, 0.4]
+Cut de A y C      | el objeto C queda con TablePotential vars=[C] valores [0.3, 0.7]
+Paste             | nodo C pegado: padres [A], relación TablePotential vars=[C] valores [0.3, 0.7] (no nombra a A)
+guardar y abrir   | igual: C con padre A y una relación sin A
+Copy de A ([0.3, 0.7]), editar la tabla de A a [0.9, 0.1], Paste | A' sale con [0.9, 0.1]
+\end{Verbatim}
+
+Por lo leído, pasa lo mismo si tras copiar se borra el original, se le cambian los estados o se le cambia el nombre (la copia toma el nombre nuevo con el apóstrofo). Qué hace la propagación con una red cuyo enlace no está en la relación no se ha medido.
+\paragraph{Cómo arreglarlo}
+Copiar en el momento de copiar: \texttt{export\allowbreak{}To\allowbreak{}Clipboard} (o el propio \texttt{Editor\allowbreak{}Panel\allowbreak{}Clipboard\allowbreak{}Assistant}) debe guardar copias de los nodos, con copias de sus relaciones (\texttt{Potential.\allowbreak{}copy}), y copias de los enlaces (\texttt{Clone\allowbreak{}Utils.\allowbreak{}safe\allowbreak{}Clone}, como hace \texttt{Node\allowbreak{}Replace\allowbreak{}States\allowbreak{}Edit} con los suyos), de modo que lo que haya en el portapapeles no cambie con lo que le pase a la red. El constructor de copia de \texttt{Node} comparte las relaciones con el original, así que no basta por sí solo. \texttt{Paste\allowbreak{}Edit} sigue igual: ya trabaja con lo que le dan. Lo que falta copiar al pegar (restricciones, revelaciones, «always observed») está en el \hyperref[err:284]{error~284}.
+
+Prueba: cortar A y C y pegar: la relación de C\textquotesingle{} nombra a A\textquotesingle{} y tiene los valores originales; copiar A, cambiar su tabla y pegar: A\textquotesingle{} tiene la tabla que había al copiar.
+
+\setcounter{subsection}{283}
+\subsection[Pegar pierde las restricciones y las condiciones de revelación de los enlaces, y la marca «always observed»]{Al pegar un trozo de red, los enlaces pegados salen sin sus restricciones ni sus condiciones de revelación (en las redes de análisis de decisiones, que son las que las admiten), y los nodos pegados sin la marca «always observed» ni, en los sucesos, «always append»}\label{err:284}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.action
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/action/PasteEdit.java:90-97, 152-156} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Node.java:143-152} \newline \path{core/src/main/java/org/openmarkov/core/model/graph/Link.java:154, 286, 306-364} \newline \path{core/src/main/java/org/openmarkov/core/model/network/type/DecisionAnalysisNetworkType.java:22-23} \newline \path{core/src/main/java/org/openmarkov/core/model/network/type/MarkovDANType.java:20-21} \newline \path{core/src/main/java/org/openmarkov/core/model/network/type/TuningNetworkType.java:21}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (la edición de pegar, sin ventana); lo de «always append» está leído
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:283]{error~283}, \hyperref[err:21]{error~21}, \hyperref[err:27]{error~27}, \hyperref[err:25]{error~25}, \hyperref[err:260]{error~260}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Paste\allowbreak{}Edit} crea los enlaces pegados con \texttt{Add\allowbreak{}Link\allowbreak{}Edit} (líneas 90-97), que hace un enlace sin más, y de cada nodo copia solo el comentario, la relevancia, el propósito y las propiedades adicionales (líneas 152-156). Se quedan por el camino las restricciones del enlace (la tabla de compatibilidad entre los estados de los dos nodos), sus condiciones de revelación (los estados o intervalos del padre que revelan al hijo) y la marca «always observed» del nodo; en un nodo de suceso, también «always append» (leído). El constructor de copia de \texttt{Node} (líneas 143-152) sí copia «always observed», pero pegar no pasa por él.
+
+Las restricciones y las revelaciones solo existen en las redes de análisis de decisiones (DAN), en las DAN de Markov y en las redes de ajuste, que son los tipos que quitan las restricciones \texttt{No\allowbreak{}Link\allowbreak{}Restriction} y \texttt{No\allowbreak{}Revelation\allowbreak{}Arc} (líneas 22-23, 20-21 y 21 de sus clases); en los demás tipos no hay nada que perder.
+
+Medido el 15-10-2026 con el código de \texttt{3a93386}, en una DAN X → Y con una restricción (X = 0 incompatible con Y = 0), el estado X = 1 como revelador e X marcado «always observed», pegando X e Y con su enlace en la misma red:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+original  | enlace X -> Y: hasRestrictions=true, revealing=[state 1]; X alwaysObserved=true
+pegado    | enlace X' -> Y': hasRestrictions=false, revealing=[]; X' alwaysObserved=false; la tabla de Y' sí se copia
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Después de crear los enlaces, copiar en cada uno la tabla de restricciones (\texttt{get\allowbreak{}Restrictions\allowbreak{}Potential}, con las variables cambiadas por las pegadas, como ya se hace con las relaciones), los estados reveladores (los de la variable pegada con los mismos índices) y los intervalos reveladores; y en cada nodo, \texttt{set\allowbreak{}Always\allowbreak{}Observed} y \texttt{set\allowbreak{}Always\allowbreak{}Append}. La comprobación final de la red (\texttt{Paste\allowbreak{}Edit}, líneas 161-171) ya se encarga de rechazar lo que el tipo de red no admita. Si el \hyperref[err:283]{error~283} se arregla copiando al copiar, esas copias deben llevarse también todo esto.
+
+Prueba: en una DAN, pegar X → Y con una restricción, un estado revelador y «always observed»: el enlace y el nodo pegados los tienen.
+
+\setcounter{subsection}{284}
+\subsection[Quitar un padre a un nodo de utilidad deja una relación uniforme que impide evaluar la red]{Borrar el enlace de un padre de azar o de decisión a un nodo de utilidad, o borrar ese padre, cambia la tabla de la utilidad por una relación uniforme; desde entonces ninguna evaluación funciona, con un mensaje que pide poner un hallazgo en la utilidad, hasta que se vuelve a escribir su tabla. Un nodo de azar conserva su tabla proyectada}\label{err:285}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.action.base.linkEdits
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/RemoveLinkEdit.java:91-116, 117-168} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/UniformPotential.java:92-104} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:149-157} \newline \path{core/src/main/java/org/openmarkov/core/action/core/CRemoveNodeEdit.java:62-81}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (la edición, la evaluación, y el guardado y la lectura del fichero, sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:26]{error~26}, \hyperref[err:239]{error~239}, \hyperref[err:275]{error~275}, \hyperref[err:229]{error~229}, \hyperref[err:99]{error~99}
+\end{ficha}
+\paragraph{Qué pasa}
+Al borrar un enlace que llega a un nodo de utilidad (herramienta de borrar sobre el enlace, o borrar el nodo padre, que pasa por la misma edición: \texttt{C\allowbreak{}Remove\allowbreak{}Node\allowbreak{}Edit}, líneas 62-81), \texttt{Remove\allowbreak{}Link\allowbreak{}Edit.\allowbreak{}do\allowbreak{}Edit} decide la relación nueva de la utilidad en las líneas 91-116: si todos los padres que quedan son numéricos, un nodo de supervalor (una suma); si queda algún padre de azar o de decisión, o no queda ninguno, un \texttt{Uniform\allowbreak{}Potential} (línea 111). La tabla de utilidades se tira. Un nodo de azar, en cambio, conserva su tabla con el padre fijado en su primer estado (líneas 117-168, \texttt{remove\allowbreak{}Variable}).
+
+Una relación uniforme sobre una variable numérica, que es lo que es una utilidad, no se puede convertir en tabla (\texttt{Uniform\allowbreak{}Potential}, líneas 92-104): desde ese momento la utilidad esperada, las políticas óptimas, el árbol de decisión y el coste-efectividad fallan con «The numeric variable U has a uniform distribution, so it has no value to compute with. Set a finding on it in edition mode and try again.», el mensaje que el \hyperref[err:229]{error~229} puso para los nodos numéricos de azar, y que aquí pide un hallazgo sobre una utilidad. El usuario tiene que abrir el nodo, volver a elegir «Table» y escribir los valores. El fichero guardado conserva la uniforme y falla igual al abrirlo.
+
+Medido el 15-10-2026 con el código de \texttt{3a93386}, sobre un diagrama de influencia A → U, B → U con U = (0, 10, 20, 30):
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+quitar A -> U        | U: UniformPotential vars=[U, B]; VEEvaluation y getCPT lanzan «The numeric variable U has a uniform distribution, so it has no value to compute with. Set a finding on it in edition mode and try again.»
+guardar y abrir      | igual
+quitar también B -> U| U: UniformPotential vars=[U]; igual
+utilidad nueva sin padres | ExactDistrPotential con valor 0: evalúa
+nodo de azar C que pierde a su padre A | TablePotential vars=[C] con los valores de A en su primer estado
+\end{Verbatim}
+
+Añadir un padre a una utilidad hace lo contrario: \texttt{Add\allowbreak{}Link\allowbreak{}Edit} extiende la tabla con \texttt{add\allowbreak{}Variable} y conserva los valores. El \hyperref[err:239]{error~239} y el \hyperref[err:275]{error~275} son de la misma familia: lo que una relación pierde al quitarle una variable.
+\paragraph{Cómo arreglarlo}
+Hacer con las utilidades lo que ya se hace con los nodos de azar: \texttt{remove\allowbreak{}Variable} sobre la relación que había (una tabla o una \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential} conservan los valores con el padre en su primer estado). Si se prefiere no inventar valores, la relación por omisión de una utilidad nueva (\texttt{generate\allowbreak{}Default\allowbreak{}Potential}, líneas 149-157: una \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential} a cero), que al menos evalúa. En ningún caso una uniforme, que ninguna utilidad puede usar. El caso de supervalor (solo padres de utilidad) se queda como está.
+
+Prueba: en el diagrama de arriba, quitar A → U y después B → U: tras cada edición la relación de U es una tabla sobre sus padres y \texttt{VE\allowbreak{}Evaluation} termina; deshacer devuelve la tabla original.
+
+\setcounter{subsection}{285}
+\subsection[Pasar una variable de estados finitos a discretizada borra las restricciones y las revelaciones de sus enlaces]{En una red de análisis de decisiones, cambiar el tipo de variable de un nodo entre «estados finitos» y «discretizada», que conserva sus estados y sus relaciones, borra sin aviso las restricciones y las condiciones de revelación de todos sus enlaces}\label{err:286}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.action.core
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/VariableTypeEdit.java:79-110, 137-152, 270-323} \newline \path{core/src/main/java/org/openmarkov/core/model/network/VariableStateOperations.java:301-329} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanel.java:906-931} \newline \path{core/src/main/java/org/openmarkov/core/model/network/type/DecisionAnalysisNetworkType.java:22-23}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (la edición, sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:24]{error~24}, \hyperref[err:25]{error~25}, \hyperref[err:27]{error~27}, \hyperref[err:284]{error~284}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Variable\allowbreak{}Type\allowbreak{}Edit.\allowbreak{}do\allowbreak{}Multi\allowbreak{}Step\allowbreak{}Edit} solo toca las relaciones cuando el cambio pasa por «numérica» (líneas 88-134); entre «estados finitos» y «discretizada» los estados se conservan (\texttt{Raw\allowbreak{}Set\allowbreak{}Type} repone los de antes) y las tablas siguen valiendo. Pero las líneas 137-152 se ejecutan con cualquier cambio: vacían las condiciones de revelación de los enlaces hacia los hijos (\texttt{Raw\allowbreak{}Set\allowbreak{}Revelation}) y quitan la tabla de restricciones de todos los enlaces del nodo (\texttt{Raw\allowbreak{}Set\allowbreak{}Restriction}), aunque estén definidas sobre los mismos estados que siguen ahí. Donde sí tiene sentido borrarlas es cuando cambia el número de estados, que es lo que hace \texttt{Variable\allowbreak{}State\allowbreak{}Operations.\allowbreak{}reset\allowbreak{}Link} (líneas 301-329) al añadir o quitar uno.
+
+Solo afecta a los tipos de red que admiten restricciones y revelaciones: las redes de análisis de decisiones (DAN), las DAN de Markov y las redes de ajuste (\hyperref[err:284]{error~284}). El camino es la pestaña de dominio de las propiedades del nodo, desplegable del tipo de variable (\texttt{Node\allowbreak{}Domain\allowbreak{}Values\allowbreak{}Table\allowbreak{}Panel}, líneas 906-931).
+
+Medido el 15-10-2026 con el código de \texttt{3a93386}, en una DAN X → Y con una restricción y un estado revelador en el enlace, y X con la tabla (0,3; 0,7):
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+antes                                     | X: estados [0, 1], Finite states; enlace: hasRestrictions=true, revealing=[state 1]
+VariableTypeEdit(X, DISCRETIZED)          | X: estados [0, 1], Discretized; tabla de X [0.3, 0.7] y tabla de Y intactas; enlace: hasRestrictions=false, revealing=[]
+VariableTypeEdit(X, FINITE_STATES)        | X: estados [0, 1], Finite states; el enlace sigue sin restricciones
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Borrar las restricciones y las revelaciones solo cuando cambian los estados ---es decir, cuando el cambio pasa por «numérica», que es cuando también cambian las relaciones---, y conservarlas entre «estados finitos» y «discretizada». Las dos ediciones internas ya saben deshacerse, así que basta con no ejecutarlas en ese caso.
+
+Prueba: en una DAN, \texttt{Variable\allowbreak{}Type\allowbreak{}Edit}(X, \texttt{DISCRETIZED}) conserva la restricción y el estado revelador del enlace X → Y; a numérica los quita y deshacer los devuelve.
+
+\setcounter{subsection}{286}
+\subsection[Deshacer un cambio en los criterios de decisión después de rehacerlo no lo deshace]{Añadir, quitar o mover un criterio de decisión en las propiedades de la red, deshacerlo, rehacerlo y volver a deshacerlo deja el cambio puesto: la lista guardada para deshacer es la misma que la edición modifica al rehacer}\label{err:287}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.action.core
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/DecisionCriteriaEdit.java:33-46, 69-85, 99-105} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:1110-1116} \newline \path{core/src/main/java/org/openmarkov/core/model/network/NetworkMetadata.java:118-124} \newline \path{core/src/main/java/org/openmarkov/core/action/base/PNEdit.java:443-453} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/DecisionCriteriaTablePanel.java:92-123} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkPropertiesDialog.java:271-290}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (la edición y deshacer y rehacer, sin ventana); quitar y mover están leídos
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:57]{error~57}, \hyperref[err:58]{error~58}, \hyperref[err:174]{error~174}, \hyperref[nota:36]{nota~36}, \hyperref[nota:81]{nota~81}
+\end{ficha}
+\paragraph{Qué pasa}
+Los criterios de decisión se editan en la pestaña de criterios de las propiedades de la red (\texttt{Decision\allowbreak{}Criteria\allowbreak{}Table\allowbreak{}Panel}, líneas 92-123, que ejecuta \texttt{Decision\allowbreak{}Criteria\allowbreak{}Edit}); «OK» cierra el diálogo y deja lo hecho como un solo paso de deshacer (\texttt{Network\allowbreak{}Properties\allowbreak{}Dialog}, líneas 271-290). «Edit → Undo» lo quita y «Edit → Redo» lo vuelve a poner; pero un segundo «Undo» ya no lo quita: el criterio añadido sigue en la red, y lo mismo con uno quitado (que no vuelve) o movido (que no vuelve a su sitio). Renombrar sí se deshace bien.
+
+Por qué pasa. El constructor guarda una copia de la lista de criterios (\texttt{last\allowbreak{}Criteria}, línea 46) y \texttt{do\allowbreak{}Edit} (líneas 69-85) modifica la lista viva de la red (\texttt{get\allowbreak{}Decision\allowbreak{}Criteria} devuelve la lista misma, \texttt{Prob\allowbreak{}Net}, líneas 1110-1116, y \texttt{Network\allowbreak{}Metadata}, líneas 118-124). \texttt{undo} (líneas 99-105) no vuelve a copiar: instala \texttt{last\allowbreak{}Criteria} como lista de la red con \texttt{set\allowbreak{}Decision\allowbreak{}Criteria}. Desde ese momento la copia guardada \emph{es} la lista viva. Rehacer vuelve a ejecutar \texttt{do\allowbreak{}Edit} (\texttt{PN\allowbreak{}Edit.\allowbreak{}redo}, líneas 443-453), que añade el criterio a esa lista, y la fotografía de antes se pierde; el siguiente deshacer instala la misma lista y no cambia nada.
+
+Medido el 15-10-2026 con el código de \texttt{3a93386}, sobre un diagrama de influencia nuevo:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+criterios al empezar        | [Cost, Effectiveness]
+añadir «new»                | [Cost, Effectiveness, new]
+deshacer                    | [Cost, Effectiveness]
+rehacer                     | [Cost, Effectiveness, new]
+deshacer otra vez           | [Cost, Effectiveness, new]   <- debía ser [Cost, Effectiveness]
+\end{Verbatim}
+
+Quitar y mover (\texttt{REMOVE}, \texttt{UP}, \texttt{DOWN}) modifican la lista viva del mismo modo, así que les pasa lo mismo (leído). \texttt{Network\allowbreak{}Agent\allowbreak{}Edit} guarda y repone la lista de agentes con el mismo patrón y conviene mirarlo con la misma prueba (leído).
+\paragraph{Cómo arreglarlo}
+Que ninguna edición comparta su lista con la red: \texttt{undo} debe instalar una copia (\texttt{new ArrayList\textless{}\textgreater{}(lastCriteria)}), o \texttt{do\allowbreak{}Edit} trabajar sobre una copia e instalarla con \texttt{set\allowbreak{}Decision\allowbreak{}Criteria}. La \hyperref[nota:66]{nota~66} cuenta ediciones de opciones de la red que rehacen dos veces; aquí el problema es el contrario, pero la prueba es la misma: hacer, deshacer, rehacer y deshacer, y comparar con el principio.
+
+Prueba: añadir un criterio, deshacer, rehacer y deshacer: la lista es la del principio; lo mismo con quitar, subir y bajar.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Restricciones de red}\label{sec:restricciones}
@@ -16420,6 +16687,52 @@ Que la lectura pase por la misma regla que el panel: construir la relación con 
 
 Prueba: leer un \texttt{.\allowbreak{}pgmx} de una red de sucesos con \texttt{\textless{}TTE\textgreater{}-1\textless{}/\allowbreak{}TTE\textgreater{}} y comprobar que no se obtiene sin aviso una relación con ese tiempo (el lector lo rechaza nombrando el nodo, o avisa y pone uno válido); lo mismo con \texttt{\textless{}Probability\allowbreak{}Occurrence\textgreater{}2\textless{}/\allowbreak{}Probability\allowbreak{}Occurrence\textgreater{}}.
 
+\setcounter{subsection}{278}
+\subsection[En un modelo temporal, «OK» en las propiedades de un nodo con gemelo en otro ciclo se rechaza como nombre repetido]{En un modelo temporal, las propiedades de un nodo que tiene gemelo en otro ciclo ---como «Age {[}0{]}» junto a «Age {[}1{]}»--- no se pueden aceptar: «OK» da «There is already a variable named Age in the network.» sin que se haya tocado el nombre, y «Cancel» deshace todo lo editado; salir de la casilla del nombre da el mismo error}\label{err:279}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui, core
+\fichakey{Paquete}org.openmarkov.gui.dialog.node; org.openmarkov.core.action.core; org.openmarkov.core.model.network.constraint
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDefinitionPanel.java:914-928, 946-947, 984-986} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:406-409, 430-437} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/OkCancelDialog.java:68-79} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeBaseNameEdit.java:49-68} \newline \path{core/src/main/java/org/openmarkov/core/model/network/constraint/ValidName.java:34-39} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Variable.java:400-402, 414-417, 594-628}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo, también en la ventana: el diálogo de propiedades abierto de verdad sobre \texttt{MID-HPV.pgmx} y sobre una red hecha en código, y «OK» pulsado; lo de salir de la casilla del nombre está leído en el código y medido solo en la edición
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:72]{error~72}, \hyperref[err:62]{error~62}, \hyperref[err:38]{error~38}, \hyperref[nota:147]{nota~147}
+\end{ficha}
+\paragraph{Qué pasa}
+En un diagrama de influencia de Markov (MID), y en cualquier otro modelo temporal, casi todos los nodos tienen un gemelo en otro ciclo: «Age {[}0{]}» y «Age {[}1{]}» son la misma variable en dos instantes y comparten el nombre base «Age». Al abrir las propiedades de uno de ellos (doble clic sobre el nodo, o su menú contextual) y pulsar «OK», aunque no se haya tocado nada, sale el aviso «There is already a variable named Age in the network.» y el diálogo sigue abierto. La única salida es «Cancel», que deshace todo lo que se hubiera editado en el diálogo (\texttt{Node\allowbreak{}Properties\allowbreak{}Dialog.\allowbreak{}do\allowbreak{}Cancel\allowbreak{}Click\allowbreak{}Before\allowbreak{}Hide}, líneas 406-409). En la práctica, en un modelo temporal no se puede cambiar ninguna propiedad de esos nodos por este diálogo; solo se salva quien cambia el nombre base por uno nuevo, y entonces el nodo deja de ser gemelo de los demás ciclos.
+
+Por qué pasa. La casilla del nombre enseña el nombre base (\texttt{set\allowbreak{}Fields\allowbreak{}From\allowbreak{}Properties}, líneas 946-947). Al pulsar «OK», \texttt{do\allowbreak{}Ok\allowbreak{}Click\allowbreak{}Before\allowbreak{}Hide} (líneas 430-437) llama a \texttt{check\allowbreak{}Name\allowbreak{}Constraints} (líneas 984-986), que construye un \texttt{Node\allowbreak{}Base\allowbreak{}Name\allowbreak{}Edit} con el texto de la casilla y le pide \texttt{try\allowbreak{}Constraints\allowbreak{}Will\allowbreak{}Be\allowbreak{}Met}. Esa comprobación (\texttt{Node\allowbreak{}Base\allowbreak{}Name\allowbreak{}Edit.\allowbreak{}check\allowbreak{}Constraints\allowbreak{}Will\allowbreak{}Be\allowbreak{}Met}, líneas 49-68) pregunta a \texttt{Valid\allowbreak{}Name.\allowbreak{}name\allowbreak{}Is\allowbreak{}Already\allowbreak{}Present} (líneas 34-39), que compara el nombre nuevo con los nombres \emph{base} de todas las demás variables: el gemelo del otro ciclo tiene el mismo nombre base, así que el nombre que el nodo ya tiene cuenta como repetido. La excepción llega al botón (\texttt{Ok\allowbreak{}Cancel\allowbreak{}Dialog}, líneas 68-79), que la envuelve en \texttt{Unrecoverable\allowbreak{}Exception} y no cierra el diálogo.
+
+La casilla del nombre tiene además un oyente de foco (\texttt{focus\allowbreak{}Lost}, líneas 914-928): cuando el foco sale de ella compara el nombre \emph{completo} del nodo, «Age {[}0{]}», con el texto de la casilla, «Age», que nunca coinciden en un nodo temporal, y ejecuta el mismo \texttt{Node\allowbreak{}Base\allowbreak{}Name\allowbreak{}Edit}. Con gemelo, el error anterior sale ya al pulsar en cualquier otra casilla (leído); sin gemelo, la edición se hace, no cambia nada y queda apuntada para deshacer como «Change node name \ldots{} from B to B» (medido en la edición).
+
+Medido el 15-10-2026 con el código de \texttt{3a93386}, abriendo de verdad el diálogo de propiedades (el mismo que abre el editor) y pulsando su «OK»:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+MID-HPV.pgmx (34 nodos), «Age [0]»     | OK lanza VariableNameIsAlreadyPresent; el diálogo sigue abierto
+Red en código con «A [0]» y «A [1]», «A [0]» | OK lanza VariableNameIsAlreadyPresent; el diálogo sigue abierto
+Red en código con «B [0]» solo              | OK cierra el diálogo sin error
+NodeBaseNameEdit(«A [0]», "A").tryConstraintsWillBeMet()  | lanza «Could not met the constraint: Variables have distinct names»
+NodeBaseNameEdit(«A [0]», "B").tryConstraintsWillBeMet()  | pasa
+NodeBaseNameEdit(«B [0]», "B").executeEdit()              | se hace, el nombre sigue «B [0]», queda un paso de deshacer «from B to B»
+\end{Verbatim}
+
+El mensaje que ve el usuario es el de \texttt{Variable\allowbreak{}Name\allowbreak{}Is\allowbreak{}Already\allowbreak{}Present}: «There is already a variable named Age in the network.». El \hyperref[err:72]{error~72} corrigió el hueco contrario en \texttt{Time\allowbreak{}Slice\allowbreak{}Edit} (el instante se comprobaba con un nombre que no existía); aquí el nombre se comprueba contra los gemelos del propio nodo.
+\paragraph{Cómo arreglarlo}
+Dos cosas, en el diálogo y en la regla:
+
+\begin{itemize}
+\tightlist
+\item
+  Que el diálogo no edite ni compruebe un nombre que no ha cambiado: \texttt{focus\allowbreak{}Lost} debe comparar el texto con el nombre base (\texttt{get\allowbreak{}Base\allowbreak{}Name}), que es lo que enseña, y \texttt{check\allowbreak{}Name\allowbreak{}Constraints} debe saltarse la comprobación cuando el nombre base es el que ya tiene.
+\item
+  Que la regla no cuente a los gemelos del nodo: \texttt{Valid\allowbreak{}Name.\allowbreak{}name\allowbreak{}Is\allowbreak{}Already\allowbreak{}Present} debe comparar el nombre completo que resultará (nombre base más ciclo, como lo compone \texttt{Variable.\allowbreak{}rebuild\allowbreak{}Full\allowbreak{}Name}) con los nombres completos de las demás variables, que es lo que mira \texttt{Distinct\allowbreak{}Variable\allowbreak{}Names.\allowbreak{}check\allowbreak{}Prob\allowbreak{}Net} y lo que hace \texttt{Time\allowbreak{}Slice\allowbreak{}Edit} desde el \hyperref[err:72]{error~72}.
+\end{itemize}
+
+Queda por decidir, pero no hace falta para esto, si renombrar un nodo temporal debe renombrar también a sus gemelos de los otros ciclos, como la pestaña de dominio propaga los estados, el tipo y la precisión (\texttt{Node\allowbreak{}Domain\allowbreak{}Values\allowbreak{}Table\allowbreak{}Panel}).
+
+Prueba: en un MID con «A {[}0{]}» y «A {[}1{]}», abrir el diálogo de propiedades de «A {[}0{]}» y pulsar «OK»: se cierra con \texttt{Ok}; \texttt{Node\allowbreak{}Base\allowbreak{}Name\allowbreak{}Edit}(«A {[}0{]}», "A") pasa las restricciones; y al salir de la casilla del nombre sin cambiarlo no queda ningún paso de deshacer.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: menús, diálogos y herramientas}\label{sec:menus}
 
@@ -18816,6 +19129,15 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:276]{Error 276} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos de la tarde del 15 de octubre \\
 \hyperref[err:277]{Error 277} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos de la tarde del 15 de octubre \\
 \hyperref[err:278]{Error 278} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos de la tarde del 15 de octubre \\
+\hyperref[err:279]{Error 279} & hallazgo nuevo, al revisar el código de la edición de redes el 15 de octubre \\
+\hyperref[err:280]{Error 280} & hallazgo nuevo, al revisar el código de la edición de redes el 15 de octubre \\
+\hyperref[err:281]{Error 281} & hallazgo nuevo, al revisar el código de la edición de redes el 15 de octubre \\
+\hyperref[err:282]{Error 282} & hallazgo nuevo, al revisar el código de la edición de redes el 15 de octubre \\
+\hyperref[err:283]{Error 283} & hallazgo nuevo, al revisar el código de la edición de redes el 15 de octubre \\
+\hyperref[err:284]{Error 284} & hallazgo nuevo, al revisar el código de la edición de redes el 15 de octubre \\
+\hyperref[err:285]{Error 285} & hallazgo nuevo, al revisar el código de la edición de redes el 15 de octubre \\
+\hyperref[err:286]{Error 286} & hallazgo nuevo, al revisar el código de la edición de redes el 15 de octubre \\
+\hyperref[err:287]{Error 287} & hallazgo nuevo, al revisar el código de la edición de redes el 15 de octubre \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
