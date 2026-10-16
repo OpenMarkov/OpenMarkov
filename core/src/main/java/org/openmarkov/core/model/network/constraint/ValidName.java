@@ -13,9 +13,7 @@ import org.openmarkov.core.model.network.GraphNetwork;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.Variable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * checks that the name field is filled and there isn't any node with the same
@@ -25,17 +23,13 @@ public class ValidName extends PNConstraint {
     // Attributes.
     
     /**
-     * This method checks that the name field is filled and there isn't any node
-     * with the same name.
-     *
-     * @return true, if the name field isn't empty and there isn't any node with
-     * this name; otherwise, false.
+     * Whether another variable of the network already has the name that the node would get with the base
+     * name {@code newName}; its twins in other time slices share the base name but not the name.
      */
     public static boolean nameIsAlreadyPresent(Node node, String newName) {
-        var variables = new ArrayList<>(node.getProbNet().getVariables());
-        variables.remove(node.getVariable());
-        var variablesNames = variables.stream().map(v -> v.getBaseName()).collect(Collectors.toSet());
-        return variablesNames.contains(newName);
+        String fullName = node.getVariable().nameWithBaseName(newName);
+        return node.getProbNet().getVariables().stream()
+                   .anyMatch(variable -> variable != node.getVariable() && variable.getName().equals(fullName));
     }
     
     @Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {

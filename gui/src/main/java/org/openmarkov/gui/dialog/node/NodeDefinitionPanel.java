@@ -916,7 +916,7 @@ public final class NodeDefinitionPanel extends JPanel
             return;
         }
         // actionPerformedNodeNameChangeValue();
-        if (node.getName().equals(this.jTextFieldNodeName.getText())) {
+        if (node.getVariable().getBaseName().equals(this.jTextFieldNodeName.getText())) {
             return;
         }
         NodeBaseNameEdit nodeBaseNameEdit = new NodeBaseNameEdit(node, this.jTextFieldNodeName.getText());

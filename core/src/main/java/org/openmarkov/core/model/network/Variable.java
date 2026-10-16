@@ -615,16 +615,18 @@ public class Variable implements Cloneable, Comparable<Variable>, ClassLocalizab
     }
 
     /**
-     * Rebuilds {@code name} from the current {@code baseName} and
-     * {@code timeSlice}.  This is the single place where the full name
-     * is composed, ensuring the invariant is always maintained.
+     * The full name this variable has with the base name {@code baseName}: the base name followed by
+     * the time slice, if it has one. This is the single place where the full name is composed.
+     */
+    public String nameWithBaseName(String baseName) {
+        return timeSlice != noTemporalTimeSlice ? baseName + " [" + timeSlice + "]" : baseName;
+    }
+
+    /**
+     * Rebuilds {@code name} from the current {@code baseName} and {@code timeSlice}.
      */
     private void rebuildFullName() {
-        if (timeSlice != noTemporalTimeSlice) {
-            this.name = baseName + " [" + timeSlice + "]";
-        } else {
-            this.name = baseName;
-        }
+        this.name = nameWithBaseName(baseName);
     }
     
     /**
