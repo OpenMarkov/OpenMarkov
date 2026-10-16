@@ -38,7 +38,7 @@ import java.util.List;
     private final boolean numberOfStatesChanged;
     
     private final List<Link<Node>> oldLinks;
-    private final HashMap<Node, Potential> potentialsByNode;
+    private final HashMap<Node, List<Potential>> potentialsByNode;
     
     public NodeReplaceStatesEdit(Node node, State[] newStates) {
         super(node.getProbNet());
@@ -48,14 +48,18 @@ import java.util.List;
         this.numberOfStatesChanged = this.newStates.length != this.lastStates.length;
         if (this.numberOfStatesChanged) {
             this.potentialsByNode = new HashMap<>();
-            this.potentialsByNode.put(this.node, node.getPotential().copy());
-            node.getChildren().forEach(child ->
-                                               this.potentialsByNode.put(child, child.getPotential().copy()));
+            this.potentialsByNode.put(this.node, copiesOf(node.getPotentials()));
+            node.getChildren().forEach(child -> this.potentialsByNode.put(child, copiesOf(child.getPotentials())));
             this.oldLinks = this.node.getProbNet().getLinks(node).stream().map(CloneUtils::safeClone).toList();
         } else {
             this.potentialsByNode = new HashMap<>();
             this.oldLinks = Collections.emptyList();
         }
+    }
+    
+    /** A copy of each relation of a node; empty for a node without relation, such as a decision without policy. */
+    private static List<Potential> copiesOf(List<Potential> potentials) {
+        return potentials.stream().map(Potential::copy).toList();
     }
     
     // Methods
@@ -68,7 +72,7 @@ import java.util.List;
         this.node.getVariable().replaceStates(this.node, this.lastStates);
         if (this.numberOfStatesChanged) {
             for (var potentialAndNode : this.potentialsByNode.entrySet()) {
-                potentialAndNode.getKey().setPotential(potentialAndNode.getValue());
+                potentialAndNode.getKey().setPotentials(potentialAndNode.getValue());
             }
             for (var oldLink : this.oldLinks) {
                 var link = this.probNet.getLink(oldLink.getFrom(), oldLink.getTo(), oldLink.isDirected());
