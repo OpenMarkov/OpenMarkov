@@ -10,8 +10,12 @@ package org.openmarkov.core.action.base.linkEdits;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.PartitionedInterval;
@@ -19,10 +23,12 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.ModelNetworkConstraint;
+import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
 import org.openmarkov.core.model.network.potential.operation.PotentialOperations;
+import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 
 import java.util.ArrayList;
@@ -103,13 +109,9 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
                         Potential newPotential = PotentialOperations.superValuePotential(oldPotential, variables);
                         newPotentials.add(newPotential);
                     }
-                } else if (!node2.onlyNumericalParents()) {//mixture of finite states and numerical Uniform
+                } else {
                     for (Potential oldPotential : oldPotentials) {
-                        // Update potential
-                        List<Variable> variables = new ArrayList<>(oldPotential.getVariables());
-                        variables.remove(node1.getVariable());
-                        Potential newPotential = new UniformPotential(variables, oldPotential.getPotentialRole());
-                        newPotentials.add(newPotential);
+                        newPotentials.add(withoutTheParent(oldPotential));
                     }
                 }
                 node2.setPotentials(newPotentials);
@@ -170,6 +172,27 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
         }
     }
     
+    /**
+     * The relation of the utility node without the parent: the values it had with the parent in its first state, as a
+     * chance node keeps them; a relation that cannot drop the parent becomes that of a new utility node.
+     */
+    private Potential withoutTheParent(Potential oldPotential) {
+        Potential newPotential;
+        if (oldPotential instanceof ExactDistrPotential exactDistrPotential) {
+            try {
+                EvidenceCase parentInItsFirstState = new EvidenceCase();
+                parentInItsFirstState.addFinding(new Finding(node1.getVariable(), 0));
+                newPotential = exactDistrPotential.project(parentInItsFirstState);
+            } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther | NonProjectablePotentialException e) {
+                throw new UnreachableException(e);
+            }
+            newPotential.setPotentialRole(oldPotential.getPotentialRole());
+        } else {
+            newPotential = oldPotential.removeVariable(node1.getVariable());
+        }
+        return newPotential instanceof UniformPotential ? PotentialUtils.generateDefaultPotential(node2) : newPotential;
+    }
+
     @Override public void undo() {
         super.undo();
 

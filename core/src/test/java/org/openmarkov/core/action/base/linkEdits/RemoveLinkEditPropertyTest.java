@@ -333,10 +333,10 @@ class RemoveLinkEditPropertyTest {
 
     /**
      * Removing a link to a UTILITY node that has mixed parents (numerical +
-     * finite-states) must produce a {@link UniformPotential}.
+     * finite-states) must not produce a {@link UniformPotential}, which no utility can use.
      */
     @Example
-    void removeLink_utilityWithMixedParents_producesUniformPotential() throws DoEditException {
+    void removeLink_utilityWithMixedParents_producesNoUniformPotential() throws DoEditException {
         ProbNet net = new ProbNet(InfluenceDiagramType.getUniqueInstance());
         net.getPNESupport().setWithUndo(true);
 
@@ -364,7 +364,7 @@ class RemoveLinkEditPropertyTest {
         new RemoveLinkEdit(net, vNum, vU, true).executeEdit();
 
         Potential newPot = nodeU.getPotential();
-        assertThat(newPot).isInstanceOf(UniformPotential.class);
+        assertThat(newPot).isNotInstanceOf(UniformPotential.class);
         assertThat(newPot.getVariables()).doesNotContain(vNum);
     }
 
