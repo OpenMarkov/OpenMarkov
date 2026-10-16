@@ -101,6 +101,6 @@ import java.util.List;
         if (stateAction == StateAction.RENAME) {
             modifiedCriterion.setCriterionName(lastName);
         }
-        probNet.setDecisionCriteria(lastCriteria);
+        probNet.setDecisionCriteria(new ArrayList<>(lastCriteria));
     }
 }
