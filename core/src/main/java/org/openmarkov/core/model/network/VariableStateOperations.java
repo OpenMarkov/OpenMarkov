@@ -245,8 +245,8 @@ public final class VariableStateOperations {
     }
 
     /**
-     * Sets uniform potential for the edited node and its children (except for
-     * Decision nodes).
+     * Sets a uniform potential for the edited node and its children, except for a decision,
+     * which loses its imposed policy.
      */
     private static void setUniformPotential(Node node) {
         Potential uniformPotential;
@@ -259,6 +259,8 @@ public final class VariableStateOperations {
             potentials = new ArrayList<>();
             potentials.add(uniformPotential);
             node.setPotentials(potentials);
+        } else {
+            node.clearPotentials();
         }
         for (Node child : node.getChildren()) {
             if (child.getNodeType() != NodeType.DECISION) {
@@ -267,6 +269,8 @@ public final class VariableStateOperations {
                         probNet, child.getVariable(), child.getNodeType());
                 potentials.add(uniformPotential);
                 child.setPotentials(potentials);
+            } else {
+                child.clearPotentials();
             }
         }
     }
