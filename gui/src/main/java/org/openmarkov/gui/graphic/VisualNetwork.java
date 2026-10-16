@@ -1159,11 +1159,25 @@ public class VisualNetwork implements PNEditListener {
                 .toList();
         SelectedContent copiedContent = new SelectedContent(selectedNodes, selectedLinks);
         if (!copiedContent.isEmpty()) {
-            clipboardAssistant.copyToClipboard(copiedContent);
+            clipboardAssistant.copyToClipboard(this.takenFromACopyOfTheNetwork(copiedContent));
             if (cut) {
                 this.removeSelectedObjects();
             }
         }
+    }
+
+    /**
+     * The same nodes and links, taken from a deep copy of the network, so that what is done to the network
+     * after copying does not reach the clipboard.
+     */
+    private SelectedContent takenFromACopyOfTheNetwork(SelectedContent content) {
+        ProbNet copy = this.probNet.deepCopy();
+        List<Node> nodes = content.nodes().stream().map(node -> copy.getNode(node.getName())).toList();
+        List<Link<Node>> links = content.links().stream()
+                .map(link -> copy.getLink(copy.getNode(link.getFrom().getName()), copy.getNode(link.getTo().getName()),
+                                          link.isDirected()))
+                .toList();
+        return new SelectedContent(nodes, links);
     }
     
     /**
