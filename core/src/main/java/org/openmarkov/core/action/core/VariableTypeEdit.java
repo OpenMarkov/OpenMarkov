@@ -110,7 +110,7 @@ public class VariableTypeEdit extends MultiStepEdit {
             }
             
             
-            if (originalVariableType == VariableType.NUMERIC) {
+            if (originalVariableType == VariableType.NUMERIC && node.getNodeType() != NodeType.DECISION) {
                 // Build the list of variables (node and its parents)
                 List<Variable> variables = new ArrayList<>();
                 if (node.getNodeType() != NodeType.UTILITY) {
@@ -183,7 +183,16 @@ public class VariableTypeEdit extends MultiStepEdit {
         }
     }
     
+    /**
+     * Gives the node a uniform relation; a decision gets none, and loses its imposed policy if it had one.
+     */
     public static void setUniformPotentialToNode(Node node, StepExecuter stepExecuter) throws DoEditException {
+        if (node.getNodeType() == NodeType.DECISION) {
+            if (node.hasPolicy()) {
+                stepExecuter.execute(new RawSetPotentialEdit(node, List.of()));
+            }
+            return;
+        }
         stepExecuter.execute(new RawSetPotentialEdit(node, PotentialOperations.getUniformPotential(
                 node.getProbNet(), node.getVariable(), node.getNodeType())));
     }
