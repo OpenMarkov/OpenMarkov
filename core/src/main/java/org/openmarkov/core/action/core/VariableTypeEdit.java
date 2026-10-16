@@ -134,23 +134,34 @@ public class VariableTypeEdit extends MultiStepEdit {
         }
         
         
-        for (Node child : probNet.getChildren(node)) {
-            Link<Node> link = probNet.getLink(node, child, true);
-            if (LinkOperations.hasRevealingConditions(link)) {
-                var originalRevealingIntervals = link.getRevealingIntervals();
-                var originalRevealingStates = link.getRevealingStates();
-                var newRevealingIntervals = new ArrayList<PartitionedInterval>();
-                var newRevealingStates = new ArrayList<State>();
-                stepExecuter.execute(new RawSetRevelation(link, newRevealingIntervals, newRevealingStates, originalRevealingIntervals, originalRevealingStates));
+        if (this.theStatesChange(originalStates, originalVariableType)) {
+            for (Node child : probNet.getChildren(node)) {
+                Link<Node> link = probNet.getLink(node, child, true);
+                if (LinkOperations.hasRevealingConditions(link)) {
+                    var originalRevealingIntervals = link.getRevealingIntervals();
+                    var originalRevealingStates = link.getRevealingStates();
+                    var newRevealingIntervals = new ArrayList<PartitionedInterval>();
+                    var newRevealingStates = new ArrayList<State>();
+                    stepExecuter.execute(new RawSetRevelation(link, newRevealingIntervals, newRevealingStates, originalRevealingIntervals, originalRevealingStates));
+                }
+            }
+
+            for (Link<Node> link : probNet.getLinks(node)) {
+                if (link.hasRestrictions()) {
+                    stepExecuter.execute(new RawSetRestriction(link));
+                }
             }
         }
         
-        for (Link<Node> link : probNet.getLinks(node)) {
-            if (link.hasRestrictions()) {
-                stepExecuter.execute(new RawSetRestriction(link));
-            }
-        }
-        
+    }
+
+    /**
+     * Whether the edit changes the states of the variable: when it goes through "numeric", or when a single state is
+     * replaced by the default ones.
+     */
+    private boolean theStatesChange(State[] originalStates, VariableType originalVariableType) {
+        return originalVariableType == VariableType.NUMERIC || this.newType == VariableType.NUMERIC
+               || originalStates.length == 1;
     }
     
     public void setPotentialsNodeAndChildren(Node node, StepExecuter stepExecuter) throws DoEditException {
