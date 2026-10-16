@@ -16,15 +16,22 @@ import org.openmarkov.core.action.core.AddNodeEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.constraint.NoLinkRestriction;
+import org.openmarkov.core.model.network.constraint.NoRevelationArc;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.PotentialRole;
+import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.window.edition.SelectedContent;
 
 import java.awt.geom.Rectangle2D;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -154,6 +161,13 @@ public class PasteEdit extends MultiStepEdit {
                     newNode.setRelevance(originalNode.getRelevance());
                     newNode.setPurpose(originalNode.getPurpose());
                     newNode.setAdditionalProperties(originalNode.getAdditionalProperties());
+                    newNode.setAlwaysObserved(originalNode.isAlwaysObserved());
+                    newNode.setAlwaysAppend(originalNode.isAlwaysAppend());
+                    newNode.setInput(originalNode.isInput());
+                    newNode.setPolicyType(originalNode.getPolicyType());
+                }
+                for (Link<Node> copiedLink : PasteEdit.this.clipboardContent.links()) {
+                    PasteEdit.this.copyRestrictionsAndRevelations(copiedLink);
                 }
             }
         };
@@ -173,6 +187,34 @@ public class PasteEdit extends MultiStepEdit {
     }
     
     
+    /**
+     * Gives the pasted link the restrictions and the revelation conditions of the copied one, when the network admits
+     * them.
+     */
+    private void copyRestrictionsAndRevelations(Link<Node> copiedLink) {
+        Node from = this.probNet.getNode(this.newVariables.get(copiedLink.getFrom().getName()));
+        Node to = this.probNet.getNode(this.newVariables.get(copiedLink.getTo().getName()));
+        Link<Node> pastedLink = this.probNet.getLink(from, to, copiedLink.isDirected());
+        if (copiedLink.hasRestrictions() && this.probNet.getConstraintOfClass(NoLinkRestriction.class) == null) {
+            TablePotential restrictions = copiedLink.getRestrictionsPotential();
+            List<Variable> variables = restrictions.getVariables().stream()
+                    .map(variable -> this.probNet.getVariable(this.newVariables.get(variable.getName())))
+                    .toList();
+            pastedLink.setRestrictionsPotential(
+                    new TablePotential(variables, PotentialRole.LINK_RESTRICTION, restrictions.getValues().clone()));
+        }
+        if (this.probNet.getConstraintOfClass(NoRevelationArc.class) == null) {
+            Variable copiedVariable = copiedLink.getFrom().getVariable();
+            State[] pastedStates = from.getVariable().getStates();
+            pastedLink.setRevealingStates(copiedLink.getRevealingStates().stream()
+                    .map(state -> pastedStates[copiedVariable.getStateIndex(state)])
+                    .collect(Collectors.toCollection(ArrayList::new)));
+            pastedLink.setRevealingIntervals(copiedLink.getRevealingIntervals().stream()
+                    .map(interval -> new PartitionedInterval(interval.getLimits(), interval.getBelongsToLeftSide()))
+                    .collect(Collectors.toCollection(ArrayList::new)));
+        }
+    }
+
     /**
      * Returns the pasted content.
      *
