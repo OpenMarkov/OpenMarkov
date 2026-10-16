@@ -108,6 +108,7 @@ public final class DecisionTreeEditor extends EditorPanel {
         this.jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         // Allows JTree nodes to accept CR/LF codes
         this.jTree.setShowsRootHandles(true);
+        this.jTree.setRootVisible(false);
         this.jTree.setRowHeight(0);
         this.jTree.setCellRenderer((tree, object, selected, expanded, leaf, row, hasFocus) -> {
             if (object instanceof DecisionTreeElementPanel) {

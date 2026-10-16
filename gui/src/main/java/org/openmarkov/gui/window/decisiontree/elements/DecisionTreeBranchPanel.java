@@ -10,7 +10,6 @@ package org.openmarkov.gui.window.decisiontree.elements;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.network.NodeType;
-import org.openmarkov.gui.window.decisiontree.format.DecisionTreeUtilityFormatters;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -60,8 +59,7 @@ public non-sealed class DecisionTreeBranchPanel extends DecisionTreeElementPanel
 		if (parent != null && parent.getNodeType() == NodeType.CHANCE) {
 			txtLeft += " /  P=" + df.format(treeBranch.getBranchProbability());
 		}
-		txtLeft += DecisionTreeUtilityFormatters.format(treeBranch.getUtility(), df, parent != null)
-				+ "</td></table></html>";
+		txtLeft += "</td></table></html>";
 		return txtLeft.toString();
 	}
 	

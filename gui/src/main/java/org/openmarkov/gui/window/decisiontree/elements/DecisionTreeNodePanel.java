@@ -19,7 +19,7 @@ import java.awt.*;
 
 /**
  * GUI representation of a logical decision tree node.
- * It manages node-specific icons and displays utility values for terminal nodes.
+ * It manages node-specific icons and displays the utility of every node.
  *
  * @author CISIAD, UNED
  * @version 2019
@@ -74,14 +74,12 @@ public non-sealed class DecisionTreeNodePanel extends DecisionTreeElementPanel {
     
     
     /**
-     * Updates the right label with formatted utility data if the node is a utility type.
+     * Writes the utility of the node, or its cost-effectiveness partition, next to the icon.
      * {@inheritDoc}
      */
     @Override
     public void update(boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-        if (this.treeNode.getNodeType() == NodeType.UTILITY) {
-            this.descriptionLabel.setText(DecisionTreeUtilityFormatters.format(this.treeNode.getUtility(), this.df, false));
-        }
+        this.descriptionLabel.setText(DecisionTreeUtilityFormatters.format(this.treeNode.getUtility(), this.df, false));
     }
     
     /**
