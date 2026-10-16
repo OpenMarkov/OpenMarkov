@@ -162,6 +162,16 @@ public class AugmentedProbTablePotential extends Potential {
         augmentedProbTable.replaceVariableInFunctions(oldVariable, variable);
     }
 
+    /** Shifts the variables and, with them, the two lists they are sorted into, the inner table and its formulas. */
+    @Override public void shift(ProbNet probNet, int timeDifference) {
+        List<Variable> shifted = getShiftedVariables(probNet, timeDifference);
+        for (int position = 0; position < shifted.size(); position++) {
+            if (shifted.get(position) != variables.get(position)) {
+                replaceVariable(position, shifted.get(position));
+            }
+        }
+    }
+
     /**
      * Everything this potential holds beyond {@code variables} is derived from them, and
      * {@link Potential#deepCopy} only re-points {@code variables} itself: it builds the copy through
