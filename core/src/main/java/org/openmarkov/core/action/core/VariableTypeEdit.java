@@ -29,6 +29,7 @@ import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
 import org.openmarkov.core.model.network.potential.operation.PotentialOperations;
+import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,11 +180,7 @@ public class VariableTypeEdit extends MultiStepEdit {
                         newPotentials.add(newPotential);
                     }
                 } else {
-                    for (Potential oldPotential : child.getPotentials()) {
-                        Potential newPotential = new UniformPotential(oldPotential.getVariables(),
-                                                                      oldPotential.getPotentialRole());
-                        newPotentials.add(newPotential);
-                    }
+                    newPotentials.add(PotentialUtils.generateDefaultPotential(child));
                 }
                 stepExecuter.execute(new RawSetPotentialEdit(child, newPotentials));
             } else {

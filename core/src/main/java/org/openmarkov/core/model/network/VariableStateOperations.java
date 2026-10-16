@@ -10,10 +10,13 @@ package org.openmarkov.core.model.network;
 import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.core.model.network.potential.UncertainTablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
 import org.openmarkov.core.model.network.potential.operation.PotentialOperations;
+import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,7 +92,9 @@ public final class VariableStateOperations {
                 nodes = probNet.getChildren(node);
 
                 for (Node child : nodes) {
-                    if (!child.getPotentials().isEmpty()) {
+                    if (child.getNodeType() == NodeType.UTILITY) {
+                        child.setPotentials(new ArrayList<>(List.of(PotentialUtils.generateDefaultPotential(child))));
+                    } else if (!child.getPotentials().isEmpty()) {
                         List<Potential> container = new ArrayList<>();
                         UniformPotential childLastPotential = new UniformPotential(
                                 child.getPotentials().getFirst().getVariables(),
@@ -119,7 +124,11 @@ public final class VariableStateOperations {
                                       .collect(Collectors.toCollection(ArrayList::new));
         list.add(stateIndex, new State(newName));
         variable.setStates(list.toArray(new State[0]));
-        setUniformPotential(node);
+        int[] oldStateOf = new int[list.size()];
+        for (int i = 0; i < oldStateOf.length; i++) {
+            oldStateOf[i] = i < stateIndex ? i : (i == stateIndex ? -1 : i - 1);
+        }
+        setUniformPotential(node, oldStates.length, oldStateOf);
         if (variable.getVariableType() == VariableType.DISCRETIZED) {
             variable.setPartitionedInterval(
                     getNewPartitionedInterval(variable, variable.getPartitionedInterval()));
@@ -140,7 +149,11 @@ public final class VariableStateOperations {
             }
         }
         variable.setStates(newStates);
-        setUniformPotential(node);
+        int[] oldStateOf = new int[newStates.length];
+        for (int i = 0; i < oldStateOf.length; i++) {
+            oldStateOf[i] = i < selectedStateIndex ? i : i + 1;
+        }
+        setUniformPotential(node, oldStates.length, oldStateOf);
         if (variable.getVariableType() == VariableType.NUMERIC
                 || variable.getVariableType() == VariableType.DISCRETIZED) {
             PartitionedInterval current = variable.getPartitionedInterval();
@@ -245,10 +258,12 @@ public final class VariableStateOperations {
     }
 
     /**
-     * Sets a uniform potential for the edited node and its children, except for a decision,
-     * which loses its imposed policy.
+     * Sets a uniform potential for the edited node and its children, except for a decision, which loses its
+     * imposed policy, and for a utility child, which keeps its values ({@link #withTheNewStatesOf}).
+     *
+     * @param oldStateOf the old index of each state of the edited variable, or -1 for a new one
      */
-    private static void setUniformPotential(Node node) {
+    private static void setUniformPotential(Node node, int oldNumStates, int[] oldStateOf) {
         Potential uniformPotential;
         List<Potential> potentials;
         ProbNet probNet = node.getProbNet();
@@ -263,7 +278,9 @@ public final class VariableStateOperations {
             node.clearPotentials();
         }
         for (Node child : node.getChildren()) {
-            if (child.getNodeType() != NodeType.DECISION) {
+            if (child.getNodeType() == NodeType.UTILITY) {
+                child.setPotentials(withTheNewStatesOf(child, node.getVariable(), oldNumStates, oldStateOf));
+            } else if (child.getNodeType() != NodeType.DECISION) {
                 potentials = new ArrayList<>();
                 uniformPotential = PotentialOperations.getUniformPotential(
                         probNet, child.getVariable(), child.getNodeType());
@@ -273,6 +290,84 @@ public final class VariableStateOperations {
                 child.clearPotentials();
             }
         }
+    }
+
+    /**
+     * The relations of a utility node once a state of its parent has been added or removed: a table or an exact
+     * distribution keeps the values of the configurations that are still there, with 0 in those of a new state;
+     * any other relation becomes that of a new utility node.
+     *
+     * @param oldStateOf the old index of each state of the parent, or -1 for a new one
+     */
+    private static List<Potential> withTheNewStatesOf(Node utility, Variable parent, int oldNumStates, int[] oldStateOf) {
+        List<Potential> potentials = new ArrayList<>();
+        for (Potential potential : utility.getPotentials()) {
+            List<Variable> variables = potential.getVariables();
+            Potential newPotential = null;
+            if (!variables.contains(parent)) {
+                newPotential = potential;
+            } else if (potential instanceof ExactDistrPotential exactDistrPotential) {
+                double[] values = valuesWithTheNewStates(variables.subList(1, variables.size()),
+                                                         exactDistrPotential.getValues(), parent, oldNumStates, oldStateOf);
+                if (values != null) {
+                    newPotential = new ExactDistrPotential(variables, potential.getPotentialRole(), values);
+                }
+            } else if (potential.getClass() == TablePotential.class || potential.getClass() == UncertainTablePotential.class) {
+                double[] values = valuesWithTheNewStates(variables, ((TablePotential) potential).getValues(),
+                                                         parent, oldNumStates, oldStateOf);
+                if (values != null) {
+                    newPotential = new TablePotential(variables, potential.getPotentialRole(), values);
+                }
+            }
+            if (newPotential == null) {
+                newPotential = PotentialUtils.generateDefaultPotential(utility);
+            }
+            if (newPotential != potential) {
+                newPotential.setComment(potential.getComment());
+                newPotential.setCriterion(potential.getCriterion());
+            }
+            potentials.add(newPotential);
+        }
+        return potentials;
+    }
+
+    /**
+     * The values of a table over {@code variables} once {@code parent} has its new states, or {@code null} if
+     * {@code oldValues} do not fit the old states. The first variable changes fastest.
+     */
+    private static double[] valuesWithTheNewStates(List<Variable> variables, double[] oldValues, Variable parent,
+                                                   int oldNumStates, int[] oldStateOf) {
+        int position = variables.indexOf(parent);
+        int[] newDimensions = variables.stream().mapToInt(Variable::getNumStates).toArray();
+        int[] oldOffsets = new int[newDimensions.length];
+        int oldSize = 1;
+        for (int i = 0; i < newDimensions.length; i++) {
+            oldOffsets[i] = oldSize;
+            oldSize *= i == position ? oldNumStates : newDimensions[i];
+        }
+        if (oldValues.length != oldSize) {
+            return null;
+        }
+        int newSize = Arrays.stream(newDimensions).reduce(1, (a, b) -> a * b);
+        double[] newValues = new double[newSize];
+        for (int cell = 0; cell < newSize; cell++) {
+            int rest = cell;
+            int oldCell = 0;
+            boolean isNew = false;
+            for (int i = 0; i < newDimensions.length; i++) {
+                int state = rest % newDimensions[i];
+                rest /= newDimensions[i];
+                if (i == position) {
+                    state = oldStateOf[state];
+                    isNew = state < 0;
+                }
+                oldCell += state * oldOffsets[i];
+            }
+            if (!isNew) {
+                newValues[cell] = oldValues[oldCell];
+            }
+        }
+        return newValues;
     }
 
     /**
