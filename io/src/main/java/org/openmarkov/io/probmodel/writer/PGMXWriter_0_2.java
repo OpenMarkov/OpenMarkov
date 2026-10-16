@@ -845,7 +845,7 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
         }
         
         String potentialType = PotentialUtils.getPotentialName(potential.getClass());
-        if (potential instanceof AugmentedProbTablePotential || (potential.getClass() == TablePotential.class)) {
+        if (potential.getClass() == TablePotential.class) {
             potentialType = "Table";
         }
         potentialElement.setAttribute(XMLAttributes.TYPE.toString(), potentialType);

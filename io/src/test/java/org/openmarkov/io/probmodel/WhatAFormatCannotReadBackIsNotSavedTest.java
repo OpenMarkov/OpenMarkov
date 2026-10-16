@@ -10,11 +10,14 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.openmarkov.core.exception.WriterException;
+import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.modelUncertainty.NormalFunction;
+import org.openmarkov.core.model.network.potential.AugmentedProbTablePotential;
+import org.openmarkov.core.model.network.potential.DeltaPotential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
@@ -105,6 +108,34 @@ public class WhatAFormatCannotReadBackIsNotSavedTest {
 
         new PGMXWriter_1_0().write(file.toString(), network, List.of());
         assertInstanceOf(UnivariateDistrPotential.class, read(file).getNode("Cost").getPotentials().getFirst());
+    }
+
+    @Test public void aTableOfFormulasIsNotSavedInFormat02(@TempDir Path folder) throws Exception {
+        ProbNet network = new ProbNet(BayesianNetworkType.getUniqueInstance());
+        Variable age = new Variable("Age", true, 0, 100, true, 1);
+        Variable smoker = new Variable("Smoker", "no", "yes");
+        network.addNode(age, NodeType.CHANCE).setPotential(
+                new DeltaPotential(List.of(age), PotentialRole.CONDITIONAL_PROBABILITY, 30));
+        network.addNode(smoker, NodeType.CHANCE);
+        network.addLink(age, smoker, true);
+        List<Variable> variables = List.of(smoker, age);
+        AugmentedProbTablePotential formulas = new AugmentedProbTablePotential(variables, PotentialRole.CONDITIONAL_PROBABILITY);
+        VariableExpression[] cells = formulas.getAugmentedProbTable().getFunctionValues();
+        cells[0] = new VariableExpression(variables, "1-{Age}/100");
+        cells[1] = new VariableExpression(variables, "{Age}/100");
+        network.getNode(smoker).setPotential(formulas);
+        Path file = folder.resolve("network.pgmx");
+
+        var refused = assertThrows(WriterException.RelationNotSupportedByFormat.class,
+                () -> new PGMXWriter_0_2().write(file.toString(), network, List.of()));
+
+        assertEquals("The network is not saved: the relation of Smoker, of type AugmentedProbTable, cannot be saved in "
+                + "format 0.2.0, which could not read it back. Save the network in another format.",
+                refused.getExceptionMessage());
+        assertFalse(Files.exists(file));
+
+        new PGMXWriter_1_0().write(file.toString(), network, List.of());
+        assertInstanceOf(AugmentedProbTablePotential.class, read(file).getNode("Smoker").getPotentials().getFirst());
     }
 
     @Test public void aNetworkThatFormat02CanReadIsStillSaved(@TempDir Path folder) throws Exception {
