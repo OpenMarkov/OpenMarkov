@@ -46,6 +46,7 @@ public class ChangeNodeTypeEdit extends MultiStepEdit {
     }
 
     @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException, ThereIsNoPotentialInNodeException {
+        boolean becomesADecision = this.newNodeType == NodeType.DECISION && this.node.getNodeType() != NodeType.DECISION;
         stepExecuter.execute(new SetNodeTypeEdit(this.node, this.newNodeType));
         VariableType[] availableVariableTypes = VariableType.of(this.newNodeType);
         VariableType oldVariableType = this.node.getVariable().getVariableType();
@@ -55,7 +56,8 @@ public class ChangeNodeTypeEdit extends MultiStepEdit {
         }
         Potential oldPotential = this.node.getPotential();
         List<Class<? extends Potential>> availablePotentials = PotentialUtils.getFilteredPotentialClasses(this.node);
-        boolean potentialIsInvalid = oldPotential == null || !availablePotentials.contains(oldPotential.getClass());
+        boolean potentialIsInvalid = oldPotential == null || becomesADecision
+                || !availablePotentials.contains(oldPotential.getClass());
         if(potentialIsInvalid) {
             Potential newPotential = PotentialUtils.generateDefaultPotential(this.probNet, this.node.getVariable(), this.newNodeType);
             stepExecuter.execute(new SetPotentialEdit(this.node, this.node.getPotential(), newPotential));
