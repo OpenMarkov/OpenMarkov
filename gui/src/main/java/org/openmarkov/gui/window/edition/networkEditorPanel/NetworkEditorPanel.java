@@ -28,6 +28,7 @@ import org.openmarkov.core.exception.WriterException;
 import org.openmarkov.core.inference.tasks.OptimalPolicies;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Point2D;
@@ -574,7 +575,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         Node dummyNode = new Node(new ProbNet(), node.getVariable(), node.getNodeType());
         dummyNode.setPotential(expectedUtility);
         PotentialEditDialog expectedUtilityDialog = new PotentialEditDialog(ComponentUtilities.getOwner(this), dummyNode, true);
-        expectedUtilityDialog.setTitle("ExpectedUtilityDialog.Title");
+        expectedUtilityDialog.setTitle(StringDatabase.getUniqueInstance().getString("ExpectedUtilityDialog.Title") + ": " + node.getName());
         expectedUtilityDialog.requestValues();
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
@@ -602,7 +603,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         }
         PotentialEditDialog optimalPolicyDialog =
                 new PotentialEditDialog(ComponentUtilities.getOwner(this), dummyNode, true);
-        optimalPolicyDialog.setTitle("OptimalPolicyDialog.Title");
+        optimalPolicyDialog.setTitle(StringDatabase.getUniqueInstance().getString("OptimalPolicyDialog.Title") + ": " + dummyNode.getName());
         optimalPolicyDialog.requestValues();
         this.visualNetwork.setSelectedAllNodes(false);
         this.repaint();
