@@ -1088,6 +1088,8 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
         Variable oldVariable = oldNode.getVariable();
         Variable newVariable = oldVariable.clone();
         newVariable.setTimeSlice(oldVariable.getTimeSlice() + timeDifference);
+        // The same criterion as the variable it comes from, not a copy
+        newVariable.setDecisionCriterion(oldVariable.getDecisionCriterion());
         Node newNode = addNode(newVariable, oldNode.getNodeType());
         // The properties come from Node itself, which is the third and last place that used to
         // carry its own copy of the same list, as the note that sat here asked: "Hacer clon para
