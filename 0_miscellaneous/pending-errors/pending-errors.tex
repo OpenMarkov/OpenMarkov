@@ -235,6 +235,9 @@ Los \hyperref[err:272]{errores~272} a \hyperref[err:278]{278} se encontraron al 
 \paragraph{Errores añadidos la noche del 15 de octubre}
 Los \hyperref[err:279]{errores~279} a \hyperref[err:287]{287} salen de revisar el código de la edición de redes ---las ediciones de \texttt{core/action} y de \texttt{gui/action}, el diálogo de propiedades del nodo y el portapapeles--- buscando defectos que no estuvieran ya en la lista. Cada uno se ha comprobado con el código de \texttt{3a93386}, ejecutando la edición sobre redes pequeñas construidas en código y, cuando la ficha lo dice, abriendo de verdad el diálogo; la fila \emph{Comprobado} de cada ficha dice cómo. El \hyperref[err:279]{error~279} afecta a todos los modelos temporales: las propiedades de un nodo con gemelo en otro ciclo no se pueden aceptar. Lo que ya estaba en la lista no se ha repetido; las fichas nuevas lo citan en \emph{Relacionados}.
 
+\paragraph{Errores añadidos el 17 de octubre}
+Los \hyperref[err:291]{errores~291} a \hyperref[err:303]{303} se encontraron al llevar a la versión en C++ y Qt los arreglos que esta lista recibió del 15 al 17 de octubre, de \texttt{5373602} a \texttt{b44fce6}. Cada uno se ha comprobado con el código de \texttt{b44fce6}, el último commit a día de hoy, y la fila \emph{Comprobado} de su ficha dice cómo; los gestos del editor de red se midieron manejando el programa entero, con el ratón y el teclado, en una pantalla anidada. Varios salieron de los propios arreglos de esos días o de lo que dejaron atrás: el \hyperref[err:292]{error~292}, del arreglo del \hyperref[err:17]{17}; el \hyperref[err:293]{293}, del del \hyperref[err:280]{280}; el \hyperref[err:294]{294}, del del \hyperref[err:286]{286}; el \hyperref[err:297]{297}, del del \hyperref[err:259]{259}; y los \hyperref[err:300]{300}, \hyperref[err:301]{301} y \hyperref[err:303]{303}, del commit \texttt{295a7a3}, de Jorge Rico. No se han añadido, por la decisión de equipo sobre los textos, los textos en inglés escritos en el código que trajeron esos commits ---los dos avisos de «Split interval» y «Change interval» de \texttt{8f4d3a8} y las dos ayudas del menú de un nodo de \texttt{295a7a3}--- ni la clave \texttt{defaultCriteria.\allowbreak{}costBenefitQALY.\allowbreak{}Text}, que \texttt{295a7a3} añade solo a \texttt{Selectables\_\allowbreak{}en.\allowbreak{}xml}.
+
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
 en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
@@ -290,9 +293,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{289 errores}; 145 de ellos son defectos nuevos: 69 encontrados al
-comprobar o corregir los demás, 62 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{41} necesitan antes una decisión del equipo. Por esfuerzo estimado: 249 pequeños, 40 medios y 0 grandes.
-De los 289, 183 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{302 errores}; 158 de ellos son defectos nuevos: 69 encontrados al
+comprobar o corregir los demás, 75 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{42} necesitan antes una decisión del equipo. Por esfuerzo estimado: 262 pequeños, 40 medios y 0 grandes.
+De los 302, 183 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -302,19 +305,19 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \midrule
 \ref{sec:potenciales}. Operaciones con potenciales & 3 \\
 \ref{sec:canonicos}. Modelos canónicos y modelo de ajuste & 3 \\
-\ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 22 \\
-\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 27 \\
+\ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 23 \\
+\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 31 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 23 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 23 \\
-\ref{sec:temporal}. Modelos temporales y evolución temporal & 10 \\
+\ref{sec:temporal}. Modelos temporales y evolución temporal & 11 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 25 \\
 \ref{sec:des}. Simulación de sucesos discretos & 18 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 14 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 15 \\
 \ref{sec:casos}. Bases de casos & 13 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 32 \\
-\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 33 \\
-\ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 14 \\
+\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 37 \\
+\ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 16 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 16 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
 \ref{sec:amua}. Exportación a Amua & 6 \\
@@ -378,6 +381,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:257]{257} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un riesgo de Weibull pegado con su variable de tiempo sigue usando la del nodo original & \texttt{core} & S \hfill No\\
 \hyperref[err:260]{260} & \textcolor{corregidoverde}{\textbf{Corregido}} · Pegar un nodo o deshacer un cambio de estados borra el comentario de cinco clases de relación & \texttt{core} & S \hfill No\\
 \hyperref[err:278]{278} & Un riesgo de Weibull da «probabilidades» negativas, mayores que uno o que no son números, sin avisar & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:292]{292} & Quitar una etiqueta del árbol puede dejar dos ramas con la misma etiqueta & \texttt{gui}, \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:ediciones}.\ Ediciones de la red: deshacer, cancelar y pegar}}\\
 \hyperref[err:24]{24} & \textcolor{corregidoverde}{\textbf{Corregido en parte}} · \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un dominio estándar de otro tamaño borra tablas que «Cancel» no devuelve & \texttt{core} & M \hfill No\\
 \hyperref[err:25]{25} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Restringir un enlace cambia la tabla del hijo y deshacer no la devuelve & \texttt{gui} & S \hfill No\\
@@ -406,6 +410,10 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:287]{287} & \textcolor{corregidoverde}{\textbf{Corregido}} · Deshacer un cambio en los criterios de decisión después de rehacerlo no lo deshace & \texttt{core} & S \hfill No\\
 \hyperref[err:288]{288} & \textcolor{corregidoverde}{\textbf{Corregido}} · Cambiar los estados o el tipo de variable de un padre de una utilidad deja su relación uniforme e impide evaluar la red & \texttt{core} & S \hfill No\\
 \hyperref[err:289]{289} & \textcolor{corregidoverde}{\textbf{Corregido}} · Quitar el padre de un nodo de azar numérico con valores exactos, o pegarlo sin él, deja una relación uniforme que impide evaluar & \texttt{core}, \texttt{gui} & S \hfill No\\
+\hyperref[err:293]{293} & Un dominio estándar de otro tamaño sigue imponiendo una política uniforme a la decisión & \texttt{core} & S \hfill No\\
+\hyperref[err:294]{294} & Una variable de un solo estado que pasa entre «estados finitos» y «discretizada» se queda con tablas de una casilla & \texttt{core} & S \hfill No\\
+\hyperref[err:295]{295} & Una utilidad pegada queda juzgada por una copia del criterio, que la red no tiene & \texttt{core}, \texttt{gui} & S \hfill No\\
+\hyperref[err:296]{296} & Quitar o añadir un padre a una suma cambia la suma misma, y deshacerlo no la devuelve & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:restricciones}.\ Restricciones de red}}\\
 \hyperref[err:37]{37} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir un fichero no comprueba las restricciones de la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:38]{38} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un estado puede quedarse con el nombre vacío o repetido & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -469,6 +477,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:211]{211} & Al sumar los estados, el nombre de la curva sale cortado: «Therapy {[}0» & \texttt{gui} & S \hfill No\\
 \hyperref[err:259]{259} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una tabla de fórmulas copiada al ciclo siguiente se calcula sobre el ciclo anterior & \texttt{core} & S \hfill No\\
 \hyperref[err:261]{261} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «Same as previous» en el primer ciclo de una variable pasa sin aviso y acaba en un error confuso & \texttt{core} & S \hfill No\\
+\hyperref[err:297]{297} & Una tabla de fórmulas que nombra dos ciclos de una variable los confunde al pasar al ciclo siguiente & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:coste}.\ Coste-efectividad y análisis de sensibilidad}}\\
 \hyperref[err:74]{74} & \textcolor{corregidoverde}{\textbf{Corregido}} · El jar publicado mezcla dos JFreeChart y muchas gráficas no se abren & \texttt{full} & S \hfill No\\
 \hyperref[err:75]{75} & \textcolor{corregidoverde}{\textbf{Corregido}} · La araña de coste-efectividad reescribe la red abierta con las medias & \texttt{core} & M \hfill No\\
@@ -529,6 +538,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:273]{273} & El mensaje que se niega a guardar una relación nombra su nodo con el instante dos veces & \texttt{io} & S \hfill No\\
 \hyperref[err:274]{274} & \textcolor{corregidoverde}{\textbf{Corregido}} · El escritor de 0.2 guarda una tabla de fórmulas como una tabla, y al abrirla las fórmulas ya no están & \texttt{io} & S \hfill No\\
 \hyperref[err:276]{276} & Un indicador sin «TTE» o sin «ProbabilityOccurrence» en el fichero revienta con un puntero nulo & \texttt{io}, \texttt{gui} & S \hfill No\\
+\hyperref[err:299]{299} & Abrir y guardar una red bayesiana sin criterios le añade dos, con la moneda de la máquina & \texttt{core}, \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -610,6 +620,10 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:265]{265} & \textcolor{corregidoverde}{\textbf{Corregido}} · La casilla del tiempo del indicador acepta «NaN», «∞» y «1E400», y el suceso deja de ocurrir & \texttt{gui}, \texttt{core} & S \hfill No\\
 \hyperref[err:266]{266} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un indicador leído con un número fuera de rango hace fallar el diálogo del nodo & \texttt{io}, \texttt{core}, \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:279]{279} & \textcolor{corregidoverde}{\textbf{Corregido}} · En un modelo temporal, «OK» en las propiedades de un nodo con gemelo en otro ciclo se rechaza como nombre repetido & \texttt{gui}, \texttt{core} & S \hfill No\\
+\hyperref[err:291]{291} & «Split interval» lee el umbral como un float, y 0.3 parte el tramo en 0.30000001192092896 & \texttt{gui} & S \hfill No\\
+\hyperref[err:300]{300} & Un clic sobre el lienzo vacío ya no quita lo señalado & \texttt{gui} & S \hfill No\\
+\hyperref[err:302]{302} & Arrastrar nodos los mueve con un paso de retraso, y el primero es del arrastre anterior & \texttt{gui} & S \hfill No\\
+\hyperref[err:303]{303} & Escape no acaba la banda ni el arrastre: si el ratón sigue, vuelven a empezar & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:menus}.\ Interfaz: menús, diálogos y herramientas}}\\
 \hyperref[err:171]{171} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir una red desde internet apaga «Guardar» para todas las redes & \texttt{gui} & M \hfill No\\
 \hyperref[err:172]{172} & «Edits history» deja un núcleo al cien por cien y puede colgar el programa & \texttt{full} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -625,6 +639,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:221]{221} & Tras pasar por otro tema, «Sync with OS» puede dejar de seguir al sistema & \texttt{gui} & S \hfill No\\
 \hyperref[err:253]{253} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un descuento escrito en tanto por ciento se guarda redondeado y se enseña con dieciocho decimales & \texttt{gui} & S \hfill No\\
 \hyperref[err:254]{254} & Con una duración del ciclo no positiva en el fichero, «OK» no cierra las propiedades de la red & \texttt{gui} & S \hfill No\\
+\hyperref[err:298]{298} & Un descuento «NaN» o «Infinity» en el fichero impide abrir las opciones de la inferencia & \texttt{gui}, \texttt{io} & S \hfill No\\
+\hyperref[err:301]{301} & «Absorb this node» se ofrece en nodos que no se pueden absorber y se apaga en otros que sí & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:textos}.\ Textos y títulos que se ven mal}}\\
 \hyperref[err:177]{177} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · La ayuda de atajos da dos teclas equivocadas, y una cierra el programa & \texttt{gui} & S \hfill No\\
 \hyperref[err:178]{178} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Pegar un nodo de sucesos donde no se admite da «\textgreater\textgreater\textgreater{} eventNode is null \textless\textless\textless» & \texttt{core} & S \hfill No\\
@@ -2889,6 +2905,38 @@ Hace falta decidir qué es una tasa negativa: si la relación sin logaritmo debe
 
 Prueba: un riesgo sin logaritmo con una tasa negativa y otro con un tiempo de 0,5: ninguno da una tabla con números fuera de {[}0, 1{]} ni NaN.
 
+\setcounter{subsection}{291}
+\subsection[Quitar una etiqueta del árbol puede dejar dos ramas con la misma etiqueta]{En el editor de árboles, quitar la etiqueta de una rama da a la referencia que la usaba una copia de su subárbol con las etiquetas que lleva dentro, aunque esas etiquetas sigan en el árbol: quedan dos ramas con la misma etiqueta, y la que siga otra referencia cambia al copiar o al guardar el árbol}\label{err:292}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui, core
+\fichakey{Paquete}org.openmarkov.gui.dialog.treeadd; org.openmarkov.core.model.network.potential.treeadd
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/TreeADDEditorPanel.java:440, 447-457, 1243-1250} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/treeadd/TreeADDBranch.java:325-329} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/treeadd/TreeADDPotential.java:585-601, 608-624}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (las operaciones del editor llamadas tal cual sobre el panel construido sin ventana; «Set label», con la respuesta de su ventanilla puesta a mano en una copia de la clase)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:17]{error~17}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{491a0d6} (\hyperref[err:17]{error~17}), cuando una rama del árbol se queda sin la etiqueta que otra referencia ---porque se le quita la etiqueta o porque se va con su subárbol---, la que la referenciaba recibe una copia de lo que decía (\texttt{Tree\allowbreak{}ADDEditor\allowbreak{}Panel.\allowbreak{}copy\allowbreak{}The\allowbreak{}Potential\allowbreak{}Of\allowbreak{}References\allowbreak{}Without\allowbreak{}Label}, líneas 447-457, y \texttt{Tree\allowbreak{}ADDBranch.\allowbreak{}replace\allowbreak{}Reference\allowbreak{}With\allowbreak{}ACopy}, líneas 325-329). Si lo que decía es un subárbol, la copia lleva sus etiquetas; y si la rama original sigue en el árbol, esas etiquetas quedan dos veces.
+
+Medido el 17-10-2026 con el código de \texttt{b44fce6}, llamando a las operaciones del editor sobre un árbol de D hecho a mano: pregunta por A; bajo «a0», por B, y la rama «b0» ---etiqueta «outer»--- pregunta por C, cuya rama «c0» lleva la etiqueta «inner»; «a1» referencia «outer» y «a2», «inner». Quitarle a «b0» su etiqueta da a «a1» una copia del subárbol de C, con su «c0» etiquetada «inner», y la otra «c0», la de dentro de «b0», sigue etiquetada igual: el árbol tiene dos ramas con la etiqueta «inner».
+
+En ese momento las dos dicen lo mismo. Pero una etiqueta tiene que nombrar una sola rama, y cuál sigue una referencia depende del orden en que \texttt{Tree\allowbreak{}ADDPotential.\allowbreak{}get\allowbreak{}Labeled\allowbreak{}Branches} (líneas 585-601) recorre el árbol: mete las etiquetas en un \texttt{Hash\allowbreak{}Map} y se queda con la última. Eso se rehace cada vez que el árbol se copia (\texttt{update\allowbreak{}References}, líneas 608-624) o se lee de un fichero. Con las ramas en otro orden ---«a0» referencia «outer» y «a1» lleva el subárbol de B---, quitar la etiqueta «outer» da la copia a «a0»; si después se cambia la hoja de la «c0» copiada, «a2» dice una cosa en el editor y otra en cuanto el árbol se copia o se guarda:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+quitar «outer»                        dos ramas con la etiqueta «inner»
+hoja de la «c0» copiada: {0.5, 0.5}   en el editor, «a2» dice [0.9, 0.1]
+una copia del árbol                   «a2» dice [0.5, 0.5]
+guardado en 1.0 y abierto             dos ramas con «inner»; «a2» dice [0.5, 0.5]
+\end{Verbatim}
+
+Nada impide, además, poner a mano una etiqueta que ya está: \texttt{set\allowbreak{}Label} (líneas 1243-1250) no mira si existe. Medido igual: poner «inner» en «b1» deja dos ramas con esa etiqueta.
+\paragraph{Cómo arreglarlo}
+Que la copia que recibe una referencia no traiga las etiquetas que siguen en el árbol: se le quitan, y las demás referencias siguen a la rama original. Y que «Set label» rechace una etiqueta que ya lleva otra rama del árbol. Con eso \texttt{get\allowbreak{}Labeled\allowbreak{}Branches} no encuentra nunca dos ramas para un nombre; conviene que el lector de \texttt{.\allowbreak{}pgmx} rechace un árbol con una etiqueta repetida, como ya rechaza una referencia sin etiqueta desde \texttt{491a0d6}.
+
+Prueba: sobre el primer árbol de arriba, \texttt{remove\allowbreak{}Label} en «b0» seguido de \texttt{copy\allowbreak{}The\allowbreak{}Potential\allowbreak{}Of\allowbreak{}References\allowbreak{}Without\allowbreak{}Label} deja una sola rama con la etiqueta «inner»; y \texttt{set\allowbreak{}Label} con «inner» sobre «b1» no la pone.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Ediciones de la red: deshacer, cancelar y pegar}\label{sec:ediciones}
 
@@ -4246,6 +4294,147 @@ En los ficheros del repositorio ningún nodo de azar tiene la relación «Exact�
 Dar a \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential} un \texttt{remove\allowbreak{}Variable} que conserve los valores con la variable en su primer estado, proyectando su tabla como hace \texttt{Table\allowbreak{}Potential}. Con eso, la rama de las utilidades de \texttt{Remove\allowbreak{}Link\allowbreak{}Edit} puede usar \texttt{remove\allowbreak{}Variable} sin el caso aparte que le puso el \hyperref[err:285]{error~285}.
 
 Prueba: en el diagrama de arriba, quitar A → N deja a N con la relación exacta 5 y la red se evalúa; copiar N solo y pegarlo da N\textquotesingle{} con la relación exacta 5.
+
+\setcounter{subsection}{292}
+\subsection[Un dominio estándar de otro tamaño sigue imponiendo una política uniforme a la decisión]{Cambiar con «Standard domains» los estados de una decisión con política impuesta, o de un padre suyo, por otro número de estados le pone una política uniforme impuesta, y la decisión deja de optimizarse sin aviso; añadir o quitar un estado en la tabla de estados, en cambio, le quita la política desde el arreglo del error 280}\label{err:293}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network; org.openmarkov.core.action.core
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/VariableStateOperations.java:72-115, 266-292} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeReplaceStatesEdit.java:66-68}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (la edición, la evaluación, y el guardado y la lectura del fichero, sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:280]{error~280}, \hyperref[err:243]{error~243}, \hyperref[err:24]{error~24}, \hyperref[err:282]{error~282}
+\end{ficha}
+\paragraph{Qué pasa}
+Una decisión con relación tiene, para el programa, una política impuesta: la evaluación la usa en vez de buscar la mejor. Desde \texttt{ab4261e} (\hyperref[err:280]{error~280}), al añadir o quitar un estado a una decisión con política impuesta, o a un padre suyo, en la tabla de estados de la pestaña de dominio, la decisión pierde la política y se optimiza (\texttt{Variable\allowbreak{}State\allowbreak{}Operations.\allowbreak{}set\allowbreak{}Uniform\allowbreak{}Potential}, líneas 266-292). Pero el botón «Standard domains» de la misma pestaña cambia los estados de una vez por otro camino, \texttt{Variable\allowbreak{}State\allowbreak{}Operations.\allowbreak{}replace\allowbreak{}States} (líneas 72-115, por donde pasa \texttt{Node\allowbreak{}Replace\allowbreak{}States\allowbreak{}Edit}), que a cada nodo que tiene relación ---el que cambia y sus hijos--- le pone una relación uniforme con las mismas variables y el mismo papel (líneas 81-89 y 93-103). A una decisión con política, eso es una política uniforme impuesta: la decisión deja de optimizarse y elige al azar, sin aviso.
+
+Medido el 17-10-2026 con el código de \texttt{b44fce6} sobre el diagrama de la prueba de \texttt{ab4261e}: X → D → U, con P(X) = (0,3; 0,7), la política impuesta D = X y U(D) = (1, 2). Las utilidades son las de la evaluación (\texttt{VEEvaluation}), y salen iguales después de guardar la red y volver a abrirla:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+                            relación de D             evaluación
+al principio                TablePotential POLICY     utilidad 1.7, D no se optimiza
+un estado más en X (tabla)  ninguna                   utilidad 2.0, D se optimiza
+un estado más en D (tabla)  ninguna                   utilidad 2.0, D se optimiza
+dominio estándar en X (3)   UniformPotential POLICY   utilidad 1.5, D no se optimiza
+dominio estándar en D (3)   UniformPotential POLICY   utilidad 0.0, D no se optimiza
+\end{Verbatim}
+
+Con un estado más por la tabla de estados la utilidad es 2, la de la decisión óptima; con el dominio estándar en X, 1,5, la de elegir al azar entre 1 y 2. En D la utilidad sale además 0 porque \texttt{replace\allowbreak{}States} deja a U con la relación de una utilidad nueva, todo a cero, ya que los estados nuevos de D no se corresponden con los viejos. Son dos botones de la misma pestaña que hacen lo mismo con los estados y dejan la decisión de dos maneras. La ficha del \hyperref[err:280]{error~280} ya lo decía («“Standard domains” sigue poniendo una política uniforme: la regla común es la que pide el error 243»), pero el \hyperref[err:243]{error~243} se cerró con \texttt{19792a8} sin tocarlo.
+\paragraph{Cómo arreglarlo}
+Que \texttt{replace\allowbreak{}States}, cuando cambia el número de estados, trate a las decisiones como \texttt{set\allowbreak{}Uniform\allowbreak{}Potential}: una decisión ---el nodo o un hijo--- se queda sin relación (\texttt{clear\allowbreak{}Potentials}) en vez de recibir una uniforme. Mejor, que las dos ediciones compartan esa regla en un solo método.
+
+Prueba: en el diagrama de arriba, \texttt{Node\allowbreak{}Replace\allowbreak{}States\allowbreak{}Edit} con un dominio de tres estados sobre X y sobre D: D se queda sin relación y \texttt{VEEvaluation} da una política óptima para D (con X, utilidad 2); deshacer devuelve la política impuesta.
+
+\setcounter{subsection}{293}
+\subsection[Una variable de un solo estado que pasa entre «estados finitos» y «discretizada» se queda con tablas de una casilla]{Cambiar el tipo de variable de un nodo de un solo estado entre «estados finitos» y «discretizada» le da dos estados, «absent» y «present», pero deja su tabla y las de sus hijos con las casillas de un estado: la propagación contesta con números que no son de ninguna tabla bien hecha, y la red guardada después no se vuelve a abrir}\label{err:294}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.action.core
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/action/core/VariableTypeEdit.java:80-157, 163-166, 220-225}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (la edición, la propagación, y el guardado y la lectura del fichero, sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:286]{error~286}, \hyperref[err:288]{error~288}, \hyperref[err:282]{error~282}
+\end{ficha}
+\paragraph{Qué pasa}
+Cuando una variable tiene un solo estado, cambiar su tipo le da los estados con que nace una variable nueva de la red, «absent» y «present»: \texttt{Raw\allowbreak{}Set\allowbreak{}Type.\allowbreak{}do\allowbreak{}Edit} (líneas 220-225) pone \texttt{get\allowbreak{}Default\allowbreak{}States(\allowbreak{})} si la variable tenía uno. Pero entre «estados finitos» y «discretizada» \texttt{Variable\allowbreak{}Type\allowbreak{}Edit.\allowbreak{}do\allowbreak{}Multi\allowbreak{}Step\allowbreak{}Edit} no toca las relaciones (líneas 89-95), porque supone que los estados se quedan; aquí no se quedan, y la tabla de la variable y las de sus hijos siguen con las casillas de un estado. Desde \texttt{1b7535a} (\hyperref[err:286]{error~286}) la edición ya sabe que en ese caso los estados cambian ---es una de las tres razones de \texttt{the\allowbreak{}States\allowbreak{}Change}, líneas 163-166---, pero solo lo usa para quitar lo que decían los enlaces.
+
+Medido el 17-10-2026 con el código de \texttt{b44fce6}, con X de un solo estado, «only», P(X) = (1), y su hijo Y con P(Y\,\textbar{}\,X) = (0,2; 0,8):
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+de FINITE_STATES a DISCRETIZED   X: [absent, present], tabla [X] [1.0]
+                                 Y: tabla [Y, X] [0.2, 0.8]
+                                 propagación: P(X) = [1.0, 0.0], P(Y) = [0.2, 0.8]
+                                 guardada en 1.0 y abierta: InvalidArgumentException
+                                 «Argument table (1) is invalid because its length
+                                 must be 2, the product of the numbers of states of
+                                 the variables.»
+de DISCRETIZED a FINITE_STATES   lo mismo
+deshacer                         X vuelve a [only] con su tabla
+\end{Verbatim}
+
+La tabla de X tiene una casilla para dos estados, y la de Y dos para cuatro configuraciones. Nada avisa. El tipo de variable se cambia en la pestaña de dominio de las propiedades del nodo; una variable de un solo estado puede llegar, por ejemplo, de un fichero.
+\paragraph{Cómo arreglarlo}
+Cuando \texttt{the\allowbreak{}States\allowbreak{}Change} es cierto, tratar las relaciones como cuando el cambio pasa por «numérica»: \texttt{set\allowbreak{}Potentials\allowbreak{}Node\allowbreak{}And\allowbreak{}Children} para el nodo y sus hijos.
+
+Prueba: con la red de arriba, \texttt{Variable\allowbreak{}Type\allowbreak{}Edit} de X a «discretizada» y de vuelta: las tablas de X y de Y tienen el tamaño de sus variables, y la red guardada con \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0} se vuelve a leer.
+
+\setcounter{subsection}{294}
+\subsection[Una utilidad pegada queda juzgada por una copia del criterio, que la red no tiene]{Pegar un nodo de utilidad en su red le da una copia de su criterio de decisión, que no es ninguno de los de la red aunque se llame igual: lo que se haga después a los criterios de la red no le llega, y si se cambia el nombre del criterio, el fichero guardado nombra para la utilidad pegada un criterio que no declara y, al abrirlo, la utilidad no tiene criterio}\label{err:295}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core, gui
+\fichakey{Paquete}org.openmarkov.core.model.network; org.openmarkov.gui.action
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/Variable.java:148-160} \newline \path{gui/src/main/java/org/openmarkov/gui/action/PasteEdit.java:84} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:731-743}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (copiar como lo hace la ventana, pegar con \texttt{Paste\allowbreak{}Edit}, cambiar el nombre del criterio con \texttt{Decision\allowbreak{}Criteria\allowbreak{}Edit}, guardar y abrir; sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:231]{error~231}, \hyperref[err:283]{error~283}, \hyperref[err:287]{error~287}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Paste\allowbreak{}Edit} hace la variable de cada nodo pegado con \texttt{new\ Variable(\allowbreak{}node.\allowbreak{}get\allowbreak{}Variable(\allowbreak{}))} (línea 84), y el constructor de copia de \texttt{Variable} clona el criterio (\texttt{this.\allowbreak{}decision\allowbreak{}Criterion\ =\ Clone\allowbreak{}Utils.\allowbreak{}safe\allowbreak{}Clone(\allowbreak{}variable.\allowbreak{}decision\allowbreak{}Criterion)}, línea 158). La utilidad pegada queda juzgada por un objeto \texttt{Criterion} que no está en la lista de criterios de la red, aunque se llame igual. \texttt{Criterion} no define \texttt{equals}, así que todo lo que compare criterios los ve distintos, y lo que se haga después a los criterios de la red ---cambiarles el nombre, la escala o el descuento--- no le llega.
+
+Medido el 17-10-2026 con el código de \texttt{b44fce6} sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-CEA-minimal.\allowbreak{}pgmx}: se copia la utilidad «Cost» como lo hace la ventana (de una copia de la red, desde \texttt{3d87c0d}), se pega en la misma red, se cambia el nombre del criterio «Cost» a «Coste» y se guarda en formato 1.0:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+pegada                  Cost' se juzga por «Cost», que no es el criterio de la red
+                        ni está entre los suyos
+renombrar Cost a Coste  Cost se juzga por «Coste», Cost' por «Cost»
+el fichero              <Criterion name="Coste" unit="€" />
+                        <Criterion name="Effectiveness" unit="QALY" />
+                        y en la variable Cost', <Criterion name="Cost" />
+guardado y abierto      criterios [Coste, Effectiveness]; Cost' sin criterio
+\end{Verbatim}
+
+El lector (\texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2}, líneas 731-743) busca el criterio de cada utilidad por su nombre entre los de la red y, si no lo encuentra, no le pone ninguno. Por lectura, lo mismo con cualquier otro cambio del criterio de la red, como su escala o su descuento: la utilidad pegada se queda con los de antes. Y la eliminación de variables suma las utilidades de un criterio solo cuando comparten el objeto del criterio (lo cuenta el mensaje de \texttt{271c669}), así que la utilidad pegada se lleva aparte en las cuentas; no se ha medido si eso cambia algún resultado. Pasaba igual antes de \texttt{3d87c0d} (\hyperref[err:283]{error~283}), que solo cambió de qué nodo sale la copia. Pegar en otra red es otro asunto: allí no hay un criterio igual que coger, y no se ha medido.
+\paragraph{Cómo arreglarlo}
+Que la utilidad pegada tome el criterio de la red que se llama igual, como hacen desde \texttt{271c669} (\hyperref[err:231]{error~231}) las utilidades de un modelo desplegado: en \texttt{Paste\allowbreak{}Edit}, después de copiar la variable, \texttt{set\allowbreak{}Decision\allowbreak{}Criterion} con el criterio de \texttt{prob\allowbreak{}Net.\allowbreak{}get\allowbreak{}Decision\allowbreak{}Criteria(\allowbreak{})} que tenga su nombre. O que el constructor de copia de \texttt{Variable} comparta el criterio en vez de clonarlo, y que quien copie a otra red lo cambie por el de esa red.
+
+Prueba: en \texttt{ID-CEA-minimal.\allowbreak{}pgmx}, copiar y pegar «Cost» en la misma red: el criterio de «Cost'» es el mismo objeto que el de la red; después de cambiar el nombre del criterio, y de guardar y abrir, «Cost'» se juzga por el criterio con el nombre nuevo.
+
+\setcounter{subsection}{295}
+\subsection[Quitar o añadir un padre a una suma cambia la suma misma, y deshacerlo no la devuelve]{Una utilidad que suma otras y tiene además un padre de azar o de decisión cambia su propia relación al quitarle o añadirle un padre: la edición guarda para deshacer el mismo objeto que acaba de cambiar, así que deshacer devuelve el enlace pero no la suma, que se queda con un sumando de más o de menos sin aviso}\label{err:296}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network.potential; org.openmarkov.core.action.base.linkEdits
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/SumPotential.java:133-144} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/RemoveLinkEdit.java:97, 110-114, 180-187, 189-194} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:201, 233-240, 244-251}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (las dos ediciones y su deshacer, sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:285]{error~285}, \hyperref[err:26]{error~26}, \hyperref[err:275]{error~275}
+\end{ficha}
+\paragraph{Qué pasa}
+Todas las clases de relación devuelven una relación nueva al quitarles o añadirles una variable, menos la suma: \texttt{Sum\allowbreak{}Potential.\allowbreak{}add\allowbreak{}Variable} y \texttt{remove\allowbreak{}Variable} (líneas 133-144) cambian su propia lista de variables y devuelven \texttt{this}. Las dos ediciones de enlaces guardan para deshacer la lista de relaciones que tenía el nodo (\texttt{old\allowbreak{}Potentials}: \texttt{Remove\allowbreak{}Link\allowbreak{}Edit}, línea 97; \texttt{Add\allowbreak{}Link\allowbreak{}Edit}, línea 201), que son esos mismos objetos; al deshacer, el nodo recupera la suma ya cambiada.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Quitar un padre}, desde \texttt{7fe37a0} (\hyperref[err:285]{error~285}): una utilidad que suma otra utilidad V y tiene además un padre de estados A no es de supervalor ---no todos sus padres son numéricos---, así que al borrar V → U su relación pasa por \texttt{without\allowbreak{}The\allowbreak{}Parent} (líneas 180-187), que llama a \texttt{remove\allowbreak{}Variable}. Antes de ese commit, quitar V → U dejaba una relación uniforme nueva y deshacer devolvía la suma entera.
+\item
+  \textbf{Añadir un padre}, desde antes: trazar A → U a una utilidad que suma V hace lo mismo al revés (\texttt{Add\allowbreak{}Link\allowbreak{}Edit}, líneas 233-240).
+\end{itemize}
+
+Medido el 17-10-2026 con el código de \texttt{b44fce6}, en un diagrama de influencia con A de azar y V y U de utilidad:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+al principio   SumPotential [U, V, A], comentario «a note»
+borrar V → U   SumPotential [U, A], comentario «a note»; el mismo objeto que antes: true
+deshacer       el enlace V → U vuelve; SumPotential [U, A]
+
+al principio   SumPotential [U, V]
+trazar A → U   SumPotential [U, V, A]; el mismo objeto que antes: true
+deshacer       el enlace A → U se va; SumPotential [U, V, A]
+\end{Verbatim}
+
+En los dos casos la red queda con una relación que no casa con sus enlaces: en el primero la suma ya no cuenta V aunque el enlace haya vuelto; en el segundo nombra a A, que ya no es su padre. Nada avisa; no se ha medido qué hace después la evaluación.
+\paragraph{Cómo arreglarlo}
+Que \texttt{Sum\allowbreak{}Potential.\allowbreak{}add\allowbreak{}Variable} y \texttt{remove\allowbreak{}Variable} devuelvan una suma nueva, con la variable de más o de menos y con el comentario, el criterio y las propiedades de la vieja (\texttt{copy\allowbreak{}Attributes\allowbreak{}From}), como las demás relaciones.
+
+Prueba: los dos casos de arriba con \texttt{Remove\allowbreak{}Link\allowbreak{}Edit} y \texttt{Add\allowbreak{}Link\allowbreak{}Edit}: después de deshacer, la relación de U es una suma sobre {[}U, V, A{]} en el primero y sobre {[}U, V{]} en el segundo.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Restricciones de red}\label{sec:restricciones}
@@ -7868,6 +8057,64 @@ core/src/main/java/org/openmarkov/core/model/network/TemporalNetOperations.java:
 Que la comprobación de \texttt{6bac458} mire todos los nodos con «Same as previous» y no solo los gemelos de un nodo del ciclo de antes: antes de escribir el modelo (al principio de \texttt{compact\allowbreak{}Network} o de \texttt{expand\allowbreak{}Network}), recorrer los nodos de la red y, para cada uno cuya relación sea «Same as previous», negarse con las mismas palabras si \texttt{get\allowbreak{}Original\allowbreak{}Potential(\allowbreak{}prob\allowbreak{}Net)} es nulo, nombrando ese nodo («Treatment {[}1{]}»). Con eso, la evolución de la edad con horizonte 1, que hoy se contesta, también se negaría, como ya se niega con horizonte 2; es coherente, porque el modelo está mal. Si además se quiere evitar el modelo mal hecho desde el principio, \texttt{Same\allowbreak{}As\allowbreak{}Previous.\allowbreak{}validate} podría no ofrecer «Same as previous» cuando ningún ciclo anterior tiene relación; la ficha del error 70 dejó \texttt{validate} como estaba a conciencia.
 
 Prueba: con la red de arriba y horizonte 1, que \texttt{Temporal\allowbreak{}Net\allowbreak{}Operations.\allowbreak{}expand\allowbreak{}Network} lance \texttt{Not\allowbreak{}Supported\allowbreak{}Operation\allowbreak{}Exception} cuyo motivo nombre «Treatment {[}1{]}», y que \texttt{MIDTemporal\allowbreak{}Evolution} de «Age» se niegue con ese mismo motivo y no con \texttt{Potential\allowbreak{}Cannot\allowbreak{}Be\allowbreak{}Converted\allowbreak{}To\allowbreak{}ATable}.
+
+\setcounter{subsection}{296}
+\subsection[Una tabla de fórmulas que nombra dos ciclos de una variable los confunde al pasar al ciclo siguiente]{Al desplegar un modelo temporal, una tabla de fórmulas que nombra dos ciclos de la misma variable ---como la edad de este ciclo y la del anterior--- pasa al ciclo siguiente con los dos nombres convertidos en el del ciclo nuevo, y calcula otro número sin aviso; y su tabla de dentro queda con dos variables cambiadas de sitio}\label{err:297}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network.potential
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/AugmentedProbTablePotential.java:157-173} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/AugmentedProbTable.java:189-195} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/Potential.java:312-323}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (el despliegue de dos diagramas de influencia de Markov hechos a mano, sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:259]{error~259}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{64f666f} (\hyperref[err:259]{error~259}), \texttt{Augmented\allowbreak{}Prob\allowbreak{}Table\allowbreak{}Potential.\allowbreak{}shift} (líneas 166-173) lleva las variables de la tabla de fórmulas al ciclo siguiente una detrás de otra, y cada \texttt{replace\allowbreak{}Variable} (líneas 157-163) cambia en las fórmulas el nombre de la variable vieja por el de la nueva (\texttt{Augmented\allowbreak{}Prob\allowbreak{}Table.\allowbreak{}replace\allowbreak{}Variable\allowbreak{}In\allowbreak{}Functions}, líneas 189-195). Cuando la relación tiene como padres dos ciclos de una misma variable ---la edad de este ciclo y la del anterior, para una fórmula que mire cuánto ha cambiado---, el primer cambio convierte \texttt{\{Age\ {[}0{]}\}} en \texttt{\{Age\ {[}1{]}\}}, y el segundo, al llegar el turno de «Age {[}1{]}», cambia por \texttt{\{Age\ {[}2{]}\}} los dos: el que ya estaba y el que acaba de poner.
+
+Lo mismo le pasa a la tabla de dentro (la que lleva las fórmulas, sobre las variables de estados), que busca cada variable vieja por identidad con \texttt{Potential.\allowbreak{}replace\allowbreak{}Variable} (líneas 312-323): con S {[}0{]} y S {[}1{]} como padres, al poner S {[}1{]} en el sitio de S {[}0{]}, la búsqueda siguiente de S {[}1{]} encuentra la que acaba de poner.
+
+Medido el 17-10-2026 con el código de \texttt{b44fce6}, desplegando a horizonte 2 con \texttt{Temporal\allowbreak{}Net\allowbreak{}Operations.\allowbreak{}expand\allowbreak{}Network} dos diagramas de influencia de Markov hechos a mano, como el de la prueba de \texttt{64f666f}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+State [1] con padres State [0], Age [0] y Age [1], y las fórmulas
+    1-({Age [1]}-{Age [0]})/100
+    ({Age [1]}-{Age [0]})/100
+    {Age [1]}/100
+    1-{Age [1]}/100
+State [2] en el modelo desplegado: variables [State [2], State [1], Age [1], Age [2]]
+    1-({Age [2]}-{Age [2]})/100
+    ({Age [2]}-{Age [2]})/100
+    {Age [2]}/100
+    1-{Age [2]}/100
+    proyectada con Age [1] = 40 y Age [2] = 50: [1.0, 0.0, 0.5, 0.5]
+    (tendría que ser [0.9, 0.1, 0.5, 0.5])
+
+X [1] con padres S [0], S [1] y K [1] (numérica)
+X [2]: variables [X [2], S [1], S [2], K [2]]; tabla de dentro [X [2], S [2], S [1]]
+\end{Verbatim}
+
+La primera es un número equivocado sin aviso: la diferencia de edad entre dos ciclos sale siempre cero. La segunda deja la tabla de dentro con un orden de variables que no es el de sus casillas; no se ha medido qué lee esa tabla después de un despliegue.
+\paragraph{El código}
+core/src/main/java/org/openmarkov/core/model/network/potential/AugmentedProbTablePotential.java:166-173
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    @Override public void shift(ProbNet probNet, int timeDifference) \{
+        List<Variable> shifted = getShiftedVariables(probNet, timeDifference);
+        for (int position = 0; position < shifted.size(); position++) \{
+            if (shifted.get(position) != variables.get(position)) \{
+                replaceVariable(position, shifted.get(position));
+            \}
+        \}
+    \}
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Tomar los nombres de todas las variables antes de moverlas y cambiarlos todos a la vez, con un mapa, como hace \texttt{GLMPotential.\allowbreak{}shift} (líneas 360-379) con las covariables de una regresión por esta misma razón; y escribir la tabla de dentro sobre las variables de estados en el orden que la relación tiene ya (\texttt{set\allowbreak{}Variables}), en vez de cambiarlas una a una. El porte a C++ lo hace así.
+
+Prueba: en \texttt{AFormula\allowbreak{}Table\allowbreak{}Copied\allowbreak{}To\allowbreak{}The\allowbreak{}Next\allowbreak{}Cycle\allowbreak{}Follows\allowbreak{}Its\allowbreak{}Variables\allowbreak{}Test}, una tabla de fórmulas con «Age {[}0{]}» y «Age {[}1{]}» como padres: en el ciclo 2 la primera fórmula es \texttt{1-(\allowbreak{}\{Age\ {[}2{]}\}-\{Age\ {[}1{]}\})/\allowbreak{}100}, y proyectada con Age {[}1{]} = 40 y Age {[}2{]} = 50 da 0,9 y 0,1 en la primera columna, con la tolerancia de la prueba (las casillas se calculan en precisión simple).
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Coste-efectividad y análisis de sensibilidad}\label{sec:coste}
@@ -11854,6 +12101,41 @@ Con el jar del 14 de octubre, sin el arreglo, el mismo puntero nulo («\texttt{b
 Leer una etiqueta que falta como una escrita vacía: \texttt{number\allowbreak{}In} puede devolver NaN si el elemento es nulo, y entonces la regla de \texttt{Indicator\allowbreak{}Potential} la rechaza con el mensaje de siempre, que nombra el nodo. O un mensaje propio que diga qué etiqueta falta.
 
 Prueba: en \texttt{An\allowbreak{}Indicator\allowbreak{}Out\allowbreak{}Of\allowbreak{}Range\allowbreak{}Is\allowbreak{}Not\allowbreak{}Read\allowbreak{}Test}, un fichero sin \texttt{\textless{}TTE\textgreater{}} y otro sin \texttt{\textless{}Probability\allowbreak{}Occurrence\textgreater{}}: los dos se rechazan con una \texttt{PGMXParser\allowbreak{}Exception} que nombra Onset, y no con un \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}.
+
+\setcounter{subsection}{298}
+\subsection[Abrir y guardar una red bayesiana sin criterios le añade dos, con la moneda de la máquina]{Una red bayesiana cuyo fichero no guarda criterios de decisión se abre con los dos que reciben las redes nuevas desde el 10 de agosto ---«Cost», con la moneda de la máquina, y «Effectiveness», en QALY---, y al guardarla se escriben, con sus escalas y sus papeles de coste-efectividad: la misma red guardada en España y en Estados Unidos da dos ficheros distintos}\label{err:299}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core, io
+\fichakey{Paquete}org.openmarkov.core.model.network; org.openmarkov.io.probmodel.reader
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/NetworkMetadata.java:31, 44-55} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:343-360}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (leer, guardar en 0.2 y en 1.0 y volver a leer, sin ventana, con la configuración regional de España y con la de Estados Unidos)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}Sí: qué criterios tiene una red cuyo fichero no los guarda ---una red bayesiana, que no tiene utilidades, quizá ninguno---, y si la moneda de la máquina debe acabar en el fichero
+\fichakey{Relacionados}\hyperref[err:174]{error~174}, \hyperref[err:244]{error~244}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{8055530} (10-08-2026, incidencia 645), toda red nace con dos criterios de decisión (constructor de \texttt{Network\allowbreak{}Metadata}, líneas 44-55): «Cost», con el símbolo de la moneda de la configuración regional de la máquina (\texttt{Currency.\allowbreak{}get\allowbreak{}Instance(\allowbreak{}USERS\_\allowbreak{}LOCALE).\allowbreak{}get\allowbreak{}Symbol(\allowbreak{})}, con \texttt{USERS\_\allowbreak{}LOCALE} en la línea 31; «€» si no tiene ninguna), y «Effectiveness», en QALY (años de vida ajustados por calidad). Antes nacía con uno, «---». El mensaje del commit dice: «This change won't apply to already existing networks, as their decision criteria is already saved in their PGMX file». No es así para un fichero que no guarda criterios, que es lo corriente en una red bayesiana: \texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Decision\allowbreak{}Criterion} (líneas 343-360) solo pone criterios si el fichero trae alguno o si la red puede tener utilidades (y entonces uno, el de siempre); en una red bayesiana no pone nada, y la red se queda con los dos de nacimiento. Al guardarla, se escriben. Ninguna de las diez redes de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}bn} guarda criterios.
+
+Medido el 17-10-2026 con el código de \texttt{b44fce6}, leyendo \texttt{inference/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}asia.\allowbreak{}pgmx} y \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}bn/\allowbreak{}BN-asia.\allowbreak{}pgmx}, guardándolas en 0.2 y en 1.0 y volviéndolas a leer:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+configuración de España (es_ES)   abierta con [Cost (€), Effectiveness (QALY)]
+                                  guardada en 0.2 y en 1.0 con
+                                    <Criterion name="Cost" unit="€" />
+                                    <Criterion name="Effectiveness" unit="QALY" />
+                                  y, en las opciones de la inferencia, las escalas de
+                                  los dos y sus papeles de coste y de efectividad
+                                  vuelta a abrir con [Cost (€), Effectiveness (QALY)]
+-Duser.language=en                abierta, guardada y vuelta a abrir con
+-Duser.country=US                   <Criterion name="Cost" unit="$" />
+\end{Verbatim}
+
+Así que la misma red, abierta y guardada en España y en Estados Unidos, da dos ficheros distintos, y una red bayesiana, que no tiene ni utilidades ni decisiones, sale con los criterios y las opciones de un análisis de coste-efectividad.
+\paragraph{Cómo arreglarlo}
+Hace falta decidir qué criterios tiene una red cuyo fichero no los guarda. Si una red bayesiana no debe tener ninguno, que el lector deje vacía la lista cuando el fichero no trae criterios y la red no puede tener utilidades, o que \texttt{Network\allowbreak{}Metadata} no los ponga más que en las redes que pueden tenerlas. Si los dos criterios de una red nueva deben quedarse, que lo que se escribe en el fichero no dependa de la máquina.
+
+Prueba: abrir \texttt{BN-asia.\allowbreak{}pgmx} y guardarlo, con \texttt{-Duser.\allowbreak{}country=US} y sin él: el fichero no gana \texttt{\textless{}Decision\allowbreak{}Criteria\textgreater{}}, o gana lo mismo en los dos casos.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
@@ -16830,6 +17112,173 @@ Queda por decidir, pero no hace falta para esto, si renombrar un nodo temporal d
 
 Prueba: en un MID con «A {[}0{]}» y «A {[}1{]}», abrir el diálogo de propiedades de «A {[}0{]}» y pulsar «OK»: se cierra con \texttt{Ok}; \texttt{Node\allowbreak{}Base\allowbreak{}Name\allowbreak{}Edit}(«A {[}0{]}», "A") pasa las restricciones; y al salir de la casilla del nombre sin cambiarlo no queda ningún paso de deshacer.
 
+\setcounter{subsection}{290}
+\subsection[«Split interval» lee el umbral como un float, y 0.3 parte el tramo en 0.30000001192092896]{En el editor de árboles, «Split interval» lee el umbral con \texttt{Float.\allowbreak{}parse\allowbreak{}Float}: casi cualquier número con decimales parte el tramo en otro que nadie escribió, una punta escrita igual no se reconoce como punta y sale un tramo de una cienmillonésima, y un número que la ventanilla da por bueno puede llegar como infinito}\label{err:291}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog.treeadd
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/TreeADDEditorPanel.java:657-750, 478-479} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/SplitIntervalDialog.java:80-96}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (el \texttt{split\allowbreak{}Interval} de verdad, sin ventana, con la respuesta de la ventanilla puesta a mano en una copia de la clase)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:161]{error~161}, \hyperref[nota:17]{nota~17}
+\end{ficha}
+\paragraph{Qué pasa}
+En el editor de una relación de tipo árbol (Tree/ADD), «Split interval» parte por un umbral el tramo de una rama de una variable numérica. \texttt{Tree\allowbreak{}ADDEditor\allowbreak{}Panel.\allowbreak{}split\allowbreak{}Interval} lee el umbral como un \texttt{float} (línea 672), y después lo compara con los límites de la rama, que son \texttt{double}, y lo pone como \texttt{double} en los tramos nuevos (líneas 686-699 y 724-725). Un \texttt{float} tiene 24 bits de mantisa: casi ningún número con decimales cabe exacto en él, y al pasarlo a \texttt{double} cambia. Tiene tres consecuencias:
+
+\begin{itemize}
+\tightlist
+\item
+  La rama nueva empieza en un número que nadie escribió: «0.3» parte el tramo en 0,30000001192092896, y así se guarda en el fichero.
+\item
+  Las comparaciones que reconocen un corte en una punta del tramo ---para negarlo, o para partir por el otro lado--- no la reconocen: con una rama que empieza en 0,1, escribir «0.1» no se toma por la punta sino por un número de dentro, y sale un tramo de una cienmillonésima.
+\item
+  Desde \texttt{8f4d3a8} (\hyperref[err:161]{error~161}), la ventanilla comprueba que lo escrito sea un número con \texttt{Double.\allowbreak{}parse\allowbreak{}Double} (\texttt{Split\allowbreak{}Interval\allowbreak{}Dialog.\allowbreak{}is\allowbreak{}ANumber}, líneas 89-96): «1e39» lo es, pero como \texttt{float} es infinito, y el corte se rechaza como si fuera el extremo del dominio.
+\end{itemize}
+
+Medido el 17-10-2026 con el código de \texttt{b44fce6}, llamando al \texttt{split\allowbreak{}Interval} de verdad sobre el panel construido sin ventana, con la respuesta de la ventanilla puesta a mano en una copia de la clase en la que solo cambia de dónde sale esa respuesta. El árbol pregunta por «Age», numérica de 0 a infinito, con las ramas {[}0; 0,1) y {[}0,1; ∞), y se parte la segunda:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+«0.1», que va con el tramo de la derecha:
+         [0.0, 0.1)  [0.1, 0.10000000149011612)  [0.10000000149011612, Infinity)
+«0.1», que va con el tramo de la izquierda:
+         [0.0, 0.1)  [0.1, 0.10000000149011612]  (0.10000000149011612, Infinity)
+«0.3»:   [0.0, 0.1)  [0.1, 0.30000001192092896)  [0.30000001192092896, Infinity)
+«1.5»:   [0.0, 0.1)  [0.1, 1.5)  [1.5, Infinity)
+«1e39»:  rechazado, InvalidLimitInTreeADDException
+\end{Verbatim}
+
+Si «0.1» va con el tramo de la derecha, es la punta que ya tiene la rama y tendría que rechazarse; si va con el de la izquierda, tendría que dar los tramos {[}0,1; 0,1{]} y (0,1; ∞). «Change interval» no tiene el problema: sus dos números se leen con \texttt{Double.\allowbreak{}parse\allowbreak{}Double} (líneas 478-479).
+\paragraph{El código}
+gui/src/main/java/org/openmarkov/gui/dialog/treeadd/TreeADDEditorPanel.java:672
+
+\begin{Shaded}
+\begin{Highlighting}[]
+        float introducedLimit = Float.parseFloat(panel.getLimit().getText());
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Leer el umbral con \texttt{Double.\allowbreak{}parse\allowbreak{}Double}, como \texttt{change\allowbreak{}Interval} y como la comprobación de la ventanilla, y guardarlo en un \texttt{double}.
+
+Prueba: sobre el árbol de arriba, \texttt{split\allowbreak{}Interval} con «0.3» parte el tramo en 0,3 exacto, y «0.1», con el tramo de la derecha, se rechaza con \texttt{Invalid\allowbreak{}Limit\allowbreak{}In\allowbreak{}Tree\allowbreak{}ADDException}.
+
+\setcounter{subsection}{299}
+\subsection[Un clic sobre el lienzo vacío ya no quita lo señalado]{En el editor de red, desde el commit 295a7a3 un clic sobre una zona vacía del lienzo ya no deja nada sin señalar: para quitar lo señalado hay que arrastrar, aunque sea un poco; pasa igual en modo inferencia}\label{err:300}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:335-343, 350-361}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo con pantalla (el programa entero en una pantalla anidada, manejado con \texttt{java.\allowbreak{}awt.\allowbreak{}Robot})
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:302]{error~302}, \hyperref[err:303]{error~303}
+\end{ficha}
+\paragraph{Qué pasa}
+Para que el clic que cierra un menú del botón derecho no empezara una banda de selección, el commit \texttt{295a7a3}, de Jorge Rico, cambió cuándo empieza la banda: antes, al apretar el botón sobre el lienzo vacío (\texttt{ON\_\allowbreak{}GAIN} en \texttt{MOUSE\_\allowbreak{}PRESSED}); ahora, cuando el ratón se mueve con el botón apretado (\texttt{HELD} en \texttt{MOUSE\_\allowbreak{}MOVED} y \texttt{MOUSE\_\allowbreak{}DRAGGED}, líneas 335-343). Pero era al empezar la banda cuando se quitaba lo señalado (\texttt{set\allowbreak{}Selected\allowbreak{}All\allowbreak{}Objects(\allowbreak{}false)}, línea 340), y ningún otro atajo lo hace con un clic sobre nada. Así que un clic sobre el lienzo vacío ya no deja nada sin señalar, que es la manera de hacerlo de casi cualquier programa de dibujo y la que el Java tenía.
+
+Medido el 17-10-2026 manejando con \texttt{java.\allowbreak{}awt.\allowbreak{}Robot} el programa entero, en una pantalla anidada, sobre \texttt{asia.\allowbreak{}pgmx}, con «Smoker?» señalado y un clic sin mover el ratón en un sitio sin nada:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+con las clases de antes de 295a7a3        señalado después del clic: []
+con b44fce6                               señalado después del clic: [Smoker?]
+con b44fce6, en modo inferencia           señalado después del clic: [Smoker?]
+\end{Verbatim}
+\paragraph{El código}
+gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:335-343
+
+\begin{Shaded}
+\begin{Highlighting}[]
+BindingCommandGroup.of(Bindings.Network.SELECTION_RECTANGLE,
+                       Binding.MeetCondition.HELD, true, MouseEvent.class,
+                       List.of(BindingCommandGroup.OnEvent.MOUSE_MOVED,
+                               BindingCommandGroup.OnEvent.MOUSE_DRAGGED))
+        .processIf((_, _) -> ... && this.selectionState == SelectionState.NOTHING && ...)
+        .withAction((_, _) -> \{
+            this.networkEditorPanel.requestFocusInWindow();
+            this.visualNetwork.setSelectedAllObjects(false);
+            this.visualNetwork.startSelectionRectangle(this.cursorPosition);
+            this.setSelectionState(SelectionState.SELECTING);
+        \}),
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Quitar lo señalado con el clic sobre el lienzo vacío ---al apretar, como antes, o al soltar sin haber arrastrado--- y empezar la banda solo al arrastrar. Si se quiere que el clic que cierra un menú no cambie lo señalado, hay que distinguir ese clic aparte: es el único caso que \texttt{295a7a3} quería evitar. El porte a C++ lo hace así: un clic sobre el lienzo vacío quita lo señalado (con mayúsculas, no) y empieza una banda que, si no se arrastra, no coge nada.
+
+Prueba: con el editor de \texttt{asia.\allowbreak{}pgmx} en pantalla y «Smoker?» señalado, un clic sin arrastrar sobre el lienzo vacío deja la selección vacía.
+
+\setcounter{subsection}{301}
+\subsection[Arrastrar nodos los mueve con un paso de retraso, y el primero es del arrastre anterior]{Al arrastrar nodos en el editor de red, cada paso del ratón mueve los nodos lo que se movió el paso anterior: el primero repite el último del arrastre de antes y el último no se aplica nunca, así que un nodo arrastrado en horizontal se mueve también en vertical; la banda de señalar va igual de retrasada}\label{err:302}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:98-108, 345-348, 668-679, 887-910}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo con pantalla (el programa entero en una pantalla anidada, manejado con \texttt{java.\allowbreak{}awt.\allowbreak{}Robot}); lo de la banda está leído en el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:300]{error~300}, \hyperref[err:303]{error~303}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Editor\allowbreak{}Command\allowbreak{}Handler\allowbreak{}Generator.\allowbreak{}apply\allowbreak{}Listeners} (líneas 887-910) añade al lienzo primero los oyentes de la máquina de atajos (\texttt{binding\allowbreak{}Reactor.\allowbreak{}add\allowbreak{}Listeners\allowbreak{}To}, línea 898) y después los que apuntan dónde está el ratón (\texttt{pre\allowbreak{}Command\allowbreak{}Mouse\allowbreak{}Adapter}, líneas 900-902). Swing llama a los oyentes en el orden en que se añadieron, así que, con cada movimiento, el atajo de mover nodos (\texttt{MOVE\_\allowbreak{}NODE\_\allowbreak{}MOUSE}, líneas 668-679) los mueve con \texttt{diff\allowbreak{}X} y \texttt{diff\allowbreak{}Y} antes de que \texttt{mouse\allowbreak{}Dragged} (líneas 98-108) calcule los de ese movimiento: usa los del anterior. El primer paso de un arrastre mueve los nodos lo que movió el último paso del arrastre de antes, y el último paso no se aplica nunca. La banda de señalar crece con los mismos números (\texttt{update\allowbreak{}Selection\allowbreak{}Rectangle(\allowbreak{}this.\allowbreak{}diff\allowbreak{}X,\ this.\allowbreak{}diff\allowbreak{}Y,\ this.\allowbreak{}graphics)}, líneas 345-348), así que también va un paso por detrás; esto está leído. Ya pasaba antes de \texttt{295a7a3}.
+
+Medido el 17-10-2026 manejando con \texttt{java.\allowbreak{}awt.\allowbreak{}Robot} el programa entero, en una pantalla anidada, sobre \texttt{asia.\allowbreak{}pgmx}: dos arrastres seguidos de diez pasos de 8 píxeles, el primero de «Has tuberculosis» hacia abajo y el segundo de «Visit to Asia?» hacia la derecha, justo después de otro que acabó con un paso de 6 hacia la derecha:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+Has tuberculosis   de (201.0, 150.0) a (207.0, 222.0): (+6, +72), y no (0, +80)
+Visit to Asia?     de (290.0, 58.0) a (362.0, 66.0): (+72, +8), y no (+80, 0)
+\end{Verbatim}
+
+Arrastrar «Smoker?» 60 píxeles hacia la derecha lo deja, igual, 8 píxeles más abajo. Los números cambian algo de una vez a otra, según cuántos movimientos junte el sistema en un evento.
+\paragraph{El código}
+gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:898-902
+
+\begin{Shaded}
+\begin{Highlighting}[]
+        this.bindingReactor.addListenersTo(this.networkEditorPanel);
+
+        this.networkEditorPanel.addMouseListener(this.preCommandMouseAdapter);
+        this.networkEditorPanel.addMouseMotionListener(this.preCommandMouseAdapter);
+        this.networkEditorPanel.addMouseWheelListener(this.preCommandMouseAdapter);
+\end{Highlighting}
+\end{Shaded}
+\paragraph{Cómo arreglarlo}
+Añadir los oyentes que apuntan dónde está el ratón antes que los de la máquina de atajos, para que cada atajo vea la posición y el desplazamiento del evento que está tratando; o calcular el desplazamiento dentro del propio atajo. Conviene mirar que no cambie por ello ningún atajo que lea \texttt{cursor\allowbreak{}Position} al apretar el botón: hoy leen la del último movimiento, que suele coincidir.
+
+Prueba: con el editor en pantalla, arrastrar un nodo 80 píxeles en horizontal, en varios pasos, deja su ordenada como estaba y su abscisa 80 píxeles más allá.
+
+\setcounter{subsection}{302}
+\subsection[Escape no acaba la banda ni el arrastre: si el ratón sigue, vuelven a empezar]{En el editor de red, Escape a mitad de una banda de señalar o de un arrastre deja el editor como si no hubiera pasado nada, pero el botón sigue apretado: con el siguiente movimiento del ratón empieza otra banda, desde donde esté, o los nodos vuelven a moverse}\label{err:303}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:255-281, 335-343, 668-679, 760-768}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo con pantalla (el programa entero en una pantalla anidada, manejado con \texttt{java.\allowbreak{}awt.\allowbreak{}Robot})
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:300]{error~300}, \hyperref[err:302]{error~302}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{295a7a3}, de Jorge Rico, Escape (el atajo \texttt{EXIT}, líneas 255-281) deja el editor en el estado \texttt{NOTHING}: la banda se va sin nada señalado, y los nodos que se arrastraban vuelven a su sitio (\texttt{cancel\allowbreak{}Nodes\allowbreak{}Movements}, líneas 760-768). Pero el botón sigue apretado, y los atajos de la banda (líneas 335-343) y de mover nodos (líneas 668-679) solo piden eso y estar en \texttt{NOTHING}: con el siguiente movimiento empieza otra banda, desde donde esté el ratón, o los nodos ---que siguen señalados--- vuelven a moverse. Para que Escape sirva hay que soltar el botón sin mover el ratón.
+
+Medido el 17-10-2026 manejando con \texttt{java.\allowbreak{}awt.\allowbreak{}Robot} el programa entero, en una pantalla anidada, sobre \texttt{asia.\allowbreak{}pgmx}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+una banda a medias                     estado SELECTING
+Escape                                 estado NOTHING, nada señalado
+el ratón sigue, sin soltar el botón    estado SELECTING: otra banda
+arrastrar «Smoker?» 60 píxeles a la derecha, Escape, 30 más y soltar:
+                                       estaba en (568.0, 52.0), queda en (604.0, 52.0)
+\end{Verbatim}
+
+Que sean 36 píxeles y no 30 se debe, seguramente, al paso de retraso del \hyperref[err:302]{error~302}.
+\paragraph{Cómo arreglarlo}
+Que después de Escape el ratón no haga nada hasta que se suelte el botón: por ejemplo, con un estado más del editor, o una marca, que los atajos de la banda y de mover nodos miren y que se quite al soltar. El porte a C++ lo hace así.
+
+Prueba: con el editor en pantalla, Escape a mitad de un arrastre y 30 píxeles más antes de soltar dejan el nodo donde estaba.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: menús, diálogos y herramientas}\label{sec:menus}
 
@@ -17654,6 +18103,104 @@ gui/src/main/java/org/openmarkov/gui/dialog/network/NetworkTemporalOptionsPanel.
 Que \texttt{apply\allowbreak{}Cycle\allowbreak{}Length} solo compruebe (y aplique) la duración si el usuario ha cambiado el texto o la unidad respecto de lo que la pestaña enseñó al abrirse; una duración que llega del fichero y nadie toca pasa, como pasa hoy en el resto del programa. Y que \texttt{do\allowbreak{}Ok\allowbreak{}Click\allowbreak{}Before\allowbreak{}Hide}, con el diálogo en solo lectura, no aplique ninguna pestaña. Aparte, conviene decidir si el lector (o el esquema, con una restricción en \texttt{Time\allowbreak{}Unit/\allowbreak{}@Value}) debe avisar de una duración no positiva al abrir el fichero, como ya avisa de lo que no cumple el esquema.
 
 Prueba: con una red cuya duración del ciclo sea 0 (puesta en código o leída de un fichero), construir \texttt{Network\allowbreak{}Temporal\allowbreak{}Options\allowbreak{}Panel} sin tocarlo y comprobar que \texttt{apply\allowbreak{}Cycle\allowbreak{}Length(\allowbreak{})} devuelve \texttt{true} y la red conserva su duración; escribir «0» en la casilla y comprobar que devuelve \texttt{false}. Lo del modo de solo lectura necesita pantalla: abrir el diálogo con \texttt{read\allowbreak{}Only\ =\ true} sobre esa red, pulsar «OK» y comprobar que se cierra.
+
+\setcounter{subsection}{297}
+\subsection[Un descuento «NaN» o «Infinity» en el fichero impide abrir las opciones de la inferencia]{Si el fichero de una red trae como descuento de un criterio «NaN» o «Infinity», que el lector acepta, la ventana de las opciones de la inferencia ---y con ella las del análisis de coste-efectividad y del de sensibilidad--- no se abre, por una excepción al escribir el descuento en tanto por ciento}\label{err:298}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui, io
+\fichakey{Paquete}org.openmarkov.gui.dialog.inference.common; org.openmarkov.io.probmodel.reader
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/inference/common/InferenceOptionsDialog.java:364, 405, 499, 541, 1055-1058} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:485-494} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:98, 171, 182, 211, 302}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (el lector, y la tabla de criterios del diálogo armada sin ventana); que el diálogo no se abre está leído en el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:253]{error~253}, \hyperref[err:264]{error~264}, \hyperref[err:254]{error~254}
+\end{ficha}
+\paragraph{Qué pasa}
+La tabla de criterios de las opciones de la inferencia escribe el descuento de cada criterio en tanto por ciento con \texttt{Inference\allowbreak{}Options\allowbreak{}Dialog.\allowbreak{}percent\allowbreak{}Of} (líneas 1055-1058), que pasa el número por \texttt{Big\allowbreak{}Decimal}; y \texttt{Big\allowbreak{}Decimal} no admite ni «NaN» ni «Infinity»: lanza \texttt{Number\allowbreak{}Format\allowbreak{}Exception}. El lector sí los deja pasar: \texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2} lee \texttt{\textless{}Discount\allowbreak{}Rate\ value="…"\textgreater{}} con \texttt{Double.\allowbreak{}parse\allowbreak{}Double} (líneas 485-494), que entiende las dos palabras. La tabla se arma dentro del constructor del diálogo (\texttt{get\allowbreak{}Multicriteria\allowbreak{}Panel}, línea 364), así que el diálogo no se abre. Lo construyen las opciones de la inferencia, el análisis de coste-efectividad y el de sensibilidad (\texttt{Inference\allowbreak{}Handler}, líneas 98, 171, 182, 211 y 302; \texttt{Sensitivity\allowbreak{}Analysis\allowbreak{}Frame\allowbreak{}Generator}; \texttt{Cost\allowbreak{}Effectiveness\allowbreak{}Plugin}).
+
+Medido el 17-10-2026 con el código de \texttt{b44fce6} sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-Chancellor-corrected.\allowbreak{}pgmx}, con el descuento del coste cambiado de \texttt{0.\allowbreak{}06} a otros valores, armando la tabla del diálogo sin ventana (el diálogo se crea sin pasar por su constructor y se le pide la tabla):
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+NaN         NumberFormatException, en la tabla de un solo criterio y en la de
+            coste-efectividad
+Infinity    NumberFormatException, en las dos
+1.0E-4      0.01 %
+-0.035555   -3.5555 %
+12.5        1250 %
+1.0E-12     0.0000000001 %
+\end{Verbatim}
+
+Ya pasaba antes de \texttt{c63a96e} (\hyperref[err:253]{error~253}), que no tocó esa parte: la tabla ya escribía el descuento con \texttt{Big\allowbreak{}Decimal}. Es de la familia del \hyperref[err:264]{error~264}, la precisión «NaN» o «Infinity» que impide abrir las propiedades del nodo. Solo se llega con un fichero escrito a mano o por otro programa: nada del programa pone así un descuento.
+\paragraph{Cómo arreglarlo}
+Que el lector rechace un descuento que no es un número finito, con un mensaje que nombre el criterio, como hace con un indicador fuera de rango desde \texttt{109ee86} (\hyperref[err:266]{error~266}); y, por si llega por otro camino, que \texttt{percent\allowbreak{}Of} escriba un número que no es finito como lo escribe \texttt{Double.\allowbreak{}to\allowbreak{}String} («NaN \%») en vez de lanzar una excepción.
+
+Prueba: en \texttt{ADiscount\allowbreak{}Written\allowbreak{}In\allowbreak{}Percent\allowbreak{}Is\allowbreak{}The\allowbreak{}Decimal\allowbreak{}Number\allowbreak{}Test}, \texttt{percent\allowbreak{}Of(\allowbreak{}Double.\allowbreak{}Na\allowbreak{}N)} y \texttt{percent\allowbreak{}Of(\allowbreak{}Double.\allowbreak{}POSITIVE\_\allowbreak{}INFINITY)} no lanzan; y un \texttt{.\allowbreak{}pgmx} con \texttt{value="Na\allowbreak{}N"} en un \texttt{\textless{}Discount\allowbreak{}Rate\textgreater{}} se rechaza al leerlo.
+
+\setcounter{subsection}{300}
+\subsection[«Absorb this node» se ofrece en nodos que no se pueden absorber y se apaga en otros que sí]{El menú de un nodo pregunta a los validadores de absorber antes de tener sus entradas, así que no deciden nada; desde el commit 295a7a3 «Absorb this node» sigue una regla que mira los padres, y está encendido en casi todos los nodos que no se pueden absorber ---pulsarlo cambia la red sin aviso o acaba en una excepción--- y apagado en varios que sí}\label{err:301}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.menutoolbar.menu; org.openmarkov.gui.validator
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/NodeContextualMenu.java:135-170, 352-366, 540-556} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/common/MenuToolBarBasicImpl.java:35-43} \newline \path{gui/src/main/java/org/openmarkov/gui/validator/AbsorbNodeValidator.java:25-61} \newline \path{core/src/main/java/org/openmarkov/core/model/network/NodeAbsorptionHandler.java:55-70}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (los validadores, la regla nueva y las ediciones de absorber, sin ventana); el menú, construido con pantalla sobre la red abierta en 32 redes, da lo mismo que la regla en sus 624 nodos
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:8]{error~8}, \hyperref[err:9]{error~9}, \hyperref[err:193]{error~193}
+\end{ficha}
+\paragraph{Qué pasa}
+El constructor de \texttt{Node\allowbreak{}Contextual\allowbreak{}Menu} pregunta a los dos validadores en sus primeras líneas (líneas 143 y 146):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+setOptionEnabled(ActionCommands.ABSORB_NODE.getCommandName(),
+                 AbsorbNodeValidator.validate(node));
+...
+setOptionEnabled(ActionCommands.ABSORB_PARENTS.getCommandName(),
+                 AbsorbParentsValidator.validate(node));
+\end{Highlighting}
+\end{Shaded}
+
+pero las dos entradas se crean después, al añadirlas al menú (\texttt{get\allowbreak{}Absorb\allowbreak{}Node\allowbreak{}Menu\allowbreak{}Item}, líneas 352-366, y \texttt{get\allowbreak{}Absorb\allowbreak{}Parents\allowbreak{}Menu\allowbreak{}Item}, líneas 540-556), y \texttt{set\allowbreak{}Option\allowbreak{}Enabled} todavía no las encuentra: \texttt{Menu\allowbreak{}Tool\allowbreak{}Bar\allowbreak{}Basic\allowbreak{}Impl.\allowbreak{}set\allowbreak{}Option\allowbreak{}Enabled} (líneas 35-43) no hace nada con una entrada nula. La respuesta de los validadores no se aplica a nada; hasta \texttt{295a7a3} las dos entradas estaban encendidas sobre cualquier nodo.
+
+\texttt{295a7a3} (de Jorge Rico, incidencia 513) les puso una regla nueva, dentro de esos dos métodos: «Absorb this node» se apaga, con una ayuda que lo explica, si algún padre del nodo no es de estados finitos o no tiene una tabla; «Absorb parents» solo se añade si el nodo tiene padres, y se apaga si alguno tiene otro hijo. Los validadores siguen sin decidir. La regla de «Absorb this node» no es la que absorber necesita: \texttt{Node\allowbreak{}Absorption\allowbreak{}Handler.\allowbreak{}absorb\allowbreak{}Node\allowbreak{}Consistently} (líneas 55-70) usa la relación del nodo absorbido, no las de sus padres; y lo que pide \texttt{Absorb\allowbreak{}Node\allowbreak{}Validator} ---que el nodo sea de azar o de decisión y que todos sus hijos sean utilidades sin hijos--- la regla no lo mira.
+
+Medido el 17-10-2026 con el código de \texttt{b44fce6} en las 78 redes de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks} que se leen (sin las de las carpetas \texttt{1-0}), con 1465 nodos:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+Absorb this node   encendido en 734 nodos; el validador rechaza 726 de ellos
+                   el validador acepta 31 nodos; la regla apaga 23 de ellos
+Absorb parents     encendido en 94 nodos; el validador rechaza 81 de ellos
+                   el validador acepta 13 nodos; la regla no apaga ninguno
+\end{Verbatim}
+
+Lo que pasa al pulsarlas, medido con las ediciones que hace la ventana (\texttt{Absorb\allowbreak{}Node\allowbreak{}Edit} y \texttt{Absorb\allowbreak{}Parents\allowbreak{}Edit}):
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+Absorb this node en «Smoker?» de asia.pgmx (dos hijos de azar)
+    de 8 nodos y 8 enlaces a 6 y 4: los dos hijos se funden en un nodo de
+    utilidad, «Has bronchitis + Has lung cancer»
+Absorb this node en «Visit to Asia?» de asia.pgmx (un hijo de azar)
+    de 8 nodos y 8 enlaces a 7 y 7
+Absorb this node en «Dyspnoea?» de asia.pgmx (sin hijos)
+    NoSuchElementException
+Absorb this node en «Disease» de ID-decide-test.pgmx
+    de 7 nodos y 8 enlaces a 5 y 5
+Absorb this node en la decisión «Do test?» de ID-decide-test.pgmx
+    NoSuchElementException
+Absorb parents en «Has tuberculosis» de asia.pgmx
+    InvalidArgumentException: «Argument nodePotential (TablePotential) is invalid
+    because only a sum, a product or a formula says how to combine the parents.»
+\end{Verbatim}
+
+La red cambia sin pedir confirmación, o la edición acaba en una excepción. Y la regla apaga nodos que sí se pueden absorber: «Result of advanced reactor» y «Result of conventional reactor» de \texttt{DAN-reactor.\allowbreak{}pgmx}, «TVExp», «mExp» y «rExp» de \texttt{DAN-dating.\allowbreak{}pgmx} ---en todos ellos el padre que la regla no admite es una decisión, que no tiene tabla--- y «State {[}1{]}» de \texttt{MID-Chancellor-corrected.\allowbreak{}pgmx}; absorberlos funciona, y la red queda con un nodo menos (tres en el último). En dos de \texttt{MID-mammography.\allowbreak{}pgmx} que el validador acepta y la regla apaga, «Time since diagnosis {[}1{]}» y «False positive {[}0{]}», absorber falla de todos modos (\texttt{Cannot\allowbreak{}Do\allowbreak{}Edit\allowbreak{}Exception}: pide evidencia en «Age»); pero la regla deja encendidos otros que fallan igual, como «CD4\% > 15 {[}0{]}» y «CD4\% 8–15 {[}0{]}» de \texttt{MID-CHAP-Ryan-Griffin.\allowbreak{}pgmx} (\texttt{Cannot\allowbreak{}Do\allowbreak{}Edit\allowbreak{}Exception}, porque «Age {[}0{]}» es numérica).
+
+El menú se construyó además, con pantalla, sobre la red abierta en 32 redes ---27 de ellas de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks}---, 624 nodos: las entradas salen encendidas y apagadas donde lo dice la regla, nodo a nodo. La ayuda que lleva «Absorb this node» apagado («Not all parents have a finite states domain and a table relation, hence, this node cannot be absorbed.») explica esa regla.
+\paragraph{Cómo arreglarlo}
+Preguntar a los validadores cuando las entradas ya existen ---por ejemplo, dentro de \texttt{get\allowbreak{}Absorb\allowbreak{}Node\allowbreak{}Menu\allowbreak{}Item} y \texttt{get\allowbreak{}Absorb\allowbreak{}Parents\allowbreak{}Menu\allowbreak{}Item}---, y que la ayuda diga lo que el validador pide. «Absorb this node» debe seguir a \texttt{Absorb\allowbreak{}Node\allowbreak{}Validator}, no a la regla de los padres; «Absorb parents», a \texttt{Absorb\allowbreak{}Parents\allowbreak{}Validator} y, como hace la regla nueva, apagarse si un padre tiene otro hijo, porque absorberlo dejaría a los dos hijos sin lo que tenían en común. Los nodos que el validador acepta y en los que absorber falla por una variable numérica (los de \texttt{MID-mammography} y \texttt{MID-CHAP-Ryan-Griffin}) piden que el validador lo mire también, o que absorber lo diga con un mensaje. El porte a C++ sigue al validador en «Absorb this node», y en «Absorb parents», a las dos reglas.
+
+Prueba: un \texttt{Node\allowbreak{}Contextual\allowbreak{}Menu} sobre «Smoker?» y sobre «Dyspnoea?» de \texttt{asia.\allowbreak{}pgmx} tiene «Absorb this node» apagado, y sobre «Result of advanced reactor» de \texttt{DAN-reactor.\allowbreak{}pgmx}, encendido.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Textos y títulos que se ven mal}\label{sec:textos}
@@ -19236,6 +19783,19 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:288]{Error 288} & hallazgo nuevo, visto al corregir el \hyperref[err:280]{error~280} \\
 \hyperref[err:289]{Error 289} & hallazgo nuevo, visto al corregir el \hyperref[err:285]{error~285} \\
 \hyperref[err:290]{Error 290} & hallazgo nuevo, visto al comprobar el arreglo del \hyperref[err:224]{error~224} \\
+\hyperref[err:291]{Error 291} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:292]{Error 292} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:293]{Error 293} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:294]{Error 294} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:295]{Error 295} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:296]{Error 296} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:297]{Error 297} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:298]{Error 298} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:299]{Error 299} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:300]{Error 300} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:301]{Error 301} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:302]{Error 302} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
+\hyperref[err:303]{Error 303} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 15 al 17 de octubre \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
