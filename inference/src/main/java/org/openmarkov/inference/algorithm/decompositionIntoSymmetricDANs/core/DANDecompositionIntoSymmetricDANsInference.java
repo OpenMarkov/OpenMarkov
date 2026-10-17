@@ -44,11 +44,11 @@ public class DANDecompositionIntoSymmetricDANsInference extends DANInference {
                                                                                                newConditioningVariablesList, evidenceCase, isCEA);
             setProbabilityAndUtilityFromEvaluation(evaluation);
         } else {// The DAN is asymmetric
-            Variable knownDecision = decisionWhoseOptionIsKnown(dan, evidenceCase);
-            if (knownDecision != null) { // It is not made: the network is the one of that option
-                State option = knownDecision.getStates()[evidenceCase.getFinding(knownDecision).getStateIndex()];
+            Variable knownVariable = variableWhoseStateIsKnown(dan, asymmetricObservedVariables, evidenceCase);
+            if (knownVariable != null) { // It is not opened: the network is the one of that state
+                State state = knownVariable.getStates()[evidenceCase.getFinding(knownVariable).getStateIndex()];
                 setProbabilityAndUtilityFromEvaluation(new DANDecompositionIntoSymmetricDANsInference(
-                        DANOperations.instantiate(dan, knownDecision, option), newConditioningVariablesList,
+                        DANOperations.instantiate(dan, knownVariable, state), newConditioningVariablesList,
                         evidenceCase, isCEA));
             } else if (!asymmetricObservedVariables
                     .isEmpty()) { // If O_A is not empty, then some always-observed variable introduces asymmetries
@@ -84,12 +84,21 @@ public class DANDecompositionIntoSymmetricDANsInference extends DANInference {
         }
     }
     
-    /** A decision that could be made now and has a finding, or null if there is none. */
-    private static Variable decisionWhoseOptionIsKnown(ProbNet dan, EvidenceCase evidenceCase) {
+    /**
+     * A decision that could be made now, or a variable observed now that restricts others, that has a finding; or
+     * null if there is none.
+     */
+    private static Variable variableWhoseStateIsKnown(ProbNet dan, List<Variable> asymmetricObservedVariables,
+                                                      EvidenceCase evidenceCase) {
         if (evidenceCase != null) {
             for (Node decision : ProbNetOperations.getParentlessDecisions(dan)) {
                 if (evidenceCase.contains(decision.getVariable())) {
                     return decision.getVariable();
+                }
+            }
+            for (Variable variable : asymmetricObservedVariables) {
+                if (evidenceCase.contains(variable)) {
+                    return variable;
                 }
             }
         }
