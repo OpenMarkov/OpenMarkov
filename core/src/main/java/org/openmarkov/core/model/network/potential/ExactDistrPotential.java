@@ -113,6 +113,7 @@ import java.util.Random;
             parentInItsFirstState.addFinding(new Finding(variable, 0));
             ExactDistrPotential newPotential = project(parentInItsFirstState);
             newPotential.setPotentialRole(role);
+            newPotential.copyAttributesFrom(this);
             return newPotential;
         } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther | NonProjectablePotentialException e) {
             throw new UnreachableException(e);

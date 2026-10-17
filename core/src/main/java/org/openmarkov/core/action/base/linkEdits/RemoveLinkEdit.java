@@ -103,6 +103,7 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
                         List<Variable> variables = oldPotential.getVariables();
                         variables.remove(node1.getVariable());
                         Potential newPotential = PotentialOperations.superValuePotential(oldPotential, variables);
+                        newPotential.copyAttributesFrom(oldPotential);
                         newPotentials.add(newPotential);
                     }
                 } else {
@@ -163,6 +164,7 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
                     if (sumIs0) {
                         newPotential = new UniformPotential(newPotential.getVariables(), newPotential.getPotentialRole());
                     }
+                    newPotential.copyAttributesFrom(oldPotential);
                     newPotentials.add(newPotential);
                 }
                 node2.setPotentials(newPotentials);
@@ -172,11 +174,16 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
     
     /**
      * The relation of the utility node without the parent: the values it had with the parent in its first state, as a
-     * chance node keeps them; a relation that cannot drop the parent becomes that of a new utility node.
+     * chance node keeps them; a relation that cannot drop the parent becomes that of a new utility node, with the
+     * comment, the criterion and the properties of the old one.
      */
     private Potential withoutTheParent(Potential oldPotential) {
         Potential newPotential = oldPotential.removeVariable(node1.getVariable());
-        return newPotential instanceof UniformPotential ? PotentialUtils.generateDefaultPotential(node2) : newPotential;
+        if (newPotential instanceof UniformPotential) {
+            newPotential = PotentialUtils.generateDefaultPotential(node2);
+            newPotential.copyAttributesFrom(oldPotential);
+        }
+        return newPotential;
     }
 
     @Override public void undo() {

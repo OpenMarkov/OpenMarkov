@@ -166,6 +166,7 @@ public class TablePotential extends AbstractIndexedPotential
             try {
                 evidenceCase.addFinding(finding);
                 newPotential = tableProject(evidenceCase, null);
+                newPotential.copyAttributesFrom(this);
             } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther |
                      NonProjectablePotentialException e) {
                 throw new UnreachableException(e);

@@ -206,6 +206,7 @@ public class LinearCombinationPotential extends GLMPotential implements Scalable
                 newCoefficientsArray[i] = newCoefficients.get(i);
             }
             newPotential.setCoefficients(newCoefficientsArray);
+            newPotential.copyAttributesFrom(this);
         } else {
             newPotential = new LinearCombinationPotential(this);
         }

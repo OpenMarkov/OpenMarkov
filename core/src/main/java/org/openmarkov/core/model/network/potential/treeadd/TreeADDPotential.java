@@ -341,7 +341,9 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
     @Override public Potential removeVariable(Variable variable) {
         List<Variable> newVariables = getVariables();
         newVariables.remove(variable);
-        return new UniformPotential(newVariables, getPotentialRole());
+        UniformPotential uniform = new UniformPotential(newVariables, getPotentialRole());
+        uniform.copyAttributesFrom(this);
+        return uniform;
     }
     
     /*

@@ -717,7 +717,8 @@ public abstract class Potential implements Localizable {
     }
     
     /**
-     * Creates a new uniform potential removing the received variable from the variables list of this potential.
+     * Creates a new uniform potential removing the received variable from the variables list of this potential,
+     * with the comment, the criterion and the properties of this one.
      *
      * @param variable Variable
      *
@@ -729,6 +730,7 @@ public abstract class Potential implements Localizable {
             List<Variable> newVariables = new ArrayList<>(variables);
             newVariables.remove(variable);
             newPotential = new UniformPotential(newVariables, role);
+            newPotential.copyAttributesFrom(this);
         } else {
             newPotential = this;
         }
