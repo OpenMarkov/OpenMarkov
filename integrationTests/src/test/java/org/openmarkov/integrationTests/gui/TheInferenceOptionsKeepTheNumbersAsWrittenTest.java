@@ -128,13 +128,28 @@ class TheInferenceOptionsKeepTheNumbersAsWrittenTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "UNICRITERION", "COST_EFFECTIVENESS" })
-    void theDiscount(MulticriteriaOptions.Type type) throws Exception {
+    @CsvSource({ "UNICRITERION, 3.5555, 0.035555", "COST_EFFECTIVENESS, 3.5555, 0.035555", "UNICRITERION, 1.4, 0.014",
+                 "COST_EFFECTIVENESS, 1.4, 0.014" })
+    void theDiscount(MulticriteriaOptions.Type type, String written, double discount) throws Exception {
         ProbNet probNet = network("/networks/mid/MID-Chancellor.pgmx");
         int column = type == UNICRITERION ? UNICRITERIA_DISCOUNT_COLUMN : CE_DISCOUNT_COLUMN;
 
-        Criterion cost = costAfterEditing(probNet, type, column, "3.5555");
+        Criterion cost = costAfterEditing(probNet, type, column, written);
 
-        assertEquals(0.035555, cost.getDiscount(), 1e-12);
+        assertEquals(discount, cost.getDiscount());
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "UNICRITERION", "COST_EFFECTIVENESS" })
+    void theDiscountLeftAsItWas(MulticriteriaOptions.Type type) throws Exception {
+        ProbNet probNet = network("/networks/mid/MID-Chancellor.pgmx");
+        probNet.getDecisionCriteria().stream()
+               .filter(criterion -> criterion.getCriterionName().equals("cost"))
+               .forEach(criterion -> criterion.setDiscount(0.014));
+        int column = type == UNICRITERION ? UNICRITERIA_DISCOUNT_COLUMN : CE_DISCOUNT_COLUMN;
+
+        Criterion cost = costAfterEditing(probNet, type, column, null);
+
+        assertEquals(0.014, cost.getDiscount());
     }
 }

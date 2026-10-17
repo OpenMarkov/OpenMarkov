@@ -494,13 +494,9 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                         }
                     }
                     
-                    // Used BigDecimal to avoid loosed precisin
-                    BigDecimal discount = new BigDecimal(String.valueOf(criterion.getDiscount()));
-                    discount = discount.multiply(new BigDecimal(100));
-                    
                     // Set the new row with criterion data
                     model.addRow(new Object[]{criterion.getCriterionName(), comboBoxUse, criterion.getCeScale(),
-                            discount + " %", comboBoxDiscountUnits});
+                            percentOf(criterion.getDiscount()), comboBoxDiscountUnits});
                 } else {
                     // Set the new row with criterion data
                     model.addRow(new Object[]{criterion.getCriterionName(), comboBoxUse, criterion.getCeScale()});
@@ -541,12 +537,8 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                         }
                     }
                     
-                    // Used BigDecimal to avoid loosed precisin
-                    BigDecimal discount = new BigDecimal(String.valueOf(criterion.getDiscount()));
-                    discount = discount.multiply(new BigDecimal(100));
-                    
                     // Set the new row with criterion data
-                    model.addRow(new Object[]{criterion.getCriterionName(), scale, discount + " %",
+                    model.addRow(new Object[]{criterion.getCriterionName(), scale, percentOf(criterion.getDiscount()),
                             comboBoxDiscountUnits});
                 } else {
                     // Set the new row with criterion data
@@ -651,9 +643,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                             if (discount.indexOf(' ') != -1) {
                                 discount = discount.substring(0, discount.indexOf(' '));
                             }
-                            double discountDouble = Double.parseDouble(discount);
-                            discountDouble /= 100;
-                            decisionCriteria.get(row - 1).setDiscount(discountDouble);
+                            decisionCriteria.get(row - 1).setDiscount(fractionOf(discount));
                             // If the edited cell is a discount unit
                         } else if (column == CE_DISCOUNT_UNIT_COLUMN) {
                             CycleLength.DiscountUnit unitSelected = CycleLength.DiscountUnit.YEAR;
@@ -685,9 +675,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                             if (discount.indexOf(' ') != -1) {
                                 discount = discount.substring(0, discount.indexOf(' '));
                             }
-                            double discountDouble = Double.parseDouble(discount);
-                            discountDouble /= 100;
-                            decisionCriteria.get(row - 1).setDiscount(discountDouble);
+                            decisionCriteria.get(row - 1).setDiscount(fractionOf(discount));
                         } else if (column == UNICRITERIA_DISCOUNT_UNIT_COLUMN) {
                             // If the edited cell is a discount unit
                             CycleLength.DiscountUnit unitSelected = CycleLength.DiscountUnit.YEAR;
@@ -1062,5 +1050,15 @@ public class InferenceOptionsDialog extends OkCancelDialog {
     
     public ChosenOption requestData() {
         return getSelectedOption();
+    }
+
+    /** A discount as the table shows it: in percent, with the figures it has and no zeros at the end. */
+    static String percentOf(double discount) {
+        return new BigDecimal(String.valueOf(discount)).movePointRight(2).stripTrailingZeros().toPlainString() + " %";
+    }
+
+    /** The discount that a number written in percent stands for, worked out in decimal: «1.4» gives 0.014. */
+    static double fractionOf(String percent) {
+        return new BigDecimal(percent).movePointLeft(2).doubleValue();
     }
 }
