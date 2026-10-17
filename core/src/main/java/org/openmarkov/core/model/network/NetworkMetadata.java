@@ -11,10 +11,8 @@ import org.openmarkov.core.inference.InferenceOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -27,8 +25,6 @@ import java.util.Map;
  * so the public API of the network does not change.
  */
 public class NetworkMetadata {
-    
-    public static Locale USERS_LOCALE = Locale.getDefault(Locale.Category.FORMAT);
     
     private String name;
     private String comment = "";
@@ -43,15 +39,7 @@ public class NetworkMetadata {
     /** Creates metadata with default values. */
     public NetworkMetadata() {
         this.decisionCriteria = new ArrayList<>();
-        String symbol = "€";
-        try {
-            symbol = Currency.getInstance(NetworkMetadata.USERS_LOCALE).getSymbol();
-        } catch (RuntimeException ex) {
-            //Do not catch this exception, it is only used to get the user's preferred currency, but when there is none,
-            //it resorts to €.
-        }
-        this.decisionCriteria.add(new Criterion("Cost", symbol));
-        this.decisionCriteria.add(new Criterion("Effectiveness", "QALY"));
+        this.decisionCriteria.add(new Criterion());
     }
     
     public String getName() {

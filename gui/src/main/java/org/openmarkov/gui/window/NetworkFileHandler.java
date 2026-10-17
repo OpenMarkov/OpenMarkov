@@ -33,6 +33,7 @@ import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.NetworkCurrency;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
@@ -98,6 +99,7 @@ public class NetworkFileHandler {
     public void createNewNetwork() {
         ProbNet newNetwork = new ProbNet();
         newNetwork.setName("New network");
+        NetworkCurrency.ofTheMachine().orElse(NetworkCurrency.WHEN_THERE_IS_NONE).giveToANewNetwork(newNetwork);
         NetworkPropertiesDialog dialogProperties = new NetworkPropertiesDialog(ComponentUtilities.getOwner(mainPanel), newNetwork, false);
         if (dialogProperties.showProperties() != OkCancelDialog.ChosenOption.Ok) {
             return;

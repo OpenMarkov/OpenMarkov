@@ -16,7 +16,7 @@ import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.logging.OpenMarkovLogger;
-import org.openmarkov.core.model.network.NetworkMetadata;
+import org.openmarkov.core.model.network.NetworkCurrency;
 import org.openmarkov.gui.configuration.JavaSerializationUtils;
 import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.Theme;
@@ -113,7 +113,7 @@ public class OpenMarkov {
             System.setProperty("sun.java2d.uiScale", UserPreferences.UI_SCALE.get().toString());
         }
         System.setProperty("flatlaf.uiScale", String.valueOf(UserPreferences.UI_SCALE.get()));
-        NetworkMetadata.USERS_LOCALE = Locale.getDefault(Locale.Category.FORMAT);
+        NetworkCurrency.USERS_LOCALE = Locale.getDefault(Locale.Category.FORMAT);
         // Numbers and dates are written in English's format way, such as using the decimal point instead of the
         // Spanish's decimal comma. This avoids multiple problems related to localization.
         Locale.setDefault(Locale.Category.FORMAT, Locale.ENGLISH);
