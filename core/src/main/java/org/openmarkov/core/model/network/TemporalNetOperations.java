@@ -19,6 +19,7 @@ import org.openmarkov.core.model.network.type.MIDType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,10 @@ public class TemporalNetOperations {
      * @return Compact network
      */
     public static List<List<Node>> compactNetwork(ProbNet probNet) {
+        List<Variable> withNothingToCopy = withNothingToCopy(probNet);
+        if (!withNothingToCopy.isEmpty()) {
+            throw new UnrecoverableException(new NotEvaluableNetworkException.NothingToCopy(withNothingToCopy));
+        }
         List<List<Node>> classifiedNodes = classifyNodesbySlices(probNet, probNet.getVariables());
         // generate the new nodes of the compact net
         List<Node> generatingNodes = new ArrayList<>();
@@ -70,11 +75,6 @@ public class TemporalNetOperations {
                     if (!node.getPotentials().isEmpty() && node.getPotentials().get(0) instanceof SameAsPrevious) {
                         Potential originalPotential = ((SameAsPrevious) node.getPotentials().get(0))
                                 .getOriginalPotential(probNet);
-                        if (originalPotential == null) {
-                            throw new NotSupportedOperationException(
-                                    "«" + variable.getName() + "» is «Same as previous», but no earlier cycle has "
-                                    + "a relation for it to copy");
-                        }
                         Potential newPotential = originalPotential.copy();
                         newPotential.shift(probNet,
                                            variable.getTimeSlice() - newPotential.getConditionedVariable()
@@ -97,6 +97,17 @@ public class TemporalNetOperations {
             
         }
         return classifiedNodes;
+    }
+    
+    /** The variables whose relation is «Same as previous» with no earlier cycle to copy, in the order of the cycles. */
+    private static List<Variable> withNothingToCopy(ProbNet probNet) {
+        return probNet.getNodes().stream()
+                      .filter(node -> !node.getPotentials().isEmpty()
+                              && node.getPotentials().getFirst() instanceof SameAsPrevious sameAsPrevious
+                              && sameAsPrevious.getOriginalPotential(probNet) == null)
+                      .map(Node::getVariable)
+                      .sorted(Comparator.comparingInt(Variable::getTimeSlice).thenComparing(Variable::getName))
+                      .toList();
     }
     
     /**

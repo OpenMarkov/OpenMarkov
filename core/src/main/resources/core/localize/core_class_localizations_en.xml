@@ -277,6 +277,8 @@
                   value="This algorithm cannot evaluate {probNet}, as it can only evaluate networks of type: {possibleNetworkTypes}."/>
     <Localization class="org.openmarkov.core.exception.NotEvaluableNetworkException$UnsatisfiedContraints"
                   value="This algorithm cannot evaluate {probNet} because it does not satisfy the following constraints: {unsatisfiedConstraints}"/>
+    <Localization class="org.openmarkov.core.exception.NotEvaluableNetworkException$NothingToCopy"
+                  value="The relation of these nodes is «Same as previous», but no earlier cycle has a relation for them to copy: {nodes}."/>
     <Localization class="org.openmarkov.core.exception.NotEvaluableNetworkException$VariableIsNotTemporal"
                   value="Variable {variable} is not temporal."/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$BadlyStructuredFile"

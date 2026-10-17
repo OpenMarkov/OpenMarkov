@@ -13,6 +13,7 @@ import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.type.NetworkType;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 //TODO: Exceptions of this class are caught for just shown a message from the StringDatabase like
 // 'Network is not evaluable', hindering the real reason behind the exception.
@@ -47,6 +48,16 @@ public abstract sealed class NotEvaluableNetworkException extends OpenMarkovExce
         
         public final String networkName;
         public final String wrongColumns;
+    }
+	
+	/** Some nodes are «Same as previous», but no earlier cycle has a relation for them to copy. */
+	public static final class NothingToCopy extends NotEvaluableNetworkException {
+		public NothingToCopy(List<Variable> variables) {
+            this.nodes = variables.stream().map(variable -> "«" + variable.getName() + "»")
+                                  .collect(Collectors.joining(", "));
+        }
+        
+        public final String nodes;
     }
 	
 	public static final class VariableIsNotTemporal extends NotEvaluableNetworkException {

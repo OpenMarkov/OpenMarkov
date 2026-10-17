@@ -8,7 +8,8 @@ package org.openmarkov.core.model.network.potential;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.exception.NotSupportedOperationException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -18,10 +19,11 @@ import org.openmarkov.core.model.network.type.DynamicBayesianNetwork;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * «Same as previous» takes the relation of the same variable in an earlier cycle. Looking for it used to break when an
@@ -92,13 +94,24 @@ class SameAsPreviousLooksForTheRelationOfAnEarlierCycleTest {
         assertSame(first.getPotential(), relation.getOriginalPotential(probNet));
     }
 
-    @Test void expandingTheModelSaysWhichNodeHasNothingToCopy() {
+    @Test void expandingTheModelSaysWhichNodesHaveNothingToCopy() {
         withATable(node("Age", 0));
         sameAsPrevious(node("B", 2));
         sameAsPrevious(node("B", 3));
 
-        NotSupportedOperationException refused = assertThrows(NotSupportedOperationException.class,
-                                                              () -> TemporalNetOperations.expandNetwork(probNet));
-        assertTrue(refused.getMessage().contains("B [3]"), refused.getMessage());
+        UnrecoverableException refused = assertThrows(UnrecoverableException.class,
+                                                      () -> TemporalNetOperations.expandNetwork(probNet));
+        assertEquals("«B [2]», «B [3]»",
+                     assertInstanceOf(NotEvaluableNetworkException.NothingToCopy.class, refused.getCause()).nodes);
+    }
+
+    @Test void expandingTheModelSaysSoWhenTheFirstCycleOfAVariableHasNothingToCopy() {
+        withATable(node("Age", 0));
+        sameAsPrevious(node("Treatment", 1));
+
+        UnrecoverableException refused = assertThrows(UnrecoverableException.class,
+                                                      () -> TemporalNetOperations.expandNetwork(probNet));
+        assertEquals("«Treatment [1]»",
+                     assertInstanceOf(NotEvaluableNetworkException.NothingToCopy.class, refused.getCause()).nodes);
     }
 }

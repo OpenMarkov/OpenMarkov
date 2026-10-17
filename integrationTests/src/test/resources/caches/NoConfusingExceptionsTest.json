@@ -122,6 +122,7 @@
     "NotEnoughMemoryException",
     "NotEvaluableNetworkException",
     "NotSupportedOperationException",
+    "NothingToCopy",
     "NumOfPotentialsMismatchesNumOfUtilities",
     "NumericVariableNeedsAFinding",
     "OnlyAtemporalVariablesAllowed",
