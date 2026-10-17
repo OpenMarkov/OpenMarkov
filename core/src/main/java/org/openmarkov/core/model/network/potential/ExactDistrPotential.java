@@ -8,9 +8,12 @@
 package org.openmarkov.core.model.network.potential;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.inference.InferenceOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.State;
@@ -98,6 +101,22 @@ import java.util.Random;
         projectedPotential.setCriterion(getChildVariable().getDecisionCriterion());
         projectedPotential.setPotentialRole(PotentialRole.UNSPECIFIED);
         return projectedPotential;
+    }
+    
+    /** {@inheritDoc} The values kept are those with the removed parent in its first state. */
+    @Override public Potential removeVariable(Variable variable) {
+        if (!variables.subList(1, variables.size()).contains(variable)) {
+            return super.removeVariable(variable);
+        }
+        try {
+            EvidenceCase parentInItsFirstState = new EvidenceCase();
+            parentInItsFirstState.addFinding(new Finding(variable, 0));
+            ExactDistrPotential newPotential = project(parentInItsFirstState);
+            newPotential.setPotentialRole(role);
+            return newPotential;
+        } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther | NonProjectablePotentialException e) {
+            throw new UnreachableException(e);
+        }
     }
     
     @Override public Potential sample(Random randomGenerator) {

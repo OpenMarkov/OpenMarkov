@@ -10,12 +10,8 @@ package org.openmarkov.core.action.base.linkEdits;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
-import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.graph.Link;
-import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.PartitionedInterval;
@@ -155,10 +151,12 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
                     // Temporal patch to be removed when the above TO-DO is implemented: a table that adds up to
                     // zero without the parent becomes uniform. A relation that cannot be projected to a table
                     // stays as its removeVariable left it - a formula or a regression without the parent, or a
-                    // uniform for the relations that cannot drop one - instead of always becoming uniform
+                    // uniform for the relations that cannot drop one - instead of always becoming uniform. An
+                    // exact distribution holds values, not probabilities, so it keeps a zero
                     boolean sumIs0;
                     try {
-                        sumIs0 = Arrays.stream(newPotential.getCPT().getValues()).sum() == 0;
+                        sumIs0 = !(newPotential instanceof ExactDistrPotential)
+                                 && Arrays.stream(newPotential.getCPT().getValues()).sum() == 0;
                     } catch (NonProjectablePotentialException e) {
                         sumIs0 = false;
                     }
@@ -177,19 +175,7 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
      * chance node keeps them; a relation that cannot drop the parent becomes that of a new utility node.
      */
     private Potential withoutTheParent(Potential oldPotential) {
-        Potential newPotential;
-        if (oldPotential instanceof ExactDistrPotential exactDistrPotential) {
-            try {
-                EvidenceCase parentInItsFirstState = new EvidenceCase();
-                parentInItsFirstState.addFinding(new Finding(node1.getVariable(), 0));
-                newPotential = exactDistrPotential.project(parentInItsFirstState);
-            } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther | NonProjectablePotentialException e) {
-                throw new UnreachableException(e);
-            }
-            newPotential.setPotentialRole(oldPotential.getPotentialRole());
-        } else {
-            newPotential = oldPotential.removeVariable(node1.getVariable());
-        }
+        Potential newPotential = oldPotential.removeVariable(node1.getVariable());
         return newPotential instanceof UniformPotential ? PotentialUtils.generateDefaultPotential(node2) : newPotential;
     }
 
