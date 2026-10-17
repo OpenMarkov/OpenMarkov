@@ -277,6 +277,11 @@
                 </Columns>
             </ValuesTable>
         </DecisionCriteria>
+        <Currency>
+            <Text value="Currency"/>
+            <Other value="Other"/>
+            <None value="None"/>
+        </Currency>
     </NetworkDecisionCriteriaPanel>
     <NetworkAgentsPanel>
         <Agents>

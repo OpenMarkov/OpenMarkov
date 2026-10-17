@@ -134,7 +134,13 @@ public final class UserPreferences {
     
     public static final UserPreference<ArrayList<ArrayList<String>>> CUSTOM_DOMAINS = UserPreference
             .of("network/custom_domains", () -> new ArrayList<>(), new UserPreference.BackupInfo(true, "Custom domains", "Custom domain used for new nodes", () -> {
-            
+
+            }), new TypeToken<>() {
+            });
+
+    public static final UserPreference<String> NEW_NETWORKS_CURRENCY = UserPreference
+            .of("network/new_networks_currency", () -> "", new UserPreference.BackupInfo(true, "Currency of new networks", "Currency in which the cost of a new network is measured", () -> {
+
             }), new TypeToken<>() {
             });
     

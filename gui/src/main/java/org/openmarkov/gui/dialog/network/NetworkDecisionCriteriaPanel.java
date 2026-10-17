@@ -7,14 +7,25 @@
 
 package org.openmarkov.gui.dialog.network;
 
+import org.openmarkov.core.action.core.NetworkCurrencyEdit;
+import org.openmarkov.core.exception.DoEditException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Criterion;
+import org.openmarkov.core.model.network.NetworkCurrency;
 import org.openmarkov.core.model.network.ProbNet;
 
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Window;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Panel to set network decision criteria.
@@ -24,6 +35,15 @@ public class NetworkDecisionCriteriaPanel extends JPanel {
 	private static final long serialVersionUID = -6784346878691434149L;
 	
 	private DecisionCriteriaTablePanel decisionCriteriaTablePanel;
+	
+	private JPanel currencyPanel;
+	
+	private JComboBox<String> currencyComboBox;
+	
+	/** The currency of each item of the selector; null for the item that says what the cost is measured in. */
+	private final List<NetworkCurrency> currencyOfEachItem = new ArrayList<>();
+	
+	private boolean showingTheCurrency;
 	
 	protected StringDatabase stringDatabase = StringDatabase.getUniqueInstance();
 	
@@ -50,8 +70,12 @@ public class NetworkDecisionCriteriaPanel extends JPanel {
 	 * Initialises the decision criteria table
 	 */
 	private void initialize() {
-		add(getDecisionCriteriaTablePanel());
-		setFieldFromProperties(probNet);		
+		JPanel criteriaAndCurrency = new JPanel(new BorderLayout(0, 5));
+		criteriaAndCurrency.add(getDecisionCriteriaTablePanel(), BorderLayout.CENTER);
+		criteriaAndCurrency.add(getCurrencyPanel(), BorderLayout.SOUTH);
+		add(criteriaAndCurrency);
+		setFieldFromProperties(probNet);
+		showTheCurrency();
 	}
 	
 	private void reset(){
@@ -75,6 +99,65 @@ public class NetworkDecisionCriteriaPanel extends JPanel {
 			decisionCriteriaTablePanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		}
 		return decisionCriteriaTablePanel;
+	}
+	
+	/**
+	 * The selector of the currency of the network, which follows the table of criteria.
+	 */
+	private JPanel getCurrencyPanel() {
+		if (currencyPanel == null) {
+			currencyComboBox = new JComboBox<>();
+			currencyComboBox.setName("currencyComboBox");
+			currencyComboBox.addActionListener(e -> currencyChosen());
+			getDecisionCriteriaTablePanel().getValuesTable().getModel()
+					.addTableModelListener(e -> SwingUtilities.invokeLater(this::showTheCurrency));
+			currencyPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 5, 0));
+			currencyPanel.add(new JLabel(stringDatabase.getString("NetworkDecisionCriteriaPanel.Currency.Text")));
+			currencyPanel.add(currencyComboBox);
+		}
+		return currencyPanel;
+	}
+	
+	/**
+	 * Shows the currency of the network; when it is in none, shows what its cost is measured in, and changes nothing.
+	 */
+	private void showTheCurrency() {
+		showingTheCurrency = true;
+		currencyComboBox.removeAllItems();
+		currencyOfEachItem.clear();
+		Optional<NetworkCurrency> current = NetworkCurrency.of(probNet);
+		List<NetworkCurrency> offered = NetworkCurrency.offered();
+		current.filter(currency -> !offered.contains(currency)).ifPresent(offered::add);
+		if (current.isEmpty()) {
+			currencyOfEachItem.add(null);
+			currencyComboBox.addItem(NetworkCurrency.costUnitOf(probNet)
+					.map(unit -> stringDatabase.getString("NetworkDecisionCriteriaPanel.Currency.Other") + " (" + unit + ")")
+					.orElse(stringDatabase.getString("NetworkDecisionCriteriaPanel.Currency.None")));
+		}
+		for (NetworkCurrency currency : offered) {
+			currencyOfEachItem.add(currency);
+			currencyComboBox.addItem(currency.code() + " (" + currency.symbol() + ")");
+		}
+		currencyComboBox.setSelectedIndex(current.map(currencyOfEachItem::indexOf).orElse(0));
+		showingTheCurrency = false;
+	}
+	
+	private void currencyChosen() {
+		int index = currencyComboBox.getSelectedIndex();
+		if (showingTheCurrency || index < 0 || currencyOfEachItem.get(index) == null) {
+			return;
+		}
+		NetworkCurrency chosen = currencyOfEachItem.get(index);
+		if (NetworkCurrency.of(probNet).equals(Optional.of(chosen))) {
+			return;
+		}
+		try {
+			new NetworkCurrencyEdit(probNet, chosen).executeEdit();
+		} catch (DoEditException e) {
+			throw new UnrecoverableException(e);
+		}
+		setFieldFromProperties(probNet);
+		SwingUtilities.invokeLater(this::showTheCurrency);
 	}
 	
 	/**

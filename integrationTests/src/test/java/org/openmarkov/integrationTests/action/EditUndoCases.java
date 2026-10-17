@@ -26,6 +26,7 @@ import org.openmarkov.core.action.core.EventNodeAlwaysAppendEdit;
 import org.openmarkov.core.action.core.MonteCarloOptionsEdit;
 import org.openmarkov.core.action.core.MulticriteriaEdit;
 import org.openmarkov.core.action.core.NetworkCommentEdit;
+import org.openmarkov.core.action.core.NetworkCurrencyEdit;
 import org.openmarkov.core.action.core.NetworkDefaultStatesEdit;
 import org.openmarkov.core.action.core.NodeAlwaysObservedEdit;
 import org.openmarkov.core.action.core.NodeBaseNameEdit;
@@ -52,6 +53,7 @@ import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.inference.TemporalOptions;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.CycleLength;
+import org.openmarkov.core.model.network.NetworkCurrency;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -292,6 +294,8 @@ final class EditUndoCases {
             ProbNet net = influenceDiagram();
             return new DecisionCriterionUnitEdit(net, net.getDecisionCriteria().getFirst().getCriterionName(), "euro");
         }));
+        cases.add(passes(NetworkCurrencyEdit.class, "changing the currency of the network",
+                () -> new NetworkCurrencyEdit(influenceDiagram(), new NetworkCurrency("USD", "$"))));
 
         // Constraints of the network
         cases.add(passes(RemoveConstraintEdit.class, "removing a constraint", () -> {

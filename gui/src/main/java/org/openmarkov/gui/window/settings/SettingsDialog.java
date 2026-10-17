@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.model.network.NetworkCurrency;
 import org.openmarkov.gui.bindings.Binding;
 import org.openmarkov.gui.bindings.BindingPanel;
 import org.openmarkov.gui.bindings.Bindings;
@@ -536,7 +537,36 @@ public final class SettingsDialog extends JDialog {
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(addToRecentsCheckBox);
         }
-        
+
+        //Currency of new networks
+        {
+            JComboBox<String> currencyComboBox = new JComboBox<>();
+            currencyComboBox.addItem("");
+            NetworkCurrency.offered().forEach(currency -> currencyComboBox.addItem(currency.code()));
+            currencyComboBox.setRenderer(new JComboBoxFunctionRender<String>(code -> {
+                NetworkCurrency currency = NetworkCurrency.forANewNetwork(code);
+                String name = currency.code() + " (" + currency.symbol() + ")";
+                return code.isEmpty() ? "System default: " + name : name;
+            }));
+            currencyComboBox.setSelectedItem(UserPreferences.NEW_NETWORKS_CURRENCY.get());
+            currencyComboBox.addItemListener(e -> {
+                if (e.getStateChange() == ItemEvent.SELECTED && e.getItem() instanceof String code) {
+                    UserPreferences.NEW_NETWORKS_CURRENCY.set(code);
+                }
+            });
+
+            var currencyLabel = new JLabel("Currency of new networks  ");
+            var helpToolTip = GUIUtils.generateTooltipElement("""
+                                                                      <html>
+                                                                      The cost of a new network is measured in this currency.<br>
+                                                                      The currency of a network is changed in "Network properties -> Decision criteria".
+                                                                      </html>""");
+            gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, currencyLabel, helpToolTip))
+                   .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
+                   .add(currencyComboBox);
+        }
+
         //Custom domain
         {
             var customDomainArea = new JTextArea(4, 30);

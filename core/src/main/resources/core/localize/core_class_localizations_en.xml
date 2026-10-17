@@ -37,6 +37,8 @@
                   value="Edit decision criteria\n{oldDecisionCriteria}\n with options {oldMulticriteriaOptions} to new decision criteria {newDecisionCriteria}\n with options {newMulticriteriaOptions}"/>
     <Localization class="org.openmarkov.core.action.core.NetworkCommentEdit"
                   value="Change comment\nOriginal comment: {currentComment}\n\nnew comment{newComment}"/>
+    <Localization class="org.openmarkov.core.action.core.NetworkCurrencyEdit"
+                  value="Change the currency of the network to {code} ({symbol})"/>
     <Localization class="org.openmarkov.core.action.core.NetworkDefaultStatesEdit"
                   value="Change default states from {currentDefaultStates} to {newDefaultStates}"/>
     <Localization class="org.openmarkov.core.action.core.NodeAlwaysObservedEdit"

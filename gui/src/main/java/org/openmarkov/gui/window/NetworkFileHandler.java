@@ -99,7 +99,7 @@ public class NetworkFileHandler {
     public void createNewNetwork() {
         ProbNet newNetwork = new ProbNet();
         newNetwork.setName("New network");
-        NetworkCurrency.ofTheMachine().orElse(NetworkCurrency.WHEN_THERE_IS_NONE).giveToANewNetwork(newNetwork);
+        NetworkCurrency.forANewNetwork(UserPreferences.NEW_NETWORKS_CURRENCY.get()).giveToANewNetwork(newNetwork);
         NetworkPropertiesDialog dialogProperties = new NetworkPropertiesDialog(ComponentUtilities.getOwner(mainPanel), newNetwork, false);
         if (dialogProperties.showProperties() != OkCancelDialog.ChosenOption.Ok) {
             return;
