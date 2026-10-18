@@ -93,6 +93,7 @@ public class EditorCommandHandlerGenerator {
                                                                                                                                    .screenToPanel(e.getX()),
                                                                               EditorCommandHandlerGenerator.this.networkEditorPanel.getZoomManager()
                                                                                                                                    .screenToPanel(e.getY()));
+                EditorCommandHandlerGenerator.this.pressPosition.setLocation(EditorCommandHandlerGenerator.this.cursorPosition);
             }
             
             @Override
@@ -339,11 +340,13 @@ public class EditorCommandHandlerGenerator {
                 
                 BindingCommandGroup.of(Bindings.Network.SELECTION_RECTANGLE, Binding.MeetCondition.HELD, true, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_MOVED, BindingCommandGroup.OnEvent.MOUSE_DRAGGED))
                                    .processIf((_, _) -> networkEditorPanel.getBaseTool() == NetworkEditorPanel.BaseTool.SELECTION && this.selectionState == SelectionState.NOTHING &&
-                                           this.visualNetwork.getElementInPosition(this.cursorPosition, this.graphics) == null)
+                                           this.visualNetwork.getElementInPosition(this.pressPosition, this.graphics) == null)
                                    .withAction((_, _) -> {
                                        this.networkEditorPanel.requestFocusInWindow();
                                        this.visualNetwork.setSelectedAllObjects(false);
-                                       this.visualNetwork.startSelectionRectangle(this.cursorPosition);
+                                       this.visualNetwork.startSelectionRectangle(this.pressPosition);
+                                       this.visualNetwork.updateSelectionRectangle(this.cursorPosition.x - this.pressPosition.x,
+                                                                                   this.cursorPosition.y - this.pressPosition.y, this.graphics);
                                        this.setSelectionState(SelectionState.SELECTING);
                                    }),
                 
@@ -795,6 +798,9 @@ public class EditorCommandHandlerGenerator {
      */
     private final Point2D.Double cursorPosition = new Point2D.Double();
     
+    /** Where the mouse button was last pressed on the canvas. */
+    private final Point2D.Double pressPosition = new Point2D.Double();
+    
     /**
      * Object that creates the contextual menus.
      */
@@ -900,12 +906,12 @@ public class EditorCommandHandlerGenerator {
         this.networkEditorPanel.removeMouseWheelListener(this.postCommandMouseAdapter);
         this.networkEditorPanel.removeKeyListener(this.postCommandKeyListener);
         
-        this.bindingReactor.addListenersTo(this.networkEditorPanel);
-        
         this.networkEditorPanel.addMouseListener(this.preCommandMouseAdapter);
         this.networkEditorPanel.addMouseMotionListener(this.preCommandMouseAdapter);
         this.networkEditorPanel.addMouseWheelListener(this.preCommandMouseAdapter);
         this.networkEditorPanel.addKeyListener(this.preCommandKeyListener);
+        
+        this.bindingReactor.addListenersTo(this.networkEditorPanel);
         
         this.networkEditorPanel.addMouseListener(this.postCommandMouseAdapter);
         this.networkEditorPanel.addMouseMotionListener(this.postCommandMouseAdapter);
