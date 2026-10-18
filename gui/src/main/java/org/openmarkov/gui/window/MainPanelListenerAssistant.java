@@ -46,8 +46,6 @@ import javax.swing.JButton;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -65,7 +63,7 @@ import java.util.List;
  * </ul>
  */
 public class MainPanelListenerAssistant extends WindowAdapter
-        implements ActionListener, PropertyNames, ComponentListener {
+        implements ActionListener, PropertyNames {
     
     private final MainPanel mainPanel;
     private final List<NetworkEditorPanel> networkPanels;
@@ -415,20 +413,4 @@ public class MainPanelListenerAssistant extends WindowAdapter
      */
 
     //
-    
-    
-    // ── ComponentListener ─────────────────────────────────────────
-    
-    @Override public void componentResized(ComponentEvent e) {
-        mainPanel.adaptToolBarSize();
-    }
-    
-    @Override public void componentMoved(ComponentEvent e) {
-    }
-    
-    @Override public void componentShown(ComponentEvent e) {
-    }
-    
-    @Override public void componentHidden(ComponentEvent e) {
-    }
 }

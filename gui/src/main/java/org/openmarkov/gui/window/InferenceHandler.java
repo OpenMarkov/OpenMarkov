@@ -125,14 +125,10 @@ class InferenceHandler {
             }
         } finally {
             getCurrentNetworkEditorPanel().updateNodesExpansionState(newWorkingMode);
-            mainPanel.adaptToolBarSize();
         }
         mainPanel.getMainPanelMenuAssistant().updateOptionsNewWorkingMode(newWorkingMode, getCurrentNetworkEditorPanel());
         mainPanel.getMainMenu().reInitialize();
-        SwingUtilities.invokeLater(() -> {
-            MainGUI.INSTANCE.revalidate();
-            MainGUI.INSTANCE.mainPanel.adaptToolBarSize();
-        });
+        SwingUtilities.invokeLater(MainGUI.INSTANCE::revalidate);
     }
     void setNewExpansionThreshold(Double newValue) {
         getCurrentNetworkEditorPanel().setExpansionThreshold(newValue);

@@ -48,7 +48,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -255,7 +254,6 @@ public class MainPanel extends JPanel {
                 frame = (JFrame) container;
                 frame.setJMenuBar(this.getMainMenu());
                 frame.addWindowListener(mainPanelListenerAssistant);
-                frame.addComponentListener(mainPanelListenerAssistant);
 //            } else if (container instanceof JApplet) {
 //                ((JApplet) container).setJMenuBar(this.getMainMenu());
             }
@@ -301,8 +299,8 @@ public class MainPanel extends JPanel {
 				toolBarPanel.add(getStandardToolBar());
 				toolBarPanel.add(getEditionToolBar());
 				*/
-            // This way, the main toolbar and the secondary are in the same line
-            toolBarPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+            // The toolbars share a row, and go on to the next one when they do not fit
+            toolBarPanel.setLayout(new WrappingFlowLayout(FlowLayout.LEFT));
             toolBarPanel.add(this.getStandardToolBar());
             toolBarPanel.add(this.getEditionToolBar());
         }
@@ -439,48 +437,6 @@ public class MainPanel extends JPanel {
     public ToolbarManager getToolbarManager() {
         return toolbarManager;
     }
-    
-    /**
-     * This method checks the size of the components present in the toolbar panel and adapts its size if necessary
-     */
-    public void adaptToolBarSize() {
-        // Variables to store different measures
-        int toolBarComponentsWidth;
-        int currentNetworkEditorPanelMaxWidth = 600;
-        // Variables to adapt the size of the toolbar
-        int safetyWidth = 11;
-        int safetyHeight = 15;
-        // When changing the working mode, sometimes the values of the size of the window are not accurate
-        int currentNetworkEditorPanelWidth = Integer.MAX_VALUE;
-        if (this.getMainPanelListenerAssistant().getCurrentNetworkEditorPanel() != null) {
-            currentNetworkEditorPanelWidth = this.getMainPanelListenerAssistant()
-                                                 .getCurrentNetworkEditorPanel()
-                                                 .getWidth();
-        }
-        // We sum the width and height of every component present in the toolbar
-        toolBarComponentsWidth = Arrays.stream(this.getToolBarPanel().getComponents())
-                                       .mapToInt(Component::getWidth)
-                                       .sum();
-        
-        int maxToolbarComponentHeight = Arrays.stream(this.getToolBarPanel().getComponents())
-                                              .mapToInt(Component::getHeight).max()
-                                              .getAsInt();
-        
-        // If the toolbar cannot show them in one single line
-        if ((this.getToolBarPanel().getWidth() < toolBarComponentsWidth + safetyWidth) || (
-                currentNetworkEditorPanelWidth < currentNetworkEditorPanelMaxWidth
-        )) {
-            // we increase the height of the toolbar accordingly
-            this.getToolBarPanel()
-                .setPreferredSize(new Dimension(this.getWidth() + safetyWidth, maxToolbarComponentHeight + safetyHeight));
-        }
-        // and if the toolbar can show them in one line
-        else {
-            // we request the Layout manager to choose the preferred size
-            this.getToolBarPanel().setPreferredSize(null);
-        }
-    }
-    
     
     private static class TabHeader extends JPanel {
         
