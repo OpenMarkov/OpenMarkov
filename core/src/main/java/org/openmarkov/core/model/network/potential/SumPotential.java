@@ -130,17 +130,24 @@ import java.util.List;
         return sum;
     }
     
+    /** @return a new sum that also adds {@code variable}, with the comment, the criterion and the properties of this one */
     @Override public Potential addVariable(Variable variable) {
-        variables.add(variable);
-        return this;
+        List<Variable> newVariables = new ArrayList<>(variables);
+        newVariables.add(variable);
+        return withVariables(newVariables);
     }
-    
-    /**
-     * Removes variable to a potential implemented in each child class
-     */
+
+    /** @return a new sum without {@code variable}, with the comment, the criterion and the properties of this one */
     @Override public Potential removeVariable(Variable variable) {
-        variables.remove(variable);
-        return this;
+        List<Variable> newVariables = new ArrayList<>(variables);
+        newVariables.remove(variable);
+        return withVariables(newVariables);
+    }
+
+    private SumPotential withVariables(List<Variable> newVariables) {
+        SumPotential sum = new SumPotential(newVariables, role);
+        sum.copyAttributesFrom(this);
+        return sum;
     }
 
     @Override public void scalePotential(double scale) {
