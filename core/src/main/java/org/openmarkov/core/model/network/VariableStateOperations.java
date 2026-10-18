@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -81,12 +82,8 @@ public final class VariableStateOperations {
             if (newStates.length != lastStates.length) {
 
                 if (!lastPotential.isEmpty()) {
-                    UniformPotential newPotential = new UniformPotential(
-                            lastPotential.getFirst().getVariables(),
-                            lastPotential.getFirst().getPotentialRole());
-                    List<Potential> newPotentials = new ArrayList<>();
-                    newPotentials.add(newPotential);
-                    node.setPotentials(newPotentials);
+                    Potential last = lastPotential.getFirst();
+                    afterTheStatesChange(node, () -> new UniformPotential(last.getVariables(), last.getPotentialRole()));
                 }
 
                 nodes = probNet.getChildren(node);
@@ -95,12 +92,8 @@ public final class VariableStateOperations {
                     if (child.getNodeType() == NodeType.UTILITY) {
                         child.setPotentials(new ArrayList<>(List.of(PotentialUtils.generateDefaultPotential(child))));
                     } else if (!child.getPotentials().isEmpty()) {
-                        List<Potential> container = new ArrayList<>();
-                        UniformPotential childLastPotential = new UniformPotential(
-                                child.getPotentials().getFirst().getVariables(),
-                                child.getPotentials().getFirst().getPotentialRole());
-                        container.add(childLastPotential);
-                        child.setPotentials(container);
+                        Potential last = child.getPotentials().getFirst();
+                        afterTheStatesChange(child, () -> new UniformPotential(last.getVariables(), last.getPotentialRole()));
                     }
                 }
                 resetLink(node);
@@ -264,31 +257,28 @@ public final class VariableStateOperations {
      * @param oldStateOf the old index of each state of the edited variable, or -1 for a new one
      */
     private static void setUniformPotential(Node node, int oldNumStates, int[] oldStateOf) {
-        Potential uniformPotential;
-        List<Potential> potentials;
         ProbNet probNet = node.getProbNet();
-
-        if (node.getNodeType() != NodeType.DECISION) {
-            uniformPotential = PotentialOperations.getUniformPotential(
-                    probNet, node.getVariable(), node.getNodeType());
-            potentials = new ArrayList<>();
-            potentials.add(uniformPotential);
-            node.setPotentials(potentials);
-        } else {
-            node.clearPotentials();
-        }
+        afterTheStatesChange(node, () -> PotentialOperations.getUniformPotential(
+                probNet, node.getVariable(), node.getNodeType()));
         for (Node child : node.getChildren()) {
             if (child.getNodeType() == NodeType.UTILITY) {
                 child.setPotentials(withTheNewStatesOf(child, node.getVariable(), oldNumStates, oldStateOf));
-            } else if (child.getNodeType() != NodeType.DECISION) {
-                potentials = new ArrayList<>();
-                uniformPotential = PotentialOperations.getUniformPotential(
-                        probNet, child.getVariable(), child.getNodeType());
-                potentials.add(uniformPotential);
-                child.setPotentials(potentials);
             } else {
-                child.clearPotentials();
+                afterTheStatesChange(child, () -> PotentialOperations.getUniformPotential(
+                        probNet, child.getVariable(), child.getNodeType()));
             }
+        }
+    }
+
+    /**
+     * The relation of a node that is not a utility once its states, or those of a parent, change in number: a decision
+     * loses its imposed policy and is optimized again; any other node gets {@code uniformPotential}.
+     */
+    private static void afterTheStatesChange(Node node, Supplier<Potential> uniformPotential) {
+        if (node.getNodeType() == NodeType.DECISION) {
+            node.clearPotentials();
+        } else {
+            node.setPotentials(new ArrayList<>(List.of(uniformPotential.get())));
         }
     }
 

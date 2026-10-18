@@ -13,6 +13,7 @@ import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -70,6 +71,31 @@ class ANewNumberOfStatesRemovesAnImposedPolicyTest {
     @Test void undoingGivesBackThePolicy() throws Exception {
         net.getPNESupport().setWithUndo(true);
         new NodeStateEdit(nodeD, StateAction.ADD, 0, "c").executeEdit();
+        net.getPNESupport().undo();
+        assertArrayEquals(new double[] { 1, 0, 0, 1 }, ((TablePotential) nodeD.getPotentials().getFirst()).getValues());
+    }
+
+    /** «Standard domains» with three states, which replaces the states of the node at once (error 293). */
+    private static State[] threeStates() {
+        return new State[] { new State("low"), new State("medium"), new State("high") };
+    }
+
+    @Tag(TestSpeed.FAST)
+    @Test void aStandardDomainOfAnotherSizeForTheDecision() throws Exception {
+        new NodeReplaceStatesEdit(nodeD, threeStates()).executeEdit();
+        assertFalse(nodeD.hasPolicy());
+    }
+
+    @Tag(TestSpeed.FAST)
+    @Test void aStandardDomainOfAnotherSizeForAParentOfTheDecision() throws Exception {
+        new NodeReplaceStatesEdit(nodeX, threeStates()).executeEdit();
+        assertFalse(nodeD.hasPolicy());
+    }
+
+    @Tag(TestSpeed.FAST)
+    @Test void undoingAStandardDomainGivesBackThePolicy() throws Exception {
+        net.getPNESupport().setWithUndo(true);
+        new NodeReplaceStatesEdit(nodeX, threeStates()).executeEdit();
         net.getPNESupport().undo();
         assertArrayEquals(new double[] { 1, 0, 0, 1 }, ((TablePotential) nodeD.getPotentials().getFirst()).getValues());
     }
