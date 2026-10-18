@@ -139,30 +139,29 @@ public class SensitivityAnalysisController {
 	}
 
 	/**
-	 * Run the analysis with the model parameters and shows the results in a dialog
+	 * Runs the analysis with the model parameters and {@code evidence} as the findings before the resolution, and
+	 * shows the results in a dialog
 	 */
-    public void runAnalysis() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NotSupportedOperationException, ConstraintViolatedException {
+    public void runAnalysis(EvidenceCase evidence) throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NotSupportedOperationException, ConstraintViolatedException {
 		JDialog sensitivityAnalysisResultsDialog = null;
 		AnalysisType sensitivityAnalysisType = sensitivityAnalysisModel.getAnalysisType();
         if (sensitivityAnalysisType == AnalysisType.TORNADO_SPIDER) {
-			sensitivityAnalysisResultsDialog = new TornadoSpiderDialog(owner, probNet, preResolutionEvidence,
+			sensitivityAnalysisResultsDialog = new TornadoSpiderDialog(owner, probNet, evidence,
 					sensitivityAnalysisModel);
         } else if (sensitivityAnalysisType == AnalysisType.PLOT) {
-			sensitivityAnalysisResultsDialog = new PlotDialog(owner, probNet, preResolutionEvidence,
+			sensitivityAnalysisResultsDialog = new PlotDialog(owner, probNet, evidence,
 					sensitivityAnalysisModel);
         } else if (sensitivityAnalysisType == AnalysisType.MAP) {
-			sensitivityAnalysisResultsDialog = new MapDialog(owner, probNet, preResolutionEvidence,
+			sensitivityAnalysisResultsDialog = new MapDialog(owner, probNet, evidence,
 					sensitivityAnalysisModel);
         } else if (sensitivityAnalysisType == AnalysisType.CEPLANE) {
-			sensitivityAnalysisResultsDialog = new CEProbabilisticDialog(owner, probNet, preResolutionEvidence,
+			sensitivityAnalysisResultsDialog = new CEProbabilisticDialog(owner, probNet, evidence,
 					sensitivityAnalysisModel);
         } else if (sensitivityAnalysisType == AnalysisType.SPIDER_CE) {
-			sensitivityAnalysisResultsDialog = new CESpiderDialog(owner, probNet, preResolutionEvidence,
+			sensitivityAnalysisResultsDialog = new CESpiderDialog(owner, probNet, evidence,
 					sensitivityAnalysisModel);
 		}
 		this.sensitivityAnalysisPlots.add(sensitivityAnalysisResultsDialog);
-
-		readPreResolutionEvidenceFromNetwork();
 	}
 
 	/** Reads again the pre-resolution evidence that the network of the window has now. */

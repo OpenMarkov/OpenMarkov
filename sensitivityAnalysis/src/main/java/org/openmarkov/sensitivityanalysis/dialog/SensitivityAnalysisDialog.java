@@ -584,18 +584,14 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
             controller.getSensitivityAnalysisModel().setSeed(seedOf(seedTextField.getText()));
             
         }
+        EvidenceCase evidence = new EvidenceCase(controller.getPreResolutionEvidence());
         if (this.controller.getSensitivityAnalysisModel().getDecisionVariable() != null
-                && this.controller.getSensitivityAnalysisModel().getSelectedScenario() != null && !this.controller
-                .getSensitivityAnalysisModel().getSelectedScenario().isEmpty()) {
-            
-            EvidenceCase newPreResolutionEvidence = new EvidenceCase(controller.getPreResolutionEvidence());
+                && this.controller.getSensitivityAnalysisModel().getSelectedScenario() != null) {
             for (Finding finding : controller.getSensitivityAnalysisModel().getSelectedScenario()) {
-                newPreResolutionEvidence.addFinding(finding);
+                evidence.addFinding(finding);
             }
-            controller.setPreResolutionEvidence(newPreResolutionEvidence);
-            
         }
-        controller.runAnalysis();
+        controller.runAnalysis(evidence);
     }
     
     @Override protected void doCancelClickBeforeHide() {
