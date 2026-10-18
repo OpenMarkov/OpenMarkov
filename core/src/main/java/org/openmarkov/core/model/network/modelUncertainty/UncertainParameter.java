@@ -9,6 +9,7 @@ package org.openmarkov.core.model.network.modelUncertainty;
 
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
+import org.openmarkov.core.model.network.potential.TablePotential;
 
 /**
  * Locator for an {@link UncertainValue} in the context of a network: pairs
@@ -34,6 +35,9 @@ public class UncertainParameter {
 	}
 
 	public double getBaseLineValue() {
+		if (getProbDensFunction() instanceof DirichletFunction dirichlet) {
+			return dirichlet.getAlpha() / sumOfTheDirichletsOfTheColumn();
+		}
 		return getProbDensFunction().getMean();
 	}
 
@@ -50,7 +54,24 @@ public class UncertainParameter {
 	}
 
 	private DomainInterval getInterval(double p) {
+		if (getProbDensFunction() instanceof DirichletFunction dirichlet) {
+			return new BetaFunction(dirichlet.getAlpha(), sumOfTheDirichletsOfTheColumn() - dirichlet.getAlpha())
+					.getInterval(p);
+		}
 		return getProbDensFunction().getInterval(p);
+	}
+
+	/** @return the sum of the parameters of the Dirichlet distributions in the column of this parameter */
+	private double sumOfTheDirichletsOfTheColumn() {
+		TablePotential table = (TablePotential) subPotential;
+		int numStates = table.getVariable(0).getNumStates();
+		double sum = 0;
+		for (UncertainValue value : table.getUncertainColumn(configuration - configuration % numStates, numStates)) {
+			if (value.getProbDensFunction() instanceof DirichletFunction dirichlet) {
+				sum += dirichlet.getAlpha();
+			}
+		}
+		return sum;
 	}
 
 	/**

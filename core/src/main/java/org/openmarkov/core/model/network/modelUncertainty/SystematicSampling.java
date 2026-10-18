@@ -314,10 +314,25 @@ public class SystematicSampling extends Sampler {
 	}
 	
 
+	/**
+	 * Puts {@code newValue} in the position {@code posToReplace} of the column and adjusts the rest so that the column
+	 * keeps its sum: the other Dirichlet in proportion, if it is a Dirichlet; the complements, otherwise.
+	 */
 	private static void replaceValueAndRedistributeComplements(double[] samples, Sampler sampler, int posToReplace,
 			double newValue) {
 		double oldValue = samples[posToReplace];
 		samples[posToReplace] = newValue;
+		int[] dirichlets = sampler.samplerUncertainValues.indexesDirichlet;
+		if (Arrays.stream(dirichlets).anyMatch(index -> index == posToReplace)) {
+			double others = Arrays.stream(dirichlets).filter(index -> index != posToReplace)
+								  .mapToDouble(index -> samples[index]).sum();
+			for (int index : dirichlets) {
+				if (index != posToReplace) {
+					samples[index] *= (others + oldValue - newValue) / others;
+				}
+			}
+			return;
+		}
 		ComplementFamily complemFamily = sampler.samplerUncertainValues.complementFamily;
 		ComplementFamily auxComplementFamily = new ComplementFamily(complemFamily.family);
 		auxComplementFamily.setProbMass(complemFamily.getProbMass() + oldValue - newValue);
