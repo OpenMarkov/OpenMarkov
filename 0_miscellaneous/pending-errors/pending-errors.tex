@@ -239,7 +239,7 @@ Los \hyperref[err:279]{errores~279} a \hyperref[err:287]{287} salen de revisar e
 Los \hyperref[err:291]{errores~291} a \hyperref[err:303]{303} se encontraron al llevar a la versión en C++ y Qt los arreglos que esta lista recibió del 15 al 17 de octubre, de \texttt{5373602} a \texttt{b44fce6}. Cada uno se ha comprobado con el código de \texttt{b44fce6}, el último commit a día de hoy, y la fila \emph{Comprobado} de su ficha dice cómo; los gestos del editor de red se midieron manejando el programa entero, con el ratón y el teclado, en una pantalla anidada. Varios salieron de los propios arreglos de esos días o de lo que dejaron atrás: el \hyperref[err:292]{error~292}, del arreglo del \hyperref[err:17]{17}; el \hyperref[err:293]{293}, del del \hyperref[err:280]{280}; el \hyperref[err:294]{294}, del del \hyperref[err:286]{286}; el \hyperref[err:297]{297}, del del \hyperref[err:259]{259}; y los \hyperref[err:300]{300}, \hyperref[err:301]{301} y \hyperref[err:303]{303}, del commit \texttt{295a7a3}, de Jorge Rico. No se han añadido, por la decisión de equipo sobre los textos, los textos en inglés escritos en el código que trajeron esos commits ---los dos avisos de «Split interval» y «Change interval» de \texttt{8f4d3a8} y las dos ayudas del menú de un nodo de \texttt{295a7a3}--- ni la clave \texttt{defaultCriteria.\allowbreak{}costBenefitQALY.\allowbreak{}Text}, que \texttt{295a7a3} añade solo a \texttt{Selectables\_\allowbreak{}en.\allowbreak{}xml}.
 
 \paragraph{Errores añadidos el 18 de octubre}
-Los \hyperref[err:304]{errores~304} a \hyperref[err:306]{306} se vieron en la ventana después de cambiar la letra de los nodos (\texttt{dfe951d}): el \hyperref[err:304]{304} lo vio Manuel Arias en su pantalla, y los \hyperref[err:305]{305} y \hyperref[err:306]{306} salieron al corregirlo. Se añaden ya corregidos, cada uno con el commit que lo corrige, para que la versión en C++ y Qt los recoja como los demás. El \hyperref[err:307]{error~307} salió el mismo día al ejecutar las pruebas desactivadas: de las que fallaban, es el único defecto del programa al que llega un usuario; las demás fallan por la propia prueba, por redes que no están en el repositorio o por código al que no se llega. El \hyperref[err:308]{error~308} salió al comprobar el \hyperref[err:277]{277}: es el análisis que fallaba y dejaba fijo el escenario.
+Los \hyperref[err:304]{errores~304} a \hyperref[err:306]{306} se vieron en la ventana después de cambiar la letra de los nodos (\texttt{dfe951d}): el \hyperref[err:304]{304} lo vio Manuel Arias en su pantalla, y los \hyperref[err:305]{305} y \hyperref[err:306]{306} salieron al corregirlo. Se añaden ya corregidos, cada uno con el commit que lo corrige, para que la versión en C++ y Qt los recoja como los demás. El \hyperref[err:307]{error~307} salió el mismo día al ejecutar las pruebas desactivadas: de las que fallaban, es el único defecto del programa al que llega un usuario; las demás fallan por la propia prueba, por redes que no están en el repositorio o por código al que no se llega. El \hyperref[err:308]{error~308} salió al comprobar el \hyperref[err:277]{277}: es el análisis que fallaba y dejaba fijo el escenario. El \hyperref[err:309]{309} salió al mirar otro de los fallos que vio, al comprobar el \hyperref[err:277]{277}, un barrido del análisis de sensibilidad por las redes del repositorio: la araña de coste-efectividad de \texttt{MID-HPV-without-supervalue.\allowbreak{}pgmx}.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -296,9 +296,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{307 errores}; 163 de ellos son defectos nuevos: 74 encontrados al
-comprobar o corregir los demás, 75 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{44} necesitan antes una decisión del equipo. Por esfuerzo estimado: 267 pequeños, 40 medios y 0 grandes.
-De los 307, 197 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{308 errores}; 164 de ellos son defectos nuevos: 75 encontrados al
+comprobar o corregir los demás, 75 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{44} necesitan antes una decisión del equipo. Por esfuerzo estimado: 268 pequeños, 40 medios y 0 grandes.
+De los 308, 197 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -314,7 +314,7 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 23 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 23 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 11 \\
-\ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 26 \\
+\ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 27 \\
 \ref{sec:des}. Simulación de sucesos discretos & 19 \\
 \ref{sec:ficheros}. Abrir y guardar redes & 15 \\
 \ref{sec:casos}. Bases de casos & 13 \\
@@ -508,6 +508,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:262]{262} & \textcolor{corregidoverde}{\textbf{Corregido}} · Aceptar el análisis de sensibilidad devuelve el escenario a su primer estado y analiza otro & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
 \hyperref[err:277]{277} & \textcolor{corregidoverde}{\textbf{Corregido}} · Después de un análisis de sensibilidad, el escenario de otra decisión sale fijo con lo elegido antes & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
 \hyperref[err:308]{308} & Dos parámetros inciertos con el mismo nombre: el análisis de sensibilidad solo ve uno, y el tornado falla & \texttt{sensitivity\allowbreak{}Analysis}, \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:309]{309} & El análisis de sensibilidad determinista toma el número de una Dirichlet por una probabilidad & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:des}.\ Simulación de sucesos discretos}}\\
 \hyperref[err:95]{95} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una utilidad acumulativa vale cero hasta el primer suceso que la alcanza & \texttt{gui}, \texttt{inference.\allowbreak{}des} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:96]{96} & La simulación se cae si un nodo espera a un padre de un suceso no ocurrido & \texttt{gui} & S \hfill No\\
@@ -9912,6 +9913,41 @@ Es la única red del repositorio con nombres repetidos, junto con su copia en el
 Primero, decidir qué significa un nombre repetido. Si significa un mismo parámetro, el análisis tiene que variar a la vez todas las casillas que lo llevan. Si son parámetros distintos, el editor tiene que rechazar un nombre que ya existe, o el análisis tiene que distinguirlos (por ejemplo, por el nodo). En cualquiera de los dos casos, el controlador no puede guardarlos en un mapa por nombre que pierde uno sin avisar. Y, si los nombres de esa red son un despiste, corregirlos.
 
 Prueba: en esa red, el diálogo ofrece los costes para el sistema y para el paciente, cada uno con su valor de referencia (o, si se decide que son un mismo parámetro, variarlo cambia las cuatro casillas), y el diagrama de tornado se abre sin error.
+
+\setcounter{subsection}{308}
+\subsection[El análisis de sensibilidad determinista toma el número de una Dirichlet por una probabilidad]{En el análisis de sensibilidad determinista, un parámetro de una Dirichlet tiene como valor de referencia el número de la Dirichlet y no su probabilidad: con la variación por defecto el análisis falla, con un porcentaje o un cociente sobre el valor de referencia da resultados falsos sin avisar, y con un intervalo escrito no reajusta el resto de la columna}\label{err:309}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network.modelUncertainty
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/DirichletFunction.java:66-68, 105-108} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/UncertainParameter.java:36-54} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/SystematicSampling.java:317-326}
+\fichakey{Comprobado}Ejecutándolo (el cálculo del tornado sobre una red mínima y el muestreo de \texttt{MID-HPV.\allowbreak{}pgmx}; la araña de coste-efectividad, con el diálogo)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:78]{error~78}, \hyperref[err:79]{error~79}, \hyperref[err:308]{error~308}
+\end{ficha}
+\paragraph{Qué pasa}
+Cada casilla con una Dirichlet guarda solo su parámetro $\alpha$ (\texttt{Dirichlet\allowbreak{}Function}), y su media (\texttt{getMean}, líneas 66-68) devuelve ese $\alpha$, no la probabilidad, que es $\alpha$ dividido entre la suma de los de la columna; tampoco tiene intervalo (\texttt{getInterval}, líneas 105-108, lanza \texttt{Not\allowbreak{}Supported\allowbreak{}Operation\allowbreak{}Exception} desde \texttt{7a9987f}). El análisis de sensibilidad determinista toma esa media como valor de referencia del parámetro (\texttt{Uncertain\allowbreak{}Parameter.\allowbreak{}get\allowbreak{}Base\allowbreak{}Line\allowbreak{}Value}, líneas 36-38) y pide ese intervalo con la variación «Percentage of the 2nd order probability», la que el diálogo trae por defecto (líneas 44-54). Además, al poner el valor nuevo del parámetro en su columna (\texttt{System\allowbreak{}atic\allowbreak{}Sampling.\allowbreak{}replace\allowbreak{}Value\allowbreak{}And\allowbreak{}Redistribute\allowbreak{}Complements}, líneas 317-326) solo reajusta las casillas «Complement», y una columna con Dirichlet no tiene ninguna.
+
+Medido el 18-10-2026 con el código de \texttt{1464ed4} en una red mínima: X, con estados a, b y c, lleva una Dirichlet(2, 3, 5) con nombres «pa», «pb» y «pc», es decir, probabilidades 0,2, 0,3 y 0,5; U(X) vale 1 si X = a y 0 si no, así que la utilidad esperada es la probabilidad de a, 0,2. Lo que calcula el tornado al variar «pa» en cinco puntos (\texttt{VE\allowbreak{}Sens\allowbreak{}An\allowbreak{}Tornado\allowbreak{}Spider}, lo que dibuja el diálogo):
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+valor de referencia de pa: 2.0
+Percentage of the 2nd order probability (90 %):
+  NotSupportedOperationException: Operation getInterval is not supported: one component of a Dirichlet is not a distribution over a number, so it has no interval
+Percentage over reference value (20 %): pa de 1,6 a 2,4
+  utilidad esperada 0,667  0,692  0,714  0,733  0,750
+User defined interval (0,1 a 0,3):
+  utilidad esperada 0,111  0,158  0,200  0,238  0,273
+\end{Verbatim}
+
+Con el porcentaje, la columna pasa a ser (1,6; 0,3; 0,5) y la evaluación la normaliza: en el punto central, que debía ser el valor de referencia, la utilidad esperada es 0,714 en vez de 0,2, y ninguno de los cinco puntos se acerca a la verdadera. Con el intervalo, P(a) = 0,3 deja la columna en (0,3; 0,3; 0,5), que suma 1,1, y se calcula con 0,273.
+
+En \texttt{MID-HPV.\allowbreak{}pgmx}, que tiene 16 parámetros Dirichlet con nombre, variar «pI\_CIN1» un 20~\% deja en la tabla de «Health state [1]» columnas como (0,813; 15,04; 0,058; 0,035), que suma 15,9. Y en \texttt{MID-HPV-without-supervalue.\allowbreak{}pgmx}, la araña de coste-efectividad con las opciones por defecto falla, con el diálogo, con el mensaje del intervalo.
+\paragraph{Cómo arreglarlo}
+Para un parámetro de una Dirichlet, tomar como valor de referencia su probabilidad, $\alpha_i/\sum_j \alpha_j$, con los $\alpha$ de su columna; como intervalo, el de su distribución marginal, que es una Beta$(\alpha_i, \sum_j \alpha_j - \alpha_i)$; y, al cambiar su valor, reajustar en proporción las demás Dirichlet de la columna para que sigan sumando lo mismo.
+
+Prueba: en la red mínima, el valor de referencia de «pa» es 0,2; con un porcentaje, el punto central da 0,2; con el intervalo de 0,1 a 0,3, los cinco puntos dan 0,1, 0,15, 0,2, 0,25 y 0,3; y con la variación por defecto el análisis se hace, entre los percentiles de la Beta(2, 8).
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Simulación de sucesos discretos}\label{sec:des}
@@ -19957,6 +19993,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:306]{Error 306} & hallazgo nuevo, visto al corregir el \hyperref[err:305]{error~305} \\
 \hyperref[err:307]{Error 307} & hallazgo nuevo, al ejecutar la prueba desactivada \texttt{All\allowbreak{}Potentials\allowbreak{}Have\allowbreak{}APanel\allowbreak{}Test} \\
 \hyperref[err:308]{Error 308} & hallazgo nuevo, visto junto al \hyperref[err:277]{error~277} \\
+\hyperref[err:309]{Error 309} & hallazgo nuevo, visto al comprobar el \hyperref[err:277]{error~277} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
