@@ -94,6 +94,12 @@ public class EditorCommandHandlerGenerator {
                                                                               EditorCommandHandlerGenerator.this.networkEditorPanel.getZoomManager()
                                                                                                                                    .screenToPanel(e.getY()));
                 EditorCommandHandlerGenerator.this.pressPosition.setLocation(EditorCommandHandlerGenerator.this.cursorPosition);
+                EditorCommandHandlerGenerator.this.mouseIgnoredUntilReleased = false;
+            }
+            
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                EditorCommandHandlerGenerator.this.mouseIgnoredUntilReleased = false;
             }
             
             @Override
@@ -269,10 +275,12 @@ public class EditorCommandHandlerGenerator {
                                                                       .finishSelectionRectangle(position);
                                                this.networkEditorPanel.setSelectedAllObjects(false);
                                                this.setSelectionState(SelectionState.NOTHING);
+                                               this.mouseIgnoredUntilReleased = true;
                                            }
                                            case MOVING -> {
                                                this.cancelNodesMovements();
                                                this.setSelectionState(SelectionState.NOTHING);
+                                               this.mouseIgnoredUntilReleased = true;
                                            }
                                            case CREATING_LINK -> {
                                                this.networkEditorPanel.getVisualNetwork().cancelLinkCreation();
@@ -340,7 +348,7 @@ public class EditorCommandHandlerGenerator {
                 
                 BindingCommandGroup.of(Bindings.Network.SELECTION_RECTANGLE, Binding.MeetCondition.HELD, true, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_MOVED, BindingCommandGroup.OnEvent.MOUSE_DRAGGED))
                                    .processIf((_, _) -> networkEditorPanel.getBaseTool() == NetworkEditorPanel.BaseTool.SELECTION && this.selectionState == SelectionState.NOTHING &&
-                                           this.visualNetwork.getElementInPosition(this.pressPosition, this.graphics) == null)
+                                           !this.mouseIgnoredUntilReleased && this.visualNetwork.getElementInPosition(this.pressPosition, this.graphics) == null)
                                    .withAction((_, _) -> {
                                        this.networkEditorPanel.requestFocusInWindow();
                                        this.visualNetwork.setSelectedAllObjects(false);
@@ -675,8 +683,8 @@ public class EditorCommandHandlerGenerator {
                 
                 BindingCommandGroup.of(Bindings.Network.MOVE_NODE_MOUSE, Binding.MeetCondition.HELD, false, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_DRAGGED, BindingCommandGroup.OnEvent.MOUSE_MOVED))
                                    .processIf((_, _) -> switch (this.selectionState) {
-                                       case NOTHING ->
-                                               !this.networkEditorPanel.getVisualNetwork().getSelectedNodes().isEmpty();
+                                       case NOTHING -> !this.mouseIgnoredUntilReleased
+                                               && !this.networkEditorPanel.getVisualNetwork().getSelectedNodes().isEmpty();
                                        case MOVING -> true;
                                        case SELECTING, CREATING_LINK -> false;
                                    })
@@ -800,6 +808,9 @@ public class EditorCommandHandlerGenerator {
     
     /** Where the mouse button was last pressed on the canvas. */
     private final Point2D.Double pressPosition = new Point2D.Double();
+    
+    /** Whether Escape cancelled a band or a drag whose mouse button has not been released yet. */
+    private boolean mouseIgnoredUntilReleased;
     
     /**
      * Object that creates the contextual menus.
