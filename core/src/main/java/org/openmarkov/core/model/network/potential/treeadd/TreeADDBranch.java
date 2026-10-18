@@ -321,9 +321,9 @@ public class TreeADDBranch implements ClassLocalizable {
         this.reference = reference;
     }
     
-    /** Gives this branch its own copy of the potential it references, so that it is no longer a reference. */
-    public void replaceReferenceWithACopy() {
-        potential = getPotential().copy();
+    /** Gives this branch {@code copy}, a copy of the potential it references, so that it is no longer a reference. */
+    public void replaceReferenceWith(Potential copy) {
+        potential = copy;
         reference = null;
         referencedBranch = null;
     }

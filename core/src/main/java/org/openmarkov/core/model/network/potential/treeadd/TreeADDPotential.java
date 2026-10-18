@@ -592,8 +592,8 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
                 if (branch.getLabel() != null) {
                     labeledBranches.put(branch.getLabel(), branch);
                 }
-                if (branch.getPotential() != null && branch.getPotential() instanceof TreeADDPotential) {
-                    subtrees.push((TreeADDPotential) branch.getPotential());
+                if (!branch.isReference() && branch.getPotential() instanceof TreeADDPotential subtree) {
+                    subtrees.push(subtree);
                 }
             }
         }
@@ -623,6 +623,52 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
         }
     }
     
+    /**
+     * @return a copy of {@code potential} to be put in a branch of this tree; a subtree is copied without the labels
+     * that branches of this tree have, so that each label names a single branch
+     */
+    public Potential copyForThisTree(Potential potential) {
+        Set<String> labelsOfThisTree = getLabeledBranches().keySet();
+        Potential copy = potential.copy();
+        if (copy instanceof TreeADDPotential subtree) {
+            Deque<TreeADDPotential> subtrees = new ArrayDeque<>();
+            subtrees.push(subtree);
+            while (!subtrees.isEmpty()) {
+                for (TreeADDBranch branch : subtrees.pop().getBranches()) {
+                    if (labelsOfThisTree.contains(branch.getLabel())) {
+                        branch.setLabel(null);
+                    }
+                    if (!branch.isReference() && branch.getPotential() instanceof TreeADDPotential inner) {
+                        subtrees.push(inner);
+                    }
+                }
+            }
+        }
+        return copy;
+    }
+
+    /**
+     * Gives each branch that references a label no branch of this tree has its own copy of the potential it used.
+     *
+     * @return whether some branch was given a copy
+     */
+    public boolean copyThePotentialOfReferencesWithoutLabel() {
+        List<TreeADDBranch> referencesWithoutLabel = getReferencesWithoutLabel();
+        for (TreeADDBranch reference : referencesWithoutLabel) {
+            reference.replaceReferenceWith(copyForThisTree(reference.getPotential()));
+        }
+        if (!referencesWithoutLabel.isEmpty()) {
+            updateReferences(getLabeledBranches());
+        }
+        return !referencesWithoutLabel.isEmpty();
+    }
+
+    /** @return whether {@code branch} can take {@code label}: no other branch of this tree has it */
+    public boolean isLabelFreeFor(String label, TreeADDBranch branch) {
+        TreeADDBranch labeledBranch = getLabeledBranches().get(label);
+        return labeledBranch == null || labeledBranch == branch;
+    }
+
     /** @return the branches of this tree, at any depth, that reference a label that no branch of this tree has */
     public List<TreeADDBranch> getReferencesWithoutLabel() {
         Set<String> labels = getLabeledBranches().keySet();

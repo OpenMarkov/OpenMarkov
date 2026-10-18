@@ -445,9 +445,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
      * removed, its own copy of the potential it used.
      */
     private void copyThePotentialOfReferencesWithoutLabel() {
-        List<TreeADDBranch> referencesWithoutLabel = rootTreeADDPotential.getReferencesWithoutLabel();
-        if (!referencesWithoutLabel.isEmpty()) {
-            referencesWithoutLabel.forEach(TreeADDBranch::replaceReferenceWithACopy);
+        if (rootTreeADDPotential.copyThePotentialOfReferencesWithoutLabel()) {
             ((TreeADDModel) jTree.getModel()).notifyTreeStructureChanged(new TreePath(rootTreeADDPotential));
             for (int i = 0; i < jTree.getRowCount(); i++) {
                 jTree.expandRow(i);
@@ -710,7 +708,8 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
                 minFirstInterval.setBelongsToLeft(true);
                 leftBranchToAdd = new TreeADDBranch(minFirstInterval,
                                                     new Threshold(minFirstInterval.getLimit(), true), branch.getRootVariable(),
-                                                    branch.getPotential().copy(), branch.getParentVariables());
+                                                    rootTreeADDPotential.copyForThisTree(branch.getPotential()),
+                                                    branch.getParentVariables());
                 rightBranchToAdd = branch;
             }
             case RIGHT_SIDE_OF_SECOND -> {
@@ -718,17 +717,19 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
                 leftBranchToAdd = branch;
                 rightBranchToAdd = new TreeADDBranch(new Threshold(maxSecondInterval.getLimit(), false),
                                                      new Threshold(maxSecondInterval.getLimit(), true), branch.getRootVariable(),
-                                                     branch.getPotential().copy(), branch.getParentVariables());
+                                                     rootTreeADDPotential.copyForThisTree(branch.getPotential()),
+                                                     branch.getParentVariables());
             }
             case IN_BETWEEN_FIRST_AND_SECOND -> {
                 Threshold maxFirstInterval = new Threshold(introducedLimit, belongsToLeft);
                 Threshold minSecondInterval = new Threshold(introducedLimit, belongsToLeft);
                 leftBranchToAdd = new TreeADDBranch(minFirstInterval, maxFirstInterval,
-                                                    branch.getRootVariable(), branch.getPotential()
-                                                                                    .copy(), branch.getParentVariables());
+                                                    branch.getRootVariable(), branch.getPotential(),
+                                                    branch.getParentVariables());
                 rightBranchToAdd = new TreeADDBranch(minSecondInterval, maxSecondInterval,
-                                                     branch.getRootVariable(), branch.getPotential()
-                                                                                     .copy(), branch.getParentVariables());
+                                                     branch.getRootVariable(),
+                                                     rootTreeADDPotential.copyForThisTree(branch.getPotential()),
+                                                     branch.getParentVariables());
             }
         }
         for (TreeADDBranch parentBranch : parentBranches) {
@@ -904,7 +905,8 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         }
         //
         TreeADDBranch newBranch = new TreeADDBranch(statesToEliminate, branch.getRootVariable(),
-                                                    branch.getPotential().copy(), branch.getParentVariables());
+                                                    rootTreeADDPotential.copyForThisTree(branch.getPotential()),
+                                                    branch.getParentVariables());
         newTreeADDBranches.add(branch);
         newTreeADDBranches.add(newBranch);
         // Updating tree
@@ -1242,7 +1244,10 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
      */
     private void setLabel(ActionEvent ae, TreeADDBranch branch, TreePath path) {
         String label = JOptionPane.showInputDialog(null, "Enter label name: ", "Set label", 1);
-        if (label != null && !label.isEmpty()) {
+        if (label != null && !label.isEmpty() && !rootTreeADDPotential.isLabelFreeFor(label, branch)) {
+            JOptionPane.showMessageDialog(this, "Another branch of the tree has the label " + label + ".", "Set label",
+                                          JOptionPane.WARNING_MESSAGE);
+        } else if (label != null && !label.isEmpty()) {
             branch.setLabel(label);
             TreeADDModel model = (TreeADDModel) jTree.getModel();
             model.notifyTreeStructureChanged(path);
@@ -1287,7 +1292,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
      */
     private void removeReference(ActionEvent ae, TreeADDBranch branch, TreePath path) {
         Potential referencedPotential = branch.getPotential();
-        branch.setPotential(referencedPotential.copy());
+        branch.setPotential(rootTreeADDPotential.copyForThisTree(referencedPotential));
         branch.setReference(null);
         TreeADDModel model = (TreeADDModel) jTree.getModel();
         model.notifyTreeStructureChanged(path);
