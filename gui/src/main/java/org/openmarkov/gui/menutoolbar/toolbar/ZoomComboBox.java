@@ -65,16 +65,26 @@ public class ZoomComboBox extends JComboBox<String> implements ItemListener, Key
         setName("ZoomComboBox");
         setEditable(true);
         setPrototypeDisplayValue("500%X");
-        Dimension size = new Dimension(getPreferredSize().width, 25);
-        setPreferredSize(size);
-        setMaximumSize(size);
-        setMinimumSize(size);
         setSelectedIndex(3); // 100% item
         oldValue = (String) getSelectedItem();
         addItemListener(this);
         addComponentKeyListener(this);
     }
     
+    /**
+     * The size its text needs, so that the toolbar neither stretches nor shrinks it.
+     */
+    @Override public Dimension getMinimumSize() {
+        return getPreferredSize();
+    }
+
+    /**
+     * The size its text needs, so that the toolbar neither stretches nor shrinks it.
+     */
+    @Override public Dimension getMaximumSize() {
+        return getPreferredSize();
+    }
+
     /**
      * Adds a new key listener to the component where edition is performed.
      *
