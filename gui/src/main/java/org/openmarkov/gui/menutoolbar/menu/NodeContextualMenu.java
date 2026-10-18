@@ -138,12 +138,7 @@ public class NodeContextualMenu extends ContextualMenu {
         NetworkEditorPanel.WorkingMode workingMode = networkEditorPanel.getNetworkEditorPanel().getWorkingMode();
         this.selectedNode = selectedNode;
         NodeType nodeType = selectedNode.getNode().getNodeType();
-        // Test if the node can be absorbed. Validate method returns true in that case
         Node node = selectedNode.getNode();
-        setOptionEnabled(ActionCommands.ABSORB_NODE.getCommandName(), AbsorbNodeValidator.validate(node));
-        
-        // Test if parents of the node can be absorbed. Validate method returns true in that case
-        setOptionEnabled(ActionCommands.ABSORB_PARENTS.getCommandName(), AbsorbParentsValidator.validate(node));
         
         boolean isEventNode = selectedNode.getNode().getNodeType().equals(NodeType.EVENT);
         
@@ -361,6 +356,9 @@ public class NodeContextualMenu extends ContextualMenu {
             if (!allParentsAreFiniteAndHaveTablePotentials) {
                 absorbNodeMenuItem.setEnabled(false);
                 absorbNodeMenuItem.setToolTipText("Not all parents have a finite states domain and a table relation, hence, this node cannot be absorbed.");
+            } else if (!AbsorbNodeValidator.validate(this.selectedNode.getNode())) {
+                absorbNodeMenuItem.setEnabled(false);
+                absorbNodeMenuItem.setToolTipText("Only a chance or decision node whose children are all utility nodes without children can be absorbed; for a decision, those utilities can only depend on what is known when deciding.");
             }
         }
         return absorbNodeMenuItem;
@@ -549,6 +547,9 @@ public class NodeContextualMenu extends ContextualMenu {
             if (!parentsHaveNoOtherChildren) {
                 absorbParentsMenuItem.setEnabled(false);
                 absorbParentsMenuItem.setToolTipText("Parents of this node cannot have other children than this node in order to absorb them.");
+            } else if (!AbsorbParentsValidator.validate(this.selectedNode.getNode())) {
+                absorbParentsMenuItem.setEnabled(false);
+                absorbParentsMenuItem.setToolTipText("Only the numeric parents of a numeric node whose relation is a sum, a product or a formula can be absorbed, and only if their own parents have finite states.");
             }
         }
         
