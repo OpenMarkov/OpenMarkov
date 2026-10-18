@@ -15,6 +15,7 @@ import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
 import org.openmarkov.core.action.core.AddNodeEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.model.graph.Link;
+import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.Point2D;
@@ -61,6 +62,17 @@ public class PasteEdit extends MultiStepEdit {
     }
     
     
+    /** @return the criterion of the network that has the name of {@code criterion}, if there is one */
+    private Optional<Criterion> sameCriterionOfTheNetwork(Criterion criterion) {
+        if (criterion == null || this.probNet.getDecisionCriteria() == null) {
+            return Optional.empty();
+        }
+        return this.probNet.getDecisionCriteria().stream()
+                           .filter(networkCriterion -> networkCriterion.getCriterionName()
+                                                                       .equals(criterion.getCriterionName()))
+                           .findFirst();
+    }
+
     @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException {
         this.newVariables = new HashMap<>();
         // Gather new node creation edits
@@ -83,6 +95,7 @@ public class PasteEdit extends MultiStepEdit {
             }
             Variable variable = new Variable(node.getVariable());
             variable.setName(newName);
+            sameCriterionOfTheNetwork(variable.getDecisionCriterion()).ifPresent(variable::setDecisionCriterion);
             this.newVariables.put(oldName, newName);
             Point2D.Double position = new Point2D.Double(node.getCoordinateX() + 7.0, node.getCoordinateY());
             if (diff != null) {
