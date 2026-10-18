@@ -162,14 +162,24 @@ public class AugmentedProbTablePotential extends Potential {
         augmentedProbTable.replaceVariableInFunctions(oldVariable, variable);
     }
 
-    /** Shifts the variables and, with them, the two lists they are sorted into, the inner table and its formulas. */
+    /**
+     * Shifts the variables and, with them, the two lists they are sorted into, the inner table and its formulas, all at
+     * once, so that two cycles of the same variable are not taken for each other.
+     */
     @Override public void shift(ProbNet probNet, int timeDifference) {
-        List<Variable> shifted = getShiftedVariables(probNet, timeDifference);
-        for (int position = 0; position < shifted.size(); position++) {
-            if (shifted.get(position) != variables.get(position)) {
-                replaceVariable(position, shifted.get(position));
-            }
+        List<Variable> shiftedVariables = getShiftedVariables(probNet, timeDifference);
+        Map<Variable, Variable> shifted = new HashMap<>();
+        for (int position = 0; position < shiftedVariables.size(); position++) {
+            shifted.put(variables.get(position), shiftedVariables.get(position));
         }
+        setVariables(new ArrayList<>(shiftedVariables));
+        classifyVariables();
+        List<Variable> innerVariables = new ArrayList<>();
+        for (Variable variable : augmentedProbTable.getVariables()) {
+            innerVariables.add(shifted.getOrDefault(variable, variable));
+        }
+        augmentedProbTable.setVariables(innerVariables);
+        augmentedProbTable.replaceVariablesInFunctions(shifted);
     }
 
     /**

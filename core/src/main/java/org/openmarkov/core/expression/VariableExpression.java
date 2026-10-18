@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class VariableExpression extends ReferencedExpression<Variable> {
@@ -30,18 +32,31 @@ public class VariableExpression extends ReferencedExpression<Variable> {
      * refers to, so replacing a variable in a potential does not reach its expressions by itself.
      */
     public VariableExpression replacing(Variable oldVariable, Variable newVariable) {
+        return replacing(Map.of(oldVariable, newVariable));
+    }
+
+    /**
+     * @return this expression with each key of {@code replacements} replaced by its value, all at once,
+     * so that a variable whose new name is the old name of another is not replaced twice; this very
+     * expression when it mentions none of them.
+     */
+    public VariableExpression replacing(Map<Variable, Variable> replacements) {
         List<Variable> references = references();
-        boolean holdsTheVariable = references.stream().anyMatch(reference -> reference == oldVariable);
+        boolean holdsAVariable = references.stream().anyMatch(replacements::containsKey);
+        Map<String, String> newNames = new HashMap<>();
+        replacements.forEach((oldVariable, newVariable) -> newNames.put(oldVariable.getName(), newVariable.getName()));
         String expression = asStringExpression();
-        String replaced = expression.replace("{" + oldVariable.getName() + "}", "{" + newVariable.getName() + "}");
-        if (!holdsTheVariable && replaced.equals(expression)) {
+        String replaced = BRACED.matcher(expression).replaceAll(braced -> {
+            String name = braced.group().substring(1, braced.group().length() - 1);
+            return Matcher.quoteReplacement(newNames.containsKey(name) ? "{" + newNames.get(name) + "}" : braced.group());
+        });
+        if (!holdsAVariable && replaced.equals(expression)) {
             return this;
         }
-        List<Variable> possibleVariables = new ArrayList<>();
-        possibleVariables.add(newVariable);
+        List<Variable> possibleVariables = new ArrayList<>(replacements.values());
         for (Variable reference : references) {
-            if (reference != oldVariable && possibleVariables.stream()
-                                                             .noneMatch(v -> v.getName().equals(reference.getName()))) {
+            if (!replacements.containsKey(reference)
+                    && possibleVariables.stream().noneMatch(v -> v.getName().equals(reference.getName()))) {
                 possibleVariables.add(reference);
             }
         }

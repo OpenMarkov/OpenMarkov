@@ -20,6 +20,7 @@ import org.openmarkov.core.model.network.VariableType;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A table potential whose cells contain symbolic function expressions ({@link VariableExpression})
@@ -187,9 +188,14 @@ public class AugmentedProbTable extends UncertainTablePotential {
     
     /** Writes the functions of the cells on {@code newVariable} wherever they were written on {@code oldVariable}. */
     public void replaceVariableInFunctions(Variable oldVariable, Variable newVariable) {
+        replaceVariablesInFunctions(Map.of(oldVariable, newVariable));
+    }
+
+    /** Writes the functions of the cells on the values of {@code replacements} wherever they were written on its keys, all at once. */
+    public void replaceVariablesInFunctions(Map<Variable, Variable> replacements) {
         VariableExpression[] replaced = new VariableExpression[functionValues.length];
         for (int i = 0; i < functionValues.length; i++) {
-            replaced[i] = functionValues[i] == null ? null : functionValues[i].replacing(oldVariable, newVariable);
+            replaced[i] = functionValues[i] == null ? null : functionValues[i].replacing(replacements);
         }
         functionValues = replaced;
     }

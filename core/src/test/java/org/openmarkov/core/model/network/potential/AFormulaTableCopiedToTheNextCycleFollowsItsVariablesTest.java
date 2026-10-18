@@ -75,6 +75,83 @@ class AFormulaTableCopiedToTheNextCycleFollowsItsVariablesTest {
         assertArrayEquals(new double[]{0.6, 0.4, 0.4, 0.6}, projected.getValues(), 1e-6);
     }
 
+    /** Error 297: with two cycles of the age as parents, each name moves one cycle, not both to the last one. */
+    @Test void twoCyclesOfANumericVariableKeepApart() throws Exception {
+        ProbNet net = new ProbNet(MIDType.getUniqueInstance());
+        Variable state0 = state(0);
+        Variable state1 = state(1);
+        Variable age0 = age(0);
+        Variable age1 = age(1);
+        net.addNode(state0, NodeType.CHANCE);
+        Node node1 = net.addNode(state1, NodeType.CHANCE);
+        net.addNode(age0, NodeType.CHANCE);
+        net.addNode(age1, NodeType.CHANCE);
+        net.addLink(state0, state1, true);
+        net.addLink(age0, state1, true);
+        net.addLink(age1, state1, true);
+        List<Variable> variables = List.of(state1, state0, age0, age1);
+        AugmentedProbTablePotential table =
+                new AugmentedProbTablePotential(new ArrayList<>(variables), PotentialRole.CONDITIONAL_PROBABILITY);
+        VariableExpression[] cells = table.getAugmentedProbTable().getFunctionValues();
+        cells[0] = new VariableExpression(variables, "1-({Age [1]}-{Age [0]})/100");
+        cells[1] = new VariableExpression(variables, "({Age [1]}-{Age [0]})/100");
+        cells[2] = new VariableExpression(variables, "{Age [1]}/100");
+        cells[3] = new VariableExpression(variables, "1-{Age [1]}/100");
+        node1.setPotential(table);
+        net.getInferenceOptions().getTemporalOptions().setHorizon(2);
+
+        ProbNet expanded = TemporalNetOperations.expandNetwork(net);
+
+        AugmentedProbTablePotential next = (AugmentedProbTablePotential) expanded.getNode(expanded.getVariable("State [2]"))
+                                                                                  .getPotentials().getFirst();
+        assertEquals(List.of("State [2]", "State [1]", "Age [1]", "Age [2]"), names(next.getVariables()));
+        assertEquals("1-({Age [2]}-{Age [1]})/100", next.getAugmentedProbTable().getFunctionValues()[0].asStringExpression());
+        EvidenceCase ages = new EvidenceCase();
+        ages.addFinding(new Finding(expanded.getVariable("Age [1]"), 40.0));
+        ages.addFinding(new Finding(expanded.getVariable("Age [2]"), 50.0));
+        TablePotential projected = next.tableProject(ages, null, new ArrayList<>());
+        assertArrayEquals(new double[]{0.9, 0.1, 0.5, 0.5}, projected.getValues(), 1e-6);
+    }
+
+    /** Error 297: with two cycles of a variable with states as parents, the inner table keeps the order of the relation. */
+    @Test void twoCyclesOfAVariableWithStatesKeepTheirPlaceInTheInnerTable() throws Exception {
+        ProbNet net = new ProbNet(MIDType.getUniqueInstance());
+        Variable s0 = named("S", 0);
+        Variable s1 = named("S", 1);
+        Variable x1 = named("X", 1);
+        Variable k1 = age(1);
+        net.addNode(s0, NodeType.CHANCE);
+        net.addNode(s1, NodeType.CHANCE);
+        net.addNode(k1, NodeType.CHANCE);
+        Node node1 = net.addNode(x1, NodeType.CHANCE);
+        net.addLink(s0, s1, true);
+        net.addLink(s0, x1, true);
+        net.addLink(s1, x1, true);
+        net.addLink(k1, x1, true);
+        node1.setPotential(new AugmentedProbTablePotential(new ArrayList<>(List.of(x1, s0, s1, k1)),
+                                                           PotentialRole.CONDITIONAL_PROBABILITY));
+        net.getInferenceOptions().getTemporalOptions().setHorizon(2);
+
+        ProbNet expanded = TemporalNetOperations.expandNetwork(net);
+
+        AugmentedProbTablePotential next = (AugmentedProbTablePotential) expanded.getNode(expanded.getVariable("X [2]"))
+                                                                                  .getPotentials().getFirst();
+        assertEquals(List.of("X [2]", "S [1]", "S [2]", "Age [2]"), names(next.getVariables()));
+        assertEquals(List.of("X [2]", "S [1]", "S [2]"), names(next.getAugmentedProbTable().getVariables()));
+    }
+
+    private static Variable age(int cycle) {
+        Variable variable = new Variable("Age");
+        variable.setTimeSlice(cycle);
+        return variable;
+    }
+
+    private static Variable named(String name, int cycle) {
+        Variable variable = new Variable(name, new State[]{new State("no"), new State("yes")});
+        variable.setTimeSlice(cycle);
+        return variable;
+    }
+
     private static Variable state(int cycle) {
         Variable variable = new Variable("State", new State[]{new State("well"), new State("ill")});
         variable.setTimeSlice(cycle);
