@@ -10,11 +10,11 @@ public class InvalidLimitInTreeADDException extends OpenMarkovException {
         return IBundledOpenMarkovException.toString(this);
     }
     
-    public InvalidLimitInTreeADDException(Threshold interval, float introducedLimit) {
+    public InvalidLimitInTreeADDException(Threshold interval, double introducedLimit) {
         this.interval = interval;
         this.introducedLimit = introducedLimit;
     }
     
     public final Threshold interval;
-    public final float introducedLimit;
+    public final double introducedLimit;
 }

@@ -512,8 +512,8 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
                                                                                                                                                              .getLimit() + ")");
         }
         boolean triesToChangeDomain =
-                upperBound.floatValue() > maxDomainLimit
-                        || lowerBound.floatValue() < minDomainLimit
+                upperBound > maxDomainLimit
+                        || lowerBound < minDomainLimit
                         || (upperBound == maxDomainLimit && !maxBelongsToLeftDomain && maxBelongsToLeft)
                         || (lowerBound == minDomainLimit && minBelongsToLeftDomain && !minBelongsToLeft);
         if (triesToChangeDomain) {
@@ -560,7 +560,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
                             parentBranches.get(branchIndex + 1).setLowerBound(new Threshold(upperBound, false));
                         }
                         break;
-                    } else if (upperBound.floatValue() < followingBranches.get(i).getUpperBound().getLimit()) {
+                    } else if (upperBound < followingBranches.get(i).getUpperBound().getLimit()) {
                         for (int j = branchIndex + 1; j <= i + branchIndex; j++) {
                             parentBranches.remove(branchIndex + 1);
                         }
@@ -573,7 +573,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         }
         // min limit
         if (!(
-                lowerBound.floatValue() == branch.getLowerBound().getLimit() && minBelongsToLeft == branch
+                lowerBound == branch.getLowerBound().getLimit() && minBelongsToLeft == branch
                         .getLowerBound().belongsToLeft()
         )) {
             ArrayList<TreeADDBranch> previousBranches = new ArrayList<TreeADDBranch>();
@@ -667,7 +667,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         } else if (panel.belongsToRight().isSelected()) {
             belongsToLeft = false;
         }
-        float introducedLimit = Float.parseFloat(panel.getLimit().getText());
+        double introducedLimit = Double.parseDouble(panel.getLimit().getText());
         Threshold minFirstInterval = branch.getLowerBound();
         Threshold maxSecondInterval = branch.getUpperBound();
         List<TreeADDBranch> parentBranches = parentTreeADD.getBranches();
