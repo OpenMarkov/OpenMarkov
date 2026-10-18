@@ -89,7 +89,7 @@ public class VariableTypeEdit extends MultiStepEdit {
         if (originalVariableType != newType) {
             switch (originalVariableType) {
                 case FINITE_STATES, DISCRETIZED -> {
-                    if (newType == VariableType.NUMERIC) {
+                    if (newType == VariableType.NUMERIC || originalStates.length == 1) {
                         setPotentialsNodeAndChildren(node, stepExecuter);
                     }
                 }
