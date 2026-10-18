@@ -241,6 +241,9 @@ Los \hyperref[err:291]{errores~291} a \hyperref[err:303]{303} se encontraron al 
 \paragraph{Errores añadidos el 18 de octubre}
 Los \hyperref[err:304]{errores~304} a \hyperref[err:306]{306} se vieron en la ventana después de cambiar la letra de los nodos (\texttt{dfe951d}): el \hyperref[err:304]{304} lo vio Manuel Arias en su pantalla, y los \hyperref[err:305]{305} y \hyperref[err:306]{306} salieron al corregirlo. Se añaden ya corregidos, cada uno con el commit que lo corrige, para que la versión en C++ y Qt los recoja como los demás. El \hyperref[err:307]{error~307} salió el mismo día al ejecutar las pruebas desactivadas: de las que fallaban, es el único defecto del programa al que llega un usuario; las demás fallan por la propia prueba, por redes que no están en el repositorio o por código al que no se llega. El \hyperref[err:308]{error~308} salió al comprobar el \hyperref[err:277]{277}: es el análisis que fallaba y dejaba fijo el escenario. El \hyperref[err:309]{309} salió al mirar otro de los fallos que vio, al comprobar el \hyperref[err:277]{277}, un barrido del análisis de sensibilidad por las redes del repositorio: la araña de coste-efectividad de \texttt{MID-HPV-without-supervalue.\allowbreak{}pgmx}.
 
+\paragraph{Errores añadidos el 19 de octubre}
+Los \hyperref[err:310]{errores~310} a \hyperref[err:313]{313} se encontraron al llevar a la versión en C++ y Qt los arreglos que esta lista recibió el 17 y el 18 de octubre, de \texttt{b83168f} a \texttt{fe96646}. Cada uno se ha comprobado con el código de \texttt{fe96646}, el último commit a día de hoy, y la fila \emph{Comprobado} de su ficha dice cómo: los dos del editor de árboles, con las operaciones del editor llamadas tal cual sobre el panel construido sin ventana y la respuesta de sus ventanillas puesta a mano en una copia de la clase; el de pegar, ejecutando el pegado, el guardado y la lectura sin ventana; y el de los gestos del editor de red, manejando el programa entero, con el ratón y el teclado, en una pantalla anidada. Dos salieron de los propios arreglos de ese día: el \hyperref[err:310]{error~310}, del arreglo del \hyperref[err:292]{292}, y el \hyperref[err:312]{312}, de lo que dejó sin resolver el del \hyperref[err:295]{295}. No se ha añadido, por la decisión de equipo sobre los textos, que los textos españoles de la ventana «About» no se pusieran al día: \texttt{ea3deaa}, el arreglo del \hyperref[err:204]{error~204}, solo cambió \texttt{Dialogs\_\allowbreak{}en.\allowbreak{}xml}.
+
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
 en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
@@ -296,9 +299,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{308 errores}; 164 de ellos son defectos nuevos: 75 encontrados al
-comprobar o corregir los demás, 75 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{45} necesitan antes una decisión del equipo. Por esfuerzo estimado: 268 pequeños, 40 medios y 0 grandes.
-De los 308, 200 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{312 errores}; 168 de ellos son defectos nuevos: 75 encontrados al
+comprobar o corregir los demás, 79 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{46} necesitan antes una decisión del equipo. Por esfuerzo estimado: 272 pequeños, 40 medios y 0 grandes.
+De los 312, 200 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -308,8 +311,8 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \midrule
 \ref{sec:potenciales}. Operaciones con potenciales & 3 \\
 \ref{sec:canonicos}. Modelos canónicos y modelo de ajuste & 3 \\
-\ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 23 \\
-\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 31 \\
+\ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 25 \\
+\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 32 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 23 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 23 \\
@@ -319,7 +322,7 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:ficheros}. Abrir y guardar redes & 15 \\
 \ref{sec:casos}. Bases de casos & 13 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 32 \\
-\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 37 \\
+\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 38 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 19 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 16 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
@@ -385,6 +388,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:260]{260} & \textcolor{corregidoverde}{\textbf{Corregido}} · Pegar un nodo o deshacer un cambio de estados borra el comentario de cinco clases de relación & \texttt{core} & S \hfill No\\
 \hyperref[err:278]{278} & Un riesgo de Weibull da «probabilidades» negativas, mayores que uno o que no son números, sin avisar & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:292]{292} & \textcolor{corregidoverde}{\textbf{Corregido}} · Quitar una etiqueta del árbol puede dejar dos ramas con la misma etiqueta & \texttt{gui}, \texttt{core} & S \hfill No\\
+\hyperref[err:310]{310} & Partir por en medio una referencia del árbol deja dos ramas compartiendo el mismo subárbol & \texttt{gui}, \texttt{core} & S \hfill No\\
+\hyperref[err:311]{311} & «Split interval» por la punta de abajo de una rama deja un tramo vacío y un valor sin rama & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:ediciones}.\ Ediciones de la red: deshacer, cancelar y pegar}}\\
 \hyperref[err:24]{24} & \textcolor{corregidoverde}{\textbf{Corregido en parte}} · \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un dominio estándar de otro tamaño borra tablas que «Cancel» no devuelve & \texttt{core} & M \hfill No\\
 \hyperref[err:25]{25} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Restringir un enlace cambia la tabla del hijo y deshacer no la devuelve & \texttt{gui} & S \hfill No\\
@@ -417,6 +422,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:294]{294} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una variable de un solo estado que pasa entre «estados finitos» y «discretizada» se queda con tablas de una casilla & \texttt{core} & S \hfill No\\
 \hyperref[err:295]{295} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una utilidad pegada queda juzgada por una copia del criterio, que la red no tiene & \texttt{core}, \texttt{gui} & S \hfill No\\
 \hyperref[err:296]{296} & \textcolor{corregidoverde}{\textbf{Corregido}} · Quitar o añadir un padre a una suma cambia la suma misma, y deshacerlo no la devuelve & \texttt{core} & S \hfill No\\
+\hyperref[err:312]{312} & Una utilidad pegada donde ningún criterio se llama como el suyo sigue juzgada por una copia que la red no tiene & \texttt{gui}, \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:restricciones}.\ Restricciones de red}}\\
 \hyperref[err:37]{37} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir un fichero no comprueba las restricciones de la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:38]{38} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Un estado puede quedarse con el nombre vacío o repetido & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -630,6 +636,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:300]{300} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un clic sobre el lienzo vacío ya no quita lo señalado & \texttt{gui} & S \hfill No\\
 \hyperref[err:302]{302} & \textcolor{corregidoverde}{\textbf{Corregido}} · Arrastrar nodos los mueve con un paso de retraso, y el primero es del arrastre anterior & \texttt{gui} & S \hfill No\\
 \hyperref[err:303]{303} & \textcolor{corregidoverde}{\textbf{Corregido}} · Escape no acaba la banda ni el arrastre: si el ratón sigue, vuelven a empezar & \texttt{gui} & S \hfill No\\
+\hyperref[err:313]{313} & Con mayúsculas o Control, arrastrar desde el lienzo vacío mueve los nodos señalados & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:menus}.\ Interfaz: menús, diálogos y herramientas}}\\
 \hyperref[err:171]{171} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir una red desde internet apaga «Guardar» para todas las redes & \texttt{gui} & M \hfill No\\
 \hyperref[err:172]{172} & «Edits history» deja un núcleo al cien por cien y puede colgar el programa & \texttt{full} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -2946,6 +2953,69 @@ Que la copia que recibe una referencia no traiga las etiquetas que siguen en el 
 
 Prueba: sobre el primer árbol de arriba, \texttt{remove\allowbreak{}Label} en «b0» seguido de \texttt{copy\allowbreak{}The\allowbreak{}Potential\allowbreak{}Of\allowbreak{}References\allowbreak{}Without\allowbreak{}Label} deja una sola rama con la etiqueta «inner»; y \texttt{set\allowbreak{}Label} con «inner» sobre «b1» no la pone.
 
+\setcounter{subsection}{309}
+\subsection[Partir por en medio una referencia del árbol deja dos ramas compartiendo el mismo subárbol]{En el editor de árboles, «Split interval» por en medio de una rama que es una referencia da a la mitad de la izquierda el mismo objeto que tiene la rama etiquetada a la que remite: dos ramas del árbol comparten el subárbol, con las etiquetas que lleva dentro, y cambiar una cambia también la otra}\label{err:310}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui, core
+\fichakey{Paquete}org.openmarkov.gui.dialog.treeadd; org.openmarkov.core.model.network.potential.treeadd
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/TreeADDEditorPanel.java:723-733} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/treeadd/TreeADDBranch.java:270-272}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (el \texttt{split\allowbreak{}Interval} de verdad sobre el panel construido sin ventana, con la respuesta de la ventanilla puesta a mano en una copia de la clase, con el oráculo \texttt{Tree\allowbreak{}Edits.\allowbreak{}java} de la versión en C++ y Qt; guardar y abrir, sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:292]{error~292}, \hyperref[err:311]{error~311}
+\end{ficha}
+\paragraph{Qué pasa}
+Una rama que es una referencia no tiene relación propia: dice lo que dice la rama que lleva su etiqueta, y su \texttt{get\allowbreak{}Potential} (\texttt{Tree\allowbreak{}ADDBranch}, líneas 270-272) devuelve el objeto de esa otra rama. Desde \texttt{267373d} (\hyperref[err:292]{error~292}), al partir un tramo por en medio, la mitad de la izquierda se queda con el subárbol original y la de la derecha recibe una copia sin las etiquetas que el árbol ya tiene (\texttt{Tree\allowbreak{}ADDEditor\allowbreak{}Panel.\allowbreak{}split\allowbreak{}Interval}, caso \texttt{IN\_\allowbreak{}BETWEEN\_\allowbreak{}FIRST\_\allowbreak{}AND\_\allowbreak{}SECOND}, líneas 723-733); antes de ese commit, las dos recibían una copia con sus etiquetas. Pero si la rama que se parte es una referencia, el subárbol «original» es el de la rama etiquetada: la mitad de la izquierda deja de ser una referencia y se queda con ese mismo objeto, y dos ramas del árbol pasan a compartirlo, con las etiquetas que lleve dentro.
+
+Medido el 18-10-2026 con el código de \texttt{fe96646}, llamando a \texttt{split\allowbreak{}Interval} sobre un árbol de D hecho a mano: pregunta por Age, numérica de 0 a 100; la rama {[}0, 50{]} lleva la etiqueta «outer» y un subárbol que pregunta por B, cuya rama «b0» lleva la etiqueta «inner»; la rama (50, 100{]} referencia «outer». Se parte la segunda en 75, con el 75 en la parte de la izquierda:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+(50, 75]                                 la misma relación que [0, 50]: el mismo objeto
+ramas con la etiqueta «inner»            2: «b0» bajo [0, 50] y «b0» bajo (50, 75]
+(75, 100]                                una copia, sin etiquetas
+cambiar la hoja de «b0» bajo (50, 75]    cambia también la de [0, 50]: [0.5, 0.5]
+guardado y abierto                       siguen dos ramas con la etiqueta «inner»
+\end{Verbatim}
+
+Es lo que el arreglo del \hyperref[err:292]{error~292} quería evitar: una etiqueta tiene que nombrar una sola rama, y aquí la llevan dos, que además cambian juntas aunque en el editor se vean como dos ramas distintas. Si una referencia usara «inner», cuál de las dos siguiera dependería del orden en que se recorre el árbol, como contaba aquel error.
+\paragraph{Cómo arreglarlo}
+Cuando la rama que se parte es una referencia, que la mitad de la izquierda reciba también \texttt{copy\allowbreak{}For\allowbreak{}This\allowbreak{}Tree(\allowbreak{}branch.\allowbreak{}get\allowbreak{}Potential(\allowbreak{}))}, como la de la derecha; o que las dos mitades sigan siendo referencias a la misma etiqueta, con el constructor de referencias de \texttt{Tree\allowbreak{}ADDBranch} y \texttt{update\allowbreak{}References} después. El porte a C++ hace lo primero.
+
+Prueba: sobre el árbol de arriba, partir (50, 100{]} en 75 deja una sola rama con la etiqueta «inner», y la relación de (50, 75{]} no es el mismo objeto que la de {[}0, 50{]}.
+
+\setcounter{subsection}{310}
+\subsection[«Split interval» por la punta de abajo de una rama deja un tramo vacío y un valor sin rama]{En el editor de árboles, partir una rama por la punta de abajo de su tramo, con esa punta en la parte de la izquierda, da a la rama nueva un tramo vacío, (0, 0{]}, y le quita la punta a la rama original: ese valor ya no cae en ninguna rama; partir por la punta de arriba, en cambio, da bien {[}50, 50{]}}\label{err:311}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog.treeadd
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/TreeADDEditorPanel.java:691-692, 707-722}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (el \texttt{split\allowbreak{}Interval} de verdad sobre el panel construido sin ventana, con la respuesta de la ventanilla puesta a mano en una copia de la clase, con el oráculo \texttt{Tree\allowbreak{}Edits.\allowbreak{}java} de la versión en C++ y Qt)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:291]{error~291}, \hyperref[err:310]{error~310}
+\end{ficha}
+\paragraph{Qué pasa}
+«Split interval» puede partir una rama por una de las puntas de su tramo, si esa punta no está ya del lado que se pide: de {[}0, 50{]}, con el 0 en la parte de la izquierda, tienen que salir {[}0, 0{]} y (0, 50{]}. Es el caso \texttt{LEFT\_\allowbreak{}SIDE\_\allowbreak{}OF\_\allowbreak{}FIRST} de \texttt{Tree\allowbreak{}ADDEditor\allowbreak{}Panel.\allowbreak{}split\allowbreak{}Interval} (líneas 691-692 y 707-714). Allí \texttt{min\allowbreak{}First\allowbreak{}Interval.\allowbreak{}set\allowbreak{}Belongs\allowbreak{}To\allowbreak{}Left(\allowbreak{}true)} (línea 708) cambia el límite de abajo de la rama original, para que la punta deje de ser suya, y después ese mismo objeto \texttt{Threshold} se usa como límite de abajo de la rama nueva (línea 709): las dos ramas quedan abiertas por abajo, y comparten el objeto. El caso simétrico, \texttt{RIGHT\_\allowbreak{}SIDE\_\allowbreak{}OF\_\allowbreak{}SECOND} (líneas 715-722), crea un \texttt{Threshold} nuevo para la rama nueva. No viene de los arreglos de estos días: ya estaba así.
+
+Medido el 18-10-2026 con el código de \texttt{fe96646}, sobre el árbol del \hyperref[err:310]{error~310}, con Age de 0 a 100 y las ramas {[}0, 50{]} y (50, 100{]}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+partir [0, 50] por el 0, con el 0 a la izquierda:
+    rama nueva       Age=(0.0, 0.0]     un tramo vacío
+    rama original    Age=(0.0, 50.0]
+partir [0, 50] por el 50, con el 50 a la derecha:
+    rama original    Age=[0.0, 50.0)
+    rama nueva       Age=[50.0, 50.0]
+\end{Verbatim}
+
+En el primer caso el 0, que está en el dominio y estaba en la rama, ya no cae en ninguna, y la rama nueva no puede tener ningún valor. Nada avisa.
+\paragraph{Cómo arreglarlo}
+Dar a la rama nueva de \texttt{LEFT\_\allowbreak{}SIDE\_\allowbreak{}OF\_\allowbreak{}FIRST} un límite de abajo nuevo, \texttt{new\ Threshold(\allowbreak{}min\allowbreak{}First\allowbreak{}Interval.\allowbreak{}get\allowbreak{}Limit(\allowbreak{}),\ false)}, como hace el caso simétrico con su límite de arriba, y cambiar solo el de la rama original.
+
+Prueba: sobre el árbol de arriba, partir {[}0, 50{]} por el 0 con el 0 a la izquierda da {[}0, 0{]} y (0, 50{]}, y las dos ramas no comparten ningún \texttt{Threshold}.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Ediciones de la red: deshacer, cancelar y pegar}\label{sec:ediciones}
 
@@ -4444,6 +4514,50 @@ En los dos casos la red queda con una relación que no casa con sus enlaces: en 
 Que \texttt{Sum\allowbreak{}Potential.\allowbreak{}add\allowbreak{}Variable} y \texttt{remove\allowbreak{}Variable} devuelvan una suma nueva, con la variable de más o de menos y con el comentario, el criterio y las propiedades de la vieja (\texttt{copy\allowbreak{}Attributes\allowbreak{}From}), como las demás relaciones.
 
 Prueba: los dos casos de arriba con \texttt{Remove\allowbreak{}Link\allowbreak{}Edit} y \texttt{Add\allowbreak{}Link\allowbreak{}Edit}: después de deshacer, la relación de U es una suma sobre {[}U, V, A{]} en el primero y sobre {[}U, V{]} en el segundo.
+
+\setcounter{subsection}{311}
+\subsection[Una utilidad pegada donde ningún criterio se llama como el suyo sigue juzgada por una copia que la red no tiene]{Desde el arreglo del error 295, una utilidad pegada toma el criterio de la red que se llama como el suyo; si no hay ninguno ---al pegarla en otra red que no lo tiene, o si el criterio cambió de nombre entre copiar y pegar---, se queda con una copia del criterio que no es de la red: el fichero guardado nombra para ella un criterio que no declara y, al abrirlo, la utilidad no tiene criterio}\label{err:312}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui, core
+\fichakey{Paquete}org.openmarkov.gui.action; org.openmarkov.core.model.network
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/action/PasteEdit.java:65-74, 96-98} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Variable.java:158} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:730-743}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo (copiar como lo hace la ventana, de una copia de la red; pegar con \texttt{Paste\allowbreak{}Edit} en otra red y en la misma después de cambiar el nombre del criterio; guardar con \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0} y abrir; sin ventana)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué criterio recibe una utilidad pegada en una red que no tiene ninguno con su nombre: el primero de la red, como hace el lector cuando el fichero no nombra ninguno; uno nuevo, que se añade a los de la red con su unidad, su escala y su descuento; o ninguno, y se avisa
+\fichakey{Relacionados}\hyperref[err:295]{error~295}, \hyperref[err:231]{error~231}, \hyperref[err:283]{error~283}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{a7c3abf} (\hyperref[err:295]{error~295}), \texttt{Paste\allowbreak{}Edit.\allowbreak{}do\allowbreak{}Multi\allowbreak{}Step\allowbreak{}Edit}, después de copiar la variable con el constructor de copia de \texttt{Variable} ---que clona el criterio (línea 158)---, busca entre los criterios de la red uno que se llame igual (\texttt{same\allowbreak{}Criterion\allowbreak{}Of\allowbreak{}The\allowbreak{}Network}, líneas 65-74) y, si lo encuentra, se lo da (línea 98). Si no lo encuentra, no hace nada, y la utilidad pegada se queda con el clon, que no está en la lista de criterios de la red. El arreglo resuelve el caso que medía la ficha del \hyperref[err:295]{error~295}, pegar en la misma red, pero quedan dos en que no hay a quién dárselo:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Pegar en otra red} que no tiene un criterio con ese nombre.
+\item
+  \textbf{Cambiar el nombre del criterio entre copiar y pegar}: lo copiado sale de una copia de la red hecha al copiar (desde \texttt{3d87c0d}, \hyperref[err:283]{error~283}), así que la utilidad lleva el nombre que el criterio tenía entonces, que la red ya no tiene.
+\end{itemize}
+
+Medido el 18-10-2026 con el código de \texttt{fe96646} sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-CEA-minimal.\allowbreak{}pgmx}, copiando la utilidad «Cost», en €, como lo hace la ventana, y guardando en formato 1.0:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+en otra red, con el criterio «Effectiveness» y ningún otro:
+  pegada                Cost se juzga por «Cost», que no es de la red;
+                        criterios de la red: [Effectiveness]
+  el fichero            <Criterion name="Effectiveness" unit="---" /> en la red,
+                        y en la variable Cost, <Criterion name="Cost" />
+  guardada y abierta    criterios [Effectiveness]; Cost sin criterio
+en la misma red, con «Cost» renombrado a «Coste» entre copiar y pegar:
+  pegada                Cost' se juzga por «Cost», que no es de la red;
+                        criterios de la red: [Coste, Effectiveness]
+  guardada y abierta    criterios [Coste, Effectiveness]; Cost' sin criterio
+\end{Verbatim}
+
+El lector (\texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2}, líneas 730-743) busca el criterio de cada utilidad por su nombre entre los de la red y, si no lo encuentra, no le pone ninguno. Por lectura, como contaba el \hyperref[err:295]{error~295}, la eliminación de variables suma las utilidades de un criterio solo cuando comparten el objeto del criterio (\texttt{271c669}), así que, hasta que se guarde, la utilidad pegada se lleva aparte en las cuentas; no se ha medido si eso cambia algún resultado. La ficha del \hyperref[err:295]{error~295} dice «Pegar en otra red que no tenga ese criterio queda como estaba», sin medirlo; el caso de cambiar el nombre entre copiar y pegar no lo nombra.
+\paragraph{Cómo arreglarlo}
+Que \texttt{Paste\allowbreak{}Edit} no deje nunca a la variable pegada con un criterio que no es de la red: si \texttt{same\allowbreak{}Criterion\allowbreak{}Of\allowbreak{}The\allowbreak{}Network} no encuentra ninguno, darle el que se decida. Lo más sencillo es el primero de la red, que es lo que ya hace el lector con una utilidad cuyo fichero no nombra ninguno (líneas 741-742). Si se decide añadir el criterio a la red, tiene que ir en la misma edición, para que deshacer el pegado lo quite.
+
+Prueba: copiar «Cost» de \texttt{ID-CEA-minimal.\allowbreak{}pgmx} y pegarlo en una red que solo tiene el criterio «Effectiveness», y en la misma red después de cambiar el nombre de «Cost» a «Coste»: en los dos casos el criterio de la utilidad pegada es uno de los de la red ---el mismo objeto---, y después de guardar y abrir la utilidad sigue teniendo criterio.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Restricciones de red}\label{sec:restricciones}
@@ -17396,6 +17510,37 @@ Que después de Escape el ratón no haga nada hasta que se suelte el botón: por
 
 Prueba: con el editor en pantalla, Escape a mitad de un arrastre y 30 píxeles más antes de soltar dejan el nodo donde estaba.
 
+\setcounter{subsection}{312}
+\subsection[Con mayúsculas o Control, arrastrar desde el lienzo vacío mueve los nodos señalados]{En el editor de red, arrastrar desde una zona vacía del lienzo con mayúsculas o con Control apretadas no tira una banda de señalar: mueve los nodos que ya estaban señalados, aunque estén lejos del puntero}\label{err:313}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel; org.openmarkov.gui.bindings
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:334-337, 349-359, 684-695} \newline \path{gui/src/main/java/org/openmarkov/gui/bindings/Bindings.java:124-134, 150-164, 166-176}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo con pantalla (el programa entero en una pantalla anidada, manejado con \texttt{java.\allowbreak{}awt.\allowbreak{}Robot}, con el guion \texttt{Canvas\allowbreak{}Gestures.\allowbreak{}java} de la versión en C++ y Qt)
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:300]{error~300}, \hyperref[err:303]{error~303}
+\end{ficha}
+\paragraph{Qué pasa}
+Cada atajo del editor tiene una combinación de teclas y botones, y dice si es exclusiva: si solo se cumple cuando no hay nada más apretado. La banda de señalar (\texttt{SELECTION\_\allowbreak{}RECTANGLE}, \texttt{Bindings}, líneas 150-164) y «Select element» (\texttt{SELECTION\_\allowbreak{}ELEMENT}, líneas 124-134) lo son; mover nodos con el ratón (\texttt{MOVE\_\allowbreak{}NODE\_\allowbreak{}MOUSE}, líneas 166-176) no lo es. En el estado \texttt{NOTHING}, la condición del atajo de mover (\texttt{Editor\allowbreak{}Command\allowbreak{}Handler\allowbreak{}Generator}, líneas 684-695) solo pide que haya nodos señalados y, desde \texttt{070f868} (\hyperref[err:303]{error~303}), que el ratón no esté parado después de un Escape; no mira dónde se apretó el botón. La de la banda (líneas 349-359), en cambio, pide que se apretara sobre el lienzo vacío. Sin otra tecla, al arrastrar desde el lienzo vacío empieza la banda, que deja el editor en \texttt{SELECTING}, y el atajo de mover ya no se cumple; con mayúsculas o con Control la banda no se cumple, y el único atajo que queda es el de mover: los nodos señalados se van con el ratón, estén donde estén. Por lectura, ya pasaba antes de \texttt{295a7a3}.
+
+Medido el 18-10-2026 con el código de \texttt{fe96646}, manejando con \texttt{java.\allowbreak{}awt.\allowbreak{}Robot} el programa entero, en una pantalla anidada, sobre \texttt{asia.\allowbreak{}pgmx}, con «Smoker?» señalado, tirando una banda desde el lienzo vacío alrededor de «Has tuberculosis»:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+con mayúsculas    «Smoker?» va de (568, 52) a (776, 132), lejos del puntero;
+                  no se señala nada más
+con Control       lo mismo
+con la clase de antes de 7468b0b delante:
+                  de (568, 52) a (755, 124), con el paso de retraso del error 302
+\end{Verbatim}
+
+Lo que cualquiera espera de mayúsculas con una banda es añadir lo que coja a lo que ya estaba señalado; lo que pasa es que un nodo que está en otro sitio se va con el ratón.
+\paragraph{Cómo arreglarlo}
+Que el atajo de mover, en el estado \texttt{NOTHING}, pida además que el botón se apretara sobre un nodo señalado (\texttt{visual\allowbreak{}Network.\allowbreak{}get\allowbreak{}Element\allowbreak{}In\allowbreak{}Position(\allowbreak{}press\allowbreak{}Position,\ graphics)}), como la banda pide que se apretara sobre el lienzo vacío. Con eso, arrastrar desde el lienzo vacío con mayúsculas o Control no mueve nada. Si además se quiere que esas teclas tiren una banda que añada a lo señalado, la banda tiene que admitirlas y, con ellas, no quitar lo señalado al empezar. El porte a C++ empieza una banda, que al soltar señala lo que coge.
+
+Prueba: con el editor de \texttt{asia.\allowbreak{}pgmx} en pantalla y «Smoker?» señalado, arrastrar con mayúsculas, y después con Control, desde el lienzo vacío deja «Smoker?» donde estaba.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: menús, diálogos y herramientas}\label{sec:menus}
 
@@ -19994,6 +20139,10 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:307]{Error 307} & hallazgo nuevo, al ejecutar la prueba desactivada \texttt{All\allowbreak{}Potentials\allowbreak{}Have\allowbreak{}APanel\allowbreak{}Test} \\
 \hyperref[err:308]{Error 308} & hallazgo nuevo, visto junto al \hyperref[err:277]{error~277} \\
 \hyperref[err:309]{Error 309} & hallazgo nuevo, visto al comprobar el \hyperref[err:277]{error~277} \\
+\hyperref[err:310]{Error 310} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 17 y el 18 de octubre \\
+\hyperref[err:311]{Error 311} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 17 y el 18 de octubre \\
+\hyperref[err:312]{Error 312} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 17 y el 18 de octubre \\
+\hyperref[err:313]{Error 313} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 17 y el 18 de octubre \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
