@@ -40,9 +40,9 @@ import java.util.List;
 public final class VisualNode extends VisualElement implements ClassLocalizable {
     
     /**
-     * Font type Helvetica, bold, size 15.
+     * Font of the name of the node.
      */
-    private static final Font TEXT_FONT = GUIFonts.of(Font.BOLD, 15);
+    private static final Font TEXT_FONT = GUIFonts.of(Font.PLAIN, 16);
     
     /**
      * Default width of a node when it is contracted. It is the width that it

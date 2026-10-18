@@ -26,22 +26,21 @@ import java.io.InputStream;
  * decides how big its nodes are. The same file opened on two machines came out with nodes of
  * different sizes, over positions that are saved and not recomputed.
  * <p>
- * DejaVu Sans was chosen for being free to redistribute and easy to read at the sizes used here: a
- * tall x-height and letters set well apart. Its licence travels beside it, in the same directory.
+ * The font is IBM Plex Sans, in its regular weight. Its licence travels beside it, in the same directory.
  */
 public final class GUIFonts {
 
-    /** The family the bundled files register themselves under. */
-    private static final String FAMILY = "DejaVu Sans";
+    /** The family the bundled file registers itself under. */
+    private static final String FAMILY = "IBM Plex Sans";
 
-    private static final boolean AVAILABLE = registerAll("/fonts/DejaVuSans.ttf", "/fonts/DejaVuSans-Bold.ttf");
+    private static final boolean AVAILABLE = registerAll("/fonts/IBMPlexSans-Regular.ttf");
 
     private GUIFonts() {
     }
 
     /**
      * The bundled font, in the given style and size. Falls back to the sans-serif of the system if the
-     * bundled files could not be read, which keeps the program drawing rather than stopping.
+     * bundled file could not be read, which keeps the program drawing rather than stopping.
      */
     public static Font of(int style, int size) {
         return new Font(AVAILABLE ? FAMILY : Font.SANS_SERIF, style, size);
