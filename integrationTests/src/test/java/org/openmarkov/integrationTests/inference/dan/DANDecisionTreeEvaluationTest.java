@@ -27,15 +27,6 @@ public class DANDecisionTreeEvaluationTest extends DANEvaluationTest {
 	}
 
 	//Next tests are commented because running them very often takes too much time
-	@Override @Disabled("Old DAN evaluation") @Test public void testDANKingNobleDescentYesFirstTask1() {
-		//testDANEvaluation("king-noble-descent-yes-first-task-1",9.03);
-
-	}
-
-	@Override @Disabled("Old DAN evaluation") @Test public void testDANKingNobleDescentYesFirstTask1SecondTask2() {
-		//testDANEvaluation("king-noble-descent-yes-first-task-1-second-task-2",9.03);
-	}
-
 	@Override @Disabled("Old DAN evaluation") @Test public void testDANKingNobleDescentNo() {
 		//testDANEvaluation("king-noble-descent-no",6.43);
 

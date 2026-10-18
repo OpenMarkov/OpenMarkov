@@ -9,7 +9,6 @@ package org.openmarkov.integrationTests.costeffectiveness;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -230,7 +229,6 @@ public class CEAGlobalAnalysisTest {
 		}
 	}
     
-    @Disabled("This tests takes too long to complete, and seems it was stressing the machine that executes the test rather than verifying functionality")
 	@Tag(TestSpeed.SLOW)
 	@SuppressWarnings("rawtypes")
     @Test
@@ -254,7 +252,7 @@ public class CEAGlobalAnalysisTest {
 		VECEPSA vecepsa = new VECEPSA(probNet);
 		vecepsa.setDecisionVariable(probNet.getNodes(NodeType.DECISION).get(0).getVariable());
 		vecepsa.setPreResolutionEvidence(evidence);
-		vecepsa.setNumSimulations(PSA_SIMULATIONS);
+		vecepsa.setNumSimulations(10);
 		vecepsa.setUseMultithreading(useMultithreading);
 
 		List<GTablePotential> result = (List<GTablePotential>) vecepsa.getCEPPotentials();
@@ -268,7 +266,7 @@ public class CEAGlobalAnalysisTest {
 		vecepsa = new VECEPSA(probNet);
 		vecepsa.setDecisionVariable(probNet.getNodes(NodeType.DECISION).get(0).getVariable());
 		vecepsa.setPreResolutionEvidence(evidence);
-		vecepsa.setNumSimulations(PSA_SIMULATIONS);
+		vecepsa.setNumSimulations(10);
 		vecepsa.setUseMultithreading(useMultithreading);
 
 		result = (List<GTablePotential>) vecepsa.getCEPPotentials();
