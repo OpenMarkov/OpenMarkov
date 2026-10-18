@@ -134,7 +134,7 @@ public class StringDatabaseTests {
 	 * @throws MissingResourceException if any string doesn't exist.
 	 */
 	private void getStringDialogs() throws MissingResourceException {
-        getCorrectString(stringDatabase, "AboutBox.Authors.Text");
+        getCorrectString(stringDatabase, "AboutBox.Title.Text");
 		getCorrectString(stringDatabase, "AddState.Title");
         getCorrectString(stringDatabase, "AddState.Message");
         getCorrectString(stringDatabase, "NetworkVariablesPanel.jLabelDefaultStates.Text");

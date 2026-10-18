@@ -765,25 +765,14 @@
         <Advertisement>
             <Text value="Please visit OpenMarkov's web page (www.openmarkov.org) for the latest updates"/>
         </Advertisement>
-        <LineSeparatorImage>
-            <URL value="/images/lineSeparator.jpg"/>
-        </LineSeparatorImage>
         <Copyright>
-            <AllRightsReserved>
-                <Text value="All rights reserved"/>
-            </AllRightsReserved>
-            <Text value=" (c) UNED - 2008-2019"/>
+            <Text value="© 2008–~ CISIAD, UNED"/>
         </Copyright>
-        <jLabelLogo>
-            <BlankSpace>
-                <Text value=" "/>
-            </BlankSpace>
-        </jLabelLogo>
-        <Authors>
-            <Text value="J.Diaz; M.Calleja &amp; others"/>
-        </Authors>
+        <License>
+            <Text value="Licensed under the GNU General Public License v3"/>
+        </License>
         <OpenMarkovLogoImage>
-            <URL value="/images/OpenMarkovSplash.jpg"/>
+            <URL value="/images/openmarkov-splash.png"/>
         </OpenMarkovLogoImage>
         <OK>
             <Text value="OK"/>
@@ -792,13 +781,10 @@
             <Text value="An open source tool for Probabilistic Graphical Models"/>
         </Product>
         <Title>
-            <Text value="About ... OpenMarkov"/>
+            <Text value="About OpenMarkov"/>
         </Title>
-        <Trademark>
-            <Text value="OpenMarkov is a registered product"/>
-        </Trademark>
         <Version>
-            <Text value="Version"/>
+            <Text value="Version ~ (built ~)"/>
         </Version>
     </AboutBox>
     <OKCancelApplyHorizontalDialog>
