@@ -322,6 +322,11 @@ public class EditorCommandHandlerGenerator {
                                                               .setSelectionOfElement(selectedElement, true);
                                    }),
                 
+                BindingCommandGroup.of(Bindings.Network.SELECTION_ELEMENT, Binding.MeetCondition.ON_GAIN, false, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_PRESSED))
+                                   .processIf((_, _) -> networkEditorPanel.getBaseTool() == NetworkEditorPanel.BaseTool.SELECTION && this.selectionState == SelectionState.NOTHING &&
+                                           this.visualNetwork.getElementInPosition(this.cursorPosition, this.graphics) == null)
+                                   .withAction((_, _) -> this.visualNetwork.setSelectedAllObjects(false)),
+                
                 BindingCommandGroup.of(Bindings.Network.ADD_ELEMENT_TO_SELECTION, Binding.MeetCondition.ON_GAIN, false, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_PRESSED))
                                    .processIf((_, _) -> this.selectionState == SelectionState.NOTHING &&
                                            this.visualNetwork.getElementInPosition(this.cursorPosition, this.graphics) != null)
