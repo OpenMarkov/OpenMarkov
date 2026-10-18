@@ -149,7 +149,7 @@ public abstract class DANEvaluationTest extends NetworkEvaluationInferenceTest {
         testNetworkEvaluation("king-noble-descent-yes-first-task-1-second-task-2", 9.03);
     }
     
-    @Disabled @Test
+    @Test
     public void testDANSimplifiedTwoTasksKingNobleDescentYes() throws NotEvaluableNetworkException, ProbNetParserException, URISyntaxException, IOException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         testNetworkEvaluation("simplified-two-tasks-king-noble-descent-yes", 9.08);
     }
@@ -157,7 +157,7 @@ public abstract class DANEvaluationTest extends NetworkEvaluationInferenceTest {
     /**
      * This network is as "simplified-two-tasks-king-noble-descent-yes", but removing zero utility potentials.
      */
-    @Disabled @Test public void testDANSimplified2TwoTasksKingNobleDescentYes()
+    @Test public void testDANSimplified2TwoTasksKingNobleDescentYes()
             throws
             NotEvaluableNetworkException, ProbNetParserException, URISyntaxException, IOException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         testNetworkEvaluation("simplified-2-two-tasks-king-noble-descent-yes", 9.08);
@@ -166,7 +166,7 @@ public abstract class DANEvaluationTest extends NetworkEvaluationInferenceTest {
     /**
      * This network is as "simplified-two-tasks-king-noble-descent-yes", but removing zero utility potentials.
      */
-    @Disabled @Tag(TestSpeed.SLOW)
+    @Tag(TestSpeed.SLOW)
     @Test public void testDANSimplifiedOneTaskKingNobleDescentYes()
             throws
             NotEvaluableNetworkException, ProbNetParserException, URISyntaxException, IOException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
@@ -195,7 +195,7 @@ public abstract class DANEvaluationTest extends NetworkEvaluationInferenceTest {
         testNetworkEvaluation("king", 7.73);
     }
     
-    @Disabled @Tag(TestSpeed.SLOW)
+    @Tag(TestSpeed.SLOW)
     @Test public void testDAN3Tests()
             throws
             NotEvaluableNetworkException, ProbNetParserException, URISyntaxException, IOException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {

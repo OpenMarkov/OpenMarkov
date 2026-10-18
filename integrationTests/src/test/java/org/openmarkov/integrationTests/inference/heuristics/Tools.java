@@ -172,7 +172,7 @@ public class Tools {
             }
             
         } else if (treeNode.getNodeType().equals(NodeType.DECISION) && !isCEA) {
-            double maxUtility = Double.MIN_VALUE;
+            double maxUtility = Double.NEGATIVE_INFINITY;
             for (DecisionTreeElement childElement : treeNode.getChildren()) {
                 DecisionTreeBranch branch = (DecisionTreeBranch) childElement;
                 double auxUtility = (double) branch.getUtility();
