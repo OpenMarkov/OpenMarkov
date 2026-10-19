@@ -137,7 +137,14 @@ public class FunctionPotentialPanel extends PotentialPanel {
         }
     }
     
+    /** Writes {@code string} as the function, on the parents of the node, as the dialog of the function does. */
     public void setFunction(String string) {
-        this.function=new VariableExpression(this.variables, string);
+        setFunction(new VariableExpression(parents, string));
+    }
+
+    /** Puts {@code function} in the panel, and shows it. */
+    public void setFunction(VariableExpression function) {
+        this.function = function;
+        functionTextArea.setText(function.asStringExpression());
     }
 }

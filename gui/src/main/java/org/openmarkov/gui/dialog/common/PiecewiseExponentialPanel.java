@@ -3,6 +3,7 @@ package org.openmarkov.gui.dialog.common;
 import org.openmarkov.core.action.core.PotentialChangeEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
+import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
@@ -42,6 +43,9 @@ public class PiecewiseExponentialPanel
      */
     JCheckBox initValueCheck;
 
+    /** The function there was when the box was checked, to put it back when it is unchecked */
+    private VariableExpression functionBeforeFirstInterval;
+
     JCheckBox ratesCheck;
 
 
@@ -78,9 +82,14 @@ public class PiecewiseExponentialPanel
         functionPanel = new FunctionPotentialPanel(this.node);
         //FIXME text hardcoded
         initValueCheck = new JCheckBox("Use first interval");
-        initValueCheck.addActionListener(actionEvent -> {if (initValueCheck.isSelected())
-            functionPanel.setFunction( piecewiseExponentialTablePanel.valuesTable.getValueAt(0,1, null).toString());}
-        );
+        initValueCheck.addActionListener(actionEvent -> {
+            if (initValueCheck.isSelected()) {
+                functionBeforeFirstInterval = functionPanel.getFunction();
+                functionPanel.setFunction(piecewiseExponentialTablePanel.valuesTable.getValueAt(0, 1, null).toString());
+            } else if (functionBeforeFirstInterval != null) {
+                functionPanel.setFunction(functionBeforeFirstInterval);
+            }
+        });
         ratesCheck = new JCheckBox("Use rates");
         ratesCheck.setSelected(piecewiseExponentialPotential.isUseRates());
         ratesCheck.setEnabled(false);
