@@ -137,6 +137,26 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String value;
     }
     
+    /** An indicator of an event whose file has no time to the event. */
+    public static final class TimeToEventMissing extends PGMXParserException {
+        public TimeToEventMissing(String variableName, Element element) {
+            super(element);
+            this.variableName = variableName;
+        }
+        
+        public final String variableName;
+    }
+    
+    /** An indicator of an event whose file has no probability of occurrence. */
+    public static final class ProbabilityOfOccurrenceMissing extends PGMXParserException {
+        public ProbabilityOfOccurrenceMissing(String variableName, Element element) {
+            super(element);
+            this.variableName = variableName;
+        }
+        
+        public final String variableName;
+    }
+    
     /** The precision of a variable that is not a finite number not below 0, the only ones its values can be rounded to. */
     public static final class PrecisionOutOfRange extends PGMXParserException {
         public PrecisionOutOfRange(String variableName, String value, Element element) {

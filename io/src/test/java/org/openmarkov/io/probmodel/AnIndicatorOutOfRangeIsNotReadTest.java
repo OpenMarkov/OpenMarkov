@@ -33,7 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * In the network of events of the tests, Onset is given by an indicator: time to the event 2 and probability of
  * occurrence 0.25. A file with a number out of range in the indicator used to be opened without a warning; the
  * simulation used it as it was, and accepting the dialog of the node ended in an unexpected error (error 266 of the
- * pending list). Now the file is not opened, and the message says which node and which number.
+ * pending list). Now the file is not opened, and the message says which node and which number. A file without one
+ * of the two numbers used to fail with a null pointer, and the message only said that the network was corrupted
+ * (error 276); now it says which node and which number is missing.
  *
  * @author Manuel Arias
  */
@@ -88,5 +90,18 @@ public class AnIndicatorOutOfRangeIsNotReadTest {
                                                        "<ProbabilityOccurrence>" + pOccurrence + "</ProbabilityOccurrence>")));
         assertEquals("The relation of Onset cannot be read: its probability of occurrence, " + pOccurrence
                              + ", must be a number between 0 and 1.", rejected.getExceptionMessage());
+    }
+
+    @Test public void anIndicatorWithoutTimeToEventIsNotRead() {
+        var rejected = assertThrows(PGMXParserException.TimeToEventMissing.class,
+                                    () -> onsetIn(with("<TTE>2.0</TTE>", "")));
+        assertEquals("The relation of Onset cannot be read: it has no time to event.", rejected.getExceptionMessage());
+    }
+
+    @Test public void anIndicatorWithoutProbabilityOfOccurrenceIsNotRead() {
+        var rejected = assertThrows(PGMXParserException.ProbabilityOfOccurrenceMissing.class,
+                                    () -> onsetIn(with("<ProbabilityOccurrence>0.25</ProbabilityOccurrence>", "")));
+        assertEquals("The relation of Onset cannot be read: it has no probability of occurrence.",
+                     rejected.getExceptionMessage());
     }
 }

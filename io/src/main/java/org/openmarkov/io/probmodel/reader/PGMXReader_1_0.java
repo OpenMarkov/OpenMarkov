@@ -521,6 +521,13 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         Element xmlPOcurrence = xmlPotential.getChild(XMLTags.P_OCCURRENCE.toString());
         // The numbers follow the rule of the relation: the file used to be opened with any of them, without a warning
         String variableName = variables.getFirst().getName();
+        // A file written by hand or by another program can lack either of them
+        if (xmlTte == null) {
+            throw new PGMXParserException.TimeToEventMissing(variableName, xmlPotential);
+        }
+        if (xmlPOcurrence == null) {
+            throw new PGMXParserException.ProbabilityOfOccurrenceMissing(variableName, xmlPotential);
+        }
         double tte = numberIn(xmlTte);
         if (!IndicatorPotential.isValidTte(tte)) {
             throw new PGMXParserException.TimeToEventOutOfRange(variableName, xmlTte.getText().strip(), xmlTte);
