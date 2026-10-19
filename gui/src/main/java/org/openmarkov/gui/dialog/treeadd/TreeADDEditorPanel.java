@@ -723,8 +723,12 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
             case IN_BETWEEN_FIRST_AND_SECOND -> {
                 Threshold maxFirstInterval = new Threshold(introducedLimit, belongsToLeft);
                 Threshold minSecondInterval = new Threshold(introducedLimit, belongsToLeft);
+                // The potential of a reference belongs to the branch it references: the left half gets a copy too
+                Potential leftPotential = branch.isReference()
+                                          ? rootTreeADDPotential.copyForThisTree(branch.getPotential())
+                                          : branch.getPotential();
                 leftBranchToAdd = new TreeADDBranch(minFirstInterval, maxFirstInterval,
-                                                    branch.getRootVariable(), branch.getPotential(),
+                                                    branch.getRootVariable(), leftPotential,
                                                     branch.getParentVariables());
                 rightBranchToAdd = new TreeADDBranch(minSecondInterval, maxSecondInterval,
                                                      branch.getRootVariable(),
