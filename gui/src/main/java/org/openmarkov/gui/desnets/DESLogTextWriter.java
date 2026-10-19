@@ -213,6 +213,15 @@ class DESLogTextWriter {
 
 
     /**
+     * @return the name of the network without its extension, if it has one: a new network, not saved yet, has none, and
+     * a name such as «model.v2.pgmx» keeps its other dots
+     */
+    static String withoutExtension(String probNetName) {
+        int dot = probNetName.lastIndexOf('.');
+        return dot > 0 ? probNetName.substring(0, dot) : probNetName;
+    }
+
+    /**
      * Creates a filename for the textual log in path
      *
      * @param probNetName
@@ -220,7 +229,7 @@ class DESLogTextWriter {
      */
     private File createFilename(String probNetName) {
 
-        String filename = probNetName.substring(0, probNetName.indexOf('.'));
+        String filename = withoutExtension(probNetName);
         filename += "-";
         filename += new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new Date());
         filename += ".log";

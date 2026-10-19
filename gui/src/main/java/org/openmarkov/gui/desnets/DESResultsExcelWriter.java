@@ -188,7 +188,7 @@ class DESResultsExcelWriter {
      * @return
      */
     private File createFilename(String probNetName){
-        String filename =probNetName.substring(0,probNetName.indexOf('.'));
+        String filename = DESLogTextWriter.withoutExtension(probNetName);
         filename+="-";
         filename+= new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new Date());
         filename+=".xlsx";
