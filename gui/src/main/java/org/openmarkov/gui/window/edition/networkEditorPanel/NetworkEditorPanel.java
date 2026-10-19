@@ -448,6 +448,32 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
         this.changeNodeProperties(selectedNode, false);
     }
 
+    /** The dialogs that «Edit relation» can open. */
+    enum RelationDialog {
+        RELATION, POLICY, NONE;
+
+        /**
+         * The dialog that «Edit relation» opens for {@code node}, the one that the menus offer: for a decision, that
+         * of its policy in edition mode and none in inference mode, where the menus do not offer its relation.
+         */
+        static RelationDialog of(Node node, WorkingMode workingMode) {
+            if (node.getNodeType() != NodeType.DECISION) {
+                return RELATION;
+            }
+            return workingMode == WorkingMode.EDITION ? POLICY : NONE;
+        }
+    }
+
+    /** «Edit relation» on the last selected node. */
+    public void editRelationOfSelectedNode() throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
+        switch (RelationDialog.of(this.visualNetwork.getLastSelectedNode().getNode(), this.workingMode)) {
+            case RELATION -> this.showPotentialDialog(this.workingMode != WorkingMode.EDITION);
+            case POLICY -> this.imposePolicyInNode();
+            case NONE -> {
+            }
+        }
+    }
+
     public void showPotentialDialog(boolean readOnly) throws IncompatibleEvidenceException, NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
         Node node = this.visualNetwork.getLastSelectedNode().getNode();
         if (this.requestPotentialValues(ComponentUtilities.getOwner(this), node, readOnly)) {

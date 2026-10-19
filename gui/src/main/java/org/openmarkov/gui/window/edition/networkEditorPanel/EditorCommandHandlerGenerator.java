@@ -499,8 +499,7 @@ public class EditorCommandHandlerGenerator {
                                            this.networkEditorPanel.getVisualNetwork().setSelectedNode(node, true);
                                        }
                                        try {
-                                           this.networkEditorPanel.showPotentialDialog(this.networkEditorPanel.getNetworkEditorPanel()
-                                                                                                              .getWorkingMode() != NetworkEditorPanel.WorkingMode.EDITION);
+                                           this.networkEditorPanel.editRelationOfSelectedNode();
                                        } catch (NotEvaluableNetworkException | IncompatibleEvidenceException |
                                                 NonProjectablePotentialException | NotEnoughMemoryException |
                                                 ConstraintViolatedException | CannotNormalizePotentialException |

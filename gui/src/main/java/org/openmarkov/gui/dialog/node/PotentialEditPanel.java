@@ -158,16 +158,24 @@ public class PotentialEditPanel extends JPanel {
             this.node.getProbNet().getPNESupport().setWithUndo(true);
             this.node.getProbNet().getPNESupport().openNewSubEditHistory();
         }
-        if (potentialInitializesOnEditHistory) {
-            this.initializePotential();
+        try {
+            if (potentialInitializesOnEditHistory) {
+                this.initializePotential();
+            }
+            List<Potential> potentials = this.node.getPotentials();
+            if (!potentials.isEmpty() && potentials.getFirst() != null && potentials.getFirst().getComment() != null && !potentials.getFirst().getComment()
+                                                                                                  .isEmpty()) {
+                this.getCommentPane().setCommentHTMLTextPaneText(potentials.getFirst().getComment());
+            }
+            this.configureComponentsPanel();
+            this.updatePotentialPanel();
+        } catch (ThereIsNoPotentialInNodeException | RuntimeException e) {
+            // A panel that is not built is never closed: without this, undo would stay in its empty sub-history
+            if (!this.readOnly) {
+                this.node.getProbNet().getPNESupport().cancelLastSubEditHistory();
+            }
+            throw e;
         }
-        List<Potential> potentials = this.node.getPotentials();
-        if (!potentials.isEmpty() && potentials.getFirst() != null && potentials.getFirst().getComment() != null && !potentials.getFirst().getComment()
-                                                                                              .isEmpty()) {
-            this.getCommentPane().setCommentHTMLTextPaneText(potentials.getFirst().getComment());
-        }
-        this.configureComponentsPanel();
-        this.updatePotentialPanel();
     }
     
     protected void initializePotential() {
