@@ -13,6 +13,7 @@ import org.openmarkov.core.inference.heuristic.EliminationHeuristic;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
@@ -60,8 +61,9 @@ import java.util.List;
 	}
 
 
+	/** A numeric chance variable has no states to make a table with, and propagating it failed in several ways. */
 	@Override protected List<PNConstraint> getAdditionalConstraints() {
-		return null;
+		return List.of(new OnlyDiscreteVariables());
 	}
 
 	// Methods from clusterPropagation

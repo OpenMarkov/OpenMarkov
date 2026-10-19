@@ -484,10 +484,11 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         
         public OnlyDiscreteVariablesAllowed(OnlyDiscreteVariables onlyDiscreteVariables, Variable variable) {
             super(onlyDiscreteVariables);
-            this.variable = variable;
+            // The name, which is what the message shows; the variable itself would show its type and states too
+            this.variable = variable.getName();
         }
         
-        private final Variable variable;
+        private final String variable;
     }
     
     public static class OnlyFiniteStatesAllowed extends ConstraintViolatedException {

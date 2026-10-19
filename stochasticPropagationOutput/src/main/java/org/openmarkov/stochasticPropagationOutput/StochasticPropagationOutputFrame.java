@@ -13,6 +13,7 @@ import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.gui.configuration.UserPreferences;
@@ -50,6 +51,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Creates the plugin dialog for exporting stochastic propagation data.
@@ -168,11 +170,15 @@ public class StochasticPropagationOutputFrame extends JDialog implements ActionL
     
     /**
      * Checks whether the current network state is valid for stochastic propagation output.
-     * Validates that a network is open, is a Bayesian network, and has nodes.
+     * Validates that a network is open, is a Bayesian network, has nodes, and has no numeric chance variable.
      *
      * @return an exception describing the problem, or {@code null} if no error
      */
     public Exception boundError() {
+        return boundError(probNet);
+    }
+
+    static Exception boundError(ProbNet probNet) {
         // Stop if there is no net opened yet
         if (probNet == null) {
             return new NoNetOpenedException();
@@ -184,6 +190,12 @@ public class StochasticPropagationOutputFrame extends JDialog implements ActionL
         // Stop if no nodes in the net
         if (probNet.getNumNodes() == 0) {
             return new NetworkHasNoNodesException(probNet);
+        }
+        // Stop if a chance variable is numeric: neither the sampling nor the exact propagation can take it
+        try {
+            probNet.checkConstraints(List.of(new OnlyDiscreteVariables()));
+        } catch (ConstraintViolatedException e) {
+            return e;
         }
         return null;
     }

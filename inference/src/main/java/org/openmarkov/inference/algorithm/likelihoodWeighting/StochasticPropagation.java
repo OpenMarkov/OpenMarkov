@@ -13,6 +13,7 @@ import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.ProbNetOperations;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.modelUncertainty.XORShiftRandom;
 import org.openmarkov.core.model.network.potential.PotentialRole;
@@ -80,9 +81,10 @@ public abstract class StochasticPropagation extends InferenceAlgorithm implement
         return possibleNetworkTypes;
     }
 
+    /** A numeric chance variable cannot be sampled: most of its relations do not know how, and the rest gave nonsense. */
     @Override
     protected List<PNConstraint> getAdditionalConstraints() {
-        return new ArrayList<>();
+        return List.of(new OnlyDiscreteVariables());
     }
 
     /**
