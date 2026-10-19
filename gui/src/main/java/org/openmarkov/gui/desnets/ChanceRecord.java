@@ -116,11 +116,12 @@ public class ChanceRecord extends DESRecord {
     }
 
     /**
-     * @return true if its CHANCE parents has been previously evaluated
+     * @param pending the chance nodes still to be computed in this pass
+     * @return true if none of its chance parents, other than itself, is pending: the others have their current value,
+     * computed before or the one they start with
      */
-    public boolean isUpdatable() {
-        //08/03/2023; Self-loop-->first extracted parents different from node
-        return chanceRecordParents.stream().filter(chanceRecord -> !chanceRecord.equals(this)).allMatch(ChanceRecord::isEvaluated);
+    public boolean isUpdatableAmong(Collection<ChanceRecord> pending) {
+        return chanceRecordParents.stream().filter(chanceRecord -> !chanceRecord.equals(this)).noneMatch(pending::contains);
     }
 
 

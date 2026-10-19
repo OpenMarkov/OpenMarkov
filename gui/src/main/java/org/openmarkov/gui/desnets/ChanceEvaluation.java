@@ -70,9 +70,7 @@ public class ChanceEvaluation extends GenericEvaluation<ChanceRecord> {
         HashMap<String, String> valuesHash = desInference.getDataFromFile().getInputValues(dataIndex);
 
         while (!remainingOrphan.isEmpty()) {
-            int i = 0;
-            while (!remainingOrphan.get(i).isUpdatable()) ++i;
-            ChanceRecord chanceRecord = remainingOrphan.remove(i);
+            ChanceRecord chanceRecord = nextReady(remainingOrphan);
             //Data from file
             if ( (dataIndex > -1) && (valuesHash.containsKey(chanceRecord.getRecordNode().getName()))) {
                 double value;
@@ -105,13 +103,25 @@ public class ChanceEvaluation extends GenericEvaluation<ChanceRecord> {
         remainingDescendants.forEach(ChanceRecord::resetEvaluationStatus);
 
         while (!remainingDescendants.isEmpty()) {
-            int i = 0;
-            while (!remainingDescendants.get(i).isUpdatable())
-                ++i;
-            ChanceRecord chanceRecord = remainingDescendants.remove(i);
+            ChanceRecord chanceRecord = nextReady(remainingDescendants);
             computeChanceValue(chanceRecord, eventHappened);
         }
         desInference.getDesLogTextWriter().logChanceChange(new ArrayList<>(eventHappened.getChanceDescendants()));
+    }
+
+    /**
+     * Removes from {@code pending} the first node none of whose chance parents is pending, the next one to compute. A
+     * parent that is not pending does not make it wait, also when an event that has not happened changes it.
+     */
+    private static ChanceRecord nextReady(List<ChanceRecord> pending) {
+        for (int i = 0; i < pending.size(); i++) {
+            if (pending.get(i).isUpdatableAmong(pending)) {
+                return pending.remove(i);
+            }
+        }
+        // Only a cycle of chance nodes without events, which EveryCycleHasAnEvent refuses before the simulation
+        throw new IllegalStateException("The chance nodes " + pending.stream().map(record -> record.getRecordNode().getName())
+                                                                      .toList() + " wait for each other");
     }
 
 
