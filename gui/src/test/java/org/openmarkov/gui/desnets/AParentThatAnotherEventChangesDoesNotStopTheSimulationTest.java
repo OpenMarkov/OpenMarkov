@@ -28,11 +28,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * A network of events, simulated for 10 years. «Onset», at year 3, makes «Ill» pass to «yes»; «Accident», at year 20,
- * would make «Injured» pass to «yes»; and «Injured» is a parent of «Ill». When «Onset» happens, «Ill» used to wait for
- * its parent «Injured», which no event had computed, since «Accident» comes after the horizon, and the simulation
- * failed with an index out of bounds (error 96). The utility «QALY» is 1.0 if «Ill» is «no» and 0.6 if it is «yes»,
- * and it is cumulative.
+ * A network of events, simulated for 10 years. «Onset», at year 3, makes «Ill» pass to «yes»; «Accident» makes
+ * «Injured» pass to «yes»; and «Injured» is a parent of «Ill». Both have transition tables. The utility «QALY» is 1.0
+ * if «Ill» is «no» and 0.6 if it is «yes», and it is cumulative.
  *
  * @author Manuel Arias
  */
@@ -51,7 +49,8 @@ class AParentThatAnotherEventChangesDoesNotStopTheSimulationTest {
         return variable;
     }
 
-    @Test void theNodeIsComputedWithTheValueItsParentHasAndTheSimulationGoesOn() throws Exception {
+    /** The effectiveness of an individual when «Accident» happens at {@code accidentYear}. */
+    private static double effectivenessWithTheAccidentAt(double accidentYear) throws Exception {
         ProbNet probNet = new ProbNet(DESNetworkType.getUniqueInstance());
         Criterion cost = new Criterion("Cost");
         Criterion effectiveness = new Criterion("Effectiveness");
@@ -75,7 +74,7 @@ class AParentThatAnotherEventChangesDoesNotStopTheSimulationTest {
         probNet.addLink(injuredNode, illNode, true);
         probNet.addLink(illNode, qalyNode, true);
         onsetNode.setPotential(new IndicatorPotential(List.of(onset), PotentialRole.CONDITIONAL_PROBABILITY, 3, 1));
-        accidentNode.setPotential(new IndicatorPotential(List.of(accident), PotentialRole.CONDITIONAL_PROBABILITY, 20, 1));
+        accidentNode.setPotential(new IndicatorPotential(List.of(accident), PotentialRole.CONDITIONAL_PROBABILITY, accidentYear, 1));
         // When its event happens, each node passes to «yes», whatever its parents
         TransitionTablePotential illTransition = new TransitionTablePotential(new ArrayList<>(List.of(ill, onset, injured)),
                                                                               PotentialRole.CONDITIONAL_PROBABILITY);
@@ -91,6 +90,23 @@ class AParentThatAnotherEventChangesDoesNotStopTheSimulationTest {
         DESInference inference = new DESInference(probNet);
         CriteriaValues results = inference.simulateOneIndividual(inference.decisionVariable.getStates()[0]);
 
-        assertEquals(3 * 1.0 + 7 * 0.6, results.getValue(new EqualCriterion(effectiveness)), 1e-9);
+        return results.getValue(new EqualCriterion(effectiveness));
+    }
+
+    /**
+     * «Accident» comes after the horizon. When «Onset» happens, «Ill» used to wait for its parent «Injured», which no
+     * event had computed, and the simulation failed with an index out of bounds (error 96).
+     */
+    @Test void theNodeIsComputedWithTheValueItsParentHasAndTheSimulationGoesOn() throws Exception {
+        assertEquals(3 * 1.0 + 7 * 0.6, effectivenessWithTheAccidentAt(20), 1e-9);
+    }
+
+    /**
+     * «Accident» comes at year 5 and reaches «Ill» through «Injured». It used to sample «Ill» again with no event of
+     * its own in the configuration, and the simulation stopped with a NullPointerException (error 316); now «Ill»
+     * makes no transition and stays «yes».
+     */
+    @Test void anotherEventThatReachesItThroughAParentMakesNoTransition() throws Exception {
+        assertEquals(3 * 1.0 + 7 * 0.6, effectivenessWithTheAccidentAt(5), 1e-9);
     }
 }

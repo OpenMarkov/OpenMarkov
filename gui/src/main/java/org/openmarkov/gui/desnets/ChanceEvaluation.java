@@ -8,6 +8,7 @@ import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.potential.TransitionTablePotential;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,9 +105,21 @@ public class ChanceEvaluation extends GenericEvaluation<ChanceRecord> {
 
         while (!remainingDescendants.isEmpty()) {
             ChanceRecord chanceRecord = nextReady(remainingDescendants);
-            computeChanceValue(chanceRecord, eventHappened);
+            if (!transitionsOnlyOnItsOwnEvents(chanceRecord, eventHappened)) {
+                computeChanceValue(chanceRecord, eventHappened);
+            }
         }
         desInference.getDesLogTextWriter().logChanceChange(new ArrayList<>(eventHappened.getChanceDescendants()));
+    }
+
+    /**
+     * A transition table says what happens when one of its events occurs: another event, which reaches the node
+     * through a chance parent, makes no transition, and the node keeps its value.
+     */
+    private static boolean transitionsOnlyOnItsOwnEvents(ChanceRecord chanceRecord, EventRecord eventHappened) {
+        Node node = chanceRecord.getRecordNode();
+        return node.getPotentials().getFirst() instanceof TransitionTablePotential
+               && !node.isParent(eventHappened.getRecordNode());
     }
 
     /**
