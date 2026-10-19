@@ -34,7 +34,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The networks of the repository in format 0.2 that have a utility node that multiplies its parents. Most of
- * them have utility nodes that add their parents too.
+ * them have utility nodes that add their parents too. DAN-economic-mediastinet and DAN-qale-mediastinet are left
+ * out: their utility nodes are each a half of those of DAN-mediastinet, the costs and the quality-adjusted life
+ * years.
  *
  * @author Manuel Arias
  */
@@ -42,8 +44,8 @@ class SumAndProductUtilityNodesSurviveSavingInFormat02Test {
 
     @Tag(TestSpeed.MEDIUM)
     @ParameterizedTest
-    @ValueSource(strings = { "ID-arthronet.pgmx", "ID-mediastinet.pgmx", "DAN-arthronet.pgmx",
-            "DAN-economic-mediastinet.pgmx", "DAN-mediastinet.pgmx", "DAN-qale-mediastinet.pgmx", "MID-HPV.pgmx" })
+    @ValueSource(strings = { "ID-arthronet.pgmx", "ID-mediastinet.pgmx", "DAN-arthronet.pgmx", "DAN-mediastinet.pgmx",
+            "MID-HPV.pgmx" })
     void theSavedNetworkIsTheSameNetwork(String fileName) throws Exception {
         ProbNet original = read(fileName);
         Map<String, String> utilityNodes = utilityNodes(original);
