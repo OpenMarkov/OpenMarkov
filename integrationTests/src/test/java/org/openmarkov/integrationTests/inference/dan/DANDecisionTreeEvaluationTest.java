@@ -13,6 +13,10 @@ import org.openmarkov.core.exception.*;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluation.DANDecisionTreeEvaluation;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluation.DANEvaluation;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 //@Ignore
 public class DANDecisionTreeEvaluationTest extends DANEvaluationTest {
     
@@ -24,6 +28,16 @@ public class DANDecisionTreeEvaluationTest extends DANEvaluationTest {
     @Override
     protected DANEvaluation buildNetworkEvaluation(ProbNet network, boolean computeDecisionTreeForGUI) throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         return new DANDecisionTreeEvaluation(network, computeDecisionTreeForGUI);
+	}
+
+	// The decision tree for the window adds nothing to the arithmetic, which is the same without it: these two networks,
+	// most of the time of this class, are evaluated once, with the tree, and the others with it and without it
+	@Override @Test public void testDANKingNobleDescentYesFirstTask1() throws NotEvaluableNetworkException, ProbNetParserException, URISyntaxException, IOException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
+		testNetworkEvaluationAndDecisionTree(loadNetwork("king-noble-descent-yes-first-task-1"), true, 9.03);
+	}
+
+	@Override @Test public void testDANKingNobleDescentYesFirstTask1SecondTask2() throws NotEvaluableNetworkException, ProbNetParserException, URISyntaxException, IOException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
+		testNetworkEvaluationAndDecisionTree(loadNetwork("king-noble-descent-yes-first-task-1-second-task-2"), true, 9.03);
 	}
 
 	//Next tests are commented because running them very often takes too much time

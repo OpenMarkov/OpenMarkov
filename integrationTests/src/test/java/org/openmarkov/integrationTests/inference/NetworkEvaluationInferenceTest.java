@@ -43,10 +43,15 @@ public abstract class NetworkEvaluationInferenceTest {
     public void testNetworkEvaluationAndDecisionTree(ProbNet network, double expectedEU, String... namesVariablesIntervention) throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
 		boolean computeDTValues []= {true, false};
 		for (boolean computeDT: computeDTValues) {
-            DANEvaluation eval = buildNetworkEvaluation(network, computeDT);
-			testDANEvaluation(eval, network, expectedEU, namesVariablesIntervention);
-			Tools.testDecisionTree(network, computeDT, (DecisionTreeComputation) eval);
+            testNetworkEvaluationAndDecisionTree(network, computeDT, expectedEU, namesVariablesIntervention);
 		}
+	}
+
+    /** Evaluates the network once, with the decision tree for the window or without it. */
+    public void testNetworkEvaluationAndDecisionTree(ProbNet network, boolean computeDT, double expectedEU, String... namesVariablesIntervention) throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
+        DANEvaluation eval = buildNetworkEvaluation(network, computeDT);
+        testDANEvaluation(eval, network, expectedEU, namesVariablesIntervention);
+        Tools.testDecisionTree(network, computeDT, (DecisionTreeComputation) eval);
 	}
 	
 }
