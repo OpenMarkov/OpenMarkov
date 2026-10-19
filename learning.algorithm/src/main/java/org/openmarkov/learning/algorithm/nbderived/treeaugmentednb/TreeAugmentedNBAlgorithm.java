@@ -36,7 +36,10 @@ public class TreeAugmentedNBAlgorithm extends DiscriminativeAlgorithm {
         }
         if (!mwst.isBuilt()) {
             mwst.build(probNet, metric, getNonRootNodes());
-            mwst.redirect(getRootOfTheTree(), probNet);
+            // With only the class there is no tree to direct, and nothing is proposed: the class alone is learned
+            if (!getNonRootVariables().isEmpty()) {
+                mwst.redirect(getRootOfTheTree(), probNet);
+            }
         }
         setRelationsForRootVariable();
 
