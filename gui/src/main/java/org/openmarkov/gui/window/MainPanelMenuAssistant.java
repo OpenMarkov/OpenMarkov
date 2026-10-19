@@ -378,6 +378,8 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                 }));
         sayWhyInferenceModeIsNotOffered();
         setOptionEnabled(ActionCommands.CHANGE_WORKING_MODE, isInferenceEnabled);
+        // In both modes: in inference mode the selected nodes can have their findings removed
+        setOptionEnabled(ActionCommands.SELECT_ALL, true);
         setOptionEnabled(ActionCommands.CHANGE_TO_INFERENCE_MODE, isInferenceEnabled);
         setOptionEnabled(ActionCommands.CHANGE_TO_EDITION_MODE, isInferenceEnabled);
         setOptionEnabled(ActionCommands.OBJECT_SELECTION, false);
@@ -565,7 +567,6 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
      */
     public void setEditionOption(String newEditionMode, boolean canPaste) {
         setOptionSelected(newEditionMode, true);
-        setOptionEnabled(ActionCommands.SELECT_ALL, true);
         setOptionEnabled(ActionCommands.CLIPBOARD_PASTE, canPaste);
     }
     
