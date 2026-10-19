@@ -137,6 +137,19 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String value;
     }
     
+    /** The precision of a variable that is not a finite number not below 0, the only ones its values can be rounded to. */
+    public static final class PrecisionOutOfRange extends PGMXParserException {
+        public PrecisionOutOfRange(String variableName, String value, Element element) {
+            super(element);
+            this.variableName = variableName;
+            this.value = value;
+        }
+        
+        public final String variableName;
+        /** The value as the file writes it. */
+        public final String value;
+    }
+    
     public static final class UnknownAgent extends PGMXParserException {
         public UnknownAgent(String variableName, String agentName, Element element) {
             super(element);

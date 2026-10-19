@@ -618,7 +618,7 @@ public class PGMXReader_0_2 {
      * @param root    {@code Element}
      * @param probNet {@code ProbNet}
      */
-    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent {
+    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange {
         Element xmlVariablesRoot = getXMLVariables(root);
         if (xmlVariablesRoot == null) {
             return;
@@ -632,14 +632,14 @@ public class PGMXReader_0_2 {
     }
     
     protected void loadVariables(List<Element> xmlVariables, ProbNet probNet)
-            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent {
+            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange {
         for (Element variableElement : xmlVariables) {
             loadVariable(variableElement, probNet);
         }
     }
     
     protected void loadVariable(Element variableElement, ProbNet probNet)
-            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent {
+            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange {
         VariableType variableType = getXMLVariableType(variableElement);
         NodeType nodeType = getXMLNodeType(variableElement);
         String variableName = getVariableName(variableElement);
@@ -686,7 +686,8 @@ public class PGMXReader_0_2 {
             VariableType variableType,
             NodeType nodeType,
             String variableName)
-            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent {
+            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent,
+                   PGMXParserException.PrecisionOutOfRange {
         
         String stringTimeSlice = variableElement.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
         String nameWithTimeSlice = variableName;
@@ -699,7 +700,7 @@ public class PGMXReader_0_2 {
         int x = getXMLXCoordinate(variableElement);
         int y = getXMLYCoordinate(variableElement);
         
-        Double precision = getXMLPrecision(variableElement);
+        Double precision = getXMLPrecision(variableElement, nameWithTimeSlice);
         
         // States & intervals
         State[] states = null;
@@ -822,11 +823,27 @@ public class PGMXReader_0_2 {
         return element.getAttributeValue(XMLAttributes.NAME.toString());
     }
     
-    protected static Double getXMLPrecision(Element variableElement) {
+    /**
+     * @return the precision of the variable, or null if the file does not give it
+     *
+     * @throws PGMXParserException.PrecisionOutOfRange if it is not a finite number not below 0, the only ones the
+     *                                                 values of the variable can be rounded to
+     */
+    protected static Double getXMLPrecision(Element variableElement, String variableName)
+            throws PGMXParserException.PrecisionOutOfRange {
         Element precisionElement = variableElement.getChild(XMLTags.PRECISION.toString());
-        Double precision = null;
-        if (precisionElement != null) {
-            precision = Double.valueOf(precisionElement.getText());
+        if (precisionElement == null) {
+            return null;
+        }
+        double precision;
+        try {
+            precision = Double.parseDouble(precisionElement.getText().strip());
+        } catch (NumberFormatException notANumber) {
+            precision = Double.NaN;
+        }
+        if (!Double.isFinite(precision) || precision < 0) {
+            throw new PGMXParserException.PrecisionOutOfRange(variableName, precisionElement.getText().strip(),
+                                                              precisionElement);
         }
         return precision;
     }

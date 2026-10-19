@@ -596,12 +596,16 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
     public static String[] convertToStringLimitValues(double[] limits, String precision) {
         String[] tableLimits = new String[limits.length];
         String rounded;
-        int numDecimals = Util.numDecimalsOf(precision);
+        // A precision that is not a finite number asks for no number of decimals: the limits are written as they are
+        boolean asTheyAre = !Double.isFinite(Double.parseDouble(precision));
+        int numDecimals = asTheyAre ? 0 : Util.numDecimalsOf(precision);
         for (int i = 0; i < limits.length; i++) {
             if (limits[i] == Double.POSITIVE_INFINITY) {
                 tableLimits[i] = INFINITY;
             } else if (limits[i] == Double.NEGATIVE_INFINITY) {
                 tableLimits[i] = NEGATIVE_INFINITY;
+            } else if (asTheyAre) {
+                tableLimits[i] = Double.toString(limits[i]);
             } else {
                 rounded = Double.toString(limits[i]);
                 // adding final zeros

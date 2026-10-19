@@ -134,6 +134,19 @@ public class NodeDomainValuesTablePanelTest {
 		assertThat(hundredths.getVariable().getPrecision()).isEqualTo(1.0);
 	}
 
+	/**
+	 * A precision that is not a finite number, which BigDecimal cannot write, is shown as Java writes it, also in the
+	 * tab of a utility node (error 264).
+	 */
+	@Test public void aPrecisionThatIsNotAFiniteNumberIsShownAsItIs() throws Exception {
+		assertThat(precisionShownFor(Double.NaN)).isEqualTo("NaN");
+		assertThat(precisionShownFor(Double.POSITIVE_INFINITY)).isEqualTo("Infinity");
+		assertThat(precisionShownFor(Double.NEGATIVE_INFINITY)).isEqualTo("-Infinity");
+
+		assertThat(new NodeDomainValuesTablePanel(utilityNode(Double.NaN)).getJComboBoxPrecision().getSelectedItem())
+				.isEqualTo("NaN");
+	}
+
 	private static Node utilityNode(double precision) {
 		Variable variable = new Variable("U");
 		variable.setPrecision(precision);

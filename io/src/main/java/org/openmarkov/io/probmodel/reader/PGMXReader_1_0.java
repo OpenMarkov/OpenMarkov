@@ -211,7 +211,7 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     
     
     @Override
-    protected void loadVariableAdvancedInformation(Element variableElement, ProbNet probNet, VariableType variableType, NodeType nodeType, String variableName) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent {
+    protected void loadVariableAdvancedInformation(Element variableElement, ProbNet probNet, VariableType variableType, NodeType nodeType, String variableName) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange {
         super.loadVariableAdvancedInformation(variableElement, probNet, variableType, nodeType, variableName);
         if (nodeType.equals(NodeType.EVENT)) {
             Node node = probNet.getNode(variableName);
