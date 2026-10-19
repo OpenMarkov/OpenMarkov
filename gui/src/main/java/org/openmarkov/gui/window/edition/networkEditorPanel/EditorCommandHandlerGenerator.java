@@ -683,8 +683,12 @@ public class EditorCommandHandlerGenerator {
                 
                 BindingCommandGroup.of(Bindings.Network.MOVE_NODE_MOUSE, Binding.MeetCondition.HELD, false, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_DRAGGED, BindingCommandGroup.OnEvent.MOUSE_MOVED))
                                    .processIf((_, _) -> switch (this.selectionState) {
+                                       // Pressed on what is selected: from the empty canvas, with Shift or Control,
+                                       // the band is not met and this would move nodes far from the mouse
                                        case NOTHING -> !this.mouseIgnoredUntilReleased
-                                               && !this.networkEditorPanel.getVisualNetwork().getSelectedNodes().isEmpty();
+                                               && !this.networkEditorPanel.getVisualNetwork().getSelectedNodes().isEmpty()
+                                               && this.visualNetwork.getElementInPosition(this.pressPosition, this.graphics) instanceof VisualElement pressed
+                                               && this.visualNetwork.isSelected(pressed);
                                        case MOVING -> true;
                                        case SELECTING, CREATING_LINK -> false;
                                    })
