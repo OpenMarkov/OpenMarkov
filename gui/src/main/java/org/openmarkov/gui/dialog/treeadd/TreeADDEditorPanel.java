@@ -706,7 +706,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
         switch (splitSide) {
             case LEFT_SIDE_OF_FIRST -> {
                 minFirstInterval.setBelongsToLeft(true);
-                leftBranchToAdd = new TreeADDBranch(minFirstInterval,
+                leftBranchToAdd = new TreeADDBranch(new Threshold(minFirstInterval.getLimit(), false),
                                                     new Threshold(minFirstInterval.getLimit(), true), branch.getRootVariable(),
                                                     rootTreeADDPotential.copyForThisTree(branch.getPotential()),
                                                     branch.getParentVariables());

@@ -40,7 +40,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The tree of C asks for Age, a numeric variable, with one branch for each interval. «Split interval» and «Change
- * interval» put the limits that are written, and recognise a limit that a branch already has (error 291).
+ * interval» put the limits that are written, and recognise a limit that a branch already has (error 291). Splitting
+ * by a closed end of a branch gives that end a branch of its own (error 311).
  *
  * @author Manuel Arias
  */
@@ -170,6 +171,22 @@ class TheIntervalsOfATreeAreCutWhereTheyAreWrittenTest {
         split(1, "0.1", false);
 
         assertEquals(List.of("[0.0, 0.1)", "[0.1, Infinity)"), intervals());
+    }
+
+    @Test void splittingByTheClosedLowerLimitGivesItABranchOfItsOwn() throws Exception {
+        aTreeOnAge(100, true, 0, 50, 100);
+
+        split(1, "50", true);
+
+        assertEquals(List.of("[0.0, 50.0)", "[50.0, 50.0]", "(50.0, 100.0]"), intervals());
+    }
+
+    @Test void splittingByTheClosedUpperLimitGivesItABranchOfItsOwn() throws Exception {
+        aTreeOnAge(100, true, 0, 50, 100);
+
+        split(1, "100", false);
+
+        assertEquals(List.of("[0.0, 50.0)", "[50.0, 100.0)", "[100.0, 100.0]"), intervals());
     }
 
     @Test void changingTheUpperLimitKeepsTheLowerOne() throws Exception {
