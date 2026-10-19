@@ -105,12 +105,16 @@ public class NetworkTemporalOptionsPanel extends JPanel {
 	 */
 	/**
 	 * Gives the network the cycle length written in the panel, if it is a different one, through an edit that can be
-	 * undone.
+	 * undone. A length that nobody has changed is not checked: the one that a file brings is kept, whatever it is.
 	 *
 	 * @return false, without changing the network, if the length is not a positive number
 	 */
 	public boolean applyCycleLength() {
 		if (unitScale == null || probNet.hasConstraintOfClass(OnlyAtemporalVariables.class)) {
+			return true;
+		}
+		if (unitScale.getText().trim().equals(String.valueOf(probNetScale))
+				&& Unit.values()[temporalUnits.getSelectedIndex()] == probNetUnit) {
 			return true;
 		}
 		double value;

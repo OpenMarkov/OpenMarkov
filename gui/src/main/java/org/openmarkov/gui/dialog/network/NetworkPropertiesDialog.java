@@ -269,6 +269,11 @@ public class NetworkPropertiesDialog extends OkCancelDialog implements PropertyN
      * @return true always
      */
     @Override protected boolean doOkClickBeforeHide() {
+        // Nothing can be changed in a dialog to read: none of its tabs is applied
+        if (this.readOnly) {
+            probNet.getPNESupport().closeSubEditHistory();
+            return true;
+        }
         if (networkTemporalOptionsPanel != null && !networkTemporalOptionsPanel.applyCycleLength()) {
             StringDatabase strings = StringDatabase.getUniqueInstance();
             JOptionPane.showMessageDialog(this, strings.getString("NetworkTemporalOptionsPanel.InvalidCycleLength"),
