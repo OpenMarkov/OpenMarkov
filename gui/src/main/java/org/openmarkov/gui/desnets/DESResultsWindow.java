@@ -133,15 +133,20 @@ public class DESResultsWindow {
         });
         sb.append("\n");
 
+        // Each number is read where generateTable reads it, so that one written with an exponent, or an option whose
+        // name starts with a digit, keeps its own cell
         while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            line = line.replaceAll(";ICER.+", "")
-                    .replaceAll("[a-zA-Z].*?;", "")
-                    .replaceAll(",", ".")
-                    .replaceAll(";+", ";")
-                    .replaceAll(";$", "")
-                    .replaceAll(";", ",");
-            sb.append(line).append("\n");
+            String[] parts = scanner.nextLine().split(";");
+            sb.append(parts[1]);
+            int index = 5;
+            for (int intervNum = 0; intervNum < interventions.size(); intervNum++) {
+                for (int criterionNum = 0; criterionNum < criteria.size(); criterionNum++) {
+                    sb.append(',').append(parts[index]).append(',').append(parts[index + 2]);
+                    index += 5;
+                }
+                index += 2;
+            }
+            sb.append("\n");
         }
         return sb.toString();
     }
