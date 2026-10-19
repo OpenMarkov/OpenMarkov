@@ -242,7 +242,7 @@ Los \hyperref[err:291]{errores~291} a \hyperref[err:303]{303} se encontraron al 
 Los \hyperref[err:304]{errores~304} a \hyperref[err:306]{306} se vieron en la ventana después de cambiar la letra de los nodos (\texttt{dfe951d}): el \hyperref[err:304]{304} lo vio Manuel Arias en su pantalla, y los \hyperref[err:305]{305} y \hyperref[err:306]{306} salieron al corregirlo. Se añaden ya corregidos, cada uno con el commit que lo corrige, para que la versión en C++ y Qt los recoja como los demás. El \hyperref[err:307]{error~307} salió el mismo día al ejecutar las pruebas desactivadas: de las que fallaban, es el único defecto del programa al que llega un usuario; las demás fallan por la propia prueba, por redes que no están en el repositorio o por código al que no se llega. El \hyperref[err:308]{error~308} salió al comprobar el \hyperref[err:277]{277}: es el análisis que fallaba y dejaba fijo el escenario. El \hyperref[err:309]{309} salió al mirar otro de los fallos que vio, al comprobar el \hyperref[err:277]{277}, un barrido del análisis de sensibilidad por las redes del repositorio: la araña de coste-efectividad de \texttt{MID-HPV-without-supervalue.\allowbreak{}pgmx}.
 
 \paragraph{Errores añadidos el 19 de octubre}
-Los \hyperref[err:310]{errores~310} a \hyperref[err:313]{313} se encontraron al llevar a la versión en C++ y Qt los arreglos que esta lista recibió el 17 y el 18 de octubre, de \texttt{b83168f} a \texttt{fe96646}. Cada uno se ha comprobado con el código de \texttt{fe96646}, el último commit a día de hoy, y la fila \emph{Comprobado} de su ficha dice cómo: los dos del editor de árboles, con las operaciones del editor llamadas tal cual sobre el panel construido sin ventana y la respuesta de sus ventanillas puesta a mano en una copia de la clase; el de pegar, ejecutando el pegado, el guardado y la lectura sin ventana; y el de los gestos del editor de red, manejando el programa entero, con el ratón y el teclado, en una pantalla anidada. Dos salieron de los propios arreglos de ese día: el \hyperref[err:310]{error~310}, del arreglo del \hyperref[err:292]{292}, y el \hyperref[err:312]{312}, de lo que dejó sin resolver el del \hyperref[err:295]{295}. No se ha añadido, por la decisión de equipo sobre los textos, que los textos españoles de la ventana «About» no se pusieran al día: \texttt{ea3deaa}, el arreglo del \hyperref[err:204]{error~204}, solo cambió \texttt{Dialogs\_\allowbreak{}en.\allowbreak{}xml}. El \hyperref[err:314]{error~314} salió al escribir la ficha del \hyperref[err:311]{311}, leyendo \texttt{Partitioned\allowbreak{}Interval}, y se ha comprobado con un programa pequeño.
+Los \hyperref[err:310]{errores~310} a \hyperref[err:313]{313} se encontraron al llevar a la versión en C++ y Qt los arreglos que esta lista recibió el 17 y el 18 de octubre, de \texttt{b83168f} a \texttt{fe96646}. Cada uno se ha comprobado con el código de \texttt{fe96646}, el último commit a día de hoy, y la fila \emph{Comprobado} de su ficha dice cómo: los dos del editor de árboles, con las operaciones del editor llamadas tal cual sobre el panel construido sin ventana y la respuesta de sus ventanillas puesta a mano en una copia de la clase; el de pegar, ejecutando el pegado, el guardado y la lectura sin ventana; y el de los gestos del editor de red, manejando el programa entero, con el ratón y el teclado, en una pantalla anidada. Dos salieron de los propios arreglos de ese día: el \hyperref[err:310]{error~310}, del arreglo del \hyperref[err:292]{292}, y el \hyperref[err:312]{312}, de lo que dejó sin resolver el del \hyperref[err:295]{295}. No se ha añadido, por la decisión de equipo sobre los textos, que los textos españoles de la ventana «About» no se pusieran al día: \texttt{ea3deaa}, el arreglo del \hyperref[err:204]{error~204}, solo cambió \texttt{Dialogs\_\allowbreak{}en.\allowbreak{}xml}. El \hyperref[err:314]{error~314} salió al escribir la ficha del \hyperref[err:311]{311}, leyendo \texttt{Partitioned\allowbreak{}Interval}, y se ha comprobado con un programa pequeño. El \hyperref[err:315]{error~315} salió al corregir el \hyperref[err:264]{264}, mirando qué ediciones hace la pestaña Domain de un nodo de utilidad, y se ha comprobado construyendo esa pestaña sin ventana.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -299,9 +299,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{313 errores}; 169 de ellos son defectos nuevos: 76 encontrados al
-comprobar o corregir los demás, 79 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{46} necesitan antes una decisión del equipo. Por esfuerzo estimado: 273 pequeños, 40 medios y 0 grandes.
-De los 313, 217 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{314 errores}; 170 de ellos son defectos nuevos: 77 encontrados al
+comprobar o corregir los demás, 79 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{46} necesitan antes una decisión del equipo. Por esfuerzo estimado: 274 pequeños, 40 medios y 0 grandes.
+De los 314, 217 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -322,7 +322,7 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:ficheros}. Abrir y guardar redes & 15 \\
 \ref{sec:casos}. Bases de casos & 13 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 32 \\
-\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 38 \\
+\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 39 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 19 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 16 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
@@ -638,6 +638,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:302]{302} & \textcolor{corregidoverde}{\textbf{Corregido}} · Arrastrar nodos los mueve con un paso de retraso, y el primero es del arrastre anterior & \texttt{gui} & S \hfill No\\
 \hyperref[err:303]{303} & \textcolor{corregidoverde}{\textbf{Corregido}} · Escape no acaba la banda ni el arrastre: si el ratón sigue, vuelven a empezar & \texttt{gui} & S \hfill No\\
 \hyperref[err:313]{313} & \textcolor{corregidoverde}{\textbf{Corregido}} · Con mayúsculas o Control, arrastrar desde el lienzo vacío mueve los nodos señalados & \texttt{gui} & S \hfill No\\
+\hyperref[err:315]{315} & Abrir la pestaña Domain de un nodo de utilidad deja la red modificada sin haber cambiado nada & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:menus}.\ Interfaz: menús, diálogos y herramientas}}\\
 \hyperref[err:171]{171} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir una red desde internet apaga «Guardar» para todas las redes & \texttt{gui} & M \hfill No\\
 \hyperref[err:172]{172} & «Edits history» deja un núcleo al cien por cien y puede colgar el programa & \texttt{full} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -17585,6 +17586,38 @@ Que el atajo de mover, en el estado \texttt{NOTHING}, pida además que el botón
 
 Prueba: con el editor de \texttt{asia.\allowbreak{}pgmx} en pantalla y «Smoker?» señalado, arrastrar con mayúsculas, y después con Control, desde el lienzo vacío deja «Smoker?» donde estaba.
 
+\setcounter{subsection}{314}
+\subsection[Abrir la pestaña Domain de un nodo de utilidad deja la red modificada sin haber cambiado nada]{Al construirse para un nodo de utilidad, la pestaña Domain de las propiedades del nodo hace cuatro ediciones que no cambian nada, una de la precisión y tres del intervalo: aceptar el diálogo sin tocar nada deja la red marcada como modificada, y con cuatro pasos de «deshacer» que no hacen nada}\label{err:315}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.dialog.node
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanel.java:183-197, 682} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodeDomainValuesTablePanelListener.java:191-262} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/NodePropertiesDialog.java:78, 406-408, 430-435}
+\fichakey{Comprobado}Ejecutándolo (la pestaña construida sin ventana, como la construye el diálogo); lo que hace el diálogo al aceptar y al cancelar está leído en su código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:263]{error~263}, \hyperref[err:264]{error~264}, \hyperref[err:207]{error~207}
+\end{ficha}
+\paragraph{Qué pasa}
+Al abrir «Node properties» sobre un nodo de utilidad, el diálogo construye la pestaña Domain. Al construirse para un nodo de utilidad, \texttt{Node\allowbreak{}Domain\allowbreak{}Values\allowbreak{}Table\allowbreak{}Panel.\allowbreak{}initialize} escribe la precisión de la variable en un campo que no está en la disposición de la pestaña, \texttt{j\allowbreak{}Formatted\allowbreak{}Text\allowbreak{}Field\allowbreak{}Precision} (línea 193), y ese campo ya tiene puesto, desde que se crea, el oyente de su valor (línea 682). El oyente, \texttt{Node\allowbreak{}Domain\allowbreak{}Values\allowbreak{}Table\allowbreak{}Panel\allowbreak{}Listener.\allowbreak{}property\allowbreak{}Change}, responde como si el usuario hubiera elegido otra precisión: ejecuta un \texttt{Precision\allowbreak{}Edit} con la misma precisión y, como la variable de una utilidad es numérica, rehace su intervalo redondeado y lo pone con \texttt{Partitioned\allowbreak{}Interval\allowbreak{}Edit}. Nada cambia, pero las ediciones quedan hechas.
+
+El diálogo abre una sub-historia de ediciones al empezar (\texttt{Node\allowbreak{}Properties\allowbreak{}Dialog}, línea 78). «Cancel» la deshace y la olvida (líneas 406-408), así que no queda rastro; «OK» la cierra y se queda con lo hecho (líneas 430-435). Así, abrir las propiedades de una utilidad y aceptar sin tocar nada deja la red marcada como modificada ---al cerrarla preguntará si guardarla--- y con pasos de «deshacer» que no hacen nada. Por lectura; el diálogo no se ha abierto.
+
+Medido el 19-10-2026 con el código de \texttt{86f26b3}, construyendo la pestaña como el diálogo (\texttt{new\ Node\allowbreak{}Domain\allowbreak{}Values\allowbreak{}Table\allowbreak{}Panel(\allowbreak{}nodo)}) sobre una utilidad de un diagrama de influencia, con «deshacer» activado:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+precisión 2      ediciones: PrecisionEdit, PartitionedIntervalEdit x 3
+                 dominio antes y después: (-Infinity, Infinity), precisión 2.0
+                 red modificada: sí; se puede deshacer: sí (cuatro veces, sin cambiar nada)
+precisión 0.01   lo mismo
+\end{Verbatim}
+
+Viene de antes del repositorio actual: la línea que escribe la precisión en el campo está desde \texttt{e1e38cc}, el primer commit. Con los nodos de azar, de decisión y de suceso no pasa, porque para ellos nada escribe en ese campo: la línea de \texttt{set\allowbreak{}Fields\allowbreak{}From\allowbreak{}Properties} que lo hacía está comentada. El oyente no mira si el panel está cargando datos.
+\paragraph{Cómo arreglarlo}
+Que \texttt{initialize} escriba la precisión en el campo con el panel marcado como cargando datos (\texttt{set\allowbreak{}Uploading\allowbreak{}Data(\allowbreak{}true)} y después \texttt{false}), como hace \texttt{set\allowbreak{}Fields\allowbreak{}From\allowbreak{}Properties}, y que \texttt{property\allowbreak{}Change} no haga nada mientras lo esté; o que no la escriba, porque el campo no se ve y el selector ya enseña la precisión desde el \hyperref[err:263]{error~263}. De paso, que el oyente no ejecute un \texttt{Precision\allowbreak{}Edit} cuando la precisión no cambia.
+
+Prueba: construir la pestaña sobre una utilidad, con «deshacer» activado, y comprobar que no se ha hecho ninguna edición y que la red no está modificada.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: menús, diálogos y herramientas}\label{sec:menus}
 
@@ -20188,6 +20221,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:312]{Error 312} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 17 y el 18 de octubre \\
 \hyperref[err:313]{Error 313} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 17 y el 18 de octubre \\
 \hyperref[err:314]{Error 314} & hallazgo nuevo, visto al escribir la ficha del \hyperref[err:311]{error~311} \\
+\hyperref[err:315]{Error 315} & hallazgo nuevo, visto al corregir el \hyperref[err:264]{error~264} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
