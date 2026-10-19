@@ -17,6 +17,7 @@ import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 
 
 /**
@@ -112,6 +113,31 @@ public class NodeDomainValuesTablePanelTest {
 		Node node = numericNode(0.1);
 		openPanel(node);
 		assertThat(node.getVariable().getPartitionedInterval().getLimits()).containsExactly(0.25, 7.75);
+	}
+
+	/**
+	 * The panel of a utility node, built as the dialog builds it, shows the precision of its variable, which opening it
+	 * does not change; and choosing «1» gives the variable that precision (error 263).
+	 */
+	@Test public void thePrecisionBoxOfAUtilityNodeShowsThePrecisionOfItsVariable() throws Exception {
+		Node twoUnits = utilityNode(2);
+		Node hundredths = utilityNode(0.01);
+
+		assertThat(new NodeDomainValuesTablePanel(twoUnits).getJComboBoxPrecision().getSelectedItem()).isEqualTo("2");
+		NodeDomainValuesTablePanel panel = new NodeDomainValuesTablePanel(hundredths);
+		assertThat(panel.getJComboBoxPrecision().getSelectedItem()).isEqualTo("0.01");
+		assertThat(twoUnits.getVariable().getPrecision()).isEqualTo(2.0);
+		assertThat(hundredths.getVariable().getPrecision()).isEqualTo(0.01);
+
+		panel.getJComboBoxPrecision().setSelectedItem("1");
+
+		assertThat(hundredths.getVariable().getPrecision()).isEqualTo(1.0);
+	}
+
+	private static Node utilityNode(double precision) {
+		Variable variable = new Variable("U");
+		variable.setPrecision(precision);
+		return new ProbNet(InfluenceDiagramType.getUniqueInstance()).addNode(variable, NodeType.UTILITY);
 	}
 
 	private static String precisionShownFor(double precision) throws Exception {

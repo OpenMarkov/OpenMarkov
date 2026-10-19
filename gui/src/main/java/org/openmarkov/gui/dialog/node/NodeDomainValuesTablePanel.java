@@ -191,6 +191,8 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
             getJLabelValuesPanel().setEnabled(false);
             getJLabelValuesPanel().setVisible(false);
             getJFormattedTextFieldPrecision().setValue(node.getVariable().getPrecision());
+            // The dialog does not call setFieldsFromProperties for a utility node, so the box is placed here
+            selectPrecision(getJComboBoxPrecision(), node.getVariable().getPrecision());
             // getJFormattedTextFieldUnit().setValue(value);
         }
         setPreferredSize(new Dimension(600, 375));
