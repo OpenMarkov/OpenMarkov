@@ -10,6 +10,7 @@ import org.jgrapht.alg.drawing.model.Point2D;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.gui.action.MoveNodeEdit;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
+import org.openmarkov.gui.graphic.VisualNetwork;
 import org.openmarkov.gui.graphic.VisualNode;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
 import org.openmarkov.gui.window.MainPanel;
@@ -71,7 +72,7 @@ public class SortProbnetPlugin implements ToolPlugin {
      * @param desiredHeight the target layout height in pixels
      */
     public static void graphicallySortNetwork(NetworkEditorPanel panel, double desiredWidth, double desiredHeight) {
-        SortedCoordinates sortedCoordinates = SortProbnetPlugin.getSortedCoordinates(panel, desiredWidth, desiredHeight);
+        SortedCoordinates sortedCoordinates = SortProbnetPlugin.getSortedCoordinates(panel.getVisualNetwork(), desiredWidth, desiredHeight);
         for (VisualNode vertex : sortedCoordinates.graph().vertexSet()) {
             Point2D position = sortedCoordinates.model().get(vertex);
             double xPos = Math.max(0.0, position.getX() - sortedCoordinates.minX());
@@ -82,7 +83,7 @@ public class SortProbnetPlugin implements ToolPlugin {
     }
     
     private static void graphicallySortNetworkAsMoveEdit(NetworkEditorPanel panel, double desiredWidth, double desiredHeight) throws DoEditException {
-        SortedCoordinates sortedCoordinates = SortProbnetPlugin.getSortedCoordinates(panel, desiredWidth, desiredHeight);
+        SortedCoordinates sortedCoordinates = SortProbnetPlugin.getSortedCoordinates(panel.getVisualNetwork(), desiredWidth, desiredHeight);
         for (VisualNode vertex : sortedCoordinates.graph().vertexSet()) {
             Point2D position = sortedCoordinates.model().get(vertex);
             double xPos = Math.max(0.0, position.getX() - sortedCoordinates.minX());
@@ -92,8 +93,7 @@ public class SortProbnetPlugin implements ToolPlugin {
         new MoveNodeEdit(sortedCoordinates.graph().vertexSet().stream().toList()).executeEdit();
     }
     
-    private static @NotNull SortProbnetPlugin.SortedCoordinates getSortedCoordinates(NetworkEditorPanel panel, double desiredWidth, double desiredHeight) {
-        var visualNetwork = panel.getVisualNetwork();
+    static @NotNull SortProbnetPlugin.SortedCoordinates getSortedCoordinates(VisualNetwork visualNetwork, double desiredWidth, double desiredHeight) {
         Graph<VisualNode, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
         LayoutModel2D<VisualNode> model = new MapLayoutModel2D<>(new Box2D(
                 Math.max(SortProbnetPlugin.MIN_BOX_WIDTH, desiredWidth),
@@ -105,6 +105,11 @@ public class SortProbnetPlugin implements ToolPlugin {
         
         visualNetwork.getAllNodes().forEach(graph::addVertex);
         for (var link : visualNetwork.getVisualLinks()) {
+            // A link from a node to itself, which a network of events allows, says nothing about where to put the
+            // node, and a simple graph refuses it
+            if (link.getSourceNode() == link.getDestinationNode()) {
+                continue;
+            }
             graph.addEdge(link.getSourceNode(), link.getDestinationNode());
             if (!link.isDirected()) {
                 graph.addEdge(link.getDestinationNode(), link.getSourceNode());
@@ -119,7 +124,7 @@ public class SortProbnetPlugin implements ToolPlugin {
     }
     
     /** Holds the result of a force-directed layout computation. */
-    private record SortedCoordinates(org.openmarkov.gui.graphic.VisualNetwork visualNetwork,
+    record SortedCoordinates(VisualNetwork visualNetwork,
                                      Graph<VisualNode, DefaultEdge> graph, LayoutModel2D<VisualNode> model, double minX,
                                      double minY) {
     }
