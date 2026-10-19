@@ -39,6 +39,7 @@
     "DensityIsInfinite",
     "DifferentSizesInPotentialsAndStates",
     "DirectedLinkCannotMatchAnUndirectedLink",
+    "DiscountOutOfRange",
     "DistributionsCannotGoTogether",
     "DoEditException",
     "EmptyCaseDatabaseException",

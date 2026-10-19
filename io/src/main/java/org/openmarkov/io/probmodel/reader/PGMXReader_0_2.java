@@ -384,7 +384,7 @@ public class PGMXReader_0_2 {
      * @param root    Root element
      * @param probNet ProbNet
      */
-    protected void getInferenceOptions(Element root, ProbNet probNet) {
+    protected void getInferenceOptions(Element root, ProbNet probNet) throws PGMXParserException.DiscountOutOfRange {
         Element inferenceOptions = root.getChild(XMLTags.INFERENCE_OPTIONS.toString());
         if (inferenceOptions != null) {
             getMulticriteriaOptions(inferenceOptions, probNet);
@@ -470,7 +470,7 @@ public class PGMXReader_0_2 {
      * @param inferenceOptions Inference Options
      * @param probNet          ProbNet
      */
-    protected void getTemporalOptions(Element inferenceOptions, ProbNet probNet) {
+    protected void getTemporalOptions(Element inferenceOptions, ProbNet probNet) throws PGMXParserException.DiscountOutOfRange {
         Element temporalOptions = inferenceOptions.getChild(XMLTags.TEMPORAL_OPTIONS.toString());
         if (temporalOptions != null) {
             
@@ -489,7 +489,7 @@ public class PGMXReader_0_2 {
                     if (element.getAttribute(XMLTags.CRITERION.toString())
                                .getValue()
                                .equals(criterion.getCriterionName())) {
-                        criterion.setDiscount(Double.parseDouble(element.getAttributeValue(XMLAttributes.VALUE.toString())));
+                        criterion.setDiscount(getXMLDiscount(element, criterion.getCriterionName()));
                         criterion.setDiscountUnit(CycleLength.DiscountUnit.valueOf(element.getAttributeValue(XMLAttributes.UNIT.toString())));
                     }
                 }
@@ -846,6 +846,25 @@ public class PGMXReader_0_2 {
                                                               precisionElement);
         }
         return precision;
+    }
+    
+    /**
+     * @return the discount that {@code discountElement} writes; a number that is not finite, which the window of the
+     * inference options could not show, or no number at all, is refused with a message that names the criterion
+     */
+    private static double getXMLDiscount(Element discountElement, String criterionName)
+            throws PGMXParserException.DiscountOutOfRange {
+        String written = discountElement.getAttributeValue(XMLAttributes.VALUE.toString());
+        double discount;
+        try {
+            discount = Double.parseDouble(written.strip());
+        } catch (NumberFormatException notANumber) {
+            discount = Double.NaN;
+        }
+        if (!Double.isFinite(discount)) {
+            throw new PGMXParserException.DiscountOutOfRange(criterionName, written.strip(), discountElement);
+        }
+        return discount;
     }
     
     protected static String getXMLPurpose(Element aditionalElement) {

@@ -1052,8 +1052,14 @@ public class InferenceOptionsDialog extends OkCancelDialog {
         return getSelectedOption();
     }
 
-    /** A discount as the table shows it: in percent, with the figures it has and no zeros at the end. */
+    /**
+     * A discount as the table shows it: in percent, with the figures it has and no zeros at the end. One that is not
+     * finite, which the reader refuses but could come from elsewhere, is shown as it is.
+     */
     static String percentOf(double discount) {
+        if (!Double.isFinite(discount)) {
+            return discount + " %";
+        }
         return new BigDecimal(String.valueOf(discount)).movePointRight(2).stripTrailingZeros().toPlainString() + " %";
     }
 

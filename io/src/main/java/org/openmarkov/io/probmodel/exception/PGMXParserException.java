@@ -137,6 +137,19 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String value;
     }
     
+    /** A discount of a criterion that is not a finite number. */
+    public static final class DiscountOutOfRange extends PGMXParserException {
+        public DiscountOutOfRange(String criterionName, String value, Element element) {
+            super(element);
+            this.criterionName = criterionName;
+            this.value = value;
+        }
+        
+        public final String criterionName;
+        /** The value as the file writes it. */
+        public final String value;
+    }
+    
     /** An indicator of an event whose file has no time to the event. */
     public static final class TimeToEventMissing extends PGMXParserException {
         public TimeToEventMissing(String variableName, Element element) {

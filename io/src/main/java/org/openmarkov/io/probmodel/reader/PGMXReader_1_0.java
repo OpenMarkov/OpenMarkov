@@ -238,7 +238,7 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     // 28/08/2023 MontecarloOptions added
     // FIXME 28/08/2023 update after decision for MonteCarlo options; some elements hardcoded
     @Override
-    protected void getInferenceOptions(Element root, ProbNet probNet) {
+    protected void getInferenceOptions(Element root, ProbNet probNet) throws PGMXParserException.DiscountOutOfRange {
         super.getInferenceOptions(root, probNet);
         this.getMonteCarloOptions(root.getChild(XMLTags.INFERENCE_OPTIONS.toString()), probNet);
         

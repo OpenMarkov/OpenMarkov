@@ -47,4 +47,10 @@ class ADiscountWrittenInPercentIsTheDecimalNumberTest {
         assertEquals("3.5 %", InferenceOptionsDialog.percentOf(0.035));
         assertEquals("0 %", InferenceOptionsDialog.percentOf(0));
     }
+
+    /** One that is not finite is shown as it is; it used to stop the window of the inference options (error 298). */
+    @Test void aDiscountThatIsNotFiniteIsShownAsItIs() {
+        assertEquals("NaN %", InferenceOptionsDialog.percentOf(Double.NaN));
+        assertEquals("Infinity %", InferenceOptionsDialog.percentOf(Double.POSITIVE_INFINITY));
+    }
 }
