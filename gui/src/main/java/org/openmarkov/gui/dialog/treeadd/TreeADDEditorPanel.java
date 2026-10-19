@@ -1082,7 +1082,7 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
                         if (treeADDBranch.getRootVariable() == newRootVariable) {
                             Threshold min = treeADDBranch.getLowerBound();
                             Threshold max = treeADDBranch.getUpperBound();
-                            partitionedInterval = new PartitionedInterval(min.belongsToLeft(), min.getLimit(),
+                            partitionedInterval = new PartitionedInterval(!min.belongsToLeft(), min.getLimit(),
                                                                           max.getLimit(), max.belongsToLeft());
                             break;
                         }

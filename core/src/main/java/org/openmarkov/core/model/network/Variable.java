@@ -169,8 +169,9 @@ public class Variable implements Cloneable, Comparable<Variable>, ClassLocalizab
      */
     public Variable(String name) {
         
+        // Closed at -infinity, as it has always been stored; no number reaches an infinite end
         this(name, new State[]{new State("0")},
-             new PartitionedInterval(false, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false), 0.0);
+             new PartitionedInterval(true, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false), 0.0);
         this.variableType = VariableType.NUMERIC;
     }
     

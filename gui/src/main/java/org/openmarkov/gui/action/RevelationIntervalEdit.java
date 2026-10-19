@@ -143,10 +143,12 @@ import org.openmarkov.core.model.network.PartitionedInterval;
 
 	private PartitionedInterval getNewPartitionedInterval() {
 		if (link.getRevealingIntervals().isEmpty()) {
-			return new PartitionedInterval(false, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false);
+			return new PartitionedInterval(true, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false);
         }
         PartitionedInterval interval = link.getRevealingIntervals().get(link.getRevealingIntervals().size() - 1);
-        return new PartitionedInterval(false, interval.getLimit(1), Double.POSITIVE_INFINITY, false);
+        // It starts where the previous one ends: closed if that one leaves the limit out, open if it takes it
+        return new PartitionedInterval(!interval.getBelongsToLeftSide(1), interval.getLimit(1),
+                                       Double.POSITIVE_INFINITY, false);
     }
 
 }

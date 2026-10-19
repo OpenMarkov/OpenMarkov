@@ -63,7 +63,8 @@ public class PartitionedInterval implements Cloneable, Serializable, ClassLocali
      */
     public PartitionedInterval(boolean leftClosed, double min, double max, boolean rightClosed) {
         limits = new double[]{min, max};
-        belongsToLeftSide = new boolean[]{leftClosed, rightClosed};
+        // A lower limit that belongs to the left is out of the interval
+        belongsToLeftSide = new boolean[]{!leftClosed, rightClosed};
         numSubintervals = 1;
     }
     

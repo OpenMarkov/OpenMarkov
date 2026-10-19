@@ -994,7 +994,7 @@ public class PGMXReader_0_2 {
             Element variableElement,
             String variableName) {
         
-        boolean leftClosedDefined, leftClosed = false, rightClosedDefined, rightClosed = false;
+        boolean leftClosedDefined, lowerBelongsToLeft = false, rightClosedDefined, rightClosed = false;
         double min = Double.NEGATIVE_INFINITY;  // Default value
         double max = Double.POSITIVE_INFINITY;  // Default value
         
@@ -1010,7 +1010,7 @@ public class PGMXReader_0_2 {
             if (!leftClosedDefined) {
                 min = Double.parseDouble(minString);
                 String leftClosedString = leftThreshold.getAttributeValue(XMLAttributes.BELONGS_TO.toString());
-                leftClosed = leftClosedString != null && leftClosedString.contentEquals(XMLValues.LEFT.toString());
+                lowerBelongsToLeft = leftClosedString != null && leftClosedString.contentEquals(XMLValues.LEFT.toString());
             }
             
             // Right
@@ -1028,7 +1028,8 @@ public class PGMXReader_0_2 {
         Element xMLPrecision = variableElement.getChild(XMLTags.PRECISION.toString());
         double precision = xMLPrecision != null ? Double.parseDouble(xMLPrecision.getText()) : 0.0;
         
-        return new Variable(variableName, leftClosed, min, max, rightClosed, precision);
+        // A lower limit that belongs to the left is out of the domain
+        return new Variable(variableName, !lowerBelongsToLeft, min, max, rightClosed, precision);
     }
     
     /**
