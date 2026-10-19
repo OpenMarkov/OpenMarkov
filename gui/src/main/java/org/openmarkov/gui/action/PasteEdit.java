@@ -89,12 +89,14 @@ public class PasteEdit extends MultiStepEdit {
         
         for (Node node : nodes) {
             String oldName = node.getName();
-            String newName = oldName;
-            while (this.probNet.containsVariable(newName)) {
-                newName += "'";
-            }
             Variable variable = new Variable(node.getVariable());
-            variable.setName(newName);
+            // The apostrophes go after the base name: after the time slice, setName would drop them
+            String baseName = variable.getBaseName();
+            while (this.probNet.containsVariable(variable.nameWithBaseName(baseName))) {
+                baseName += "'";
+            }
+            variable.setBaseName(baseName);
+            String newName = variable.getName();
             sameCriterionOfTheNetwork(variable.getDecisionCriterion()).ifPresent(variable::setDecisionCriterion);
             this.newVariables.put(oldName, newName);
             Point2D.Double position = new Point2D.Double(node.getCoordinateX() + 7.0, node.getCoordinateY());
