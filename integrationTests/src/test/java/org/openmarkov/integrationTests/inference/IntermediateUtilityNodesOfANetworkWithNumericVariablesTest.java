@@ -35,6 +35,9 @@ class IntermediateUtilityNodesOfANetworkWithNumericVariablesTest {
         ProbNet probNet = new PGMXReader().read(
                 Networks.getNetworks().filter(url -> url.getPath().endsWith("/mid/MID-HPV.pgmx"))
                         .findFirst().orElseThrow()).probNet();
+        // Every node gets a value with two cycles as with the 88 of the file, which CEAGlobalAnalysisTest and
+        // SumAndProductUtilityNodesSurviveSavingInFormat02Test still evaluate
+        probNet.getInferenceOptions().getTemporalOptions().setHorizon(2);
         VEPropagation propagation = new VEPropagation(probNet);
         propagation.setVariablesOfInterest(probNet.getVariables());
         propagation.setPreResolutionEvidence(new EvidenceCase());
