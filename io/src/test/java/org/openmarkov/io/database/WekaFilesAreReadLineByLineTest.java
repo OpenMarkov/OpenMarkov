@@ -88,6 +88,32 @@ class WekaFilesAreReadLineByLineTest {
         assertTrue(message.contains("Line 7") && message.contains("«g»") && message.contains("«Y»"), message);
     }
 
+    /** Whatever the lines before: an unknown value of an earlier case does not declare it (error 249). */
+    @Test
+    void aQuotedQuestionMarkThatItsColumnDoesNotDeclareIsRefused() throws Exception {
+        String alone = refusal(HEADER + "a,'?',e\n");
+        String afterAnUnknownValue = refusal(HEADER + "a,?,e\na,'?',e\n");
+
+        assertTrue(alone.contains("Line 6") && alone.contains("«?»") && alone.contains("«Y»"), alone);
+        assertTrue(afterAnUnknownValue.contains("Line 7") && afterAnUnknownValue.contains("«?»")
+                   && afterAnUnknownValue.contains("[c, d]"), afterAnUnknownValue);
+    }
+
+    @Test
+    void aQuotedQuestionMarkThatItsColumnDeclaresIsRead() throws Exception {
+        CaseDatabase database = read("""
+                @relation test
+                @attribute X {a,b}
+                @attribute Y {c,d,'?'}
+                @data
+                a,'?'
+                b,?
+                """);
+
+        assertEquals(List.of("c", "d", "?"), states(database.getVariables().get(1)));
+        assertArrayEquals(new int[][]{{0, 2}, {1, 2}}, database.getCases());
+    }
+
     @Test
     void aLineWithTooFewValuesIsRefused() throws Exception {
         assertTrue(refusal(HEADER + "a,c,e\na,c\n").contains("Line 7"));

@@ -46,6 +46,8 @@ final class ArffReader {
 
     private final List<String> names = new ArrayList<>();
     private final List<List<String>> states = new ArrayList<>();
+    /** How many of the states of each column its header declares; the unknown value of the cases goes after them */
+    private final List<Integer> declared = new ArrayList<>();
     private final List<int[]> cases = new ArrayList<>();
 
     private ArffReader() {
@@ -136,6 +138,7 @@ final class ArffReader {
         }
         names.add(name);
         states.add(values);
+        declared.add(values.size());
     }
 
     /** Where the name of an attribute ends: at its closing quote, or else at the first blank or brace. */
@@ -172,10 +175,12 @@ final class ArffReader {
                 continue;
             }
             String value = unquote(field);
-            example[column] = values.indexOf(value);
+            // A quoted ? is a value of that name, which the header must declare
+            List<String> declaredValues = values.subList(0, declared.get(column));
+            example[column] = declaredValues.indexOf(value);
             if (example[column] == -1) {
                 throw new ParseException("Line " + lineNumber + ": the value «" + value + "» is not one of those of the "
-                                         + "attribute «" + names.get(column) + "»: " + values, lineNumber);
+                                         + "attribute «" + names.get(column) + "»: " + declaredValues, lineNumber);
             }
         }
         cases.add(example);
