@@ -46,21 +46,18 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
     }
 
     /**
-     * Checks whether this plugin should be enabled based on the presence of an open network.
-     *
-     * @return {@code true} if a network is currently open, {@code false} otherwise
+     * The command of the button «Cost-effectiveness analysis» of the toolbar. The main menu makes the item do what the
+     * button does, which with a network of events is the simulation, and enables it when the button is enabled.
      */
-    public boolean enabled() {
-        return MainPanel.getCurrentProbNet() != null;
-    }
+    private static final String COST_EFFECTIVENESS_COMMAND = "Tools.CostEffectivenessDeterministic";
     
     @Override public JMenuItem toMenuItem() {
         return new JMenuItemBuilder(StringDatabase.getUniqueInstance().getString("Tools.CostEffectiveness"))
-                .enabled(MainPanel.getCurrentProbNet() != null)
-                .onClick(CostEffectivenessPlugin::onClick)
+                .withActionCommand(COST_EFFECTIVENESS_COMMAND)
                 .build();
     }
     
+    /** What the button does with a network that is not of events: it calls this. */
     private static void onClick() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, ConstraintViolatedException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         JFrame parent = MainGUI.INSTANCE.mainPanel.getMainFrame();
         ProbNet probNet = MainPanel.getCurrentProbNet();

@@ -87,6 +87,13 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
     private static final double UI_SCALE_MIN = 0.5;
     
     private final Map<ActionCommands, JComponent> items = new EnumMap<>(ActionCommands.class);
+    /**
+     * The items of the tools menu that declare an action command of the window, as «Cost effectiveness analysis» does
+     * the one of the button of the toolbar: they do what the button does and are enabled when it is.
+     */
+    private final Map<ActionCommands, JMenuItem> toolItems = new EnumMap<>(ActionCommands.class);
+    /** Whether each option was last enabled, to give it to the items of the tools menu when that menu is rebuilt. */
+    private final Map<ActionCommands, Boolean> optionsEnabled = new EnumMap<>(ActionCommands.class);
     final HashMap<JComponent, String> defaultText = new HashMap<>();
     
     private final MainPanel mainPanel;
@@ -172,6 +179,10 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
     
     @Override
     public void setOptionEnabled(String actionCommand, boolean b) {
+        ActionCommands command = ActionCommands.of(actionCommand);
+        if (command != null) {
+            this.optionsEnabled.put(command, b);
+        }
         MenuToolBarBasicImpl.setOptionEnabled(getJComponentActionCommand(actionCommand), b);
     }
     
@@ -364,7 +375,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
                 var plugins = pluginsByGroupIterator.next().getValue();
                 plugins.sort(Comparator.comparing(ToolPlugin::priorityInGroup));
                 for (ToolPlugin plugin : plugins) {
-                    this.toolsMenu.add(plugin.toMenuItem());
+                    this.toolsMenu.add(toolItem(plugin.toMenuItem()));
                 }
                 if (pluginsByGroupIterator.hasNext()) {
                     this.toolsMenu.addSeparator();
@@ -374,6 +385,18 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
             this.toolsMenu.add(this.items.get(ActionCommands.CONFIGURATION));
         }
         return this.toolsMenu;
+    }
+    
+    private JMenuItem toolItem(JMenuItem item) {
+        ActionCommands command = ActionCommands.of(item.getActionCommand());
+        if (command != null) {
+            item.addActionListener(this.listener);
+            this.toolItems.put(command, item);
+            if (this.optionsEnabled.containsKey(command)) {
+                item.setEnabled(this.optionsEnabled.get(command));
+            }
+        }
+        return item;
     }
     
     private JMenu buildHelpMenu() {
@@ -631,7 +654,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
             return this.items.get(ActionCommands.CHANGE_TO_EDITION_MODE);
         }
         if (cmd == ActionCommands.NODES) return this.viewNodesMenu;
-        return this.items.get(cmd);
+        return this.items.containsKey(cmd) ? this.items.get(cmd) : this.toolItems.get(cmd);
     }
     
     // ── Recent files ───────────────────────────────────────────────
