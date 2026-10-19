@@ -130,7 +130,8 @@ final class ArffReader {
         // No values: every case of the column is unknown
         for (String field : list.isBlank() ? List.<String>of() : fields(list, lineNumber)) {
             String value = unquote(field);
-            if (value.isEmpty() || values.contains(value)) {
+            // Two commas in a row leave a value out; '' is the empty value, which Weka and the writer write
+            if (field.isEmpty() || values.contains(value)) {
                 throw new ParseException("Line " + lineNumber + ": the attribute «" + name + "» has an empty or a "
                                          + "repeated value", lineNumber);
             }

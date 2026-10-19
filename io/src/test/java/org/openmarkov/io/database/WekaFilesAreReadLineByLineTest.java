@@ -114,6 +114,17 @@ class WekaFilesAreReadLineByLineTest {
         assertArrayEquals(new int[][]{{0, 2}, {1, 2}}, database.getCases());
     }
 
+    /** Two commas in a row leave a value out; '' is the empty value (error 246). */
+    @Test
+    void aValueLeftOutOfTheHeaderIsRefusedButAnEmptyOneIsRead() throws Exception {
+        String message = refusal("@relation r\n@attribute X {a,,b}\n@data\na\n");
+        CaseDatabase database = read("@relation r\n@attribute X {'',b}\n@data\n''\nb\n");
+
+        assertTrue(message.contains("Line 2") && message.contains("«X»"), message);
+        assertEquals(List.of("", "b"), states(database.getVariables().getFirst()));
+        assertArrayEquals(new int[][]{{0}, {1}}, database.getCases());
+    }
+
     @Test
     void aLineWithTooFewValuesIsRefused() throws Exception {
         assertTrue(refusal(HEADER + "a,c,e\na,c\n").contains("Line 7"));

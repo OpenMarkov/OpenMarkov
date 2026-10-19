@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.io.database.excel.CSVDataBaseIO;
 import org.openmarkov.io.database.weka.ArffDataBaseIO;
 
 import java.io.File;
@@ -87,6 +88,18 @@ class AWekaDatabaseSavedByOpenMarkovIsReadBackTest {
         assertSame(saved, saveAndRead(saved));
         String text = Files.readString(save(saved).toPath(), StandardCharsets.UTF_8);
         assertTrue(text.contains("{'50\\% \\\"rate\\\"','a\\tb','two\\nlines','carriage\\rreturn','r\\u001Es'}"), text);
+    }
+
+    /** The empty state that a blank cell of a CSV file gives is written '' and read back (error 246). */
+    @Test
+    void theEmptyStateOfABlankCellIsReadBack() throws Exception {
+        Path csv = Files.createTempDirectory("csv").resolve("blank.csv");
+        Files.writeString(csv, "A,B,C\nx,,w\ny,z,v\n", StandardCharsets.UTF_8);
+        csv.toFile().deleteOnExit();
+        CaseDatabase read = new CSVDataBaseIO().load(csv.toFile());
+
+        assertTrue(states(read.getVariables().get(1)).contains(""), states(read.getVariables().get(1)).toString());
+        assertSame(read, saveAndRead(read));
     }
 
     @Test
