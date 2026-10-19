@@ -45,11 +45,10 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Run tests
-      run: mvn test --batch-mode
-
-    - name: Build OpenMarkov.jar
-      run: mvn package -pl full -am -DskipTests --batch-mode
+      # A single Maven run tests every module and builds OpenMarkov.jar, so that the modules are compiled once; it stops
+      # before the jar is published if a test fails. Coverage is not measured here, since nothing reads the report.
+    - name: Run tests and build OpenMarkov.jar
+      run: mvn package --batch-mode -Djacoco.skip=true
 
     - name: Move JAR to public web folder
       run: |
