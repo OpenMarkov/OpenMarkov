@@ -22,7 +22,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
 import java.awt.Component;
 import java.awt.Window;
@@ -105,6 +104,9 @@ import java.awt.event.ActionListener;
                                                                             .get(selectedRow), null);
         criteriaEdit.executeEdit();
         setDataFromCriteria(probNet.getDecisionCriteria());
+        // The neighbour is selected, as in the list of states
+        int neighbour = Math.min(selectedRow, valuesTable.getRowCount() - 1);
+        valuesTable.setRowSelectionInterval(neighbour, neighbour);
     }
     
     @Override protected void actionPerformedUpValue(ActionEvent e) throws DoEditException {
@@ -125,20 +127,9 @@ import java.awt.event.ActionListener;
         setDataFromCriteria(probNet.getDecisionCriteria());
     }
     
-    /*
-    Fixing issue https://bitbucket.org/cisiad/org.openmarkov.issues/issue/221/button-delete-in-node-properties-parents
-    The remove button was always set to disabled, unless more than two parents were present
-    We need to override the method from KeyTablePanel
-    as in it we are not able to determine in which panel we are located and thus
-    if the button needs to be enabled or not.
-     */
-    @Override public void valueChanged(ListSelectionEvent e) {
-        super.valueChanged(e);
-        
-        // If there are two criteria, one can be deleted
-        if (valuesTable.getRowCount() == 2) {
-            removeValueButton.setEnabled(true);
-        }
+    /** A network keeps at least one criterion. */
+    @Override protected int minimumRowCount() {
+        return 1;
     }
     
     /**

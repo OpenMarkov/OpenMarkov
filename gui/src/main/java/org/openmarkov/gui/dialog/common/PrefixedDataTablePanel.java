@@ -266,6 +266,6 @@ public class PrefixedDataTablePanel extends KeyTablePanel {
             }
         }
         // The button is enabled or disabled accordingly
-        removeValueButton.setEnabled(removeValueButtonEnabled);
+        removeValueButton.setEnabled(removeValueButtonEnabled && valuesTable.getSelectedRow() != -1);
     }
 }

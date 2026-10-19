@@ -218,7 +218,7 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
      * @param e selection event information.
      */
     public void valueChanged(ListSelectionEvent e) {
-        removeValueButton.setEnabled(valuesTable.getRowCount() > 1);
+        removeValueButton.setEnabled(valuesTable.getRowCount() > 1 && valuesTable.getSelectedRow() != -1);
     }
 
 }

@@ -112,7 +112,16 @@ import java.util.stream.Collectors;
         edits.add(networkAgentEdit);
         //StringsWithProperties agents = probNet.getAgents();
         setDataFromAdvancedProperties(probNet.getAgents());
-        valuesTable.setRowSelectionInterval(selectedRow, selectedRow);
+        // The neighbour is selected; there is none when the last agent is removed
+        int neighbour = Math.min(selectedRow, valuesTable.getRowCount() - 1);
+        if (neighbour >= 0) {
+            valuesTable.setRowSelectionInterval(neighbour, neighbour);
+        }
+    }
+
+    /** A network may have no agents, as most have none. */
+    @Override protected int minimumRowCount() {
+        return 0;
     }
     
     

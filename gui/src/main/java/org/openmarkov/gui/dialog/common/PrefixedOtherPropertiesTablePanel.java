@@ -341,7 +341,7 @@ public class PrefixedOtherPropertiesTablePanel extends KeyTablePanel implements 
     @Override public void valueChanged(ListSelectionEvent e) {
         super.valueChanged(e);
         int rowCount = valuesTable.getRowCount();
-        removeValueButton.setEnabled(rowCount >= 1);
+        removeValueButton.setEnabled(rowCount >= 1 && valuesTable.getSelectedRow() != -1);
     }
     
     @Override public void tableChanged(TableModelEvent e) {

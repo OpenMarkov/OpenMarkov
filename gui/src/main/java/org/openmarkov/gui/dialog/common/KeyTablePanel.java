@@ -368,7 +368,10 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
             if (source.equals(addValueButton)) {
                 actionPerformedAddValue(e);
             } else if (source.equals(removeValueButton)) {
-                actionPerformedRemoveValue(e);
+                // Every list removes its selected row; without one there is nothing to remove
+                if (valuesTable.getSelectedRow() != -1) {
+                    actionPerformedRemoveValue(e);
+                }
             } else if (source.equals(upValueButton)) {
                 actionPerformedUpValue(e);
             } else if (source.equals(downValueButton)) {
@@ -439,7 +442,12 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
                 downValueButton.setEnabled(true);
             }
         }
-        removeValueButton.setEnabled(rowCount > 2);
+        removeValueButton.setEnabled(index != -1 && rowCount > minimumRowCount());
+    }
+
+    /** The fewest rows the list may be left with: «Delete» is disabled when it has no more. */
+    protected int minimumRowCount() {
+        return 2;
     }
     
     /**
