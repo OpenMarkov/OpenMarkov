@@ -19,6 +19,7 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.gui.configuration.UserPreference;
+import org.openmarkov.gui.inputTracing.GlobalInputTracker;
 import org.openmarkov.gui.graphic.VisualNode;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.edition.ZoomManager;
@@ -49,6 +50,8 @@ class AModifiedDragFromTheEmptyCanvasMovesNothingTest {
     @BeforeAll static void ignoreTheStoredPreferences() {
         ignoreStorage = UserPreference.IGNORE_STORAGE;
         UserPreference.IGNORE_STORAGE = true;
+        // The program follows the keys from the first event it handles; alone, this test's first key would be lost
+        GlobalInputTracker.getHeldKeyCodes();
     }
 
     @AfterAll static void restoreTheStoredPreferences() {
