@@ -15,8 +15,10 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.learning.core.util.LearningEditProposal;
 import org.openmarkov.learning.metric.Metric;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -136,6 +138,37 @@ public class TreeAugmentedNBAlgorithmTest {
         AddLinkEdit edit = (AddLinkEdit) proposal.getEdit();
         assertNotEquals("Class", edit.getVariableFrom().getName());
         assertNotEquals("Class", edit.getVariableTo().getName());
+    }
+
+    /** Each proposal is the best of those that remain, not the last one found (error 241). */
+    @Test
+    public void theProposalsComeFromTheBestToTheWorst() {
+        TestableTAN tan = createAlgorithm();
+        tan.init(null);
+
+        List<String> edges = new ArrayList<>();
+        List<Double> scores = new ArrayList<>();
+        for (LearningEditProposal proposal = tan.getBestEdit(false, false); proposal != null;
+             proposal = tan.getNextEdit(false, false)) {
+            AddLinkEdit edit = (AddLinkEdit) proposal.getEdit();
+            edges.add(edit.getVariableFrom().getName() + "->" + edit.getVariableTo().getName());
+            scores.add(metric.getScore(edit));
+        }
+
+        assertEquals("F1->F2", edges.getFirst());
+        assertEquals(List.of(10.0, 5.0, 3.0, 0.0, 0.0, 0.0), scores);
+    }
+
+    @Test
+    public void theLinksOfTheTreeComeFromTheBestToTheWorst() {
+        TestableTAN tan = createAlgorithm();
+        tan.init(null);
+
+        AddLinkEdit first = (AddLinkEdit) tan.getBestEdit(true, false).getEdit();
+        AddLinkEdit second = (AddLinkEdit) tan.getNextEdit(true, false).getEdit();
+
+        assertEquals("F1->F2", first.getVariableFrom().getName() + "->" + first.getVariableTo().getName());
+        assertEquals("F1->F3", second.getVariableFrom().getName() + "->" + second.getVariableTo().getName());
     }
 
     // --- Helpers ---

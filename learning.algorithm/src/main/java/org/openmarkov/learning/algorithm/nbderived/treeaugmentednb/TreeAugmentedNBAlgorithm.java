@@ -73,7 +73,7 @@ public class TreeAugmentedNBAlgorithm extends DiscriminativeAlgorithm {
                 AddLinkEdit addLink = new AddLinkEdit(probNet, n1.getVariable(), n2.getVariable(), true);
                 double addScore = metric.getScore(addLink);
 
-                if (!isEditAlreadyConsidered(addLink)
+                if (addScore >= bestPartialScore && !isEditAlreadyConsidered(addLink)
                         && ((!onlyAllowedEdits || isAllowed(addLink) && mwst.contains(n1.getVariable(), n2.getVariable()))
                         && (!onlyPositiveEdits || addScore > 0) && !isBlocked(addLink))
                 ) {
