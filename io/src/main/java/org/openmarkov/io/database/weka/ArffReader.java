@@ -38,6 +38,12 @@ final class ArffReader {
 
     private static final String MISSING = "?";
 
+    /** The characters that Weka writes after a backslash, and those that they stand for, in the same order. */
+    static final String ESCAPED = "\\'\"%tnr";
+    static final String UNESCAPED = "\\'\"%\t\n\r";
+    /** U+001E, the other character that Weka escapes: it writes a backslash, a u and 001E. */
+    static final char RECORD_SEPARATOR = '\u001E';
+
     private final List<String> names = new ArrayList<>();
     private final List<List<String>> states = new ArrayList<>();
     private final List<int[]> cases = new ArrayList<>();
@@ -208,19 +214,24 @@ final class ArffReader {
         throw new ParseException("Line " + lineNumber + ": a quote is not closed", lineNumber);
     }
 
+    /** The text of a quoted field, with the escapes that Weka writes undone, as its Utils.unbackQuoteChars does. */
     private static String unquote(String field) {
         if (field.length() < 2 || (field.charAt(0) != '\'' && field.charAt(0) != '"')
             || field.charAt(field.length() - 1) != field.charAt(0)) {
             return field;
         }
-        char quote = field.charAt(0);
         StringBuilder text = new StringBuilder();
         for (int position = 1; position < field.length() - 1; position++) {
             char character = field.charAt(position);
-            if (character == '\\' && position + 2 < field.length()
-                && (field.charAt(position + 1) == quote || field.charAt(position + 1) == '\\')) {
-                position++;
-                character = field.charAt(position);
+            if (character == '\\' && position + 2 < field.length()) {
+                int escape = ESCAPED.indexOf(field.charAt(position + 1));
+                if (escape >= 0) {
+                    position++;
+                    character = UNESCAPED.charAt(escape);
+                } else if (field.startsWith("u001E", position + 1) && position + 6 < field.length()) {
+                    position += 5;
+                    character = RECORD_SEPARATOR;
+                }
             }
             text.append(character);
         }

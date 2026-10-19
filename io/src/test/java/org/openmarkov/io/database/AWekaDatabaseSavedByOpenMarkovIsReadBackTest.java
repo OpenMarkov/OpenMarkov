@@ -22,6 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A case database saved in the format of Weka is read back with the same variables, states and cases (errors 122
@@ -74,6 +75,18 @@ class AWekaDatabaseSavedByOpenMarkovIsReadBackTest {
                 new int[][]{{0, 1}, {1, 2}, {2, 0}});
 
         assertSame(saved, saveAndRead(saved));
+    }
+
+    /** They are written as Weka writes them, so a line break does not cut the case in two (error 248). */
+    @Test
+    void namesWithTabsLineBreaksAndTheOtherCharactersThatWekaEscapesAreReadBack() throws Exception {
+        CaseDatabase saved = new CaseDatabase(
+                List.of(new Variable("Rate\tin %", "50% \"rate\"", "a\tb", "two\nlines", "carriage\rreturn", "r\u001Es")),
+                new int[][]{{0}, {1}, {2}, {3}, {4}});
+
+        assertSame(saved, saveAndRead(saved));
+        String text = Files.readString(save(saved).toPath(), StandardCharsets.UTF_8);
+        assertTrue(text.contains("{'50\\% \\\"rate\\\"','a\\tb','two\\nlines','carriage\\rreturn','r\\u001Es'}"), text);
     }
 
     @Test

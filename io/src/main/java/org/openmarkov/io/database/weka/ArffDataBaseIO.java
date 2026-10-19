@@ -95,14 +95,26 @@ public class ArffDataBaseIO implements CaseDatabaseReader, CaseDatabaseWriter {
     }
 
     /**
-     * Quotes a name or a value that has a character with a meaning in the format, escaping the quotes and the
-     * backslashes in it, as Weka does.
+     * Quotes a name or a value that has a character with a meaning in the format, escaping with a backslash the
+     * characters that Weka escapes, as its Utils.backQuoteChars does: a line break is not written as such, so it
+     * does not cut the case in two.
      */
     private static String quoted(String text) {
         if (!text.isEmpty() && !text.equals(MISSING) && text.chars().noneMatch(
                 character -> Character.isWhitespace(character) || ",'\"{}%\\".indexOf(character) >= 0)) {
             return text;
         }
-        return "'" + text.replace("\\", "\\\\").replace("'", "\\'") + "'";
+        StringBuilder escaped = new StringBuilder("'");
+        for (char character : text.toCharArray()) {
+            int escape = ArffReader.UNESCAPED.indexOf(character);
+            if (escape >= 0) {
+                escaped.append('\\').append(ArffReader.ESCAPED.charAt(escape));
+            } else if (character == ArffReader.RECORD_SEPARATOR) {
+                escaped.append("\\u001E");
+            } else {
+                escaped.append(character);
+            }
+        }
+        return escaped.append('\'').toString();
     }
 }
