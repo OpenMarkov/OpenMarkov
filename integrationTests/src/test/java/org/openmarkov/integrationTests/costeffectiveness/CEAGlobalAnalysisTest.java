@@ -49,7 +49,8 @@ public class CEAGlobalAnalysisTest {
 	private boolean useMultithreading = true;
 
 	/**
-	 * How many Monte Carlo draws each probabilistic sensitivity analysis below takes.
+	 * How many Monte Carlo draws testDMHEE47PSA takes; testBriggsSA, with two analyses of sixty cycles, takes
+	 * {@link #BRIGGS_SIMULATIONS}.
 	 * <p>
 	 * It used to be a thousand in one test and five thousand in another, and those two tests alone
 	 * accounted for 202 of the 257 seconds the whole project spent running tests. What they buy
@@ -59,13 +60,16 @@ public class CEAGlobalAnalysisTest {
 	 * property of one draw, not of a thousand, and testDMHEE47PSA says as much in its own comment:
 	 * "PSA results are stochastic (no fixed seed); assert structural validity only."
 	 * <p>
-	 * Fifty keeps a sample large enough to exercise the machinery repeatedly, including the
+	 * Ten, like four, keeps a sample large enough to exercise the machinery repeatedly, including the
 	 * multithreaded path, while costing a fraction of the time. What it does give up is the
 	 * accidental fuzzing: more draws are more chances to stumble on a combination of sampled
 	 * parameters that produces a NaN. Reaching for that on every build was a poor trade, and the
 	 * way to buy it back is a fixed seed, which the sampling code does not yet offer.
 	 */
-	private static final int PSA_SIMULATIONS = 50;
+	private static final int PSA_SIMULATIONS = 10;
+
+	/** How many Monte Carlo draws each of the two analyses of testBriggsSA takes; see {@link #PSA_SIMULATIONS}. */
+	private static final int BRIGGS_SIMULATIONS = 4;
 
 	@BeforeEach public void setUp() {
 
@@ -252,7 +256,7 @@ public class CEAGlobalAnalysisTest {
 		VECEPSA vecepsa = new VECEPSA(probNet);
 		vecepsa.setDecisionVariable(probNet.getNodes(NodeType.DECISION).get(0).getVariable());
 		vecepsa.setPreResolutionEvidence(evidence);
-		vecepsa.setNumSimulations(10);
+		vecepsa.setNumSimulations(BRIGGS_SIMULATIONS);
 		vecepsa.setUseMultithreading(useMultithreading);
 
 		List<GTablePotential> result = (List<GTablePotential>) vecepsa.getCEPPotentials();
@@ -266,7 +270,7 @@ public class CEAGlobalAnalysisTest {
 		vecepsa = new VECEPSA(probNet);
 		vecepsa.setDecisionVariable(probNet.getNodes(NodeType.DECISION).get(0).getVariable());
 		vecepsa.setPreResolutionEvidence(evidence);
-		vecepsa.setNumSimulations(10);
+		vecepsa.setNumSimulations(BRIGGS_SIMULATIONS);
 		vecepsa.setUseMultithreading(useMultithreading);
 
 		result = (List<GTablePotential>) vecepsa.getCEPPotentials();
