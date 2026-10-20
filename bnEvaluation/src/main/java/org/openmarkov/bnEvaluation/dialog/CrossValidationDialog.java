@@ -77,13 +77,11 @@ public final class CrossValidationDialog extends OkCancelDialog {
         super(owner);
         this.owner = owner;
         this.setTitle("Cross validation");
-        this.setMinimumSize(new Dimension(400, 750));
         this.setLocationRelativeTo(owner);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         algorithmConfigurationManager = new AlgorithmConfigurationManager((JFrame) this.owner);
         JPanel mainPanel = new JPanel();
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        mainPanel.setPreferredSize(new Dimension(700, 400));
         // add components with a BoxLayout
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
         this.dbOpenerPanel = new DBOpenerPanel(this);
@@ -102,7 +100,6 @@ public final class CrossValidationDialog extends OkCancelDialog {
         this.add(mainPanel);
         setEnableComponents();
         this.pack();
-        setSize(new Dimension(720, 700));
     }
     
     /**

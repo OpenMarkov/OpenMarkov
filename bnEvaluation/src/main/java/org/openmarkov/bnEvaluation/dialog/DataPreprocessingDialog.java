@@ -49,10 +49,10 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
 
         JPanel mainPanel = new JPanel();
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        mainPanel.setPreferredSize(new Dimension(750, 500));
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
         this.dbOpenerPanel = new DBOpenerPanel(this);
+        this.dbOpenerPanel.setAlignmentX(LEFT_ALIGNMENT);
         mainPanel.add(this.dbOpenerPanel);
 
         this.optionsPanel = new PreprocessingOptionsPanel();
@@ -91,7 +91,6 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         setCancelButton(cancelButton);
 
         this.pack();
-        setSize(new Dimension(880, 500));
     }
 
     /**

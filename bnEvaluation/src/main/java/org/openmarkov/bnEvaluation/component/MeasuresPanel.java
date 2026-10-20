@@ -44,7 +44,6 @@ public class MeasuresPanel extends JPanel {
      */
     private JPanel initialize() {
         this.setBorder(BorderFactory.createTitledBorder("Measures"));
-        this.setPreferredSize(new Dimension(840, 220));
         
         // create components
         CMMeasuresCheck = new JCheckBox("Predictive capacity");

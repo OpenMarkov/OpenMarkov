@@ -325,13 +325,13 @@ public final class PreprocessingOptionsPanel extends JPanel {
                                                                                                             org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                                                                                        .add(52, 52, 52)));
 
-        // Two rows so the four global options fit without being cut off on the right.
-        JPanel classAndOutliersRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 2));
-        classAndOutliersRow.add(new JLabel("Class variable (for MDLP / ChiMerge):"));
-        classAndOutliersRow.add(classVariableComboBox);
-        classAndOutliersRow.add(Box.createHorizontalStrut(20));
-        classAndOutliersRow.add(new JLabel("Outliers:"));
-        classAndOutliersRow.add(outliersComboBox);
+        JPanel classVariableRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 2));
+        classVariableRow.add(new JLabel("Class variable (for MDLP / ChiMerge):"));
+        classVariableRow.add(classVariableComboBox);
+
+        JPanel outliersRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 2));
+        outliersRow.add(new JLabel("Outliers:"));
+        outliersRow.add(outliersComboBox);
 
         JPanel featureSelectionRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 2));
         featureSelectionRow.add(new JLabel("Feature selection:"));
@@ -341,9 +341,11 @@ public final class PreprocessingOptionsPanel extends JPanel {
 
         JPanel globalOptionsPanel = new JPanel();
         globalOptionsPanel.setLayout(new BoxLayout(globalOptionsPanel, BoxLayout.PAGE_AXIS));
-        classAndOutliersRow.setAlignmentX(LEFT_ALIGNMENT);
+        classVariableRow.setAlignmentX(LEFT_ALIGNMENT);
+        outliersRow.setAlignmentX(LEFT_ALIGNMENT);
         featureSelectionRow.setAlignmentX(LEFT_ALIGNMENT);
-        globalOptionsPanel.add(classAndOutliersRow);
+        globalOptionsPanel.add(classVariableRow);
+        globalOptionsPanel.add(outliersRow);
         globalOptionsPanel.add(featureSelectionRow);
 
         globalOptionsPanel.setAlignmentX(LEFT_ALIGNMENT);
