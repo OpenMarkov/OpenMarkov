@@ -992,8 +992,9 @@ public class LearningDialog extends JDialog {
             ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         databasePath = null;
         databaseName = null;
+        database = null;
         modelNet = null;
-        generalTabPanel.caseFileTextPane.setText(null);
+        resetCaseDatabaseFile();
         modelNetTabPanel.modelNetTextPane.setText(null);
         modelNetTabPanel.noModelNetRadioButton.setEnabled(true);
         resetVariablePanel();
