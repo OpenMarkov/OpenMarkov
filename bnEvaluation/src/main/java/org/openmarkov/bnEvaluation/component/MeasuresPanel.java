@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 public class MeasuresPanel extends JPanel {
     
     private JCheckBox CMMeasuresCheck;
+    private JLabel clasVariableLabel;
     private JCheckBox showIndProbCheckBox;
     private JComboBox<String> existingVariablesComboBox;
     private JCheckBox logLikelihoodMeasureCheck;
@@ -47,7 +48,7 @@ public class MeasuresPanel extends JPanel {
         
         // create components
         CMMeasuresCheck = new JCheckBox("Predictive capacity");
-        JLabel clasVariableLabel = new JLabel("Classification variable");
+        clasVariableLabel = new JLabel("Classification variable");
         showIndProbCheckBox = new JCheckBox("Show individual probabilities");
         existingVariablesComboBox = new JComboBox<>();
         existingVariablesComboBox.addItem("select variable");
@@ -62,6 +63,7 @@ public class MeasuresPanel extends JPanel {
         
         
         CMMeasuresCheck.addActionListener(e -> CMMeasuresCheckActionPerformed());
+        CMMeasuresCheckActionPerformed();
         scoreMeasuresCheck.addActionListener(e -> this.metricsCheckboxes().forEach(metricCheckboxes -> {
             metricCheckboxes.setSelected(scoreMeasuresCheck.isSelected());
         }));
@@ -133,6 +135,7 @@ public class MeasuresPanel extends JPanel {
      * This method is the listener of CheckBox: CMMeasuresCheck
      */
     private void CMMeasuresCheckActionPerformed() {
+        clasVariableLabel.setEnabled(CMMeasuresCheck.isSelected());
         existingVariablesComboBox.setEnabled(CMMeasuresCheck.isSelected());
         showIndProbCheckBox.setEnabled(CMMeasuresCheck.isSelected());
     }
@@ -246,6 +249,7 @@ public class MeasuresPanel extends JPanel {
         super.setEnabled(enabled);
         if (enabled) {
             this.allMeasureRelatedCheckboxes().forEach(checkbox -> checkbox.setEnabled(true));
+            CMMeasuresCheckActionPerformed();
         } else {
             for (Component component : this.getComponents()) {
                 component.setEnabled(false);
