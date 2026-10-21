@@ -506,7 +506,7 @@ public final class PreprocessingOptionsPanel extends JPanel {
             preprocessOptions.setPreferredSize(new Dimension(225, 18));
             JCheckBox varSelect = new JCheckBox(variable.getName());
             varSelect.setPreferredSize(new Dimension(175, 18));
-            varSelect.setEnabled(false);
+            varSelect.setEnabled(selectedVariablesRadioButton.isSelected());
             boolean select = true;
             varSelect.setSelected(select);
             JComboBox<Discretization.Option> discretizeOptions = new JComboBox<>(new DefaultComboBoxModel<>());
