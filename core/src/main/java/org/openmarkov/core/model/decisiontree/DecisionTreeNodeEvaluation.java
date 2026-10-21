@@ -15,16 +15,14 @@ package org.openmarkov.core.model.decisiontree;
  */
 public class DecisionTreeNodeEvaluation {
 
-	private double prob;
+	private final double prob;
+
+	public DecisionTreeNodeEvaluation(double prob) {
+		this.prob = prob;
+	}
 
 	public double getProb() {
 		return prob;
 	}
-
-	public void setProb(double prob) {
-		this.prob = prob;
-	}
-
-
 
 }

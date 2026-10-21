@@ -1,5 +1,6 @@
 package org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core;
 
+import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.decisiontree.EvaluationType;
@@ -7,8 +8,6 @@ import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.potential.GTablePotential;
-import org.openmarkov.core.model.network.potential.Potential;
 
 /**
  * This class represents a node of the decision tree used in the evaluation of a DAN with CEPs. It extends the class
@@ -41,8 +40,11 @@ public class CEADecisionTreeNode extends DecisionTreeNode<CEP> {
     }
     
     @Override
-    public void setOnlyValueForUtility(Potential tablePotential) {
-        setUtility(DANOperations.getOnlyValuePotentialCEP((GTablePotential) tablePotential));
+    public CEP getUtility() {
+        if (getEvaluation() == null) {
+            return null;
+        }
+        return ((CENodeEvaluation) getEvaluation()).getCep();
     }
 
     @Override

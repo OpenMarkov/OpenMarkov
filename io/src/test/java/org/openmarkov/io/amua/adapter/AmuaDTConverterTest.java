@@ -1,8 +1,10 @@
 package org.openmarkov.io.amua.adapter;
 
 import org.junit.jupiter.api.Test;
+import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.potential.*;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.CEADecisionTreeNode;
@@ -69,7 +71,7 @@ class AmuaDTConverterTest {
         Variable root = net.getVariables().getFirst();
 
         CEADecisionTreeNode treeNode = new CEADecisionTreeNode(root, net);
-        treeNode.setUtility(new CEP.CEPBuilder().build(null, 0.0, 10.0));
+        treeNode.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 0.0, 10.0)));
 
         AmuaDTConverter converter = new AmuaDTConverter(AmuaModel.COST_EFFECTIVENESS_DT);
         AmuaDTCENode amuaNode = (AmuaDTCENode) converter.convertToAmuaTree(treeNode);
@@ -99,7 +101,7 @@ class AmuaDTConverterTest {
         EvaluationDecisionTreeNode root = new EvaluationDecisionTreeNode(D, net);
         EvaluationDecisionTreeNode chanceNode = new EvaluationDecisionTreeNode(C, net);
         EvaluationDecisionTreeNode utilityNode = new EvaluationDecisionTreeNode(U, net);
-        utilityNode.setUtility(10.0);
+        utilityNode.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
 
         root.addChild(branch(net, D, D.getStates()[0], chanceNode));
         chanceNode.addChild(branch(net, C, C.getStates()[0], utilityNode, 0.7));
@@ -253,13 +255,13 @@ class AmuaDTConverterTest {
         EvaluationDecisionTreeNode chanceNo = new EvaluationDecisionTreeNode(C_no, net);
 
         EvaluationDecisionTreeNode u1 = new EvaluationDecisionTreeNode(U1, net);
-        u1.setUtility(8.0);
+        u1.setEvaluation(new UnicritNodeEvaluation(1.0, 8.0));
         EvaluationDecisionTreeNode u2 = new EvaluationDecisionTreeNode(U2, net);
-        u2.setUtility(9.0);
+        u2.setEvaluation(new UnicritNodeEvaluation(1.0, 9.0));
         EvaluationDecisionTreeNode u3 = new EvaluationDecisionTreeNode(U3, net);
-        u3.setUtility(3.0);
+        u3.setEvaluation(new UnicritNodeEvaluation(1.0, 3.0));
         EvaluationDecisionTreeNode u4 = new EvaluationDecisionTreeNode(U4, net);
-        u4.setUtility(10.0);
+        u4.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
 
         decision.addChild(branch(net, D, D.getStates()[0], chanceYes));
         decision.addChild(branch(net, D, D.getStates()[1], chanceNo));
@@ -303,22 +305,22 @@ class AmuaDTConverterTest {
         CEADecisionTreeNode chanceT2 = new CEADecisionTreeNode(C_t2, net);
 
         CEADecisionTreeNode u1 = new CEADecisionTreeNode(U1, net);
-        u1.setUtility(new CEP.CEPBuilder().build(null, 0.0, 10.0));
+        u1.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 0.0, 10.0)));
 
         CEADecisionTreeNode u2 = new CEADecisionTreeNode(U2, net);
-        u2.setUtility(new CEP.CEPBuilder().build(null, 0.0, 1.2));
+        u2.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 0.0, 1.2)));
 
         CEADecisionTreeNode u3 = new CEADecisionTreeNode(U3, net);
-        u3.setUtility(new CEP.CEPBuilder().build(null, 20000.0, 9.9));
+        u3.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 20000.0, 9.9)));
 
         CEADecisionTreeNode u4 = new CEADecisionTreeNode(U4, net);
-        u4.setUtility(new CEP.CEPBuilder().build(null, 20000.0, 4.0));
+        u4.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 20000.0, 4.0)));
 
         CEADecisionTreeNode u5 = new CEADecisionTreeNode(U5, net);
-        u5.setUtility(new CEP.CEPBuilder().build(null, 70000.0, 9.3));
+        u5.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 70000.0, 9.3)));
 
         CEADecisionTreeNode u6 = new CEADecisionTreeNode(U6, net);
-        u6.setUtility(new CEP.CEPBuilder().build(null, 70000.0, 6.5));
+        u6.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 70000.0, 6.5)));
 
         root.addChild(branch(net,D,D.getStates()[0],chanceNo));
         root.addChild(branch(net,D,D.getStates()[1],chanceT1));

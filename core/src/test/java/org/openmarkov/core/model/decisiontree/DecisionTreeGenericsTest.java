@@ -38,7 +38,7 @@ class DecisionTreeGenericsTest {
         DecisionTreeBranch<Double> branch = new DecisionTreeBranch<>(probNet,
                 decision, decision.getStates()[0]);
         StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(chanceNode, probNet);
-        node.setUtility(7.5);
+        node.setEvaluation(new UnicritNodeEvaluation(1.0, 7.5));
         branch.setChild(node);
 
         // Direct typed access; no cast needed.
@@ -47,23 +47,6 @@ class DecisionTreeGenericsTest {
 
         DecisionTreeNode<Double> typedChild = branch.getChild();
         assertSame(node, typedChild);
-    }
-
-    @Test
-    void branchOfStringReturnsStringUtilityWithoutCast() {
-        // A different T proves the generic propagates through both Node and Branch.
-        ProbNet probNet = new ProbNet();
-        Variable variable = new Variable("X", new State[]{new State("a"), new State("b")});
-        Node node = probNet.addNode(variable, NodeType.UTILITY);
-
-        StubDecisionTreeNode<String> stub = new StubDecisionTreeNode<>(node, probNet);
-        stub.setUtility("answer");
-
-        DecisionTreeBranch<String> branch = new DecisionTreeBranch<>(probNet);
-        branch.setChild(stub);
-
-        String utility = branch.getUtility();
-        assertEquals("answer", utility);
     }
 
     @Test

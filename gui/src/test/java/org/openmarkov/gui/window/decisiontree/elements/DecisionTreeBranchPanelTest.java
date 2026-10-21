@@ -8,6 +8,7 @@ package org.openmarkov.gui.window.decisiontree.elements;
 
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
+import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Variable;
@@ -30,7 +31,7 @@ class DecisionTreeBranchPanelTest {
     void aBranchOfAChanceNodeShowsItsStateAndProbabilityButNotTheUtility() {
         Variable disease = new Variable("Disease (X)", "absent", "present");
         EvaluationDecisionTreeNode chance = node(disease, NodeType.CHANCE);
-        chance.setScenarioProbability(1.0);
+        chance.setEvaluation(new UnicritNodeEvaluation(1.0, 9.72));
         DecisionTreeBranch<Double> absent = branch(chance, disease, 0, 0.86, 10.0);
 
         String html = new DecisionTreeBranchPanel(absent).getBranchDescriptiontHTML();
@@ -43,7 +44,7 @@ class DecisionTreeBranchPanelTest {
     void aBranchOfADecisionNodeShowsItsStateAndMarksTheBestOne() {
         Variable therapy = new Variable("Therapy (T)", "no", "yes");
         EvaluationDecisionTreeNode decision = node(therapy, NodeType.DECISION);
-        decision.setScenarioProbability(1.0);
+        decision.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
         DecisionTreeBranch<Double> no = branch(decision, therapy, 0, 1.0, 8.0);
         DecisionTreeBranch<Double> yes = branch(decision, therapy, 1, 1.0, 10.0);
 
@@ -61,7 +62,7 @@ class DecisionTreeBranchPanelTest {
     void theRootBranchShowsNothing() {
         DecisionTreeBranch<Double> root = new DecisionTreeBranch<>(null);
         EvaluationDecisionTreeNode first = node(new Variable("Disease (X)", "absent", "present"), NodeType.CHANCE);
-        first.setUtility(9.72);
+        first.setEvaluation(new UnicritNodeEvaluation(1.0, 9.72));
         root.setChild(first);
 
         String html = new DecisionTreeBranchPanel(root).getBranchDescriptiontHTML();
@@ -80,7 +81,7 @@ class DecisionTreeBranchPanelTest {
         branch.setScenarioProbability(scenarioProbability);
         parent.addChild(branch);
         EvaluationDecisionTreeNode leaf = node(new Variable("Utility"), NodeType.UTILITY);
-        leaf.setUtility(utility);
+        leaf.setEvaluation(new UnicritNodeEvaluation(scenarioProbability, utility));
         branch.setChild(leaf);
         return branch;
     }

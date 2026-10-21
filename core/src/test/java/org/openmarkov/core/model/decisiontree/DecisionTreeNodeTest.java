@@ -120,24 +120,20 @@ class DecisionTreeNodeTest {
     }
 
     @Test
-    void scenarioProbabilityRoundTrip() {
+    void scenarioProbabilityIsTheOneOfTheEvaluation() {
         StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(decisionNode, probNet);
 
         // Default sentinel
         assertEquals(Double.NEGATIVE_INFINITY, node.getScenarioProbability());
 
-        node.setScenarioProbability(0.42);
+        node.setEvaluation(new UnicritNodeEvaluation(0.42, 0.0));
         assertEquals(0.42, node.getScenarioProbability());
     }
 
     @Test
     void copyTransfersStateFromOtherNode() {
         StubDecisionTreeNode<Double> source = new StubDecisionTreeNode<>(decisionNode, probNet);
-        source.setUtility(7.5);
-        source.setScenarioProbability(0.3);
-        UnicritNodeEvaluation evaluation = new UnicritNodeEvaluation();
-        evaluation.setProb(0.3);
-        evaluation.setUtility(7.5);
+        UnicritNodeEvaluation evaluation = new UnicritNodeEvaluation(0.3, 7.5);
         source.setEvaluation(evaluation);
 
         StubDecisionTreeNode<Double> dest = new StubDecisionTreeNode<>(chanceNode, probNet);
@@ -148,8 +144,6 @@ class DecisionTreeNodeTest {
         assertSame(decisionVariable, dest.getVariable());
         assertEquals(NodeType.DECISION, dest.getNodeType());
         assertSame(probNet, dest.getNetwork());
-        // The evaluation is state like any other: a copy that keeps the plain
-        // numbers but drops the evaluation leaves the node contradicting itself.
         assertSame(evaluation, dest.getEvaluation());
     }
 
@@ -215,11 +209,11 @@ class DecisionTreeNodeTest {
     }
 
     @Test
-    void utilityGetterAndSetterRoundTrip() {
+    void utilityIsTheOneOfTheEvaluation() {
         StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(decisionNode, probNet);
 
         assertNull(node.getUtility());
-        node.setUtility(3.14);
+        node.setEvaluation(new UnicritNodeEvaluation(1.0, 3.14));
         assertEquals(3.14, node.getUtility());
     }
 

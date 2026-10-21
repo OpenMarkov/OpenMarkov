@@ -18,16 +18,15 @@ import org.openmarkov.core.model.network.CEP;
  */
 public class CENodeEvaluation extends DecisionTreeNodeEvaluation {
 
-	private CEP cep;
+	private final CEP cep;
+
+	public CENodeEvaluation(double prob, CEP cep) {
+		super(prob);
+		this.cep = cep;
+	}
 
 	public CEP getCep() {
 		return cep;
 	}
-
-	public void setCep(CEP cep) {
-		this.cep = cep;
-	}
-
-
 
 }

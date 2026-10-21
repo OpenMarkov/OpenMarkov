@@ -2,8 +2,10 @@ package org.openmarkov.io.amua.adapter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.CEADecisionTreeNode;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.EvaluationDecisionTreeNode;
@@ -209,7 +211,7 @@ public class AmuaDTValidatorTest {
         Variable v = simpleNet.getVariable(name);
         CEADecisionTreeNode node = new CEADecisionTreeNode(v, simpleNet);
 
-        node.setUtility(new CEP.CEPBuilder().build(null, cost, eff));
+        node.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, cost, eff)));
 
         return node;
     }
@@ -252,7 +254,7 @@ public class AmuaDTValidatorTest {
 
             for (State s : chanceVars[i].getStates()) {
                 EvaluationDecisionTreeNode util = new EvaluationDecisionTreeNode(utilVars[utilIndex++], simpleNet);
-                util.setUtility(2.0);
+                util.setEvaluation(new UnicritNodeEvaluation(1.0, 2.0));
                 DecisionTreeBranch cb = new DecisionTreeBranch(simpleNet, chanceVars[i], s);
                 cb.setChild(util);
                 chance.addChild(cb);

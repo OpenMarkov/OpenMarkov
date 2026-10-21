@@ -7,8 +7,11 @@
 
 package org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core;
 
+import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.DecisionTreeNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
@@ -17,9 +20,11 @@ import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.potential.SumPotential;
+import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.DecisionTreeComputation;
 
 import java.util.ArrayList;
@@ -143,10 +148,20 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
             }
         }
         if (computeDecisionTreeForGUI) {
-            decisionTree.setScenarioProbability(DANOperations.getOnlyValuePotential(this.getProbability()));
-            decisionTree.setOnlyValueForUtility(this.getUtility());
+            decisionTree.setEvaluation(evaluationOfTheTreeNode());
         }
         
+    }
+    
+    /**
+     * The probability and the utility computed for this network, as the evaluation of its node in the tree.
+     */
+    private DecisionTreeNodeEvaluation evaluationOfTheTreeNode() {
+        double probability = DANOperations.getOnlyValuePotential(getProbability());
+        if (isCEAnalysis) {
+            return new CENodeEvaluation(probability, DANOperations.getOnlyValuePotentialCEP((GTablePotential) getUtility()));
+        }
+        return new UnicritNodeEvaluation(probability, DANOperations.getOnlyValuePotential((TablePotential) getUtility()));
     }
     
     

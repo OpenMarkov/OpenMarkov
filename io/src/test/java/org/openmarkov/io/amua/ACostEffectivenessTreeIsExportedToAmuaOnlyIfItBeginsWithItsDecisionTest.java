@@ -9,6 +9,7 @@ package org.openmarkov.io.amua;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.network.CEP;
@@ -78,7 +79,7 @@ class ACostEffectivenessTreeIsExportedToAmuaOnlyIfItBeginsWithItsDecisionTest {
     private CEADecisionTreeNode node(Variable variable, DecisionTreeNode<?> first,
                                      DecisionTreeNode<?> second) {
         CEADecisionTreeNode node = new CEADecisionTreeNode(variable, net);
-        node.setScenarioProbability(1);
+        node.setEvaluation(new CENodeEvaluation(1.0, null));
         State[] states = variable.getStates();
         double probability = net.getNode(variable).getNodeType() == NodeType.DECISION ? 1 : 0.5;
         node.addChild(branch(variable, states[0], probability, first));
@@ -95,7 +96,7 @@ class ACostEffectivenessTreeIsExportedToAmuaOnlyIfItBeginsWithItsDecisionTest {
 
     private CEADecisionTreeNode leaf(double cost, double effectiveness) {
         CEADecisionTreeNode leaf = new CEADecisionTreeNode(utility, net);
-        leaf.setUtility(new CEP.CEPBuilder().build(null, cost, effectiveness));
+        leaf.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, cost, effectiveness)));
         return leaf;
     }
 

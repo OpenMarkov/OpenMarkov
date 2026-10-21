@@ -17,15 +17,16 @@ import org.openmarkov.core.inference.Strategy;
  */
 public class UnicritNodeEvaluation extends DecisionTreeNodeEvaluation {
 
-	private double utility;
+	private final double utility;
 	private Strategy strategy;
+
+	public UnicritNodeEvaluation(double prob, double utility) {
+		super(prob);
+		this.utility = utility;
+	}
 
 	public double getUtility() {
 		return utility;
-	}
-
-	public void setUtility(double utility) {
-		this.utility = utility;
 	}
 
 	public Strategy getStrategy() {

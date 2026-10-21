@@ -11,7 +11,6 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.potential.Potential;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,30 +24,23 @@ import java.util.List;
  */
 public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElement {
 
-	protected double scenarioProbability = Double.NEGATIVE_INFINITY;
 	private Variable variable;
 	protected NodeType nodeType;
 	protected List<DecisionTreeElement> children;
 	private DecisionTreeElement parent = null;
 	private ProbNet network;
+	/** The only place where the probability and the utility of this node are kept. */
 	private DecisionTreeNodeEvaluation evaluation;
 
 	/**
-	 * This is attribute represents what in the past was the utility for
-	 * uni-criteria decision trees, but now it is generalized
-	 * to use the same decision tree structure in the case of cost-effectiveness
-	 * analysis decision trees.
+	 * Returns the utility kept in the evaluation of this node: a number in
+	 * single-criterion trees, a cost-effectiveness partition in cost-effectiveness
+	 * trees.
+	 *
+	 * @return the utility of this node, or {@code null} if the node has not been
+	 *         evaluated yet.
 	 */
-	protected T utility;
-
-	public void setUtility(T utility) {
-		this.utility = utility;
-	}
-
-	public T getUtility() {
-		return utility;
-	}
-
+	public abstract T getUtility();
 
 	/**
 	 * Constructor creating a decision tree node from a network node.
@@ -135,18 +127,15 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 		return (parent != null) ? parent.getBranchStates() : new EvidenceCase();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>It is the probability kept in the evaluation of this node, or
+	 * {@link Double#NEGATIVE_INFINITY} if the node has not been evaluated yet.
+	 */
 	@Override
 	public double getScenarioProbability() {
-		return scenarioProbability;
-	}
-
-	/**
-	 * Sets the probability of the scenario up to this node.
-	 * 
-	 * @param scenarioProbability The accumulated probability.
-	 */
-	public void setScenarioProbability(double scenarioProbability) {
-		this.scenarioProbability = scenarioProbability;
+		return (evaluation == null) ? Double.NEGATIVE_INFINITY : evaluation.getProb();
 	}
 
 	/**
@@ -198,8 +187,6 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 	 * @param node The node to copy from.
 	 */
 	public void copy(DecisionTreeNode<T> node) {
-		utility = node.utility;
-		scenarioProbability = node.scenarioProbability;
 		variable = node.variable;
 		nodeType = node.getNodeType();
 		evaluation = node.evaluation;
@@ -217,13 +204,6 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 	 * @return True if it is the best decision, false otherwise.
 	 */
 	public abstract boolean isBestDecision(DecisionTreeBranch<T> treeBranch);
-
-	/**
-	 * Sets the utility based on a TablePotential.
-	 *
-	 * @param tablePotential The potential containing utility values.
-	 */
-	public abstract void setOnlyValueForUtility(Potential tablePotential);
 
 	/**
 	 * Whether the utility of this tree is a single number or a cost-effectiveness function of the

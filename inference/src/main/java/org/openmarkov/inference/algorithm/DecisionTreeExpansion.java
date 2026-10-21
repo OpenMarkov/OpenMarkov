@@ -469,37 +469,19 @@ public class DecisionTreeExpansion {
 	 * that feeds the parent's merge — is left untouched, so the arithmetic of the
 	 * recursion is unchanged.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("rawtypes")
 	private Expansion attachEvaluation(DecisionTreeNode treeNode, TablePotential probability, Potential utility) {
 		double probabilityValue = DANOperations.getOnlyValuePotential(probability);
-		Potential nodeUtility = utility;
-		DecisionTreeNodeEvaluation evaluation;
 		if (isCEA) {
 			CEP cep = DANOperations.getOnlyValuePotentialCEP((GTablePotential) utility);
-			CEP normalized = normalizeCEP(cep);
-			CENodeEvaluation ceEvaluation = new CENodeEvaluation();
-			ceEvaluation.setCep(normalized);
-			evaluation = ceEvaluation;
-			if (normalized != cep) {
-				// Replace the CEP inside a private copy of the potential, so the node's
-				// stored utility matches the normalized CEP without mutating the
-				// potential that flows up the recursion.
-				GTablePotential copy = (GTablePotential) ((Potential) utility).copy();
-				copy.elementTable.set(0, normalized);
-				nodeUtility = copy;
-			}
+			treeNode.setEvaluation(new CENodeEvaluation(probabilityValue, normalizeCEP(cep)));
 		} else {
-			UnicritNodeEvaluation unicritEvaluation = new UnicritNodeEvaluation();
-			unicritEvaluation.setUtility(DANOperations.getOnlyValuePotential((TablePotential) utility));
 			// The strategy is left unset: variable elimination computes it, but the DAN
 			// layer discards it. Recovering it is what the revised pseudocode asks for
 			// when it says that variableElimination must return a decisionModelEvaluation.
-			evaluation = unicritEvaluation;
+			treeNode.setEvaluation(new UnicritNodeEvaluation(probabilityValue,
+					DANOperations.getOnlyValuePotential((TablePotential) utility)));
 		}
-		evaluation.setProb(probabilityValue);
-		treeNode.setEvaluation(evaluation);
-		treeNode.setScenarioProbability(probabilityValue);
-		treeNode.setOnlyValueForUtility(nodeUtility);
 		return new Expansion(treeNode, probability, utility);
 	}
 

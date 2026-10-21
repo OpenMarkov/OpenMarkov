@@ -4,16 +4,13 @@ import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.decisiontree.EvaluationType;
+import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.potential.Potential;
-import org.openmarkov.core.model.network.potential.TablePotential;
 
 public class EvaluationDecisionTreeNode extends DecisionTreeNode<Double> {
-
-	// protected double utility = Double.NEGATIVE_INFINITY;
 
 	public EvaluationDecisionTreeNode(Node node) {
 		super(node);
@@ -50,8 +47,11 @@ public class EvaluationDecisionTreeNode extends DecisionTreeNode<Double> {
 	}
 
 	@Override
-	public void setOnlyValueForUtility(Potential tablePotential) {
-		this.setUtility(DANOperations.getOnlyValuePotential((TablePotential) tablePotential));
+	public Double getUtility() {
+		if (getEvaluation() == null) {
+			return null;
+		}
+		return ((UnicritNodeEvaluation) getEvaluation()).getUtility();
 	}
 
 	@Override

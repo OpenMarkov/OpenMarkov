@@ -97,7 +97,7 @@ class DecisionTreeBranchTest {
     @Test
     void branchProbabilityZeroWhenParentScenarioIsZero() {
         StubDecisionTreeNode<Double> parent = new StubDecisionTreeNode<>(decisionNode, probNet);
-        parent.setScenarioProbability(0.0);
+        parent.setEvaluation(new UnicritNodeEvaluation(0.0, 0.0));
 
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
         parent.addChild(branch);
@@ -109,7 +109,7 @@ class DecisionTreeBranchTest {
     @Test
     void branchProbabilityIsScenarioRatio() {
         StubDecisionTreeNode<Double> parent = new StubDecisionTreeNode<>(decisionNode, probNet);
-        parent.setScenarioProbability(0.4);
+        parent.setEvaluation(new UnicritNodeEvaluation(0.4, 0.0));
 
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
         parent.addChild(branch);
@@ -195,7 +195,7 @@ class DecisionTreeBranchTest {
     void getUtilityDelegatesToChild() {
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
         StubDecisionTreeNode<Double> child = new StubDecisionTreeNode<>(chanceNode, probNet);
-        child.setUtility(2.5);
+        child.setEvaluation(new UnicritNodeEvaluation(1.0, 2.5));
         branch.setChild(child);
 
         assertEquals(2.5, branch.getUtility());

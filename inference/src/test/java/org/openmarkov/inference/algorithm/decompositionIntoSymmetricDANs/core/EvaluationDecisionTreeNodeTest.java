@@ -9,6 +9,7 @@ package org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
+import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -53,7 +54,7 @@ class EvaluationDecisionTreeNodeTest {
             Variable chance = new Variable("after " + state.getName(), "a", "b");
             Node chanceNode = probNet.addNode(chance, NodeType.CHANCE);
             EvaluationDecisionTreeNode child = new EvaluationDecisionTreeNode(chanceNode, probNet);
-            child.setUtility(utility);
+            child.setEvaluation(new UnicritNodeEvaluation(1.0, utility));
             branch.setChild(child);
         }
         return branch;

@@ -9,7 +9,6 @@ package org.openmarkov.core.model.decisiontree;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.potential.Potential;
 
 /**
  * Minimal concrete subclass of {@link DecisionTreeNode} used only for unit testing.
@@ -34,9 +33,14 @@ final class StubDecisionTreeNode<T> extends DecisionTreeNode<T> {
         return false;
     }
 
+    /** Reads a single-criterion evaluation, the only kind these tests give the stub. */
     @Override
-    public void setOnlyValueForUtility(Potential tablePotential) {
-        // unused in tests
+    @SuppressWarnings("unchecked")
+    public T getUtility() {
+        if (getEvaluation() == null) {
+            return null;
+        }
+        return (T) Double.valueOf(((UnicritNodeEvaluation) getEvaluation()).getUtility());
     }
 
     @Override
