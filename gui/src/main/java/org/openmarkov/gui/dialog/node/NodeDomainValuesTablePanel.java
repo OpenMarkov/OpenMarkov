@@ -182,6 +182,8 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
      */
     private void initialize() {
         if (node.getNodeType() == NodeType.UTILITY) {
+            // What is written here shows the variable, so the listeners must not edit it, as in setFieldsFromProperties
+            setUploadingData(true);
             getJComboBoxNodeVariableType().setSelectedItem(stringDatabase
                                                                    .getString("NodeDomainValuesTablePanel.jComboBoxNodeVariableType." + "Items.Continuous"));
             getDiscretizedStatesPanel().setEnabled(false);
@@ -190,10 +192,12 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
             getJPanelMonotonyUpDown().setVisible(false);
             getJLabelValuesPanel().setEnabled(false);
             getJLabelValuesPanel().setVisible(false);
-            getJFormattedTextFieldPrecision().setValue(node.getVariable().getPrecision());
-            // The dialog does not call setFieldsFromProperties for a utility node, so the box is placed here
+            // The precision is not written in jFormattedTextFieldPrecision, which is not shown: its listener edits
+            // the variable whenever its value changes (error 315). The dialog does not call setFieldsFromProperties
+            // for a utility node, so the box is placed here
             selectPrecision(getJComboBoxPrecision(), node.getVariable().getPrecision());
             // getJFormattedTextFieldUnit().setValue(value);
+            setUploadingData(false);
         }
         setPreferredSize(new Dimension(600, 375));
         GroupLayout groupLayout = new GroupLayout(this);

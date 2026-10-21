@@ -134,6 +134,21 @@ public class NodeDomainValuesTablePanelTest {
 		assertThat(hundredths.getVariable().getPrecision()).isEqualTo(1.0);
 	}
 
+	/** Building the panel of a utility node, as the dialog builds it, edits nothing (error 315). */
+	@Test public void thePanelOfAUtilityNodeEditsNothingWhenItIsBuilt() {
+		for (double precision : new double[]{2, 0.01}) {
+			Node node = utilityNode(precision);
+			ProbNet net = node.getProbNet();
+			net.getPNESupport().setWithUndo(true);
+
+			new NodeDomainValuesTablePanel(node);
+
+			assertThat(net.getPNESupport().getCanUndo()).as("an edit to undo").isFalse();
+			assertThat(net.getPNESupport().networkIsModified()).as("the network is modified").isFalse();
+			assertThat(node.getVariable().getPrecision()).isEqualTo(precision);
+		}
+	}
+
 	/**
 	 * A precision that is not a finite number, which BigDecimal cannot write, is shown as Java writes it, also in the
 	 * tab of a utility node (error 264).
