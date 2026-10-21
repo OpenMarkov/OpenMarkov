@@ -119,6 +119,10 @@ public class CEProbabilisticDialog extends JDialog {
     private JRadioButton relativeRadioButton;
     private JComboBox<State> relativeDecisionSelector;
     private boolean[] selectedStates;
+    /**
+     * The show/hide check boxes of each tab, one per state of the decision
+     */
+    private final List<List<JCheckBox>> showHideCheckBoxSets = new ArrayList<>();
     private ChartPanel ceChartPanel;
     private ChartPanel ceacChartPanel;
     private JPanel cePlanePanel;
@@ -448,6 +452,10 @@ public class CEProbabilisticDialog extends JDialog {
                     for (int stateIndex = 0; stateIndex < decisionVariable.getNumStates(); stateIndex++) {
                         if (decisionVariable.getStateName(stateIndex).equals(checkBox.getText())) {
                             selectedStates[stateIndex] = checkBox.isSelected();
+                            // Both tabs hide the state, so the check box of the other tab must say so
+                            for (List<JCheckBox> checkBoxes : showHideCheckBoxSets) {
+                                checkBoxes.get(stateIndex).setSelected(checkBox.isSelected());
+                            }
                         }
                     }
                     refreshChartPanels();
@@ -458,6 +466,7 @@ public class CEProbabilisticDialog extends JDialog {
             showHideCheckBoxes.add(stateCheckbox);
             showHidePanel.add(stateCheckbox);
         }
+        showHideCheckBoxSets.add(showHideCheckBoxes);
         
         JScrollPane scrollPane = new JScrollPane(showHidePanel);
         scrollPane.setBorder(new EmptyBorder(2, 2, 2, 2));
