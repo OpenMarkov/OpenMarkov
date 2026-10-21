@@ -96,7 +96,7 @@ class DecisionTreeBranchTest {
 
     @Test
     void branchProbabilityZeroWhenParentScenarioIsZero() {
-        StubDecisionTreeNode<Double> parent = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode parent = new DecisionTreeNode(decisionNode, probNet);
         parent.setEvaluation(new UnicritNodeEvaluation(0.0, 0.0));
 
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
@@ -108,7 +108,7 @@ class DecisionTreeBranchTest {
 
     @Test
     void branchProbabilityIsScenarioRatio() {
-        StubDecisionTreeNode<Double> parent = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode parent = new DecisionTreeNode(decisionNode, probNet);
         parent.setEvaluation(new UnicritNodeEvaluation(0.4, 0.0));
 
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
@@ -126,19 +126,6 @@ class DecisionTreeBranchTest {
     }
 
     /**
-     * Same situation, same kind of answer: a branch without a child has no
-     * utility, and says so with null — which its consumers (the formatters, the
-     * best-decision check) already understand — instead of dereferencing the
-     * missing child.
-     */
-    @Test
-    void getUtilityIsNullWhileTheBranchHasNoChild() {
-        DecisionTreeBranch<Double> branch = new DecisionTreeBranch<>(probNet, decisionVariable, yes);
-
-        assertNull(branch.getUtility());
-    }
-
-    /**
      * The two kinds of element answer the same question the same way. Consumers walk
      * the tree through {@link DecisionTreeElement#getChildren()} without knowing which
      * one they hold, so "no children" has to look alike from both.
@@ -146,7 +133,7 @@ class DecisionTreeBranchTest {
     @Test
     void bothKindsOfElementReportNoChildrenTheSameWay() {
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
-        StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(chanceNode, probNet);
+        DecisionTreeNode node = new DecisionTreeNode(chanceNode, probNet);
 
         assertEquals(node.getChildren().isEmpty(), branch.getChildren().isEmpty());
     }
@@ -176,7 +163,7 @@ class DecisionTreeBranchTest {
     @Test
     void setChildLinksBranchAndNode() {
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
-        StubDecisionTreeNode<Double> child = new StubDecisionTreeNode<>(chanceNode, probNet);
+        DecisionTreeNode child = new DecisionTreeNode(chanceNode, probNet);
 
         branch.setChild(child);
 
@@ -189,16 +176,6 @@ class DecisionTreeBranchTest {
         EvidenceCase childEvidence = child.getBranchStates();
         assertEquals(1, childEvidence.getFindings().size());
         assertSame(decisionVariable, childEvidence.getFindings().get(0).getVariable());
-    }
-
-    @Test
-    void getUtilityDelegatesToChild() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
-        StubDecisionTreeNode<Double> child = new StubDecisionTreeNode<>(chanceNode, probNet);
-        child.setEvaluation(new UnicritNodeEvaluation(1.0, 2.5));
-        branch.setChild(child);
-
-        assertEquals(2.5, branch.getUtility());
     }
 
     @Test
@@ -227,10 +204,10 @@ class DecisionTreeBranchTest {
         // be cleared so the next query reflects the new ancestor chain.
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet);
 
-        StubDecisionTreeNode<Double> parentYes = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode parentYes = new DecisionTreeNode(decisionNode, probNet);
         DecisionTreeBranch upstreamYes = new DecisionTreeBranch(probNet, decisionVariable, yes);
         parentYes.addChild(upstreamYes);
-        StubDecisionTreeNode<Double> innerYes = new StubDecisionTreeNode<>(chanceNode, probNet);
+        DecisionTreeNode innerYes = new DecisionTreeNode(chanceNode, probNet);
         upstreamYes.setChild(innerYes);
         innerYes.addChild(branch);
 
@@ -239,10 +216,10 @@ class DecisionTreeBranchTest {
         assertEquals(yes.getName(), first.getFindings().get(0).getState());
 
         // Re-parent the branch under a different decision-state chain.
-        StubDecisionTreeNode<Double> parentNo = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode parentNo = new DecisionTreeNode(decisionNode, probNet);
         DecisionTreeBranch upstreamNo = new DecisionTreeBranch(probNet, decisionVariable, no);
         parentNo.addChild(upstreamNo);
-        StubDecisionTreeNode<Double> innerNo = new StubDecisionTreeNode<>(chanceNode, probNet);
+        DecisionTreeNode innerNo = new DecisionTreeNode(chanceNode, probNet);
         upstreamNo.setChild(innerNo);
         innerNo.addChild(branch);   // triggers branch.setParent(innerNo) → cache invalidation
 

@@ -5,6 +5,8 @@ import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.EvaluationType;
+import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
@@ -13,7 +15,6 @@ import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.DecisionTreeComputation;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANOperations;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.EvaluationDecisionTreeNode;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
 
 import java.io.IOException;
@@ -133,9 +134,9 @@ public class Tools {
     }
     
     
-    public static void testDecisionTreeNode(DecisionTreeNode<Double> treeNode, boolean exploreZeroProbabilityBranches) {
+    public static void testDecisionTreeNode(DecisionTreeNode treeNode, boolean exploreZeroProbabilityBranches) {
         
-        boolean isCEA = !(treeNode.getClass() == EvaluationDecisionTreeNode.class);
+        boolean isCEA = treeNode.getEvaluationType() == EvaluationType.CE;
         double deltaEquals = Math.pow(10, -6);
         if (treeNode.getNodeType().equals(NodeType.CHANCE)) {
             
@@ -151,7 +152,7 @@ public class Tools {
                 
                 totalProbability += branchProbability;
                 if (!isCEA) {
-                    weightedUtility += branchProbability * (double) branch.getUtility();
+                    weightedUtility += branchProbability * utility(branch.getChild());
                 }
                 
                 // Recursive call
@@ -168,14 +169,14 @@ public class Tools {
             // Test that the utility assigned to a chance node is the weighted sum of the
             // utility of its configurations
             if (!isCEA) {
-                Assertions.assertEquals(treeNode.getUtility(), weightedUtility, deltaEquals);
+                Assertions.assertEquals(utility(treeNode), weightedUtility, deltaEquals);
             }
             
         } else if (treeNode.getNodeType().equals(NodeType.DECISION) && !isCEA) {
             double maxUtility = Double.NEGATIVE_INFINITY;
             for (DecisionTreeElement childElement : treeNode.getChildren()) {
                 DecisionTreeBranch branch = (DecisionTreeBranch) childElement;
-                double auxUtility = (double) branch.getUtility();
+                double auxUtility = utility(branch.getChild());
                 if (auxUtility > maxUtility) {
                     maxUtility = auxUtility;
                 }
@@ -187,8 +188,12 @@ public class Tools {
             
             // Test that the utility assigned to a chance node is the max value of the
             // utility of its configurations
-            Assertions.assertEquals(maxUtility, treeNode.getUtility(), deltaEquals);
+            Assertions.assertEquals(maxUtility, utility(treeNode), deltaEquals);
         }
+    }
+
+    private static double utility(DecisionTreeNode treeNode) {
+        return ((UnicritNodeEvaluation) treeNode.getEvaluation()).getUtility();
     }
     
     

@@ -14,9 +14,6 @@ import java.text.DecimalFormat;
  * Formatter for cost-effectiveness analysis decision trees. For a single
  * interval prints {@code " Cost=X / Effectiveness=Y"}; for multiple intervals
  * prints each one with its willingness-to-pay threshold range.
- *
- * <p>Extracted from {@code CEADecisionTreeNode#formatUtility} as part of
- * Phase 3 of the decisiontree refactor (separating model from presentation).
  */
 public final class CEPUtilityFormatter implements DecisionTreeUtilityFormatter<CEP> {
 

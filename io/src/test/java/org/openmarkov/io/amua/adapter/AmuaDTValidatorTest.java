@@ -7,8 +7,6 @@ import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 import org.openmarkov.core.model.network.*;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.CEADecisionTreeNode;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.EvaluationDecisionTreeNode;
 import org.openmarkov.io.amua.adatper.AmuaDTValidator;
 import org.openmarkov.io.amua.model.*;
 
@@ -20,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AmuaDTValidatorTest {
 
     private ProbNet simpleNet;
-    private CEADecisionTreeNode ceaRoot;
-    private EvaluationDecisionTreeNode unicriteriaRoot;
+    private DecisionTreeNode ceaRoot;
+    private DecisionTreeNode unicriteriaRoot;
 
     @BeforeEach
     void setUp() {
@@ -93,9 +91,10 @@ public class AmuaDTValidatorTest {
         Variable D2 = new Variable("SecondDecision", 2);
         simpleNet.addNode(D2, NodeType.DECISION);
 
-        CEADecisionTreeNode secondDecisionNode = new CEADecisionTreeNode(D2, simpleNet);
+        DecisionTreeNode secondDecisionNode = new DecisionTreeNode(D2, simpleNet);
+        secondDecisionNode.setEvaluation(new CENodeEvaluation(1.0, null));
         DecisionTreeBranch firstBranch = (DecisionTreeBranch) ceaRoot.getChildren().get(0);
-        CEADecisionTreeNode firstChanceNode = (CEADecisionTreeNode) firstBranch.getChild();
+        DecisionTreeNode firstChanceNode = firstBranch.getChild();
         DecisionTreeBranch newBranch = new DecisionTreeBranch(simpleNet, D2, D2.getStates()[0]);
 
         newBranch.setChild(secondDecisionNode);
@@ -114,7 +113,8 @@ public class AmuaDTValidatorTest {
         Variable wrongVar = new Variable("WrongNode");
         simpleNet.addNode(wrongVar, NodeType.CHANCE);
 
-        EvaluationDecisionTreeNode wrongChild = new EvaluationDecisionTreeNode(wrongVar, simpleNet);
+        DecisionTreeNode wrongChild = new DecisionTreeNode(wrongVar, simpleNet);
+        wrongChild.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
         firstBranch.setChild(wrongChild);
 
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> validator.determineAmuaDTType(ceaRoot));
@@ -144,7 +144,8 @@ public class AmuaDTValidatorTest {
         Variable wrongVar = new Variable("WrongNode");
         simpleNet.addNode(wrongVar, NodeType.CHANCE);
 
-        CEADecisionTreeNode wrongChild = new CEADecisionTreeNode(wrongVar, simpleNet);
+        DecisionTreeNode wrongChild = new DecisionTreeNode(wrongVar, simpleNet);
+        wrongChild.setEvaluation(new CENodeEvaluation(1.0, null));
         firstBranch.setChild(wrongChild);
 
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> validator.determineAmuaDTType(unicriteriaRoot));
@@ -180,18 +181,22 @@ public class AmuaDTValidatorTest {
         return net;
     }
 
-    private CEADecisionTreeNode createCEATree() {
+    private DecisionTreeNode createCEATree() {
 
         Variable D = simpleNet.getVariable("Decision");
         Variable C_no = simpleNet.getVariable("C_no");
         Variable C_t1 = simpleNet.getVariable("C_t1");
         Variable C_t2 = simpleNet.getVariable("C_t2");
 
-        CEADecisionTreeNode root = new CEADecisionTreeNode(D, simpleNet);
+        DecisionTreeNode root = new DecisionTreeNode(D, simpleNet);
+        root.setEvaluation(new CENodeEvaluation(1.0, null));
 
-        CEADecisionTreeNode chanceNo = new CEADecisionTreeNode(C_no, simpleNet);
-        CEADecisionTreeNode chanceT1 = new CEADecisionTreeNode(C_t1, simpleNet);
-        CEADecisionTreeNode chanceT2 = new CEADecisionTreeNode(C_t2, simpleNet);
+        DecisionTreeNode chanceNo = new DecisionTreeNode(C_no, simpleNet);
+        chanceNo.setEvaluation(new CENodeEvaluation(1.0, null));
+        DecisionTreeNode chanceT1 = new DecisionTreeNode(C_t1, simpleNet);
+        chanceT1.setEvaluation(new CENodeEvaluation(1.0, null));
+        DecisionTreeNode chanceT2 = new DecisionTreeNode(C_t2, simpleNet);
+        chanceT2.setEvaluation(new CENodeEvaluation(1.0, null));
 
         root.addChild(branch(D, D.getStates()[0], chanceNo));
         root.addChild(branch(D, D.getStates()[1], chanceT1));
@@ -207,26 +212,27 @@ public class AmuaDTValidatorTest {
         return root;
     }
 
-    private CEADecisionTreeNode utilityNode(String name, double cost, double eff) {
+    private DecisionTreeNode utilityNode(String name, double cost, double eff) {
         Variable v = simpleNet.getVariable(name);
-        CEADecisionTreeNode node = new CEADecisionTreeNode(v, simpleNet);
+        DecisionTreeNode node = new DecisionTreeNode(v, simpleNet);
 
         node.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, cost, eff)));
 
         return node;
     }
 
-    private DecisionTreeBranch branch(Variable var, State state, DecisionTreeNode<?> child) {
+    private DecisionTreeBranch branch(Variable var, State state, DecisionTreeNode child) {
         DecisionTreeBranch b = new DecisionTreeBranch(simpleNet, var, state);
         b.setChild(child);
 
         return b;
     }
 
-    private EvaluationDecisionTreeNode createUnicriteriaTree() {
+    private DecisionTreeNode createUnicriteriaTree() {
         Variable decision = simpleNet.getVariable("Decision");
 
-        EvaluationDecisionTreeNode root = new EvaluationDecisionTreeNode(simpleNet.getNode("Decision"));
+        DecisionTreeNode root = new DecisionTreeNode(simpleNet.getNode("Decision"));
+        root.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
 
         Variable[] chanceVars = {
             simpleNet.getVariable("C_no"),
@@ -246,14 +252,15 @@ public class AmuaDTValidatorTest {
         int utilIndex = 0;
 
         for (int i = 0; i < chanceVars.length; i++) {
-            EvaluationDecisionTreeNode chance = new EvaluationDecisionTreeNode(chanceVars[i], simpleNet);
+            DecisionTreeNode chance = new DecisionTreeNode(chanceVars[i], simpleNet);
+            chance.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
             DecisionTreeBranch b = new DecisionTreeBranch(simpleNet, decision, decision.getStates()[i]);
 
             b.setChild(chance);
             root.addChild(b);
 
             for (State s : chanceVars[i].getStates()) {
-                EvaluationDecisionTreeNode util = new EvaluationDecisionTreeNode(utilVars[utilIndex++], simpleNet);
+                DecisionTreeNode util = new DecisionTreeNode(utilVars[utilIndex++], simpleNet);
                 util.setEvaluation(new UnicritNodeEvaluation(1.0, 2.0));
                 DecisionTreeBranch cb = new DecisionTreeBranch(simpleNet, chanceVars[i], s);
                 cb.setChild(util);

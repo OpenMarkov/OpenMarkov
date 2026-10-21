@@ -19,7 +19,6 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.testTags.TestSpeed;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.CEADecisionTreeNode;
 
 import java.util.List;
 
@@ -62,23 +61,23 @@ class ACostEffectivenessTreeIsExportedToAmuaOnlyIfItBeginsWithItsDecisionTest {
     }
 
     /** «Therapy»: «none» costs 0 and gives 5; «drug» costs 1000 and gives 8. */
-    private CEADecisionTreeNode therapyNode() {
+    private DecisionTreeNode therapyNode() {
         return node(therapy, leaf(0, 5), leaf(1000, 8));
     }
 
     /** «Test»: «negative» ends in a leaf; «positive» leads to {@code positive}. */
-    private CEADecisionTreeNode testNode(DecisionTreeNode<?> positive) {
+    private DecisionTreeNode testNode(DecisionTreeNode positive) {
         return node(test, leaf(0, 9), positive);
     }
 
     /** «Symptom»: «no» ends in a leaf; «yes» leads to «Test», with «Therapy» under «positive». */
-    private CEADecisionTreeNode symptomNode() {
+    private DecisionTreeNode symptomNode() {
         return node(symptom, leaf(0, 9), testNode(therapyNode()));
     }
 
-    private CEADecisionTreeNode node(Variable variable, DecisionTreeNode<?> first,
-                                     DecisionTreeNode<?> second) {
-        CEADecisionTreeNode node = new CEADecisionTreeNode(variable, net);
+    private DecisionTreeNode node(Variable variable, DecisionTreeNode first,
+                                     DecisionTreeNode second) {
+        DecisionTreeNode node = new DecisionTreeNode(variable, net);
         node.setEvaluation(new CENodeEvaluation(1.0, null));
         State[] states = variable.getStates();
         double probability = net.getNode(variable).getNodeType() == NodeType.DECISION ? 1 : 0.5;
@@ -87,21 +86,21 @@ class ACostEffectivenessTreeIsExportedToAmuaOnlyIfItBeginsWithItsDecisionTest {
         return node;
     }
 
-    private DecisionTreeBranch branch(Variable variable, State state, double probability, DecisionTreeNode<?> child) {
+    private DecisionTreeBranch branch(Variable variable, State state, double probability, DecisionTreeNode child) {
         DecisionTreeBranch branch = new DecisionTreeBranch(net, variable, state);
         branch.setScenarioProbability(probability);
         branch.setChild(child);
         return branch;
     }
 
-    private CEADecisionTreeNode leaf(double cost, double effectiveness) {
-        CEADecisionTreeNode leaf = new CEADecisionTreeNode(utility, net);
+    private DecisionTreeNode leaf(double cost, double effectiveness) {
+        DecisionTreeNode leaf = new DecisionTreeNode(utility, net);
         leaf.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, cost, effectiveness)));
         return leaf;
     }
 
     /** Returns the message shown to the user, or fails if the tree is accepted. */
-    private static String refusal(DecisionTreeNode<?> root) {
+    private static String refusal(DecisionTreeNode root) {
         AmuaExporter exporter = new AmuaExporter(root);
         assertFalse(exporter.isValidDTForAmua(), "The tree should not be exported to Amua");
         return exporter.getValidationErrorMessage();

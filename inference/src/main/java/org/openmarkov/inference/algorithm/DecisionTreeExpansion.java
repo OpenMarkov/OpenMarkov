@@ -35,7 +35,6 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANConditionalSymmetricInference;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANDecisionTreeInference;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANOperations;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.FactoryDecisionTree;
 import org.openmarkov.inference.algorithm.variableElimination.ChanceVariableElimination;
 import org.openmarkov.inference.algorithm.variableElimination.DecisionVariableElimination;
 
@@ -122,7 +121,6 @@ public class DecisionTreeExpansion {
 	 * evaluated, together with the probability and the utility of every child in
 	 * the same order. Merging the branches consumes the latter two.
 	 */
-	@SuppressWarnings("rawtypes")
 	private record Branches(List<DecisionTreeBranch> branches, List<TablePotential> probabilities,
 			List<Potential> utilities) {
 	}
@@ -297,7 +295,6 @@ public class DecisionTreeExpansion {
 	 * @param childDepth how many levels the children may still be expanded.
 	 * @return one branch per state, with the probability and the utility of each child.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Branches expandForNode(ProbNet probNet, EvidenceCase evidence, Node node, int childDepth)
 			throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException,
 			PotentialOperationException.DifferentSizesInPotentialsAndStates {
@@ -322,7 +319,6 @@ public class DecisionTreeExpansion {
 	 * variable is a dummy one whose states are the names of the candidate
 	 * decisions.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Branches prioritizeDecisions(ProbNet probNet, EvidenceCase evidence, List<Node> nextDecisions,
 			Variable orderVariable, int childDepth)
 			throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException,
@@ -348,7 +344,6 @@ public class DecisionTreeExpansion {
 	 * branches will need. The branch keeps the probability of its scenario, which
 	 * is the one of its child: reaching the child is reaching the branch.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static void addBranch(Branches branches, DecisionTreeBranch branch, Expansion child) {
 		branch.setChild(child.node());
 		branch.setScenarioProbability(child.node().getScenarioProbability());
@@ -431,10 +426,9 @@ public class DecisionTreeExpansion {
 	 * Builds a leaf of the tree, hanging from the super-value node of the model
 	 * and carrying an already computed probability and utility.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Expansion leaf(ProbNet probNet, TablePotential probability, Potential utility) {
 		Node superValueNode = DANDecisionTreeInference.getSuperValueNode(probNet, isCEA);
-		DecisionTreeNode treeNode = FactoryDecisionTree.createInstanceDecisionTreeNode(isCEA, superValueNode, probNet);
+		DecisionTreeNode treeNode = new DecisionTreeNode(superValueNode, probNet);
 		return attachEvaluation(treeNode, probability, utility);
 	}
 
@@ -447,10 +441,9 @@ public class DecisionTreeExpansion {
 	 * node is created last, as the pseudocode has it: it is the merged
 	 * evaluation, and not the other way round, that the recursion is after.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Expansion node(ProbNet probNet, Node node, Branches branches, TablePotential probability,
 			Potential utility) {
-		DecisionTreeNode treeNode = FactoryDecisionTree.createInstanceDecisionTreeNode(isCEA, node, probNet);
+		DecisionTreeNode treeNode = new DecisionTreeNode(node, probNet);
 		Expansion expansion = attachEvaluation(treeNode, probability, utility);
 		for (DecisionTreeBranch branch : branches.branches()) {
 			treeNode.addChild(branch);
@@ -469,7 +462,6 @@ public class DecisionTreeExpansion {
 	 * that feeds the parent's merge — is left untouched, so the arithmetic of the
 	 * recursion is unchanged.
 	 */
-	@SuppressWarnings("rawtypes")
 	private Expansion attachEvaluation(DecisionTreeNode treeNode, TablePotential probability, Potential utility) {
 		double probabilityValue = DANOperations.getOnlyValuePotential(probability);
 		if (isCEA) {

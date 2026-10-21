@@ -54,7 +54,7 @@ class DecisionTreeManagerImplTest {
         assertNotNull(root);
         assertInstanceOf(DecisionTreeBranch.class, root);
 
-        DecisionTreeNode<?> firstRealNode = ((DecisionTreeBranch) root).getChild();
+        DecisionTreeNode firstRealNode = ((DecisionTreeBranch) root).getChild();
         assertNotNull(firstRealNode);
         // The first real node in a simple ID is a chance or decision; never utility.
         assertFalse(firstRealNode.getNodeType() == NodeType.UTILITY);
@@ -179,7 +179,7 @@ class DecisionTreeManagerImplTest {
               .append("=")
               .append(branch.getBranchState() == null ? "*" : branch.getBranchState().getName())
               .append("]\n");
-        } else if (element instanceof DecisionTreeNode<?> node) {
+        } else if (element instanceof DecisionTreeNode node) {
             sb.append("Node[")
               .append(node.getNodeType())
               .append(":")

@@ -209,7 +209,7 @@ public class TreeNodeToDot {
      * node whose utility was not set.
      */
     private String formatUtility(DecisionTreeNode treeNode) {
-        return DecisionTreeUtilityFormatters.format(treeNode.getUtility(), df, false);
+        return DecisionTreeUtilityFormatters.format(treeNode.getEvaluation(), df, false);
     }
 
     /**

@@ -79,7 +79,7 @@ public non-sealed class DecisionTreeNodePanel extends DecisionTreeElementPanel {
      */
     @Override
     public void update(boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-        this.descriptionLabel.setText(DecisionTreeUtilityFormatters.format(this.treeNode.getUtility(), this.df, false));
+        this.descriptionLabel.setText(DecisionTreeUtilityFormatters.format(this.treeNode.getEvaluation(), this.df, false));
     }
     
     /**

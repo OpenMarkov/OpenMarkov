@@ -7,6 +7,8 @@
 package org.openmarkov.gui.window.decisiontree.format;
 
 import org.junit.jupiter.api.Test;
+import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
+import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 import org.openmarkov.core.model.network.CEP;
 
 import java.text.DecimalFormat;
@@ -14,7 +16,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DecisionTreeUtilityFormattersTest {
 
@@ -22,26 +23,25 @@ class DecisionTreeUtilityFormattersTest {
             new DecimalFormat("0.0000", new DecimalFormatSymbols(Locale.US));
 
     @Test
-    void dispatchesDoubleToDoubleFormatter() {
-        String out = DecisionTreeUtilityFormatters.format(7.5, DF, false);
+    void dispatchesASingleCriterionEvaluationToDoubleFormatter() {
+        String out = DecisionTreeUtilityFormatters.format(new UnicritNodeEvaluation(1.0, 7.5), DF, false);
         assertEquals(" U=7.5000", out);
     }
 
     @Test
-    void dispatchesCEPToCepFormatter() {
+    void dispatchesACostEffectivenessEvaluationToCepFormatter() {
         CEP zero = CEP.getZeroPartition();
-        String out = DecisionTreeUtilityFormatters.format(zero, DF, false);
+        String out = DecisionTreeUtilityFormatters.format(new CENodeEvaluation(1.0, zero), DF, false);
         assertEquals(" ", out);
     }
 
     @Test
-    void nullUtilityProducesEmptyString() {
+    void aNodeNotYetEvaluatedProducesEmptyString() {
         assertEquals("", DecisionTreeUtilityFormatters.format(null, DF, false));
     }
 
     @Test
-    void unsupportedTypeThrows() {
-        assertThrows(IllegalArgumentException.class,
-                () -> DecisionTreeUtilityFormatters.format("not-a-utility", DF, false));
+    void aCostEffectivenessEvaluationWithoutPartitionProducesEmptyString() {
+        assertEquals("", DecisionTreeUtilityFormatters.format(new CENodeEvaluation(1.0, null), DF, false));
     }
 }

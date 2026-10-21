@@ -16,31 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract base class for nodes in a decision tree.
+ * A node of a decision tree.
  * Nodes can be of type CHANCE, DECISION, or UTILITY.
- * 
- * @param <T> The type of utility associated with this node (e.g., Double,
- *            CostEffectiveness).
  */
-public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElement {
+public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 
 	private Variable variable;
-	protected NodeType nodeType;
-	protected List<DecisionTreeElement> children;
+	private NodeType nodeType;
+	private List<DecisionTreeElement> children;
 	private DecisionTreeElement parent = null;
 	private ProbNet network;
 	/** The only place where the probability and the utility of this node are kept. */
 	private DecisionTreeNodeEvaluation evaluation;
-
-	/**
-	 * Returns the utility kept in the evaluation of this node: a number in
-	 * single-criterion trees, a cost-effectiveness partition in cost-effectiveness
-	 * trees.
-	 *
-	 * @return the utility of this node, or {@code null} if the node has not been
-	 *         evaluated yet.
-	 */
-	public abstract T getUtility();
 
 	/**
 	 * Constructor creating a decision tree node from a network node.
@@ -186,7 +173,7 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 	 *
 	 * @param node The node to copy from.
 	 */
-	public void copy(DecisionTreeNode<T> node) {
+	public void copy(DecisionTreeNode node) {
 		variable = node.variable;
 		nodeType = node.getNodeType();
 		evaluation = node.evaluation;
@@ -198,17 +185,44 @@ public abstract non-sealed class DecisionTreeNode<T> implements DecisionTreeElem
 	}
 
 	/**
-	 * Checks if a specific branch represents the best decision from this node.
+	 * Checks if a specific branch represents the best decision from this node: in
+	 * a decision node, the branch whose child has the highest utility. In
+	 * cost-effectiveness analysis there is no single best decision, because the
+	 * optimal choice depends on the willingness-to-pay threshold. A branch whose
+	 * child has not been evaluated yet is not the best one either, and the other
+	 * branches are compared without it: the interface asks while painting, and a
+	 * half-built tree has such branches.
 	 *
 	 * @param treeBranch The branch to check.
 	 * @return True if it is the best decision, false otherwise.
 	 */
-	public abstract boolean isBestDecision(DecisionTreeBranch<T> treeBranch);
+	public boolean isBestDecision(DecisionTreeBranch treeBranch) {
+		if (nodeType != NodeType.DECISION
+				|| !(evaluationOfTheChild(treeBranch) instanceof UnicritNodeEvaluation candidate)) {
+			return false;
+		}
+		for (DecisionTreeElement otherBranch : children) {
+			if (evaluationOfTheChild((DecisionTreeBranch) otherBranch) instanceof UnicritNodeEvaluation other
+					&& !(candidate.getUtility() >= other.getUtility())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static DecisionTreeNodeEvaluation evaluationOfTheChild(DecisionTreeBranch branch) {
+		DecisionTreeNode child = branch.getChild();
+		return (child == null) ? null : child.getEvaluation();
+	}
 
 	/**
-	 * Whether the utility of this tree is a single number or a cost-effectiveness function of the
-	 * willingness to pay.
+	 * Whether the utility of this node is a single number or a cost-effectiveness function of the
+	 * willingness to pay, as its evaluation says.
+	 *
+	 * @return the kind of evaluation, or {@code null} if the node has not been evaluated yet.
 	 */
-	public abstract EvaluationType getEvaluationType();
+	public EvaluationType getEvaluationType() {
+		return (evaluation == null) ? null : evaluation.getEvaluationType();
+	}
 
 }

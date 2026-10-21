@@ -16,7 +16,7 @@ import org.openmarkov.core.model.network.CEP;
  *
  * @author Manuel Arias
  */
-public class CENodeEvaluation extends DecisionTreeNodeEvaluation {
+public final class CENodeEvaluation extends DecisionTreeNodeEvaluation {
 
 	private final CEP cep;
 
@@ -27,6 +27,11 @@ public class CENodeEvaluation extends DecisionTreeNodeEvaluation {
 
 	public CEP getCep() {
 		return cep;
+	}
+
+	@Override
+	public EvaluationType getEvaluationType() {
+		return EvaluationType.CE;
 	}
 
 }

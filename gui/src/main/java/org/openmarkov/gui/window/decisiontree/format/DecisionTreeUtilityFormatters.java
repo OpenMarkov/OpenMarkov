@@ -6,16 +6,17 @@
  */
 package org.openmarkov.gui.window.decisiontree.format;
 
-import org.openmarkov.core.model.network.CEP;
+import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
+import org.openmarkov.core.model.decisiontree.DecisionTreeNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 
 import java.text.DecimalFormat;
 
 /**
- * Single entry point for formatting the utility carried by a decision-tree
- * node when its concrete type is not statically known (e.g. inside generic
- * GUI panels).
+ * Single entry point for formatting the utility carried by the evaluation of a
+ * decision-tree node.
  *
- * <p>Dispatches by runtime type to {@link DoubleUtilityFormatter} or
+ * <p>Dispatches by the kind of evaluation to {@link DoubleUtilityFormatter} or
  * {@link CEPUtilityFormatter}; future analysis types only need to register a
  * new formatter here.
  */
@@ -25,22 +26,17 @@ public final class DecisionTreeUtilityFormatters {
     }
 
     /**
-     * Formats the given utility value, choosing the right formatter by
-     * runtime type. Returns an empty string when the utility is {@code null}.
-     *
-     * @throws IllegalArgumentException if the utility type is not supported.
+     * Formats the utility of the given evaluation, choosing the right formatter
+     * by the kind of evaluation. Returns an empty string when the node has not
+     * been evaluated yet or its evaluation carries no utility.
      */
-    public static String format(Object utility, DecimalFormat df, boolean addSlashPrefix) {
-        if (utility == null) {
-            return "";
-        }
-        if (utility instanceof Double d) {
-            return DoubleUtilityFormatter.INSTANCE.format(d, df, addSlashPrefix);
-        }
-        if (utility instanceof CEP cep) {
-            return CEPUtilityFormatter.INSTANCE.format(cep, df, addSlashPrefix);
-        }
-        throw new IllegalArgumentException(
-                "No DecisionTreeUtilityFormatter registered for type: " + utility.getClass());
+    public static String format(DecisionTreeNodeEvaluation evaluation, DecimalFormat df, boolean addSlashPrefix) {
+        return switch (evaluation) {
+            case null -> "";
+            case UnicritNodeEvaluation unicrit ->
+                    DoubleUtilityFormatter.INSTANCE.format(unicrit.getUtility(), df, addSlashPrefix);
+            case CENodeEvaluation ce ->
+                    (ce.getCep() == null) ? "" : CEPUtilityFormatter.INSTANCE.format(ce.getCep(), df, addSlashPrefix);
+        };
     }
 }

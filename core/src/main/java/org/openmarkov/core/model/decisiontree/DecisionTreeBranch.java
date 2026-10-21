@@ -20,17 +20,14 @@ import java.util.List;
  * Represents a branch in the decision tree, connecting a parent node to a child
  * node.
  * A branch is typically associated with a specific state of a variable.
- *
- * @param <T> The utility type carried by the surrounding tree (e.g. {@code Double}
- *            for plain expected-utility evaluation, {@code CEP} for cost-effectiveness).
  */
-public non-sealed class DecisionTreeBranch<T> implements DecisionTreeElement {
+public non-sealed class DecisionTreeBranch implements DecisionTreeElement {
 
 	protected double scenarioProbability = Double.NEGATIVE_INFINITY;
 	private final Variable branchVariable;
 	private final State branchState;
-	private DecisionTreeNode<T> parent;
-	private DecisionTreeNode<T> child;
+	private DecisionTreeNode parent;
+	private DecisionTreeNode child;
 	private final ProbNet probNet;
 	private EvidenceCase scenarioEvidence = null;
 
@@ -134,7 +131,7 @@ public non-sealed class DecisionTreeBranch<T> implements DecisionTreeElement {
 	 *
 	 * @return The child DecisionTreeNode.
 	 */
-	public DecisionTreeNode<T> getChild() {
+	public DecisionTreeNode getChild() {
 		return child;
 	}
 
@@ -143,7 +140,7 @@ public non-sealed class DecisionTreeBranch<T> implements DecisionTreeElement {
 	 *
 	 * @param child the child to set.
 	 */
-	public void setChild(DecisionTreeNode<T> child) {
+	public void setChild(DecisionTreeNode child) {
 		this.child = child;
 		child.setParent(this);
 	}
@@ -162,29 +159,15 @@ public non-sealed class DecisionTreeBranch<T> implements DecisionTreeElement {
 	 *
 	 * @return The parent DecisionTreeNode.
 	 */
-	public DecisionTreeNode<T> getParent() {
+	public DecisionTreeNode getParent() {
 		return parent;
 	}
 
 	@Override
 	public void setParent(DecisionTreeElement parent) {
-		@SuppressWarnings("unchecked")
-		DecisionTreeNode<T> typedParent = (DecisionTreeNode<T>) parent;
-		this.parent = typedParent;
+		this.parent = (DecisionTreeNode) parent;
 		// Invalidate the lazily-computed evidence cache: the path to the root has changed.
 		this.scenarioEvidence = null;
-	}
-
-	/**
-	 * Returns the utility of the child node, or {@code null} while the branch has
-	 * no child yet — a half-built tree has such branches, and "no utility yet" is
-	 * an answer its consumers already understand, where dereferencing the missing
-	 * child was a {@code NullPointerException} away from the cause.
-	 *
-	 * @return The utility value, or {@code null} if the branch has no child.
-	 */
-	public T getUtility() {
-		return (child == null) ? null : child.getUtility();
 	}
 
 }

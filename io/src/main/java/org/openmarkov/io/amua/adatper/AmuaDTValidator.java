@@ -18,7 +18,7 @@ public class AmuaDTValidator {
 
     private final List<Criterion> criteria;
     private int decisionNodeCount = 0;
-    private DecisionTreeNode<?> decisionNode;
+    private DecisionTreeNode decisionNode;
 
     public AmuaDTValidator(List<Criterion> criteria) {
         this.criteria = criteria;
@@ -29,7 +29,7 @@ public class AmuaDTValidator {
      *
      * @throws IllegalStateException if the decision tree type is not supported
      */
-    public AmuaModel determineAmuaDTType(DecisionTreeNode<?> treeNode) {
+    public AmuaModel determineAmuaDTType(DecisionTreeNode treeNode) {
         if (criteria == null || criteria.isEmpty()) {
             throw new IllegalStateException("The tree has no defined criteria.");
         }
@@ -85,7 +85,7 @@ public class AmuaDTValidator {
      * @param isCE whether CE structure is expected.
      * @throws IllegalStateException if the subtree is invalid.
      */
-    private void hasValidStructure(DecisionTreeNode<?> node, int maxDecisionNodes, boolean isCE){
+    private void hasValidStructure(DecisionTreeNode node, int maxDecisionNodes, boolean isCE){
         isValidNode(node, maxDecisionNodes, isCE);
         for (DecisionTreeElement child : node.getChildren()) {
             if (child instanceof DecisionTreeBranch branch) {
@@ -103,7 +103,7 @@ public class AmuaDTValidator {
      * @param isCE whether CE structure is expected.
      * @throws IllegalStateException if the node is invalid.
      */
-    private void isValidNode(DecisionTreeNode<?> node, int maxDecisionNodes, boolean isCE) {
+    private void isValidNode(DecisionTreeNode node, int maxDecisionNodes, boolean isCE) {
         // validate the kind of evaluation the node belongs to
         if (isCE && node.getEvaluationType() != EvaluationType.CE) {
             throw new IllegalStateException("Invalid node type for Cost-Effectiveness tree.");
@@ -134,7 +134,7 @@ public class AmuaDTValidator {
      *
      * @throws IllegalStateException if the tree has no decision or the decision is below the root.
      */
-    private void checkDecisionIsTheRoot(DecisionTreeNode<?> root) {
+    private void checkDecisionIsTheRoot(DecisionTreeNode root) {
         if (decisionNode == null) {
             throw new IllegalStateException("The tree has no decision. Amua compares the options of the first node "
                                             + "as strategies, so the tree must begin with a decision.");

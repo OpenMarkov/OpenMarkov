@@ -7,12 +7,12 @@
 package org.openmarkov.gui.window.decisiontree.elements;
 
 import org.junit.jupiter.api.Test;
+import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.EvaluationDecisionTreeNode;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,9 +30,9 @@ class DecisionTreeBranchPanelTest {
     @Test
     void aBranchOfAChanceNodeShowsItsStateAndProbabilityButNotTheUtility() {
         Variable disease = new Variable("Disease (X)", "absent", "present");
-        EvaluationDecisionTreeNode chance = node(disease, NodeType.CHANCE);
+        DecisionTreeNode chance = node(disease, NodeType.CHANCE);
         chance.setEvaluation(new UnicritNodeEvaluation(1.0, 9.72));
-        DecisionTreeBranch<Double> absent = branch(chance, disease, 0, 0.86, 10.0);
+        DecisionTreeBranch absent = branch(chance, disease, 0, 0.86, 10.0);
 
         String html = new DecisionTreeBranchPanel(absent).getBranchDescriptiontHTML();
 
@@ -43,10 +43,10 @@ class DecisionTreeBranchPanelTest {
     @Test
     void aBranchOfADecisionNodeShowsItsStateAndMarksTheBestOne() {
         Variable therapy = new Variable("Therapy (T)", "no", "yes");
-        EvaluationDecisionTreeNode decision = node(therapy, NodeType.DECISION);
+        DecisionTreeNode decision = node(therapy, NodeType.DECISION);
         decision.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
-        DecisionTreeBranch<Double> no = branch(decision, therapy, 0, 1.0, 8.0);
-        DecisionTreeBranch<Double> yes = branch(decision, therapy, 1, 1.0, 10.0);
+        DecisionTreeBranch no = branch(decision, therapy, 0, 1.0, 8.0);
+        DecisionTreeBranch yes = branch(decision, therapy, 1, 1.0, 10.0);
 
         String htmlNo = new DecisionTreeBranchPanel(no).getBranchDescriptiontHTML();
         String htmlYes = new DecisionTreeBranchPanel(yes).getBranchDescriptiontHTML();
@@ -60,8 +60,8 @@ class DecisionTreeBranchPanelTest {
 
     @Test
     void theRootBranchShowsNothing() {
-        DecisionTreeBranch<Double> root = new DecisionTreeBranch<>(null);
-        EvaluationDecisionTreeNode first = node(new Variable("Disease (X)", "absent", "present"), NodeType.CHANCE);
+        DecisionTreeBranch root = new DecisionTreeBranch(null);
+        DecisionTreeNode first = node(new Variable("Disease (X)", "absent", "present"), NodeType.CHANCE);
         first.setEvaluation(new UnicritNodeEvaluation(1.0, 9.72));
         root.setChild(first);
 
@@ -70,17 +70,17 @@ class DecisionTreeBranchPanelTest {
         assertTrue(html.contains("<td align=center border=0></td>"), html);
     }
 
-    private static EvaluationDecisionTreeNode node(Variable variable, NodeType type) {
-        return new EvaluationDecisionTreeNode(new Node(null, variable, type));
+    private static DecisionTreeNode node(Variable variable, NodeType type) {
+        return new DecisionTreeNode(new Node(null, variable, type));
     }
 
     /** Hangs from the node a branch for the given state that leads to a utility leaf with the given value. */
-    private static DecisionTreeBranch<Double> branch(EvaluationDecisionTreeNode parent, Variable variable, int state,
+    private static DecisionTreeBranch branch(DecisionTreeNode parent, Variable variable, int state,
                                                      double scenarioProbability, double utility) {
-        DecisionTreeBranch<Double> branch = new DecisionTreeBranch<>(null, variable, variable.getStates()[state]);
+        DecisionTreeBranch branch = new DecisionTreeBranch(null, variable, variable.getStates()[state]);
         branch.setScenarioProbability(scenarioProbability);
         parent.addChild(branch);
-        EvaluationDecisionTreeNode leaf = node(new Variable("Utility"), NodeType.UTILITY);
+        DecisionTreeNode leaf = node(new Variable("Utility"), NodeType.UTILITY);
         leaf.setEvaluation(new UnicritNodeEvaluation(scenarioProbability, utility));
         branch.setChild(leaf);
         return branch;

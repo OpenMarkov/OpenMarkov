@@ -52,7 +52,7 @@ class DecisionTreeNodeTest {
 
     @Test
     void constructorFromNodeAndNetworkSetsBothFields() {
-        StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode node = new DecisionTreeNode(decisionNode, probNet);
 
         assertSame(decisionVariable, node.getVariable());
         assertEquals(NodeType.DECISION, node.getNodeType());
@@ -64,7 +64,7 @@ class DecisionTreeNodeTest {
     @Test
     void constructorFromNodeOnlyLeavesNetworkNull() {
         // Documents existing behaviour: the (Node) constructor does not set network.
-        StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(chanceNode);
+        DecisionTreeNode node = new DecisionTreeNode(chanceNode);
 
         assertSame(chanceVariable, node.getVariable());
         assertNull(node.getNetwork());
@@ -72,7 +72,7 @@ class DecisionTreeNodeTest {
 
     @Test
     void constructorFromVariableResolvesNodeFromNetwork() {
-        StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(chanceVariable, probNet);
+        DecisionTreeNode node = new DecisionTreeNode(chanceVariable, probNet);
 
         assertSame(chanceVariable, node.getVariable());
         assertEquals(NodeType.CHANCE, node.getNodeType());
@@ -81,7 +81,7 @@ class DecisionTreeNodeTest {
 
     @Test
     void addChildLinksParentAndChildSymmetrically() {
-        StubDecisionTreeNode<Double> parent = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode parent = new DecisionTreeNode(decisionNode, probNet);
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet);
 
         parent.addChild(branch);
@@ -95,7 +95,7 @@ class DecisionTreeNodeTest {
 
     @Test
     void getBranchStatesWithoutParentReturnsEmptyEvidence() {
-        StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode node = new DecisionTreeNode(decisionNode, probNet);
 
         EvidenceCase evidence = node.getBranchStates();
 
@@ -105,12 +105,12 @@ class DecisionTreeNodeTest {
 
     @Test
     void getBranchStatesWithParentDelegates() {
-        StubDecisionTreeNode<Double> root = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode root = new DecisionTreeNode(decisionNode, probNet);
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable,
                 decisionVariable.getStates()[0]);
         root.addChild(branch);
 
-        StubDecisionTreeNode<Double> child = new StubDecisionTreeNode<>(chanceNode, probNet);
+        DecisionTreeNode child = new DecisionTreeNode(chanceNode, probNet);
         branch.setChild(child);
 
         EvidenceCase evidence = child.getBranchStates();
@@ -121,7 +121,7 @@ class DecisionTreeNodeTest {
 
     @Test
     void scenarioProbabilityIsTheOneOfTheEvaluation() {
-        StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode node = new DecisionTreeNode(decisionNode, probNet);
 
         // Default sentinel
         assertEquals(Double.NEGATIVE_INFINITY, node.getScenarioProbability());
@@ -132,14 +132,13 @@ class DecisionTreeNodeTest {
 
     @Test
     void copyTransfersStateFromOtherNode() {
-        StubDecisionTreeNode<Double> source = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode source = new DecisionTreeNode(decisionNode, probNet);
         UnicritNodeEvaluation evaluation = new UnicritNodeEvaluation(0.3, 7.5);
         source.setEvaluation(evaluation);
 
-        StubDecisionTreeNode<Double> dest = new StubDecisionTreeNode<>(chanceNode, probNet);
+        DecisionTreeNode dest = new DecisionTreeNode(chanceNode, probNet);
         dest.copy(source);
 
-        assertEquals(7.5, dest.getUtility());
         assertEquals(0.3, dest.getScenarioProbability());
         assertSame(decisionVariable, dest.getVariable());
         assertEquals(NodeType.DECISION, dest.getNodeType());
@@ -149,11 +148,11 @@ class DecisionTreeNodeTest {
 
     @Test
     void copyDoesNotShareChildrenListWithSource() {
-        StubDecisionTreeNode<Double> source = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode source = new DecisionTreeNode(decisionNode, probNet);
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet);
         source.addChild(branch);
 
-        StubDecisionTreeNode<Double> dest = new StubDecisionTreeNode<>(chanceNode, probNet);
+        DecisionTreeNode dest = new DecisionTreeNode(chanceNode, probNet);
         dest.copy(source);
 
         // Mutating the source list after copy must not leak into the destination.
@@ -174,15 +173,15 @@ class DecisionTreeNodeTest {
      */
     @Test
     void copyKeepsTheDestinationsPlaceInTheTree() {
-        StubDecisionTreeNode<Double> root = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode root = new DecisionTreeNode(decisionNode, probNet);
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable,
                 decisionVariable.getStates()[0]);
         root.addChild(branch);
 
-        StubDecisionTreeNode<Double> dest = new StubDecisionTreeNode<>(chanceNode, probNet);
+        DecisionTreeNode dest = new DecisionTreeNode(chanceNode, probNet);
         branch.setChild(dest);   // dest hangs from the tree: D=yes on its path
 
-        StubDecisionTreeNode<Double> source = new StubDecisionTreeNode<>(chanceNode, probNet);
+        DecisionTreeNode source = new DecisionTreeNode(chanceNode, probNet);
         dest.copy(source);
 
         assertEquals(1, dest.getBranchStates().getFindings().size(),
@@ -197,29 +196,31 @@ class DecisionTreeNodeTest {
      */
     @Test
     void copyReparentsTheSharedChildrenToTheDestination() {
-        StubDecisionTreeNode<Double> source = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode source = new DecisionTreeNode(decisionNode, probNet);
         DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable,
                 decisionVariable.getStates()[0]);
         source.addChild(branch);
 
-        StubDecisionTreeNode<Double> dest = new StubDecisionTreeNode<>(chanceNode, probNet);
+        DecisionTreeNode dest = new DecisionTreeNode(chanceNode, probNet);
         dest.copy(source);
 
-        assertSame(dest, ((DecisionTreeBranch<?>) dest.getChildren().get(0)).getParent());
+        assertSame(dest, ((DecisionTreeBranch) dest.getChildren().get(0)).getParent());
     }
 
     @Test
-    void utilityIsTheOneOfTheEvaluation() {
-        StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(decisionNode, probNet);
+    void evaluationTypeIsTheOneOfTheEvaluation() {
+        DecisionTreeNode node = new DecisionTreeNode(decisionNode, probNet);
 
-        assertNull(node.getUtility());
+        assertNull(node.getEvaluationType());
         node.setEvaluation(new UnicritNodeEvaluation(1.0, 3.14));
-        assertEquals(3.14, node.getUtility());
+        assertEquals(EvaluationType.UNICRITERION, node.getEvaluationType());
+        node.setEvaluation(new CENodeEvaluation(1.0, null));
+        assertEquals(EvaluationType.CE, node.getEvaluationType());
     }
 
     @Test
     void toStringContainsVariableName() {
-        StubDecisionTreeNode<Double> node = new StubDecisionTreeNode<>(decisionNode, probNet);
+        DecisionTreeNode node = new DecisionTreeNode(decisionNode, probNet);
         assertTrue(node.toString().contains("D"));
     }
 }

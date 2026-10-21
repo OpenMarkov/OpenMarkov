@@ -13,7 +13,7 @@ package org.openmarkov.core.model.decisiontree;
  *
  * @author Manuel Arias
  */
-public class DecisionTreeNodeEvaluation {
+public abstract sealed class DecisionTreeNodeEvaluation permits UnicritNodeEvaluation, CENodeEvaluation {
 
 	private final double prob;
 
@@ -24,5 +24,11 @@ public class DecisionTreeNodeEvaluation {
 	public double getProb() {
 		return prob;
 	}
+
+	/**
+	 * Whether the value of the scenario is a single number or a cost-effectiveness function of the
+	 * willingness to pay.
+	 */
+	public abstract EvaluationType getEvaluationType();
 
 }

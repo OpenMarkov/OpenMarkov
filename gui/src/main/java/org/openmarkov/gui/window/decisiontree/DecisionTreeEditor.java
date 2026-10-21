@@ -13,10 +13,10 @@ import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.PotentialOperationException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.decisiontree.operation.DecisionTreeManager;
-import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.gui.configuration.GUIColors;
@@ -304,7 +304,8 @@ public final class DecisionTreeEditor extends EditorPanel {
             Object selectedComponent = DecisionTreeEditor.this.jTree.getLastSelectedPathComponent();
             if (selectedComponent instanceof DecisionTreeNodePanel treeNodePanel) {
                 DecisionTreeNode treeNode = treeNodePanel.getTreeNode();
-                CEPDialog cepDialog = new CEPDialog(null, (CEP) (treeNode.getUtility()), treeNode.getNetwork());
+                CEPDialog cepDialog = new CEPDialog(null, ((CENodeEvaluation) treeNode.getEvaluation()).getCep(),
+                                                    treeNode.getNetwork());
                 cepDialog.setVisible(true);
             }
         }

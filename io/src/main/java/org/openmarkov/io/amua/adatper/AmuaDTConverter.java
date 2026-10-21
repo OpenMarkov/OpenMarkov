@@ -40,7 +40,7 @@ public class AmuaDTConverter {
      * @return the root of the converted Amua tree
      * @throws IllegalArgumentException if the root node is null
      */
-    public AmuaDTNode<?> convertToAmuaTree(DecisionTreeNode<?> root) {
+    public AmuaDTNode<?> convertToAmuaTree(DecisionTreeNode root) {
         if (root == null) {
             throw new IllegalArgumentException("Tree cannot be null.");
         }
@@ -75,7 +75,7 @@ public class AmuaDTConverter {
      * @param level the depth level in the Amua tree
      * @return the corresponding Amua node
      */
-    private AmuaDTNode<?> convertToAmuaTree(DecisionTreeNode<?> decisionTreeNode, DecisionTreeBranch branch, AmuaDTNode<?> parent, int level) {
+    private AmuaDTNode<?> convertToAmuaTree(DecisionTreeNode decisionTreeNode, DecisionTreeBranch branch, AmuaDTNode<?> parent, int level) {
         // collapsed, visible, hasVarUpdates: default values
         AmuaDTNode<?> amuaNode = createNodeInstance();
 
@@ -111,7 +111,7 @@ public class AmuaDTConverter {
         List<AmuaDTNode<?>> childrenNodes = new ArrayList<>();
         for (DecisionTreeElement child : decisionTreeNode.getChildren()) {
             if (child instanceof DecisionTreeBranch childBranch) {
-                DecisionTreeNode<?> childNode = childBranch.getChild();
+                DecisionTreeNode childNode = childBranch.getChild();
                 AmuaDTNode<?> amuaChildNode = convertToAmuaTree(childNode, childBranch, amuaNode,level + 1);
                 childrenNodes.add(amuaChildNode);
             }
@@ -154,7 +154,7 @@ public class AmuaDTConverter {
      * @param amuaNode the Amua node to update
      * @param node the OpenMarkov node to read utility values from
      */
-    private void assignUtilities(AmuaDTNode<?> amuaNode, DecisionTreeNode<?> node) {
+    private void assignUtilities(AmuaDTNode<?> amuaNode, DecisionTreeNode node) {
 
         if (amuaNode instanceof AmuaDTCENode ceNode) {
 
@@ -258,7 +258,7 @@ public class AmuaDTConverter {
      * @param node the decision tree node whose cost will be obtained.
      * @return the cost value associated with the node
      */
-    private double getCEACost(DecisionTreeNode<?> node) {
+    private double getCEACost(DecisionTreeNode node) {
         CEP cep = getCEAUtility(node);
         return (cep != null) ? cep.getCost(0) : 0.0;
     }
@@ -270,7 +270,7 @@ public class AmuaDTConverter {
      * @param node the decision tree node whose effectiveness will be obtained.
      * @return the effectiveness value associated with the node
      */
-    private double getCEAEffectiveness(DecisionTreeNode<?> node) {
+    private double getCEAEffectiveness(DecisionTreeNode node) {
         CEP cep = getCEAUtility(node);
         return (cep != null) ? cep.getEffectiveness(0) : 0.0;
     }
@@ -284,14 +284,14 @@ public class AmuaDTConverter {
      * @return the CEP object containing cost and effectiveness values.
      * @throws IllegalArgumentException if the tree type is not COST_EFFECTIVENESS
      */
-    private CEP getCEAUtility(DecisionTreeNode<?> node) {
+    private CEP getCEAUtility(DecisionTreeNode node) {
         if (amuaModel != AmuaModel.COST_EFFECTIVENESS_DT) {
             throw new IllegalArgumentException("Invalid tree type for CEA utility.");
         }
         if (node.getEvaluationType() != EvaluationType.CE) {
             return null;
         }
-        return (CEP) node.getUtility();
+        return ((CENodeEvaluation) node.getEvaluation()).getCep();
     }
 
 
@@ -301,12 +301,12 @@ public class AmuaDTConverter {
      * @return the utility value
      * @throws IllegalArgumentException if the tree type is not UNICRITERIA
      */
-    private double getUnicriteriaUtility(DecisionTreeNode<?> node) {
+    private double getUnicriteriaUtility(DecisionTreeNode node) {
         if (amuaModel != AmuaModel.UNICRITERIA_DT) {
             throw new IllegalArgumentException("Invalid tree type for unicriteria utility.");
         }
 
-        Double utility = (Double) node.getUtility();
-        return (utility != null) ? utility : 0.0;
+        UnicritNodeEvaluation evaluation = (UnicritNodeEvaluation) node.getEvaluation();
+        return (evaluation != null) ? evaluation.getUtility() : 0.0;
     }
 }

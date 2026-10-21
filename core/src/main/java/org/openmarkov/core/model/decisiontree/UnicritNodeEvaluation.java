@@ -15,7 +15,7 @@ import org.openmarkov.core.inference.Strategy;
  *
  * @author Manuel Arias
  */
-public class UnicritNodeEvaluation extends DecisionTreeNodeEvaluation {
+public final class UnicritNodeEvaluation extends DecisionTreeNodeEvaluation {
 
 	private final double utility;
 	private Strategy strategy;
@@ -27,6 +27,11 @@ public class UnicritNodeEvaluation extends DecisionTreeNodeEvaluation {
 
 	public double getUtility() {
 		return utility;
+	}
+
+	@Override
+	public EvaluationType getEvaluationType() {
+		return EvaluationType.UNICRITERION;
 	}
 
 	public Strategy getStrategy() {

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class AmuaExporter {
 
-    private final DecisionTreeNode<?> treeNode;
+    private final DecisionTreeNode treeNode;
     private final List<Criterion> criteria;
     private AmuaModel amuaModel;
     private AmuaDTNode<?> amuaTreeNode;
@@ -33,7 +33,7 @@ public class AmuaExporter {
      * @param treeNode root node of the decision tree in OpenMarkov format.
      * @throws IllegalArgumentException if the root node or its network is null.
      */
-    public AmuaExporter(DecisionTreeNode<?> treeNode) {
+    public AmuaExporter(DecisionTreeNode treeNode) {
 
         if (treeNode == null) {
             throw new IllegalArgumentException("The decision tree root node cannot be null.");

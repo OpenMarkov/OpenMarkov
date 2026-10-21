@@ -247,7 +247,7 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
             for (Node parentNode : utilityNode.getParents()) {
                 if (parentNode.getNodeType() == NodeType.UTILITY) {
                     //DecisionTreeNode treeNode = new DecisionTreeNode(parentNode);
-                    DecisionTreeNode treeNode = FactoryDecisionTree.createInstanceDecisionTreeNode(isCEAnalysis, parentNode);
+                    DecisionTreeNode treeNode = new DecisionTreeNode(parentNode);
                     utilityTreeNode.addChild(treeNode);
                     utilityTreeStack.push(treeNode);
                 }
@@ -257,7 +257,7 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
     
     private DecisionTreeNode createDecisionTreeNode(ProbNet dan, Variable rootDecision, EvidenceCase evidence) {
         setDANNameFromEvidence(dan, evidence);
-        return FactoryDecisionTree.createInstanceDecisionTreeNode(isCEAnalysis, rootDecision, dan);
+        return new DecisionTreeNode(rootDecision, dan);
     }
     
     private static void setDANNameFromEvidence(ProbNet dan, EvidenceCase evidence) {
@@ -295,7 +295,7 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
     
     private DecisionTreeNode createDecisionTreeNode(ProbNet dan, Node node, EvidenceCase evidence) {
         setDANNameFromEvidence(dan, evidence);
-        return FactoryDecisionTree.createInstanceDecisionTreeNode(isCEAnalysis, node, dan);
+        return new DecisionTreeNode(node, dan);
     }
     
     

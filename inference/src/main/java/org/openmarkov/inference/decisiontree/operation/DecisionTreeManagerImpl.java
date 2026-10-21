@@ -53,7 +53,6 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public DecisionTreeElement buildDecisionTree(ProbNet probNet, int depth, EvidenceCase branchEvidence)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
@@ -66,9 +65,6 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
                     List.of(InfluenceDiagramType.getUniqueInstance(),
                             DecisionAnalysisNetworkType.getUniqueInstance()));
         }
-        // The branch's utility type is unknown at this layer (it depends on the
-        // factory: Double for plain evaluation, CEP for CEA). Phase 4 will type
-        // the factory chain end-to-end.
         DecisionTreeBranch root = new DecisionTreeBranch(probNet);
         GenerateDecisionTree genDT = taskFactory.createTask(probNet, depth);
         genDT.setPreResolutionEvidence(branchEvidence);
@@ -86,12 +82,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
 
     /**
      * Recursive expansion logic moved from DecisionTreePanel.
-     *
-     * <p>Uses raw {@link DecisionTreeNode} / {@link DecisionTreeBranch} because the
-     * utility type carried by the tree is unknown at this layer. Phase 4 of the
-     * decisiontree refactor will type the factory chain end-to-end.
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
     private void inferenceExpandLevels(DecisionTreeElement root,
             DecisionTreeNode parent, int n, EvidenceCase branchEvidence)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
@@ -104,7 +95,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
             for (DecisionTreeElement branch : root.getChildren()) {
                 EvidenceCase newEvi;
                 if (root instanceof DecisionTreeBranch) {
-                    newEvi = createEvidenceBranchPath(branchEvidence, (DecisionTreeBranch<?>) root);
+                    newEvi = createEvidenceBranchPath(branchEvidence, (DecisionTreeBranch) root);
                 } else {
                     newEvi = branchEvidence;
                 }
@@ -130,7 +121,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
         }
     }
 
-    private EvidenceCase createEvidenceBranchPath(EvidenceCase branchEvidence, DecisionTreeBranch<?> branch) {
+    private EvidenceCase createEvidenceBranchPath(EvidenceCase branchEvidence, DecisionTreeBranch branch) {
         EvidenceCase newEvi = new EvidenceCase(branchEvidence);
         if (branch != null) {
             Variable branchVariable = branch.getBranchVariable();

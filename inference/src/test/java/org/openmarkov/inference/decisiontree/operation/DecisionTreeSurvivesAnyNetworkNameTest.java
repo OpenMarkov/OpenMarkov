@@ -41,7 +41,7 @@ class DecisionTreeSurvivesAnyNetworkNameTest {
 	}
 
 	private static void collect(DecisionTreeElement element, List<String> names) {
-		if (element instanceof DecisionTreeNode<?> node) {
+		if (element instanceof DecisionTreeNode node) {
 			names.add(node.getNetwork().getName());
 		}
 		element.getChildren().forEach(child -> collect(child, names));

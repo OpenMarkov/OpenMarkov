@@ -12,9 +12,6 @@ import java.text.DecimalFormat;
  * Formatter for plain expected-utility decision trees: prints
  * {@code " U=<value>"} with the given decimal format. {@code NaN} utilities
  * are rendered as {@code 0}.
- *
- * <p>Extracted from {@code EvaluationDecisionTreeNode#formatUtility} as part of
- * Phase 3 of the decisiontree refactor (separating model from presentation).
  */
 public final class DoubleUtilityFormatter implements DecisionTreeUtilityFormatter<Double> {
 
