@@ -60,7 +60,7 @@ class DecisionTreeBranchPanelTest {
 
     @Test
     void theRootBranchShowsNothing() {
-        DecisionTreeBranch root = new DecisionTreeBranch(null);
+        DecisionTreeBranch root = new DecisionTreeBranch();
         DecisionTreeNode first = node(new Variable("Disease (X)", "absent", "present"), NodeType.CHANCE);
         first.setEvaluation(new UnicritNodeEvaluation(1.0, 9.72));
         root.setChild(first);
@@ -74,14 +74,17 @@ class DecisionTreeBranchPanelTest {
         return new DecisionTreeNode(new Node(null, variable, type));
     }
 
-    /** Hangs from the node a branch for the given state that leads to a utility leaf with the given value. */
+    /**
+     * Hangs from the node, whose scenario has probability 1, a branch for the given state that leads to a
+     * utility leaf with the given value.
+     */
     private static DecisionTreeBranch branch(DecisionTreeNode parent, Variable variable, int state,
-                                                     double scenarioProbability, double utility) {
-        DecisionTreeBranch branch = new DecisionTreeBranch(null, variable, variable.getStates()[state]);
-        branch.setScenarioProbability(scenarioProbability);
+                                                     double probability, double utility) {
+        DecisionTreeBranch branch = new DecisionTreeBranch(variable.getStates()[state]);
+        branch.setBranchProbability(probability);
         parent.addChild(branch);
         DecisionTreeNode leaf = node(new Variable("Utility"), NodeType.UTILITY);
-        leaf.setEvaluation(new UnicritNodeEvaluation(scenarioProbability, utility));
+        leaf.setEvaluation(new UnicritNodeEvaluation(probability, utility));
         branch.setChild(leaf);
         return branch;
     }

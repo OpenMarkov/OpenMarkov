@@ -6,11 +6,6 @@
  */
 package org.openmarkov.core.model.decisiontree;
 
-import org.openmarkov.core.exception.IncompatibleEvidenceException;
-import org.openmarkov.core.exception.UnreachableException;
-import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.Finding;
-import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 
@@ -18,40 +13,35 @@ import java.util.List;
 
 /**
  * Represents a branch in the decision tree, connecting a parent node to a child
- * node.
- * A branch is typically associated with a specific state of a variable.
+ * node. A branch is a state of the variable of its parent node, and keeps the
+ * probability of that state given the path down to the parent.
+ * <p>
+ * The only branch without a state is the one the interface hangs the root node
+ * from: it has a child but no parent.
  */
 public non-sealed class DecisionTreeBranch implements DecisionTreeElement {
 
-	protected double scenarioProbability = Double.NEGATIVE_INFINITY;
-	private final Variable branchVariable;
 	private final State branchState;
+	/** Probability of the state of this branch given the path down to its parent; NaN until it is set. */
+	private double branchProbability = Double.NaN;
 	private DecisionTreeNode parent;
 	private DecisionTreeNode child;
-	private final ProbNet probNet;
-	private EvidenceCase scenarioEvidence = null;
 
 	/**
-	 * Constructor creating a branch associated with a specific variable state.
-	 * 
-	 * @param probNet        The probabilistic network.
-	 * @param branchVariable The variable determining this branch.
-	 * @param branchState    The specific state of the variable for this branch.
+	 * Constructor creating a branch for a state of the variable of the node it
+	 * will hang from.
+	 *
+	 * @param branchState The state of the variable of the parent node.
 	 */
-	public DecisionTreeBranch(ProbNet probNet, Variable branchVariable, State branchState) {
-		this.probNet = probNet;
+	public DecisionTreeBranch(State branchState) {
 		this.branchState = branchState;
-		this.branchVariable = branchVariable;
 	}
 
 	/**
-	 * Constructor creating a generic branch without specific variable/state
-	 * association.
-	 * 
-	 * @param probNet The probabilistic network.
+	 * Constructor creating the branch without a state that holds the root node.
 	 */
-	public DecisionTreeBranch(ProbNet probNet) {
-		this(probNet, null, null);
+	public DecisionTreeBranch() {
+		this(null);
 	}
 
 	/**
@@ -69,37 +59,33 @@ public non-sealed class DecisionTreeBranch implements DecisionTreeElement {
 	}
 
 	/**
-	 * Returns the probability of this branch given its parent's scenario.
-	 * 
-	 * @return The conditional probability of this branch.
+	 * Returns the probability of the state of this branch given the path down to
+	 * its parent, as the algorithm that built the tree set it.
+	 *
+	 * @return The conditional probability of this branch, or NaN if it has not been set.
 	 */
 	public double getBranchProbability() {
-		double parentScenarioProb = parent.getScenarioProbability();
-		return (parentScenarioProb != 0) ? getScenarioProbability() / parentScenarioProb : 0;
-	}
-
-	@Override
-	public EvidenceCase getBranchStates() {
-		if (scenarioEvidence == null) {
-			scenarioEvidence = (parent != null) ? new EvidenceCase(parent.getBranchStates()) : new EvidenceCase();
-			if (branchVariable != null) {
-				try {
-					scenarioEvidence.addFinding(new Finding(branchVariable, branchState));
-				} catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther e) {
-					throw new UnreachableException(e);
-				}
-			}
-		}
-		return scenarioEvidence;
+		return branchProbability;
 	}
 
 	/**
-	 * Returns the branchVariable.
+	 * Sets the probability of the state of this branch given the path down to its
+	 * parent.
 	 *
-	 * @return the branchVariable.
+	 * @param branchProbability The conditional probability of this branch.
+	 */
+	public void setBranchProbability(double branchProbability) {
+		this.branchProbability = branchProbability;
+	}
+
+	/**
+	 * Returns the variable whose state this branch is, which is the variable of
+	 * its parent node.
+	 *
+	 * @return the variable of the parent node, or {@code null} if the branch does not hang from a node yet.
 	 */
 	public Variable getBranchVariable() {
-		return branchVariable;
+		return (parent == null) ? null : parent.getVariable();
 	}
 
 	/**
@@ -109,21 +95,6 @@ public non-sealed class DecisionTreeBranch implements DecisionTreeElement {
 	 */
 	public State getBranchState() {
 		return branchState;
-	}
-
-	@Override
-	public double getScenarioProbability() {
-		return scenarioProbability;
-	}
-
-	/**
-	 * Sets the probability of the scenario (path) leading up to and including this
-	 * branch.
-	 * 
-	 * @param scenarioProbability The scenario probability.
-	 */
-	public void setScenarioProbability(double scenarioProbability) {
-		this.scenarioProbability = scenarioProbability;
 	}
 
 	/**
@@ -136,22 +107,23 @@ public non-sealed class DecisionTreeBranch implements DecisionTreeElement {
 	}
 
 	/**
-	 * Sets the child.
+	 * Hangs a node from this branch.
 	 *
 	 * @param child the child to set.
 	 */
 	public void setChild(DecisionTreeNode child) {
 		this.child = child;
-		child.setParent(this);
+		child.setParentBranch(this);
 	}
 
 	@Override
 	public String toString() {
-		if (branchVariable == null) {
+		if (branchState == null) {
 			return "DecisionTreeBranch [root]";
 		}
-		return "DecisionTreeBranch [branchVariable=" + branchVariable.getName() + ", branchState=" +
-				branchState + "]";
+		Variable branchVariable = getBranchVariable();
+		return "DecisionTreeBranch [branchVariable=" + (branchVariable == null ? null : branchVariable.getName())
+				+ ", branchState=" + branchState + "]";
 	}
 
 	/**
@@ -163,11 +135,9 @@ public non-sealed class DecisionTreeBranch implements DecisionTreeElement {
 		return parent;
 	}
 
-	@Override
-	public void setParent(DecisionTreeElement parent) {
-		this.parent = (DecisionTreeNode) parent;
-		// Invalidate the lazily-computed evidence cache: the path to the root has changed.
-		this.scenarioEvidence = null;
+	/** Called by {@link DecisionTreeNode#addChild}, which is the only way to hang a branch from a node. */
+	void setParent(DecisionTreeNode parent) {
+		this.parent = parent;
 	}
 
 }

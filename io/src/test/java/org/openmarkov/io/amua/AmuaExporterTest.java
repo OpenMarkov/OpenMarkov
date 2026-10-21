@@ -127,18 +127,18 @@ public class AmuaExporterTest {
         chanceYes.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
         chanceNo.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
 
-        DecisionTreeBranch branchYes_U1 = createBranch(probNet, C_yes, cYes1, 0.14, utilityNode1);
-        DecisionTreeBranch branchYes_U2 = createBranch(probNet, C_yes, cYes2, 0.86, utilityNode2);
-        DecisionTreeBranch branchNo_U3 = createBranch(probNet, C_no, cNo1, 0.14, utilityNode3);
-        DecisionTreeBranch branchNo_U4 = createBranch(probNet, C_no, cNo2, 0.86, utilityNode4);
+        DecisionTreeBranch branchYes_U1 = createBranch(cYes1, 0.14, utilityNode1);
+        DecisionTreeBranch branchYes_U2 = createBranch(cYes2, 0.86, utilityNode2);
+        DecisionTreeBranch branchNo_U3 = createBranch(cNo1, 0.14, utilityNode3);
+        DecisionTreeBranch branchNo_U4 = createBranch(cNo2, 0.86, utilityNode4);
 
         chanceYes.addChild(branchYes_U1);
         chanceYes.addChild(branchYes_U2);
         chanceNo.addChild(branchNo_U3);
         chanceNo.addChild(branchNo_U4);
 
-        DecisionTreeBranch branchYes = createBranch(probNet, D, dYes, 1.0, chanceYes);
-        DecisionTreeBranch branchNo = createBranch(probNet, D, dNo, 1.0, chanceNo);
+        DecisionTreeBranch branchYes = createBranch(dYes, 1.0, chanceYes);
+        DecisionTreeBranch branchNo = createBranch(dNo, 1.0, chanceNo);
         decisionNode.addChild(branchYes);
         decisionNode.addChild(branchNo);
 
@@ -195,18 +195,18 @@ public class AmuaExporterTest {
         chanceYes.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
         chanceNo.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
 
-        DecisionTreeBranch branchYes_U1 = createBranch(probNet, C_yes, cYes1, 0.14, utilityNode1);
-        DecisionTreeBranch branchYes_U2 = createBranch(probNet, C_yes, cYes2, 0.86, utilityNode2);
-        DecisionTreeBranch branchNo_U3 = createBranch(probNet, C_no, cNo1, 0.14, utilityNode3);
-        DecisionTreeBranch branchNo_U4 = createBranch(probNet, C_no, cNo2, 0.86, utilityNode4);
+        DecisionTreeBranch branchYes_U1 = createBranch(cYes1, 0.14, utilityNode1);
+        DecisionTreeBranch branchYes_U2 = createBranch(cYes2, 0.86, utilityNode2);
+        DecisionTreeBranch branchNo_U3 = createBranch(cNo1, 0.14, utilityNode3);
+        DecisionTreeBranch branchNo_U4 = createBranch(cNo2, 0.86, utilityNode4);
 
         chanceYes.addChild(branchYes_U1);
         chanceYes.addChild(branchYes_U2);
         chanceNo.addChild(branchNo_U3);
         chanceNo.addChild(branchNo_U4);
 
-        DecisionTreeBranch branchYes = createBranch(probNet, D, dYes, 1.0, chanceYes);
-        DecisionTreeBranch branchNo = createBranch(probNet, D, dNo, 1.0, chanceNo);
+        DecisionTreeBranch branchYes = createBranch(dYes, 1.0, chanceYes);
+        DecisionTreeBranch branchNo = createBranch(dNo, 1.0, chanceNo);
         decisionNode.addChild(branchYes);
         decisionNode.addChild(branchNo);
 
@@ -283,20 +283,20 @@ public class AmuaExporterTest {
         chanceT1.setEvaluation(new CENodeEvaluation(1.0, null));
         chanceT2.setEvaluation(new CENodeEvaluation(1.0, null));
 
-        DecisionTreeBranch bNo = createBranch(probNet, D, sNo, 1.0, chanceNo);
-        DecisionTreeBranch bT1 = createBranch(probNet, D, sT1, 1.0, chanceT1);
-        DecisionTreeBranch bT2 = createBranch(probNet, D, sT2, 1.0, chanceT2);
+        DecisionTreeBranch bNo = createBranch(sNo, 1.0, chanceNo);
+        DecisionTreeBranch bT1 = createBranch(sT1, 1.0, chanceT1);
+        DecisionTreeBranch bT2 = createBranch(sT2, 1.0, chanceT2);
 
         root.addChild(bNo);
         root.addChild(bT1);
         root.addChild(bT2);
 
-        chanceNo.addChild(createBranch(probNet, C_no, absentNo, 0.86, u1));
-        chanceNo.addChild(createBranch(probNet, C_no, presentNo, 0.14, u2));
-        chanceT1.addChild(createBranch(probNet, C_t1, absentT1, 0.86, u3));
-        chanceT1.addChild(createBranch(probNet, C_t1, presentT1, 0.14, u4));
-        chanceT2.addChild(createBranch(probNet, C_t2, absentT2, 0.86, u5));
-        chanceT2.addChild(createBranch(probNet, C_t2, presentT2, 0.14, u6));
+        chanceNo.addChild(createBranch(absentNo, 0.86, u1));
+        chanceNo.addChild(createBranch(presentNo, 0.14, u2));
+        chanceT1.addChild(createBranch(absentT1, 0.86, u3));
+        chanceT1.addChild(createBranch(presentT1, 0.14, u4));
+        chanceT2.addChild(createBranch(absentT2, 0.86, u5));
+        chanceT2.addChild(createBranch(presentT2, 0.14, u6));
 
         return root;
     }
@@ -375,32 +375,32 @@ public class AmuaExporterTest {
         State dieNo = die.getStates()[0];
         State dieYes = die.getStates()[1];
 
-        DecisionTreeBranch dieNoBranch1 = createBranch(probNet, die, dieNo, 1.0, uPEAbsentDieNo);
-        DecisionTreeBranch dieYesBranch1 = createBranch(probNet, die, dieYes, 0.0, uPEAbsentDieYes);
+        DecisionTreeBranch dieNoBranch1 = createBranch(dieNo, 1.0, uPEAbsentDieNo);
+        DecisionTreeBranch dieYesBranch1 = createBranch(dieYes, 0.0, uPEAbsentDieYes);
 
-        DecisionTreeBranch dieNoBranch2 = createBranch(probNet, die, dieNo, 0.95, uPEPresentDieNo);
-        DecisionTreeBranch dieYesBranch2 = createBranch(probNet, die, dieYes, 0.05, uPEPresentDieYes);
+        DecisionTreeBranch dieNoBranch2 = createBranch(dieNo, 0.95, uPEPresentDieNo);
+        DecisionTreeBranch dieYesBranch2 = createBranch(dieYes, 0.05, uPEPresentDieYes);
 
         dieNodeAbsent.addChild(dieNoBranch1);
         dieNodeAbsent.addChild(dieYesBranch1);
         dieNodePresent.addChild(dieNoBranch2);
         dieNodePresent.addChild(dieYesBranch2);
 
-        DecisionTreeBranch peAbsentBranch = createBranch(probNet, pe, peAbsent, 0.81, dieNodeAbsent);
-        DecisionTreeBranch pePresentBranch = createBranch(probNet, pe, pePresent, 0.19, dieNodePresent);
+        DecisionTreeBranch peAbsentBranch = createBranch(peAbsent, 0.81, dieNodeAbsent);
+        DecisionTreeBranch pePresentBranch = createBranch(pePresent, 0.19, dieNodePresent);
 
         peNode.addChild(peAbsentBranch);
         peNode.addChild(pePresentBranch);
 
-        DecisionTreeBranch angioDeath = createBranch(probNet, dieAngio, dieAngioYes, 0.01, uDieAngio);
-        DecisionTreeBranch angioSurvive = createBranch(probNet, dieAngio, dieAngioNo, 0.99, peNode);
+        DecisionTreeBranch angioDeath = createBranch(dieAngioYes, 0.01, uDieAngio);
+        DecisionTreeBranch angioSurvive = createBranch(dieAngioNo, 0.99, peNode);
 
         dieAngioNode.addChild(angioDeath);
         dieAngioNode.addChild(angioSurvive);
 
-        DecisionTreeBranch bAngio = createBranch(probNet, decision, angiogram, 1.0, dieAngioNode);
-        DecisionTreeBranch bNoAC = createBranch(probNet, decision, noAC, 1.0, peNode);
-        DecisionTreeBranch bAC = createBranch(probNet, decision, ac, 1.0, peNode);
+        DecisionTreeBranch bAngio = createBranch(angiogram, 1.0, dieAngioNode);
+        DecisionTreeBranch bNoAC = createBranch(noAC, 1.0, peNode);
+        DecisionTreeBranch bAC = createBranch(ac, 1.0, peNode);
 
         root.addChild(bAngio);
         root.addChild(bNoAC);
@@ -432,9 +432,9 @@ public class AmuaExporterTest {
     }
 
 
-    private DecisionTreeBranch createBranch(ProbNet net, Variable variable, State state, double probability, DecisionTreeNode child) {
-        DecisionTreeBranch branch = new DecisionTreeBranch(net, variable, state);
-        branch.setScenarioProbability(probability);
+    private DecisionTreeBranch createBranch(State state, double probability, DecisionTreeNode child) {
+        DecisionTreeBranch branch = new DecisionTreeBranch(state);
+        branch.setBranchProbability(probability);
         branch.setChild(child);
         return branch;
     }

@@ -13,53 +13,88 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * A node of a decision tree.
  * Nodes can be of type CHANCE, DECISION, or UTILITY.
+ * <p>
+ * A node hangs from one branch, its parent branch, and has one branch per
+ * state of its variable, its child branches; only branches hang from a node.
  */
 public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 
 	private Variable variable;
 	private NodeType nodeType;
-	private List<DecisionTreeElement> children;
-	private DecisionTreeElement parent = null;
+	private List<DecisionTreeBranch> childBranches;
+	private DecisionTreeBranch parentBranch = null;
 	private ProbNet network;
+	/** The evidence the algorithm evaluated this node with: what has been observed on the path down to it. */
+	private final EvidenceCase evidence;
 	/** The only place where the probability and the utility of this node are kept. */
 	private DecisionTreeNodeEvaluation evaluation;
 
 	/**
-	 * Constructor creating a decision tree node from a network node.
-	 * 
+	 * Constructor creating a decision tree node from a network node, with no
+	 * evidence.
+	 *
 	 * @param node The network node (variable + potential).
 	 */
 	public DecisionTreeNode(Node node) {
-		this.variable = node.getVariable();
-		this.nodeType = node.getNodeType();
-		children = new ArrayList<>();
+		this(node, null, null);
 	}
 
 	/**
 	 * Constructor creating a decision tree node from a network node and the network
-	 * itself.
-	 * 
+	 * itself, with no evidence.
+	 *
 	 * @param node    The network node.
 	 * @param network The probabilistic network.
 	 */
 	public DecisionTreeNode(Node node, ProbNet network) {
-		this(node);
-		this.network = network;
+		this(node, network, null);
 	}
 
 	/**
-	 * Constructor creating a decision tree node from a variable and the network.
-	 * 
+	 * Constructor creating a decision tree node from a network node, the network
+	 * itself and the evidence it is evaluated with.
+	 *
+	 * @param node     The network node.
+	 * @param network  The probabilistic network.
+	 * @param evidence What has been observed on the path down to this node; {@code null} means nothing.
+	 */
+	public DecisionTreeNode(Node node, ProbNet network, EvidenceCase evidence) {
+		this.variable = node.getVariable();
+		this.nodeType = node.getNodeType();
+		this.network = network;
+		// A copy, so that what the algorithm does next with its own evidence does not change the node's;
+		// copying null gives an empty evidence
+		this.evidence = new EvidenceCase(evidence);
+		childBranches = new ArrayList<>();
+	}
+
+	/**
+	 * Constructor creating a decision tree node from a variable and the network,
+	 * with no evidence.
+	 *
 	 * @param variable The variable associated with the node.
 	 * @param probNet  The probabilistic network.
 	 */
 	public DecisionTreeNode(Variable variable, ProbNet probNet) {
-		this(probNet.getNode(variable), probNet);
+		this(variable, probNet, null);
+	}
+
+	/**
+	 * Constructor creating a decision tree node from a variable, the network and
+	 * the evidence it is evaluated with.
+	 *
+	 * @param variable The variable associated with the node.
+	 * @param probNet  The probabilistic network.
+	 * @param evidence What has been observed on the path down to this node; {@code null} means nothing.
+	 */
+	public DecisionTreeNode(Variable variable, ProbNet probNet, EvidenceCase evidence) {
+		this(probNet.getNode(variable), probNet, evidence);
 	}
 
 	/**
@@ -92,7 +127,7 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 
 	/**
 	 * Returns the type of the node.
-	 * 
+	 *
 	 * @return The node type (CHANCE, DECISION, UTILITY).
 	 */
 	public NodeType getNodeType() {
@@ -100,57 +135,97 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 	}
 
 	/**
-	 * Returns the children.
+	 * {@inheritDoc}
 	 *
-	 * @return the children.
+	 * <p>They are the child branches of this node, and the list cannot be
+	 * modified: branches are added with {@link #addChild}.
 	 */
 	@Override
 	public List<DecisionTreeElement> getChildren() {
-		return children;
-	}
-
-	@Override
-	public EvidenceCase getBranchStates() {
-		return (parent != null) ? parent.getBranchStates() : new EvidenceCase();
+		return Collections.unmodifiableList(childBranches);
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the branches that hang from this node, one per state of its variable.
 	 *
-	 * <p>It is the probability kept in the evaluation of this node, or
-	 * {@link Double#NEGATIVE_INFINITY} if the node has not been evaluated yet.
+	 * @return the child branches, in a list that cannot be modified.
 	 */
-	@Override
+	public List<DecisionTreeBranch> getChildBranches() {
+		return Collections.unmodifiableList(childBranches);
+	}
+
+	/**
+	 * Returns the branch this node hangs from.
+	 *
+	 * @return the parent branch, or {@code null} if the node does not hang from a branch yet.
+	 */
+	public DecisionTreeBranch getParentBranch() {
+		return parentBranch;
+	}
+
+	/**
+	 * Returns the evidence the algorithm evaluated this node with: what has been
+	 * observed on the path down to it. A decision taken on the path is not
+	 * there, because it is already imposed on the network of the node.
+	 *
+	 * @return the evidence of this node; empty if it was created without evidence.
+	 */
+	public EvidenceCase getBranchStates() {
+		return evidence;
+	}
+
+	/**
+	 * Returns the probability of the scenario leading to this node. It is the
+	 * probability kept in the evaluation of this node, or
+	 * {@link Double#NEGATIVE_INFINITY} if the node has not been evaluated yet.
+	 *
+	 * @return The scenario probability.
+	 */
 	public double getScenarioProbability() {
 		return (evaluation == null) ? Double.NEGATIVE_INFINITY : evaluation.getProb();
 	}
 
 	/**
-	 * Adds a child element to this node.
-	 * 
-	 * @param child The child element (usually a DecisionTreeBranch).
+	 * Hangs a branch from this node.
+	 *
+	 * @param child The branch.
 	 */
-	public void addChild(DecisionTreeElement child) {
+	public void addChild(DecisionTreeBranch child) {
 		child.setParent(this);
-		children.add(child);
+		childBranches.add(child);
+	}
+
+	/**
+	 * Sets on each child branch the probability of its state given the path down
+	 * to this node: the probability of the scenario of its child divided by the
+	 * one of this node, or 0 when the one of this node is 0. The algorithms that
+	 * build the tree call it once this node and the children of its branches have
+	 * their evaluations.
+	 */
+	public void setBranchProbabilitiesFromEvaluations() {
+		double probability = getScenarioProbability();
+		for (DecisionTreeBranch branch : childBranches) {
+			branch.setBranchProbability(
+					(probability != 0) ? branch.getChild().getScenarioProbability() / probability : 0);
+		}
 	}
 
 	@Override
 	public String toString() {
 		return "DecisionTreeNode [variable=" +
 				variable.getName() +
-				", children=" + children +
+				", children=" + childBranches +
 				"]";
 	}
 
-	@Override
-	public void setParent(DecisionTreeElement parent) {
-		this.parent = parent;
+	/** Called by {@link DecisionTreeBranch#setChild}, which is the only way to hang a node from a branch. */
+	void setParentBranch(DecisionTreeBranch parentBranch) {
+		this.parentBranch = parentBranch;
 	}
 
 	/**
 	 * Returns the probabilistic network associated with this node.
-	 * 
+	 *
 	 * @return The ProbNet.
 	 */
 	public ProbNet getNetwork() {
@@ -163,13 +238,12 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 	 * an existing tree: the leaf takes the subtree root's content and stays where
 	 * it hangs.
 	 * <p>
-	 * The children list is duplicated as a new {@link ArrayList} containing the
-	 * same element references (shallow copy of the list, not of the elements), and
-	 * each child is re-parented to this node — otherwise the children would keep
-	 * pointing at the source, an orphan outside the tree, and the path evidence of
-	 * the grafted subtree would be computed through it. The parent link is left
-	 * untouched for the same reason: resetting it cut this node off from the path
-	 * above, and its accumulated evidence came back empty.
+	 * The list of child branches is duplicated as a new {@link ArrayList}
+	 * containing the same branches (shallow copy of the list, not of the
+	 * branches), and each branch is re-parented to this node — otherwise the
+	 * branches would keep pointing at the source, an orphan outside the tree. The
+	 * parent branch and the evidence are left untouched for the same reason: they
+	 * are this node's place in the tree.
 	 *
 	 * @param node The node to copy from.
 	 */
@@ -177,9 +251,9 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 		variable = node.variable;
 		nodeType = node.getNodeType();
 		evaluation = node.evaluation;
-		children = new ArrayList<>(node.children);
-		for (DecisionTreeElement child : children) {
-			child.setParent(this);
+		childBranches = new ArrayList<>(node.childBranches);
+		for (DecisionTreeBranch branch : childBranches) {
+			branch.setParent(this);
 		}
 		network = node.network;
 	}
@@ -201,8 +275,8 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 				|| !(evaluationOfTheChild(treeBranch) instanceof UnicritNodeEvaluation candidate)) {
 			return false;
 		}
-		for (DecisionTreeElement otherBranch : children) {
-			if (evaluationOfTheChild((DecisionTreeBranch) otherBranch) instanceof UnicritNodeEvaluation other
+		for (DecisionTreeBranch otherBranch : childBranches) {
+			if (evaluationOfTheChild(otherBranch) instanceof UnicritNodeEvaluation other
 					&& !(candidate.getUtility() >= other.getUtility())) {
 				return false;
 			}

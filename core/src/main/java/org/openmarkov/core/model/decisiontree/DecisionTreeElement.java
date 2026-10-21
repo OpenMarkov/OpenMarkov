@@ -7,13 +7,12 @@
 
 package org.openmarkov.core.model.decisiontree;
 
-import org.openmarkov.core.model.network.EvidenceCase;
-
 import java.util.List;
 
 /**
  * Interface that represents an element in a decision tree.
- * Both nodes and branches implement this interface.
+ * Both nodes and branches implement this interface: it is what the interface
+ * walks to paint the tree.
  */
 public sealed interface DecisionTreeElement permits DecisionTreeBranch, DecisionTreeNode {
 	/**
@@ -25,26 +24,5 @@ public sealed interface DecisionTreeElement permits DecisionTreeBranch, Decision
 	 * @return List of children, possibly empty.
 	 */
 	List<DecisionTreeElement> getChildren();
-
-	/**
-	 * Returns the evidence case associated with the path to this element.
-	 * 
-	 * @return The accumulated evidence.
-	 */
-	EvidenceCase getBranchStates();
-
-	/**
-	 * Returns the probability of the scenario leading to this element.
-	 * 
-	 * @return The scenario probability.
-	 */
-	double getScenarioProbability();
-
-	/**
-	 * Sets the parent of this element.
-	 * 
-	 * @param parent The parent element.
-	 */
-	void setParent(DecisionTreeElement parent);
 
 }

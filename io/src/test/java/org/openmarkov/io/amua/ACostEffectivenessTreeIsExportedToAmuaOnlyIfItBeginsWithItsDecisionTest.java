@@ -81,14 +81,14 @@ class ACostEffectivenessTreeIsExportedToAmuaOnlyIfItBeginsWithItsDecisionTest {
         node.setEvaluation(new CENodeEvaluation(1.0, null));
         State[] states = variable.getStates();
         double probability = net.getNode(variable).getNodeType() == NodeType.DECISION ? 1 : 0.5;
-        node.addChild(branch(variable, states[0], probability, first));
-        node.addChild(branch(variable, states[1], probability, second));
+        node.addChild(branch(states[0], probability, first));
+        node.addChild(branch(states[1], probability, second));
         return node;
     }
 
-    private DecisionTreeBranch branch(Variable variable, State state, double probability, DecisionTreeNode child) {
-        DecisionTreeBranch branch = new DecisionTreeBranch(net, variable, state);
-        branch.setScenarioProbability(probability);
+    private DecisionTreeBranch branch(State state, double probability, DecisionTreeNode child) {
+        DecisionTreeBranch branch = new DecisionTreeBranch(state);
+        branch.setBranchProbability(probability);
         branch.setChild(child);
         return branch;
     }

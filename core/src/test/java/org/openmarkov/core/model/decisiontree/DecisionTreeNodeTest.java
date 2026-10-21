@@ -9,6 +9,7 @@ package org.openmarkov.core.model.decisiontree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -82,19 +84,29 @@ class DecisionTreeNodeTest {
     @Test
     void addChildLinksParentAndChildSymmetrically() {
         DecisionTreeNode parent = new DecisionTreeNode(decisionNode, probNet);
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet);
+        DecisionTreeBranch branch = new DecisionTreeBranch(decisionVariable.getStates()[0]);
 
         parent.addChild(branch);
 
         List<DecisionTreeElement> children = parent.getChildren();
         assertEquals(1, children.size());
         assertSame(branch, children.get(0));
-        // setParent should have been called as part of addChild
+        assertEquals(List.of(branch), parent.getChildBranches());
         assertSame(parent, branch.getParent());
     }
 
+    /** Branches are hung with {@code addChild}, which also links them back to the node. */
     @Test
-    void getBranchStatesWithoutParentReturnsEmptyEvidence() {
+    void theChildrenCannotBeChangedThroughTheirList() {
+        DecisionTreeNode node = new DecisionTreeNode(decisionNode, probNet);
+        DecisionTreeBranch branch = new DecisionTreeBranch(decisionVariable.getStates()[0]);
+
+        assertThrows(UnsupportedOperationException.class, () -> node.getChildren().add(branch));
+        assertThrows(UnsupportedOperationException.class, () -> node.getChildBranches().add(branch));
+    }
+
+    @Test
+    void aNodeCreatedWithoutEvidenceHasAnEmptyOne() {
         DecisionTreeNode node = new DecisionTreeNode(decisionNode, probNet);
 
         EvidenceCase evidence = node.getBranchStates();
@@ -103,20 +115,36 @@ class DecisionTreeNodeTest {
         assertTrue(evidence.getFindings().isEmpty());
     }
 
+    /**
+     * The evidence of a node is the one it was created with, which the algorithm
+     * evaluated it with; it is not rebuilt from the branches above it. Above this
+     * one there is a decision, which is not evidence.
+     */
     @Test
-    void getBranchStatesWithParentDelegates() {
+    void theEvidenceIsTheOneTheNodeWasCreatedWith() throws Exception {
         DecisionTreeNode root = new DecisionTreeNode(decisionNode, probNet);
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable,
-                decisionVariable.getStates()[0]);
+        DecisionTreeBranch branch = new DecisionTreeBranch(decisionVariable.getStates()[0]);
         root.addChild(branch);
+        EvidenceCase evidence = new EvidenceCase();
+        evidence.addFinding(new Finding(chanceVariable, chanceVariable.getStates()[1]));
 
-        DecisionTreeNode child = new DecisionTreeNode(chanceNode, probNet);
+        DecisionTreeNode child = new DecisionTreeNode(chanceNode, probNet, evidence);
         branch.setChild(child);
 
-        EvidenceCase evidence = child.getBranchStates();
-        // Inherited from branch -> includes the finding D=yes
-        assertEquals(1, evidence.getFindings().size());
-        assertSame(decisionVariable, evidence.getFindings().get(0).getVariable());
+        List<Finding> findings = child.getBranchStates().getFindings();
+        assertEquals(1, findings.size());
+        assertSame(chanceVariable, findings.get(0).getVariable());
+    }
+
+    /** The node keeps a copy: what the algorithm does afterwards with its evidence does not reach the node. */
+    @Test
+    void theNodeKeepsACopyOfItsEvidence() throws Exception {
+        EvidenceCase evidence = new EvidenceCase();
+        DecisionTreeNode node = new DecisionTreeNode(chanceVariable, probNet, evidence);
+
+        evidence.addFinding(new Finding(decisionVariable, decisionVariable.getStates()[0]));
+
+        assertTrue(node.getBranchStates().getFindings().isEmpty());
     }
 
     @Test
@@ -149,15 +177,13 @@ class DecisionTreeNodeTest {
     @Test
     void copyDoesNotShareChildrenListWithSource() {
         DecisionTreeNode source = new DecisionTreeNode(decisionNode, probNet);
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet);
-        source.addChild(branch);
+        source.addChild(new DecisionTreeBranch(decisionVariable.getStates()[0]));
 
         DecisionTreeNode dest = new DecisionTreeNode(chanceNode, probNet);
         dest.copy(source);
 
-        // Mutating the source list after copy must not leak into the destination.
-        DecisionTreeBranch extra = new DecisionTreeBranch(probNet);
-        source.addChild(extra);
+        // Adding to the source after copy must not leak into the destination.
+        source.addChild(new DecisionTreeBranch(decisionVariable.getStates()[1]));
 
         assertEquals(1, dest.getChildren().size());
         assertEquals(2, source.getChildren().size());
@@ -165,46 +191,44 @@ class DecisionTreeNodeTest {
 
     /**
      * The one use of {@code copy} is grafting a fresh subtree onto a leaf of an
-     * existing tree, so the destination keeps its own place: its parent link is
-     * untouched and the evidence accumulated along the path above it survives the
-     * graft. The previous contract reset the parent to null and expected the
-     * caller to re-attach; the only caller never did, and the grafted node came
-     * back with empty path evidence.
+     * existing tree, so the destination keeps its own place: the branch it hangs
+     * from and its evidence. The previous contract reset the parent to null and
+     * expected the caller to re-attach; the only caller never did, and the grafted
+     * node came back with empty path evidence.
      */
     @Test
-    void copyKeepsTheDestinationsPlaceInTheTree() {
+    void copyKeepsTheDestinationsPlaceInTheTree() throws Exception {
         DecisionTreeNode root = new DecisionTreeNode(decisionNode, probNet);
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable,
-                decisionVariable.getStates()[0]);
+        DecisionTreeBranch branch = new DecisionTreeBranch(decisionVariable.getStates()[0]);
         root.addChild(branch);
+        EvidenceCase evidence = new EvidenceCase();
+        evidence.addFinding(new Finding(chanceVariable, chanceVariable.getStates()[0]));
 
-        DecisionTreeNode dest = new DecisionTreeNode(chanceNode, probNet);
-        branch.setChild(dest);   // dest hangs from the tree: D=yes on its path
+        DecisionTreeNode dest = new DecisionTreeNode(chanceNode, probNet, evidence);
+        branch.setChild(dest);
 
         DecisionTreeNode source = new DecisionTreeNode(chanceNode, probNet);
         dest.copy(source);
 
+        assertSame(branch, dest.getParentBranch());
         assertEquals(1, dest.getBranchStates().getFindings().size(),
-                "the path evidence above the grafted node must survive the graft");
+                "the evidence of the grafted node must survive the graft");
     }
 
     /**
      * The shared children must point at the node they now hang from. If they kept
      * the source as parent, the source — an orphan outside the tree — would stay
-     * reachable, and the path evidence of the grafted subtree would be computed
-     * through it.
+     * reachable from them.
      */
     @Test
     void copyReparentsTheSharedChildrenToTheDestination() {
         DecisionTreeNode source = new DecisionTreeNode(decisionNode, probNet);
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable,
-                decisionVariable.getStates()[0]);
-        source.addChild(branch);
+        source.addChild(new DecisionTreeBranch(decisionVariable.getStates()[0]));
 
         DecisionTreeNode dest = new DecisionTreeNode(chanceNode, probNet);
         dest.copy(source);
 
-        assertSame(dest, ((DecisionTreeBranch) dest.getChildren().get(0)).getParent());
+        assertSame(dest, dest.getChildBranches().get(0).getParent());
     }
 
     @Test

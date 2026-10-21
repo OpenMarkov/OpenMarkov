@@ -53,7 +53,7 @@ class DecisionTreeNodeBestDecisionTest {
 
     /** A branch of the decision whose child has the given evaluation; no child if the evaluation is null. */
     private DecisionTreeBranch branchWithEvaluation(State state, DecisionTreeNodeEvaluation evaluation) {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, state);
+        DecisionTreeBranch branch = new DecisionTreeBranch(state);
         decisionTreeNode.addChild(branch);
         if (evaluation != null) {
             Variable chance = new Variable("after " + state.getName(), "a", "b");
@@ -120,7 +120,7 @@ class DecisionTreeNodeBestDecisionTest {
     void noBranchOfAChanceNodeIsTheBestDecision() {
         Variable chance = new Variable("C", "a", "b");
         DecisionTreeNode chanceTreeNode = new DecisionTreeNode(probNet.addNode(chance, NodeType.CHANCE), probNet);
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, chance, chance.getStates()[0]);
+        DecisionTreeBranch branch = new DecisionTreeBranch(chance.getStates()[0]);
         chanceTreeNode.addChild(branch);
         DecisionTreeNode child = new DecisionTreeNode(probNet.addNode(new Variable("U"), NodeType.UTILITY), probNet);
         child.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));

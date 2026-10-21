@@ -8,7 +8,6 @@ package org.openmarkov.core.model.decisiontree;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -17,7 +16,6 @@ import org.openmarkov.core.model.network.Variable;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,79 +46,70 @@ class DecisionTreeBranchTest {
     }
 
     @Test
-    void constructorWithVariableAndStateStoresThem() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+    void constructorStoresTheStateAndTheVariableIsTheOneOfTheParent() {
+        DecisionTreeBranch branch = new DecisionTreeBranch(yes);
+        assertSame(yes, branch.getBranchState());
+        assertNull(branch.getBranchVariable(), "a branch that hangs from no node has no variable yet");
+
+        new DecisionTreeNode(decisionNode, probNet).addChild(branch);
 
         assertSame(decisionVariable, branch.getBranchVariable());
-        assertSame(yes, branch.getBranchState());
     }
 
     @Test
-    void constructorWithoutVariableLeavesBothNull() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet);
+    void theRootBranchHasNeitherStateNorVariable() {
+        DecisionTreeBranch branch = new DecisionTreeBranch();
 
         assertNull(branch.getBranchVariable());
         assertNull(branch.getBranchState());
     }
 
     @Test
-    void getBranchStatesAddsFindingForBranchVariable() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+    void branchProbabilityIsNotANumberUntilItIsSet() {
+        DecisionTreeBranch branch = new DecisionTreeBranch(yes);
+        assertTrue(Double.isNaN(branch.getBranchProbability()));
 
-        EvidenceCase evidence = branch.getBranchStates();
-
-        assertEquals(1, evidence.getFindings().size());
-        assertSame(decisionVariable, evidence.getFindings().get(0).getVariable());
+        branch.setBranchProbability(0.25);
+        assertEquals(0.25, branch.getBranchProbability());
     }
 
     @Test
-    void getBranchStatesWithoutVariableReturnsEmptyEvidence() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet);
-
-        EvidenceCase evidence = branch.getBranchStates();
-
-        assertNotNull(evidence);
-        assertTrue(evidence.getFindings().isEmpty());
-    }
-
-    @Test
-    void getBranchStatesIsCachedAcrossCalls() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
-
-        EvidenceCase first = branch.getBranchStates();
-        EvidenceCase second = branch.getBranchStates();
-
-        // Currently the implementation caches scenarioEvidence -> same instance.
-        assertSame(first, second);
-    }
-
-    @Test
-    void branchProbabilityZeroWhenParentScenarioIsZero() {
-        DecisionTreeNode parent = new DecisionTreeNode(decisionNode, probNet);
+    void branchProbabilityFromTheEvaluationsIsZeroWhenTheParentScenarioIsZero() {
+        DecisionTreeNode parent = new DecisionTreeNode(chanceNode, probNet);
         parent.setEvaluation(new UnicritNodeEvaluation(0.0, 0.0));
+        DecisionTreeBranch branch = hangChild(parent, yes, 0.5);
 
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
-        parent.addChild(branch);
-        branch.setScenarioProbability(0.5);
+        parent.setBranchProbabilitiesFromEvaluations();
 
         assertEquals(0.0, branch.getBranchProbability());
     }
 
     @Test
-    void branchProbabilityIsScenarioRatio() {
-        DecisionTreeNode parent = new DecisionTreeNode(decisionNode, probNet);
+    void branchProbabilityFromTheEvaluationsIsTheRatioOfTheScenarios() {
+        DecisionTreeNode parent = new DecisionTreeNode(chanceNode, probNet);
         parent.setEvaluation(new UnicritNodeEvaluation(0.4, 0.0));
+        DecisionTreeBranch first = hangChild(parent, yes, 0.1);
+        DecisionTreeBranch second = hangChild(parent, no, 0.3);
 
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+        parent.setBranchProbabilitiesFromEvaluations();
+
+        assertEquals(0.25, first.getBranchProbability(), 1e-12);
+        assertEquals(0.75, second.getBranchProbability(), 1e-12);
+    }
+
+    /** Hangs from the node a branch whose child has the given scenario probability. */
+    private DecisionTreeBranch hangChild(DecisionTreeNode parent, State state, double scenarioProbability) {
+        DecisionTreeBranch branch = new DecisionTreeBranch(state);
         parent.addChild(branch);
-        branch.setScenarioProbability(0.1);
-
-        assertEquals(0.25, branch.getBranchProbability(), 1e-12);
+        DecisionTreeNode child = new DecisionTreeNode(decisionNode, probNet);
+        child.setEvaluation(new UnicritNodeEvaluation(scenarioProbability, 0.0));
+        branch.setChild(child);
+        return branch;
     }
 
     @Test
     void getChildrenIsEmptyWhileTheBranchHasNoChild() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+        DecisionTreeBranch branch = new DecisionTreeBranch(yes);
 
         assertTrue(branch.getChildren().isEmpty());
     }
@@ -132,7 +121,7 @@ class DecisionTreeBranchTest {
      */
     @Test
     void bothKindsOfElementReportNoChildrenTheSameWay() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+        DecisionTreeBranch branch = new DecisionTreeBranch(yes);
         DecisionTreeNode node = new DecisionTreeNode(chanceNode, probNet);
 
         assertEquals(node.getChildren().isEmpty(), branch.getChildren().isEmpty());
@@ -146,7 +135,7 @@ class DecisionTreeBranchTest {
      */
     @Test
     void walkingABranchWithNoChildYetDoesNotFail() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+        DecisionTreeBranch branch = new DecisionTreeBranch(yes);
 
         assertDoesNotThrow(() -> countElements(branch));
         assertEquals(1, countElements(branch));
@@ -162,7 +151,7 @@ class DecisionTreeBranchTest {
 
     @Test
     void setChildLinksBranchAndNode() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+        DecisionTreeBranch branch = new DecisionTreeBranch(yes);
         DecisionTreeNode child = new DecisionTreeNode(chanceNode, probNet);
 
         branch.setChild(child);
@@ -170,21 +159,7 @@ class DecisionTreeBranchTest {
         assertSame(child, branch.getChild());
         assertEquals(1, branch.getChildren().size());
         assertSame(child, branch.getChildren().get(0));
-
-        // Symmetry is verified indirectly: the child sees the branch's evidence
-        // via its parent chain.
-        EvidenceCase childEvidence = child.getBranchStates();
-        assertEquals(1, childEvidence.getFindings().size());
-        assertSame(decisionVariable, childEvidence.getFindings().get(0).getVariable());
-    }
-
-    @Test
-    void scenarioProbabilityRoundTrip() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
-        assertEquals(Double.NEGATIVE_INFINITY, branch.getScenarioProbability());
-
-        branch.setScenarioProbability(0.7);
-        assertEquals(0.7, branch.getScenarioProbability());
+        assertSame(branch, child.getParentBranch());
     }
 
     /**
@@ -193,43 +168,15 @@ class DecisionTreeBranchTest {
      */
     @Test
     void toStringDoesNotThrowWhenBranchVariableIsNull() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet);
-        assertDoesNotThrow(branch::toString);
-    }
-
-    @Test
-    void scenarioEvidenceCacheIsInvalidatedWhenBranchIsReparented() {
-        // The branch caches its accumulated evidence the first time it is queried.
-        // If the branch is then attached to a different parent, the cache must
-        // be cleared so the next query reflects the new ancestor chain.
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet);
-
-        DecisionTreeNode parentYes = new DecisionTreeNode(decisionNode, probNet);
-        DecisionTreeBranch upstreamYes = new DecisionTreeBranch(probNet, decisionVariable, yes);
-        parentYes.addChild(upstreamYes);
-        DecisionTreeNode innerYes = new DecisionTreeNode(chanceNode, probNet);
-        upstreamYes.setChild(innerYes);
-        innerYes.addChild(branch);
-
-        // Prime the cache through the "yes" chain.
-        EvidenceCase first = branch.getBranchStates();
-        assertEquals(yes.getName(), first.getFindings().get(0).getState());
-
-        // Re-parent the branch under a different decision-state chain.
-        DecisionTreeNode parentNo = new DecisionTreeNode(decisionNode, probNet);
-        DecisionTreeBranch upstreamNo = new DecisionTreeBranch(probNet, decisionVariable, no);
-        parentNo.addChild(upstreamNo);
-        DecisionTreeNode innerNo = new DecisionTreeNode(chanceNode, probNet);
-        upstreamNo.setChild(innerNo);
-        innerNo.addChild(branch);   // triggers branch.setParent(innerNo) → cache invalidation
-
-        EvidenceCase second = branch.getBranchStates();
-        assertEquals(no.getName(), second.getFindings().get(0).getState());
+        assertDoesNotThrow(new DecisionTreeBranch()::toString);
+        assertDoesNotThrow(new DecisionTreeBranch(yes)::toString);
     }
 
     @Test
     void toStringWithBranchVariableContainsVariableName() {
-        DecisionTreeBranch branch = new DecisionTreeBranch(probNet, decisionVariable, yes);
+        DecisionTreeBranch branch = new DecisionTreeBranch(yes);
+        new DecisionTreeNode(decisionNode, probNet).addChild(branch);
+
         assertTrue(branch.toString().contains("D"));
     }
 }

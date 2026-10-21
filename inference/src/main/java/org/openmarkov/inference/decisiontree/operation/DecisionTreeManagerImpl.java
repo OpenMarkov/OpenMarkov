@@ -65,7 +65,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
                     List.of(InfluenceDiagramType.getUniqueInstance(),
                             DecisionAnalysisNetworkType.getUniqueInstance()));
         }
-        DecisionTreeBranch root = new DecisionTreeBranch(probNet);
+        DecisionTreeBranch root = new DecisionTreeBranch();
         GenerateDecisionTree genDT = taskFactory.createTask(probNet, depth);
         genDT.setPreResolutionEvidence(branchEvidence);
         root.setChild(genDT.getDecisionTree());

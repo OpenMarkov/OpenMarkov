@@ -29,7 +29,6 @@ import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.Decisio
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class DANDecisionTreeInference extends DANInference implements DecisionTreeComputation {
     private DecisionTreeNode decisionTree;
@@ -101,7 +100,6 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
             if (computeDecisionTreeForGUI) {
                 decisionTree = createDecisionTreeNode(dan, svNode, evidenceCase);
                 //TODO Consider in some moment to have the tree structure of SV nodes in the DT in the GUI
-                //addNonSVUtilityNodesToDecisionTree();
             }
         } else {
             int childTreeDepth = currentTreeDepth + 1;
@@ -149,6 +147,7 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
         }
         if (computeDecisionTreeForGUI) {
             decisionTree.setEvaluation(evaluationOfTheTreeNode());
+            decisionTree.setBranchProbabilitiesFromEvaluations();
         }
         
     }
@@ -231,33 +230,9 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
     }
     
     
-    /**
-     * Adds a utility tree at the tip of each leaf
-     */
-    public void addNonSVUtilityNodesToDecisionTree() {
-        // Add utility nodes
-        //DecisionTreeNode svTreeNode = new DecisionTreeNode(svNode);
-        ProbNet probNet = decisionTree.getNetwork();
-        
-        Stack<DecisionTreeNode> utilityTreeStack = new Stack<>();
-        utilityTreeStack.push(decisionTree);
-        while (!utilityTreeStack.isEmpty()) {
-            DecisionTreeNode utilityTreeNode = utilityTreeStack.pop();
-            Node utilityNode = probNet.getNode(utilityTreeNode.getVariable());
-            for (Node parentNode : utilityNode.getParents()) {
-                if (parentNode.getNodeType() == NodeType.UTILITY) {
-                    //DecisionTreeNode treeNode = new DecisionTreeNode(parentNode);
-                    DecisionTreeNode treeNode = new DecisionTreeNode(parentNode);
-                    utilityTreeNode.addChild(treeNode);
-                    utilityTreeStack.push(treeNode);
-                }
-            }
-        }
-    }
-    
     private DecisionTreeNode createDecisionTreeNode(ProbNet dan, Variable rootDecision, EvidenceCase evidence) {
         setDANNameFromEvidence(dan, evidence);
-        return new DecisionTreeNode(rootDecision, dan);
+        return new DecisionTreeNode(rootDecision, dan, evidence);
     }
     
     private static void setDANNameFromEvidence(ProbNet dan, EvidenceCase evidence) {
@@ -295,7 +270,7 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
     
     private DecisionTreeNode createDecisionTreeNode(ProbNet dan, Node node, EvidenceCase evidence) {
         setDANNameFromEvidence(dan, evidence);
-        return new DecisionTreeNode(node, dan);
+        return new DecisionTreeNode(node, dan, evidence);
     }
     
     
@@ -329,8 +304,8 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
      * @param childEvaluation This method: (1) adds to 'childrenProbability' and
      *                        'childrenUtility' the results of the child evaluation
      *                        'childEvaluation'; and (2) updates the decision tree by adding a
-     *                        branch labeled with ('Variable' = 'state') and by setting the
-     *                        corresponding values of 'utility' and 'scenarioProbability".
+     *                        branch for 'state' that leads to the tree of the child evaluation.
+     *                        The probability of the branch is set once this node is evaluated.
      * @param dan             ProbNet representing a Decision Analysis Network
      * @param x               Variable
      * @param state           State
@@ -339,18 +314,14 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
                                                                 Variable x, State state) {
         super.addResultsOfChildEvaluation(childEvaluation);
         if (computeDecisionTreeForGUI()) {
-            addBranchAndChildToDecisionTree(dan, x, state, childEvaluation);
+            addBranchAndChildToDecisionTree(state, childEvaluation);
         }
     }
     
-    private void addBranchAndChildToDecisionTree(ProbNet dan, Variable x, State state,
-                                                 DANDecisionTreeInference auxEval) {
-        DecisionTreeBranch treeBranch = new DecisionTreeBranch(dan, x, state);
+    private void addBranchAndChildToDecisionTree(State state, DANDecisionTreeInference auxEval) {
+        DecisionTreeBranch treeBranch = new DecisionTreeBranch(state);
         decisionTree.addChild(treeBranch);
         treeBranch.setChild(auxEval.getDecisionTree());
-        treeBranch.setScenarioProbability(DANOperations.getOnlyValuePotential(auxEval.getProbability()));
-        // TODO See if this is really necessary
-        //treeBranch.setOnlyValueUtilityOrCEP(auxEval.getUtility());
     }
     
     

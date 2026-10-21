@@ -101,9 +101,9 @@ class AmuaDTConverterTest {
         DecisionTreeNode utilityNode = new DecisionTreeNode(U, net);
         utilityNode.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
 
-        root.addChild(branch(net, D, D.getStates()[0], chanceNode));
-        chanceNode.addChild(branch(net, C, C.getStates()[0], utilityNode, 0.7));
-        chanceNode.addChild(branch(net, C, C.getStates()[1], utilityNode, 0.4));
+        root.addChild(branch(D.getStates()[0], chanceNode));
+        chanceNode.addChild(branch(C.getStates()[0], utilityNode, 0.7));
+        chanceNode.addChild(branch(C.getStates()[1], utilityNode, 0.4));
 
         AmuaDTConverter converter = new AmuaDTConverter(AmuaModel.UNICRITERIA_DT);
         AmuaDTNode<?> amuaRoot = converter.convertToAmuaTree(root);
@@ -132,8 +132,8 @@ class AmuaDTConverterTest {
         net.addNode(C, NodeType.CHANCE);
         DecisionTreeNode root = new DecisionTreeNode(D, net);
         DecisionTreeNode chanceNode = new DecisionTreeNode(C, net);
-        root.addChild(branch(net, D, D.getStates()[0], chanceNode));
-        root.addChild(branch(net, D, D.getStates()[1], chanceNode));
+        root.addChild(branch(D.getStates()[0], chanceNode));
+        root.addChild(branch(D.getStates()[1], chanceNode));
         AmuaDTConverter converter = new AmuaDTConverter(AmuaModel.COST_EFFECTIVENESS_DT);
         AmuaDTNode<?> amuaRoot = converter.convertToAmuaTree(root);
 
@@ -261,13 +261,13 @@ class AmuaDTConverterTest {
         DecisionTreeNode u4 = new DecisionTreeNode(U4, net);
         u4.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
 
-        decision.addChild(branch(net, D, D.getStates()[0], chanceYes));
-        decision.addChild(branch(net, D, D.getStates()[1], chanceNo));
+        decision.addChild(branch(D.getStates()[0], chanceYes));
+        decision.addChild(branch(D.getStates()[1], chanceNo));
 
-        chanceYes.addChild(branch(net, C_yes, C_yes.getStates()[0], u1, 0.14));
-        chanceYes.addChild(branch(net, C_yes, C_yes.getStates()[1], u2, 0.86));
-        chanceNo.addChild(branch(net, C_no, C_no.getStates()[0], u3, 0.14));
-        chanceNo.addChild(branch(net, C_no, C_no.getStates()[1], u4, 0.86));
+        chanceYes.addChild(branch(C_yes.getStates()[0], u1, 0.14));
+        chanceYes.addChild(branch(C_yes.getStates()[1], u2, 0.86));
+        chanceNo.addChild(branch(C_no.getStates()[0], u3, 0.14));
+        chanceNo.addChild(branch(C_no.getStates()[1], u4, 0.86));
 
         return decision;
     }
@@ -320,29 +320,29 @@ class AmuaDTConverterTest {
         DecisionTreeNode u6 = new DecisionTreeNode(U6, net);
         u6.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 70000.0, 6.5)));
 
-        root.addChild(branch(net,D,D.getStates()[0],chanceNo));
-        root.addChild(branch(net,D,D.getStates()[1],chanceT1));
-        root.addChild(branch(net,D,D.getStates()[2],chanceT2));
+        root.addChild(branch(D.getStates()[0],chanceNo));
+        root.addChild(branch(D.getStates()[1],chanceT1));
+        root.addChild(branch(D.getStates()[2],chanceT2));
 
-        chanceNo.addChild(branch(net,C_no,C_no.getStates()[0],u1,0.86));
-        chanceNo.addChild(branch(net,C_no,C_no.getStates()[1],u2,0.14));
-        chanceT1.addChild(branch(net,C_t1,C_t1.getStates()[0],u3,0.86));
-        chanceT1.addChild(branch(net,C_t1,C_t1.getStates()[1],u4,0.14));
-        chanceT2.addChild(branch(net,C_t2,C_t2.getStates()[0],u5,0.86));
-        chanceT2.addChild(branch(net,C_t2,C_t2.getStates()[1],u6,0.14));
+        chanceNo.addChild(branch(C_no.getStates()[0],u1,0.86));
+        chanceNo.addChild(branch(C_no.getStates()[1],u2,0.14));
+        chanceT1.addChild(branch(C_t1.getStates()[0],u3,0.86));
+        chanceT1.addChild(branch(C_t1.getStates()[1],u4,0.14));
+        chanceT2.addChild(branch(C_t2.getStates()[0],u5,0.86));
+        chanceT2.addChild(branch(C_t2.getStates()[1],u6,0.14));
 
         return root;
     }
 
-    private DecisionTreeBranch branch(ProbNet net, Variable var, State state, DecisionTreeNode child){
-        DecisionTreeBranch b = new DecisionTreeBranch(net,var,state);
+    private DecisionTreeBranch branch(State state, DecisionTreeNode child){
+        DecisionTreeBranch b = new DecisionTreeBranch(state);
         b.setChild(child);
         return b;
     }
 
-    private DecisionTreeBranch branch(ProbNet net, Variable var, State state, DecisionTreeNode child, double probability){
-        DecisionTreeBranch b = branch(net,var,state,child);
-        b.setScenarioProbability(probability);
+    private DecisionTreeBranch branch(State state, DecisionTreeNode child, double probability){
+        DecisionTreeBranch b = branch(state,child);
+        b.setBranchProbability(probability);
         return b;
     }
 

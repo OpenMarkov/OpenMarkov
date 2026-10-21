@@ -158,7 +158,7 @@ public class DecisionTreeExpansion {
 			return variableElimination(probNet, evidence);
 		}
 		Expansion oneLevel = expand(probNet, evidence, 1);
-		return leaf(probNet, oneLevel.probability(), oneLevel.utility());
+		return leaf(probNet, evidence, oneLevel.probability(), oneLevel.utility());
 	}
 
 	// ---------------------------------------------------------------------
@@ -224,8 +224,8 @@ public class DecisionTreeExpansion {
 			Node node = nodeList.get(0);
 			Branches branches = expandForNode(probNet, evidence, node, childDepth(depth));
 			return node.getNodeType() == NodeType.CHANCE ?
-					average(probNet, node, branches) :
-					optimize(probNet, node, branches);
+					average(probNet, evidence, node, branches) :
+					optimize(probNet, evidence, node, branches);
 		}
 		// Several decisions can be the first one: the tree branches on which one is
 		// made first, which is itself a decision and is therefore optimized over. The
@@ -233,7 +233,7 @@ public class DecisionTreeExpansion {
 		Node orderNode = new Node(probNet, DANOperations.createDummyVariableOfOrder(nodeList), NodeType.DECISION);
 		Branches branches = prioritizeDecisions(probNet, evidence, nodeList, orderNode.getVariable(),
 				childDepth(depth));
-		return optimize(probNet, orderNode, branches);
+		return optimize(probNet, evidence, orderNode, branches);
 	}
 
 	/** Guards against {@link Integer#MAX_VALUE} — the unbounded case — decaying into a finite depth. */
@@ -307,7 +307,7 @@ public class DecisionTreeExpansion {
 			// Only an observation extends the evidence; taking a decision does not.
 			EvidenceCase childEvidence = isChance ? extendEvidence(evidence, variable, state) : evidence;
 			Expansion child = subtree(instantiatedNet, childEvidence, childDepth);
-			addBranch(branches, new DecisionTreeBranch(probNet, variable, state), child);
+			addBranch(branches, new DecisionTreeBranch(state), child);
 		}
 		return branches;
 	}
@@ -330,7 +330,7 @@ public class DecisionTreeExpansion {
 			ProbNet prioritizedNet = DANOperations.prioritize(probNet, decision);
 			// Deciding the order is a decision, so it does not extend the evidence either.
 			Expansion child = subtree(prioritizedNet, evidence, childDepth);
-			addBranch(branches, new DecisionTreeBranch(probNet, orderVariable, state), child);
+			addBranch(branches, new DecisionTreeBranch(state), child);
 		}
 		return branches;
 	}
@@ -341,12 +341,11 @@ public class DecisionTreeExpansion {
 
 	/**
 	 * Hangs an already expanded child from a branch and records what merging the
-	 * branches will need. The branch keeps the probability of its scenario, which
-	 * is the one of its child: reaching the child is reaching the branch.
+	 * branches will need. The probability of the branch is set later, once the
+	 * node it hangs from has its own evaluation.
 	 */
 	private static void addBranch(Branches branches, DecisionTreeBranch branch, Expansion child) {
 		branch.setChild(child.node());
-		branch.setScenarioProbability(child.node().getScenarioProbability());
 		branches.branches().add(branch);
 		branches.probabilities().add(child.probability());
 		branches.utilities().add(child.utility());
@@ -360,14 +359,14 @@ public class DecisionTreeExpansion {
 	 * Merges the branches of a chance node by averaging them, weighted by their
 	 * probability — the {@code average} half of {@code merge branches}.
 	 */
-	private Expansion average(ProbNet probNet, Node node, Branches branches)
+	private Expansion average(ProbNet probNet, EvidenceCase evidence, Node node, Branches branches)
 			throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException,
 			PotentialOperationException.DifferentSizesInPotentialsAndStates {
 		Variable variable = node.getVariable();
 		TablePotential conditionedProbability = (TablePotential) condition(variable, branches.probabilities());
 		ChanceVariableElimination elimination = new ChanceVariableElimination(variable,
 				Arrays.asList(conditionedProbability), Arrays.asList(condition(variable, branches.utilities())));
-		return node(probNet, node, branches, elimination.getMarginalProbability(),
+		return node(probNet, evidence, node, branches, elimination.getMarginalProbability(),
 				sumOfUtilities(elimination.getUtilityPotentials()));
 	}
 
@@ -376,7 +375,7 @@ public class DecisionTreeExpansion {
 	 * the utility — the {@code optimize} half of {@code merge branches}.
 	 */
 	@SuppressWarnings("unchecked")
-	private Expansion optimize(ProbNet probNet, Node node, Branches branches)
+	private Expansion optimize(ProbNet probNet, EvidenceCase evidence, Node node, Branches branches)
 			throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException,
 			PotentialOperationException.DifferentSizesInPotentialsAndStates {
 		Variable variable = node.getVariable();
@@ -388,7 +387,7 @@ public class DecisionTreeExpansion {
 		Potential utility = maximizedUtility != null ?
 				maximizedUtility :
 				(Potential) DiscretePotentialOperations.createZeroUtilityPotential(probNet);
-		return node(probNet, node, branches, elimination.getProjectedProbability(), utility);
+		return node(probNet, evidence, node, branches, elimination.getProjectedProbability(), utility);
 	}
 
 	/** Gathers the potentials of the branches into a single one conditioned on the branching variable. */
@@ -419,16 +418,16 @@ public class DecisionTreeExpansion {
 			throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException {
 		DANConditionalSymmetricInference inference = new DANConditionalSymmetricInference(probNet, null,
 				evidence != null ? evidence : new EvidenceCase(), isCEA);
-		return leaf(probNet, inference.getProbability(), inference.getUtility());
+		return leaf(probNet, evidence, inference.getProbability(), inference.getUtility());
 	}
 
 	/**
 	 * Builds a leaf of the tree, hanging from the super-value node of the model
 	 * and carrying an already computed probability and utility.
 	 */
-	private Expansion leaf(ProbNet probNet, TablePotential probability, Potential utility) {
+	private Expansion leaf(ProbNet probNet, EvidenceCase evidence, TablePotential probability, Potential utility) {
 		Node superValueNode = DANDecisionTreeInference.getSuperValueNode(probNet, isCEA);
-		DecisionTreeNode treeNode = new DecisionTreeNode(superValueNode, probNet);
+		DecisionTreeNode treeNode = new DecisionTreeNode(superValueNode, probNet, evidence);
 		return attachEvaluation(treeNode, probability, utility);
 	}
 
@@ -441,13 +440,14 @@ public class DecisionTreeExpansion {
 	 * node is created last, as the pseudocode has it: it is the merged
 	 * evaluation, and not the other way round, that the recursion is after.
 	 */
-	private Expansion node(ProbNet probNet, Node node, Branches branches, TablePotential probability,
-			Potential utility) {
-		DecisionTreeNode treeNode = new DecisionTreeNode(node, probNet);
+	private Expansion node(ProbNet probNet, EvidenceCase evidence, Node node, Branches branches,
+			TablePotential probability, Potential utility) {
+		DecisionTreeNode treeNode = new DecisionTreeNode(node, probNet, evidence);
 		Expansion expansion = attachEvaluation(treeNode, probability, utility);
 		for (DecisionTreeBranch branch : branches.branches()) {
 			treeNode.addChild(branch);
 		}
+		treeNode.setBranchProbabilitiesFromEvaluations();
 		return expansion;
 	}
 

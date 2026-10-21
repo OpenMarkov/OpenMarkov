@@ -95,7 +95,7 @@ public class AmuaDTValidatorTest {
         secondDecisionNode.setEvaluation(new CENodeEvaluation(1.0, null));
         DecisionTreeBranch firstBranch = (DecisionTreeBranch) ceaRoot.getChildren().get(0);
         DecisionTreeNode firstChanceNode = firstBranch.getChild();
-        DecisionTreeBranch newBranch = new DecisionTreeBranch(simpleNet, D2, D2.getStates()[0]);
+        DecisionTreeBranch newBranch = new DecisionTreeBranch(D2.getStates()[0]);
 
         newBranch.setChild(secondDecisionNode);
         firstChanceNode.addChild(newBranch);
@@ -198,16 +198,16 @@ public class AmuaDTValidatorTest {
         DecisionTreeNode chanceT2 = new DecisionTreeNode(C_t2, simpleNet);
         chanceT2.setEvaluation(new CENodeEvaluation(1.0, null));
 
-        root.addChild(branch(D, D.getStates()[0], chanceNo));
-        root.addChild(branch(D, D.getStates()[1], chanceT1));
-        root.addChild(branch(D, D.getStates()[2], chanceT2));
+        root.addChild(branch(D.getStates()[0], chanceNo));
+        root.addChild(branch(D.getStates()[1], chanceT1));
+        root.addChild(branch(D.getStates()[2], chanceT2));
 
-        chanceNo.addChild(branch(C_no, C_no.getStates()[0], utilityNode("U1", 0, 10)));
-        chanceNo.addChild(branch(C_no, C_no.getStates()[1], utilityNode("U2", 0, 1.2)));
-        chanceT1.addChild(branch(C_t1, C_t1.getStates()[0], utilityNode("U3", 20000, 9.9)));
-        chanceT1.addChild(branch(C_t1, C_t1.getStates()[1], utilityNode("U4", 20000, 4)));
-        chanceT2.addChild(branch(C_t2, C_t2.getStates()[0], utilityNode("U5", 70000, 9.3)));
-        chanceT2.addChild(branch(C_t2, C_t2.getStates()[1], utilityNode("U6", 70000, 6.5)));
+        chanceNo.addChild(branch(C_no.getStates()[0], utilityNode("U1", 0, 10)));
+        chanceNo.addChild(branch(C_no.getStates()[1], utilityNode("U2", 0, 1.2)));
+        chanceT1.addChild(branch(C_t1.getStates()[0], utilityNode("U3", 20000, 9.9)));
+        chanceT1.addChild(branch(C_t1.getStates()[1], utilityNode("U4", 20000, 4)));
+        chanceT2.addChild(branch(C_t2.getStates()[0], utilityNode("U5", 70000, 9.3)));
+        chanceT2.addChild(branch(C_t2.getStates()[1], utilityNode("U6", 70000, 6.5)));
 
         return root;
     }
@@ -221,8 +221,8 @@ public class AmuaDTValidatorTest {
         return node;
     }
 
-    private DecisionTreeBranch branch(Variable var, State state, DecisionTreeNode child) {
-        DecisionTreeBranch b = new DecisionTreeBranch(simpleNet, var, state);
+    private DecisionTreeBranch branch(State state, DecisionTreeNode child) {
+        DecisionTreeBranch b = new DecisionTreeBranch(state);
         b.setChild(child);
 
         return b;
@@ -254,7 +254,7 @@ public class AmuaDTValidatorTest {
         for (int i = 0; i < chanceVars.length; i++) {
             DecisionTreeNode chance = new DecisionTreeNode(chanceVars[i], simpleNet);
             chance.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
-            DecisionTreeBranch b = new DecisionTreeBranch(simpleNet, decision, decision.getStates()[i]);
+            DecisionTreeBranch b = new DecisionTreeBranch(decision.getStates()[i]);
 
             b.setChild(chance);
             root.addChild(b);
@@ -262,7 +262,7 @@ public class AmuaDTValidatorTest {
             for (State s : chanceVars[i].getStates()) {
                 DecisionTreeNode util = new DecisionTreeNode(utilVars[utilIndex++], simpleNet);
                 util.setEvaluation(new UnicritNodeEvaluation(1.0, 2.0));
-                DecisionTreeBranch cb = new DecisionTreeBranch(simpleNet, chanceVars[i], s);
+                DecisionTreeBranch cb = new DecisionTreeBranch(s);
                 cb.setChild(util);
                 chance.addChild(cb);
             }

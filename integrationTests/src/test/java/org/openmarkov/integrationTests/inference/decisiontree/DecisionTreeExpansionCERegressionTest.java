@@ -124,8 +124,7 @@ class DecisionTreeExpansionCERegressionTest {
 				continue;
 			}
 			String branchPath = path + " → " + entry.getKey();
-			soft.assertThat(actualBranch.getScenarioProbability()).as("probabilidad del escenario en %s", branchPath)
-					.isCloseTo(referenceBranch.getScenarioProbability(), RATE);
+			// The probability of the scenario of the branch is the one of its child, compared below
 			soft.assertThat(actualBranch.getBranchProbability()).as("probabilidad de la rama %s", branchPath)
 					.isCloseTo(referenceBranch.getBranchProbability(), RATE);
 			if (referenceBranch.getChild() != null && actualBranch.getChild() != null) {
