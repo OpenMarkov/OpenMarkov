@@ -546,6 +546,12 @@ public final class PreprocessingOptionsPanel extends JPanel {
             numIntervalsPanel.add(numIntervals);
             i++;
         }
+        // The new rows take the options chosen for all the variables, as when those options change
+        missingValuesComboBoxActionPerformed();
+        discretizeComboBoxActionPerformed();
+        if (numIntervalsCheckBox.isSelected()) {
+            numIntervalsCheckBoxActionPerformed();
+        }
 
         varSelectionPanel.revalidate();
         missingValuesPanel.revalidate();
