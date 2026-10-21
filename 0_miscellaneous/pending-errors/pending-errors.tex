@@ -245,7 +245,7 @@ Los \hyperref[err:304]{errores~304} a \hyperref[err:306]{306} se vieron en la ve
 Los \hyperref[err:310]{errores~310} a \hyperref[err:313]{313} se encontraron al llevar a la versión en C++ y Qt los arreglos que esta lista recibió el 17 y el 18 de octubre, de \texttt{b83168f} a \texttt{fe96646}. Cada uno se ha comprobado con el código de \texttt{fe96646}, el último commit a día de hoy, y la fila \emph{Comprobado} de su ficha dice cómo: los dos del editor de árboles, con las operaciones del editor llamadas tal cual sobre el panel construido sin ventana y la respuesta de sus ventanillas puesta a mano en una copia de la clase; el de pegar, ejecutando el pegado, el guardado y la lectura sin ventana; y el de los gestos del editor de red, manejando el programa entero, con el ratón y el teclado, en una pantalla anidada. Dos salieron de los propios arreglos de ese día: el \hyperref[err:310]{error~310}, del arreglo del \hyperref[err:292]{292}, y el \hyperref[err:312]{312}, de lo que dejó sin resolver el del \hyperref[err:295]{295}. No se ha añadido, por la decisión de equipo sobre los textos, que los textos españoles de la ventana «About» no se pusieran al día: \texttt{ea3deaa}, el arreglo del \hyperref[err:204]{error~204}, solo cambió \texttt{Dialogs\_\allowbreak{}en.\allowbreak{}xml}. El \hyperref[err:314]{error~314} salió al escribir la ficha del \hyperref[err:311]{311}, leyendo \texttt{Partitioned\allowbreak{}Interval}, y se ha comprobado con un programa pequeño. El \hyperref[err:315]{error~315} salió al corregir el \hyperref[err:264]{264}, mirando qué ediciones hace la pestaña Domain de un nodo de utilidad, y se ha comprobado construyendo esa pestaña sin ventana. El \hyperref[err:316]{error~316} salió al corregir el \hyperref[err:96]{96}, al probar su arreglo con una simulación de verdad. El \hyperref[err:317]{error~317} salió al preparar el arreglo del \hyperref[err:256]{256}, leyendo cómo calcula la araña su eje; no se ha ejecutado.
 
 \paragraph{Errores añadidos el 21 de octubre}
-Los \hyperref[err:318]{errores~318} y \hyperref[err:319]{319} salieron al corregir el \hyperref[err:219]{219}, mirando qué otras cosas de la ventana «Data preprocessing» no siguen a las opciones elegidas al cargar una base o al pulsar «Reset values». Los dos se han comprobado construyendo el panel sin ventana y leyendo la petición que manda a preprocesar. El \hyperref[err:320]{error~320} salió al corregir lo que quedaba del \hyperref[err:71]{71}: con la red desplegada por fin calculable, se comparó con el modelo de Markov en los 55 modelos de Markov distintos del equipo.
+Los \hyperref[err:318]{errores~318} y \hyperref[err:319]{319} salieron al corregir el \hyperref[err:219]{219}, mirando qué otras cosas de la ventana «Data preprocessing» no siguen a las opciones elegidas al cargar una base o al pulsar «Reset values». Los dos se han comprobado construyendo el panel sin ventana y leyendo la petición que manda a preprocesar. El \hyperref[err:320]{error~320} salió al corregir lo que quedaba del \hyperref[err:71]{71}: con la red desplegada por fin calculable, se comparó con el modelo de Markov en los 55 modelos de Markov distintos del equipo. El \hyperref[err:321]{error~321} salió al comprobar que la reorganización de las clases del árbol de decisión (\texttt{de0543f} y \texttt{5d6de9a}) no cambia nada de lo que dan los árboles, sus exportaciones a Amua y a Graphviz incluidas: con una de las redes de ejemplo de Francisco Javier Díez, la exportación a Amua caía igual antes y después, y cae también con el código anterior a esos cambios (\texttt{21250b8}). Se ha comprobado ejecutando el exportador sin ventana.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -302,9 +302,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{319 errores}; 175 de ellos son defectos nuevos: 82 encontrados al
-comprobar o corregir los demás, 79 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{48} necesitan antes una decisión del equipo. Por esfuerzo estimado: 278 pequeños, 41 medios y 0 grandes.
-De los 319, 239 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{320 errores}; 176 de ellos son defectos nuevos: 83 encontrados al
+comprobar o corregir los demás, 79 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{48} necesitan antes una decisión del equipo. Por esfuerzo estimado: 279 pequeños, 41 medios y 0 grandes.
+De los 320, 239 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -329,7 +329,7 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 19 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 16 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
-\ref{sec:amua}. Exportación a Amua & 6 \\
+\ref{sec:amua}. Exportación a Amua & 7 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -696,6 +696,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:198]{198} & \textcolor{corregidoverde}{\textbf{Corregido}} · Amua recibe las probabilidades y los valores redondeados a cuatro decimales & \texttt{io} & S \hfill No\\
 \hyperref[err:199]{199} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una decisión por debajo del primer nivel se rechaza con «Decision node not found» & \texttt{io} & S \hfill No\\
 \hyperref[err:244]{244} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un criterio sin unidad deja el modelo de Amua con una dimensión de menos & \texttt{io} & S \hfill No\\
+\hyperref[err:321]{321} & Un árbol con una rama imposible no se puede exportar a Amua & \texttt{io} & S \hfill No\\
 \bottomrule
 \end{longtable}
 }
@@ -19823,6 +19824,41 @@ Escribir siempre un \texttt{\textless{}dim\allowbreak{}Symbols\textgreater{}} po
 
 Prueba: exportar el árbol de \texttt{ID-CEA-minimal.\allowbreak{}pgmx} con el criterio \texttt{Effectiveness} sin unidad y comprobar que el fichero lleva dos \texttt{\textless{}dim\allowbreak{}Symbols\textgreater{}}, el segundo vacío, tantos como \texttt{\textless{}dim\allowbreak{}Names\textgreater{}}.
 
+\setcounter{subsection}{320}
+\subsection[Un árbol con una rama imposible no se puede exportar a Amua]{Un árbol de coste-efectividad con una rama imposible, evaluada con la partición «de probabilidad cero», no se puede exportar a Amua: la exportación cae con NullPointerException en vez de escribir el fichero o decir por qué no puede}\label{err:321}
+\begin{ficha}
+\fichakey{Estado}Presente. Hoy no se llega a él desde la ventana con ninguna de las redes medidas (lo explica el final de \emph{Qué pasa})
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.amua.adatper; org.openmarkov.core.model.network
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/amua/adatper/AmuaDTConverter.java:157-181, 261-276} \newline \path{io/src/main/java/org/openmarkov/io/amua/AmuaExporter.java:80-100} \newline \path{core/src/main/java/org/openmarkov/core/model/network/CEP.java:73, 146-160, 249-269}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{f96934f}: \texttt{Decision\allowbreak{}Tree\allowbreak{}Manager\allowbreak{}Impl.\allowbreak{}build\allowbreak{}Decision\allowbreak{}Tree}, que es como construye el árbol la ventana, y \texttt{Amua\allowbreak{}Exporter.\allowbreak{}is\allowbreak{}Valid\allowbreak{}DT\allowbreak{}For\allowbreak{}Amua} sobre su raíz, que es lo primero que hace «Export to Amua». Lo que vería el usuario, leído en el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:197]{error~197}, \hyperref[err:199]{error~199}
+\end{ficha}
+\paragraph{Qué pasa}
+Cuando el análisis de coste-efectividad llega a una situación de probabilidad cero, no calcula costes ni efectividades: pone una partición especial, la «de probabilidad cero» (\texttt{CEP.\allowbreak{}get\allowbreak{}Zero\allowbreak{}Partition(\allowbreak{})}), que no tiene tablas de costes ni de efectividades. El árbol de decisión la deja en algunas ramas imposibles, como el resultado de un test que no se ha hecho. \texttt{Amua\allowbreak{}DT\allowbreak{}Converter.\allowbreak{}assign\allowbreak{}Utilities} pide a la partición de cada nodo el coste y la efectividad del primer intervalo (\texttt{get\allowbreak{}Cost(\allowbreak{}0)} y \texttt{get\allowbreak{}Effectiveness(\allowbreak{}0)}) sin mirar antes si es la de probabilidad cero (\texttt{is\allowbreak{}Zero(\allowbreak{})}), y cae:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+java.lang.NullPointerException: Cannot load from double array because "this.costs" is null
+    at org.openmarkov.core.model.network.CEP.getCost(CEP.java:250)
+    at org.openmarkov.io.amua.adatper.AmuaDTConverter.getCEACost(AmuaDTConverter.java:263)
+    at org.openmarkov.io.amua.adatper.AmuaDTConverter.assignUtilities(AmuaDTConverter.java:161)
+    at org.openmarkov.io.amua.adatper.AmuaDTConverter.convertToAmuaTree(AmuaDTConverter.java:108)
+    ...
+    at org.openmarkov.io.amua.AmuaExporter.isValidDTForAmua(AmuaExporter.java:86)
+\end{Verbatim}
+
+La conversión se hace al comprobar si el árbol se puede exportar, antes de pedir el fichero, y \texttt{is\allowbreak{}Valid\allowbreak{}DT\allowbreak{}For\allowbreak{}Amua} solo recoge \texttt{Illegal\allowbreak{}State\allowbreak{}Exception}, que es como avisa de un árbol que Amua no admite. En la ventana (\texttt{Decision\allowbreak{}Tree\allowbreak{}Editor.\allowbreak{}export\allowbreak{}To\allowbreak{}Amua}) saldría, por tanto, la ventana de error no previsto, en vez del fichero o del mensaje de árbol no válido.
+
+Medido el 21-10-2026 con \texttt{04.6-ID-CEA-two-tests.\allowbreak{}pgmx}, una de las quince redes de ejemplo que Francisco Javier Díez envió el 16-10-2026 y que todavía no están en el repositorio: se decide si hacer un test C, después si hacer un test E y por último la terapia. Construido a profundidad 2, o a profundidad 1 y expandido un nivel, el árbol tiene una sola decisión, «Do test C?»; bajo «no», las ramas «C negative» y «C positive» de «Result of C» son imposibles, y bajo «yes», la rama «C not done»; las tres llevan la partición de probabilidad cero, y la exportación cae. En la red de un solo test, \texttt{04.5-ID-CEA-one-test.\allowbreak{}pgmx}, las ramas imposibles llevan en cambio una partición normal, de coste 0, y el árbol se exporta.
+
+Por qué no se llega desde la ventana: la ventana construye el árbol siempre a profundidad 5 (\texttt{DEFAULT\_\allowbreak{}DEPTH} en \texttt{Decision\allowbreak{}Tree\allowbreak{}Editor}), y «Expand next level» y «Expand all levels» solo añaden niveles. A esa profundidad el árbol de \texttt{04.6} tiene tres decisiones, y el exportador lo rechaza antes de convertirlo, con su mensaje «Amua supports only one decision node». Se ha probado lo mismo con las 20 redes distintas del repositorio guardadas con análisis de coste-efectividad que admiten árbol (diagramas de influencia y redes de análisis de decisiones) y con las de Francisco Javier Díez salvo las dos \texttt{mediastinet}, a profundidades 1, 2 y 3 (también expandidas un nivel) y 5 (también expandida uno y dos niveles): ninguna otra cae. \texttt{DAN-CE-7-test-problem} y \texttt{DAN-CE-8-test-problem} no terminaron en cinco minutos, y \texttt{DAN-CE-6-test-problem} solo se midió a profundidades 1 y 5. No se ha buscado si una red con una sola decisión puede dejar a profundidad 5 una rama con la partición de probabilidad cero; el código no lo impide. El fallo se verá en cuanto el árbol se construya a otra profundidad o con el algoritmo nuevo, \texttt{Decision\allowbreak{}Tree\allowbreak{}Expansion}, que hoy solo usan las pruebas y que cae con la misma partición en su método \texttt{normalize\allowbreak{}CEP}, en las redes \texttt{04.5} y \texttt{04.6}.
+\paragraph{Cómo arreglarlo}
+En \texttt{Amua\allowbreak{}DT\allowbreak{}Converter}, leer el coste y la efectividad de la partición solo si no es la de probabilidad cero, y dar a la rama imposible coste y efectividad 0, que Amua multiplica por su probabilidad, también 0. Antes, como en el \hyperref[err:198]{error~198}, comprobar en el código de Amua que acepta una rama de azar con probabilidad 0 y qué hace con ella en el análisis de coste-efectividad. Corregirlo junto con \texttt{normalize\allowbreak{}CEP}, que tiene la misma causa, antes de llevar el algoritmo nuevo a la ventana.
+
+Prueba: el árbol de \texttt{04.6} a profundidad 2 se exporta y sus tres ramas imposibles salen con probabilidad 0, coste 0 y efectividad 0 (con \texttt{04.6} cuando esté en el repositorio, o con una red pequeña hecha para la prueba con un test que puede no hacerse).
+
 
 % ═════════════════════════════════════════════════════════════════════════════
 \appendix
@@ -20394,6 +20430,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:318]{Error 318} & hallazgo nuevo, visto al corregir el \hyperref[err:219]{error~219} \\
 \hyperref[err:319]{Error 319} & hallazgo nuevo, visto al corregir el \hyperref[err:219]{error~219} \\
 \hyperref[err:320]{Error 320} & hallazgo nuevo, visto al corregir el \hyperref[err:71]{error~71} \\
+\hyperref[err:321]{Error 321} & hallazgo nuevo, visto al reorganizar las clases del árbol de decisión (\texttt{de0543f} y \texttt{5d6de9a}) \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
