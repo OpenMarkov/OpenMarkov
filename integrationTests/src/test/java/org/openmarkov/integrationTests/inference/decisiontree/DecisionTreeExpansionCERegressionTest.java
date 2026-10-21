@@ -9,8 +9,10 @@ package org.openmarkov.integrationTests.inference.decisiontree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import networks.Networks;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.data.Offset;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.openmarkov.core.inference.MulticriteriaOptions;
@@ -77,21 +79,79 @@ class DecisionTreeExpansionCERegressionTest {
 	})
 	void matchesReference(String resource, int depth) throws Exception {
 		ProbNet net = load(resource);
-		boolean isCEA = net.getInferenceOptions().getMultiCriteriaOptions()
+		assertSameTree(net, reference(net, depth), actual(net, depth));
+	}
+
+	/**
+	 * Networks saved for a unicriterion analysis but with a cost and an effectiveness criterion,
+	 * analysed for cost-effectiveness, as the user can choose in the window. The scenario of
+	 * each impossible branch, the result of a test that is not done, has the partition of
+	 * probability zero, on which the new algorithm failed until fc8ee0c.
+	 */
+	@ParameterizedTest(name = "{0} @ profundidad {1}, en coste-efectividad")
+	@CsvSource({
+			// red, profundidad
+			"networks/id/ID-decide-test.pgmx, 4",
+			"networks/id/ID-decide-test.pgmx, 6",
+			"networks/id/ID-CEA-test-2therapies.pgmx, 4",
+			"networks/id/ID-CEA-test-2therapies-new-test.pgmx, 2",
+			"networks/id/ID-CEA-test-2therapies-new-test.pgmx, 4",
+	})
+	void matchesReferenceInCostEffectiveness(String resource, int depth) throws Exception {
+		ProbNet net = load(resource);
+		net.getInferenceOptions().getMultiCriteriaOptions()
+				.setMulticriteriaType(MulticriteriaOptions.Type.COST_EFFECTIVENESS);
+		assertSameTree(net, reference(net, depth), actual(net, depth));
+	}
+
+	/**
+	 * A large asymmetric network, at the depth the plan uses for it. Besides giving the same
+	 * tree, the new algorithm must not be slower than twice the old one: evaluating each leaf
+	 * by expanding it level by level, as the pseudocode says literally, made it three and a
+	 * half times slower here (28 s against 8 s). Its leaves are now decomposed into symmetric
+	 * models, as the old algorithm does, and it takes about three quarters of its time. The
+	 * old one runs first, in a colder virtual machine, so the comparison does not favour it.
+	 */
+	@Test
+	void aLargeNetworkGivesTheSameTreeAboutAsFastAsTheOldAlgorithm() throws Exception {
+		URL url = Networks.getNetworks().filter(u -> u.getPath().endsWith("/dan/DAN-mediastinet.pgmx"))
+				.findFirst().orElseThrow();
+		ProbNet net = new PGMXReader().read(url).probNet();
+		long start = System.nanoTime();
+		DecisionTreeNode reference = reference(net, 2);
+		long old = System.nanoTime() - start;
+		start = System.nanoTime();
+		DecisionTreeNode actual = actual(net, 2);
+		long now = System.nanoTime() - start;
+
+		assertSameTree(net, reference, actual);
+		assertThat(now).as("tiempo del algoritmo nuevo (%d ms) frente al antiguo (%d ms)", now / 1_000_000,
+				old / 1_000_000).isLessThan(2 * old);
+	}
+
+	private static boolean isCEA(ProbNet net) {
+		return net.getInferenceOptions().getMultiCriteriaOptions()
 				.getMulticriteriaType() != MulticriteriaOptions.Type.UNICRITERION;
+	}
+
+	/** The tree of the old algorithm, the one the window uses. */
+	private static DecisionTreeNode reference(ProbNet net, int depth) throws Exception {
 		boolean isID = net.getNetworkType() instanceof InfluenceDiagramType;
+		return (isID
+				? new IDDecisionTreeInference(net.copy(), depth, true, isCEA(net))
+				: new DANDecisionTreeInference(net.copy(), depth, true, isCEA(net))).getDecisionTree();
+	}
 
-		DecisionTreeNode reference = (isID
-				? new IDDecisionTreeInference(net.copy(), depth, true, isCEA)
-				: new DANDecisionTreeInference(net.copy(), depth, true, isCEA)).getDecisionTree();
-
-		DecisionTreeNode actual = new DecisionTreeExpansion(isCEA ? EvaluationType.CE : EvaluationType.UNICRITERION)
+	private static DecisionTreeNode actual(ProbNet net, int depth) throws Exception {
+		return new DecisionTreeExpansion(isCEA(net) ? EvaluationType.CE : EvaluationType.UNICRITERION)
 				.expandTree(net.copy(), new EvidenceCase(), depth);
+	}
 
+	private static void assertSameTree(ProbNet net, DecisionTreeNode reference, DecisionTreeNode actual) {
 		assertThat(countNodes(actual)).as("número de nodos").isEqualTo(countNodes(reference));
 
 		SoftAssertions soft = new SoftAssertions();
-		assertSameTree(soft, reference, actual, isCEA, "raíz");
+		assertSameTree(soft, reference, actual, isCEA(net), "raíz");
 		soft.assertAll();
 	}
 
@@ -138,6 +198,12 @@ class DecisionTreeExpansionCERegressionTest {
 		if (isCEA) {
 			CEP referenceCep = ((ProbAndCEP) reference).getCep();
 			CEP actualCep = ((ProbAndCEP) actual).getCep();
+			if (referenceCep.isZero() || actualCep.isZero()) {
+				// The scenario of an impossible branch has no intervals to compare
+				soft.assertThat(actualCep.isZero()).as("partición de probabilidad cero en %s", path)
+						.isEqualTo(referenceCep.isZero());
+				return;
+			}
 			assertSameCostEffectiveness(soft, referenceCep, actualCep, path);
 			soft.assertThat(adjacentEqualPartitions(actualCep))
 					.as("el CEP nuevo no debe tener particiones redundantes en %s", path).isZero();

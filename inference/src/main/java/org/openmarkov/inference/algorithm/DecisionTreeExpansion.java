@@ -34,6 +34,7 @@ import org.openmarkov.core.model.network.potential.operation.DiscretePotentialOp
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANConditionalSymmetricInference;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANDecisionTreeInference;
+import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANDecompositionIntoSymmetricDANsInference;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANOperations;
 import org.openmarkov.inference.algorithm.variableElimination.ChanceVariableElimination;
 import org.openmarkov.inference.algorithm.variableElimination.DecisionVariableElimination;
@@ -82,13 +83,20 @@ import java.util.List;
  * pseudocode states, and both live where the branches are built: a branch whose
  * remaining depth is zero gets a leaf — evaluated in one go, its inner tree
  * discarded — and a model with nothing left to expand gets a leaf as well.
- * Because of the first one, evaluating an asymmetric model never holds more
- * than one level of tree per stack frame: {@code evaluate} expands a single
- * level and each of its leaves evaluates in turn.
+ * <p>
+ * Where the code departs from the letter of the pseudocode is in how an
+ * asymmetric model is evaluated in one go. The pseudocode expands one level and
+ * evaluates each of its leaves in turn, which in a large model repeats much of
+ * the work at every leaf (five times slower than {@link DANDecisionTreeInference}
+ * on the mediastinet network at depth 2). The code decomposes the model into
+ * symmetric ones instead ({@link DANDecompositionIntoSymmetricDANsInference}), as
+ * {@link DANDecisionTreeInference} does with its leaves: the same evaluation, at
+ * the cost of the old algorithm.
  * <p>
  * The numerical work is delegated to the primitives already used by
  * {@link DANDecisionTreeInference}: {@link DANOperations#instantiate},
- * {@link ChanceVariableElimination} and {@link DecisionVariableElimination}.
+ * {@link ChanceVariableElimination}, {@link DecisionVariableElimination} and the
+ * decomposition into symmetric models.
  * Results are therefore expected to agree with that class; the difference is
  * structural — expansion is separated from evaluation, the tree is always
  * returned instead of being produced as a side effect behind a flag, and the
@@ -131,11 +139,10 @@ public class DecisionTreeExpansion {
 
 	/**
 	 * Evaluates a decision model. A symmetric model is evaluated by variable
-	 * elimination; an asymmetric one is evaluated by expanding one level of its
-	 * tree and taking the evaluation of the root, which is what
-	 * {@code evaluate → expandTree(probNet, evidence, depth = 1)} amounts to.
-	 * That tree is a means to the evaluation, not part of any tree the caller
-	 * asked for, so it is discarded.
+	 * elimination; an asymmetric one, by decomposing it into symmetric models,
+	 * which gives what {@code evaluate → expandTree(probNet, evidence, depth = 1)}
+	 * gives without building the trees of its leaves (see the description of the
+	 * class).
 	 *
 	 * @param probNet  the decision model.
 	 * @param evidence the evidence of the branch this model belongs to; may be {@code null}.
@@ -154,11 +161,13 @@ public class DecisionTreeExpansion {
 	private Expansion evaluateAsLeaf(ProbNet probNet, EvidenceCase evidence)
 			throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException,
 			PotentialOperationException.DifferentSizesInPotentialsAndStates {
-		if (DANOperations.isSymmetric(probNet, evidence != null ? evidence : new EvidenceCase())) {
+		EvidenceCase leafEvidence = evidence != null ? evidence : new EvidenceCase();
+		if (DANOperations.isSymmetric(probNet, leafEvidence)) {
 			return variableElimination(probNet, evidence);
 		}
-		Expansion oneLevel = expand(probNet, evidence, 1);
-		return leaf(probNet, evidence, oneLevel.probability(), oneLevel.utility());
+		DANDecompositionIntoSymmetricDANsInference decomposition =
+				new DANDecompositionIntoSymmetricDANsInference(probNet, null, leafEvidence, isCEA);
+		return leaf(probNet, evidence, decomposition.getProbability(), decomposition.getUtility());
 	}
 
 	// ---------------------------------------------------------------------
