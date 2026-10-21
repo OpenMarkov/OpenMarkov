@@ -244,6 +244,9 @@ Los \hyperref[err:304]{errores~304} a \hyperref[err:306]{306} se vieron en la ve
 \paragraph{Errores añadidos el 19 de octubre}
 Los \hyperref[err:310]{errores~310} a \hyperref[err:313]{313} se encontraron al llevar a la versión en C++ y Qt los arreglos que esta lista recibió el 17 y el 18 de octubre, de \texttt{b83168f} a \texttt{fe96646}. Cada uno se ha comprobado con el código de \texttt{fe96646}, el último commit a día de hoy, y la fila \emph{Comprobado} de su ficha dice cómo: los dos del editor de árboles, con las operaciones del editor llamadas tal cual sobre el panel construido sin ventana y la respuesta de sus ventanillas puesta a mano en una copia de la clase; el de pegar, ejecutando el pegado, el guardado y la lectura sin ventana; y el de los gestos del editor de red, manejando el programa entero, con el ratón y el teclado, en una pantalla anidada. Dos salieron de los propios arreglos de ese día: el \hyperref[err:310]{error~310}, del arreglo del \hyperref[err:292]{292}, y el \hyperref[err:312]{312}, de lo que dejó sin resolver el del \hyperref[err:295]{295}. No se ha añadido, por la decisión de equipo sobre los textos, que los textos españoles de la ventana «About» no se pusieran al día: \texttt{ea3deaa}, el arreglo del \hyperref[err:204]{error~204}, solo cambió \texttt{Dialogs\_\allowbreak{}en.\allowbreak{}xml}. El \hyperref[err:314]{error~314} salió al escribir la ficha del \hyperref[err:311]{311}, leyendo \texttt{Partitioned\allowbreak{}Interval}, y se ha comprobado con un programa pequeño. El \hyperref[err:315]{error~315} salió al corregir el \hyperref[err:264]{264}, mirando qué ediciones hace la pestaña Domain de un nodo de utilidad, y se ha comprobado construyendo esa pestaña sin ventana. El \hyperref[err:316]{error~316} salió al corregir el \hyperref[err:96]{96}, al probar su arreglo con una simulación de verdad. El \hyperref[err:317]{error~317} salió al preparar el arreglo del \hyperref[err:256]{256}, leyendo cómo calcula la araña su eje; no se ha ejecutado.
 
+\paragraph{Errores añadidos el 21 de octubre}
+Los \hyperref[err:318]{errores~318} y \hyperref[err:319]{319} salieron al corregir el \hyperref[err:219]{219}, mirando qué otras cosas de la ventana «Data preprocessing» no siguen a las opciones elegidas al cargar una base o al pulsar «Reset values». Los dos se han comprobado construyendo el panel sin ventana y leyendo la petición que manda a preprocesar.
+
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
 en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
@@ -299,9 +302,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{316 errores}; 172 de ellos son defectos nuevos: 79 encontrados al
-comprobar o corregir los demás, 79 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 276 pequeños, 40 medios y 0 grandes.
-De los 316, 231 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{318 errores}; 174 de ellos son defectos nuevos: 81 encontrados al
+comprobar o corregir los demás, 79 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{47} necesitan antes una decisión del equipo. Por esfuerzo estimado: 278 pequeños, 40 medios y 0 grandes.
+De los 318, 231 están ya corregidos, 11 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -321,7 +324,7 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:des}. Simulación de sucesos discretos & 20 \\
 \ref{sec:ficheros}. Abrir y guardar redes & 15 \\
 \ref{sec:casos}. Bases de casos & 13 \\
-\ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 32 \\
+\ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 34 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 39 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 19 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 16 \\
@@ -601,6 +604,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:240]{240} & \textcolor{corregidoverde}{\textbf{Corregido}} · El árbol aumentado (TAN) falla con NoSuchElementException si no hay ninguna característica & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:241]{241} & \textcolor{corregidoverde}{\textbf{Corregido}} · El TAN interactivo sin «Only allowed edits» no enseña los mejores enlaces si hay más de 50 & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \hyperref[err:251]{251} & El PC interactivo sigue pasando de fase al pedir la mejor propuesta, según las casillas marcadas & \texttt{learning.\allowbreak{}algorithm} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:318]{318} & Al cargar otra base en «Data preprocessing», las opciones generales se ven pero no se aplican & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
+\hyperref[err:319]{319} & «Reset values» de «Data preprocessing» deja encendido «Select/unselect all variables» & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:editor}.\ Interfaz: editor de red y paneles de las relaciones}}\\
 \hyperref[err:150]{150} & \textcolor{corregidoverde}{\textbf{Corregido}} · Volver a elegir la clase de relación que ya tiene un nodo borra sus números & \texttt{gui} & S \hfill No\\
 \hyperref[err:151]{151} & \textcolor{corregidoverde}{\textbf{Corregido}} · En una regresión, lo escrito como Cholesky se pierde al guardar la red & \texttt{gui} & S \hfill No\\
@@ -15463,6 +15468,58 @@ Hace falta decidir cuándo termina una fase en el modo interactivo. Si basta con
 
 Prueba: con \texttt{Head\allowbreak{}To\allowbreak{}Head2.\allowbreak{}csv}, aplicar los 5 borrados pidiendo la mejor propuesta con las dos casillas marcadas, y llenar después la tabla sin «Only positive edits»: debe dar la misma tabla que si la casilla se quita antes de pedir la mejor propuesta tras el último borrado (hoy, 3 borrados); lo mismo con \texttt{BN-asia10k.\allowbreak{}csv} y sus 21 borrados (6).
 
+\setcounter{subsection}{317}
+\subsection[Al cargar otra base en «Data preprocessing», las opciones generales se ven pero no se aplican]{En «Data preprocessing», cargar otra base de casos devuelve cada variable a «Keep records with missing values», «Do not discretize» y dos intervalos, aunque arriba sigan elegidas otras opciones para todas: el fichero que se guarda sale preprocesado con lo que no se ve, sin ningún aviso}\label{err:318}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.component
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/component/PreprocessingOptionsPanel.java:479-550, 581-616}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo: el panel construido sin ventana, con la petición que manda a preprocesar
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:219]{error~219}, \hyperref[err:319]{error~319}
+\end{ficha}
+\paragraph{Qué pasa}
+Arriba de la ventana hay tres opciones que valen para todas las variables: qué hacer con los valores que faltan, cómo discretizar y, con «Same number of intervals», cuántos intervalos. Debajo hay una fila por variable que las copia. Si después de elegirlas se carga otra base de casos (o la misma otra vez), las opciones de arriba siguen como estaban, pero las filas nuevas salen con los valores de partida, y lo que se aplica al guardar es lo de las filas.
+
+Medido el 21-10-2026 construyendo el panel sin ventana y leyendo la petición que manda a preprocesar:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+arriba: «Erase records with missing values», «Set all to: Equal width intervals», «Same number of intervals» con 5
+antes de cargar otra vez:  Erase, Equal width, 5 intervalos
+después de cargar otra vez: arriba lo mismo; la petición lleva Keep, Do not discretize, 2 intervalos
+\end{Verbatim}
+
+Por qué pasa: \texttt{rebuild\allowbreak{}Variable\allowbreak{}Rows} crea cada fila con la primera opción de sus listas y con 2 intervalos, sin mirar las opciones de arriba; solo sus oyentes las copian a las filas, y no se ejecutan al cargar. La petición se lee de las filas (líneas 581-616).
+\paragraph{Cómo arreglarlo}
+Que cada fila nueva tome lo que dicen las opciones de arriba, como hacen sus oyentes al cambiarlas: la opción de valores que faltan y la de discretizar cuando no es «Specify for each variable», y el número de intervalos cuando «Same number of intervals» está marcada.
+
+Prueba: la medida de arriba; tras cargar otra vez, la petición lleva Erase, Equal width y 5 intervalos.
+
+\setcounter{subsection}{318}
+\subsection[«Reset values» de «Data preprocessing» deja encendido «Select/unselect all variables»]{En «Data preprocessing», «Reset values» vuelve a «All variables» pero deja encendida la casilla «Select/unselect all variables»; pulsarla desmarca todas las variables, y al guardar no se conserva ninguna aunque la ventana diga «All variables»}\label{err:319}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.component
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/component/PreprocessingOptionsPanel.java:367-378, 453-476}
+\fichakey{Comprobado}Leyendo el código y ejecutándolo: el panel construido sin ventana, con la petición que manda a preprocesar
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:219]{error~219}, \hyperref[err:318]{error~318}
+\end{ficha}
+\paragraph{Qué pasa}
+La casilla «Select/unselect all variables» marca o desmarca de una vez las casillas de las variables, y solo debería poderse usar con «Selected variables» elegido. Con esa opción elegida, «Reset values» vuelve a «All variables», pero la casilla sigue encendida. Pulsarla desmarca las casillas de todas las variables, que están apagadas, y la ventana sigue diciendo «All variables».
+
+Medido el 21-10-2026 construyendo el panel sin ventana: tras elegir «Selected variables» y «Reset values», «All variables» está elegido y «Select/unselect all variables» encendida; pulsarla deja la petición sin ninguna variable.
+
+Por qué pasa: \texttt{reset} elige «All variables» con \texttt{set\allowbreak{}Selected} (línea 374), que no ejecuta su oyente; es el oyente el que apaga y desmarca «Select/unselect all variables» (líneas 453-460).
+\paragraph{Cómo arreglarlo}
+Que «Reset values» deje la casilla como la deja elegir «All variables»: apagada y sin marcar.
+
+Prueba: la medida de arriba; tras «Reset values», la casilla está apagada y la petición lleva todas las variables.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: editor de red y paneles de las relaciones}\label{sec:editor}
 
@@ -20297,6 +20354,8 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:315]{Error 315} & hallazgo nuevo, visto al corregir el \hyperref[err:264]{error~264} \\
 \hyperref[err:316]{Error 316} & hallazgo nuevo, visto al corregir el \hyperref[err:96]{error~96} \\
 \hyperref[err:317]{Error 317} & hallazgo nuevo, visto al preparar el arreglo del \hyperref[err:256]{error~256} \\
+\hyperref[err:318]{Error 318} & hallazgo nuevo, visto al corregir el \hyperref[err:219]{error~219} \\
+\hyperref[err:319]{Error 319} & hallazgo nuevo, visto al corregir el \hyperref[err:219]{error~219} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
