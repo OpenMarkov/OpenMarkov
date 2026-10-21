@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.network.modelUncertainty;
 
 import org.apache.commons.math3.distribution.BetaDistribution;
+import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.openmarkov.core.exception.InvalidArgumentException;
 
 import java.util.List;
@@ -85,9 +86,17 @@ import java.util.Random;
     }
     
     @Override public double getDensity(double x) {
+        // Commons Math does not check the parameters when it builds a beta: it refuses alpha only at 0 and beta only
+        // at 1, and elsewhere answers that the density is not a number
+        if (!(alpha > 0)) {
+            throw new NotStrictlyPositiveException(alpha);
+        }
+        if (!(beta > 0)) {
+            throw new NotStrictlyPositiveException(beta);
+        }
         // At 0 with alpha below 1, and at 1 with beta below 1, the density grows without bound: Commons Math refuses
         // to give it instead of answering infinity
-        if (alpha > 0 && beta > 0 && ((x == 0 && alpha < 1) || (x == 1 && beta < 1))) {
+        if ((x == 0 && alpha < 1) || (x == 1 && beta < 1)) {
             return Double.POSITIVE_INFINITY;
         }
         return new BetaDistribution(null, alpha, beta).density(x);

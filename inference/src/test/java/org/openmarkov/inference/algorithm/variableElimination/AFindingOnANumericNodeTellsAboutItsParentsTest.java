@@ -218,6 +218,21 @@ class AFindingOnANumericNodeTellsAboutItsParentsTest {
                      () -> probabilityOfTheDisease(network(TriangularFunction.class, 0, 4, 5, 2, 10, 6), observed(3)));
     }
 
+    /**
+     * Commons Math refuses a beta whose alpha is not positive only at 0, and one whose beta is not positive only at 1;
+     * elsewhere the finding was refused saying that the beta cannot tell how likely the value is (error 272 of the
+     * pending list).
+     */
+    @Test void aBetaWithAParameterThatIsNotPositiveIsRefusedWhereverItIsSeen() {
+        var refused = assertThrows(NonProjectablePotentialException.ParametersAreNotADistribution.class,
+                                   () -> probabilityOfTheDisease(network(BetaFunction.class, 0, 2, 5, 1), observed(0.5)));
+        assertEquals("The finding on N cannot be used: with Disease = absent, the parameters of its Beta "
+                             + "distribution, alpha = 0 and beta = 2, do not make a distribution.",
+                     refused.getExceptionMessage());
+        assertThrows(NonProjectablePotentialException.ParametersAreNotADistribution.class,
+                     () -> probabilityOfTheDisease(network(BetaFunction.class, 5, 1, 2, -1), observed(0.5)));
+    }
+
     /** A beta of parameter below 1 has an infinite density at 0, as the gamma above, and ends the same way. */
     @Test void aBetaSeenWhereItsDensityIsInfiniteEndsAsTheGamma() {
         var refused = assertThrows(NonProjectablePotentialException.DensityIsInfinite.class,
