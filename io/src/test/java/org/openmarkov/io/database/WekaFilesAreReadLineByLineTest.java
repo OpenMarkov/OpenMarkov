@@ -29,7 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * A file of Weka is read one case per line, whatever characters its names have (errors 118, 119, 121 and 123).
+ * A file of Weka is read one case per line, whatever characters its names have (errors 118, 119, 121 and 123), and
+ * with the comments that follow what a line says (error 247).
  *
  * @author Manuel Arias
  */
@@ -196,6 +197,53 @@ class WekaFilesAreReadLineByLineTest {
         assertEquals(List.of("Smoker?", "Rate 50%"), database.getVariables().stream().map(Variable::getName).toList());
         assertEquals(List.of("yes, a lot", "no"), states(database.getVariables().getFirst()));
         assertArrayEquals(new int[][]{{0, 1}, {1, 0}}, database.getCases());
+    }
+
+    /** As Weka and the former reader leave it out (error 247). */
+    @Test
+    void aCommentAfterWhatALineSaysIsLeftOut() throws Exception {
+        CaseDatabase database = read("""
+                @relation test % the relation
+                @attribute X {a,b} % why
+                @attribute Y {'c%',d}%no blank
+                @data%the cases
+                a,'c%' % first
+                b,d\t% second
+                """);
+
+        assertEquals(List.of("a", "b"), states(database.getVariables().getFirst()));
+        assertEquals(List.of("c%", "d"), states(database.getVariables().get(1)));
+        assertArrayEquals(new int[][]{{0, 0}, {1, 1}}, database.getCases());
+    }
+
+    /** Within an unquoted word a % is part of it, as the writers of OpenMarkov before October 2026 wrote it. */
+    @Test
+    void aPercentWithinAnUnquotedWordIsNotAComment() throws Exception {
+        CaseDatabase database = read("""
+                @relation test
+                @attribute Rate50% {low%,high}
+                @data
+                low%
+                high
+                """);
+
+        assertEquals("Rate50%", database.getVariables().getFirst().getName());
+        assertEquals(List.of("low%", "high"), states(database.getVariables().getFirst()));
+        assertArrayEquals(new int[][]{{0}, {1}}, database.getCases());
+    }
+
+    /** What a comment leaves out is missing, as in Weka. */
+    @Test
+    void aCommentThatLeavesOutPartOfALineMakesItBeRefused() throws Exception {
+        assertEquals("Line 2: the attribute «X» is of type «{a,»; only attributes that list their values between braces "
+                     + "can be read", refusal("""
+                                                     @relation test
+                                                     @attribute X {a, %b}
+                                                     @data
+                                                     a
+                                                     """));
+        assertEquals("Line 6: the value «» is not one of those of the attribute «Z»: [e, f]",
+                     refusal(HEADER + "a,c,% e\n"));
     }
 
     /** The sample file that Weka comes with, «weather.nominal.arff». */

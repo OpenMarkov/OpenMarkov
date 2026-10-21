@@ -25,8 +25,10 @@ import java.util.Locale;
 /**
  * Reads a case database in ARFF, the format of Weka: a header with {@code @relation}, an {@code @attribute} line per
  * column and {@code @data}, followed by one case per line, its values separated by commas. Only nominal columns,
- * those that list their values between braces, can be read. The keywords may be written in any case, a line that
- * starts with {@code %} is a comment, and a name or a value may be quoted with {@code '} or {@code "}.
+ * those that list their values between braces, can be read. The keywords may be written in any case, a name or a
+ * value may be quoted with {@code '} or {@code "}, and a {@code %} that is not quoted starts a comment, which ends
+ * with the line, if it starts a word: within an unquoted word, such as {@code 50%}, it is part of it, as the
+ * writers of OpenMarkov before October 2026 wrote it and its former reader read it.
  * <p>
  * A {@code ?} stands for an unknown value: the column gets a state {@code ?}, as in the other readers of case
  * databases. Anything else that does not fit, such as a value that its column does not declare or a line with more
@@ -91,7 +93,7 @@ final class ArffReader {
                 readCase(line, lineNumber);
                 continue;
             }
-            String keyword = line.split("\\s", 2)[0].toLowerCase(Locale.ROOT);
+            String keyword = line.split("[\\s%]", 2)[0].toLowerCase(Locale.ROOT);
             switch (keyword) {
                 case "@relation" -> { }
                 case "@attribute" -> readAttribute(line.substring(keyword.length()).strip(), lineNumber);
@@ -114,9 +116,9 @@ final class ArffReader {
      * @param declaration what follows {@code @attribute}: the name and, between braces, the values
      */
     private void readAttribute(String declaration, int lineNumber) throws ParseException {
-        int nameEnd = endOfName(declaration, lineNumber);
+        int nameEnd = declaration.startsWith("%") ? 0 : endOfName(declaration, lineNumber);
         String name = unquote(declaration.substring(0, nameEnd));
-        String type = declaration.substring(nameEnd).strip();
+        String type = withoutComment(declaration.substring(nameEnd), lineNumber);
         if (name.isEmpty()) {
             throw new ParseException("Line " + lineNumber + ": the attribute has no name", lineNumber);
         }
@@ -159,7 +161,7 @@ final class ArffReader {
         if (line.startsWith("{")) {
             throw new ParseException("Line " + lineNumber + ": cases in sparse format cannot be read", lineNumber);
         }
-        List<String> fields = fields(line, lineNumber);
+        List<String> fields = fields(withoutComment(line, lineNumber), lineNumber);
         if (fields.size() != names.size()) {
             throw new ParseException("Line " + lineNumber + ": " + fields.size() + " values for " + names.size()
                                      + " attributes", lineNumber);
@@ -203,6 +205,21 @@ final class ArffReader {
             }
         }
         return fields;
+    }
+
+    /** {@code text}, stripped, up to the {@code %} that starts a comment, if any (see the class comment). */
+    private static String withoutComment(String text, int lineNumber) throws ParseException {
+        for (int position = 0; position < text.length(); position++) {
+            char character = text.charAt(position);
+            // A quote before it can only be one that closes, since the loop skips what is quoted
+            if (character == '%' && (position == 0 || " \t,{}'\"".indexOf(text.charAt(position - 1)) >= 0)) {
+                return text.substring(0, position).strip();
+            }
+            if (character == '\'' || character == '"') {
+                position = closingQuote(text, position, lineNumber);
+            }
+        }
+        return text.strip();
     }
 
     /** The position of the quote that closes the one at {@code open}; a backslash escapes a quote or itself. */
