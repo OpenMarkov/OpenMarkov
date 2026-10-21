@@ -338,6 +338,8 @@ public class MapDialog extends JDialog {
                 .getString(hAxisVariation.getVariationType().toString()));
         xAxis.setLowerMargin(0);
         xAxis.setUpperMargin(0);
+        // A user defined interval may not reach zero, which a NumberAxis includes unless told otherwise
+        xAxis.setAutoRangeIncludesZero(false);
         xAxis.setNumberFormatOverride(hDecimalFormat);
         
         // Set the y axis format
@@ -345,6 +347,7 @@ public class MapDialog extends JDialog {
                 .getString(vAxisVariation.getVariationType().toString()));
         yAxis.setLowerMargin(0);
         yAxis.setUpperMargin(0);
+        yAxis.setAutoRangeIncludesZero(false);
         yAxis.setNumberFormatOverride(vDecimalFormat);
         
         XYBlockRenderer renderer = new XYBlockRenderer();
