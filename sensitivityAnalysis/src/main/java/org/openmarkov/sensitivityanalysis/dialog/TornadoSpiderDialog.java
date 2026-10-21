@@ -426,10 +426,17 @@ public class TornadoSpiderDialog extends JDialog {
         categoryAxis.setLabelFont(MainGUI.INSTANCE.mainPanel.getFont().deriveFont(14.0f));
         categoryAxis.setTickLabelFont(MainGUI.INSTANCE.mainPanel.getFont().deriveFont(12.0f));
         
+        // The margins shrink as bars are added. JFreeChart takes a negative one, and draws the bars at the ends out of
+        // the chart, so from 16 bars on they keep a small one, and the bars keep apart by a fifth of the chart
         double space = 0.475 - (bars * 0.03);
+        double categoryMargin = 0.01;
+        if (space < 0.01) {
+            space = 0.01;
+            categoryMargin = 0.2;
+        }
         categoryAxis.setLowerMargin(space);
         categoryAxis.setUpperMargin(space);
-        categoryAxis.setCategoryMargin(0.01);
+        categoryAxis.setCategoryMargin(categoryMargin);
         
 
         IntervalBarRenderer renderer = new IntervalBarRenderer() {

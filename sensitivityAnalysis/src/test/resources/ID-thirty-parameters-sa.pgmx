@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="InfluenceDiagram">
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <Properties />
+    <Variables>
+      <Variable name="X" type="finiteStates" role="chance">
+        <Coordinates x="129" y="55" />
+        <States>
+          <State name="s01" />
+          <State name="s02" />
+          <State name="s03" />
+          <State name="s04" />
+          <State name="s05" />
+          <State name="s06" />
+          <State name="s07" />
+          <State name="s08" />
+          <State name="s09" />
+          <State name="s10" />
+          <State name="s11" />
+          <State name="s12" />
+          <State name="s13" />
+          <State name="s14" />
+          <State name="s15" />
+          <State name="s16" />
+          <State name="s17" />
+          <State name="s18" />
+          <State name="s19" />
+          <State name="s20" />
+          <State name="s21" />
+          <State name="s22" />
+          <State name="s23" />
+          <State name="s24" />
+          <State name="s25" />
+          <State name="s26" />
+          <State name="s27" />
+          <State name="s28" />
+          <State name="s29" />
+          <State name="s30" />
+        </States>
+      </Variable>
+      <Variable name="U" type="numeric" role="utility">
+        <Coordinates x="132" y="246" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="X" />
+        <Variable name="U" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="X" />
+        </Variables>
+        <Values>0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.03 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04 0.04</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <UtilityVariable name="U" />
+        <Variables>
+          <Variable name="X" />
+        </Variables>
+        <Values>1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0 12.0 13.0 14.0 15.0 16.0 17.0 18.0 19.0 20.0 21.0 22.0 23.0 24.0 25.0 26.0 27.0 28.0 29.0 30.0</Values>
+        <UncertainValues>
+          <Value distribution="Triangular" name="p01">0.9 1.1 1</Value>
+          <Value distribution="Triangular" name="p02">1.8 2.2 2</Value>
+          <Value distribution="Triangular" name="p03">2.7 3.3 3</Value>
+          <Value distribution="Triangular" name="p04">3.6 4.4 4</Value>
+          <Value distribution="Triangular" name="p05">4.5 5.5 5</Value>
+          <Value distribution="Triangular" name="p06">5.4 6.6 6</Value>
+          <Value distribution="Triangular" name="p07">6.3 7.7 7</Value>
+          <Value distribution="Triangular" name="p08">7.2 8.8 8</Value>
+          <Value distribution="Triangular" name="p09">8.1 9.9 9</Value>
+          <Value distribution="Triangular" name="p10">9 11 10</Value>
+          <Value distribution="Triangular" name="p11">9.9 12.1 11</Value>
+          <Value distribution="Triangular" name="p12">10.8 13.2 12</Value>
+          <Value distribution="Triangular" name="p13">11.7 14.3 13</Value>
+          <Value distribution="Triangular" name="p14">12.6 15.4 14</Value>
+          <Value distribution="Triangular" name="p15">13.5 16.5 15</Value>
+          <Value distribution="Triangular" name="p16">14.4 17.6 16</Value>
+          <Value distribution="Triangular" name="p17">15.3 18.7 17</Value>
+          <Value distribution="Triangular" name="p18">16.2 19.8 18</Value>
+          <Value distribution="Triangular" name="p19">17.1 20.9 19</Value>
+          <Value distribution="Triangular" name="p20">18 22 20</Value>
+          <Value distribution="Triangular" name="p21">18.9 23.1 21</Value>
+          <Value distribution="Triangular" name="p22">19.8 24.2 22</Value>
+          <Value distribution="Triangular" name="p23">20.7 25.3 23</Value>
+          <Value distribution="Triangular" name="p24">21.6 26.4 24</Value>
+          <Value distribution="Triangular" name="p25">22.5 27.5 25</Value>
+          <Value distribution="Triangular" name="p26">23.4 28.6 26</Value>
+          <Value distribution="Triangular" name="p27">24.3 29.7 27</Value>
+          <Value distribution="Triangular" name="p28">25.2 30.8 28</Value>
+          <Value distribution="Triangular" name="p29">26.1 31.9 29</Value>
+          <Value distribution="Triangular" name="p30">27 33 30</Value>
+        </UncertainValues>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>
