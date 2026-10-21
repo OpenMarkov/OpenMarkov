@@ -15,12 +15,12 @@ import org.openmarkov.core.inference.Strategy;
  *
  * @author Manuel Arias
  */
-public final class UnicritNodeEvaluation extends DecisionTreeNodeEvaluation {
+public final class ProbAndUtilityAndStrategy extends DecisionModelEvaluation {
 
 	private final double utility;
 	private Strategy strategy;
 
-	public UnicritNodeEvaluation(double prob, double utility) {
+	public ProbAndUtilityAndStrategy(double prob, double utility) {
 		super(prob);
 		this.utility = utility;
 	}

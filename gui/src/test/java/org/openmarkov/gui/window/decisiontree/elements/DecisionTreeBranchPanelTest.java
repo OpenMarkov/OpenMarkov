@@ -7,9 +7,9 @@
 package org.openmarkov.gui.window.decisiontree.elements;
 
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
-import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Variable;
@@ -31,7 +31,7 @@ class DecisionTreeBranchPanelTest {
     void aBranchOfAChanceNodeShowsItsStateAndProbabilityButNotTheUtility() {
         Variable disease = new Variable("Disease (X)", "absent", "present");
         DecisionTreeNode chance = node(disease, NodeType.CHANCE);
-        chance.setEvaluation(new UnicritNodeEvaluation(1.0, 9.72));
+        chance.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 9.72));
         DecisionTreeBranch absent = branch(chance, disease, 0, 0.86, 10.0);
 
         String html = new DecisionTreeBranchPanel(absent).getBranchDescriptiontHTML();
@@ -44,7 +44,7 @@ class DecisionTreeBranchPanelTest {
     void aBranchOfADecisionNodeShowsItsStateAndMarksTheBestOne() {
         Variable therapy = new Variable("Therapy (T)", "no", "yes");
         DecisionTreeNode decision = node(therapy, NodeType.DECISION);
-        decision.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
+        decision.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 10.0));
         DecisionTreeBranch no = branch(decision, therapy, 0, 1.0, 8.0);
         DecisionTreeBranch yes = branch(decision, therapy, 1, 1.0, 10.0);
 
@@ -62,7 +62,7 @@ class DecisionTreeBranchPanelTest {
     void theRootBranchShowsNothing() {
         DecisionTreeBranch root = new DecisionTreeBranch();
         DecisionTreeNode first = node(new Variable("Disease (X)", "absent", "present"), NodeType.CHANCE);
-        first.setEvaluation(new UnicritNodeEvaluation(1.0, 9.72));
+        first.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 9.72));
         root.setChild(first);
 
         String html = new DecisionTreeBranchPanel(root).getBranchDescriptiontHTML();
@@ -84,7 +84,7 @@ class DecisionTreeBranchPanelTest {
         branch.setBranchProbability(probability);
         parent.addChild(branch);
         DecisionTreeNode leaf = node(new Variable("Utility"), NodeType.UTILITY);
-        leaf.setEvaluation(new UnicritNodeEvaluation(probability, utility));
+        leaf.setEvaluation(new ProbAndUtilityAndStrategy(probability, utility));
         branch.setChild(leaf);
         return branch;
     }

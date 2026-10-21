@@ -88,7 +88,7 @@ class DecisionTreeNodeTest {
 
         parent.addChild(branch);
 
-        List<DecisionTreeElement> children = parent.getChildren();
+        List<DecisionTreeVisualNode> children = parent.getChildren();
         assertEquals(1, children.size());
         assertSame(branch, children.get(0));
         assertEquals(List.of(branch), parent.getChildBranches());
@@ -109,7 +109,7 @@ class DecisionTreeNodeTest {
     void aNodeCreatedWithoutEvidenceHasAnEmptyOne() {
         DecisionTreeNode node = new DecisionTreeNode(decisionNode, probNet);
 
-        EvidenceCase evidence = node.getBranchStates();
+        EvidenceCase evidence = node.getEvidence();
 
         assertNotNull(evidence);
         assertTrue(evidence.getFindings().isEmpty());
@@ -131,7 +131,7 @@ class DecisionTreeNodeTest {
         DecisionTreeNode child = new DecisionTreeNode(chanceNode, probNet, evidence);
         branch.setChild(child);
 
-        List<Finding> findings = child.getBranchStates().getFindings();
+        List<Finding> findings = child.getEvidence().getFindings();
         assertEquals(1, findings.size());
         assertSame(chanceVariable, findings.get(0).getVariable());
     }
@@ -144,7 +144,7 @@ class DecisionTreeNodeTest {
 
         evidence.addFinding(new Finding(decisionVariable, decisionVariable.getStates()[0]));
 
-        assertTrue(node.getBranchStates().getFindings().isEmpty());
+        assertTrue(node.getEvidence().getFindings().isEmpty());
     }
 
     @Test
@@ -154,14 +154,14 @@ class DecisionTreeNodeTest {
         // Default sentinel
         assertEquals(Double.NEGATIVE_INFINITY, node.getScenarioProbability());
 
-        node.setEvaluation(new UnicritNodeEvaluation(0.42, 0.0));
+        node.setEvaluation(new ProbAndUtilityAndStrategy(0.42, 0.0));
         assertEquals(0.42, node.getScenarioProbability());
     }
 
     @Test
     void copyTransfersStateFromOtherNode() {
         DecisionTreeNode source = new DecisionTreeNode(decisionNode, probNet);
-        UnicritNodeEvaluation evaluation = new UnicritNodeEvaluation(0.3, 7.5);
+        ProbAndUtilityAndStrategy evaluation = new ProbAndUtilityAndStrategy(0.3, 7.5);
         source.setEvaluation(evaluation);
 
         DecisionTreeNode dest = new DecisionTreeNode(chanceNode, probNet);
@@ -211,7 +211,7 @@ class DecisionTreeNodeTest {
         dest.copy(source);
 
         assertSame(branch, dest.getParentBranch());
-        assertEquals(1, dest.getBranchStates().getFindings().size(),
+        assertEquals(1, dest.getEvidence().getFindings().size(),
                 "the evidence of the grafted node must survive the graft");
     }
 
@@ -236,9 +236,9 @@ class DecisionTreeNodeTest {
         DecisionTreeNode node = new DecisionTreeNode(decisionNode, probNet);
 
         assertNull(node.getEvaluationType());
-        node.setEvaluation(new UnicritNodeEvaluation(1.0, 3.14));
+        node.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 3.14));
         assertEquals(EvaluationType.UNICRITERION, node.getEvaluationType());
-        node.setEvaluation(new CENodeEvaluation(1.0, null));
+        node.setEvaluation(new ProbAndCEP(1.0, null));
         assertEquals(EvaluationType.CE, node.getEvaluationType());
     }
 

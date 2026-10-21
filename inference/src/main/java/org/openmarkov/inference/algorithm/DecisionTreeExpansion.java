@@ -11,12 +11,12 @@ import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.PotentialOperationException;
-import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
+import org.openmarkov.core.model.decisiontree.DecisionModelEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
-import org.openmarkov.core.model.decisiontree.DecisionTreeNodeEvaluation;
 import org.openmarkov.core.model.decisiontree.EvaluationType;
-import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.ProbAndCEP;
+import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
@@ -109,7 +109,7 @@ public class DecisionTreeExpansion {
 	/**
 	 * The probability and the utility of a subproblem, together with the tree
 	 * node that represents it. The potentials — rather than the plain numbers
-	 * carried by {@link DecisionTreeNodeEvaluation} — travel through the
+	 * carried by {@link DecisionModelEvaluation} — travel through the
 	 * recursion because merging branches is a variable-elimination step, and in
 	 * cost-effectiveness analysis the utility potential holds CEPs.
 	 */
@@ -141,7 +141,7 @@ public class DecisionTreeExpansion {
 	 * @param evidence the evidence of the branch this model belongs to; may be {@code null}.
 	 * @return the evaluation of the model.
 	 */
-	public DecisionTreeNodeEvaluation evaluate(ProbNet probNet, EvidenceCase evidence)
+	public DecisionModelEvaluation evaluate(ProbNet probNet, EvidenceCase evidence)
 			throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException,
 			PotentialOperationException.DifferentSizesInPotentialsAndStates {
 		return evaluateAsLeaf(probNet, evidence).node().getEvaluation();
@@ -466,12 +466,12 @@ public class DecisionTreeExpansion {
 		double probabilityValue = DANOperations.getOnlyValuePotential(probability);
 		if (isCEA) {
 			CEP cep = DANOperations.getOnlyValuePotentialCEP((GTablePotential) utility);
-			treeNode.setEvaluation(new CENodeEvaluation(probabilityValue, normalizeCEP(cep)));
+			treeNode.setEvaluation(new ProbAndCEP(probabilityValue, normalizeCEP(cep)));
 		} else {
 			// The strategy is left unset: variable elimination computes it, but the DAN
 			// layer discards it. Recovering it is what the revised pseudocode asks for
 			// when it says that variableElimination must return a decisionModelEvaluation.
-			treeNode.setEvaluation(new UnicritNodeEvaluation(probabilityValue,
+			treeNode.setEvaluation(new ProbAndUtilityAndStrategy(probabilityValue,
 					DANOperations.getOnlyValuePotential((TablePotential) utility)));
 		}
 		return new Expansion(treeNode, probability, utility);

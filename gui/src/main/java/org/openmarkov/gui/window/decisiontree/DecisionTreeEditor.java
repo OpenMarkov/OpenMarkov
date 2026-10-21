@@ -13,9 +13,9 @@ import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.PotentialOperationException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.localize.StringDatabase;
-import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
-import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.DecisionTreeVisualNode;
+import org.openmarkov.core.model.decisiontree.ProbAndCEP;
 import org.openmarkov.core.model.decisiontree.operation.DecisionTreeManager;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -95,7 +95,7 @@ public final class DecisionTreeEditor extends EditorPanel {
         this.zoomManager = new ZoomManager();
         this.decisionTreeManager = new DecisionTreeManagerImpl();
         
-        DecisionTreeElement root = buildDecisionTree(networkPanel.getProbNet());
+        DecisionTreeVisualNode root = buildDecisionTree(networkPanel.getProbNet());
         
         this.jTree = new JTree(new DecisionTreeModel(root)) {
             @Override public void paint(Graphics g) {
@@ -153,7 +153,7 @@ public final class DecisionTreeEditor extends EditorPanel {
      *
      * @param root The root element of the decision tree.
      */
-    private void updateVisualInformation(DecisionTreeElement root) {
+    private void updateVisualInformation(DecisionTreeVisualNode root) {
         DecisionTreeModel model = new DecisionTreeModel(root);
         this.jTree.setModel(model);
         for (int i = 0; i < this.jTree.getRowCount(); i++) {
@@ -168,7 +168,7 @@ public final class DecisionTreeEditor extends EditorPanel {
      *
      * @see #buildDecisionTree(ProbNet, int)
      */
-    private DecisionTreeElement buildDecisionTree(ProbNet probNet)
+    private DecisionTreeVisualNode buildDecisionTree(ProbNet probNet)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException,
             PotentialOperationException.DifferentSizesInPotentialsAndStates {
         return buildDecisionTree(probNet, DEFAULT_DEPTH);
@@ -187,7 +187,7 @@ public final class DecisionTreeEditor extends EditorPanel {
      * @throws NonProjectablePotentialException                                if the potential cannot be projected
      * @throws PotentialOperationException.DifferentSizesInPotentialsAndStates if different sizes in potentials and states occurs
      */
-    private DecisionTreeElement buildDecisionTree(ProbNet probNet, int depth)
+    private DecisionTreeVisualNode buildDecisionTree(ProbNet probNet, int depth)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException,
             PotentialOperationException.DifferentSizesInPotentialsAndStates {
         return this.decisionTreeManager.buildDecisionTree(probNet, depth);
@@ -304,7 +304,7 @@ public final class DecisionTreeEditor extends EditorPanel {
             Object selectedComponent = DecisionTreeEditor.this.jTree.getLastSelectedPathComponent();
             if (selectedComponent instanceof DecisionTreeNodePanel treeNodePanel) {
                 DecisionTreeNode treeNode = treeNodePanel.getTreeNode();
-                CEPDialog cepDialog = new CEPDialog(null, ((CENodeEvaluation) treeNode.getEvaluation()).getCep(),
+                CEPDialog cepDialog = new CEPDialog(null, ((ProbAndCEP) treeNode.getEvaluation()).getCep(),
                                                     treeNode.getNetwork());
                 cepDialog.setVisible(true);
             }

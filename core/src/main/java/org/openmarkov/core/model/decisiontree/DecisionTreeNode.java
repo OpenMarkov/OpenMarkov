@@ -23,7 +23,7 @@ import java.util.List;
  * A node hangs from one branch, its parent branch, and has one branch per
  * state of its variable, its child branches; only branches hang from a node.
  */
-public non-sealed class DecisionTreeNode implements DecisionTreeElement {
+public non-sealed class DecisionTreeNode implements DecisionTreeVisualNode {
 
 	private Variable variable;
 	private NodeType nodeType;
@@ -33,7 +33,7 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 	/** The evidence the algorithm evaluated this node with: what has been observed on the path down to it. */
 	private final EvidenceCase evidence;
 	/** The only place where the probability and the utility of this node are kept. */
-	private DecisionTreeNodeEvaluation evaluation;
+	private DecisionModelEvaluation evaluation;
 
 	/**
 	 * Constructor creating a decision tree node from a network node, with no
@@ -103,7 +103,7 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 	 *
 	 * @return the evaluation of this node.
 	 */
-	public DecisionTreeNodeEvaluation getEvaluation() {
+	public DecisionModelEvaluation getEvaluation() {
 		return evaluation;
 	}
 
@@ -112,7 +112,7 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 	 *
 	 * @param evaluation the evaluation of this node.
 	 */
-	public void setEvaluation(DecisionTreeNodeEvaluation evaluation) {
+	public void setEvaluation(DecisionModelEvaluation evaluation) {
 		this.evaluation = evaluation;
 	}
 
@@ -141,7 +141,7 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 	 * modified: branches are added with {@link #addChild}.
 	 */
 	@Override
-	public List<DecisionTreeElement> getChildren() {
+	public List<DecisionTreeVisualNode> getChildren() {
 		return Collections.unmodifiableList(childBranches);
 	}
 
@@ -170,7 +170,7 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 	 *
 	 * @return the evidence of this node; empty if it was created without evidence.
 	 */
-	public EvidenceCase getBranchStates() {
+	public EvidenceCase getEvidence() {
 		return evidence;
 	}
 
@@ -272,11 +272,11 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 	 */
 	public boolean isBestDecision(DecisionTreeBranch treeBranch) {
 		if (nodeType != NodeType.DECISION
-				|| !(evaluationOfTheChild(treeBranch) instanceof UnicritNodeEvaluation candidate)) {
+				|| !(evaluationOfTheChild(treeBranch) instanceof ProbAndUtilityAndStrategy candidate)) {
 			return false;
 		}
 		for (DecisionTreeBranch otherBranch : childBranches) {
-			if (evaluationOfTheChild(otherBranch) instanceof UnicritNodeEvaluation other
+			if (evaluationOfTheChild(otherBranch) instanceof ProbAndUtilityAndStrategy other
 					&& !(candidate.getUtility() >= other.getUtility())) {
 				return false;
 			}
@@ -284,7 +284,7 @@ public non-sealed class DecisionTreeNode implements DecisionTreeElement {
 		return true;
 	}
 
-	private static DecisionTreeNodeEvaluation evaluationOfTheChild(DecisionTreeBranch branch) {
+	private static DecisionModelEvaluation evaluationOfTheChild(DecisionTreeBranch branch) {
 		DecisionTreeNode child = branch.getChild();
 		return (child == null) ? null : child.getEvaluation();
 	}

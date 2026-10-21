@@ -9,9 +9,9 @@ package org.openmarkov.io.amua;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.ProbAndCEP;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.NodeType;
@@ -78,7 +78,7 @@ class ACostEffectivenessTreeIsExportedToAmuaOnlyIfItBeginsWithItsDecisionTest {
     private DecisionTreeNode node(Variable variable, DecisionTreeNode first,
                                      DecisionTreeNode second) {
         DecisionTreeNode node = new DecisionTreeNode(variable, net);
-        node.setEvaluation(new CENodeEvaluation(1.0, null));
+        node.setEvaluation(new ProbAndCEP(1.0, null));
         State[] states = variable.getStates();
         double probability = net.getNode(variable).getNodeType() == NodeType.DECISION ? 1 : 0.5;
         node.addChild(branch(states[0], probability, first));
@@ -95,7 +95,7 @@ class ACostEffectivenessTreeIsExportedToAmuaOnlyIfItBeginsWithItsDecisionTest {
 
     private DecisionTreeNode leaf(double cost, double effectiveness) {
         DecisionTreeNode leaf = new DecisionTreeNode(utility, net);
-        leaf.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, cost, effectiveness)));
+        leaf.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, cost, effectiveness)));
         return leaf;
     }
 

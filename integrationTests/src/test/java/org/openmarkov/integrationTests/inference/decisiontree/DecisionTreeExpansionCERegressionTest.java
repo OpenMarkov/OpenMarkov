@@ -14,13 +14,13 @@ import org.assertj.core.data.Offset;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.openmarkov.core.inference.MulticriteriaOptions;
-import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
+import org.openmarkov.core.model.decisiontree.DecisionModelEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
-import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
-import org.openmarkov.core.model.decisiontree.DecisionTreeNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.DecisionTreeVisualNode;
 import org.openmarkov.core.model.decisiontree.EvaluationType;
-import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.ProbAndCEP;
+import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
@@ -133,23 +133,23 @@ class DecisionTreeExpansionCERegressionTest {
 		}
 	}
 
-	private static void assertSameUtility(SoftAssertions soft, DecisionTreeNodeEvaluation reference,
-			DecisionTreeNodeEvaluation actual, boolean isCEA, String path) {
+	private static void assertSameUtility(SoftAssertions soft, DecisionModelEvaluation reference,
+			DecisionModelEvaluation actual, boolean isCEA, String path) {
 		if (isCEA) {
-			CEP referenceCep = ((CENodeEvaluation) reference).getCep();
-			CEP actualCep = ((CENodeEvaluation) actual).getCep();
+			CEP referenceCep = ((ProbAndCEP) reference).getCep();
+			CEP actualCep = ((ProbAndCEP) actual).getCep();
 			assertSameCostEffectiveness(soft, referenceCep, actualCep, path);
 			soft.assertThat(adjacentEqualPartitions(actualCep))
 					.as("el CEP nuevo no debe tener particiones redundantes en %s", path).isZero();
 		} else {
-			soft.assertThat(((UnicritNodeEvaluation) actual).getUtility()).as("utilidad en %s", path)
-					.isCloseTo(((UnicritNodeEvaluation) reference).getUtility(), MONEY);
+			soft.assertThat(((ProbAndUtilityAndStrategy) actual).getUtility()).as("utilidad en %s", path)
+					.isCloseTo(((ProbAndUtilityAndStrategy) reference).getUtility(), MONEY);
 		}
 	}
 
 	private static Map<String, DecisionTreeBranch> branchesByState(DecisionTreeNode node) {
 		Map<String, DecisionTreeBranch> branches = new LinkedHashMap<>();
-		for (DecisionTreeElement child : node.getChildren()) {
+		for (DecisionTreeVisualNode child : node.getChildren()) {
 			if (child instanceof DecisionTreeBranch branch) {
 				branches.put(branch.getBranchState() != null ? branch.getBranchState().getName() : "—", branch);
 			}
@@ -190,13 +190,13 @@ class DecisionTreeExpansionCERegressionTest {
 		return n;
 	}
 
-	private static int countNodes(DecisionTreeElement element) {
+	private static int countNodes(DecisionTreeVisualNode element) {
 		if (element == null) {
 			return 0;
 		}
 		if (element instanceof DecisionTreeNode node) {
 			int n = 1;
-			for (DecisionTreeElement child : node.getChildren()) {
+			for (DecisionTreeVisualNode child : node.getChildren()) {
 				n += countNodes(child);
 			}
 			return n;

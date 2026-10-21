@@ -7,11 +7,11 @@
 
 package org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core;
 
-import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
+import org.openmarkov.core.model.decisiontree.DecisionModelEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
-import org.openmarkov.core.model.decisiontree.DecisionTreeNodeEvaluation;
-import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.ProbAndCEP;
+import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
@@ -155,12 +155,12 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
     /**
      * The probability and the utility computed for this network, as the evaluation of its node in the tree.
      */
-    private DecisionTreeNodeEvaluation evaluationOfTheTreeNode() {
+    private DecisionModelEvaluation evaluationOfTheTreeNode() {
         double probability = DANOperations.getOnlyValuePotential(getProbability());
         if (isCEAnalysis) {
-            return new CENodeEvaluation(probability, DANOperations.getOnlyValuePotentialCEP((GTablePotential) getUtility()));
+            return new ProbAndCEP(probability, DANOperations.getOnlyValuePotentialCEP((GTablePotential) getUtility()));
         }
-        return new UnicritNodeEvaluation(probability, DANOperations.getOnlyValuePotential((TablePotential) getUtility()));
+        return new ProbAndUtilityAndStrategy(probability, DANOperations.getOnlyValuePotential((TablePotential) getUtility()));
     }
     
     

@@ -48,11 +48,11 @@ class DecisionTreeNodeBestDecisionTest {
     }
 
     private DecisionTreeBranch branchWithUtility(State state, Double utility) {
-        return branchWithEvaluation(state, utility == null ? null : new UnicritNodeEvaluation(1.0, utility));
+        return branchWithEvaluation(state, utility == null ? null : new ProbAndUtilityAndStrategy(1.0, utility));
     }
 
     /** A branch of the decision whose child has the given evaluation; no child if the evaluation is null. */
-    private DecisionTreeBranch branchWithEvaluation(State state, DecisionTreeNodeEvaluation evaluation) {
+    private DecisionTreeBranch branchWithEvaluation(State state, DecisionModelEvaluation evaluation) {
         DecisionTreeBranch branch = new DecisionTreeBranch(state);
         decisionTreeNode.addChild(branch);
         if (evaluation != null) {
@@ -108,8 +108,8 @@ class DecisionTreeNodeBestDecisionTest {
     @Test
     void noBranchIsTheBestDecisionInCostEffectiveness() throws Exception {
         CEP cep = new CEP(new StrategyTree[]{null}, new double[]{10.0}, new double[]{2.0}, null, 0.0, 100.0);
-        DecisionTreeBranch first = branchWithEvaluation(yes, new CENodeEvaluation(1.0, cep));
-        DecisionTreeBranch second = branchWithEvaluation(no, new CENodeEvaluation(1.0, cep));
+        DecisionTreeBranch first = branchWithEvaluation(yes, new ProbAndCEP(1.0, cep));
+        DecisionTreeBranch second = branchWithEvaluation(no, new ProbAndCEP(1.0, cep));
 
         assertFalse(decisionTreeNode.isBestDecision(first));
         assertFalse(decisionTreeNode.isBestDecision(second));
@@ -123,7 +123,7 @@ class DecisionTreeNodeBestDecisionTest {
         DecisionTreeBranch branch = new DecisionTreeBranch(chance.getStates()[0]);
         chanceTreeNode.addChild(branch);
         DecisionTreeNode child = new DecisionTreeNode(probNet.addNode(new Variable("U"), NodeType.UTILITY), probNet);
-        child.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
+        child.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 10.0));
         branch.setChild(child);
 
         assertFalse(chanceTreeNode.isBestDecision(branch));

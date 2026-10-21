@@ -19,7 +19,7 @@ import java.util.List;
  * The only branch without a state is the one the interface hangs the root node
  * from: it has a child but no parent.
  */
-public non-sealed class DecisionTreeBranch implements DecisionTreeElement {
+public non-sealed class DecisionTreeBranch implements DecisionTreeVisualNode {
 
 	private final State branchState;
 	/** Probability of the state of this branch given the path down to its parent; NaN until it is set. */
@@ -54,7 +54,7 @@ public non-sealed class DecisionTreeBranch implements DecisionTreeElement {
 	 * {@link NullPointerException} one frame below.
 	 */
 	@Override
-	public List<DecisionTreeElement> getChildren() {
+	public List<DecisionTreeVisualNode> getChildren() {
 		return (child == null) ? List.of() : List.of(child);
 	}
 

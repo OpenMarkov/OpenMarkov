@@ -13,8 +13,8 @@ import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.PotentialOperationException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
-import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.DecisionTreeVisualNode;
 import org.openmarkov.core.model.decisiontree.operation.DecisionTreeManager;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
@@ -45,7 +45,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
     }
 
     @Override
-    public DecisionTreeElement buildDecisionTree(ProbNet probNet, int depth)
+    public DecisionTreeVisualNode buildDecisionTree(ProbNet probNet, int depth)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
             NotSupportedOperationException {
@@ -53,7 +53,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
     }
 
     @Override
-    public DecisionTreeElement buildDecisionTree(ProbNet probNet, int depth, EvidenceCase branchEvidence)
+    public DecisionTreeVisualNode buildDecisionTree(ProbNet probNet, int depth, EvidenceCase branchEvidence)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
             NotSupportedOperationException {
@@ -73,7 +73,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
     }
 
     @Override
-    public void expandLevels(DecisionTreeElement root, int levels)
+    public void expandLevels(DecisionTreeVisualNode root, int levels)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
             NotSupportedOperationException {
@@ -83,7 +83,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
     /**
      * Recursive expansion logic moved from DecisionTreePanel.
      */
-    private void inferenceExpandLevels(DecisionTreeElement root,
+    private void inferenceExpandLevels(DecisionTreeVisualNode root,
             DecisionTreeNode parent, int n, EvidenceCase branchEvidence)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
@@ -92,7 +92,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
             if (root instanceof DecisionTreeNode) {
                 parent = (DecisionTreeNode) root;
             }
-            for (DecisionTreeElement branch : root.getChildren()) {
+            for (DecisionTreeVisualNode branch : root.getChildren()) {
                 EvidenceCase newEvi;
                 if (root instanceof DecisionTreeBranch) {
                     newEvi = createEvidenceBranchPath(branchEvidence, (DecisionTreeBranch) root);
@@ -104,7 +104,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
         } else {
             DecisionTreeNode rootDT = (DecisionTreeNode) root;
             // Recursively build the next part of the tree
-            DecisionTreeElement newSubTree = buildDecisionTree(rootDT.getNetwork(), n, branchEvidence);
+            DecisionTreeVisualNode newSubTree = buildDecisionTree(rootDT.getNetwork(), n, branchEvidence);
             if (newSubTree instanceof DecisionTreeBranch) {
                 DecisionTreeNode auxRoot = ((DecisionTreeBranch) newSubTree).getChild();
                 // The name check guards against grafting a subtree whose root repeats

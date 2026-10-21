@@ -16,11 +16,11 @@ import org.openmarkov.core.model.network.CEP;
  *
  * @author Manuel Arias
  */
-public final class CENodeEvaluation extends DecisionTreeNodeEvaluation {
+public final class ProbAndCEP extends DecisionModelEvaluation {
 
 	private final CEP cep;
 
-	public CENodeEvaluation(double prob, CEP cep) {
+	public ProbAndCEP(double prob, CEP cep) {
 		super(prob);
 		this.cep = cep;
 	}

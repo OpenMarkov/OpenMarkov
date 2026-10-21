@@ -87,7 +87,7 @@ public class AmuaDTValidator {
      */
     private void hasValidStructure(DecisionTreeNode node, int maxDecisionNodes, boolean isCE){
         isValidNode(node, maxDecisionNodes, isCE);
-        for (DecisionTreeElement child : node.getChildren()) {
+        for (DecisionTreeVisualNode child : node.getChildren()) {
             if (child instanceof DecisionTreeBranch branch) {
                 hasValidStructure(branch.getChild(), maxDecisionNodes, isCE);
             }

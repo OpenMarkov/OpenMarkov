@@ -13,8 +13,8 @@ import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.PotentialOperationException;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
-import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.DecisionTreeVisualNode;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -47,7 +47,7 @@ class DecisionTreeManagerImplTest {
         ProbNet id = simpleIdWithName();
 
         DecisionTreeManagerImpl manager = new DecisionTreeManagerImpl();
-        DecisionTreeElement root = manager.buildDecisionTree(id, DEFAULT_DEPTH);
+        DecisionTreeVisualNode root = manager.buildDecisionTree(id, DEFAULT_DEPTH);
 
         // The current implementation always wraps the result in a synthetic root
         // DecisionTreeBranch.
@@ -87,7 +87,7 @@ class DecisionTreeManagerImplTest {
         ProbNet id = simpleIdWithName();
 
         DecisionTreeManagerImpl manager = new DecisionTreeManagerImpl();
-        DecisionTreeElement root = manager.buildDecisionTree(id, 0);
+        DecisionTreeVisualNode root = manager.buildDecisionTree(id, 0);
         DecisionTreeNode leaf = (DecisionTreeNode) root.getChildren().get(0);
         assertEquals(NodeType.UTILITY, leaf.getNodeType(), "depth 0 must produce a single leaf");
 
@@ -104,8 +104,8 @@ class DecisionTreeManagerImplTest {
         ProbNet id = simpleIdWithName();
 
         DecisionTreeManagerImpl manager = new DecisionTreeManagerImpl();
-        DecisionTreeElement withoutEvidence = manager.buildDecisionTree(id, DEFAULT_DEPTH);
-        DecisionTreeElement withEmptyEvidence = manager.buildDecisionTree(
+        DecisionTreeVisualNode withoutEvidence = manager.buildDecisionTree(id, DEFAULT_DEPTH);
+        DecisionTreeVisualNode withEmptyEvidence = manager.buildDecisionTree(
                 simpleIdWithName(), DEFAULT_DEPTH, new EvidenceCase());
 
         assertEquals(canonicalSnapshot(withoutEvidence), canonicalSnapshot(withEmptyEvidence));
@@ -119,7 +119,7 @@ class DecisionTreeManagerImplTest {
         ProbNet id = simpleIdWithName();
 
         DecisionTreeManagerImpl manager = new DecisionTreeManagerImpl();
-        DecisionTreeElement root = manager.buildDecisionTree(id, DEFAULT_DEPTH);
+        DecisionTreeVisualNode root = manager.buildDecisionTree(id, DEFAULT_DEPTH);
 
         String snapshot = canonicalSnapshot(root);
 
@@ -140,7 +140,7 @@ class DecisionTreeManagerImplTest {
         ProbNet id = simpleIdWithName();
 
         DecisionTreeManagerImpl manager = new DecisionTreeManagerImpl();
-        DecisionTreeElement root = manager.buildDecisionTree(id, 1);
+        DecisionTreeVisualNode root = manager.buildDecisionTree(id, 1);
         String before = canonicalSnapshot(root);
 
         manager.expandLevels(root, 1);
@@ -157,7 +157,7 @@ class DecisionTreeManagerImplTest {
      * Uses a depth-first walk and prints the kind of element plus the variable
      * name when applicable.
      */
-    private static String canonicalSnapshot(DecisionTreeElement element)
+    private static String canonicalSnapshot(DecisionTreeVisualNode element)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException,
             PotentialOperationException.DifferentSizesInPotentialsAndStates,
@@ -167,7 +167,7 @@ class DecisionTreeManagerImplTest {
         return sb.toString();
     }
 
-    private static void appendElement(DecisionTreeElement element, StringBuilder sb, int depth) {
+    private static void appendElement(DecisionTreeVisualNode element, StringBuilder sb, int depth) {
         if (element == null) {
             sb.append("  ".repeat(depth)).append("<null>\n");
             return;
@@ -186,9 +186,9 @@ class DecisionTreeManagerImplTest {
               .append(node.getVariable() == null ? "?" : node.getVariable().getName())
               .append("]\n");
         }
-        List<DecisionTreeElement> children = element.getChildren();
+        List<DecisionTreeVisualNode> children = element.getChildren();
         if (children != null) {
-            for (DecisionTreeElement child : children) {
+            for (DecisionTreeVisualNode child : children) {
                 appendElement(child, sb, depth + 1);
             }
         }

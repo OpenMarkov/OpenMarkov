@@ -3,10 +3,10 @@ package org.openmarkov.integrationTests.inference.heuristics;
 import org.junit.jupiter.api.Assertions;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
-import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.DecisionTreeVisualNode;
 import org.openmarkov.core.model.decisiontree.EvaluationType;
-import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
@@ -142,7 +142,7 @@ public class Tools {
             
             double totalProbability = 0;
             double weightedUtility = 0;
-            for (DecisionTreeElement childElement : treeNode.getChildren()) {
+            for (DecisionTreeVisualNode childElement : treeNode.getChildren()) {
                 DecisionTreeBranch branch = (DecisionTreeBranch) childElement;
                 double branchProbability = branch.getBranchProbability();
                 
@@ -174,7 +174,7 @@ public class Tools {
             
         } else if (treeNode.getNodeType().equals(NodeType.DECISION) && !isCEA) {
             double maxUtility = Double.NEGATIVE_INFINITY;
-            for (DecisionTreeElement childElement : treeNode.getChildren()) {
+            for (DecisionTreeVisualNode childElement : treeNode.getChildren()) {
                 DecisionTreeBranch branch = (DecisionTreeBranch) childElement;
                 double auxUtility = utility(branch.getChild());
                 if (auxUtility > maxUtility) {
@@ -193,7 +193,7 @@ public class Tools {
     }
 
     private static double utility(DecisionTreeNode treeNode) {
-        return ((UnicritNodeEvaluation) treeNode.getEvaluation()).getUtility();
+        return ((ProbAndUtilityAndStrategy) treeNode.getEvaluation()).getUtility();
     }
     
     

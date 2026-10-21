@@ -1,10 +1,10 @@
 package org.openmarkov.io.amua;
 
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
-import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.ProbAndCEP;
+import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 import org.openmarkov.core.model.network.*;
 
 import java.io.File;
@@ -102,7 +102,7 @@ public class AmuaExporterTest {
         probNet.addNode(U4, NodeType.UTILITY);
 
         DecisionTreeNode decisionNode = new DecisionTreeNode(D, probNet);
-        decisionNode.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
+        decisionNode.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 0.0));
         DecisionTreeNode chanceYes = new DecisionTreeNode(C_yes, probNet);
         DecisionTreeNode chanceNo = new DecisionTreeNode(C_no, probNet);
         DecisionTreeNode utilityNode1 = new DecisionTreeNode(U1, probNet);
@@ -110,10 +110,10 @@ public class AmuaExporterTest {
         DecisionTreeNode utilityNode3 = new DecisionTreeNode(U3, probNet);
         DecisionTreeNode utilityNode4 = new DecisionTreeNode(U4, probNet);
 
-        utilityNode1.setEvaluation(new UnicritNodeEvaluation(1.0, 8.0));
-        utilityNode2.setEvaluation(new UnicritNodeEvaluation(1.0, 9.0));
-        utilityNode3.setEvaluation(new UnicritNodeEvaluation(1.0, 3.0));
-        utilityNode4.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
+        utilityNode1.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 8.0));
+        utilityNode2.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 9.0));
+        utilityNode3.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 3.0));
+        utilityNode4.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 10.0));
 
         State cYes1 = C_yes.getStates()[0];
         cYes1.setName("absent");
@@ -124,8 +124,8 @@ public class AmuaExporterTest {
         State cNo2 = C_no.getStates()[1];
         cNo2.setName("present");
 
-        chanceYes.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
-        chanceNo.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
+        chanceYes.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 0.0));
+        chanceNo.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 0.0));
 
         DecisionTreeBranch branchYes_U1 = createBranch(cYes1, 0.14, utilityNode1);
         DecisionTreeBranch branchYes_U2 = createBranch(cYes2, 0.86, utilityNode2);
@@ -170,7 +170,7 @@ public class AmuaExporterTest {
         probNet.setDecisionCriteria(assignInvalidCriteriaList(0.0));
 
         DecisionTreeNode decisionNode = new DecisionTreeNode(D, probNet);
-        decisionNode.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
+        decisionNode.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 0.0));
         DecisionTreeNode chanceYes = new DecisionTreeNode(C_yes, probNet);
         DecisionTreeNode chanceNo = new DecisionTreeNode(C_no, probNet);
         DecisionTreeNode utilityNode1 = new DecisionTreeNode(U1, probNet);
@@ -178,10 +178,10 @@ public class AmuaExporterTest {
         DecisionTreeNode utilityNode3 = new DecisionTreeNode(U3, probNet);
         DecisionTreeNode utilityNode4 = new DecisionTreeNode(U4, probNet);
 
-        utilityNode1.setEvaluation(new UnicritNodeEvaluation(1.0, 8.0));
-        utilityNode2.setEvaluation(new UnicritNodeEvaluation(1.0, 9.0));
-        utilityNode3.setEvaluation(new UnicritNodeEvaluation(1.0, 3.0));
-        utilityNode4.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
+        utilityNode1.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 8.0));
+        utilityNode2.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 9.0));
+        utilityNode3.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 3.0));
+        utilityNode4.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 10.0));
 
         State cYes1 = C_yes.getStates()[0];
         cYes1.setName("absent");
@@ -192,8 +192,8 @@ public class AmuaExporterTest {
         State cNo2 = C_no.getStates()[1];
         cNo2.setName("present");
 
-        chanceYes.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
-        chanceNo.setEvaluation(new UnicritNodeEvaluation(1.0, 0.0));
+        chanceYes.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 0.0));
+        chanceNo.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 0.0));
 
         DecisionTreeBranch branchYes_U1 = createBranch(cYes1, 0.14, utilityNode1);
         DecisionTreeBranch branchYes_U2 = createBranch(cYes2, 0.86, utilityNode2);
@@ -250,7 +250,7 @@ public class AmuaExporterTest {
         probNet.setDecisionCriteria(assignBasicCriteriaList(30000.0));
 
         DecisionTreeNode root = new DecisionTreeNode(D, probNet);
-        root.setEvaluation(new CENodeEvaluation(1.0, null));
+        root.setEvaluation(new ProbAndCEP(1.0, null));
         DecisionTreeNode chanceNo = new DecisionTreeNode(C_no, probNet);
         DecisionTreeNode chanceT1 = new DecisionTreeNode(C_t1, probNet);
         DecisionTreeNode chanceT2 = new DecisionTreeNode(C_t2, probNet);
@@ -261,12 +261,12 @@ public class AmuaExporterTest {
         DecisionTreeNode u5 = new DecisionTreeNode(U5, probNet);
         DecisionTreeNode u6 = new DecisionTreeNode(U6, probNet);
 
-        u1.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 0.0, 10.0)));
-        u2.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 0.0, 1.2)));
-        u3.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 20000.0, 9.9)));
-        u4.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 20000.0, 4.0)));
-        u5.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 70000.0, 9.3)));
-        u6.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 70000.0, 6.5)));
+        u1.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 0.0, 10.0)));
+        u2.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 0.0, 1.2)));
+        u3.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 20000.0, 9.9)));
+        u4.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 20000.0, 4.0)));
+        u5.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 70000.0, 9.3)));
+        u6.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 70000.0, 6.5)));
 
         State sNo = D.getStates()[0];
         State sT1 = D.getStates()[1];
@@ -279,9 +279,9 @@ public class AmuaExporterTest {
         State absentT2 = C_t2.getStates()[0];
         State presentT2 = C_t2.getStates()[1];
 
-        chanceNo.setEvaluation(new CENodeEvaluation(1.0, null));
-        chanceT1.setEvaluation(new CENodeEvaluation(1.0, null));
-        chanceT2.setEvaluation(new CENodeEvaluation(1.0, null));
+        chanceNo.setEvaluation(new ProbAndCEP(1.0, null));
+        chanceT1.setEvaluation(new ProbAndCEP(1.0, null));
+        chanceT2.setEvaluation(new ProbAndCEP(1.0, null));
 
         DecisionTreeBranch bNo = createBranch(sNo, 1.0, chanceNo);
         DecisionTreeBranch bT1 = createBranch(sT1, 1.0, chanceT1);
@@ -336,31 +336,31 @@ public class AmuaExporterTest {
         probNet.setDecisionCriteria(assignBasicCriteriaList(25000));
 
         DecisionTreeNode root = new DecisionTreeNode(decision, probNet);
-        root.setEvaluation(new CENodeEvaluation(1.0, null));
+        root.setEvaluation(new ProbAndCEP(1.0, null));
         DecisionTreeNode dieAngioNode = new DecisionTreeNode(dieAngio, probNet);
         DecisionTreeNode peNode = new DecisionTreeNode(pe, probNet);
         DecisionTreeNode dieNodeAbsent = new DecisionTreeNode(die, probNet);
         DecisionTreeNode dieNodePresent = new DecisionTreeNode(die, probNet);
 
         DecisionTreeNode uDieAngio = new DecisionTreeNode(qale, probNet);
-        uDieAngio.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 0.0, 0.0)));
+        uDieAngio.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 0.0, 0.0)));
 
         DecisionTreeNode uPEAbsentDieNo = new DecisionTreeNode(qale, probNet);
-        uPEAbsentDieNo.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 1000.0, 7.0)));
+        uPEAbsentDieNo.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 1000.0, 7.0)));
 
         DecisionTreeNode uPEAbsentDieYes = new DecisionTreeNode(qale, probNet);
-        uPEAbsentDieYes.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 300.0, 4.0)));
+        uPEAbsentDieYes.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 300.0, 4.0)));
 
         DecisionTreeNode uPEPresentDieNo = new DecisionTreeNode(qale, probNet);
-        uPEPresentDieNo.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 500.0, 8.0)));
+        uPEPresentDieNo.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 500.0, 8.0)));
 
         DecisionTreeNode uPEPresentDieYes = new DecisionTreeNode(qale, probNet);
-        uPEPresentDieYes.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 600.0, 5.5)));
+        uPEPresentDieYes.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 600.0, 5.5)));
 
-        dieAngioNode.setEvaluation(new CENodeEvaluation(1.0, null));
-        peNode.setEvaluation(new CENodeEvaluation(1.0, null));
-        dieNodeAbsent.setEvaluation(new CENodeEvaluation(1.0, null));
-        dieNodePresent.setEvaluation(new CENodeEvaluation(1.0, null));
+        dieAngioNode.setEvaluation(new ProbAndCEP(1.0, null));
+        peNode.setEvaluation(new ProbAndCEP(1.0, null));
+        dieNodeAbsent.setEvaluation(new ProbAndCEP(1.0, null));
+        dieNodePresent.setEvaluation(new ProbAndCEP(1.0, null));
 
         State angiogram = decision.getStates()[0];
         State noAC = decision.getStates()[1];

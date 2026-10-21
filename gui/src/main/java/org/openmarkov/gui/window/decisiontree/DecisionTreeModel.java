@@ -11,8 +11,8 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
-import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.DecisionTreeVisualNode;
 import org.openmarkov.gui.window.decisiontree.elements.DecisionTreeBranchPanel;
 import org.openmarkov.gui.window.decisiontree.elements.DecisionTreeElementPanel;
 import org.openmarkov.gui.window.decisiontree.elements.DecisionTreeNodePanel;
@@ -22,7 +22,7 @@ import java.util.Set;
 
 /**
  * Adapter model for visualizing decision trees in Swing components (JTree).
- * It transforms the {@link DecisionTreeElement} logical structure into GUI panels.
+ * It transforms the {@link DecisionTreeVisualNode} logical structure into GUI panels.
  */
 public class DecisionTreeModel implements TreeModel {
 
@@ -36,7 +36,7 @@ public class DecisionTreeModel implements TreeModel {
 	 * Constructor for DecisionTreeModel.
 	 * @param root The base element of the logical model.
 	 */
-	public DecisionTreeModel(DecisionTreeElement root) {
+	public DecisionTreeModel(DecisionTreeVisualNode root) {
 		super();
 		this.listeners = new HashSet<>();
 		this.root = buildPanelTree(root);
@@ -47,12 +47,12 @@ public class DecisionTreeModel implements TreeModel {
      * @param treeElement The logical element to process.
      * @return The corresponding panel (Node or Branch) with its children linked.
      */
-	private static DecisionTreeElementPanel buildPanelTree(DecisionTreeElement treeElement) {
+	private static DecisionTreeElementPanel buildPanelTree(DecisionTreeVisualNode treeElement) {
 		DecisionTreeElementPanel treeElementPanel = switch (treeElement) {
 			case DecisionTreeBranch decisionTreeBranch -> new DecisionTreeBranchPanel(decisionTreeBranch);
 			case DecisionTreeNode decisionTreeNode -> new DecisionTreeNodePanel(decisionTreeNode);
 		};
-		for (DecisionTreeElement child : treeElement.getChildren()) {
+		for (DecisionTreeVisualNode child : treeElement.getChildren()) {
 			treeElementPanel.addChild(buildPanelTree(child));
 		}
 		return treeElementPanel;

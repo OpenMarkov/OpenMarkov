@@ -13,11 +13,11 @@ package org.openmarkov.core.model.decisiontree;
  *
  * @author Manuel Arias
  */
-public abstract sealed class DecisionTreeNodeEvaluation permits UnicritNodeEvaluation, CENodeEvaluation {
+public abstract sealed class DecisionModelEvaluation permits ProbAndUtilityAndStrategy, ProbAndCEP {
 
 	private final double prob;
 
-	public DecisionTreeNodeEvaluation(double prob) {
+	public DecisionModelEvaluation(double prob) {
 		this.prob = prob;
 	}
 

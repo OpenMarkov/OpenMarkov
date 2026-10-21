@@ -76,7 +76,7 @@ class DecisionTreeBranchTest {
     @Test
     void branchProbabilityFromTheEvaluationsIsZeroWhenTheParentScenarioIsZero() {
         DecisionTreeNode parent = new DecisionTreeNode(chanceNode, probNet);
-        parent.setEvaluation(new UnicritNodeEvaluation(0.0, 0.0));
+        parent.setEvaluation(new ProbAndUtilityAndStrategy(0.0, 0.0));
         DecisionTreeBranch branch = hangChild(parent, yes, 0.5);
 
         parent.setBranchProbabilitiesFromEvaluations();
@@ -87,7 +87,7 @@ class DecisionTreeBranchTest {
     @Test
     void branchProbabilityFromTheEvaluationsIsTheRatioOfTheScenarios() {
         DecisionTreeNode parent = new DecisionTreeNode(chanceNode, probNet);
-        parent.setEvaluation(new UnicritNodeEvaluation(0.4, 0.0));
+        parent.setEvaluation(new ProbAndUtilityAndStrategy(0.4, 0.0));
         DecisionTreeBranch first = hangChild(parent, yes, 0.1);
         DecisionTreeBranch second = hangChild(parent, no, 0.3);
 
@@ -102,7 +102,7 @@ class DecisionTreeBranchTest {
         DecisionTreeBranch branch = new DecisionTreeBranch(state);
         parent.addChild(branch);
         DecisionTreeNode child = new DecisionTreeNode(decisionNode, probNet);
-        child.setEvaluation(new UnicritNodeEvaluation(scenarioProbability, 0.0));
+        child.setEvaluation(new ProbAndUtilityAndStrategy(scenarioProbability, 0.0));
         branch.setChild(child);
         return branch;
     }
@@ -116,7 +116,7 @@ class DecisionTreeBranchTest {
 
     /**
      * The two kinds of element answer the same question the same way. Consumers walk
-     * the tree through {@link DecisionTreeElement#getChildren()} without knowing which
+     * the tree through {@link DecisionTreeVisualNode#getChildren()} without knowing which
      * one they hold, so "no children" has to look alike from both.
      */
     @Test
@@ -141,9 +141,9 @@ class DecisionTreeBranchTest {
         assertEquals(1, countElements(branch));
     }
 
-    private static int countElements(DecisionTreeElement element) {
+    private static int countElements(DecisionTreeVisualNode element) {
         int count = 1;
-        for (DecisionTreeElement child : element.getChildren()) {
+        for (DecisionTreeVisualNode child : element.getChildren()) {
             count += countElements(child);
         }
         return count;

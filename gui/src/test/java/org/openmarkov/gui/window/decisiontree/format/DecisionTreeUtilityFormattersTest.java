@@ -7,8 +7,8 @@
 package org.openmarkov.gui.window.decisiontree.format;
 
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
-import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.ProbAndCEP;
+import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 import org.openmarkov.core.model.network.CEP;
 
 import java.text.DecimalFormat;
@@ -24,14 +24,14 @@ class DecisionTreeUtilityFormattersTest {
 
     @Test
     void dispatchesASingleCriterionEvaluationToDoubleFormatter() {
-        String out = DecisionTreeUtilityFormatters.format(new UnicritNodeEvaluation(1.0, 7.5), DF, false);
+        String out = DecisionTreeUtilityFormatters.format(new ProbAndUtilityAndStrategy(1.0, 7.5), DF, false);
         assertEquals(" U=7.5000", out);
     }
 
     @Test
     void dispatchesACostEffectivenessEvaluationToCepFormatter() {
         CEP zero = CEP.getZeroPartition();
-        String out = DecisionTreeUtilityFormatters.format(new CENodeEvaluation(1.0, zero), DF, false);
+        String out = DecisionTreeUtilityFormatters.format(new ProbAndCEP(1.0, zero), DF, false);
         assertEquals(" ", out);
     }
 
@@ -42,6 +42,6 @@ class DecisionTreeUtilityFormattersTest {
 
     @Test
     void aCostEffectivenessEvaluationWithoutPartitionProducesEmptyString() {
-        assertEquals("", DecisionTreeUtilityFormatters.format(new CENodeEvaluation(1.0, null), DF, false));
+        assertEquals("", DecisionTreeUtilityFormatters.format(new ProbAndCEP(1.0, null), DF, false));
     }
 }

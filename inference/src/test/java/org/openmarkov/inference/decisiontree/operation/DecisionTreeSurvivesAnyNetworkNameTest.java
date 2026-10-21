@@ -7,8 +7,8 @@
 package org.openmarkov.inference.decisiontree.operation;
 
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
+import org.openmarkov.core.model.decisiontree.DecisionTreeVisualNode;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.inference.testutils.TestNetworks;
 
@@ -40,7 +40,7 @@ class DecisionTreeSurvivesAnyNetworkNameTest {
 		return names;
 	}
 
-	private static void collect(DecisionTreeElement element, List<String> names) {
+	private static void collect(DecisionTreeVisualNode element, List<String> names) {
 		if (element instanceof DecisionTreeNode node) {
 			names.add(node.getNetwork().getName());
 		}

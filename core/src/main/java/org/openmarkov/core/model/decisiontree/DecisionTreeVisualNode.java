@@ -14,7 +14,7 @@ import java.util.List;
  * Both nodes and branches implement this interface: it is what the interface
  * walks to paint the tree.
  */
-public sealed interface DecisionTreeElement permits DecisionTreeBranch, DecisionTreeNode {
+public sealed interface DecisionTreeVisualNode permits DecisionTreeBranch, DecisionTreeNode {
 	/**
 	 * Returns the list of children of this element. An element with no children
 	 * returns an empty list, never {@code null} and never a list containing
@@ -23,6 +23,6 @@ public sealed interface DecisionTreeElement permits DecisionTreeBranch, Decision
 	 *
 	 * @return List of children, possibly empty.
 	 */
-	List<DecisionTreeElement> getChildren();
+	List<DecisionTreeVisualNode> getChildren();
 
 }

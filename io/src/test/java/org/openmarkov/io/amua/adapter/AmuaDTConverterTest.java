@@ -1,10 +1,10 @@
 package org.openmarkov.io.amua.adapter;
 
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
-import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.ProbAndCEP;
+import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.potential.*;
 import org.openmarkov.io.amua.adatper.AmuaDTConverter;
@@ -69,7 +69,7 @@ class AmuaDTConverterTest {
         Variable root = net.getVariables().getFirst();
 
         DecisionTreeNode treeNode = new DecisionTreeNode(root, net);
-        treeNode.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 0.0, 10.0)));
+        treeNode.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 0.0, 10.0)));
 
         AmuaDTConverter converter = new AmuaDTConverter(AmuaModel.COST_EFFECTIVENESS_DT);
         AmuaDTCENode amuaNode = (AmuaDTCENode) converter.convertToAmuaTree(treeNode);
@@ -99,7 +99,7 @@ class AmuaDTConverterTest {
         DecisionTreeNode root = new DecisionTreeNode(D, net);
         DecisionTreeNode chanceNode = new DecisionTreeNode(C, net);
         DecisionTreeNode utilityNode = new DecisionTreeNode(U, net);
-        utilityNode.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
+        utilityNode.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 10.0));
 
         root.addChild(branch(D.getStates()[0], chanceNode));
         chanceNode.addChild(branch(C.getStates()[0], utilityNode, 0.7));
@@ -253,13 +253,13 @@ class AmuaDTConverterTest {
         DecisionTreeNode chanceNo = new DecisionTreeNode(C_no, net);
 
         DecisionTreeNode u1 = new DecisionTreeNode(U1, net);
-        u1.setEvaluation(new UnicritNodeEvaluation(1.0, 8.0));
+        u1.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 8.0));
         DecisionTreeNode u2 = new DecisionTreeNode(U2, net);
-        u2.setEvaluation(new UnicritNodeEvaluation(1.0, 9.0));
+        u2.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 9.0));
         DecisionTreeNode u3 = new DecisionTreeNode(U3, net);
-        u3.setEvaluation(new UnicritNodeEvaluation(1.0, 3.0));
+        u3.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 3.0));
         DecisionTreeNode u4 = new DecisionTreeNode(U4, net);
-        u4.setEvaluation(new UnicritNodeEvaluation(1.0, 10.0));
+        u4.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 10.0));
 
         decision.addChild(branch(D.getStates()[0], chanceYes));
         decision.addChild(branch(D.getStates()[1], chanceNo));
@@ -303,22 +303,22 @@ class AmuaDTConverterTest {
         DecisionTreeNode chanceT2 = new DecisionTreeNode(C_t2, net);
 
         DecisionTreeNode u1 = new DecisionTreeNode(U1, net);
-        u1.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 0.0, 10.0)));
+        u1.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 0.0, 10.0)));
 
         DecisionTreeNode u2 = new DecisionTreeNode(U2, net);
-        u2.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 0.0, 1.2)));
+        u2.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 0.0, 1.2)));
 
         DecisionTreeNode u3 = new DecisionTreeNode(U3, net);
-        u3.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 20000.0, 9.9)));
+        u3.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 20000.0, 9.9)));
 
         DecisionTreeNode u4 = new DecisionTreeNode(U4, net);
-        u4.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 20000.0, 4.0)));
+        u4.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 20000.0, 4.0)));
 
         DecisionTreeNode u5 = new DecisionTreeNode(U5, net);
-        u5.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 70000.0, 9.3)));
+        u5.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 70000.0, 9.3)));
 
         DecisionTreeNode u6 = new DecisionTreeNode(U6, net);
-        u6.setEvaluation(new CENodeEvaluation(1.0, new CEP.CEPBuilder().build(null, 70000.0, 6.5)));
+        u6.setEvaluation(new ProbAndCEP(1.0, new CEP.CEPBuilder().build(null, 70000.0, 6.5)));
 
         root.addChild(branch(D.getStates()[0],chanceNo));
         root.addChild(branch(D.getStates()[1],chanceT1));

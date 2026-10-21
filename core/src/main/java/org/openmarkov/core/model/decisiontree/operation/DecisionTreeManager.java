@@ -11,7 +11,7 @@ import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.PotentialOperationException;
-import org.openmarkov.core.model.decisiontree.DecisionTreeElement;
+import org.openmarkov.core.model.decisiontree.DecisionTreeVisualNode;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 
@@ -29,7 +29,7 @@ public interface DecisionTreeManager {
      * @param depth   Maximum depth.
      * @return The root element of the tree.
      */
-    DecisionTreeElement buildDecisionTree(ProbNet probNet, int depth)
+    DecisionTreeVisualNode buildDecisionTree(ProbNet probNet, int depth)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
             NotSupportedOperationException;
@@ -42,7 +42,7 @@ public interface DecisionTreeManager {
      * @param branchEvidence Evidence accumulated in the branch.
      * @return The decision tree branch/root.
      */
-    DecisionTreeElement buildDecisionTree(ProbNet probNet, int depth, EvidenceCase branchEvidence)
+    DecisionTreeVisualNode buildDecisionTree(ProbNet probNet, int depth, EvidenceCase branchEvidence)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
             NotSupportedOperationException;
@@ -53,7 +53,7 @@ public interface DecisionTreeManager {
      * @param root   The current root or branch to expand.
      * @param levels The number of levels to expand.
      */
-    void expandLevels(DecisionTreeElement root, int levels)
+    void expandLevels(DecisionTreeVisualNode root, int levels)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
             NotSupportedOperationException;

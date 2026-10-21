@@ -6,9 +6,9 @@
  */
 package org.openmarkov.gui.window.decisiontree.format;
 
-import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
-import org.openmarkov.core.model.decisiontree.DecisionTreeNodeEvaluation;
-import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.DecisionModelEvaluation;
+import org.openmarkov.core.model.decisiontree.ProbAndCEP;
+import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 
 import java.text.DecimalFormat;
 
@@ -30,12 +30,12 @@ public final class DecisionTreeUtilityFormatters {
      * by the kind of evaluation. Returns an empty string when the node has not
      * been evaluated yet or its evaluation carries no utility.
      */
-    public static String format(DecisionTreeNodeEvaluation evaluation, DecimalFormat df, boolean addSlashPrefix) {
+    public static String format(DecisionModelEvaluation evaluation, DecimalFormat df, boolean addSlashPrefix) {
         return switch (evaluation) {
             case null -> "";
-            case UnicritNodeEvaluation unicrit ->
+            case ProbAndUtilityAndStrategy unicrit ->
                     DoubleUtilityFormatter.INSTANCE.format(unicrit.getUtility(), df, addSlashPrefix);
-            case CENodeEvaluation ce ->
+            case ProbAndCEP ce ->
                     (ce.getCep() == null) ? "" : CEPUtilityFormatter.INSTANCE.format(ce.getCep(), df, addSlashPrefix);
         };
     }

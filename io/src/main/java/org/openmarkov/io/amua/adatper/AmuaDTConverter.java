@@ -109,7 +109,7 @@ public class AmuaDTConverter {
 
         // recursive call
         List<AmuaDTNode<?>> childrenNodes = new ArrayList<>();
-        for (DecisionTreeElement child : decisionTreeNode.getChildren()) {
+        for (DecisionTreeVisualNode child : decisionTreeNode.getChildren()) {
             if (child instanceof DecisionTreeBranch childBranch) {
                 DecisionTreeNode childNode = childBranch.getChild();
                 AmuaDTNode<?> amuaChildNode = convertToAmuaTree(childNode, childBranch, amuaNode,level + 1);
@@ -291,7 +291,7 @@ public class AmuaDTConverter {
         if (node.getEvaluationType() != EvaluationType.CE) {
             return null;
         }
-        return ((CENodeEvaluation) node.getEvaluation()).getCep();
+        return ((ProbAndCEP) node.getEvaluation()).getCep();
     }
 
 
@@ -306,7 +306,7 @@ public class AmuaDTConverter {
             throw new IllegalArgumentException("Invalid tree type for unicriteria utility.");
         }
 
-        UnicritNodeEvaluation evaluation = (UnicritNodeEvaluation) node.getEvaluation();
+        ProbAndUtilityAndStrategy evaluation = (ProbAndUtilityAndStrategy) node.getEvaluation();
         return (evaluation != null) ? evaluation.getUtility() : 0.0;
     }
 }

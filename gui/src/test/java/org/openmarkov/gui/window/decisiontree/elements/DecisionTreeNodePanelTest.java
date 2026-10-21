@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
-import org.openmarkov.core.model.decisiontree.CENodeEvaluation;
-import org.openmarkov.core.model.decisiontree.UnicritNodeEvaluation;
+import org.openmarkov.core.model.decisiontree.ProbAndCEP;
+import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -33,7 +33,7 @@ class DecisionTreeNodePanelTest {
     @EnumSource(value = NodeType.class, names = {"CHANCE", "DECISION", "UTILITY"})
     void everyKindOfNodeShowsItsUtility(NodeType type) {
         DecisionTreeNode node = new DecisionTreeNode(new Node(null, new Variable("X"), type));
-        node.setEvaluation(new UnicritNodeEvaluation(1.0, 9.72));
+        node.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 9.72));
 
         assertEquals(" U=9.7200", description(new DecisionTreeNodePanel(node)));
     }
@@ -49,7 +49,7 @@ class DecisionTreeNodePanelTest {
     @Test
     void aCostEffectivenessNodeShowsItsPartition() throws Exception {
         DecisionTreeNode node = new DecisionTreeNode(new Node(null, new Variable("X"), NodeType.CHANCE));
-        node.setEvaluation(new CENodeEvaluation(1.0,
+        node.setEvaluation(new ProbAndCEP(1.0,
                 new CEP(new StrategyTree[]{null}, new double[]{10.0}, new double[]{2.0}, null, 0.0, 100.0)));
 
         String text = description(new DecisionTreeNodePanel(node));
