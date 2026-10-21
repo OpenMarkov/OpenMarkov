@@ -372,6 +372,8 @@ public final class PreprocessingOptionsPanel extends JPanel {
         featureSelectionTopKSpinner.setValue(5);
         numIntervalsCheckBox.setSelected(false);
         allVariablesRadioButton.setSelected(true);
+        // setSelected does not run its listener, which leaves «Select/unselect all variables» off
+        allVariablesRadioButtonActionPerformed();
         numIntervalsSpinner.setValue(2);
         numIntervalsSpinner.setEnabled(false);
         rebuildVariableRows();
