@@ -75,10 +75,31 @@ public class CEAGlobalAnalysisTest {
 
 	}
     
-	// testCHAP deleted: VECEAnalysis throws NonProjectablePotentialException$CannotResolveVariable
-	// on the chap.pgmx network. Requires a fix in the inference engine.
+	/** The regressions of the cycles of CHAP are computed on the variables of their own cycle (error 71). */
+	@Tag(TestSpeed.MEDIUM)
+	@Test
+	public void testCHAP() throws Exception {
+		assertTheAnalysisOfCHAP("/networks/mid/chap.pgmx");
+	}
 
-	// testCHAPSV deleted: same CannotResolveVariable failure as testCHAP (chap-sv.pgmx).
+	@Tag(TestSpeed.MEDIUM)
+	@Test
+	public void testCHAPSV() throws Exception {
+		assertTheAnalysisOfCHAP("/networks/mid/chap-sv.pgmx");
+	}
+
+	/** Placebo and cotrimoxazole, with the threshold between them. */
+	private void assertTheAnalysisOfCHAP(String network) throws Exception {
+		ProbNet probNet = new PGMXReader_0_2().read(getClass().getResource(network)).probNet();
+		VECEAnalysis ceAnalysis = new VECEAnalysis(probNet);
+		ceAnalysis.setPreResolutionEvidence(new EvidenceCase());
+
+		CEP cep = (CEP) ceAnalysis.getUtility().elementTable.getFirst();
+
+		Assertions.assertArrayEquals(new double[]{183.17956090146305, 188.8049839162166}, cep.getCosts(), 1E-9);
+		Assertions.assertArrayEquals(new double[]{2.628777672658497, 4.082310655680631}, cep.getEffectivities(), 1E-9);
+		Assertions.assertArrayEquals(new double[]{3.8701722495882893}, cep.getThresholds(), 1E-9);
+	}
 
 	// testChancellorHC deleted: VECEAnalysis throws ClassCastException (TreeADDPotential cannot
 	// be cast to ExactDistrPotential) on MID-dmhee-2.5.pgmx. Requires a fix in the inference engine.

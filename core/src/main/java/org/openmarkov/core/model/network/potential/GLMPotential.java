@@ -356,6 +356,29 @@ public abstract class GLMPotential extends Potential {
         }
     }
     
+    /**
+     * Replaces the numeric parent of the same name and, with it, the variable that the covariates are written on: a
+     * covariate holds that variable, which otherwise would be found only by its name, and the name changes when an
+     * expanded network becomes an influence diagram (error 71).
+     */
+    @Override public void replaceNumericVariable(Variable convertedParentVariable) {
+        super.replaceNumericVariable(convertedParentVariable);
+        if (covariates == null) {
+            return;
+        }
+        Map<Variable, Variable> replacements = new HashMap<>();
+        for (VariableExpression covariate : covariates) {
+            for (Variable reference : covariate.references()) {
+                if (reference.getName().equals(convertedParentVariable.getName())) {
+                    replacements.put(reference, convertedParentVariable);
+                }
+            }
+        }
+        for (int i = 0; i < covariates.length; i++) {
+            covariates[i] = covariates[i].replacing(replacements);
+        }
+    }
+    
     /** Shifts the variables and, with them, the ones the covariates are written on. */
     @Override public void shift(ProbNet probNet, int timeDifference) {
         List<Variable> before = new ArrayList<>(variables);
@@ -400,7 +423,21 @@ public abstract class GLMPotential extends Potential {
         }
         
         if (this.covariates != null) {
-            potential.covariates = this.covariates.clone();
+            // A covariate holds the variables it is written on, which must be those of the copy, as the potential's
+            // (error 71)
+            Map<Variable, Variable> toTheCopy = new HashMap<>();
+            for (VariableExpression covariate : this.covariates) {
+                for (Variable reference : covariate.references()) {
+                    Variable copied = copyNet.getVariable(reference.getName());
+                    if (copied != null) {
+                        toTheCopy.put(reference, copied);
+                    }
+                }
+            }
+            potential.covariates = new VariableExpression[this.covariates.length];
+            for (int i = 0; i < this.covariates.length; i++) {
+                potential.covariates[i] = this.covariates[i].replacing(toTheCopy);
+            }
         }
         
         if (sampledCoefficients != null) {

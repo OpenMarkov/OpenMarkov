@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.TemporalNetOperations;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.testTags.TestSpeed;
@@ -51,6 +52,29 @@ class ANetworkWithARegressionInItsCyclesIsEvaluatedTest {
         CEP result = (CEP) analysis.getUtility().elementTable.getFirst();
 
         assertTrue(result.getNumIntervals() >= 1);
+        assertTrue(Arrays.stream(result.getCosts()).allMatch(Double::isFinite));
+        assertTrue(Arrays.stream(result.getEffectivities()).allMatch(Double::isFinite));
+    }
+
+    /**
+     * «Expand network» gives a network that can be computed: its regressions are written on its own variables, which
+     * are renamed at the end (error 71). What it gives is not compared with the analysis of the Markov model.
+     * Two cycles are enough, since the regressions of each cycle are written on the variables of the one before; the
+     * twenty of the network take forty seconds.
+     */
+    @Test void itsExpandedNetworkIsPropagatedAndAnalysed() throws Exception {
+        probNet.getInferenceOptions().getTemporalOptions().setHorizon(2);
+        ProbNet expanded = TemporalNetOperations.expandNetwork(probNet, new EvidenceCase(), "expanded");
+
+        VEPropagation propagation = new VEPropagation(expanded);
+        propagation.setVariablesOfInterest(expanded.getVariables());
+        propagation.setPreResolutionEvidence(new EvidenceCase());
+        propagation.setPostResolutionEvidence(new EvidenceCase());
+        assertEquals(expanded.getVariables().size(), propagation.getPosteriorValues().size());
+
+        VECEAnalysis analysis = new VECEAnalysis(expanded);
+        analysis.setPreResolutionEvidence(new EvidenceCase());
+        CEP result = (CEP) analysis.getUtility().elementTable.getFirst();
         assertTrue(Arrays.stream(result.getCosts()).allMatch(Double::isFinite));
         assertTrue(Arrays.stream(result.getEffectivities()).allMatch(Double::isFinite));
     }
