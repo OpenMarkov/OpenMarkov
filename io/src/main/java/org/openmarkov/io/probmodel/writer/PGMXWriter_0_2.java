@@ -144,8 +144,8 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
         if (variable == null) {
             return "?";
         }
-        String timeSlice = variable.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
-        return variable.getAttributeValue(XMLAttributes.NAME.toString()) + (timeSlice == null ? "" : " [" + timeSlice + "]");
+        // The name of a variable of a time slice already ends with it, as in "Health [1]"
+        return variable.getAttributeValue(XMLAttributes.NAME.toString());
     }
     
     /**

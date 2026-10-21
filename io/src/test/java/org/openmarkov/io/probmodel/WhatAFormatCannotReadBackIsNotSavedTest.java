@@ -110,6 +110,26 @@ public class WhatAFormatCannotReadBackIsNotSavedTest {
         assertInstanceOf(UnivariateDistrPotential.class, read(file).getNode("Cost").getPotentials().getFirst());
     }
 
+    /**
+     * The message named a node of a time slice with the slice twice, as "Cost [1] [1]" (error 273 of the pending
+     * list).
+     */
+    @Test public void theMessageNamesANodeOfATimeSliceOnce(@TempDir Path folder) {
+        ProbNet network = new ProbNet(BayesianNetworkType.getUniqueInstance());
+        Variable cost = new Variable("Cost", true, 0, 100, true, 0.1);
+        cost.setTimeSlice(1);
+        network.addNode(cost, NodeType.CHANCE).setPotential(
+                new UnivariateDistrPotential(List.of(cost), NormalFunction.class, PotentialRole.CONDITIONAL_PROBABILITY));
+        Path file = folder.resolve("network.pgmx");
+
+        var refused = assertThrows(WriterException.RelationNotSupportedByFormat.class,
+                () -> new PGMXWriter_0_2().write(file.toString(), network, List.of()));
+
+        assertEquals("The network is not saved: the relation of Cost [1], of type UnivariateDistr, cannot be saved in "
+                + "format 0.2.0, which could not read it back. Save the network in another format.",
+                refused.getExceptionMessage());
+    }
+
     @Test public void aTableOfFormulasIsNotSavedInFormat02(@TempDir Path folder) throws Exception {
         ProbNet network = new ProbNet(BayesianNetworkType.getUniqueInstance());
         Variable age = new Variable("Age", true, 0, 100, true, 1);
