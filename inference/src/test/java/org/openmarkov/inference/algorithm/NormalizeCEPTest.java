@@ -138,6 +138,20 @@ class NormalizeCEPTest {
 		assertThat(normalized.getCosts()).hasSize(1);
 	}
 
+	/**
+	 * The scenario of an impossible branch, such as the result of a test that is
+	 * not done, has the partition of probability zero, which has no costs nor
+	 * effectiveness. Normalizing read them anyway and failed with a
+	 * NullPointerException, as with {@code ID-decide-test} in cost-effectiveness
+	 * from depth 4 on.
+	 */
+	@Test
+	void thePartitionOfProbabilityZeroIsUnchanged() {
+		CEP zero = CEP.getZeroPartition();
+
+		assertThat(DecisionTreeExpansion.normalizeCEP(zero)).isSameAs(zero);
+	}
+
 	@Test
 	void isIdempotent() {
 		CEP original = cep(new double[][] { { 0, 1 }, { 10, 2 }, { 10, 2 }, { 10, 2 } },

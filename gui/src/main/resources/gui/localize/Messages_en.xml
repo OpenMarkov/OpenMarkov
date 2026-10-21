@@ -390,4 +390,7 @@
         <InvalidTree value="The decision tree cannot be exported to Amua: ~"/>
         <Done value="Decision tree exported to ~. In Amua, open it with Model &gt; Open Model."/>
     </ExportAmua>
+    <ShowCEP>
+        <ImpossibleScenario value="This scenario is impossible (its probability is zero), so it has no cost-effectiveness partition."/>
+    </ShowCEP>
 </properties>

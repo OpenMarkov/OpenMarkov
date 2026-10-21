@@ -253,26 +253,30 @@ public class AmuaDTConverter {
 
 
     /**
-     * Retrieves the cost component of a Cost-Effectiveness decision tree
+     * Retrieves the cost component of a Cost-Effectiveness decision tree. The
+     * scenario of an impossible branch has no partition, only the one of
+     * probability zero, and gets 0, which Amua multiplies by the probability 0 of
+     * its branch.
      *
      * @param node the decision tree node whose cost will be obtained.
      * @return the cost value associated with the node
      */
     private double getCEACost(DecisionTreeNode node) {
         CEP cep = getCEAUtility(node);
-        return (cep != null) ? cep.getCost(0) : 0.0;
+        return (cep != null && !cep.isZero()) ? cep.getCost(0) : 0.0;
     }
 
 
     /**
-     * Retrieves the effectiveness component of a Cost-Effectiveness decision tree
+     * Retrieves the effectiveness component of a Cost-Effectiveness decision tree,
+     * 0 for the scenario of an impossible branch, as {@link #getCEACost} does.
      *
      * @param node the decision tree node whose effectiveness will be obtained.
      * @return the effectiveness value associated with the node
      */
     private double getCEAEffectiveness(DecisionTreeNode node) {
         CEP cep = getCEAUtility(node);
-        return (cep != null) ? cep.getEffectiveness(0) : 0.0;
+        return (cep != null && !cep.isZero()) ? cep.getEffectiveness(0) : 0.0;
     }
 
 

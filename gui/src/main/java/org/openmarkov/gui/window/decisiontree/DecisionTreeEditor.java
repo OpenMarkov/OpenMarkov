@@ -17,6 +17,7 @@ import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.decisiontree.DecisionTreeVisualNode;
 import org.openmarkov.core.model.decisiontree.ProbAndCEP;
 import org.openmarkov.core.model.decisiontree.operation.DecisionTreeManager;
+import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.gui.configuration.GUIColors;
@@ -300,12 +301,25 @@ public final class DecisionTreeEditor extends EditorPanel {
                                           title, JOptionPane.INFORMATION_MESSAGE);
         }
         
+        /**
+         * Shows the cost-effectiveness partition of the selected node. The node of an
+         * impossible branch has none, only the partition of probability zero, and the
+         * user is told so.
+         */
         private void openAssociatedCEP() {
             Object selectedComponent = DecisionTreeEditor.this.jTree.getLastSelectedPathComponent();
             if (selectedComponent instanceof DecisionTreeNodePanel treeNodePanel) {
                 DecisionTreeNode treeNode = treeNodePanel.getTreeNode();
-                CEPDialog cepDialog = new CEPDialog(null, ((ProbAndCEP) treeNode.getEvaluation()).getCep(),
-                                                    treeNode.getNetwork());
+                CEP cep = ((ProbAndCEP) treeNode.getEvaluation()).getCep();
+                if (cep.isZero()) {
+                    StringDatabase strings = StringDatabase.getUniqueInstance();
+                    JOptionPane.showMessageDialog(DecisionTreeEditor.this,
+                                                  strings.getString("ShowCEP.ImpossibleScenario"),
+                                                  strings.getString("CostEffectivenessResults.Intervals.Title"),
+                                                  JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                CEPDialog cepDialog = new CEPDialog(null, cep, treeNode.getNetwork());
                 cepDialog.setVisible(true);
             }
         }

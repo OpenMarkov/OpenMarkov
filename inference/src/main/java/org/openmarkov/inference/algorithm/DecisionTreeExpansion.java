@@ -482,12 +482,16 @@ public class DecisionTreeExpansion {
 	 * cost and effectiveness merged into a single partition. The piecewise
 	 * cost-effectiveness function is unchanged; only its representation is made
 	 * minimal, matching the form produced by {@link DANDecisionTreeInference}.
-	 * The original is returned unchanged when there is nothing to merge.
+	 * The original is returned unchanged when there is nothing to merge, and so is
+	 * the partition of a scenario of probability zero, which has no intervals.
 	 * <p>
 	 * Package-private rather than private so that {@code NormalizeCEPTest} can
 	 * exercise it directly with hand-built CEPs.
 	 */
 	static CEP normalizeCEP(CEP cep) {
+		if (cep.isZero()) {
+			return cep;
+		}
 		double[] costs = cep.getCosts();
 		double[] effectiveness = cep.getEffectivities();
 		double[] thresholds = cep.getThresholds();
