@@ -167,11 +167,20 @@ public non-sealed class NumericVariableBox extends InnerBox {
     }
     
     /**
-     * Wide enough for the value at either end of the range, so for every value in between.
+     * Wide enough for the value at either end of the range, so for every value in between, and for the values the box
+     * writes, which the range does not bound when it could not be computed and has infinite ends.
      */
     @Override protected double getValueColumnWidth() {
-        return Math.max(VALUE_COLUMN_WIDTH, Math.max(getTextWidth(VisualState.formatValue(minValue)),
-                                                     getTextWidth(VisualState.formatValue(maxValue))));
+        double width = Math.max(VALUE_COLUMN_WIDTH, Math.max(getTextWidth(VisualState.formatValue(minValue)),
+                                                             getTextWidth(VisualState.formatValue(maxValue))));
+        // Those of every evidence case, so that the column does not change when another case is shown
+        for (int caseNumber = 0; caseNumber < visualState.getNumberOfValues(); caseNumber++) {
+            double value = visualState.getStateValue(caseNumber);
+            if (!Double.isNaN(value)) {
+                width = Math.max(width, getTextWidth(VisualState.formatValue(value)));
+            }
+        }
+        return width;
     }
     
     @Override public Shape getShape(Graphics2D g) {

@@ -54,6 +54,20 @@ class ValuesFitInTheInnerBoxTest {
 		assertValueFits(box, -1234.5678);
 	}
 
+	/**
+	 * A utility whose range could not be computed keeps the infinite ends of its domain, which are written narrower
+	 * than its value (error 242).
+	 */
+	@Test
+	void aUtilityWithoutRangeEndsBeforeTheBorder() throws Exception {
+		Variable variable = new Variable("Cost");
+		variable.setVariableType(VariableType.NUMERIC);
+		NumericVariableBox box = (NumericVariableBox) boxOf(variable, NodeType.UTILITY);
+		box.getVisualState().setStateValue(0, 2085.5044);
+
+		assertValueFits(box, 2085.5044);
+	}
+
 	@Test
 	void theBarTakesWhatTheColumnsLeave() throws Exception {
 		InnerBox box = boxOf(new Variable("Disease", "present", "absent"), NodeType.CHANCE);

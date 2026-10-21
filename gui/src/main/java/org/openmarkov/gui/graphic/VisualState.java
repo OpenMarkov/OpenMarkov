@@ -209,6 +209,17 @@ public final class VisualState extends VisualElement {
     }
     
     /**
+     * Returns the value of this state for the given evidence case.
+     *
+     * @param caseNumber the position in the array, which matches the evidence case number
+     *
+     * @return the value of this state in that case
+     */
+    public double getStateValue(int caseNumber) {
+        return this.stateValues.get(caseNumber);
+    }
+    
+    /**
      * Returns the number of positions in the array. This number is the same
      * that the number of evidence cases in memory and the same that the number
      * of bars that should be painted
