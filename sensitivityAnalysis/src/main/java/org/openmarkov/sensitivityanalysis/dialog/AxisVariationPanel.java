@@ -7,6 +7,7 @@
 
 package org.openmarkov.sensitivityanalysis.dialog;
 
+import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
 import org.openmarkov.core.model.network.modelUncertainty.DeterministicAxisVariationType;
 import org.openmarkov.core.localize.StringDatabase;
@@ -55,6 +56,12 @@ public class AxisVariationPanel extends JPanel {
     private JPanel variationTypeParametersPanelX;
     
     /**
+     * Copies into the variation of X axis what is written in its controls, since a text field passes it on only with
+     * Enter; null if the axis has no controls
+     */
+    private Runnable writtenValuesReaderX;
+    
+    /**
      * Variation of X axis
      */
     private AxisVariation variationXAxis;
@@ -64,6 +71,7 @@ public class AxisVariationPanel extends JPanel {
     private DeterministicAxisVariationType typeSelectedY;
     private JComboBox<String> variationTypesComboBoxY;
     private JPanel variationTypeParametersPanelY;
+    private Runnable writtenValuesReaderY;
     private AxisVariation variationYAxis;
     
     /**
@@ -265,6 +273,7 @@ public class AxisVariationPanel extends JPanel {
             variationTypeParametersPanelY = panel;
             type = typeSelectedY;
         }
+        Runnable writtenValuesReader = null;
         
         // Set the predefined percentages and create the action listener to update model for each variation type
         if (type == DeterministicAxisVariationType.PORV) {
@@ -276,19 +285,18 @@ public class AxisVariationPanel extends JPanel {
             
             if (isXAxis) {
                 percentage.addActionListener(e -> {
-                    double percetangeOverReferenceValueX = (Double) ((JComboBox<Double>) e.getSource())
-                            .getSelectedItem();
+                    double percetangeOverReferenceValueX = numberOf(((JComboBox<?>) e.getSource()).getSelectedItem());
                     setVariationAxisValue(percetangeOverReferenceValueX, true);
                 });
             } else {
                 percentage.addActionListener(e -> {
-                    double percetangeOverReferenceValueY = (Double) ((JComboBox<Double>) e.getSource())
-                            .getSelectedItem();
+                    double percetangeOverReferenceValueY = numberOf(((JComboBox<?>) e.getSource()).getSelectedItem());
                     setVariationAxisValue(percetangeOverReferenceValueY, false);
                 });
             }
             percentage.setSelectedItem(25.0);
             setVariationAxisValue(25.0, isXAxis);
+            writtenValuesReader = () -> setVariationAxisValue(numberOf(percentage.getEditor().getItem()), isXAxis);
             
             panel.add(percentage);
             panel.add(new JLabel("%"));
@@ -302,18 +310,17 @@ public class AxisVariationPanel extends JPanel {
             ratio.setEditable(true);
             if (isXAxis) {
                 ratio.addActionListener(e -> {
-                    double ratioOverReferenceValueX = (Double) ((JComboBox<Double>) e.getSource())
-                            .getSelectedItem();
+                    double ratioOverReferenceValueX = numberOf(((JComboBox<?>) e.getSource()).getSelectedItem());
                     setVariationAxisValue(ratioOverReferenceValueX, true);
                 });
             } else {
                 ratio.addActionListener(e -> {
-                    double ratioOverReferenceValueY = (Double) ((JComboBox<Double>) e.getSource())
-                            .getSelectedItem();
+                    double ratioOverReferenceValueY = numberOf(((JComboBox<?>) e.getSource()).getSelectedItem());
                     setVariationAxisValue(ratioOverReferenceValueY, false);
                 });
             }
             setVariationAxisValue(1.10, isXAxis);
+            writtenValuesReader = () -> setVariationAxisValue(numberOf(ratio.getEditor().getItem()), isXAxis);
             
             panel.add(ratio);
             
@@ -326,18 +333,19 @@ public class AxisVariationPanel extends JPanel {
             percentaje.setEditable(true);
             if (isXAxis) {
                 percentaje.addActionListener(e -> {
-                    double percetangeOfParameterProbabilityX = (Double) ((JComboBox<Double>) e.getSource())
-                            .getSelectedItem();
+                    double percetangeOfParameterProbabilityX = numberOf(
+                            ((JComboBox<?>) e.getSource()).getSelectedItem());
                     setVariationAxisValue(percetangeOfParameterProbabilityX, true);
                 });
             } else {
                 percentaje.addActionListener(e -> {
-                    double percetangeOfParameterProbabilityY = (Double) ((JComboBox<Double>) e.getSource())
-                            .getSelectedItem();
+                    double percetangeOfParameterProbabilityY = numberOf(
+                            ((JComboBox<?>) e.getSource()).getSelectedItem());
                     setVariationAxisValue(percetangeOfParameterProbabilityY, false);
                 });
             }
             setVariationAxisValue(80.0, isXAxis);
+            writtenValuesReader = () -> setVariationAxisValue(numberOf(percentaje.getEditor().getItem()), isXAxis);
             panel.add(percentaje);
             panel.add(new JLabel("%"));
             
@@ -349,13 +357,13 @@ public class AxisVariationPanel extends JPanel {
             if (isXAxis) {
                 lowerBoundTextField.addActionListener(e -> {
                     String lowerBoundString = ((JTextField) e.getSource()).getText();
-                    double lowerBound = Double.parseDouble(lowerBoundString);
+                    double lowerBound = numberOf(lowerBoundString);
                     setBoundValue(lowerBound, true, true);
                 });
             } else {
                 lowerBoundTextField.addActionListener(e -> {
                     String lowerBoundString = ((JTextField) e.getSource()).getText();
-                    double lowerBound = Double.parseDouble(lowerBoundString);
+                    double lowerBound = numberOf(lowerBoundString);
                     setBoundValue(lowerBound, true, false);
                 });
             }
@@ -370,19 +378,28 @@ public class AxisVariationPanel extends JPanel {
             if (isXAxis) {
                 upperBoundTextField.addActionListener(e -> {
                     String upperBoundString = ((JTextField) e.getSource()).getText();
-                    double upperBound = Double.parseDouble(upperBoundString);
+                    double upperBound = numberOf(upperBoundString);
                     setBoundValue(upperBound, false, true);
                     
                 });
             } else {
                 upperBoundTextField.addActionListener(e -> {
                     String upperBoundString = ((JTextField) e.getSource()).getText();
-                    double upperBound = Double.parseDouble(upperBoundString);
+                    double upperBound = numberOf(upperBoundString);
                     setBoundValue(upperBound, false, false);
                 });
             }
             
             panel.add(upperBoundTextField);
+            writtenValuesReader = () -> {
+                setBoundValue(numberOf(lowerBoundTextField.getText()), true, isXAxis);
+                setBoundValue(numberOf(upperBoundTextField.getText()), false, isXAxis);
+            };
+        }
+        if (isXAxis) {
+            writtenValuesReaderX = writtenValuesReader;
+        } else {
+            writtenValuesReaderY = writtenValuesReader;
         }
         
         return panel;
@@ -469,6 +486,75 @@ public class AxisVariationPanel extends JPanel {
                 controller.getSensitivityAnalysisModel().setVerticalAxisVariation(variationYAxis);
             }
             
+        }
+    }
+    
+    /**
+     * Copies into the variation of each axis in use what is written in its controls, and checks that each variation
+     * spans an interval: without width, the plots cannot draw their axes (error 256).
+     *
+     * @return the text that says what is wrong, or null if the analysis can be run
+     */
+    public @Nullable String problemWithTheVariations() {
+        SensitivityAnalysisConfiguration configuration = controller.getConfiguration();
+        if (!configuration.isDeterministic()) {
+            return null;
+        }
+        String problem = problemWith(variationXAxis, writtenValuesReaderX);
+        if (!configuration.isBiaxial()) {
+            return problem == null ? null : stringDatabase.getString(problem);
+        }
+        if (problem != null) {
+            return stringDatabase.getFormattedString("SensitivityAnalysis.Axis.Invalid.Horizontal",
+                                                     stringDatabase.getString(problem));
+        }
+        if (typeSelectedY != DeterministicAxisVariationType.PREV) {
+            problem = problemWith(variationYAxis, writtenValuesReaderY);
+        }
+        return problem == null ? null : stringDatabase.getFormattedString("SensitivityAnalysis.Axis.Invalid.Vertical",
+                                                                          stringDatabase.getString(problem));
+    }
+    
+    private static @Nullable String problemWith(AxisVariation variation, @Nullable Runnable writtenValuesReader) {
+        if (writtenValuesReader != null) {
+            writtenValuesReader.run();
+        }
+        return problemWith(variation);
+    }
+    
+    /**
+     * @param variation variation of one axis
+     *
+     * @return the key of the text that says why {@code variation} does not span an interval, or null if it does
+     */
+    public static @Nullable String problemWith(AxisVariation variation) {
+        double value = variation.getVariationValue();
+        double[] bounds = variation.getVariationBounds();
+        boolean spansAnInterval = switch (variation.getVariationType()) {
+            case PORV -> value > 0 && value < Double.POSITIVE_INFINITY;
+            // A ratio of 1 leaves each parameter at its reference value, and below 1 the interval is reversed
+            case RORV -> value > 1 && value < Double.POSITIVE_INFINITY;
+            // Above 100 % no interval of a distribution has that probability
+            case POPP -> value > 0 && value <= 100;
+            case UDIN -> bounds[0] < bounds[1] && Double.isFinite(bounds[0]) && Double.isFinite(bounds[1]);
+            case PREV -> true;
+        };
+        return spansAnInterval ? null : "SensitivityAnalysis.Axis.Invalid." + variation.getVariationType().name();
+    }
+    
+    /**
+     * @param item an item of a combo box or the text of a text field
+     *
+     * @return {@code item} as a number, or NaN if it is not one
+     */
+    static double numberOf(@Nullable Object item) {
+        if (item instanceof Number number) {
+            return number.doubleValue();
+        }
+        try {
+            return Double.parseDouble(String.valueOf(item));
+        } catch (NumberFormatException e) {
+            return Double.NaN;
         }
     }
     

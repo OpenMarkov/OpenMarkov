@@ -36,6 +36,14 @@
                 <UDIN value="User defined interval"/>
                 <PREV value="Same variation as for parameter in horizontal axis"/>
             </VariationSpiderLegend>
+            <Invalid value="Invalid variation">
+                <PORV value="The percentage over the reference value must be a number greater than 0, such as 25."/>
+                <RORV value="The ratio over the reference value must be a number greater than 1, such as 1.25."/>
+                <POPP value="The percentage of the 2nd order probability must be a number greater than 0 and not greater than 100, such as 90."/>
+                <UDIN value="The ends of the interval must be numbers, the first one smaller than the second one, such as from 0 to 1."/>
+                <Horizontal value="Horizontal axis: ~"/>
+                <Vertical value="Vertical axis: ~"/>
+            </Invalid>
         </Axis>
         <General>
             <Decision value="Decision:"/>

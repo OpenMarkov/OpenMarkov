@@ -68,6 +68,11 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
     private ScopePanel scopePanel;
     
     /**
+     * Panel with the variation of each axis
+     */
+    private AxisVariationPanel axisVariationPanel;
+    
+    /**
      * Network name panel
      */
     private JPanel networkNamePanel;
@@ -448,7 +453,8 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
      * @return axis variation panel
      */
     public AxisVariationPanel getAxisVariationPanel() {
-        return new AxisVariationPanel(controller);
+        axisVariationPanel = new AxisVariationPanel(controller);
+        return axisVariationPanel;
     }
     
     /**
@@ -570,6 +576,13 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
     }
     
     protected void doOkClick() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotSupportedOperationException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, ConstraintViolatedException {
+        String invalidVariation = axisVariationPanel == null ? null : axisVariationPanel.problemWithTheVariations();
+        if (invalidVariation != null) {
+            JOptionPane.showMessageDialog(this, invalidVariation,
+                                          stringDatabase.getString("SensitivityAnalysis.Axis.Invalid"),
+                                          JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         // This dialog stays open between analyses, so the user may have set evidence in the network
         // since the scenario was built. Both are read again before they are mixed.
         controller.readPreResolutionEvidenceFromNetwork();
