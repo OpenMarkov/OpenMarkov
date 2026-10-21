@@ -247,6 +247,16 @@ public class TraceTemporalEvolutionDialog extends JDialog {
      */
     private List<JLabel> legendLabels;
     /**
+     * The state of each series of a chance variable conditioned on decisions, by the name of the series, which is the
+     * state followed by the options of the decisions in brackets. The name is not taken apart because those options
+     * may hold brackets of their own, such as the cycle of a decision
+     */
+    private final Map<String, String> stateOfSeries = new HashMap<>();
+    /**
+     * The options of the decisions of each of those series, by its name
+     */
+    private final Map<String, String> optionsOfSeries = new HashMap<>();
+    /**
      * JScrollPane containing the customized legends for chart. chart own legend is disabled and used this panel instead
      */
     private JScrollPane legendPanel;
@@ -1401,9 +1411,8 @@ public class TraceTemporalEvolutionDialog extends JDialog {
      */
     private XYSeries sumSeries(ArrayList<XYSeries> arraySeries) {
         String seriesName = (String) arraySeries.get(0).getKey();
-        if (!conditioningVariables.isEmpty()) {
-            seriesName = seriesName.substring(seriesName.indexOf('[') + 1, seriesName.indexOf(']'));
-        }
+        // The sum of the states is named after the options of the decisions, if any
+        seriesName = optionsOfSeries.getOrDefault(seriesName, seriesName);
         
         XYSeries series = new XYSeries(seriesName);
         for (int i = 0; i < arraySeries.get(0).getItemCount(); i++) {
@@ -1504,7 +1513,7 @@ public class TraceTemporalEvolutionDialog extends JDialog {
                 String nameOfSerie;
                 if (conditioningVariables != null && !conditioningVariables.isEmpty()) {
                     int stateIndex = i % variableOfInterest.getNumStates();
-                    nameOfSerie = variableOfInterest.getStateName(stateIndex) + " [";
+                    String options = "";
                     
                     int positionSelector = variableOfInterest.getNumStates();
                     for (int j = conditioningVariables.size() - 1; j >= 0; j--) {
@@ -1513,13 +1522,13 @@ public class TraceTemporalEvolutionDialog extends JDialog {
                                                                                  .getStateName((i / positionSelector) % conditioningVariables.get(j)
                                                                                                                                              .getNumStates());
                         positionSelector *= conditioningVariables.get(j).getNumStates();
-                        nameOfSerie += nameOfConditionalVariable + " = " + stateOfConditionalVariable + " ; ";
+                        options += nameOfConditionalVariable + " = " + stateOfConditionalVariable + " ; ";
                     }
-                    if (!conditioningVariables.isEmpty()) {
-                        nameOfSerie = nameOfSerie.substring(0, nameOfSerie.length() - 3) + "]";
-                    } else {
-                        nameOfSerie = nameOfSerie.substring(0, nameOfSerie.length() - 2);
-                    }
+                    options = options.substring(0, options.length() - 3);
+                    String state = variableOfInterest.getStateName(stateIndex);
+                    nameOfSerie = state + " [" + options + "]";
+                    stateOfSeries.put(nameOfSerie, state);
+                    optionsOfSeries.put(nameOfSerie, options);
                 } else {
                     nameOfSerie = variableOfInterest.getStateName(i);
                 }
@@ -1625,9 +1634,7 @@ public class TraceTemporalEvolutionDialog extends JDialog {
         while (listPointer < legendItemsOld.getItemCount()) {
             
             String subListTitle = legendItemsOld.get(listPointer).getLabel();
-            if (subListTitle.indexOf('[') != -1) {
-                subListTitle = subListTitle.substring(subListTitle.indexOf('[') + 1, subListTitle.indexOf(']'));
-            }
+            subListTitle = optionsOfSeries.getOrDefault(subListTitle, subListTitle);
             
             boolean isSamePolicy = true;
             //24/11/2022 temporal evolution by criterion extracted to getCriteriaLegendTitle method
@@ -1657,18 +1664,14 @@ public class TraceTemporalEvolutionDialog extends JDialog {
             
             while (isSamePolicy && listPointer < legendItemsOld.getItemCount()) {
                 String subListTitle2 = legendItemsOld.get(listPointer).getLabel();
-                if (subListTitle2.indexOf('[') != -1) {
-                    subListTitle2 = subListTitle2.substring(subListTitle2.indexOf('[') + 1, subListTitle2.indexOf(']'));
-                }
+                subListTitle2 = optionsOfSeries.getOrDefault(subListTitle2, subListTitle2);
                 
                 if (!subListTitle.equals(subListTitle2)) {
                     isSamePolicy = false;
                 } else {
                     LegendItem item = legendItemsOld.get(listPointer);
                     String nameItem2 = item.getLabel();
-                    if (nameItem2.indexOf('[') != -1) {
-                        nameItem2 = nameItem2.substring(0, nameItem2.indexOf('[') - 1);
-                    }
+                    nameItem2 = stateOfSeries.getOrDefault(nameItem2, nameItem2);
                     Image img = makeImage(item, (Color) chart.getXYPlot().getRenderer().getSeriesPaint(listPointer));
                     JLabel itemLegendLabel = makeLegendLabel(nameItem2, img);
                     // get metrics from the graphics

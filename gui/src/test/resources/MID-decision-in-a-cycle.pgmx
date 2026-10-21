@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="MID">
+    <DecisionCriteria>
+      <Criterion name="Cost" unit="€" />
+    </DecisionCriteria>
+    <Properties />
+    <Variables>
+      <Variable name="Therapy" timeSlice="0" type="finiteStates" role="decision">
+        <Coordinates x="100" y="60" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Health" timeSlice="0" type="finiteStates" role="chance">
+        <Coordinates x="100" y="200" />
+        <States>
+          <State name="healthy" />
+          <State name="sick" />
+        </States>
+      </Variable>
+      <Variable name="Health" timeSlice="1" type="finiteStates" role="chance">
+        <Coordinates x="300" y="200" />
+        <States>
+          <State name="healthy" />
+          <State name="sick" />
+        </States>
+      </Variable>
+      <Variable name="Cost" timeSlice="0" type="numeric" role="utility">
+        <Coordinates x="100" y="320" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Cost" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Therapy" timeSlice="0" />
+        <Variable name="Health" timeSlice="0" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Health" timeSlice="0" />
+        <Variable name="Health" timeSlice="1" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Health" timeSlice="0" />
+        <Variable name="Cost" timeSlice="0" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Health" timeSlice="0" />
+          <Variable name="Therapy" timeSlice="0" />
+        </Variables>
+        <Values>0.5 0.5 0.9 0.1</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Health" timeSlice="1" />
+          <Variable name="Health" timeSlice="0" />
+        </Variables>
+        <Values>0.8 0.2 0.3 0.7</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost" timeSlice="0" />
+        <Variables>
+          <Variable name="Health" timeSlice="0" />
+        </Variables>
+        <Values>0.0 100.0</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="Cost" Value="-1.0" />
+        </Scales>
+      </Unicriterion>
+    </MulticriteriaOptions>
+    <TemporalOptions>
+      <Slices>3</Slices>
+      <Transition>BEGINNING</Transition>
+      <DiscountRates>
+        <DiscountRate Criterion="Cost" value="0.0" unit="YEAR" />
+      </DiscountRates>
+    </TemporalOptions>
+  </InferenceOptions>
+</ProbModelXML>
