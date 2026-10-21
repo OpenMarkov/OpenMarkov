@@ -10,12 +10,14 @@ package org.openmarkov.sensitivityanalysis.dialog;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
+import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.dialog.ExceptionDialog;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.window.MainGUI;
+import org.openmarkov.sensitivityanalysis.exceptions.ScopeException;
 import org.openmarkov.sensitivityanalysis.exceptions.UncertainParameterException;
 import org.openmarkov.sensitivityanalysis.model.AnalysisType;
 import org.openmarkov.sensitivityanalysis.model.ParameterType;
@@ -182,6 +184,10 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
                                                                                                                       .size() < 2) {
             ExceptionDialog.show(new UncertainParameterException.FewUncertainParameters(2, controller.getUncertainParameters()
                                                                                                      .size()));
+            getOKButton().setEnabled(false);
+        } else if (!controller.getConfiguration().isCanBeGlobal() && !controller.getConfiguration().isCanBeDecision()) {
+            ExceptionDialog.show(new ScopeException.NoDecisionInTheNetwork(analysisTypeSelector.getSelectedItem()
+                                                                                               .toString()));
             getOKButton().setEnabled(false);
         } else {
             ParametersPanel parametersPanel = new ParametersPanel(controller);
@@ -421,6 +427,10 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
             config.setCanBeDecision(true);
         }
         
+        // Without decisions, the scope can only be global: the scope panel would choose a decision that is not there
+        if (controller.getProbNet().getNodes(NodeType.DECISION).isEmpty()) {
+            config.setCanBeDecision(false);
+        }
         controller.getSensitivityAnalysisModel().setAnalysisType(analysisType);
     }
     
