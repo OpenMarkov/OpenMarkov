@@ -72,7 +72,10 @@ public class DBGeneratorGUI extends JDialog {
      */
     protected StringDatabase stringDatabase = StringDatabase.getUniqueInstance();
     private ProbNet net;
-    private String netFilePath = null;
+    /**
+     * Network loaded with «Open», used when «Load Net from file» is chosen.
+     */
+    private ProbNet netFromFile;
     private String fileName = null;
     private CaseDatabaseWriter databaseWriter = null;
     /**
@@ -154,26 +157,11 @@ public class DBGeneratorGUI extends JDialog {
         jPanel8.setBorder(
                 BorderFactory.createTitledBorder(stringDatabase.getString("DBGenerator.ChooseNet")));
         fromFileRadioButton.setText(stringDatabase.getString("DBGenerator.LoadNetFromFile"));
-        fromFileRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // GEN-FIRST:event_fromFileRadioButton1ActionPerformed
-                if (netFilePath == null) {
-                    netFilePath = requestNetworkFileToOpen();
-                    if (netFilePath != null) {
-                        try {
-                            net = NetsIO.openNetworkFile(netFilePath).probNet();
-                        } catch (IOException | ProbNetParserException | NoReaderForFileException
-                                 | CorruptNetworkFile e) {
-                            throw new UnrecoverableException(e);
-                        }
-                    }
-                }
-                if (netFilePath != null) {
-                    loadNetButton.setEnabled(fromFileRadioButton.isSelected());
-                    generateButton.setEnabled(net != null);
-                }
-            }
+        fromFileRadioButton.addActionListener(evt -> {
+            // GEN-FIRST:event_fromFileRadioButton1ActionPerformed
+            net = netFromFile;
+            loadNetButton.setEnabled(true);
+            generateButton.setEnabled(net != null);
         });
         fromOpenMarkovRadioButton.setText(stringDatabase.getString("DBGenerator.TakeOpenModelNet"));
         fromOpenMarkovRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -192,12 +180,13 @@ public class DBGeneratorGUI extends JDialog {
         loadNetButton.setEnabled(false);
         loadNetButton.addActionListener(evt -> {
             // GEN-FIRST:event_loadModelNetButtonActionPerformed
-            netFilePath = requestNetworkFileToOpen();
+            String netFilePath = requestNetworkFileToOpen();
             if (netFilePath == null) {
                 return;
             }
             try {
-                net = NetsIO.openNetworkFile(netFilePath).probNet();
+                netFromFile = NetsIO.openNetworkFile(netFilePath).probNet();
+                net = netFromFile;
             } catch (NoReaderForFileException | IOException | ProbNetParserException | CorruptNetworkFile e) {
                 throw new UnrecoverableException(e);
             } finally {
@@ -361,6 +350,7 @@ public class DBGeneratorGUI extends JDialog {
             NetworkEditorPanel networkPanel = MainGUI.INSTANCE.mainPanel.getMainPanelListenerAssistant()
                     .getCurrentNetworkEditorPanel();
             net = networkPanel.getProbNet();
+            loadNetButton.setEnabled(false);
             generateButton.setEnabled(net != null);
         }
     }// GEN-LAST:event_fromOpenMarkovRadioButtonActionPerformed
