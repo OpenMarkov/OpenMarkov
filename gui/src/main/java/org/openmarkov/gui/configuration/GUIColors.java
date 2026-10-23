@@ -121,6 +121,8 @@ public class GUIColors {
     public static final class DecisionTree {
         public static final GUIColor BACKGROUND = Network.BACKGROUND;
         public static final GUIColor WINDOW = new GUIColor(new Color(0, 0, 255));
+        /** Laid over a node that can still be expanded, to darken it while its name stays legible. */
+        public static final GUIColor EXPANDABLE_NODE_SHADE = new GUIColor(new Color(0, 0, 0, 45));
     }
     
     public static final class Tables {

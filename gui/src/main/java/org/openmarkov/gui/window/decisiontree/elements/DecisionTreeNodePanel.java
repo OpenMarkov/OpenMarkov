@@ -7,10 +7,12 @@
 package org.openmarkov.gui.window.decisiontree.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.graphic.VisualNode;
 import org.openmarkov.gui.window.decisiontree.format.DecisionTreeUtilityFormatters;
 
@@ -41,16 +43,28 @@ public non-sealed class DecisionTreeNodePanel extends DecisionTreeElementPanel {
     }
     
     @Override public JComponent makeSummary() {
-        return visualNodePanel(this.treeNode.getNodeType(), this.treeNode.getVariable().getName());
+        return visualNodePanel(this.treeNode.getNodeType(), this.treeNode.getVariable().getName(), canBeExpanded());
     }
     
     public static @NotNull JPanel visualNodePanel(NodeType nodeType, String nodeName) {
+        return visualNodePanel(nodeType, nodeName, false);
+    }
+    
+    /**
+     * @param shaded whether the node is drawn darker, as one that can still be expanded.
+     */
+    private static @NotNull JPanel visualNodePanel(NodeType nodeType, String nodeName, boolean shaded) {
         var visualNode = new VisualNode(new Node(null,
                                                  new Variable(nodeName),
                                                  nodeType), null);
         JPanel panel = new JPanel() {
             @Override public void paint(Graphics g) {
-                visualNode.paint((Graphics2D) g);
+                Graphics2D g2 = (Graphics2D) g;
+                visualNode.paint(g2);
+                if (shaded) {
+                    g2.setColor(GUIColors.DecisionTree.EXPANDABLE_NODE_SHADE.getColor());
+                    g2.fill(visualNode.getShape(g2));
+                }
             }
         };
         Shape nodeDimensions = visualNode.getShape((Graphics2D) panel.getGraphics());
@@ -74,12 +88,25 @@ public non-sealed class DecisionTreeNodePanel extends DecisionTreeElementPanel {
     
     
     /**
-     * Writes the utility of the node, or its cost-effectiveness partition, next to the icon.
+     * Writes the utility of the node, or its cost-effectiveness partition, next to the icon; that the
+     * scenario is impossible instead, if it is; and an ellipsis after it if the node can still be expanded.
      * {@inheritDoc}
      */
     @Override
     public void update(boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-        this.descriptionLabel.setText(DecisionTreeUtilityFormatters.format(this.treeNode.getEvaluation(), this.df, false));
+        String text = this.treeNode.isImpossible()
+                ? " " + StringDatabase.getUniqueInstance().getString("DecisionTreeNode.ImpossibleScenario")
+                : DecisionTreeUtilityFormatters.format(this.treeNode.getEvaluation(), this.df, false);
+        this.descriptionLabel.setText(canBeExpanded() ? text + "  \u2026" : text);
+    }
+    
+    /**
+     * Whether the node is a leaf the tree could still go on from: an evaluated node with no branches that
+     * is neither a utility node, where the tree ends, nor a scenario that cannot happen.
+     */
+    boolean canBeExpanded() {
+        return this.treeNode.getEvaluation() != null && this.treeNode.getChildBranches().isEmpty()
+                && this.treeNode.getNodeType() != NodeType.UTILITY && !this.treeNode.isImpossible();
     }
     
     /**

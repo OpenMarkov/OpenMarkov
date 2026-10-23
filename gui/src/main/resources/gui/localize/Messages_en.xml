@@ -393,4 +393,7 @@
     <ShowCEP>
         <ImpossibleScenario value="This scenario is impossible (its probability is zero), so it has no cost-effectiveness partition."/>
     </ShowCEP>
+    <DecisionTreeNode>
+        <ImpossibleScenario value="impossible scenario"/>
+    </DecisionTreeNode>
 </properties>
