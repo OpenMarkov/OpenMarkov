@@ -29,6 +29,7 @@ import org.openmarkov.core.model.decisiontree.ProbAndCEP;
 import org.openmarkov.core.model.decisiontree.ProbAndUtilityAndStrategy;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.inference.algorithm.DecisionTreeExpansion;
@@ -166,6 +167,50 @@ class DecisionTreeExpansionCERegressionTest {
 		assertThat(ifPresent.isBestDecision(branch(ifPresent, "yes"))).as("con enfermedad, tratar").isTrue();
 	}
 
+	/**
+	 * Where the depth runs out, the leaf is the node of the variable the tree would
+	 * branch on next, with no branches, so that it can be expanded later.
+	 */
+	@Test
+	void aLeafWhereTheDepthRunsOutIsTheNodeOfTheNextVariable() throws Exception {
+		DecisionTreeNode root = actual(load(EXAMPLES + "03.4-ID-decide-test.pgmx"), 2);
+		DecisionTreeNode ifNegative = child(child(root, "yes"), "negative");
+		DecisionTreeNode ifPositive = child(child(root, "yes"), "positive");
+
+		assertThat(ifNegative.getVariable().getName()).isEqualTo("Therapy (T)");
+		assertThat(ifNegative.getChildBranches()).isEmpty();
+		assertThat(utility(ifNegative)).isCloseTo(9.6958, MONEY);
+		assertThat(ifPositive.getVariable().getName()).isEqualTo("Therapy (T)");
+		assertThat(utility(ifPositive)).isCloseTo(7.9684, MONEY);
+		assertThat(ifPositive.getNetwork().getNode("Therapy (T)")).as("la red de la hoja, para seguir expandiendo")
+				.isNotNull();
+	}
+
+	/** When several decisions can be made first, the leaf is the node of the decision about their order. */
+	@Test
+	void aLeafBeforeSeveralDecisionsIsTheNodeOfTheirOrder() throws Exception {
+		DecisionTreeNode root = actual(load(EXAMPLES + "03.5-DAN-decide-two-tests.pgmx"), 0);
+		DecisionTreeNode afterTestZ = child(actual(load(EXAMPLES + "03.5-DAN-decide-two-tests.pgmx"), 1),
+				"Do test Z?");
+
+		assertThat(root.getVariable().getName()).isEqualTo("OD");
+		assertThat(root.getNodeType()).isEqualTo(NodeType.DECISION);
+		assertThat(root.getChildBranches()).isEmpty();
+		assertThat(utility(root)).isCloseTo(9.6247, MONEY);
+		assertThat(afterTestZ.getVariable().getName()).isEqualTo("Do test Z?");
+		assertThat(afterTestZ.getChildBranches()).isEmpty();
+	}
+
+	/** When nothing is left to expand, the leaf is the utility node of the model. */
+	@Test
+	void aLeafWithNothingLeftToExpandIsTheUtilityNode() throws Exception {
+		DecisionTreeNode root = actual(load(EXAMPLES + "03.2-ID-blind-decision.pgmx"), 6);
+
+		DecisionTreeNode leaf = child(child(root, "no"), "absent");
+		assertThat(leaf.getVariable().getName()).isEqualTo("Effectiveness (E)");
+		assertThat(leaf.getNodeType()).isEqualTo(NodeType.UTILITY);
+	}
+
 	private static double utility(DecisionTreeNode node) {
 		return ((ProbAndUtilityAndStrategy) node.getEvaluation()).getUtility();
 	}
@@ -256,10 +301,19 @@ class DecisionTreeExpansionCERegressionTest {
 	 * Asserts that the two trees agree at this node and, recursively, at every
 	 * branch below it. Children are matched by the state of their branch instead
 	 * of by position, so that a difference in the order of the branches is
-	 * reported as such and does not make every node below look wrong.
+	 * reported as such and does not make every node below look wrong. Where the
+	 * depth runs out, the old algorithm puts the utility node and the new one the
+	 * node of the next variable, so there only the evaluations are compared.
 	 */
 	private static void assertSameTree(SoftAssertions soft, DecisionTreeNode reference, DecisionTreeNode actual,
 			boolean isCEA, String path) {
+		if (actual.getChildBranches().isEmpty() && actual.getNodeType() != NodeType.UTILITY) {
+			soft.assertThat(reference.getChildBranches()).as("ramas de la hoja %s", path).isEmpty();
+			soft.assertThat(actual.getScenarioProbability()).as("probabilidad del escenario en %s", path)
+					.isCloseTo(reference.getScenarioProbability(), RATE);
+			assertSameUtility(soft, reference.getEvaluation(), actual.getEvaluation(), isCEA, path);
+			return;
+		}
 		soft.assertThat(actual.getVariable().getName()).as("variable en %s", path)
 				.isEqualTo(reference.getVariable().getName());
 		soft.assertThat(actual.getNodeType()).as("tipo de nodo en %s", path).isEqualTo(reference.getNodeType());

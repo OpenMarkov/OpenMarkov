@@ -82,7 +82,9 @@ import java.util.List;
  * The two conditions that stop the recursion are the ones the revised
  * pseudocode states, and both live where the branches are built: a branch whose
  * remaining depth is zero gets a leaf — evaluated in one go, its inner tree
- * discarded — and a model with nothing left to expand gets a leaf as well.
+ * discarded — and a model with nothing left to expand gets a leaf as well. The
+ * first kind of leaf is the node of the variable the tree would branch on next,
+ * so that it can be expanded later; the second is the utility node of the model.
  * <p>
  * Where the code departs from the letter of the pseudocode is in how an
  * asymmetric model is evaluated in one go. The pseudocode expands one level and
@@ -156,18 +158,31 @@ public class DecisionTreeExpansion {
 
 	/**
 	 * Evaluates a model and represents the result as a leaf of the tree, which is
-	 * what a branch needs when its remaining depth is zero.
+	 * what a branch needs when its remaining depth is zero. The leaf is the node of
+	 * the variable the tree would branch on next, or the utility node of the model
+	 * if nothing is left to branch on.
 	 */
 	private Expansion evaluateAsLeaf(ProbNet probNet, EvidenceCase evidence)
 			throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException,
 			PotentialOperationException.DifferentSizesInPotentialsAndStates {
+		Node leafNode = nextNodeOrUtility(probNet, evidence);
 		EvidenceCase leafEvidence = evidence != null ? evidence : new EvidenceCase();
 		if (DANOperations.isSymmetric(probNet, leafEvidence)) {
-			return variableElimination(probNet, evidence);
+			return variableElimination(probNet, evidence, leafNode);
 		}
 		DANDecompositionIntoSymmetricDANsInference decomposition =
 				new DANDecompositionIntoSymmetricDANsInference(probNet, null, leafEvidence, isCEA);
-		return leaf(probNet, evidence, decomposition.getProbability(), decomposition.getUtility());
+		return leaf(leafNode, probNet, evidence, decomposition.getProbability(), decomposition.getUtility());
+	}
+
+	/** The node the tree would branch on next, or the utility node of the model if there is none. */
+	private Node nextNodeOrUtility(ProbNet probNet, EvidenceCase evidence) {
+		List<Node> nodeList = getNextNode(probNet, evidence);
+		return switch (nodeList.size()) {
+			case 0 -> DANDecisionTreeInference.getSuperValueNode(probNet, isCEA);
+			case 1 -> nodeList.get(0);
+			default -> orderNode(probNet, nodeList);
+		};
 	}
 
 	// ---------------------------------------------------------------------
@@ -227,7 +242,7 @@ public class DecisionTreeExpansion {
 		if (nodeList.isEmpty()) {
 			// Only utility nodes (and observed chance nodes) remain in the model, so it
 			// cannot be expanded any further and is symmetric by construction.
-			return variableElimination(probNet, evidence);
+			return variableElimination(probNet, evidence, DANDecisionTreeInference.getSuperValueNode(probNet, isCEA));
 		}
 		if (nodeList.size() == 1) {
 			Node node = nodeList.get(0);
@@ -237,12 +252,19 @@ public class DecisionTreeExpansion {
 					optimize(probNet, evidence, node, branches);
 		}
 		// Several decisions can be the first one: the tree branches on which one is
-		// made first, which is itself a decision and is therefore optimized over. The
-		// branching variable is a dummy one, with no node of its own in the model.
-		Node orderNode = new Node(probNet, DANOperations.createDummyVariableOfOrder(nodeList), NodeType.DECISION);
+		// made first, which is itself a decision and is therefore optimized over.
+		Node orderNode = orderNode(probNet, nodeList);
 		Branches branches = prioritizeDecisions(probNet, evidence, nodeList, orderNode.getVariable(),
 				childDepth(depth));
 		return optimize(probNet, evidence, orderNode, branches);
+	}
+
+	/**
+	 * The node of the decision about which of several decisions is made first. Its
+	 * variable is a dummy one, with no node of its own in the model.
+	 */
+	private static Node orderNode(ProbNet probNet, List<Node> nextDecisions) {
+		return new Node(probNet, DANOperations.createDummyVariableOfOrder(nextDecisions), NodeType.DECISION);
 	}
 
 	/** Guards against {@link Integer#MAX_VALUE} — the unbounded case — decaying into a finite depth. */
@@ -421,22 +443,19 @@ public class DecisionTreeExpansion {
 
 	/**
 	 * Evaluates a symmetric model by variable elimination and represents it as a
-	 * leaf of the tree.
+	 * leaf of the tree, the given node.
 	 */
-	private Expansion variableElimination(ProbNet probNet, EvidenceCase evidence)
+	private Expansion variableElimination(ProbNet probNet, EvidenceCase evidence, Node leafNode)
 			throws NotEvaluableNetworkException, IncompatibleEvidenceException, NonProjectablePotentialException {
 		DANConditionalSymmetricInference inference = new DANConditionalSymmetricInference(probNet, null,
 				evidence != null ? evidence : new EvidenceCase(), isCEA);
-		return leaf(probNet, evidence, inference.getProbability(), inference.getUtility());
+		return leaf(leafNode, probNet, evidence, inference.getProbability(), inference.getUtility());
 	}
 
-	/**
-	 * Builds a leaf of the tree, hanging from the super-value node of the model
-	 * and carrying an already computed probability and utility.
-	 */
-	private Expansion leaf(ProbNet probNet, EvidenceCase evidence, TablePotential probability, Potential utility) {
-		Node superValueNode = DANDecisionTreeInference.getSuperValueNode(probNet, isCEA);
-		DecisionTreeNode treeNode = new DecisionTreeNode(superValueNode, probNet, evidence);
+	/** Builds a leaf of the tree, the given node, carrying an already computed probability and utility. */
+	private Expansion leaf(Node leafNode, ProbNet probNet, EvidenceCase evidence, TablePotential probability,
+			Potential utility) {
+		DecisionTreeNode treeNode = new DecisionTreeNode(leafNode, probNet, evidence);
 		return attachEvaluation(treeNode, probability, utility);
 	}
 
