@@ -134,6 +134,53 @@ class DecisionTreeExpansionCERegressionTest {
 	}
 
 	/**
+	 * Values computed by hand, which do not depend on the old algorithm. The disease is absent with
+	 * probability 0.86; its utility is 10 if absent and 3 if present without therapy, 9 and 8 with it.
+	 * Deciding blindly, no therapy gives 0.86·10 + 0.14·3 = 9.02 and therapy 0.86·9 + 0.14·8 = 8.86.
+	 */
+	@Test
+	void theBlindDecisionHasTheValueComputedByHand() throws Exception {
+		DecisionTreeNode root = actual(load(EXAMPLES + "03.2-ID-blind-decision.pgmx"), 6);
+
+		assertThat(utility(root)).isCloseTo(9.02, MONEY);
+		assertThat(utility(child(root, "no"))).isCloseTo(9.02, MONEY);
+		assertThat(utility(child(root, "yes"))).isCloseTo(8.86, MONEY);
+		assertThat(root.isBestDecision(branch(root, "no"))).as("no tratar es la mejor decisión").isTrue();
+		assertThat(root.isBestDecision(branch(root, "yes"))).isFalse();
+	}
+
+	/**
+	 * Knowing the disease before deciding, the best is no therapy if it is absent (10) and therapy if
+	 * it is present (8), so the decision is worth 0.86·10 + 0.14·8 = 9.72.
+	 */
+	@Test
+	void thePerfectInformationHasTheValueComputedByHand() throws Exception {
+		DecisionTreeNode root = actual(load(EXAMPLES + "03.1-ID-perfect-information.pgmx"), 6);
+		DecisionTreeNode ifAbsent = child(root, "absent");
+		DecisionTreeNode ifPresent = child(root, "present");
+
+		assertThat(utility(root)).isCloseTo(9.72, MONEY);
+		assertThat(utility(ifAbsent)).isCloseTo(10, MONEY);
+		assertThat(utility(ifPresent)).isCloseTo(8, MONEY);
+		assertThat(ifAbsent.isBestDecision(branch(ifAbsent, "no"))).as("sin enfermedad, no tratar").isTrue();
+		assertThat(ifPresent.isBestDecision(branch(ifPresent, "yes"))).as("con enfermedad, tratar").isTrue();
+	}
+
+	private static double utility(DecisionTreeNode node) {
+		return ((ProbAndUtilityAndStrategy) node.getEvaluation()).getUtility();
+	}
+
+	private static DecisionTreeBranch branch(DecisionTreeNode node, String state) {
+		DecisionTreeBranch branch = branchesByState(node).get(state);
+		assertThat(branch).as("rama %s de %s", state, node.getVariable().getName()).isNotNull();
+		return branch;
+	}
+
+	private static DecisionTreeNode child(DecisionTreeNode node, String state) {
+		return branch(node, state).getChild();
+	}
+
+	/**
 	 * In this example network the utility node «Cost of test Z» has a uniform potential, so both
 	 * algorithms refuse it naming that node.
 	 */
