@@ -31,6 +31,9 @@ import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.potential.StrategyTree;
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.inference.algorithm.DecisionTreeExpansion;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANDecisionTreeInference;
@@ -40,6 +43,7 @@ import org.openmarkov.io.probmodel.reader.PGMXReader;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -226,6 +230,56 @@ class DecisionTreeExpansionCERegressionTest {
 			n += countAllNodes(branch.getChild());
 		}
 		return n;
+	}
+
+	/**
+	 * Each node keeps the optimal strategy of its subtree, also a leaf where the depth runs out:
+	 * do the test, and treat only if it is positive.
+	 */
+	@Test
+	void eachNodeKeepsTheStrategyOfItsSubtree() throws Exception {
+		ProbNet net = load(EXAMPLES + "03.4-ID-decide-test.pgmx");
+		DecisionTreeNode root = actual(net, 6);
+		DecisionTreeNode cutShort = child(child(actual(net, 2), "yes"), "positive");
+
+		assertThat(strategy(root)).isEqualTo("Do the test? (D) [yes] { Result of test (Y) [negative] "
+				+ "{ Therapy (T) [no] } [positive] { Therapy (T) [yes] } }");
+		assertThat(strategy(child(child(root, "yes"), "negative"))).isEqualTo("Therapy (T) [no]");
+		assertThat(strategy(cutShort)).isEqualTo("Therapy (T) [yes]");
+		assertThat(((ProbAndUtilityAndStrategy) child(child(child(root, "yes"), "negative"), "no").getEvaluation())
+				.getStrategy()).as("después de la última decisión no queda nada que decidir").isNull();
+	}
+
+	/**
+	 * In a decision analysis network the strategy starts with the order of the decisions: test Z
+	 * first; if negative, test Y and treat only if Y is positive; if positive, treat without Y.
+	 */
+	@Test
+	void theStrategyOfADecisionAnalysisNetworkStartsWithTheOrder() throws Exception {
+		DecisionTreeNode root = actual(load(EXAMPLES + "03.5-DAN-decide-two-tests.pgmx"), 1);
+
+		assertThat(strategy(root)).isEqualTo("OD [Do test Z?] { Do test Z? [yes] { Result of Z [negative] "
+				+ "{ Do test Y? [yes] { Result of Y [negative] { Therapy [no] } [positive] { Therapy [yes] } } } "
+				+ "[positive] { Do test Y? [no] { Therapy [yes] } } } }");
+	}
+
+	/** The strategy of a node as text: each variable, its states and, in braces, what follows them. */
+	private static String strategy(DecisionTreeNode node) {
+		StrategyTree strategy = ((ProbAndUtilityAndStrategy) node.getEvaluation()).getStrategy();
+		assertThat(strategy).as("estrategia de %s", node.getVariable().getName()).isNotNull();
+		return text(strategy);
+	}
+
+	private static String text(StrategyTree tree) {
+		StringBuilder text = new StringBuilder(tree.getRootVariable().getName());
+		for (TreeADDBranch branch : tree.getBranches()) {
+			text.append(" [").append(branch.getStates().stream().map(State::getName).collect(Collectors.joining(", ")))
+					.append("]");
+			if (branch.getPotential() instanceof StrategyTree next) {
+				text.append(" { ").append(text(next)).append(" }");
+			}
+		}
+		return text.toString();
 	}
 
 	/** When nothing is left to expand, the leaf is the utility node of the model. */

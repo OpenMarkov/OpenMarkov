@@ -28,6 +28,7 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.AbstractIndexedPotential;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.StrategyCarrier;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.operation.DiscretePotentialOperations;
@@ -484,8 +485,9 @@ public class DecisionTreeExpansion {
 	}
 
 	/**
-	 * Reads the plain numbers out of the potentials and hangs them on the tree
-	 * node as its evaluation.
+	 * Reads the plain numbers out of the potentials, and in a unicriterion
+	 * analysis the optimal strategy, and hangs them on the tree node as its
+	 * evaluation.
 	 * <p>
 	 * In cost-effectiveness analysis the node's CEP is normalized (adjacent
 	 * partitions of equal cost and effectiveness are merged, see
@@ -500,13 +502,19 @@ public class DecisionTreeExpansion {
 			CEP cep = DANOperations.getOnlyValuePotentialCEP((GTablePotential) utility);
 			treeNode.setEvaluation(new ProbAndCEP(probabilityValue, normalizeCEP(cep)));
 		} else {
-			// The strategy is left unset: variable elimination computes it, but the DAN
-			// layer discards it. Recovering it is what the revised pseudocode asks for
-			// when it says that variableElimination must return a decisionModelEvaluation.
 			treeNode.setEvaluation(new ProbAndUtilityAndStrategy(probabilityValue,
-					DANOperations.getOnlyValuePotential((TablePotential) utility)));
+					DANOperations.getOnlyValuePotential((TablePotential) utility), strategy(utility)));
 		}
 		return new Expansion(treeNode, probability, utility);
+	}
+
+	/**
+	 * The optimal strategy the elimination of the variables has composed into a
+	 * utility potential, or {@code null} if it carries none.
+	 */
+	private static StrategyTree strategy(Potential utility) {
+		StrategyTree[] strategyTrees = utility instanceof StrategyCarrier carrier ? carrier.getStrategyTrees() : null;
+		return strategyTrees == null || strategyTrees.length == 0 ? null : strategyTrees[0];
 	}
 
 	/**

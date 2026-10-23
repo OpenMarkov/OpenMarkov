@@ -7,7 +7,7 @@
 
 package org.openmarkov.core.model.decisiontree;
 
-import org.openmarkov.core.inference.Strategy;
+import org.openmarkov.core.model.network.potential.StrategyTree;
 
 /**
  * The evaluation of a node in a tree whose utility is a single number, as in ordinary
@@ -18,11 +18,19 @@ import org.openmarkov.core.inference.Strategy;
 public final class ProbAndUtilityAndStrategy extends DecisionModelEvaluation {
 
 	private final double utility;
-	private Strategy strategy;
+	private final StrategyTree strategy;
 
 	public ProbAndUtilityAndStrategy(double prob, double utility) {
+		this(prob, utility, null);
+	}
+
+	/**
+	 * @param strategy the optimal strategy of the subproblem; {@code null} if there is nothing to decide in it.
+	 */
+	public ProbAndUtilityAndStrategy(double prob, double utility, StrategyTree strategy) {
 		super(prob);
 		this.utility = utility;
+		this.strategy = strategy;
 	}
 
 	public double getUtility() {
@@ -34,12 +42,9 @@ public final class ProbAndUtilityAndStrategy extends DecisionModelEvaluation {
 		return EvaluationType.UNICRITERION;
 	}
 
-	public Strategy getStrategy() {
+	/** The optimal strategy of the subproblem, or {@code null} if it is unknown or there is nothing to decide. */
+	public StrategyTree getStrategy() {
 		return strategy;
-	}
-
-	public void setStrategy(Strategy strategy) {
-		this.strategy = strategy;
 	}
 
 }
