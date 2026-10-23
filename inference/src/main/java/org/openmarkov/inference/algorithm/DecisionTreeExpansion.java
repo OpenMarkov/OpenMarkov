@@ -466,12 +466,16 @@ public class DecisionTreeExpansion {
 	/**
 	 * Builds the node the branches hang from, once they have been merged. The
 	 * node is created last, as the pseudocode has it: it is the merged
-	 * evaluation, and not the other way round, that the recursion is after.
+	 * evaluation, and not the other way round, that the recursion is after. A
+	 * node whose scenario cannot happen gets no branches.
 	 */
 	private Expansion node(ProbNet probNet, EvidenceCase evidence, Node node, Branches branches,
 			TablePotential probability, Potential utility) {
 		DecisionTreeNode treeNode = new DecisionTreeNode(node, probNet, evidence);
 		Expansion expansion = attachEvaluation(treeNode, probability, utility);
+		if (treeNode.isImpossible()) {
+			return expansion;
+		}
 		for (DecisionTreeBranch branch : branches.branches()) {
 			treeNode.addChild(branch);
 		}

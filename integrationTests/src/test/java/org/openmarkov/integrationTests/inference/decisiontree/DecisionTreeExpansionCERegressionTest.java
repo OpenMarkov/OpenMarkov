@@ -201,6 +201,33 @@ class DecisionTreeExpansionCERegressionTest {
 		assertThat(afterTestZ.getChildBranches()).isEmpty();
 	}
 
+	/**
+	 * A branch that cannot happen, a test result when the test is not done, ends in a node with
+	 * probability 0 and no branches: 27 nodes instead of the 45 the old algorithm builds.
+	 */
+	@Test
+	void aScenarioThatCannotHappenHasNothingBelow() throws Exception {
+		ProbNet net = load(EXAMPLES + "03.4-ID-decide-test.pgmx");
+		DecisionTreeNode root = actual(net, 6);
+		DecisionTreeNode notDone = child(child(root, "yes"), "not done");
+
+		assertThat(notDone.getVariable().getName()).isEqualTo("Therapy (T)");
+		assertThat(notDone.isImpossible()).isTrue();
+		assertThat(notDone.getChildBranches()).isEmpty();
+		assertThat(branch(child(root, "yes"), "not done").getBranchProbability()).isZero();
+		assertThat(child(child(root, "yes"), "negative").isImpossible()).isFalse();
+		assertThat(countNodes(root)).isEqualTo(27);
+		assertThat(countAllNodes(reference(net, 6))).isEqualTo(45);
+	}
+
+	private static int countAllNodes(DecisionTreeNode node) {
+		int n = 1;
+		for (DecisionTreeBranch branch : node.getChildBranches()) {
+			n += countAllNodes(branch.getChild());
+		}
+		return n;
+	}
+
 	/** When nothing is left to expand, the leaf is the utility node of the model. */
 	@Test
 	void aLeafWithNothingLeftToExpandIsTheUtilityNode() throws Exception {
@@ -303,10 +330,18 @@ class DecisionTreeExpansionCERegressionTest {
 	 * of by position, so that a difference in the order of the branches is
 	 * reported as such and does not make every node below look wrong. Where the
 	 * depth runs out, the old algorithm puts the utility node and the new one the
-	 * node of the next variable, so there only the evaluations are compared.
+	 * node of the next variable, so there only the evaluations are compared. Below
+	 * a scenario that cannot happen the old algorithm goes on and the new one
+	 * stops, so there only the probability is compared.
 	 */
 	private static void assertSameTree(SoftAssertions soft, DecisionTreeNode reference, DecisionTreeNode actual,
 			boolean isCEA, String path) {
+		if (actual.isImpossible() || reference.isImpossible()) {
+			soft.assertThat(actual.isImpossible()).as("escenario imposible en %s", path)
+					.isEqualTo(reference.isImpossible());
+			soft.assertThat(actual.getChildBranches()).as("ramas del escenario imposible %s", path).isEmpty();
+			return;
+		}
 		if (actual.getChildBranches().isEmpty() && actual.getNodeType() != NodeType.UTILITY) {
 			soft.assertThat(reference.getChildBranches()).as("ramas de la hoja %s", path).isEmpty();
 			soft.assertThat(actual.getScenarioProbability()).as("probabilidad del escenario en %s", path)
@@ -405,11 +440,15 @@ class DecisionTreeExpansionCERegressionTest {
 		return n;
 	}
 
+	/** The nodes of a tree, not counting those below a scenario that cannot happen. */
 	private static int countNodes(DecisionTreeVisualNode element) {
 		if (element == null) {
 			return 0;
 		}
 		if (element instanceof DecisionTreeNode node) {
+			if (node.isImpossible()) {
+				return 1;
+			}
 			int n = 1;
 			for (DecisionTreeVisualNode child : node.getChildren()) {
 				n += countNodes(child);

@@ -186,6 +186,16 @@ public non-sealed class DecisionTreeNode implements DecisionTreeVisualNode {
 	}
 
 	/**
+	 * Whether the scenario leading to this node cannot happen, because its
+	 * probability is 0. Such a node has no utility to show and is not expanded.
+	 *
+	 * @return true if this node has been evaluated and its scenario has probability 0.
+	 */
+	public boolean isImpossible() {
+		return evaluation != null && evaluation.getProb() == 0;
+	}
+
+	/**
 	 * Hangs a branch from this node.
 	 *
 	 * @param child The branch.
