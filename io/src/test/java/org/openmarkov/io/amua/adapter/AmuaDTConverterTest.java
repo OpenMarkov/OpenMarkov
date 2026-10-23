@@ -34,7 +34,7 @@ class AmuaDTConverterTest {
 
         assertNotNull(amuaNode);
         assertEquals("Root", amuaNode.getName());
-        assertEquals(0, amuaNode.getType());
+        assertEquals(2, amuaNode.getType(), "a node without branches is a terminal node in Amua");
         assertEquals(0, amuaNode.getChildNodes().size());
         assertEquals(0.0, amuaNode.getPayoff());
         assertEquals(0, amuaNode.getLevel());
@@ -76,10 +76,10 @@ class AmuaDTConverterTest {
 
         assertNotNull(amuaNode);
         assertEquals("Root", amuaNode.getName());
-        assertEquals(0, amuaNode.getType());
+        assertEquals(2, amuaNode.getType(), "a node without branches is a terminal node in Amua");
         assertEquals(0, amuaNode.getChildNodes().size());
         assertEquals(0.0, amuaNode.getPayoff().getCost());
-        assertEquals(0.0, amuaNode.getPayoff().getEffectiveness());
+        assertEquals(10.0, amuaNode.getPayoff().getEffectiveness());
         assertEquals(0, amuaNode.getLevel());
         assertTrue(amuaNode.getXPos() >= 0);
         assertTrue(amuaNode.getYPos() >= 0);

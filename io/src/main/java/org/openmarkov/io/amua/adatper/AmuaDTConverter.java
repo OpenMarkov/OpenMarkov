@@ -68,6 +68,18 @@ public class AmuaDTConverter {
 
 
     /**
+     * Returns the type of the node in Amua format. A node without branches is a terminal node, whatever its type:
+     * a leaf where the expansion of the tree stopped, or a scenario that cannot happen.
+     *
+     * @param node the node of the OpenMarkov tree
+     * @return the integer representation of the node type (Amua format)
+     */
+    private int amuaType(DecisionTreeNode node) {
+        return typeNode(node.getChildBranches().isEmpty() ? NodeType.UTILITY : node.getNodeType());
+    }
+
+
+    /**
      * Recursively converts an OpenMarkov decision tree node into an Amua node.
      * @param decisionTreeNode the OpenMarkov node to convert
      * @param branch the branch from the parent node, or null if root
@@ -80,7 +92,7 @@ public class AmuaDTConverter {
         AmuaDTNode<?> amuaNode = createNodeInstance();
 
         amuaNode.setIndex(index++);
-        amuaNode.setType(typeNode(decisionTreeNode.getNodeType()));
+        amuaNode.setType(amuaType(decisionTreeNode));
         amuaNode.setLevel(level);
 
         // Name

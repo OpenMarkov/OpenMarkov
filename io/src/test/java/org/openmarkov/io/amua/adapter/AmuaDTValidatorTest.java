@@ -93,6 +93,14 @@ public class AmuaDTValidatorTest {
 
         DecisionTreeNode secondDecisionNode = new DecisionTreeNode(D2, simpleNet);
         secondDecisionNode.setEvaluation(new ProbAndCEP(1.0, null));
+        // With a branch, because a decision without branches ends the tree in Amua
+        Variable utility = new Variable("SecondUtility");
+        simpleNet.addNode(utility, NodeType.UTILITY);
+        DecisionTreeNode leaf = new DecisionTreeNode(utility, simpleNet);
+        leaf.setEvaluation(new ProbAndCEP(1.0, null));
+        DecisionTreeBranch secondDecisionBranch = new DecisionTreeBranch(D2.getStates()[0]);
+        secondDecisionBranch.setChild(leaf);
+        secondDecisionNode.addChild(secondDecisionBranch);
         DecisionTreeBranch firstBranch = (DecisionTreeBranch) ceaRoot.getChildren().get(0);
         DecisionTreeNode firstChanceNode = firstBranch.getChild();
         DecisionTreeBranch newBranch = new DecisionTreeBranch(D2.getStates()[0]);

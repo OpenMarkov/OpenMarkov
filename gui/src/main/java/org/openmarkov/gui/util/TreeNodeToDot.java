@@ -1,5 +1,6 @@
 package org.openmarkov.gui.util;
 
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.network.NodeType;
@@ -204,11 +205,15 @@ public class TreeNodeToDot {
     /**
      * Formats a node's utility by its runtime type — {@code " U=…"} for an
      * expected-utility tree, the cost/effectiveness text for a CEA tree, and an
-     * empty string for a node with no utility. The old code cast the utility to
+     * empty string for a node with no utility; a node whose scenario cannot
+     * happen says so instead. The old code cast the utility to
      * {@code double}, which threw on a CEA tree (its utility is a CEP) and on a
      * node whose utility was not set.
      */
-    private String formatUtility(DecisionTreeNode treeNode) {
+    String formatUtility(DecisionTreeNode treeNode) {
+        if (treeNode.isImpossible()) {
+            return " " + StringDatabase.getUniqueInstance().getString("DecisionTreeNode.ImpossibleScenario");
+        }
         return DecisionTreeUtilityFormatters.format(treeNode.getEvaluation(), df, false);
     }
 

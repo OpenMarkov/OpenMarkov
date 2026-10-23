@@ -119,7 +119,8 @@ public class AmuaDTValidator {
             throw new IllegalStateException("Unsupported node type: " + type);
         }
 
-        if (type == NodeType.DECISION) {
+        // A decision without branches ends the tree in Amua, as a terminal node
+        if (type == NodeType.DECISION && !node.getChildBranches().isEmpty()) {
             decisionNodeCount++;
             if (decisionNodeCount > maxDecisionNodes) {
                 throw new IllegalStateException("Amua supports only one decision node.");
