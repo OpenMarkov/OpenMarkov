@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="DAN">
+    <Comment showWhenOpeningNetwork="false"><![CDATA[<<Double click to add/modify comment>>]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <Variables>
+      <Variable name="Disease" type="finiteStates" role="chance">
+        <Coordinates x="460" y="85" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Result of Z" type="finiteStates" role="chance">
+        <Coordinates x="550" y="175" />
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="529" y="247" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Effectiveness" type="numeric" role="utility">
+        <Coordinates x="460" y="316" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Do test Z?" type="finiteStates" role="decision">
+        <Coordinates x="621" y="85" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Do test Y?" type="finiteStates" role="decision">
+        <Coordinates x="296" y="90" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Result of Y" type="finiteStates" role="chance">
+        <Coordinates x="367" y="178" />
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Cost of Y" type="numeric" role="utility">
+        <Coordinates x="236" y="179" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Cost of Z" type="numeric" role="utility">
+        <Coordinates x="693" y="174" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of Z" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Effectiveness" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of Y" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Effectiveness" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test Z?" />
+        <Variable name="Result of Z" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Do test Z?" />
+            <Variable name="Result of Z" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test Z?" />
+        <Variable name="Cost of Z" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test Y?" />
+        <Variable name="Result of Y" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Do test Y?" />
+            <Variable name="Result of Y" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test Y?" />
+        <Variable name="Cost of Y" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.86 0.14</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Result of Z" />
+          <Variable name="Do test Z?" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.0 0.0 0.96 0.04 0.0 0.0 0.07 0.93</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Effectiveness" />
+        <Variables>
+          <Variable name="Disease" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>10.0 3.0 9.0 8.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Result of Y" />
+          <Variable name="Do test Y?" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.0 0.0 0.97 0.03 0.0 0.0 0.09 0.91</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of Y" />
+        <Variables>
+          <Variable name="Do test Y?" />
+        </Variables>
+        <Values>0.0 -0.02</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of Z" />
+        <Variables>
+          <Variable name="Do test Z?" />
+        </Variables>
+        <Values>0.0 -0.015</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Effectiveness" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

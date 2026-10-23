@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="InfluenceDiagram">
+    <Comment showWhenOpeningNetwork="false"><![CDATA[<<Pulse dos veces para incluir/modificar comentario>>]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="---" unit="---" />
+    </DecisionCriteria>
+    <Variables>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="298" y="406" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Disease" type="finiteStates" role="chance">
+        <Coordinates x="141" y="81" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Effectiveness (E)" type="numeric" role="utility">
+        <Coordinates x="197" y="491" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Result of test Y" type="finiteStates" role="chance">
+        <Coordinates x="306" y="148" />
+        <States>
+          <State name="not done" />
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Cost of test Y" type="numeric" role="utility">
+        <Coordinates x="453" y="146" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+      <Variable name="Do test Y?" type="finiteStates" role="decision">
+        <Coordinates x="362" y="82" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Do test Z?" type="finiteStates" role="decision">
+        <Coordinates x="358" y="250" />
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Result of test Z" type="finiteStates" role="chance">
+        <Coordinates x="311" y="313" />
+        <States>
+          <State name="not done" />
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Cost of test Z" type="numeric" role="utility">
+        <Coordinates x="457" y="311" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="---" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Effectiveness (E)" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Effectiveness (E)" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of test Y" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of test Z" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Result of test Y" />
+        <Variable name="Do test Z?" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test Y?" />
+        <Variable name="Result of test Y" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test Y?" />
+        <Variable name="Cost of test Y" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test Z?" />
+        <Variable name="Result of test Z" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test Z?" />
+        <Variable name="Cost of test Z" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Result of test Z" />
+        <Variable name="Therapy" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.86 0.14</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <UtilityVariable name="Effectiveness (E)" />
+        <Variables>
+          <Variable name="Disease" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>10.0 3.0 9.0 8.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Result of test Y" />
+          <Variable name="Do test Y?" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>1.0 0.0 0.0 0.0 0.97 0.03 1.0 0.0 0.0 0.0 0.09 0.91</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <UtilityVariable name="Cost of test Y" />
+        <Variables>
+          <Variable name="Do test Y?" />
+        </Variables>
+        <Values>0.0 -0.2</Values>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Result of test Z" />
+          <Variable name="Do test Z?" />
+          <Variable name="Disease" />
+        </Variables>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <UtilityVariable name="Cost of test Z" />
+        <Variables>
+          <Variable name="Do test Z?" />
+        </Variables>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+      <Unicriterion>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="---" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="---" Value="Cost" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

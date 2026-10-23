@@ -8,13 +8,17 @@
 package org.openmarkov.integrationTests.inference.decisiontree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 
 import networks.Networks;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.openmarkov.core.exception.NonProjectablePotentialException.NumericVariableNeedsAFinding;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.model.decisiontree.DecisionModelEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
@@ -35,6 +39,8 @@ import org.openmarkov.io.probmodel.reader.PGMXReader;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Regression guard for {@link DecisionTreeExpansion}: on every network it must
@@ -57,6 +63,9 @@ class DecisionTreeExpansionCERegressionTest {
 
 	private static final Offset<Double> MONEY = Offset.offset(1e-4);
 	private static final Offset<Double> RATE = Offset.offset(1e-7);
+
+	/** The example networks of F. J. Díez's course, as he sent them on 2026-10-16. */
+	private static final String EXAMPLES = "networks/decision-tree-examples/";
 
 	@ParameterizedTest(name = "{0} @ profundidad {1}")
 	@CsvSource({
@@ -102,6 +111,45 @@ class DecisionTreeExpansionCERegressionTest {
 		net.getInferenceOptions().getMultiCriteriaOptions()
 				.setMulticriteriaType(MulticriteriaOptions.Type.COST_EFFECTIVENESS);
 		assertSameTree(net, reference(net, depth), actual(net, depth));
+	}
+
+	/** The example networks of F. J. Díez's course, at every depth up to the whole tree. */
+	@ParameterizedTest(name = "{0} @ profundidad {1}")
+	@MethodSource("exampleNetworksAndDepths")
+	void matchesReferenceOnTheExampleNetworks(String resource, int depth) throws Exception {
+		ProbNet net = load(resource);
+		assertSameTree(net, reference(net, depth), actual(net, depth));
+	}
+
+	/** The two mediastinet networks are too large for a deeper tree. */
+	private static Stream<Arguments> exampleNetworksAndDepths() {
+		return Stream.of("03.1-ID-perfect-information.pgmx", "03.2-ID-blind-decision.pgmx",
+						"03.3-ID-indirect-evidence.pgmx", "03.4-ID-decide-test.pgmx", "03.5-DAN-decide-two-tests.pgmx",
+						"04.1-ID-CEA-disease-absent.pgmx", "04.2-ID-CEA-disease-present.pgmx",
+						"04.3-ID-CEA-disease-known.pgmx", "04.4-ID-CEA-disease-uncertain.pgmx",
+						"04.5-ID-CEA-one-test.pgmx", "04.6-ID-CEA-two-tests.pgmx", "04.7-DAN-CEA-two-tests.pgmx",
+						"04.8-ID-mediastinet.pgmx", "04.9-DAN-mediastinet.pgmx")
+				.flatMap(name -> IntStream.rangeClosed(0, name.contains("mediastinet") ? 2 : 6)
+						.mapToObj(depth -> Arguments.of(EXAMPLES + name, depth)));
+	}
+
+	/**
+	 * In this example network the utility node «Cost of test Z» has a uniform potential, so both
+	 * algorithms refuse it naming that node.
+	 */
+	@Test
+	void anExampleNetworkWithAUniformUtilityIsRefusedByBothAlgorithms() throws Exception {
+		ProbNet net = load(EXAMPLES + "03.4-ID-decide-two-tests.pgmx");
+
+		NumericVariableNeedsAFinding byTheOldOne = catchThrowableOfType(NumericVariableNeedsAFinding.class,
+				() -> reference(net, 6));
+		NumericVariableNeedsAFinding byTheNewOne = catchThrowableOfType(NumericVariableNeedsAFinding.class,
+				() -> actual(net, 6));
+
+		assertThat(byTheOldOne).as("aviso del algoritmo antiguo").isNotNull();
+		assertThat(byTheNewOne).as("aviso del algoritmo nuevo").isNotNull();
+		assertThat(byTheOldOne.variable.getName()).isEqualTo("Cost of test Z");
+		assertThat(byTheNewOne.variable.getName()).isEqualTo("Cost of test Z");
 	}
 
 	/**

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="InfluenceDiagram">
+    <Comment showWhenOpeningNetwork="false"><![CDATA[<<Double click to add/modify comment>>]]></Comment>
+    <DecisionCriteria>
+      <Criterion name="Cost" unit="€" />
+      <Criterion name="Effectiveness" unit="QALY" />
+    </DecisionCriteria>
+    <Variables>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="353" y="120" />
+        <States>
+          <State name="no therapy" />
+          <State name="therapy 1" />
+          <State name="therapy 2" />
+        </States>
+      </Variable>
+      <Variable name="Effectiveness" type="numeric" role="utility">
+        <Coordinates x="229" y="269" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Effectiveness" />
+      </Variable>
+      <Variable name="Cost of therapy" type="numeric" role="utility">
+        <Coordinates x="471" y="272" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="Cost" />
+      </Variable>
+      <Variable name="Disease" type="finiteStates" role="chance">
+        <Coordinates x="122" y="120" />
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Effectiveness" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Cost of therapy" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Effectiveness" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Therapy" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <UtilityVariable name="Effectiveness" />
+        <Variables>
+          <Variable name="Disease" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>10.0 1.2 9.9 4.0 9.3 6.5</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <UtilityVariable name="Cost of therapy" />
+        <Variables>
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>0.0 20000.0 70000.0</Values>
+      </Potential>
+      <Potential type="Uniform" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>COST_EFFECTIVENESS</SelectedAnalysisType>
+      <Unicriterion>
+        <Unit>QALY</Unit>
+        <Scales>
+          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Effectiveness" Value="1.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Effectiveness" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="Cost" Value="Cost" />
+          <CE_Criterion Criterion="Effectiveness" Value="Effectiveness" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

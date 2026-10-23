@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="DAN">
+    <DecisionCriteria>
+      <Criterion name="cost" unit="€" />
+      <Criterion name="effectiveness" unit="QALY" />
+    </DecisionCriteria>
+    <AdditionalProperties>
+      <Property name="Version" value="1.0" />
+      <Property name="VisualPrecision" value="0.0" />
+      <Property name="KindOfGraph" value="directed" />
+    </AdditionalProperties>
+    <Variables>
+      <Variable name="Disease" type="finiteStates" role="chance">
+        <Coordinates x="430" y="81" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="X" />
+        </AdditionalProperties>
+        <States>
+          <State name="absent" />
+          <State name="present" />
+        </States>
+      </Variable>
+      <Variable name="Result of E" type="finiteStates" role="chance">
+        <Coordinates x="542" y="168" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Y" />
+        </AdditionalProperties>
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Therapy" type="finiteStates" role="decision">
+        <Coordinates x="575" y="288" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="D" />
+        </AdditionalProperties>
+        <States>
+          <State name="no therapy" />
+          <State name="therapy 1" />
+          <State name="therapy 2" />
+        </States>
+      </Variable>
+      <Variable name="Do test E?" type="finiteStates" role="decision">
+        <Coordinates x="625" y="80" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="T" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Health state" type="numeric" role="utility">
+        <Coordinates x="430" y="383" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="U" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>0.1</Precision>
+        <Criterion name="effectiveness" />
+      </Variable>
+      <Variable name="Cost of E" type="numeric" role="utility">
+        <Coordinates x="709" y="172" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="C" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="cost" />
+      </Variable>
+      <Variable name="Cost of therapy" type="numeric" role="utility">
+        <Coordinates x="707" y="382" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="cost" />
+      </Variable>
+      <Variable name="Cost of C" type="numeric" role="utility">
+        <Coordinates x="120" y="175" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Min" value="0.0" />
+          <Property name="Precision" value="2.0" />
+          <Property name="Max" value="1.0" />
+          <Property name="Title" value="C" />
+        </AdditionalProperties>
+        <Unit />
+        <Precision>2.0</Precision>
+        <Criterion name="cost" />
+      </Variable>
+      <Variable name="Result of C" type="finiteStates" role="chance">
+        <Coordinates x="305" y="163" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="Y" />
+        </AdditionalProperties>
+        <States>
+          <State name="negative" />
+          <State name="positive" />
+        </States>
+      </Variable>
+      <Variable name="Do test C?" type="finiteStates" role="decision">
+        <Coordinates x="188" y="82" />
+        <AdditionalProperties>
+          <Property name="Relevance" value="7.0" />
+          <Property name="Title" value="T" />
+        </AdditionalProperties>
+        <States>
+          <State name="no" />
+          <State name="yes" />
+        </States>
+      </Variable>
+      <Variable name="Discomfort due to C" type="numeric" role="utility">
+        <Coordinates x="204" y="267" />
+        <Unit />
+        <Precision>0.01</Precision>
+        <Criterion name="effectiveness" />
+      </Variable>
+    </Variables>
+    <Links>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Health state" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of E" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Disease" />
+        <Variable name="Result of C" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Health state" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Therapy" />
+        <Variable name="Cost of therapy" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test E?" />
+        <Variable name="Result of E" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Do test E?" />
+            <Variable name="Result of E" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test E?" />
+        <Variable name="Cost of E" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test C?" />
+        <Variable name="Result of C" />
+        <Potential type="Table" role="linkRestriction">
+          <Variables>
+            <Variable name="Do test C?" />
+            <Variable name="Result of C" />
+          </Variables>
+          <Values>0.0 1.0 0.0 1.0</Values>
+        </Potential>
+        <RevelationCondition>
+          <State name="yes" />
+        </RevelationCondition>
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test C?" />
+        <Variable name="Discomfort due to C" />
+      </Link>
+      <Link directed="true">
+        <Variable name="Do test C?" />
+        <Variable name="Cost of C" />
+      </Link>
+    </Links>
+    <Potentials>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.86 0.14</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Result of E" />
+          <Variable name="Do test E?" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.0 0.0 0.93 0.07 0.0 0.0 0.1 0.9</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Health state" />
+        <Variables>
+          <Variable name="Disease" />
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>10.0 1.2 9.9 4.0 9.3 6.5</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of E" />
+        <Variables>
+          <Variable name="Do test E?" />
+        </Variables>
+        <Values>0.0 150.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of therapy" />
+        <Variables>
+          <Variable name="Therapy" />
+        </Variables>
+        <Values>0.0 20000.0 70000.0</Values>
+      </Potential>
+      <Potential type="Table" role="utility">
+        <UtilityVariable name="Cost of C" />
+        <Variables>
+          <Variable name="Do test C?" />
+        </Variables>
+        <Values>0.0 18.0</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <Variables>
+          <Variable name="Result of C" />
+          <Variable name="Do test C?" />
+          <Variable name="Disease" />
+        </Variables>
+        <Values>0.0 0.0 0.91 0.09 0.0 0.0 0.22 0.78</Values>
+      </Potential>
+      <Potential type="Table" role="conditionalProbability">
+        <UtilityVariable name="Discomfort due to C" />
+        <Variables>
+          <Variable name="Do test C?" />
+        </Variables>
+        <Values>0.0 -0.001</Values>
+      </Potential>
+    </Potentials>
+  </ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>COST_EFFECTIVENESS</SelectedAnalysisType>
+      <Unicriterion>
+        <Unit>€</Unit>
+        <Scales>
+          <Scale Criterion="cost" Value="1.0" />
+          <Scale Criterion="effectiveness" Value="25000.0" />
+        </Scales>
+      </Unicriterion>
+      <CostEffectiveness>
+        <Scales>
+          <Scale Criterion="cost" Value="1.0" />
+          <Scale Criterion="effectiveness" Value="1.0" />
+        </Scales>
+        <CE_Criteria>
+          <CE_Criterion Criterion="cost" Value="Cost" />
+          <CE_Criterion Criterion="effectiveness" Value="Effectiveness" />
+        </CE_Criteria>
+      </CostEffectiveness>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>
