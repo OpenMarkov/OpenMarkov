@@ -100,8 +100,8 @@ public class TemporalEvolutionDialog extends OkCancelDialog {
         setMinimumSize(new Dimension(300, 300));
         this.setResizable(true);
         this.preResolutionEvidence = new EvidenceCase(preResolutionEvidence);
-        this.setTitle(stringDatabase.getString("TemporalEvolutionResultDialog.Title") + probNet
-                .getName());
+        this.setTitle(stringDatabase.getString("TemporalEvolutionResultDialog.Title") + " "
+                              + (selectedNode != null ? selectedNode.getVariable().getBaseName() : probNet.getName()));
         getComponentsPanel().setLayout(new BoxLayout(getComponentsPanel(), BoxLayout.PAGE_AXIS));
         getComponentsPanel().add(getSlicesPanel());
         getComponentsPanel().add(getScopeSelectorPanel());
