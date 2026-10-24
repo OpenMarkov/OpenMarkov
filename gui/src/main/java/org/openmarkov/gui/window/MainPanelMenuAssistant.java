@@ -143,6 +143,9 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         setOptionEnabled(INFERENCE_ACTION_COMMANDS, false);
         setOptionEnabled(ActionCommands.SELECT_ALL, false);
         sayWhyInferenceModeIsNotOffered();
+        // Every network opens in edition mode
+        mainPanel.getMainMenu().getSwitchWorkingMode().setText(
+                MenuLocalizer.getLabel(MenuItemNames.EDIT_SWITCH_TO_INFERENCE_MODE_MENUITEM));
         setOptionEnabled(ActionCommands.CHANGE_WORKING_MODE, false);
         setOptionEnabled(ActionCommands.CHANGE_TO_INFERENCE_MODE, false);
         setOptionEnabled(ActionCommands.CHANGE_TO_EDITION_MODE, false);
