@@ -271,7 +271,7 @@
         </Configuration>
         <Plugin>
             <NotAvailable value="The functionality you are trying to run is not available"/>
-            <Error value="An error ocurred while trying to process command:"/>
+            <Error value="An error occurred while trying to process command:"/>
         </Plugin>
         <Mnemonic value="t"/>
     </Tools>

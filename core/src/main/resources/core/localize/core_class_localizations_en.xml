@@ -226,8 +226,6 @@
                   value="The new evidence {newFinding} is not compatible with an old evidence: {oldFinding}"/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$FindingVariableIsMissingAState"
                   value="The variable {variable.getName} has no state {state}, so this finding cannot be translated."/>
-    <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$SamplesWeigthIsZero"
-                  value="Samples weigth is zero"/>
     <Localization class="org.openmarkov.core.exception.IntervalsAreNotEvenException"
                   value="The total number of subintervals or time horizon is not even."/>
     <Localization class="org.openmarkov.core.exception.IntervalsAreNotMultipleOf3Exception"
@@ -490,7 +488,7 @@
             class="org.openmarkov.core.exception.ConstraintViolatedException$OnlySelfLoopsWithEventAndChanceNodesException"
             value="Self loop can only be used if the node is event or chance, which is not applicable to {node}."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$SamplesWeightIsZero"
-                  value="Samples weigth is 0"/>
+                  value="Samples weight is 0"/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$VariableMustBeEvent"
                   value="Node for {variable} is not an Event node."/>
     <Localization class="org.openmarkov.core.exception.NotEvaluableNetworkException$UnsatisfiedConstraints"
