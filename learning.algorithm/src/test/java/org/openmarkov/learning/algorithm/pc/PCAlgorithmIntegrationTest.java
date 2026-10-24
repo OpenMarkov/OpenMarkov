@@ -98,7 +98,7 @@ public class PCAlgorithmIntegrationTest {
      * @throws Exception if the resource cannot be read or if any parsing problem occurs.
      */
 
-    static CaseDatabase loadCsvDatabase(String resourcePath, List<Variable> variables) throws Exception {
+    public static CaseDatabase loadCsvDatabase(String resourcePath, List<Variable> variables) throws Exception {
         InputStream is = PCAlgorithmIntegrationTest.class.getClassLoader().getResourceAsStream(resourcePath);
         assertNotNull(is, "Test resource not found: " + resourcePath);
 
