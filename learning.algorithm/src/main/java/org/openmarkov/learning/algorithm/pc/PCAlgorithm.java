@@ -7,7 +7,10 @@
 
 package org.openmarkov.learning.algorithm.pc;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.UnknownNullability;
+import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.base.PNEditListener;
 import org.openmarkov.core.action.core.COrientLinksEdit;
@@ -82,10 +85,18 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
      */
     CausalDirectionTester causalDirectionTester;
 
+    private static final Logger logger = LogManager.getLogger(PCAlgorithm.class);
+
     /**
      * Current algorithm phase
      */
     private Phase phase;
+
+    /** The phase whose edits the last search returned; it can be ahead of {@link #phase}. */
+    private Phase searchPhase;
+
+    /** The last orientation of a collider applied, whose own orientations are notified after it. */
+    private COrientLinksEdit lastColliderEdit;
 
     // Phase delegates
     private final SkeletonDiscovery skeleton;
@@ -118,6 +129,7 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
 
         cache = new HashMap<>();
         this.phase = Phase.INITIAL_PHASE;
+        this.searchPhase = Phase.INITIAL_PHASE;
 
         this.skeleton = new SkeletonDiscovery(this);
         this.colliders = new ColliderOrientation(this);
@@ -132,6 +144,7 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
     public void init(ModelNetUse modelNetUse) {
         super.init(modelNetUse);
         phase = Phase.INITIAL_PHASE;
+        searchPhase = Phase.INITIAL_PHASE;
         cache.clear();
         skeleton.resetState();
         resetHistory();
@@ -141,7 +154,8 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
 
     /**
      * Method that returns the best edit in each step of the algorithm or null
-     * if there are no more edits to consider.
+     * if there are no more edits to consider. When the current phase has none,
+     * it returns the best edit of the next phase without moving to it.
      *
      * @param onlyAllowedEdits the only allowed edits
      * @param onlyPositiveEdits the only positive edits
@@ -155,13 +169,17 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
     	resetHistory();
         skeleton.resetState();
 
-        return nextEdit(onlyAllowedEdits, onlyPositiveEdits);
+        Phase currentPhase = phase;
+        LearningEditProposal bestEditProposal = nextEdit(onlyAllowedEdits, onlyPositiveEdits);
+        searchPhase = phase;
+        phase = currentPhase;
+        return bestEditProposal;
     }
 
     /**
-     * Method that returns the next best edit of the current phase, or null
-     * if there are no more edits to consider in it (depending on the
-     * arguments it receives). It does not move the algorithm to the next phase.
+     * Method that returns the next best edit of the phase of the last search, or
+     * null if there are no more edits to consider in it (depending on the
+     * arguments it receives). It does not move the algorithm to another phase.
      *
      * @param onlyAllowedEdits  if true, only allowed edits are considered
      * @param onlyPositiveEdits if true, only positive edits are considered
@@ -172,12 +190,28 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
     		boolean onlyAllowedEdits,
     		boolean onlyPositiveEdits) {
         Phase currentPhase = phase;
+        phase = searchPhase;
         LearningEditProposal bestEditProposal = nextEdit(onlyAllowedEdits, onlyPositiveEdits);
-        if (phase != currentPhase) {
-            phase = currentPhase;
-            return null;
+        boolean movedOn = phase != searchPhase;
+        phase = currentPhase;
+        return movedOn ? null : bestEditProposal;
+    }
+
+    /** Applies the edits left in the current phase and moves on to the phase whose edits come next. */
+    @Override
+    public void runTillNextPhase() {
+        Phase currentPhase = phase;
+        LearningEditProposal bestEditProposal = getBestEdit(true, true);
+        while (bestEditProposal != null && searchPhase == currentPhase) {
+            PNEdit bestEdit = bestEditProposal.getEdit();
+            try {
+                bestEdit.executeEdit();
+            } catch (DoEditException exception) {
+                logger.debug("Edit not allowed by constraint, skipping: {}", bestEdit, exception);
+            }
+            bestEditProposal = getBestEdit(true, true);
         }
-        return bestEditProposal;
+        phase = searchPhase;
     }
 
     private LearningEditProposal nextEdit(boolean onlyAllowedEdits, boolean onlyPositiveEdits) {
@@ -291,7 +325,7 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
     // CRITICAL: CompoundEdit guard pattern.
     // When flattenEdit notifies sub-edits of a COrientLinksEdit, the order is:
     //   compound first, then sub-edits (OrientLinkEdits).
-    // The guards below (phase != HEAD_TO_HEAD / phase != INITIAL_PHASE) prevent
+    // The guards below (lastColliderEdit / phase != INITIAL_PHASE) prevent
     // sub-edit notifications from overriding the phase set by the compound handler.
 
     @Override public void afterEditExecutes(@UnknownNullability PNEdit edit) {
@@ -307,17 +341,16 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
             probNet.addLink(nodeX, nodeY, false);
             phase = Phase.INITIAL_PHASE;
             skeleton.resetState();
-        } else if (edit instanceof COrientLinksEdit) {
+        } else if (edit instanceof COrientLinksEdit colliderEdit) {
             // After applying a v-structure orientation, the search goes on in HEAD_TO_HEAD_ORIENTATION.
             phase = Phase.HEAD_TO_HEAD_ORIENTATION;
+            lastColliderEdit = colliderEdit;
         } else if (edit instanceof OrientLinkEdit) {
             // After applying a remaining-link orientation, the search goes on in REMAINING_LINKS_ORIENTATION.
-            //
-            // Guard: when flattenEdit notifies sub-edits of a COrientLinksEdit, the compound
-            // handler above fires first and sets HEAD_TO_HEAD_ORIENTATION.  The sub-edits
-            // (OrientLinkEdits) must NOT override that — they should only act on standalone
-            // orient edits from the remaining-links phase.
-            if (phase != Phase.HEAD_TO_HEAD_ORIENTATION) {
+            // The orientations of a collider are notified after the collider itself, and keep its phase.
+            boolean partOfTheLastCollider = lastColliderEdit != null
+                    && lastColliderEdit.getEdits().anyMatch(colliderPart -> colliderPart == edit);
+            if (!partOfTheLastCollider) {
                 phase = Phase.REMAINING_LINKS_ORIENTATION;
             }
         }
