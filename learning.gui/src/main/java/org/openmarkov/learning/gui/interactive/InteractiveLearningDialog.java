@@ -343,7 +343,7 @@ public class InteractiveLearningDialog extends JDialog
     private void btnRunActionPerformed(ActionEvent evt) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, CannotNormalizePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {//GEN-FIRST:event_btnRunActionPerformed
         try {
             if (!learningFinished) {
-                learningManager.learn();
+                learningManager.learnFromTheCurrentState();
                 this.setVisible(false);
             }
         } finally {

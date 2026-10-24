@@ -43,7 +43,7 @@ class EachLinkFromTheClassIsLearntOnceTest {
 
     private static final String CLASS = "C";
 
-    private static LearningAlgorithm algorithm(String name, ProbNet net, CaseDatabase database) {
+    static LearningAlgorithm algorithm(String name, ProbNet net, CaseDatabase database) {
         MetricManager metrics = new MetricManager();
         return switch (name) {
             case "naive Bayes" -> new NaiveBayesAlgorithm(net, database, 0.5);

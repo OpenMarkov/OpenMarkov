@@ -109,6 +109,13 @@ public class LearningManager {
     }
     
     /**
+     * Goes on learning from the network as it is, as the «Finish» button of the interactive learning does.
+     */
+    public void learnFromTheCurrentState() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, CannotNormalizePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+        learningAlgorithm.runFromTheCurrentState();
+    }
+    
+    /**
      * Returns learned net
      *
      * @return {@code ProbNet} containing learned net

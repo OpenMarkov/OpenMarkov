@@ -87,6 +87,14 @@ public abstract class LearningAlgorithm {
      */
     public void run(ModelNetUse modelNetUse) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, CannotNormalizePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
         init(modelNetUse);
+        runFromTheCurrentState();
+    }
+    
+    /**
+     * Goes on learning from the network as it is, without initializing the algorithm again, and then learns the
+     * parameters.
+     */
+    public void runFromTheCurrentState() throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, CannotNormalizePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
         /* Main loop */
         LearningEditProposal bestEdition = getBestEdit(true, true);
         while (bestEdition != null) {
