@@ -248,7 +248,7 @@ Los \hyperref[err:310]{errores~310} a \hyperref[err:313]{313} se encontraron al 
 Los \hyperref[err:318]{errores~318} y \hyperref[err:319]{319} salieron al corregir el \hyperref[err:219]{219}, mirando qué otras cosas de la ventana «Data preprocessing» no siguen a las opciones elegidas al cargar una base o al pulsar «Reset values». Los dos se han comprobado construyendo el panel sin ventana y leyendo la petición que manda a preprocesar. El \hyperref[err:320]{error~320} salió al corregir lo que quedaba del \hyperref[err:71]{71}: con la red desplegada por fin calculable, se comparó con el modelo de Markov en los 55 modelos de Markov distintos del equipo. El \hyperref[err:321]{error~321} salió al comprobar que la reorganización de las clases del árbol de decisión (\texttt{de0543f} y \texttt{5d6de9a}) no cambia nada de lo que dan los árboles, sus exportaciones a Amua y a Graphviz incluidas: con una de las redes de ejemplo de Francisco Javier Díez, la exportación a Amua caía igual antes y después, y cae también con el código anterior a esos cambios (\texttt{21250b8}). Se ha comprobado ejecutando el exportador sin ventana. El \hyperref[err:322]{error~322} salió al preparar el arreglo del 321, buscando qué más lee la partición de probabilidad cero sin comprobarlo; se añade ya corregido, por el mismo commit que el 321.
 
 \paragraph{Errores añadidos el 24 de octubre}
-El \hyperref[err:323]{error~323} salió al corregir el \hyperref[err:134]{134}, comparando el aprendizaje automático del superpadre antes y después del arreglo. Se ha comprobado sin ventana, repitiendo las llamadas de la ventana de aprendizaje con los seis clasificadores, y la fila \emph{Comprobado} de su ficha dice cómo.
+El \hyperref[err:323]{error~323} salió al corregir el \hyperref[err:134]{134}, comparando el aprendizaje automático del superpadre antes y después del arreglo. Se ha comprobado sin ventana, repitiendo las llamadas de la ventana de aprendizaje con los seis clasificadores, y la fila \emph{Comprobado} de su ficha dice cómo. Los \hyperref[err:324]{errores~324} a \hyperref[err:328]{328} se encontraron al llevar a la versión en C++ y Qt los arreglos que esta lista recibió del 21 al 24 de octubre, de \texttt{c5bf2a7} a \texttt{48432c1}. Cada uno se ha comprobado con el código de hoy ---el último commit con código, \texttt{ddb8ed2}, no toca ninguna de las clases que nombran---, y la fila \emph{Comprobado} de su ficha dice cómo: todos ejecutándolos sin ventana, sobre las clases del programa; el del PC, repitiendo paso a paso las tablas de su ventana. Todos salieron de los arreglos de esos días: el \hyperref[err:324]{324}, al seguir la evidencia que recibe el despliegue que arregló el del \hyperref[err:71]{71}; los \hyperref[err:325]{325} y \hyperref[err:326]{326}, al leer entera la caja de un nodo para el del \hyperref[err:242]{242}; el \hyperref[err:327]{327}, de lo que cambió el del \hyperref[err:251]{251}; y el \hyperref[err:328]{328}, al medir lo que niega el diálogo del análisis de sensibilidad tras el del \hyperref[err:92]{92}. No se ha añadido, por la decisión de equipo sobre los textos, que los dos textos nuevos del árbol de decisión (\texttt{Show\allowbreak{}CEP.\allowbreak{}Impossible\allowbreak{}Scenario} y \texttt{Decision\allowbreak{}Tree\allowbreak{}Node.\allowbreak{}Impossible\allowbreak{}Scenario}) solo estén en \texttt{Messages\_\allowbreak{}en.\allowbreak{}xml}.
 
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
@@ -305,9 +305,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{322 errores}; 178 de ellos son defectos nuevos: 85 encontrados al
-comprobar o corregir los demás, 79 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{48} necesitan antes una decisión del equipo. Por esfuerzo estimado: 281 pequeños, 41 medios y 0 grandes.
-De los 322, 257 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{327 errores}; 183 de ellos son defectos nuevos: 85 encontrados al
+comprobar o corregir los demás, 84 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{48} necesitan antes una decisión del equipo. Por esfuerzo estimado: 286 pequeños, 41 medios y 0 grandes.
+De los 327, 257 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -322,13 +322,13 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 24 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 24 \\
-\ref{sec:temporal}. Modelos temporales y evolución temporal & 12 \\
-\ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 28 \\
+\ref{sec:temporal}. Modelos temporales y evolución temporal & 13 \\
+\ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 29 \\
 \ref{sec:des}. Simulación de sucesos discretos & 20 \\
 \ref{sec:ficheros}. Abrir y guardar redes & 15 \\
 \ref{sec:casos}. Bases de casos & 13 \\
-\ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 35 \\
-\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 39 \\
+\ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 36 \\
+\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 41 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 19 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 16 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
@@ -496,6 +496,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:261]{261} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «Same as previous» en el primer ciclo de una variable pasa sin aviso y acaba en un error confuso & \texttt{core} & S \hfill No\\
 \hyperref[err:297]{297} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una tabla de fórmulas que nombra dos ciclos de una variable los confunde al pasar al ciclo siguiente & \texttt{core} & S \hfill No\\
 \hyperref[err:320]{320} & La red que da «Expand Network» no calcula lo mismo que el modelo de Markov & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:324]{324} & «Expand Network» no ve los hallazgos puestos en el modelo & \texttt{core}, \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:coste}.\ Coste-efectividad y análisis de sensibilidad}}\\
 \hyperref[err:74]{74} & \textcolor{corregidoverde}{\textbf{Corregido}} · El jar publicado mezcla dos JFreeChart y muchas gráficas no se abren & \texttt{full} & S \hfill No\\
 \hyperref[err:75]{75} & \textcolor{corregidoverde}{\textbf{Corregido}} · La araña de coste-efectividad reescribe la red abierta con las medias & \texttt{core} & M \hfill No\\
@@ -525,6 +526,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:308]{308} & Dos parámetros inciertos con el mismo nombre: el análisis de sensibilidad solo ve uno, y el tornado falla & \texttt{sensitivity\allowbreak{}Analysis}, \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:309]{309} & \textcolor{corregidoverde}{\textbf{Corregido}} · El análisis de sensibilidad determinista toma el número de una Dirichlet por una probabilidad & \texttt{core} & S \hfill No\\
 \hyperref[err:317]{317} & Con la razón o el porcentaje de la probabilidad, un parámetro de valor de referencia 0 dejaría la araña sin eje & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill Sí\\
+\hyperref[err:328]{328} & El mapa de dos parámetros, en una red sin ninguno con nombre, pide «al menos 1» & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:des}.\ Simulación de sucesos discretos}}\\
 \hyperref[err:95]{95} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una utilidad acumulativa vale cero hasta el primer suceso que la alcanza & \texttt{gui}, \texttt{inference.\allowbreak{}des} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:96]{96} & \textcolor{corregidoverde}{\textbf{Corregido}} · La simulación se cae si un nodo espera a un padre de un suceso no ocurrido & \texttt{gui} & S \hfill No\\
@@ -612,6 +614,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:318]{318} & \textcolor{corregidoverde}{\textbf{Corregido}} · Al cargar otra base en «Data preprocessing», las opciones generales se ven pero no se aplican & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \hyperref[err:319]{319} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Reset values» de «Data preprocessing» deja encendido «Select/unselect all variables» & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \hyperref[err:323]{323} & El aprendizaje automático de cinco clasificadores deja repetido cada enlace desde la clase & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
+\hyperref[err:327]{327} & Tras aplicar a mano los borrados del PC, «Complete phase» no hace nada la primera vez & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:editor}.\ Interfaz: editor de red y paneles de las relaciones}}\\
 \hyperref[err:150]{150} & \textcolor{corregidoverde}{\textbf{Corregido}} · Volver a elegir la clase de relación que ya tiene un nodo borra sus números & \texttt{gui} & S \hfill No\\
 \hyperref[err:151]{151} & \textcolor{corregidoverde}{\textbf{Corregido}} · En una regresión, lo escrito como Cholesky se pierde al guardar la red & \texttt{gui} & S \hfill No\\
@@ -652,6 +655,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:303]{303} & \textcolor{corregidoverde}{\textbf{Corregido}} · Escape no acaba la banda ni el arrastre: si el ratón sigue, vuelven a empezar & \texttt{gui} & S \hfill No\\
 \hyperref[err:313]{313} & \textcolor{corregidoverde}{\textbf{Corregido}} · Con mayúsculas o Control, arrastrar desde el lienzo vacío mueve los nodos señalados & \texttt{gui} & S \hfill No\\
 \hyperref[err:315]{315} & \textcolor{corregidoverde}{\textbf{Corregido}} · Abrir la pestaña Domain de un nodo de utilidad deja la red modificada sin haber cambiado nada & \texttt{gui} & S \hfill No\\
+\hyperref[err:325]{325} & La barra de una utilidad se mide con su rango redondeado a dos decimales, y en un rango estrecho se sale de la caja & \texttt{gui} & S \hfill No\\
+\hyperref[err:326]{326} & El número de un nodo abierto se redondea dos veces, y a veces sale con la última cifra cambiada & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:menus}.\ Interfaz: menús, diálogos y herramientas}}\\
 \hyperref[err:171]{171} & \textcolor{asignadoazul}{\textbf{Jorge Rico}} · Abrir una red desde internet apaga «Guardar» para todas las redes & \texttt{gui} & M \hfill No\\
 \hyperref[err:172]{172} & «Edits history» deja un núcleo al cien por cien y puede colgar el programa & \texttt{full} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -8359,6 +8364,35 @@ Decidir primero para qué es la red desplegada. Si es para calcular con ella lo 
 
 Prueba: para los modelos de Markov del repositorio, la evaluación y el coste-efectividad de la red desplegada coinciden con los del modelo.
 
+\setcounter{subsection}{323}
+\subsection[«Expand Network» no ve los hallazgos puestos en el modelo]{«Expand Network» despliega una copia del modelo de Markov y busca en ella los hallazgos del modelo por el objeto de su variable, así que no encuentra ninguno: la red se despliega como si no se hubiera visto nada, y en un modelo cuya edad de partida es uniforme se niega pidiendo que se observe la edad que ya está observada}\label{err:324}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core, gui
+\fichakey{Paquete}org.openmarkov.core.model.network; org.openmarkov.core.inference.tasks; org.openmarkov.gui.window
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/TemporalNetOperations.java:468-487} \newline \path{core/src/main/java/org/openmarkov/core/inference/tasks/TaskUtilities.java:47-49, 88-90} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:440} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:174-198}
+\fichakey{Comprobado}Ejecutándolo, sin ventana: \texttt{Temporal\allowbreak{}Net\allowbreak{}Operations.\allowbreak{}expand\allowbreak{}Network(\allowbreak{}red,\allowbreak{}\ evidencia,\allowbreak{}\ nombre)}, que es la llamada de la ventana, con el generador \texttt{Expanded\allowbreak{}Networks.\allowbreak{}java} de la versión en C++ y Qt. Que la ventana nueva recibe después la evidencia del modelo, leído en el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:320]{error~320}, \hyperref[err:71]{error~71}, \hyperref[err:229]{error~229}
+\end{ficha}
+\paragraph{Qué pasa}
+«Expand Network», del menú contextual de un modelo de Markov (\texttt{Inference\allowbreak{}Handler.\allowbreak{}expand\allowbreak{}Network}, líneas 174-198), llama a \texttt{Temporal\allowbreak{}Net\allowbreak{}Operations.\allowbreak{}expand\allowbreak{}Network(\allowbreak{}prob\allowbreak{}Net,\allowbreak{}\ pre\allowbreak{}Resolution\allowbreak{}Evidence,\allowbreak{}\ network\allowbreak{}Name)} (líneas 468-487) con la evidencia que se ha puesto en el modelo en modo de edición. Esa función despliega \texttt{prob\allowbreak{}Net.\allowbreak{}deep\allowbreak{}Copy(\allowbreak{})} (línea 474), cuyas variables son otros objetos, mientras que la evidencia que recibe está sobre las variables del modelo. Los dos pasos que la usan, \texttt{Task\allowbreak{}Utilities.\allowbreak{}extend\allowbreak{}Pre\allowbreak{}Resolution\allowbreak{}Evidence} (línea 478) y \texttt{Task\allowbreak{}Utilities.\allowbreak{}discretize\allowbreak{}Non\allowbreak{}Observed\allowbreak{}Numeric\allowbreak{}Variables} (línea 484, que llama a \texttt{Prob\allowbreak{}Net\allowbreak{}Operations.\allowbreak{}convert\allowbreak{}Numerical\allowbreak{}Variables\allowbreak{}To\allowbreak{}FS}), buscan cada hallazgo por el objeto de su variable y no encuentran ninguno: la red se despliega como si no se hubiera visto nada.
+
+En un modelo cuya edad de partida es uniforme, como los del \hyperref[err:229]{error~229}, eso acaba en la negativa que pide justo ese hallazgo. Medido el 24-10-2026 con el código de hoy sobre \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-CHD-Walker.\allowbreak{}pgmx}, a dos ciclos, con el hallazgo Age {[}0{]} = 50 puesto en el modelo:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+red           MID-CHD-Walker.pgmx, horizonte 2, hallazgo Age [0] = 50
+desplegada    no: NonProjectablePotentialException$NumericVariableNeedsAFinding,
+              variable «Age [0]»
+\end{Verbatim}
+
+El texto de esa negativa es «The numeric variable Age {[}0{]} has a uniform distribution, so it has no value to compute with. Set a finding on it in edition mode and try again.», con el hallazgo ya puesto; y la variable que lleva la excepción es la de la copia, no la del modelo (medido aparte el 21-10-2026 por la versión en C++ y Qt, con el jar del 19-10-2026 y \texttt{GLMPotential} de \texttt{88ed0dd} delante, que daba la misma negativa). Con un hallazgo sobre una variable numérica que no sea uniforme, la red se desplegaría dándole estados como si no se hubiera observado; y la ventana nueva recibe después la evidencia del modelo (\texttt{set\allowbreak{}Evidence}, líneas 194-196), sobre variables que no son las suyas. Esto último está leído, no medido.
+\paragraph{Cómo arreglarlo}
+Pasar la evidencia a las variables de la copia antes de usarla: hacer, sobre la red desplegada, un caso de evidencia con los mismos hallazgos, buscando cada variable por su nombre, y dárselo a los dos pasos y a la ventana nueva. Conviene hacerlo en la misma función que use el arreglo del \hyperref[err:320]{error~320}, si se decide que la red desplegada haga los mismos pasos que los análisis.
+
+Prueba: desplegar \texttt{MID-CHD-Walker.\allowbreak{}pgmx} a dos ciclos con Age {[}0{]} = 50 puesto en el modelo da una red, en la que la edad del ciclo 0 está observada en 50; y la evidencia que recibe la ventana nueva es de variables de esa red.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Coste-efectividad y análisis de sensibilidad}\label{sec:coste}
 
@@ -10218,6 +10252,33 @@ Con el tanto por ciento sobre el valor de referencia no pasa: el eje es el que e
 Hay que decidir qué enseñar: dejar ese parámetro fuera de la araña con un aviso, medir su variación en valor absoluto en vez de en proporción, o no ofrecer esas dos variaciones si algún parámetro elegido tiene valor de referencia 0. Sea cual sea, la araña no debería fijar el eje con un número que no sea finito.
 
 Prueba: con un parámetro incierto de media 0 y otro normal, la araña con la razón 1,25 y con el 90 \% de la probabilidad se abre, y el parámetro de media 0 sale como se decida.
+
+\setcounter{subsection}{327}
+\subsection[El mapa de dos parámetros, en una red sin ninguno con nombre, pide «al menos 1»]{En una red sin parámetros inciertos con nombre, el diálogo del análisis de sensibilidad niega el mapa de dos parámetros con el mismo aviso que los análisis de uno, «There is 0 uncertain parameters, but there should be at least 1.»: el aviso que pide dos solo sale cuando ya hay uno. La frase, además, va en singular}\label{err:328}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}sensitivityAnalysis
+\fichakey{Paquete}org.openmarkov.sensitivityanalysis.dialog
+\fichakey{Ficheros}\path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/SensitivityAnalysisDialog.java:175-189} \newline \path{sensitivityAnalysis/src/main/resources/sensitivityanalysis/localize/sensitivityanalysis_class_localizations_en.xml:3}
+\fichakey{Comprobado}Ejecutándolo, sin ventana: las comprobaciones de \texttt{get\allowbreak{}Content\allowbreak{}Frame}, en su orden, sobre \texttt{BN-asia.\allowbreak{}pgmx} y \texttt{DAN-dating.\allowbreak{}pgmx}, con el generador \texttt{Sensitivity\allowbreak{}Dialogs.\allowbreak{}java} de la versión en C++ y Qt
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:92]{error~92}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Sensitivity\allowbreak{}Analysis\allowbreak{}Dialog.\allowbreak{}get\allowbreak{}Content\allowbreak{}Frame} mira primero si no hay ningún parámetro incierto con nombre, y lo dice con \texttt{Few\allowbreak{}Uncertain\allowbreak{}Parameters(\allowbreak{}1,\allowbreak{}\ …)} (líneas 175-181); solo después, si el análisis mueve dos (\texttt{is\allowbreak{}Biaxial}), mira si hay menos de dos (líneas 182-188). Con ninguno, el mapa, que mueve dos, dice lo mismo que el tornado o la gráfica de uno. Es verdad, pero se queda corto: con uno tampoco se podría, y el aviso no lo dice. Medido el 24-10-2026 con el código de hoy, con \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}bn/\allowbreak{}BN-asia.\allowbreak{}pgmx} y \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}dan/\allowbreak{}DAN-dating.\allowbreak{}pgmx}, que dan lo mismo:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+TORNADO_SPIDER   negado: There is 0 uncertain parameters, but there should be at least 1.
+PLOT             negado: lo mismo
+MAP              negado: lo mismo
+\end{Verbatim}
+
+De paso, la frase (\texttt{sensitivityanalysis\_\allowbreak{}class\_\allowbreak{}localizations\_\allowbreak{}en.\allowbreak{}xml}, línea 3) no concuerda en número: con 0 o con más de uno, «There are … parameters».
+\paragraph{Cómo arreglarlo}
+Una sola comprobación con el número que pide el análisis elegido, \texttt{Few\allowbreak{}Uncertain\allowbreak{}Parameters(\allowbreak{}is\allowbreak{}Biaxial\ ?\ 2\ :\ 1,\allowbreak{}\ …)}; y un texto que valga para cualquier número, por ejemplo «The network has \{actual\} uncertain parameters, but this analysis needs at least \{required\}.».
+
+Prueba: en \texttt{BN-asia.\allowbreak{}pgmx}, el mapa se niega pidiendo al menos 2, y el tornado y la gráfica, al menos 1.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Simulación de sucesos discretos}\label{sec:des}
@@ -15636,6 +15697,38 @@ Que \texttt{set\allowbreak{}Relations\allowbreak{}For\allowbreak{}Root\allowbrea
 
 Prueba: aprender con cada uno de los seis clasificadores como lo hace la ventana y comprobar que de la clase sale un solo enlace a cada característica.
 
+\setcounter{subsection}{326}
+\subsection[Tras aplicar a mano los borrados del PC, «Complete phase» no hace nada la primera vez]{En el aprendizaje interactivo con el PC, cuando se han aplicado uno a uno todos los borrados de enlaces la tabla ofrece ya los colisionadores, pero el algoritmo sigue en la fase de borrar: la primera pulsación de «Complete phase» completa esa fase, en la que no queda nada, y no cambia ni la red ni la tabla; hace falta una segunda}\label{err:327}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}learning.algorithm
+\fichakey{Paquete}org.openmarkov.learning.algorithm.pc
+\fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/pc/PCAlgorithm.java:165-176, 202-215}
+\fichakey{Comprobado}Ejecutándolo, sin ventana: las búsquedas y las ediciones de la ventana del PC interactivo, repetidas paso a paso con el generador \texttt{Pc\allowbreak{}Interactive\allowbreak{}Tables.\allowbreak{}java} de la versión en C++ y Qt, sobre \texttt{BN-asia10k.\allowbreak{}csv}
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:251]{error~251}, \hyperref[err:140]{error~140}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{dfa962d} (\hyperref[err:251]{error~251}), mirar la tabla ya no cambia la fase: cuando la fase en curso no tiene propuestas, \texttt{get\allowbreak{}Best\allowbreak{}Edit} (líneas 165-176) devuelve la mejor de la siguiente sin pasar a ella. Así, al aplicar con «Apply edit» el último borrado, la tabla pasa a ofrecer los colisionadores ---las parejas de flechas que se encuentran en un nodo---, pero el algoritmo sigue en la fase de quitar enlaces. Si entonces se pulsa «Complete phase», \texttt{run\allowbreak{}Till\allowbreak{}Next\allowbreak{}Phase} (líneas 202-215) completa la fase de quitar enlaces, en la que no queda nada, y pasa a la siguiente: la red no cambia, y la tabla sale igual que antes de pulsar. Hay que pulsarlo otra vez para que oriente los colisionadores. Antes del arreglo, la primera pulsación los orientaba, porque la fase ya había avanzado al mirar.
+
+Medido el 24-10-2026 con el código de hoy sobre \texttt{learning.\allowbreak{}algorithm/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}network/\allowbreak{}BN-asia10k.\allowbreak{}csv}, con el PC construido como en sus pruebas (grafo completo no dirigido, suavizado 0,5, entropía cruzada, significación 0,05), aplicando la primera fila mientras es un borrado y pulsando después «Complete phase» hasta vaciar la tabla:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+tras el último borrado    fase 0; la tabla ofrece los dos colisionadores
+«Complete phase», 1.ª     fase 1; la red no cambia; la tabla ofrece los mismos dos
+«Complete phase», 2.ª     fase 2; orienta los dos; la tabla ofrece cinco orientaciones
+«Complete phase», 3.ª     fase 3; orienta lo que queda; la tabla, vacía
+\end{Verbatim}
+
+Con el PC de antes de \texttt{dfa962d}, dos pulsaciones bastaban. La versión en C++ y Qt lo midió también el 24-10-2026 con las demás bases de las pruebas del PC: en todas aquellas en que el recorrido llega a orientar algo ---todas menos \texttt{One\allowbreak{}Node-1000.\allowbreak{}csv}, que no tiene enlaces, y \texttt{alarm500.\allowbreak{}csv}, en la que trescientos pasos no acaban los borrados---, hace falta una pulsación más que antes. Pasa lo mismo nada más abrir la ventana cuando no hay ningún enlace que quitar (\texttt{Two\allowbreak{}Nodes\allowbreak{}Ato\allowbreak{}B-1000.\allowbreak{}csv}): la tabla ofrece ya las dos orientaciones del único enlace y la primera pulsación no hace nada.
+
+La ventana no enseña en qué fase está el algoritmo, así que lo único que ve el usuario es un botón que no hace nada.
+\paragraph{Cómo arreglarlo}
+Que «Complete phase» complete la fase cuyas propuestas enseña la tabla, que es la de la última búsqueda (\texttt{search\allowbreak{}Phase}) cuando va por delante de la fase en curso: por ejemplo, que \texttt{run\allowbreak{}Till\allowbreak{}Next\allowbreak{}Phase} pase primero a esa fase si la suya no tiene nada que hacer.
+
+Prueba: con \texttt{BN-asia10k.\allowbreak{}csv}, tras aplicar a mano todos los borrados, una sola pulsación de «Complete phase» orienta los dos colisionadores.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: editor de red y paneles de las relaciones}\label{sec:editor}
 
@@ -17863,6 +17956,66 @@ Viene de antes del repositorio actual: la línea que escribe la precisión en el
 Que \texttt{initialize} escriba la precisión en el campo con el panel marcado como cargando datos (\texttt{set\allowbreak{}Uploading\allowbreak{}Data(\allowbreak{}true)} y después \texttt{false}), como hace \texttt{set\allowbreak{}Fields\allowbreak{}From\allowbreak{}Properties}, y que \texttt{property\allowbreak{}Change} no haga nada mientras lo esté; o que no la escriba, porque el campo no se ve y el selector ya enseña la precisión desde el \hyperref[err:263]{error~263}. De paso, que el oyente no ejecute un \texttt{Precision\allowbreak{}Edit} cuando la precisión no cambia.
 
 Prueba: construir la pestaña sobre una utilidad, con «deshacer» activado, y comprobar que no se ha hecho ninguna edición y que la red no está modificada.
+
+\setcounter{subsection}{324}
+\subsection[La barra de una utilidad se mide con su rango redondeado a dos decimales, y en un rango estrecho se sale de la caja]{En modo inferencia, la barra de un nodo de utilidad se mide con los extremos de su rango redondeados a dos decimales, que la caja guarda para escribirlos debajo: en un rango de centésimas la barra dice otra cosa que el número de al lado, y puede salirse de su marco y de la caja}\label{err:325}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.graphic
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/graphic/NumericVariableBox.java:101-104, 120-123} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/VisualState.java:343-352}
+\fichakey{Comprobado}Ejecutándolo, sin ventana: la caja de una utilidad construida sobre una red hecha en código, los extremos que guarda y la cuenta de \texttt{Visual\allowbreak{}State.\allowbreak{}paint}. Lo que se pinta lo midió la versión en C++ y Qt el 21-10-2026, pintando la caja en una imagen
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:326]{error~326}, \hyperref[err:242]{error~242}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Numeric\allowbreak{}Variable\allowbreak{}Box.\allowbreak{}set\allowbreak{}Min\allowbreak{}Value} y \texttt{set\allowbreak{}Max\allowbreak{}Value} (líneas 101-104 y 120-123) guardan los extremos del rango de la utilidad redondeados a dos decimales, \texttt{Math.\allowbreak{}rint(\allowbreak{}x\ *\ 100)\ /\allowbreak{}\ 100} ---«currently formatted with 2 decimals», dice su comentario---. El redondeo sirve para escribir los extremos debajo de la barra, en la regla de la caja; pero \texttt{Visual\allowbreak{}State.\allowbreak{}paint} (líneas 343-352) mide también la barra con ellos: (valor − mínimo) / (máximo − mínimo) por lo que mide la barra entera, sin tope. En un rango estrecho eso cambia mucho lo que mide. Medido el 24-10-2026 con el código de hoy, construyendo la caja de una utilidad y leyendo los extremos que guarda; el largo, con la cuenta de \texttt{paint}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+rango [0, 0.0149]      guardado [0, 0.01]   valor 0.0149   barra: 149 % de su largo
+rango [0, 0.0149]      guardado [0, 0.01]   valor 0.0074   74 %, y no el 50 %
+rango [0, 0.104]       guardado [0, 0.1]    valor 0.104    104 %
+rango [0, 1.004]       guardado [0, 1]      valor 1.004    100,4 %
+rango [0.001, 0.004]   guardado [0, 0]      valor 0.003    infinito: no se pinta
+\end{Verbatim}
+
+Pintada en una imagen (21-10-2026, la caja del jar del 19-10-2026 y la de \texttt{9d2b71e} dan lo mismo), con el marco de la barra acabando en el píxel 150 y la caja en el 198, la barra del primer caso va de 29 a 208, fuera de la caja, por debajo del número; la del segundo, de 29 a 117. Con un rango de unidades o más no se nota; con uno de centésimas, la barra dice otra cosa que el número de al lado. Un rango así lo tiene, por ejemplo, una utilidad que mide una fracción pequeña por ciclo.
+\paragraph{Cómo arreglarlo}
+Guardar los extremos tal como son y redondearlos solo al escribirlos en la regla; y, por si el valor cae fuera del rango, que el largo de la barra no pase de 0 ni del largo entero.
+
+Prueba: la caja de una utilidad de rango {[}0, 0,0149{]} con el valor 0,0074 pinta la mitad de la barra, y con 0,0149, la barra entera, sin pasar de su marco.
+
+\setcounter{subsection}{325}
+\subsection[El número de un nodo abierto se redondea dos veces, y a veces sale con la última cifra cambiada]{En modo inferencia, cada número de la caja de un nodo se redondea a cuatro decimales al guardarlo y otra vez al escribirlo; el primer redondeo deja a mitad un valor que no lo estaba, y el número sale con la cuarta decimal cambiada en uno: 0,12345 se escribe 0.1234, y 0,00025, 0.0002}\label{err:326}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.graphic
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/graphic/VisualState.java:41-42, 97-99, 204-209}
+\fichakey{Comprobado}Ejecutándolo, sin ventana: \texttt{Visual\allowbreak{}State.\allowbreak{}set\allowbreak{}State\allowbreak{}Value} y \texttt{format\allowbreak{}Value} sobre la caja de una utilidad construida en código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:325]{error~325}, \hyperref[err:242]{error~242}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Visual\allowbreak{}State.\allowbreak{}set\allowbreak{}State\allowbreak{}Value} (líneas 204-209) guarda cada valor con \texttt{Math.\allowbreak{}rint(\allowbreak{}value\ *\ Math.\allowbreak{}pow(\allowbreak{}10,\allowbreak{}\ 4))\ /\allowbreak{}\ Math.\allowbreak{}pow(\allowbreak{}10,\allowbreak{}\ 4)}, y \texttt{format\allowbreak{}Value} (líneas 97-99) lo escribe con \texttt{Decimal\allowbreak{}Format(\allowbreak{}"0.\allowbreak{}0000")} (líneas 41-42). \texttt{Decimal\allowbreak{}Format} redondea al par mirando el valor exacto del \texttt{double}, y con eso bastaría. Pero le llega el número ya redondeado por \texttt{Math.\allowbreak{}rint}, que redondea al par el producto por 10 000, y ese producto puede salir justo a mitad aunque el \texttt{double} no lo esté: 0.12345 es 0,12345000000000000417…, un poco más de la mitad, pero 0.12345 · 10 000 da 1234,5. Medido el 24-10-2026 con el código de hoy:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+valor     guardado   escrito    sin el primer redondeo   el double
+0.00025   0.0002     «0.0002»   «0.0003»                 0.00025000000000000000520
+0.00035   0.0004     «0.0004»   «0.0003»                 0.00034999999999999999644
+0.12345   0.1234     «0.1234»   «0.1235»                 0.12345000000000000417
+0.12355   0.1236     «0.1236»   «0.1235»                 0.12354999999999999316
+0.00005   0.0        «0.0000»   «0.0001»                 0.000050000000000000002396
+0.33335   0.3334     «0.3334»   «0.3333»                 0.33334999999999997966
+\end{Verbatim}
+
+Es una cifra en la cuarta decimal, y solo con valores que caen justo a mitad de la quinta, que en una probabilidad calculada son raros y en una escrita a mano no tanto. Desde \texttt{9d2b71e} (\hyperref[err:242]{error~242}), el ancho de la columna del número sale también del valor guardado, como la barra.
+\paragraph{Cómo arreglarlo}
+Guardar el valor tal cual y redondearlo solo al escribirlo, con \texttt{format\allowbreak{}Value}, que ya redondea bien; la columna del número se mide con lo que se escribe, y la barra, con el valor.
+
+Prueba: 0,12345 se escribe «0.1235», 0,00025 «0.0003» y 0,33335 «0.3333».
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: menús, diálogos y herramientas}\label{sec:menus}
@@ -20511,6 +20664,11 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:321]{Error 321} & hallazgo nuevo, visto al reorganizar las clases del árbol de decisión (\texttt{de0543f} y \texttt{5d6de9a}) \\
 \hyperref[err:322]{Error 322} & hallazgo nuevo, visto al preparar el arreglo del \hyperref[err:321]{error~321} \\
 \hyperref[err:323]{Error 323} & hallazgo nuevo, visto al corregir el \hyperref[err:134]{error~134} \\
+\hyperref[err:324]{Error 324} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 21 al 24 de octubre \\
+\hyperref[err:325]{Error 325} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 21 al 24 de octubre \\
+\hyperref[err:326]{Error 326} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 21 al 24 de octubre \\
+\hyperref[err:327]{Error 327} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 21 al 24 de octubre \\
+\hyperref[err:328]{Error 328} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 21 al 24 de octubre \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
