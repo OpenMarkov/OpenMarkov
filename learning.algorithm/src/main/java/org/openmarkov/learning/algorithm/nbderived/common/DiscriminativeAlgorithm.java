@@ -106,11 +106,11 @@ public abstract class DiscriminativeAlgorithm extends ScoreAndSearchAlgorithm im
 
 
     /**
-     * Sets the standard NB net given a root node
+     * Sets the standard NB net given a root node, adding the links from it that the network does not have yet
      */
     @Override public void setRelationsForRootVariable() {
         Node root = this.getRootNode();
-        this.getNonRootNodes().forEach(node->{
+        this.getNonRootNodes().stream().filter(node -> !node.getParents().contains(root)).forEach(node->{
             probNet.addLink(root, node, true);
             //markEditAsConsidered(new AddLinkEdit(probNet, root.getVariable(), node.getVariable(), true));
         });
