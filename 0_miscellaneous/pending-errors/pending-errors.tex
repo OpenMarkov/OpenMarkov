@@ -247,6 +247,9 @@ Los \hyperref[err:310]{errores~310} a \hyperref[err:313]{313} se encontraron al 
 \paragraph{Errores añadidos el 21 de octubre}
 Los \hyperref[err:318]{errores~318} y \hyperref[err:319]{319} salieron al corregir el \hyperref[err:219]{219}, mirando qué otras cosas de la ventana «Data preprocessing» no siguen a las opciones elegidas al cargar una base o al pulsar «Reset values». Los dos se han comprobado construyendo el panel sin ventana y leyendo la petición que manda a preprocesar. El \hyperref[err:320]{error~320} salió al corregir lo que quedaba del \hyperref[err:71]{71}: con la red desplegada por fin calculable, se comparó con el modelo de Markov en los 55 modelos de Markov distintos del equipo. El \hyperref[err:321]{error~321} salió al comprobar que la reorganización de las clases del árbol de decisión (\texttt{de0543f} y \texttt{5d6de9a}) no cambia nada de lo que dan los árboles, sus exportaciones a Amua y a Graphviz incluidas: con una de las redes de ejemplo de Francisco Javier Díez, la exportación a Amua caía igual antes y después, y cae también con el código anterior a esos cambios (\texttt{21250b8}). Se ha comprobado ejecutando el exportador sin ventana. El \hyperref[err:322]{error~322} salió al preparar el arreglo del 321, buscando qué más lee la partición de probabilidad cero sin comprobarlo; se añade ya corregido, por el mismo commit que el 321.
 
+\paragraph{Errores añadidos el 24 de octubre}
+El \hyperref[err:323]{error~323} salió al corregir el \hyperref[err:134]{134}, comparando el aprendizaje automático del superpadre antes y después del arreglo. Se ha comprobado sin ventana, repitiendo las llamadas de la ventana de aprendizaje con los seis clasificadores, y la fila \emph{Comprobado} de su ficha dice cómo.
+
 \paragraph{Errores asignados el 29 de septiembre}
 Jorge Rico se encarga de los errores que llevan la marca \textcolor{asignadoazul}{\textbf{Jorge Rico}}
 en la tabla del resumen y en su título, y la fila \emph{Asignado a} en su ficha: \hyperref[err:24]{errores~24}, \hyperref[err:25]{25}, \hyperref[err:27]{27}, \hyperref[err:28]{28}, \hyperref[err:33]{33}, \hyperref[err:37]{37}, \hyperref[err:38]{38}, \hyperref[err:114]{114}, \hyperref[err:124]{124}, \hyperref[err:154]{154}, \hyperref[err:155]{155}, \hyperref[err:156]{156}, \hyperref[err:157]{157}, \hyperref[err:158]{158}, \hyperref[err:162]{162}, \hyperref[err:163]{163}, \hyperref[err:165]{165}, \hyperref[err:168]{168}, \hyperref[err:171]{171}, \hyperref[err:173]{173}, \hyperref[err:174]{174}, \hyperref[err:177]{177}, \hyperref[err:178]{178}, \hyperref[err:179]{179}, \hyperref[err:180]{180}, \hyperref[err:181]{181}, \hyperref[err:182]{182}, \hyperref[err:183]{183}, \hyperref[err:184]{184}, \hyperref[err:185]{185}, \hyperref[err:186]{186}, \hyperref[err:188]{188}, \hyperref[err:189]{189}, \hyperref[err:190]{190}, \hyperref[err:191]{191} y \hyperref[err:192]{192}.
@@ -302,9 +305,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{321 errores}; 177 de ellos son defectos nuevos: 84 encontrados al
-comprobar o corregir los demás, 79 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{48} necesitan antes una decisión del equipo. Por esfuerzo estimado: 280 pequeños, 41 medios y 0 grandes.
-De los 321, 257 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
+La lista tiene \textbf{322 errores}; 178 de ellos son defectos nuevos: 85 encontrados al
+comprobar o corregir los demás, 79 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{48} necesitan antes una decisión del equipo. Por esfuerzo estimado: 281 pequeños, 41 medios y 0 grandes.
+De los 322, 257 están ya corregidos, 10 lo están en parte y 1 está cerrado sin arreglo; 36 están asignados a Jorge Rico.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -324,7 +327,7 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:des}. Simulación de sucesos discretos & 20 \\
 \ref{sec:ficheros}. Abrir y guardar redes & 15 \\
 \ref{sec:casos}. Bases de casos & 13 \\
-\ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 34 \\
+\ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 35 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 39 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 19 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 16 \\
@@ -608,6 +611,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:251]{251} & \textcolor{corregidoverde}{\textbf{Corregido}} · El PC interactivo sigue pasando de fase al pedir la mejor propuesta, según las casillas marcadas & \texttt{learning.\allowbreak{}algorithm} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:318]{318} & \textcolor{corregidoverde}{\textbf{Corregido}} · Al cargar otra base en «Data preprocessing», las opciones generales se ven pero no se aplican & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \hyperref[err:319]{319} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Reset values» de «Data preprocessing» deja encendido «Select/unselect all variables» & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
+\hyperref[err:323]{323} & El aprendizaje automático de cinco clasificadores deja repetido cada enlace desde la clase & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:editor}.\ Interfaz: editor de red y paneles de las relaciones}}\\
 \hyperref[err:150]{150} & \textcolor{corregidoverde}{\textbf{Corregido}} · Volver a elegir la clase de relación que ya tiene un nodo borra sus números & \texttt{gui} & S \hfill No\\
 \hyperref[err:151]{151} & \textcolor{corregidoverde}{\textbf{Corregido}} · En una regresión, lo escrito como Cholesky se pierde al guardar la red & \texttt{gui} & S \hfill No\\
@@ -13997,7 +14001,7 @@ Prueba de regresión: con una métrica de prueba (una subclase de \texttt{Accura
 \setcounter{subsection}{133}
 \subsection[Superpadre interactivo: llenar la tabla avanza el algoritmo y la vacía]{\textcolor{corregidoverde}{[Corregido]} En el aprendizaje interactivo con el clasificador de superpadre, llenar la tabla hace avanzar el algoritmo como si se hubieran aplicado las propuestas: «Block edit» o volver a marcar «Only positive edits» dejan la tabla vacía y dan el aprendizaje por terminado, y aplicando las propuestas una a una se aprenden menos enlaces que con el aprendizaje automático}\label{err:134}
 \begin{ficha}
-\fichakey{Estado}Corregido en el commit \texttt{ddb8ed2} (24-10-2026), con la decisión de Manuel Arias: la tabla enseña solo alternativas para el paso en curso, y buscar no cambia el estado del algoritmo. Los superpadres (las características que ya tienen una hija entre las características), las huérfanas (las que solo tienen por padre la clase) y la exactitud que hay que superar ya no se guardan en campos que la búsqueda cambiaba: se leen de la red tal como está. La exactitud de cada conjunto de enlaces ya puntuado se recuerda, y la de uno nuevo (un enlace añadido a mano) se calcula. Con «Unique superparent» desmarcada, la tabla ofrece los enlaces desde el superpadre elegido hacia las demás huérfanas; marcada, el cambio compuesto de los siguientes mejores superpadres, y un cambio compuesto bloqueado se salta. El aprendizaje automático da las mismas redes que antes en siete casos (\texttt{BN-\allowbreak{}asia10k.\allowbreak{}csv} con las clases Bronchitis, Smoker y Dyspnea; \texttt{Head\allowbreak{}To\allowbreak{}Head2.\allowbreak{}csv} con C y con A; \texttt{Head\allowbreak{}To\allowbreak{}Head2-\allowbreak{}10k.\allowbreak{}csv} con C; \texttt{Three\allowbreak{}Nodes\allowbreak{}Ato\allowbreak{}Bto\allowbreak{}C.\allowbreak{}csv} con B), con la casilla marcada y sin marcar. Prueba: \texttt{The\allowbreak{}Interactive\allowbreak{}Super\allowbreak{}Parent\allowbreak{}Offers\allowbreak{}The\allowbreak{}Current\allowbreak{}Step\allowbreak{}Test}, sobre \texttt{BN-\allowbreak{}asia10k.\allowbreak{}csv} con la clase Bronchitis; tarda unos 156 segundos. Visto al medir, sin anotar todavía como error: en el aprendizaje automático, la red sale con cada enlace desde la clase dos veces, porque \texttt{init} se ejecuta al abrir y otra vez al aprender, cada vez añade los enlaces desde la clase, y la primera quita la restricción de enlaces distintos
+\fichakey{Estado}Corregido en el commit \texttt{ddb8ed2} (24-10-2026), con la decisión de Manuel Arias: la tabla enseña solo alternativas para el paso en curso, y buscar no cambia el estado del algoritmo. Los superpadres (las características que ya tienen una hija entre las características), las huérfanas (las que solo tienen por padre la clase) y la exactitud que hay que superar ya no se guardan en campos que la búsqueda cambiaba: se leen de la red tal como está. La exactitud de cada conjunto de enlaces ya puntuado se recuerda, y la de uno nuevo (un enlace añadido a mano) se calcula. Con «Unique superparent» desmarcada, la tabla ofrece los enlaces desde el superpadre elegido hacia las demás huérfanas; marcada, el cambio compuesto de los siguientes mejores superpadres, y un cambio compuesto bloqueado se salta. El aprendizaje automático da las mismas redes que antes en siete casos (\texttt{BN-\allowbreak{}asia10k.\allowbreak{}csv} con las clases Bronchitis, Smoker y Dyspnea; \texttt{Head\allowbreak{}To\allowbreak{}Head2.\allowbreak{}csv} con C y con A; \texttt{Head\allowbreak{}To\allowbreak{}Head2-\allowbreak{}10k.\allowbreak{}csv} con C; \texttt{Three\allowbreak{}Nodes\allowbreak{}Ato\allowbreak{}Bto\allowbreak{}C.\allowbreak{}csv} con B), con la casilla marcada y sin marcar. Prueba: \texttt{The\allowbreak{}Interactive\allowbreak{}Super\allowbreak{}Parent\allowbreak{}Offers\allowbreak{}The\allowbreak{}Current\allowbreak{}Step\allowbreak{}Test}, sobre \texttt{learn\allowbreak{}Test\allowbreak{}Data\allowbreak{}Base.\allowbreak{}csv} con la clase A (unos 2 segundos; con \texttt{BN-\allowbreak{}asia10k.\allowbreak{}csv} tardaba 156, y se cambió en \texttt{7125e12}). Visto al medir: el \hyperref[err:323]{error~323}
 \fichakey{Módulo}learning.algorithm
 \fichakey{Paquete}org.openmarkov.learning.algorithm.nbderived.spnb
 \fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:41-47} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:59-79} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/spnb/SuperParentNBAlgorithm.java:88-153} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/common/DiscriminativeAlgorithm.java:81-90} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/interactive/InteractiveLearningDialog.java:306-350} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/interactive/InteractiveLearningDialog.java:407-431} \newline \path{learning.core/src/main/java/org/openmarkov/learning/core/algorithm/LearningAlgorithm.java:88-103}
@@ -15583,6 +15587,54 @@ Por qué pasa: \texttt{reset} elige «All variables» con \texttt{set\allowbreak
 Que «Reset values» deje la casilla como la deja elegir «All variables»: apagada y sin marcar.
 
 Prueba: la medida de arriba; tras «Reset values», la casilla está apagada y la petición lleva todas las variables.
+
+
+\setcounter{subsection}{322}
+\subsection[El aprendizaje automático de cinco clasificadores deja repetido cada enlace desde la clase]{El aprendizaje automático con naive Bayes, el árbol aumentado (TAN), el bosque aumentado (FAN), KDB o el superpadre deja la red aprendida con cada enlace desde la clase dos veces}\label{err:323}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}learning.algorithm
+\fichakey{Paquete}org.openmarkov.learning.algorithm.nbderived.common; org.openmarkov.learning.algorithm.naivebayes
+\fichakey{Ficheros}\path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/nbderived/common/DiscriminativeAlgorithm.java:111-117} \newline \path{learning.algorithm/src/main/java/org/openmarkov/learning/algorithm/naivebayes/NaiveBayesAlgorithm.java:30-40} \newline \path{learning.core/src/main/java/org/openmarkov/learning/core/algorithm/LearningAlgorithm.java:88-93} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/LearningController.java:84} \newline \path{learning.gui/src/main/java/org/openmarkov/learning/gui/LearningDialog.java:906} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/LearningEvaluator.java:152-153}
+\fichakey{Comprobado}Ejecutándolo sin ventana: las llamadas de la ventana de aprendizaje con los seis clasificadores, y la red aprendida guardada, vuelta a abrir y con un enlace borrado; la ventana no se ha abierto
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:134]{error~134}, \hyperref[err:141]{error~141}
+\end{ficha}
+\paragraph{Qué pasa}
+En Herramientas («Tools») → «Learning», con el tipo «Discriminative», un clasificador y «Automatic learning», la red que se abre al terminar tiene cada enlace desde la clase hacia una característica dos veces. Las tablas de probabilidad salen bien, pero los enlaces repetidos se guardan con la red y se notan al editarla.
+
+Por qué pasa: la ventana prepara el algoritmo dos veces. \texttt{Learning\allowbreak{}Controller.\allowbreak{}init\allowbreak{}Learning} llama a \texttt{Learning\allowbreak{}Manager.\allowbreak{}init} al abrirse (línea 84), y \texttt{learn} (\texttt{Learning\allowbreak{}Dialog}, línea 906) llega a \texttt{Learning\allowbreak{}Algorithm.\allowbreak{}run}, que empieza otra vez por \texttt{init} (líneas 88-93). Cada \texttt{init} de estos clasificadores llama a \texttt{set\allowbreak{}Relations\allowbreak{}For\allowbreak{}Root\allowbreak{}Variable} (\texttt{Discriminative\allowbreak{}Algorithm}, líneas 111-117, y su copia en \texttt{Naive\allowbreak{}Bayes\allowbreak{}Algorithm}), que añade un enlace desde la clase a cada característica con \texttt{prob\allowbreak{}Net.\allowbreak{}add\allowbreak{}Link}, sin mirar si ya está.
+
+Medido el 24-10-2026 sin ventana, repitiendo esas llamadas sobre \texttt{learning.\allowbreak{}algorithm/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}network/\allowbreak{}Head\allowbreak{}To\allowbreak{}Head2.\allowbreak{}csv} con la clase C (cuatro características), cada clasificador construido como su ventana de opciones:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+naive Bayes                     8 enlaces desde la clase, 4 distintos
+TAN                             8, 4 distintos
+FAN                             8, 4 distintos
+KDB (k = 1)                     8, 4 distintos
+superpadre                      8, 4 distintos
+superpadre, «Unique superparent» 8, 4 distintos
+selectivo, hacia delante        4, 4 distintos
+\end{Verbatim}
+
+El selectivo hacia delante no añade esos enlaces en \texttt{init}; hacia atrás sí los añade (\texttt{Selective\allowbreak{}NBAlgorithm.\allowbreak{}init}, línea 45), así que, por lectura, también los repite.
+
+Lo que se nota, medido con una red de naive Bayes aprendida así (tres variables, dos enlaces repetidos):
+
+\begin{itemize}
+\tightlist
+\item
+  al guardarla, en el formato 0.2 y en el 1.0, el fichero lleva cada enlace dos veces, y al abrirlo la red los sigue teniendo;
+\item
+  al borrar uno de ellos (\texttt{Remove\allowbreak{}Link\allowbreak{}Edit}, la misma edición que hace el editor) queda el otro, pero la característica ya no tiene a la clase como padre: queda un enlace que no corresponde a ninguna dependencia.
+\end{itemize}
+
+La validación cruzada de \texttt{bn\allowbreak{}Evaluation} sigue el mismo camino (\texttt{Learning\allowbreak{}Evaluator}, líneas 152-153). En el aprendizaje interactivo la ventana se abre tras un solo \texttt{init}, y la repetición aparece al pulsar «Finish», que hoy vuelve a pasar por \texttt{run} (\hyperref[err:141]{error~141}).
+\paragraph{Cómo arreglarlo}
+Que \texttt{set\allowbreak{}Relations\allowbreak{}For\allowbreak{}Root\allowbreak{}Variable}, en \texttt{Discriminative\allowbreak{}Algorithm} y en \texttt{Naive\allowbreak{}Bayes\allowbreak{}Algorithm}, no añada un enlace que la red ya tiene. Es independiente del arreglo del \hyperref[err:141]{error~141}, que hará que «Finish» no vuelva a preparar el algoritmo, pero el aprendizaje automático y la validación cruzada lo seguirán preparando dos veces.
+
+Prueba: aprender con cada uno de los seis clasificadores como lo hace la ventana y comprobar que de la clase sale un solo enlace a cada característica.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: editor de red y paneles de las relaciones}\label{sec:editor}
@@ -20458,6 +20510,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:320]{Error 320} & hallazgo nuevo, visto al corregir el \hyperref[err:71]{error~71} \\
 \hyperref[err:321]{Error 321} & hallazgo nuevo, visto al reorganizar las clases del árbol de decisión (\texttt{de0543f} y \texttt{5d6de9a}) \\
 \hyperref[err:322]{Error 322} & hallazgo nuevo, visto al preparar el arreglo del \hyperref[err:321]{error~321} \\
+\hyperref[err:323]{Error 323} & hallazgo nuevo, visto al corregir el \hyperref[err:134]{error~134} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
