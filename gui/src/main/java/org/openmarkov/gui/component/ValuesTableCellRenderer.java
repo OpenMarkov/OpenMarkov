@@ -287,6 +287,7 @@ public class ValuesTableCellRenderer extends DefaultTableCellRenderer {
             jUncertaintyIcon.setHorizontalTextPosition(SwingConstants.LEFT);
             jUncertaintyIcon.setIconTextGap(0);
             jUncertaintyIcon.setBackground(GUIColors.Tables.ValuesTable.UNCERTAINTY_BACKGROUND.getColor());
+            jUncertaintyIcon.setForeground(GUIColors.Tables.ValuesTable.UNCERTAINTY_FOREGROUND.getColor());
         }
         return jUncertaintyIcon;
     }

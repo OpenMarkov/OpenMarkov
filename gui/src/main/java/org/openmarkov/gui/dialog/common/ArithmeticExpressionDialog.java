@@ -223,6 +223,7 @@ import java.util.List;
         boolean expressionIsValid = isValidExpression();
         this.getOKButton().setEnabled(expressionIsValid);
         expressionTextField.setBackground(expressionIsValid ? GUIColors.General.CORRECT.getColor() : GUIColors.General.WRONG.getColor());
+        expressionTextField.setForeground(GUIColors.General.TEXT.getColor());
     }
     
 }

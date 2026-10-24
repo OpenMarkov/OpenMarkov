@@ -474,7 +474,7 @@ public class MainPanel extends JPanel {
         if (component instanceof NetworkEditorPanel networkPanel) {
             Consumer<NetworkEditorPanel> reloadNamesAndColor = networkP -> {
                 if (networkP.getModified()) {
-                    header.titleLabel.setForeground(GUIColors.General.ATTENTION_BG.getColor());
+                    header.titleLabel.setForeground(GUIColors.General.ATTENTION_TEXT.getColor());
                 } else {
                     header.titleLabel.setForeground(null);
                 }

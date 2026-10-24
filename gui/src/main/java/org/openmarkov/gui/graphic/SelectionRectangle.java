@@ -157,7 +157,7 @@ public class SelectionRectangle {
 		double width = this.w;
 		double height = this.h;
 		g.setStroke(DASHED_STROKE);
-        g.setPaint(GUIColors.General.TEXT.getColor());
+        g.setPaint(GUIColors.Network.SELECTION_RECTANGLE.getColor());
 
 		if (!(width == 0.0 && height == 0.0)) {
 			g.draw(this.rectangleSelection);

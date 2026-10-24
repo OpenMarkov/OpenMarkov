@@ -219,7 +219,7 @@ public class TreeADDCellRenderer extends JPanel implements TreeCellRenderer {
             }
             intervalString += maximun;
             intervalString += max.belongsToLeft() ? "]" : ")";
-            txtLeft += "<td align=center border=0>" + varName + "=" + intervalString + "</td>";
+            txtLeft += varName + "=" + intervalString;
         } else {
             String varName = topVariable.getName();
             List<State> branchStates = treeBranch.getBranchStates();
@@ -239,7 +239,7 @@ public class TreeADDCellRenderer extends JPanel implements TreeCellRenderer {
             if (branchStates.size() > 1) {
                 varStateNames += "}";
             }
-            txtLeft += "<td align=center border=0>" + varStateNames + "</td>";
+            txtLeft += varStateNames;
         }
         txtLeft += "</html>";
         return txtLeft;

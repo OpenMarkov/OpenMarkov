@@ -19,6 +19,9 @@ public class GUIColors {
         
         public static final GUIColor ATTENTION_BG = new GUIColor(new Color(212, 56, 56));
         public static final GUIColor ATTENTION_FG = new GUIColor(new Color(255, 255, 255));
+        /** Text that asks for attention, such as the name of a tab with unsaved changes. */
+        public static final GUIColor ATTENTION_TEXT = new GUIColor(new Color(200, 48, 48))
+                .inDark(new Color(255, 143, 143));
         public static final GUIColor TRANSPARENT = new GUIColor(new Color(0, 0, 0, 0));
     }
     
@@ -55,6 +58,8 @@ public class GUIColors {
         
         public static final GUIColor BACKGROUND = new GUIColor(new Color(255, 255, 255))
                 .inDark(new Color(69, 72, 74));
+        public static final GUIColor SELECTION_RECTANGLE = new GUIColor(new Color(0, 0, 0))
+                .inDark(new Color(227, 227, 227));
         public static final GUIColor REVELATION_ARC_VARIABLE = new GUIColor(new Color(128, 0, 0))
                 .inDark(new Color(217, 141, 141));
         
@@ -179,6 +184,7 @@ public class GUIColors {
         public static final class ValuesTable {
             public static final GUIColor GRID_COLOR = new GUIColor(new Color(128, 128, 128));
             public static final GUIColor UNCERTAINTY_BACKGROUND = new GUIColor(new Color(255, 255, 255));
+            public static final GUIColor UNCERTAINTY_FOREGROUND = new GUIColor(new Color(0, 0, 0));
             public static final GUIColor OPTIMAL_POLICY = new GUIColor(new Color(80, 220, 95));
         }
     }
