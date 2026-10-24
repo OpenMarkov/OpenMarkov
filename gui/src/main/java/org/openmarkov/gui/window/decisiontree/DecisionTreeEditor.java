@@ -311,7 +311,7 @@ public final class DecisionTreeEditor extends EditorPanel {
             if (selectedComponent instanceof DecisionTreeNodePanel treeNodePanel) {
                 DecisionTreeNode treeNode = treeNodePanel.getTreeNode();
                 CEP cep = ((ProbAndCEP) treeNode.getEvaluation()).getCep();
-                if (cep.isZero()) {
+                if (treeNode.isImpossible() || cep.isZero()) {
                     StringDatabase strings = StringDatabase.getUniqueInstance();
                     JOptionPane.showMessageDialog(DecisionTreeEditor.this,
                                                   strings.getString("ShowCEP.ImpossibleScenario"),

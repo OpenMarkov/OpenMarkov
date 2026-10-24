@@ -100,13 +100,9 @@ public non-sealed class DecisionTreeNodePanel extends DecisionTreeElementPanel {
         this.descriptionLabel.setText(canBeExpanded() ? text + "  \u2026" : text);
     }
     
-    /**
-     * Whether the node is a leaf the tree could still go on from: an evaluated node with no branches that
-     * is neither a utility node, where the tree ends, nor a scenario that cannot happen.
-     */
+    /** Whether the node is a leaf the tree could still go on from. */
     boolean canBeExpanded() {
-        return this.treeNode.getEvaluation() != null && this.treeNode.getChildBranches().isEmpty()
-                && this.treeNode.getNodeType() != NodeType.UTILITY && !this.treeNode.isImpossible();
+        return this.treeNode.canBeExpanded();
     }
     
     /**

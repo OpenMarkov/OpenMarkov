@@ -16,8 +16,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
-import org.openmarkov.core.model.decisiontree.ProbAndCEP;
-import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.gui.configuration.UserPreference;
 import org.openmarkov.gui.dialog.costeffectiveness.CEPDialog;
@@ -51,10 +49,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * In a cost-effectiveness tree, the node of an impossible branch, such as the result of a test that is not done, has
- * no cost-effectiveness partition: the evaluation leaves there the partition of probability zero, which has no costs
- * nor effectiveness. «Show CEP» on that node built the window of the partition anyway and failed with a
- * NullPointerException (error 322). Now it says why there is nothing to show; on any other node it still shows the
- * partition. {@code ID-decide-test}, analysed for cost-effectiveness, has 9 such nodes in the tree the window builds.
+ * no cost-effectiveness partition worth showing: its probability is zero. «Show CEP» on that node built the window of
+ * the partition anyway and failed with a NullPointerException (error 322). Now it says why there is nothing to show;
+ * on any other node it still shows the partition. {@code ID-decide-test}, analysed for cost-effectiveness, has such
+ * nodes in the tree the window builds.
  *
  * @author Manuel Arias
  */
@@ -107,7 +105,7 @@ class ShowCEPOfAnImpossibleScenarioSaysWhyThereIsNoneTest {
     }
 
     @Test void anImpossibleScenarioSaysWhyItHasNoPartition() throws Exception {
-        JDialog shown = showCEPOf(node -> partitionOf(node).isZero());
+        JDialog shown = showCEPOf(DecisionTreeNode::isImpossible);
 
         JOptionPane message = find(shown, JOptionPane.class);
         assertNotNull(message, "the window that showed is not a message");
@@ -115,13 +113,9 @@ class ShowCEPOfAnImpossibleScenarioSaysWhyThereIsNoneTest {
     }
 
     @Test void aPossibleScenarioShowsItsPartition() throws Exception {
-        JDialog shown = showCEPOf(node -> !partitionOf(node).isZero());
+        JDialog shown = showCEPOf(node -> !node.isImpossible());
 
         assertInstanceOf(CEPDialog.class, shown);
-    }
-
-    private static CEP partitionOf(DecisionTreeNode node) {
-        return ((ProbAndCEP) node.getEvaluation()).getCep();
     }
 
     /**

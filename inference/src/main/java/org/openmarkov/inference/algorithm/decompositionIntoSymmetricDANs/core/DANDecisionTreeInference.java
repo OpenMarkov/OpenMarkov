@@ -242,10 +242,17 @@ public class DANDecisionTreeInference extends DANInference implements DecisionTr
             if (size > 0) {
                 Finding lastFinding = findings.get(size - 1);
                 Variable variable = lastFinding.getVariable();
-                dan.setName(baseName(dan.getName()) + "-" + replaceWhiteSpaces(variable.getName()) + "="
-                        + replaceWhiteSpaces(variable.getStateName(lastFinding.getStateIndex())));
+                dan.setName(nameAfterFinding(dan.getName(), variable, variable.getStateName(lastFinding.getStateIndex())));
             }
         }
+    }
+
+    /**
+     * The name of the subnetwork produced by observing a state of a variable in a network: the name of the
+     * network, without its file extension, followed by the finding.
+     */
+    public static String nameAfterFinding(String networkName, Variable variable, String stateName) {
+        return baseName(networkName) + "-" + replaceWhiteSpaces(variable.getName()) + "=" + replaceWhiteSpaces(stateName);
     }
 
     /**

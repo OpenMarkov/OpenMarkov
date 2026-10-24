@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Safety-net tests for {@link DecisionTreeManagerImpl} introduced in Phase 0
@@ -77,26 +78,22 @@ class DecisionTreeManagerImplTest {
                 () -> manager.buildDecisionTree(bn, DEFAULT_DEPTH));
     }
 
-    /**
-     * A tree built with depth zero is a single leaf hanging from the root
-     * branch. Expanding it used to do nothing, silently: the graft was guarded
-     * by conditions on the leaf's parent node, and the root leaf has none.
-     */
+    /** A tree built with depth zero is a single leaf hanging from the root branch, and it can be expanded. */
     @Test
-    void expandLevelsGraftsOntoARootLeafTree() throws Exception {
+    void expandLevelsExpandsARootLeafTree() throws Exception {
         ProbNet id = simpleIdWithName();
 
         DecisionTreeManagerImpl manager = new DecisionTreeManagerImpl();
         DecisionTreeVisualNode root = manager.buildDecisionTree(id, 0);
         DecisionTreeNode leaf = (DecisionTreeNode) root.getChildren().get(0);
-        assertEquals(NodeType.UTILITY, leaf.getNodeType(), "depth 0 must produce a single leaf");
+        assertTrue(leaf.getChildBranches().isEmpty(), "depth 0 must produce a single leaf");
+        assertTrue(leaf.canBeExpanded());
 
         manager.expandLevels(root, DEFAULT_DEPTH);
 
-        DecisionTreeNode grafted = (DecisionTreeNode) root.getChildren().get(0);
-        assertFalse(grafted.getNodeType() == NodeType.UTILITY,
-                "expanding the root leaf must graft the real tree onto it");
-        assertFalse(grafted.getChildren().isEmpty());
+        DecisionTreeNode expanded = (DecisionTreeNode) root.getChildren().get(0);
+        assertEquals(leaf.getVariable(), expanded.getVariable());
+        assertFalse(expanded.getChildren().isEmpty());
     }
 
     @Test

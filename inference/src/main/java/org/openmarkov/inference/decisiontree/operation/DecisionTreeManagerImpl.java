@@ -11,22 +11,18 @@ import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.exception.PotentialOperationException;
-import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
 import org.openmarkov.core.model.decisiontree.DecisionTreeNode;
 import org.openmarkov.core.model.decisiontree.DecisionTreeVisualNode;
 import org.openmarkov.core.model.decisiontree.operation.DecisionTreeManager;
 import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.Finding;
-import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.core.inference.tasks.GenerateDecisionTree;
-import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core.DANOperations;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +33,7 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
     private final GenerateDecisionTreeTaskFactory taskFactory;
 
     public DecisionTreeManagerImpl() {
-        this(new DecompositionGenerateDecisionTreeTaskFactory());
+        this(new DecisionTreeExpansionTaskFactory());
     }
 
     public DecisionTreeManagerImpl(GenerateDecisionTreeTaskFactory taskFactory) {
@@ -72,72 +68,31 @@ public class DecisionTreeManagerImpl implements DecisionTreeManager {
         return root;
     }
 
+    /**
+     * Expands each leaf the tree can still go on from by the given number of
+     * levels: the leaf is replaced by the tree built from its own network and
+     * evidence, whose root is the variable of the leaf.
+     */
     @Override
     public void expandLevels(DecisionTreeVisualNode root, int levels)
             throws NotEvaluableNetworkException, IncompatibleEvidenceException,
             NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
             NotSupportedOperationException {
-        inferenceExpandLevels(root, null, levels, new EvidenceCase());
-    }
-
-    /**
-     * Recursive expansion logic moved from DecisionTreePanel.
-     */
-    private void inferenceExpandLevels(DecisionTreeVisualNode root,
-            DecisionTreeNode parent, int n, EvidenceCase branchEvidence)
-            throws NotEvaluableNetworkException, IncompatibleEvidenceException,
-            NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates,
-            NotSupportedOperationException {
-        if (root instanceof DecisionTreeBranch || ((DecisionTreeNode) root).getNodeType() != NodeType.UTILITY) {
-            if (root instanceof DecisionTreeNode) {
-                parent = (DecisionTreeNode) root;
-            }
-            for (DecisionTreeVisualNode branch : root.getChildren()) {
-                EvidenceCase newEvi;
-                if (root instanceof DecisionTreeBranch) {
-                    newEvi = createEvidenceBranchPath(branchEvidence, (DecisionTreeBranch) root);
-                } else {
-                    newEvi = branchEvidence;
-                }
-                inferenceExpandLevels(branch, parent, n, newEvi);
-            }
-        } else {
-            DecisionTreeNode rootDT = (DecisionTreeNode) root;
-            // Recursively build the next part of the tree
-            DecisionTreeVisualNode newSubTree = buildDecisionTree(rootDT.getNetwork(), n, branchEvidence);
-            if (newSubTree instanceof DecisionTreeBranch) {
-                DecisionTreeNode auxRoot = ((DecisionTreeBranch) newSubTree).getChild();
-                // The name check guards against grafting a subtree whose root repeats
-                // the chance node above the leaf. With no parent there is nothing to
-                // repeat: the leaf is the root of the whole tree — as when it was
-                // built with depth zero — and skipping the graft here made expansion
-                // silently do nothing.
-                if (parent == null
-                        || parent.getNodeType() == NodeType.DECISION
-                        || (!(parent.getVariable().getName().equalsIgnoreCase(auxRoot.getVariable().getName())))) {
-                    rootDT.copy(auxRoot);
-                }
-            }
+        for (DecisionTreeNode leaf : leavesThatCanBeExpanded(root, new ArrayList<>())) {
+            DecisionTreeBranch subtree = (DecisionTreeBranch) buildDecisionTree(leaf.getNetwork(), levels,
+                                                                                leaf.getEvidence());
+            leaf.getParentBranch().setChild(subtree.getChild());
         }
     }
 
-    private EvidenceCase createEvidenceBranchPath(EvidenceCase branchEvidence, DecisionTreeBranch branch) {
-        EvidenceCase newEvi = new EvidenceCase(branchEvidence);
-        if (branch != null) {
-            Variable branchVariable = branch.getBranchVariable();
-            // The order variable is a dummy one with no node in the model, so it can
-            // never be evidence. It is recognized by the one name constant, not by a
-            // literal repeated here.
-            if (branchVariable != null
-                    && (!branchVariable.getName().equals(DANOperations.ORDER_VARIABLE_NAME))
-                    && !newEvi.contains(branchVariable)) {
-                try {
-                    newEvi.addFinding(new Finding(branchVariable, branch.getBranchState()));
-                } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther e) {
-                    throw new UnreachableException(e);
-                }
-            }
+    private static List<DecisionTreeNode> leavesThatCanBeExpanded(DecisionTreeVisualNode element,
+                                                                 List<DecisionTreeNode> leaves) {
+        if (element instanceof DecisionTreeNode node && node.canBeExpanded()) {
+            leaves.add(node);
         }
-        return newEvi;
+        for (DecisionTreeVisualNode child : element.getChildren()) {
+            leavesThatCanBeExpanded(child, leaves);
+        }
+        return leaves;
     }
 }

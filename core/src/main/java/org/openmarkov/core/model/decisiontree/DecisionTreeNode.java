@@ -196,6 +196,17 @@ public non-sealed class DecisionTreeNode implements DecisionTreeVisualNode {
 	}
 
 	/**
+	 * Whether the tree can still go on from this node: it has been evaluated, has
+	 * no branches, and is neither a utility node, where the tree ends, nor a
+	 * scenario that cannot happen.
+	 *
+	 * @return true if this node is a leaf that can be expanded.
+	 */
+	public boolean canBeExpanded() {
+		return evaluation != null && childBranches.isEmpty() && nodeType != NodeType.UTILITY && !isImpossible();
+	}
+
+	/**
 	 * Hangs a branch from this node.
 	 *
 	 * @param child The branch.

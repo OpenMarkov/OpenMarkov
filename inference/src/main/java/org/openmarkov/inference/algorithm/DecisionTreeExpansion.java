@@ -336,8 +336,13 @@ public class DecisionTreeExpansion {
 
 		for (State state : variable.getStates()) {
 			ProbNet instantiatedNet = DANOperations.instantiate(probNet, variable, state);
-			// Only an observation extends the evidence; taking a decision does not.
-			EvidenceCase childEvidence = isChance ? extendEvidence(evidence, variable, state) : evidence;
+			// Only an observation extends the evidence, and names the subnetwork after it; taking a decision does not.
+			EvidenceCase childEvidence = evidence;
+			if (isChance) {
+				childEvidence = extendEvidence(evidence, variable, state);
+				instantiatedNet.setName(DANDecisionTreeInference.nameAfterFinding(probNet.getName(), variable,
+						state.getName()));
+			}
 			Expansion child = subtree(instantiatedNet, childEvidence, childDepth);
 			addBranch(branches, new DecisionTreeBranch(state), child);
 		}
