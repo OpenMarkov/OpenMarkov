@@ -112,6 +112,7 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
      */
     public SensitivityAnalysisDialog(Window owner, SensitivityAnalysisController controller) {
         super(owner);
+        this.setTitle(stringDatabase.getString("SensitivityAnalysis.Title"));
         this.setModal(false);
         this.setResizable(true);
         this.controller = controller;
