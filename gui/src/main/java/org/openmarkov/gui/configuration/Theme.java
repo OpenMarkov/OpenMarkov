@@ -52,13 +52,9 @@ public enum Theme {
     static {
         AtomicBoolean lastWasDark = new AtomicBoolean(Theme.OSisDark());
         com.jthemedetecor.OsThemeDetector.getDetector().registerListener(newIsDark -> {
-            if (UserPreferences.PREFERRED_THEME.get() != Theme.SYNC_OS) {
+            if (!mustFollowTheSystem(lastWasDark, UserPreferences.PREFERRED_THEME.get(), newIsDark)) {
                 return;
             }
-            if (lastWasDark.get() == newIsDark) {
-                return;
-            }
-            lastWasDark.set(newIsDark);
             SwingUtilities.invokeLater(() -> {
                 try {
                     Theme.updateInterfaceToLook();
@@ -68,5 +64,14 @@ public enum Theme {
                 }
             });
         });
+    }
+
+    /**
+     * Records whether the system is now dark, whatever the preferred theme, and tells whether the interface has to
+     * change with it.
+     */
+    static boolean mustFollowTheSystem(AtomicBoolean lastWasDark, Theme preferred, boolean newIsDark) {
+        boolean changed = lastWasDark.getAndSet(newIsDark) != newIsDark;
+        return changed && preferred == Theme.SYNC_OS;
     }
 }
