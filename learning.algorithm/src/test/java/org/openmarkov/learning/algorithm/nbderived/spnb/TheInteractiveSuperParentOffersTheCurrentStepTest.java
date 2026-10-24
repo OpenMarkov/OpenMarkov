@@ -31,11 +31,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Manuel Arias
  */
-@Tag(TestSpeed.SLOW)
+@Tag(TestSpeed.MEDIUM)
 class TheInteractiveSuperParentOffersTheCurrentStepTest {
 
-    private static final String DATA = "network/BN-asia10k.csv";
-    private static final String CLASS = "Bronchitis";
+    private static final String DATA = "network/learnTestDataBase.csv";
+    private static final String CLASS = "A";
 
     private LearningManager manager;
 
