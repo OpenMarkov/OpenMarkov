@@ -89,13 +89,12 @@ class MeekOrientation {
     }
 
     private LearningEditProposal meekR1Orient(Node nodeB, Node nodeC, boolean onlyAllowedEdits) {
-        for (Node nodeA : PCAlgorithm.sorted(nodeB.getParents())) {
-            if (!nodeA.getNeighbors().contains(nodeC)) {
-                LearningEditProposal proposal = buildOrientProposal(nodeB, nodeC, "Meek R1", onlyAllowedEdits);
-                if (proposal != null) return proposal;
-            }
-        }
-        return null;
+        return r1Orients(nodeB, nodeC) ? buildOrientProposal(nodeB, nodeC, "Meek R1", onlyAllowedEdits) : null;
+    }
+
+    /** Whether there is A->B with A not adjacent to C. */
+    private static boolean r1Orients(Node nodeB, Node nodeC) {
+        return nodeB.getParents().stream().anyMatch(nodeA -> !nodeA.getNeighbors().contains(nodeC));
     }
 
     // ---- Meek R2 ----
@@ -119,10 +118,12 @@ class MeekOrientation {
     }
 
     private LearningEditProposal meekR2Orient(Node nodeA, Node nodeC, boolean onlyAllowedEdits) {
-        if (pc.net().existsPath(nodeA, nodeC, true, Collections.emptyList())) {
-            return buildOrientProposal(nodeA, nodeC, "Meek R2", onlyAllowedEdits);
-        }
-        return null;
+        return r2Orients(nodeA, nodeC) ? buildOrientProposal(nodeA, nodeC, "Meek R2", onlyAllowedEdits) : null;
+    }
+
+    /** Whether there is a directed path A=>C. */
+    private boolean r2Orients(Node nodeA, Node nodeC) {
+        return pc.net().existsPath(nodeA, nodeC, true, Collections.emptyList());
     }
 
     // ---- Meek R3 ----
@@ -148,35 +149,41 @@ class MeekOrientation {
     }
 
     private LearningEditProposal meekR3Orient(Node nodeD, Node nodeA, boolean onlyAllowedEdits) {
+        return r3Orients(nodeD, nodeA) ? buildOrientProposal(nodeD, nodeA, "Meek R3", onlyAllowedEdits) : null;
+    }
+
+    /** Whether two parents B and C of A, not adjacent to each other, are both undirected siblings of D. */
+    private static boolean r3Orients(Node nodeD, Node nodeA) {
         // Candidates: parents of A that are also undirected siblings of D
         List<Node> candidates = new ArrayList<>(nodeA.getParents());
         candidates.retainAll(nodeD.getSiblings());
-        candidates.sort(Comparator.comparing(Node::getName));
-
         for (int i = 0; i < candidates.size(); i++) {
-            Node nodeB = candidates.get(i);
             for (int j = i + 1; j < candidates.size(); j++) {
-                Node nodeC = candidates.get(j);
-                if (!nodeB.getNeighbors().contains(nodeC)) {
-                    LearningEditProposal proposal = buildOrientProposal(
-                            nodeD, nodeA, "Meek R3", onlyAllowedEdits);
-                    if (proposal != null) return proposal;
+                if (!candidates.get(i).getNeighbors().contains(candidates.get(j))) {
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
+    }
+
+    /** Whether a Meek rule orients the link between X and Z, in either direction. */
+    private boolean aRuleOrients(Node nodeX, Node nodeZ) {
+        return r1Orients(nodeX, nodeZ) || r1Orients(nodeZ, nodeX)
+                || r2Orients(nodeX, nodeZ) || r2Orients(nodeZ, nodeX)
+                || r3Orients(nodeX, nodeZ) || r3Orients(nodeZ, nodeX);
     }
 
     // ---- Fallback ----
 
     /**
-     * Attempts to orient undirected links (X-Z) when no Meek rule applies,
+     * Attempts to orient undirected links (X-Z) that no Meek rule orients,
      * as a last resort. Uses the ANM causal direction tester if available,
      * otherwise orients arbitrarily while preserving acyclicity.
      */
     private LearningEditProposal tryOrientUnorientedWithoutPath(boolean onlyAllowedEdits) {
         for (Link<Node> link : pc.sortedLinks()) {
-            if (!link.isDirected()) {
+            if (!link.isDirected() && !aRuleOrients(link.getFrom(), link.getTo())) {
                 Node nodeX = link.getFrom();
                 Node nodeZ = link.getTo();
 
