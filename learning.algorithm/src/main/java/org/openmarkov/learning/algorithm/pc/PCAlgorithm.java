@@ -197,12 +197,15 @@ public class PCAlgorithm extends IndependenceRelationsAlgorithm
         return movedOn ? null : bestEditProposal;
     }
 
-    /** Applies the edits left in the current phase and moves on to the phase whose edits come next. */
+    /**
+     * Applies the edits left in the phase whose edits the table shows, which is the next one when the current phase
+     * has none left, and moves on to the phase whose edits come after them.
+     */
     @Override
     public void runTillNextPhase() {
-        Phase currentPhase = phase;
         LearningEditProposal bestEditProposal = getBestEdit(true, true);
-        while (bestEditProposal != null && searchPhase == currentPhase) {
+        Phase phaseToComplete = searchPhase;
+        while (bestEditProposal != null && searchPhase == phaseToComplete) {
             PNEdit bestEdit = bestEditProposal.getEdit();
             try {
                 bestEdit.executeEdit();
