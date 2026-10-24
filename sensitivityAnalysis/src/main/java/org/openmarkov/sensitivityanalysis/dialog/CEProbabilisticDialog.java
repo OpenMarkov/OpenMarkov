@@ -35,6 +35,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.GTablePotential;
+import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.gui.window.OMTabbedPane;
@@ -415,6 +416,7 @@ public class CEProbabilisticDialog extends JDialog {
         buttonGroup.add(relativeRadioButton);
         
         relativeDecisionSelector = new JComboBox<>();
+        relativeDecisionSelector.setRenderer(new JComboBoxFunctionRender<>(State::getName));
         for (State state : decisionVariable.getStates()) {
             relativeDecisionSelector.addItem(state);
         }

@@ -43,6 +43,7 @@ import org.openmarkov.core.model.network.modelUncertainty.DomainInterval;
 import org.openmarkov.core.model.network.modelUncertainty.Tools;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
 import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.gui.window.MainGUI;
@@ -705,6 +706,7 @@ public class TornadoSpiderDialog extends JDialog {
      */
     private JComboBox<State> createComboBox(int selectedState, String panelName) {
         JComboBox<State> comboBox = new JComboBox<>();
+        comboBox.setRenderer(new JComboBoxFunctionRender<>(State::getName));
         for (State state : decisionVariable.getStates()) {
             comboBox.addItem(state);
         }

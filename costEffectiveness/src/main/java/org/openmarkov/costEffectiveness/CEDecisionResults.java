@@ -34,6 +34,7 @@ import org.openmarkov.core.model.network.Util;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.StrategyTree;
+import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.dialog.costeffectiveness.InterventionDialog;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
@@ -752,6 +753,7 @@ public class CEDecisionResults extends JDialog {
 		buttonGroup.add(relativeRadioButton);
 
 		relativeDecisionSelector = new JComboBox<>();
+		relativeDecisionSelector.setRenderer(new JComboBoxFunctionRender<>(State::getName));
 		for (int option = 0; option < cepsForDecision.length; option++) {
 			if (!cepsForDecision[option].isZero()) {
 				relativeDecisionSelector.addItem(decisionVariable.getStates()[option]);

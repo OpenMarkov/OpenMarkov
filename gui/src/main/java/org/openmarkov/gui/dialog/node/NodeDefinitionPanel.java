@@ -17,6 +17,7 @@ import org.openmarkov.core.model.network.*;
 import org.openmarkov.gui.action.ChangeNodeTypeEdit;
 import org.openmarkov.gui.action.NodeAgentEdit;
 import org.openmarkov.gui.action.NodeDecisionCriteriaEdit;
+import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.dialog.CommentListener;
 import org.openmarkov.gui.dialog.common.CommentHTMLScrollPane;
 import org.openmarkov.gui.util.Purpose;
@@ -754,6 +755,7 @@ public final class NodeDefinitionPanel extends JPanel
         if (jComboBoxDecisionCriteria == null) {
             List<Criterion> decisionCriteria = node.getProbNet().getDecisionCriteria();
             jComboBoxDecisionCriteria = new JComboBox<>();
+            jComboBoxDecisionCriteria.setRenderer(new JComboBoxFunctionRender<>(Criterion::getCriterionName));
             
             for (Criterion criterion : decisionCriteria) {
                 jComboBoxDecisionCriteria.addItem(criterion);
