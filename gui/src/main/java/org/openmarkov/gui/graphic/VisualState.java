@@ -342,11 +342,7 @@ public final class VisualState extends VisualElement {
                 setColorCaseDependent(i, g);
                 double barLength;
                 if (isNumeric) {
-                    Double minRange = ((NumericVariableBox) innerBox).getMinValue();
-                    Double maxRange = ((NumericVariableBox) innerBox).getMaxValue();
-                    double range = maxRange - minRange;
-                    double value = this.stateValues.get(i) - minRange;
-                    barLength = (value / range) * barFullLength;
+                    barLength = ((NumericVariableBox) innerBox).barLength(this.stateValues.get(i), barFullLength);
                 } else {
                     barLength = Double.isNaN(this.stateValues.get(i)) ? 0 : this.stateValues.get(i) * barFullLength;
                 }

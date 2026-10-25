@@ -99,8 +99,7 @@ public non-sealed class NumericVariableBox extends InnerBox {
      * @param minValue minimum value that the numeric variable can take.
      */
     public void setMinValue(double minValue) {
-        //minUtilityRange is currently formatted with 2 decimals
-        this.minValue = (Math.rint(minValue * 100)) / 100;
+        this.minValue = minValue;
     }
     
     /**
@@ -118,8 +117,22 @@ public non-sealed class NumericVariableBox extends InnerBox {
      * @param maxValue maximum value that the numeric variable can take.
      */
     public void setMaxValue(double maxValue) {
-        //maxUtilityRange is currently formatted with 2 decimals
-        this.maxValue = (Math.rint(maxValue * 100)) / 100;
+        this.maxValue = maxValue;
+    }
+    
+    /**
+     * The length of the bar of {@code value} in the range of the box, from 0 to {@code fullLength}.
+     */
+    double barLength(double value, double fullLength) {
+        double length = (value - minValue) / (maxValue - minValue) * fullLength;
+        return Double.isNaN(length) ? 0 : Math.clamp(length, 0, fullLength);
+    }
+    
+    /**
+     * An end of the range as the scale writes it, with two decimals at most.
+     */
+    private static String scaleLabel(double end) {
+        return "" + Math.rint(end * 100) / 100;
     }
     
     /**
@@ -228,9 +241,9 @@ public non-sealed class NumericVariableBox extends InnerBox {
                                  scaleXPostion + barFullLength, scaleYPostion + (BAR_HEIGHT / 2)));
         
         g.setFont(SCALE_FONT);
-        g.drawString("" + minValue, (int) scaleXPostion - SCALE_RANGE_HORIZONTAL_OFFSET,
+        g.drawString(scaleLabel(minValue), (int) scaleXPostion - SCALE_RANGE_HORIZONTAL_OFFSET,
                      (int) scaleYPostion + g.getFont().getSize() + SCALE_RANGE_VERTICAL_OFFSET);
-        g.drawString("" + maxValue, (int) ((int) scaleXPostion + barFullLength) - SCALE_RANGE_HORIZONTAL_OFFSET,
+        g.drawString(scaleLabel(maxValue), (int) ((int) scaleXPostion + barFullLength) - SCALE_RANGE_HORIZONTAL_OFFSET,
                      (int) scaleYPostion + g.getFont().getSize() + SCALE_RANGE_VERTICAL_OFFSET);
         g.setFont(INNERBOX_FONT);
     }
