@@ -40,7 +40,6 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
 //        }
         initialize();
         this.setBorder(new TitledBorder("Life Table"));
-        setEnabledRemoveValue(true);
 
         chooser.setDialogTitle("Choose a CSV data file");
         chooser.setApproveButtonText("Load data");
