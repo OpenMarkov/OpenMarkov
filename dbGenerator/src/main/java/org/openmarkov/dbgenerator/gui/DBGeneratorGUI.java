@@ -224,7 +224,6 @@ public class DBGeneratorGUI extends JDialog {
         generateButton.setEnabled(false);
         generateButton.addActionListener(evt -> {
             // GEN-FIRST:event_EvaluateButtonActionPerformed
-            CaseDatabase database = DBGenerator.generate(net, Integer.parseInt((String) caseNumber.getSelectedItem()));
             String databasePath = null;
 
             if (caseDBFileChooser.showSaveDialog(DBGeneratorGUI.this) == JFileChooser.APPROVE_OPTION) {
@@ -246,6 +245,8 @@ public class DBGeneratorGUI extends JDialog {
                 generateButton.setEnabled(net != null);
                 databasePath = caseDBFileChooser.getSelectedFile().getParent()
                         + FileSystems.getDefault().getSeparator() + filename;
+                CaseDatabase database = DBGenerator.generate(net,
+                                                             Integer.parseInt((String) caseNumber.getSelectedItem()));
                 try {
                     databaseWriter.save(new File(databasePath), database);
                 } catch (IOException e) {
@@ -253,8 +254,8 @@ public class DBGeneratorGUI extends JDialog {
                 }
                 JOptionPane.showMessageDialog(null, stringDatabase.getString("DBGenerator.Finished"),
                         stringDatabase.getString("DBGenerator.Title"), JOptionPane.INFORMATION_MESSAGE);
+                DBGeneratorGUI.this.setVisible(false);
             }
-            DBGeneratorGUI.this.setVisible(false);
         });
         cancelButton.setText(stringDatabase.getString("DBGenerator.Cancel"));
         cancelButton.setPreferredSize(new java.awt.Dimension(99, 23));
