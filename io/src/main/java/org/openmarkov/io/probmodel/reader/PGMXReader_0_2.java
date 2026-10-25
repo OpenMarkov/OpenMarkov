@@ -719,7 +719,7 @@ public class PGMXReader_0_2 {
                 variable = new Variable(variableName, states);
             } else {
                 if (variableType == VariableType.NUMERIC) {
-                    variable = getXMLContinuousVariable(variableElement, variableName);
+                    variable = getXMLContinuousVariable(variableElement, variableName, precision == null ? 0.0 : precision);
                 } else { // DISCRETIZED variable. Read sub-intervals
                     Element thresholdsElement = variableElement.getChild(XMLTags.THRESHOLDS.toString());
                     variable = getXMLDiscretizedVariable(thresholdsElement, states, variableName);
@@ -1023,12 +1023,14 @@ public class PGMXReader_0_2 {
     /**
      * @param variableElement . {@code Element}
      * @param variableName    . {@code String}
+     * @param precision       the precision of the variable, already read
      *
      * @return A continuous variable. {@code Variable}
      */
     protected static Variable getXMLContinuousVariable(
             Element variableElement,
-            String variableName) {
+            String variableName,
+            double precision) {
         
         boolean leftClosedDefined, lowerBelongsToLeft = false, rightClosedDefined, rightClosed = false;
         double min = Double.NEGATIVE_INFINITY;  // Default value
@@ -1059,10 +1061,6 @@ public class PGMXReader_0_2 {
                 rightClosed = rightClosedString != null && rightClosedString.contentEquals(XMLValues.LEFT.toString());
             }
         }
-        
-        // Precision
-        Element xMLPrecision = variableElement.getChild(XMLTags.PRECISION.toString());
-        double precision = xMLPrecision != null ? Double.parseDouble(xMLPrecision.getText()) : 0.0;
         
         // A lower limit that belongs to the left is out of the domain
         return new Variable(variableName, !lowerBelongsToLeft, min, max, rightClosed, precision);
