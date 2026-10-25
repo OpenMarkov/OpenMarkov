@@ -577,10 +577,13 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     }
 
     /**
-     * This method removes an imposed policy from a decision node.
+     * This method removes an imposed policy from a decision node; it does nothing if the node has none.
      */
     public void removePolicyFromNode() {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
+        if (visualNode.getNode().getPotentials().isEmpty()) {
+            return;
+        }
         try {
             new RemovePolicyEdit(visualNode.getNode()).executeEdit();
         } catch (DoEditException e) {

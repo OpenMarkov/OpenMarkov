@@ -439,6 +439,7 @@ public class NodeContextualMenu extends ContextualMenu {
         if (removePolicyMenuItem == null) {
             removePolicyMenuItem = new LocalizedMenuItem(MenuItemNames.DECISION_REMOVE_POLICY_MENUITEM,
                                                          ActionCommands.DECISION_REMOVE_POLICY.getCommandName());
+            removePolicyMenuItem.setEnabled(!selectedNode.getNode().getPotentials().isEmpty());
             removePolicyMenuItem.addActionListener(listener);
         }
         return removePolicyMenuItem;
