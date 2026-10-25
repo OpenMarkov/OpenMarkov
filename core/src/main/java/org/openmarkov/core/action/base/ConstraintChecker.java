@@ -66,7 +66,7 @@ public class ConstraintChecker {
     /**
      * Throws a {@link ConstraintViolatedException} if any violations were recorded.
      * If multiple violations exist, they are wrapped in a
-     * {@link ConstraintViolatedException.MultipleConstraintsViolateds}.
+     * {@link ConstraintViolatedException.MultipleConstraintsViolated}.
      *
      * @throws ConstraintViolatedException if one or more violations were recorded
      */
@@ -75,7 +75,7 @@ public class ConstraintChecker {
             case 0 -> {
             }
             case 1 -> throw this.exceptions.stream().findFirst().get();
-            default -> throw new ConstraintViolatedException.MultipleConstraintsViolateds(this.exceptions);
+            default -> throw new ConstraintViolatedException.MultipleConstraintsViolated(this.exceptions);
         }
     }
     

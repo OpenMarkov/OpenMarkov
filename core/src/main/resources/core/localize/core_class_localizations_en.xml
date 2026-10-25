@@ -129,7 +129,7 @@
                   value="Model doesn't allow inverting links, meaning it is impossible to invert link from {from} to {to}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ModelDoesNotAllowRemovingLink"
                   value="Model doesn't allow removing links, meaning it is imposible to remove link from {from} to {to}."/>
-    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$MultipleConstraintsViolateds"
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$MultipleConstraintsViolated"
                   value="Multiple constraints have been violated:"/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfStateCannotBeEmpty"
                   value="Cannot use an empty name of state in node {node}."/>

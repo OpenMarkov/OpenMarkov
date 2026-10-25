@@ -68,11 +68,11 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         return this.localize();
     }
     
-    public static class MultipleConstraintsViolateds extends ConstraintViolatedException {
+    public static class MultipleConstraintsViolated extends ConstraintViolatedException {
         
         private final TreeMap<PNConstraint, TreeSet<ConstraintViolatedException>> exceptionsMap;
         
-        public MultipleConstraintsViolateds(Collection<ConstraintViolatedException> exceptions) {
+        public MultipleConstraintsViolated(Collection<ConstraintViolatedException> exceptions) {
             super(null);
             exceptionsMap = new TreeMap<>(Comparator.comparing(constraint -> constraint.getClass().getSimpleName()));
             for (ConstraintViolatedException exception : exceptions) {
@@ -97,16 +97,16 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
                 var concreteExceptionMessages = exceptions
                         .stream()
                         .map(e -> Localizable.localize(e, formatter, e.getClass().getName()))
-                        .map(MultipleConstraintsViolateds::tabList)
+                        .map(MultipleConstraintsViolated::tabList)
                         .collect(Collectors.joining(System.lineSeparator()));
                 return constraintExceptionMessage + System.lineSeparator() + concreteExceptionMessages;
             });
             if (thereIsOnlyOneKindOfConstraintViolated()) {
                 return exceptionsMapAsStrings.findFirst().get();
             }
-            String constraintExceptionMessage = Localizable.localize(this, formatter, MultipleConstraintsViolateds.class.getName());
+            String constraintExceptionMessage = Localizable.localize(this, formatter, MultipleConstraintsViolated.class.getName());
             String individualConstraintViolationReasons = exceptionsMapAsStrings
-                    .map(MultipleConstraintsViolateds::tabList)
+                    .map(MultipleConstraintsViolated::tabList)
                     .collect(Collectors.joining(System.lineSeparator()));
             return constraintExceptionMessage + System.lineSeparator() + individualConstraintViolationReasons;
         }
