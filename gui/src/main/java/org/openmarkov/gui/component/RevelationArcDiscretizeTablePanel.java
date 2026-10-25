@@ -19,6 +19,7 @@ import org.openmarkov.gui.action.RevelationIntervalEdit;
 import javax.swing.event.TableModelEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 /******
  * This class implements a Discretize table for the edition of intervals. The intervals can be continuous or discontinuous.
@@ -64,6 +65,9 @@ public class RevelationArcDiscretizeTablePanel extends DiscretizeTablePanel {
             accumulatedIndex += intervalTable.length;
         }
         setData(allIntervalTable);
+        // A new interval starts where the last one ends, so it needs a last one that ends before infinity
+        List<PartitionedInterval> intervals = link.getRevealingIntervals();
+        setEnabledAddValue(intervals.isEmpty() || intervals.getLast().getMax() < Double.POSITIVE_INFINITY);
     }
     
     /** A link may reveal no interval, as before the first one is added. */
