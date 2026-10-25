@@ -993,10 +993,10 @@ public class LearningDialog extends JDialog {
         databasePath = null;
         databaseName = null;
         database = null;
-        modelNet = null;
         resetCaseDatabaseFile();
-        modelNetTabPanel.modelNetTextPane.setText(null);
         modelNetTabPanel.noModelNetRadioButton.setEnabled(true);
+        modelNetTabPanel.noModelNetRadioButton.setSelected(true);
+        noModelNetRadioButtonActionPerformed(evt);
         resetVariablePanel();
     }//GEN-LAST:event_resetButtonActionPerformed
 
