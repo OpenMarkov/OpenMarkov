@@ -195,17 +195,13 @@ public final class VisualState extends VisualElement {
     
     /**
      * Sets the value of this state for the given position of the array (this
-     * position matches the evidence case number). The value is truncated so it
-     * only has NUMBER_OF_DECIMALS decimals
+     * position matches the evidence case number).
      *
      * @param caseNumber the position in the array to be established
      * @param value      the value to be set
      */
     public void setStateValue(int caseNumber, double value) {
-        // Value is currently formatted fixely with 4 decimals
-        double truncatedValue = (Math.rint(value * Math.pow(10, NUMBER_OF_DECIMALS))) / Math
-                .pow(10, NUMBER_OF_DECIMALS);
-        this.stateValues.set(caseNumber, truncatedValue);
+        this.stateValues.set(caseNumber, value);
     }
     
     /**
