@@ -535,13 +535,18 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
         while (index < comboBox.getItemCount() && Double.parseDouble(comboBox.getItemAt(index)) > precision) {
             index++;
         }
-        if (index == comboBox.getItemCount() || Double.compare(Double.parseDouble(comboBox.getItemAt(index)), precision) != 0) {
+        if (index == comboBox.getItemCount() || !samePrecision(Double.parseDouble(comboBox.getItemAt(index)), precision)) {
             // BigDecimal takes neither NaN nor an infinity: the reader refuses them, but a network built otherwise may have one
             comboBox.insertItemAt(Double.isFinite(precision)
                                   ? BigDecimal.valueOf(precision).stripTrailingZeros().toPlainString()
                                   : Double.toString(precision), index);
         }
         comboBox.setSelectedIndex(index);
+    }
+    
+    /** Whether two precisions are the same: −0 is 0, and NaN is NaN. */
+    private static boolean samePrecision(double a, double b) {
+        return a == b || Double.isNaN(a) && Double.isNaN(b);
     }
     
     /**
