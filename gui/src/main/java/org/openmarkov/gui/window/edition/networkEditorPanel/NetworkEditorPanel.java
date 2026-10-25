@@ -449,14 +449,14 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     }
 
     /** The dialogs that «Edit relation» can open. */
-    enum RelationDialog {
+    public enum RelationDialog {
         RELATION, POLICY, NONE;
 
         /**
          * The dialog that «Edit relation» opens for {@code node}, the one that the menus offer: for a decision, that
          * of its policy in edition mode and none in inference mode, where the menus do not offer its relation.
          */
-        static RelationDialog of(Node node, WorkingMode workingMode) {
+        public static RelationDialog of(Node node, WorkingMode workingMode) {
             if (node.getNodeType() != NodeType.DECISION) {
                 return RELATION;
             }

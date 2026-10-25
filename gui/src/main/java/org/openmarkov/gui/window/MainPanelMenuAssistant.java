@@ -667,8 +667,9 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                             canTemporalEvolution = true;
                         }
                     }
+                    canNodeTable = NetworkEditorPanel.RelationDialog.of(visualNode.getNode(), workingMode)
+                            == NetworkEditorPanel.RelationDialog.RELATION;
                     switch (visualNode.getNode().getNodeType()) {
-                        case CHANCE, UTILITY -> canNodeTable = true;
                         case DECISION -> {
                             switch (workingMode) {
                                 case EDITION -> {
@@ -695,7 +696,7 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                         case EVENT -> {
                             canAddTimeToEvent = true;
                         }
-                        case SV_SUM, SV_PRODUCT -> {
+                        case CHANCE, UTILITY, SV_SUM, SV_PRODUCT -> {
                         }
                     }
                     String label = StringDatabase.getUniqueInstance().getString(
