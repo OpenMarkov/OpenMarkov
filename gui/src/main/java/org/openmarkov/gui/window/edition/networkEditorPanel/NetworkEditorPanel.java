@@ -462,6 +462,15 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
             }
             return workingMode == WorkingMode.EDITION ? POLICY : NONE;
         }
+
+        /** The text of the menu entry that opens the relation of a node of type {@code nodeType}. */
+        public static String menuText(NodeType nodeType, WorkingMode workingMode) {
+            boolean utility = nodeType == NodeType.UTILITY;
+            return StringDatabase.getUniqueInstance().getString(switch (workingMode) {
+                case EDITION -> utility ? "Edit.Utility" : "Edit.NodePotential";
+                case INFERENCE -> utility ? "Edit.ViewUtility" : "Edit.ViewNodePotential";
+            });
+        }
     }
 
     /** «Edit relation» on the last selected node. */

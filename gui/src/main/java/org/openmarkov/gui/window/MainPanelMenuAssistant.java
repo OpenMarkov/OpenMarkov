@@ -699,19 +699,8 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
                         case CHANCE, UTILITY, SV_SUM, SV_PRODUCT -> {
                         }
                     }
-                    String label = StringDatabase.getUniqueInstance().getString(
-                            switch (visualNode.getNode().getNodeType()) {
-                                case CHANCE, DECISION, EVENT -> switch (workingMode) {
-                                    case EDITION -> "Edit.NodePotential";
-                                    case INFERENCE -> "Edit.ViewNodePotential";
-                                };
-                                case UTILITY -> switch (workingMode) {
-                                    case EDITION -> "Edit.Utility";
-                                    case INFERENCE -> "Edit.ViewUtility";
-                                };
-                                case SV_SUM, SV_PRODUCT -> null;
-                            });
-                    setText(ActionCommands.EDIT_POTENTIAL.getCommandName(), label);
+                    setText(ActionCommands.EDIT_POTENTIAL.getCommandName(),
+                            NetworkEditorPanel.RelationDialog.menuText(visualNode.getNode().getNodeType(), workingMode));
                     canAddFinding = !visualNode.hasAnyFinding() || (workingMode == NetworkEditorPanel.WorkingMode.EDITION)
                             || (
                             workingMode == NetworkEditorPanel.WorkingMode.INFERENCE && visualNode.isPostResolutionFinding()

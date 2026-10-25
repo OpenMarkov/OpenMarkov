@@ -388,6 +388,8 @@ public class NodeContextualMenu extends ContextualMenu {
         if (relationMenuItem == null) {
             relationMenuItem = new LocalizedMenuItem(MenuItemNames.EDIT_NODERELATION_MENUITEM,
                                                      ActionCommands.EDIT_POTENTIAL.getCommandName());
+            relationMenuItem.setText(NetworkEditorPanel.RelationDialog.menuText(selectedNode.getNode().getNodeType(),
+                                                                                networkEditorPanel.getWorkingMode()));
             relationMenuItem.setIcon(IconBind.EDIT_PROBABILITIES_ENABLED.icon());
             relationMenuItem.addActionListener(listener);
         }
