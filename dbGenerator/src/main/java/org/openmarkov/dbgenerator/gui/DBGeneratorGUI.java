@@ -8,6 +8,7 @@
 package org.openmarkov.dbgenerator.gui;
 
 import org.apache.commons.io.FilenameUtils;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
@@ -226,9 +227,11 @@ public class DBGeneratorGUI extends JDialog {
         generateButton.setEnabled(false);
         generateButton.addActionListener(evt -> {
             // GEN-FIRST:event_EvaluateButtonActionPerformed
+            int numberOfCases;
             try {
+                numberOfCases = numberOfCases((String) caseNumber.getSelectedItem());
                 DBGenerator.checkCanBeSampled(net);
-            } catch (NodeCannotBeSampled e) {
+            } catch (InvalidArgumentException | NodeCannotBeSampled e) {
                 throw new UnrecoverableException(e);
             }
             String databasePath = null;
@@ -254,7 +257,7 @@ public class DBGeneratorGUI extends JDialog {
                         + FileSystems.getDefault().getSeparator() + filename;
                 CaseDatabase database;
                 try {
-                    database = DBGenerator.generate(net, Integer.parseInt((String) caseNumber.getSelectedItem()));
+                    database = DBGenerator.generate(net, numberOfCases);
                 } catch (NodeCannotBeSampled e) {
                     throw new UnrecoverableException(e);
                 }
@@ -333,6 +336,24 @@ public class DBGeneratorGUI extends JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * @return the number of cases in {@code typed}, ignoring the blanks around it
+     *
+     * @throws InvalidArgumentException if it is not a whole number greater than 0
+     */
+    static int numberOfCases(String typed) {
+        int numberOfCases;
+        try {
+            numberOfCases = Integer.parseInt(typed.strip());
+        } catch (NumberFormatException notAWholeNumber) {
+            numberOfCases = 0;
+        }
+        if (numberOfCases <= 0) {
+            throw new InvalidArgumentException(typed, "number of cases", "it must be a whole number greater than 0");
+        }
+        return numberOfCases;
+    }
+    
     /**
      * It asks the user to choose a file by means of a open-file dialog box.
      *
