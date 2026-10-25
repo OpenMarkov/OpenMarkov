@@ -187,6 +187,7 @@ public class DBGeneratorGUI extends JDialog {
             try {
                 netFromFile = NetsIO.openNetworkFile(netFilePath).probNet();
                 net = netFromFile;
+                netFilePathTextPane.setText(fileName);
             } catch (NoReaderForFileException | IOException | ProbNetParserException | CorruptNetworkFile e) {
                 throw new UnrecoverableException(e);
             } finally {
@@ -333,7 +334,6 @@ public class DBGeneratorGUI extends JDialog {
         if (netFileChooser.showOpenDialog(this.parent) == JFileChooser.APPROVE_OPTION) {
             filePath = netFileChooser.getSelectedFile().getAbsolutePath();
             fileName = netFileChooser.getSelectedFile().getName();
-            netFilePathTextPane.setText(fileName);
         }
         return filePath;
     }
