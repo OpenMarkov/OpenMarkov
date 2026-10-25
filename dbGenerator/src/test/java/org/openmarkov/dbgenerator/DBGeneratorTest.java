@@ -58,20 +58,20 @@ public class DBGeneratorTest {
                 new double[]{0.7, 0.3, 0.2, 0.8}));
     }
 
-    @Test public void sameSeedProducesIdenticalDatabases() {
+    @Test public void sameSeedProducesIdenticalDatabases() throws Exception {
         CaseDatabase first = DBGenerator.generate(probNet, 500, 12345L);
         CaseDatabase second = DBGenerator.generate(probNet, 500, 12345L);
         assertArrayEquals(first.getCases(), second.getCases());
     }
 
-    @Test public void differentSeedsProduceDifferentDatabases() {
+    @Test public void differentSeedsProduceDifferentDatabases() throws Exception {
         CaseDatabase first = DBGenerator.generate(probNet, 500, 12345L);
         CaseDatabase second = DBGenerator.generate(probNet, 500, 67890L);
         assertFalse(java.util.Arrays.deepEquals(first.getCases(), second.getCases()),
                 "two different seeds produced the same 500-case database");
     }
 
-    @Test public void columnsOffByRoundingAreSampledAsNormalized() {
+    @Test public void columnsOffByRoundingAreSampledAsNormalized() throws Exception {
         ProbNet rounded = oneNodeWith(0.5005, 0.5);
         ProbNet exact = oneNodeWith(0.5005 / 1.0005, 0.5 / 1.0005);
         assertArrayEquals(DBGenerator.generate(exact, 100_000, 12345L).getCases(),

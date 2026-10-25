@@ -18,6 +18,7 @@ import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.dbgenerator.DBGenerator;
+import org.openmarkov.dbgenerator.NodeCannotBeSampled;
 import org.openmarkov.gui.dialog.io.DBWriterOMFileChooser;
 import org.openmarkov.gui.dialog.io.FileFilterByExtension;
 import org.openmarkov.gui.dialog.io.NetsIO;
@@ -225,6 +226,11 @@ public class DBGeneratorGUI extends JDialog {
         generateButton.setEnabled(false);
         generateButton.addActionListener(evt -> {
             // GEN-FIRST:event_EvaluateButtonActionPerformed
+            try {
+                DBGenerator.checkCanBeSampled(net);
+            } catch (NodeCannotBeSampled e) {
+                throw new UnrecoverableException(e);
+            }
             String databasePath = null;
 
             if (caseDBFileChooser.showSaveDialog(DBGeneratorGUI.this) == JFileChooser.APPROVE_OPTION) {
@@ -246,8 +252,12 @@ public class DBGeneratorGUI extends JDialog {
                 generateButton.setEnabled(net != null);
                 databasePath = caseDBFileChooser.getSelectedFile().getParent()
                         + FileSystems.getDefault().getSeparator() + filename;
-                CaseDatabase database = DBGenerator.generate(net,
-                                                             Integer.parseInt((String) caseNumber.getSelectedItem()));
+                CaseDatabase database;
+                try {
+                    database = DBGenerator.generate(net, Integer.parseInt((String) caseNumber.getSelectedItem()));
+                } catch (NodeCannotBeSampled e) {
+                    throw new UnrecoverableException(e);
+                }
                 try {
                     databaseWriter.save(new File(databasePath), database);
                 } catch (IOException e) {

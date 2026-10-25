@@ -8,6 +8,7 @@ package org.openmarkov.dbgenerator;
 
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.ProbNetOperations;
 import org.openmarkov.core.model.network.Variable;
@@ -31,8 +32,9 @@ public class DBGenerator  {
 	 * @param probNet       the Bayesian network to sample from
 	 * @param numberOfCases the number of cases to generate
 	 * @return a {@link CaseDatabase} containing the sampled cases
+	 * @throws NodeCannotBeSampled if a node of the network cannot be sampled
 	 */
-	public static CaseDatabase generate(ProbNet probNet, int numberOfCases) {
+	public static CaseDatabase generate(ProbNet probNet, int numberOfCases) throws NodeCannotBeSampled {
 		return generate(probNet, numberOfCases, new Random());
 	}
 
@@ -45,12 +47,27 @@ public class DBGenerator  {
 	 * @param numberOfCases the number of cases to generate
 	 * @param seed          the seed for the random generator
 	 * @return a {@link CaseDatabase} containing the sampled cases
+	 * @throws NodeCannotBeSampled if a node of the network cannot be sampled
 	 */
-	public static CaseDatabase generate(ProbNet probNet, int numberOfCases, long seed) {
+	public static CaseDatabase generate(ProbNet probNet, int numberOfCases, long seed) throws NodeCannotBeSampled {
 		return generate(probNet, numberOfCases, new Random(seed));
 	}
 
-	private static CaseDatabase generate(ProbNet probNet, int numberOfCases, Random randomGenerator) {
+	/**
+	 * @throws NodeCannotBeSampled for the first node, in the order of sampling, that is not a chance node or has no
+	 *                             relation
+	 */
+	public static void checkCanBeSampled(ProbNet probNet) throws NodeCannotBeSampled {
+		for (Node node : ProbNetOperations.sortTopologically(probNet)) {
+			if (node.getNodeType() != NodeType.CHANCE || node.getPotentials().isEmpty()) {
+				throw new NodeCannotBeSampled(node.getName());
+			}
+		}
+	}
+
+	private static CaseDatabase generate(ProbNet probNet, int numberOfCases, Random randomGenerator)
+			throws NodeCannotBeSampled {
+		checkCanBeSampled(probNet);
 		List<Node> nodes = probNet.getNodes();
 		int[][] cases = new int[numberOfCases][nodes.size()];
 		List<Node> sortedNodes = ProbNetOperations.sortTopologically(probNet);
@@ -66,8 +83,13 @@ public class DBGenerator  {
 			
 			for (int j = 0; j < sortedNodeIndexes.size(); ++j) {
 				Node node = sortedNodes.get(j);
-				int sampledIndex = normalized.getNode(node.getVariable()).getPotentials().get(0)
-						.sampleConditionedVariable(randomGenerator, sampledStateIndexes);
+				int sampledIndex;
+				try {
+					sampledIndex = normalized.getNode(node.getVariable()).getPotentials().get(0)
+							.sampleConditionedVariable(randomGenerator, sampledStateIndexes);
+				} catch (UnsupportedOperationException cannotBeSampled) {
+					throw new NodeCannotBeSampled(node.getName());
+				}
 				sampledStateIndexes.put(node.getVariable(), sampledIndex);
 				cases[i][sortedNodeIndexes.get(j)] = sampledIndex;
 			}

@@ -112,6 +112,7 @@
     "NoSelectedNodeException",
     "NoSuperValueNodeAllowed",
     "NoWriterForExtensionException",
+    "NodeCannotBeSampled",
     "NodeCannotHaveMoreParents",
     "NodeHasMoreParentsThanAllowed",
     "NodeHasRepeatedLinks",

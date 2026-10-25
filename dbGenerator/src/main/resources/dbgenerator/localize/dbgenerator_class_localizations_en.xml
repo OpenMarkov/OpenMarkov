@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassLocalizations>
+    <Localization class="org.openmarkov.dbgenerator.NodeCannotBeSampled"
+                  value="Cases cannot be generated: node {nodeName} is not a chance node with a relation that can be sampled."/>
+</ClassLocalizations>
