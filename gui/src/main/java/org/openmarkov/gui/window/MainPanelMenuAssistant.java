@@ -882,6 +882,9 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         setOptionEnabled(ActionCommands.DECISION_CREATION, false);
         setOptionEnabled(ActionCommands.UTILITY_CREATION, false);
         setOptionEnabled(ActionCommands.LINK_CREATION, false);
+        setOptionEnabled(ActionCommands.SELECT_ALL, false);
+        setOptionEnabled(ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC, false);
+        setOptionEnabled(ActionCommands.SENSITIVITY_ANALYSIS, false);
         
         //mainPanel.getStandardToolBar().getDecisionTreeButton().setSelected(true);
         setZoom(decisionTreeEditor.getZoom());

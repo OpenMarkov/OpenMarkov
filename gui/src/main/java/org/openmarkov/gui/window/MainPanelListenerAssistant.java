@@ -133,7 +133,11 @@ public class MainPanelListenerAssistant extends WindowAdapter
                     GUIUtils.executeUIAction(() -> getCurrentNetworkEditorPanel().pasteFromClipboard(null));
             case ActionCommands.UNDO -> editAndViewHandler.undo();
             case ActionCommands.REDO -> editAndViewHandler.redo();
-            case ActionCommands.SELECT_ALL -> getCurrentNetworkEditorPanel().selectAllObjects();
+            case ActionCommands.SELECT_ALL -> {
+                if (getCurrentNetworkEditorPanel() != null) {
+                    getCurrentNetworkEditorPanel().selectAllObjects();
+                }
+            }
             case ActionCommands.AUTO_ARRANGE -> getCurrentNetworkEditorPanel().autoArrangeNodes();
             case ActionCommands.OBJECT_REMOVAL -> getCurrentNetworkEditorPanel().removeSelectedObjects();
             case ActionCommands.EDITION_MODE_PREFIX -> editAndViewHandler.activateEditionMode(actionCommand);
@@ -301,7 +305,9 @@ public class MainPanelListenerAssistant extends WindowAdapter
                                             .getProbNet(), newVariable, selectedNode.getNodeType(), position).executeEdit();
             });
             case ActionCommands.COST_EFFECTIVENESS_DETERMINISTIC -> {
-                GUIUtils.executeUIAction(() -> inferenceHandler.showCostEffectivenessDeterministic(getCurrentNetworkEditorPanel()));
+                if (getCurrentNetworkEditorPanel() != null) {
+                    GUIUtils.executeUIAction(() -> inferenceHandler.showCostEffectivenessDeterministic(getCurrentNetworkEditorPanel()));
+                }
             }
             case ActionCommands.CONFIGURATION ->
                     GUIUtils.executeUIAction(editAndViewHandler::showUserConfigurationDialog);
