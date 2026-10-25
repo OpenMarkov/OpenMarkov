@@ -33,7 +33,7 @@ class TheUnrolledNetworkOfAMarkovInfluenceDiagramPropagatesTest {
                         .findFirst().orElseThrow()).probNet();
         EvidenceCase evidence = new EvidenceCase();
         ProbNet unrolled = TemporalNetOperations.expandNetwork(markovInfluenceDiagram, evidence,
-                                                               "MID-Chancellor_extended.pgmx");
+                                                               "MID-Chancellor_extended.pgmx").probNet();
         VEPropagation propagation = new VEPropagation(unrolled);
         propagation.setVariablesOfInterest(unrolled.getVariables());
         propagation.setPreResolutionEvidence(evidence);

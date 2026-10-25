@@ -187,15 +187,16 @@ class InferenceHandler {
         String fileName = networkName.substring(0, networkName.lastIndexOf('.'));
         fileName = fileName + stringDatabase.getString("CostEffectiveness.ExpandNetwork.FileName") + ".pgmx";
 
-        ProbNet expandedNetwork = TemporalNetOperations.expandNetwork(probNet, preResolutionEvidence, fileName);
+        TemporalNetOperations.ExpandedNetwork expanded =
+                TemporalNetOperations.expandNetwork(probNet, preResolutionEvidence, fileName);
         
-        NetworkEditorPanel networkPanel = fileHandler.createNewFrame(expandedNetwork, null);
+        NetworkEditorPanel networkPanel = fileHandler.createNewFrame(expanded.probNet(), null);
         mainPanel.getMainPanelMenuAssistant()
                  .setOptionEnabled(ActionCommands.SAVE_OPEN_NETWORK.getCommandName(), false);
         networkPanel.setNetworkFile(path + File.separator + fileName);
         networkPanel.getEditorPanel()
                     .getEvidenceManager()
-                    .setEvidence(preResolutionEvidence, new ArrayList<>());
+                    .setEvidence(expanded.evidence(), new ArrayList<>());
         fileHandler.getNetworkEditorPanels().add(networkPanel);
     }
 

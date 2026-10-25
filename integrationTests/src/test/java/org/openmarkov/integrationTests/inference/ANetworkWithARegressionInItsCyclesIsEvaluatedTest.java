@@ -64,7 +64,7 @@ class ANetworkWithARegressionInItsCyclesIsEvaluatedTest {
      */
     @Test void itsExpandedNetworkIsPropagatedAndAnalysed() throws Exception {
         probNet.getInferenceOptions().getTemporalOptions().setHorizon(2);
-        ProbNet expanded = TemporalNetOperations.expandNetwork(probNet, new EvidenceCase(), "expanded");
+        ProbNet expanded = TemporalNetOperations.expandNetwork(probNet, new EvidenceCase(), "expanded").probNet();
 
         VEPropagation propagation = new VEPropagation(expanded);
         propagation.setVariablesOfInterest(expanded.getVariables());

@@ -456,16 +456,21 @@ public class TemporalNetOperations {
     //		return expandedNetwork;
     //	}
     
+    /** An expanded network, with the findings of the model on its own variables. */
+    public record ExpandedNetwork(ProbNet probNet, EvidenceCase evidence) {
+    }
+    
     /**
      * @param probNet               MID to be expanded
      * @param preResolutionEvidence evidence associated to probNet
      * @param networkName           MID to be expanded
      *
-     * @return expanded network as an influence diagram with the associated evidence extended, the evidence generated from constant potentials,and the non-observed variables discretized
+     * @return expanded network as an influence diagram with the associated evidence extended, the evidence generated from constant potentials,and the non-observed variables discretized,
+     * and the findings of {@code preResolutionEvidence} on its variables
      *
      * @throws UnsupportedOperationException - when probNet is not an MID, the network cannot be expanded.
      */
-    public static ProbNet expandNetwork(ProbNet probNet, EvidenceCase preResolutionEvidence, String networkName) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException {
+    public static ExpandedNetwork expandNetwork(ProbNet probNet, EvidenceCase preResolutionEvidence, String networkName) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException {
         //FIXME hardcoded
         if (!(probNet.getNetworkType() instanceof MIDType)) {
             throw new NotSupportedOperationException("Network has to be an MID");
@@ -473,17 +478,47 @@ public class TemporalNetOperations {
 //		LogManager.getLogger().debug("Expanding");
         ProbNet expandedNetwork = TemporalNetOperations.expandNetwork(probNet.deepCopy());
         expandedNetwork.setName(networkName);
+        EvidenceCase evidence = onVariablesOf(expandedNetwork, preResolutionEvidence);
 //		LogManager.getLogger().debug("Extending pre-resolution evidence");
         // Extend pre-resolution evidence
-        preResolutionEvidence = TaskUtilities.extendPreResolutionEvidence(expandedNetwork, preResolutionEvidence);
+        EvidenceCase extendedEvidence = TaskUtilities.extendPreResolutionEvidence(expandedNetwork, evidence);
 //		LogManager.getLogger().debug("Applying discounts");
         // Apply discounts
         expandedNetwork = TaskUtilities.applyDiscounts(expandedNetwork, true);
 //		LogManager.getLogger().debug("Discretizing non-observerd numeric variables");
         // Discretize non-observed numeric variables
-        expandedNetwork = TaskUtilities.discretizeNonObservedNumericVariables(expandedNetwork, preResolutionEvidence);
+        expandedNetwork = TaskUtilities.discretizeNonObservedNumericVariables(expandedNetwork, extendedEvidence);
+        // The discretization copies the network, and turns an observed numeric variable into one of a single state
+        evidence = onVariablesOf(expandedNetwork, evidence);
         transformToInfluenceDiagram(expandedNetwork);
-        return expandedNetwork;
+        return new ExpandedNetwork(expandedNetwork, evidence);
+    }
+    
+    /**
+     * The findings of {@code evidence} on the variables of {@code expandedNetwork} with the same names; a numeric value
+     * on a variable of states is the state with its name. A finding on a cycle beyond the horizon, which the expanded
+     * network does not have, is left out.
+     */
+    private static EvidenceCase onVariablesOf(ProbNet expandedNetwork, EvidenceCase evidence)
+            throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther {
+        EvidenceCase onExpanded = new EvidenceCase();
+        if (evidence == null) {
+            return onExpanded;
+        }
+        for (Finding finding : evidence.getFindings()) {
+            Variable variable = expandedNetwork.getVariable(finding.getVariable().getName());
+            if (variable != null) {
+                if (variable.getVariableType() != VariableType.FINITE_STATES) {
+                    onExpanded.addFinding(new Finding(variable, finding.getNumericalValue()));
+                } else if (finding.getVariable().getVariableType() == VariableType.FINITE_STATES) {
+                    onExpanded.addFinding(new Finding(variable, finding.getStateIndex()));
+                } else {
+                    onExpanded.addFinding(new Finding(variable,
+                                                      variable.getStateIndex(String.valueOf(finding.getNumericalValue()))));
+                }
+            }
+        }
+        return onExpanded;
     }
 
 //
