@@ -66,6 +66,11 @@ public class RevelationArcDiscretizeTablePanel extends DiscretizeTablePanel {
         setData(allIntervalTable);
     }
     
+    /** A link may reveal no interval, as before the first one is added. */
+    @Override protected int minimumRowCount() {
+        return 0;
+    }
+    
     /**
      * Invoked when the button 'add' is pressed.
      */
