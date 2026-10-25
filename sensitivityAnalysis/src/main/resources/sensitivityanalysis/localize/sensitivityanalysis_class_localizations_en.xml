@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClassLocalizations>
-    <Localization class="org.openmarkov.sensitivityanalysis.exceptions.UncertainParameterException$FewUncertainParameters" value="There is {actual} uncertain parameters, but there should be at least {required}."/>
+    <Localization class="org.openmarkov.sensitivityanalysis.exceptions.UncertainParameterException$FewUncertainParameters" value="Uncertain parameters in the network: {actual}. This analysis needs at least {required}."/>
     <Localization class="org.openmarkov.sensitivityanalysis.exceptions.ScopeException$NoDecisionInTheNetwork" value="The analysis «{analysis}» is made for a decision, and the network has none."/>
 </ClassLocalizations>

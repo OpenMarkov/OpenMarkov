@@ -44,6 +44,14 @@ public class SensitivityAnalysisConfiguration {
 		this.isBiaxial = isBiaxial;
 	}
 
+	/** The fewest named uncertain parameters the analysis needs: none, one, or two for one that moves two at once. */
+	public int requiredUncertainParameters() {
+		if (parameterType == ParameterType.NO_PARAMETER) {
+			return 0;
+		}
+		return isBiaxial ? 2 : 1;
+	}
+
 	public ParameterType getParameterType() {
 		return this.parameterType;
 	}

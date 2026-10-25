@@ -173,17 +173,9 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
         mainPanel.add(getNetworkNamePanel());
         mainPanel.add(getAnalysisTypePanel());
         
-        if (controller.getConfiguration()
-                      .getParameterType() != ParameterType.NO_PARAMETER && controller.getUncertainParameters()
-                                                                                     .isEmpty()) {
-            ExceptionDialog.show(new UncertainParameterException.FewUncertainParameters(1, controller.getUncertainParameters()
-                                                                                                     .size()));
-            getOKButton().setEnabled(false);
-        } else if (controller.getConfiguration()
-                             .getParameterType() != ParameterType.NO_PARAMETER && controller.getConfiguration()
-                                                                                            .isBiaxial() && controller.getUncertainParameters()
-                                                                                                                      .size() < 2) {
-            ExceptionDialog.show(new UncertainParameterException.FewUncertainParameters(2, controller.getUncertainParameters()
+        int required = controller.getConfiguration().requiredUncertainParameters();
+        if (controller.getUncertainParameters().size() < required) {
+            ExceptionDialog.show(new UncertainParameterException.FewUncertainParameters(required, controller.getUncertainParameters()
                                                                                                      .size()));
             getOKButton().setEnabled(false);
         } else if (!controller.getConfiguration().isCanBeGlobal() && !controller.getConfiguration().isCanBeDecision()) {
