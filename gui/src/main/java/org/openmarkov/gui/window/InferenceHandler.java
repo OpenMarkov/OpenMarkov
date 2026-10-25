@@ -174,7 +174,6 @@ class InferenceHandler {
     void expandNetwork(ProbNet probNet, EvidenceCase preResolutionEvidence) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, ThereIsNoPotentialInNodeException {
         emptyPotentialChecker();
         NetworkEditorPanel networkPanelMID = getCurrentNetworkEditorPanel();
-        String path = (new File(networkPanelMID.getNetworkFile())).getParent();
         InferenceOptionsDialog costEffectivenessDialog = new InferenceOptionsDialog(probNet,
                                                                                     ComponentUtilities.getOwner(mainPanel), null);
         costEffectivenessDialog.getMulticriteriaPanel().setEnabled(false);
@@ -182,10 +181,7 @@ class InferenceHandler {
             return;
         }
 
-        StringDatabase stringDatabase = StringDatabase.getUniqueInstance();
-        String networkName = probNet.getName();
-        String fileName = networkName.substring(0, networkName.lastIndexOf('.'));
-        fileName = fileName + stringDatabase.getString("CostEffectiveness.ExpandNetwork.FileName") + ".pgmx";
+        String fileName = expandedFileName(probNet.getName());
 
         TemporalNetOperations.ExpandedNetwork expanded =
                 TemporalNetOperations.expandNetwork(probNet, preResolutionEvidence, fileName);
@@ -193,11 +189,29 @@ class InferenceHandler {
         NetworkEditorPanel networkPanel = fileHandler.createNewFrame(expanded.probNet(), null);
         mainPanel.getMainPanelMenuAssistant()
                  .setOptionEnabled(ActionCommands.SAVE_OPEN_NETWORK.getCommandName(), false);
-        networkPanel.setNetworkFile(path + File.separator + fileName);
+        networkPanel.setNetworkFile(expandedFile(networkPanelMID.getNetworkFile(), fileName));
         networkPanel.getEditorPanel()
                     .getEvidenceManager()
                     .setEvidence(expanded.evidence(), new ArrayList<>());
         fileHandler.getNetworkEditorPanels().add(networkPanel);
+    }
+
+    /**
+     * @return {@code networkName} without its extension, if it has one, followed by the suffix of an expanded network
+     * and ".pgmx"
+     */
+    static String expandedFileName(String networkName) {
+        int extension = networkName.lastIndexOf('.');
+        String baseName = extension < 0 ? networkName : networkName.substring(0, extension);
+        return baseName + StringDatabase.getUniqueInstance().getString("CostEffectiveness.ExpandNetwork.FileName")
+               + ".pgmx";
+    }
+    
+    /**
+     * @return the file {@code expandedFileName} in the folder of {@code modelFile}, or null if the model has no file
+     */
+    static String expandedFile(String modelFile, String expandedFileName) {
+        return modelFile == null ? null : new File(new File(modelFile).getParent(), expandedFileName).getPath();
     }
 
     // ── Decision tree & optimal strategy ──────────────────────────
