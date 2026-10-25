@@ -150,6 +150,16 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String value;
     }
     
+    /** The discount rate of a criterion whose file has no value. */
+    public static final class DiscountMissing extends PGMXParserException {
+        public DiscountMissing(String criterionName, Element element) {
+            super(element);
+            this.criterionName = criterionName;
+        }
+        
+        public final String criterionName;
+    }
+    
     /** An indicator of an event whose file has no time to the event. */
     public static final class TimeToEventMissing extends PGMXParserException {
         public TimeToEventMissing(String variableName, Element element) {

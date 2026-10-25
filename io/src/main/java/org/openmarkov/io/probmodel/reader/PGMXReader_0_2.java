@@ -384,7 +384,7 @@ public class PGMXReader_0_2 {
      * @param root    Root element
      * @param probNet ProbNet
      */
-    protected void getInferenceOptions(Element root, ProbNet probNet) throws PGMXParserException.DiscountOutOfRange {
+    protected void getInferenceOptions(Element root, ProbNet probNet) throws PGMXParserException.DiscountOutOfRange, PGMXParserException.DiscountMissing {
         Element inferenceOptions = root.getChild(XMLTags.INFERENCE_OPTIONS.toString());
         if (inferenceOptions != null) {
             getMulticriteriaOptions(inferenceOptions, probNet);
@@ -470,7 +470,7 @@ public class PGMXReader_0_2 {
      * @param inferenceOptions Inference Options
      * @param probNet          ProbNet
      */
-    protected void getTemporalOptions(Element inferenceOptions, ProbNet probNet) throws PGMXParserException.DiscountOutOfRange {
+    protected void getTemporalOptions(Element inferenceOptions, ProbNet probNet) throws PGMXParserException.DiscountOutOfRange, PGMXParserException.DiscountMissing {
         Element temporalOptions = inferenceOptions.getChild(XMLTags.TEMPORAL_OPTIONS.toString());
         if (temporalOptions != null) {
             
@@ -850,11 +850,15 @@ public class PGMXReader_0_2 {
     
     /**
      * @return the discount that {@code discountElement} writes; a number that is not finite, which the window of the
-     * inference options could not show, or no number at all, is refused with a message that names the criterion
+     * inference options could not show, no number at all, or no value, is refused with a message that names the
+     * criterion
      */
     private static double getXMLDiscount(Element discountElement, String criterionName)
-            throws PGMXParserException.DiscountOutOfRange {
+            throws PGMXParserException.DiscountOutOfRange, PGMXParserException.DiscountMissing {
         String written = discountElement.getAttributeValue(XMLAttributes.VALUE.toString());
+        if (written == null) {
+            throw new PGMXParserException.DiscountMissing(criterionName, discountElement);
+        }
         double discount;
         try {
             discount = Double.parseDouble(written.strip());
