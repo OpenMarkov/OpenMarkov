@@ -475,7 +475,7 @@ public class PGMXReader_0_2 {
         if (temporalOptions != null) {
             
             Element slices = temporalOptions.getChild(XMLTags.SLICES.toString());
-            probNet.getInferenceOptions().getTemporalOptions().setHorizon(Integer.parseInt(slices.getValue()));
+            probNet.getInferenceOptions().getTemporalOptions().setHorizon(parseInteger(slices.getValue()));
             
             Element transition = temporalOptions.getChild(XMLTags.TRANSITION.toString());
             probNet.getInferenceOptions()
@@ -747,7 +747,7 @@ public class PGMXReader_0_2 {
         
         // Set timeSlice
         if (stringTimeSlice != null) {
-            variable.setTimeSlice(Integer.parseInt(stringTimeSlice));
+            variable.setTimeSlice(parseInteger(stringTimeSlice));
         }
         
         // Set unit
@@ -816,7 +816,7 @@ public class PGMXReader_0_2 {
         String timeSlice = element.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
         variableName = variableName.replace(" [" + timeSlice + "]", "");
         return (timeSlice == null) ? probNet.getVariable(variableName)
-                : probNet.getVariable(variableName, Integer.parseInt(timeSlice));
+                : probNet.getVariable(variableName, parseInteger(timeSlice));
     }
     
     protected String getElementName(Element element) {
@@ -980,7 +980,7 @@ public class PGMXReader_0_2 {
         int xCoordinate = 0;
         if (coordinatesElement != null) {
             String xString = coordinatesElement.getAttributeValue(XMLAttributes.X.toString());
-            xCoordinate = Integer.parseInt(xString);
+            xCoordinate = parseInteger(xString);
         }
         return xCoordinate;
     }
@@ -995,7 +995,7 @@ public class PGMXReader_0_2 {
         int yCoordinate = 0;
         if (coordinatesElement != null) {
             String yString = coordinatesElement.getAttributeValue(XMLAttributes.Y.toString());
-            yCoordinate = Integer.parseInt(yString);
+            yCoordinate = parseInteger(yString);
         }
         return yCoordinate;
     }
@@ -1574,6 +1574,13 @@ public class PGMXReader_0_2 {
         // Builds the tree potential from the graph
         
         return new TreeADDPotential(variables, topVariable, xmlRole, branches);
+    }
+    
+    /**
+     * @return the integer written in {@code text}, ignoring the blanks around it
+     */
+    protected static int parseInteger(String text) {
+        return Integer.parseInt(text.strip());
     }
     
     protected static double[] parseDoubles(String string) {

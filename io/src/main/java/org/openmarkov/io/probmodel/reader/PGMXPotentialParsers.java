@@ -49,7 +49,7 @@ public class PGMXPotentialParsers {
         String timeSlice = element.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
         variableName = variableName.replace(" [" + timeSlice + "]", "");
         return (timeSlice == null) ? probNet.getVariable(variableName)
-                : probNet.getVariable(variableName, Integer.parseInt(timeSlice));
+                : probNet.getVariable(variableName, PGMXReader_0_2.parseInteger(timeSlice));
     }
 
     // -------------------------------------------------------------------------
@@ -176,7 +176,7 @@ public class PGMXPotentialParsers {
         if (xmlTimeVariable != null) {
             String variableName = xmlTimeVariable.getAttributeValue(XMLAttributes.NAME.toString());
             String timeSlice = xmlTimeVariable.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
-            Variable timeVariable = probNet.getVariable(variableName, Integer.parseInt(timeSlice));
+            Variable timeVariable = probNet.getVariable(variableName, PGMXReader_0_2.parseInteger(timeSlice));
             potential.setTimeVariable(timeVariable);
         }
         Element xmlLog = xmlPotential.getChild(XMLTags.LOG.toString());
@@ -253,7 +253,7 @@ public class PGMXPotentialParsers {
             State state = variables.getFirst().getState(xmlState.getText());
             return new DeltaPotential(variables, role, state);
         } else if (xmlStateIndex != null) {
-            int stateIndex = Integer.parseInt(xmlStateIndex.getText());
+            int stateIndex = PGMXReader_0_2.parseInteger(xmlStateIndex.getText());
             State state = variables.getFirst().getStates()[stateIndex];
             return new DeltaPotential(variables, role, state);
         }
@@ -267,7 +267,7 @@ public class PGMXPotentialParsers {
         Element xmlNumberOfCases = xmlPotential.getChild(XMLTags.NUMBER_OF_CASES.toString());
         Element xmlTheta = xmlPotential.getChild(XMLTags.THETA.toString());
         if ((xmlNumberOfCases != null) && (xmlTheta != null)) {
-            int N = Integer.parseInt(xmlNumberOfCases.getText());
+            int N = PGMXReader_0_2.parseInteger(xmlNumberOfCases.getText());
             double theta = Double.parseDouble(xmlTheta.getText());
             return new BinomialPotential(variables, role, N, theta);
         }
