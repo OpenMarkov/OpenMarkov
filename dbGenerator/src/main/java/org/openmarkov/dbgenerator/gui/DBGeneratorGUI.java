@@ -229,7 +229,7 @@ public class DBGeneratorGUI extends JDialog {
             // GEN-FIRST:event_EvaluateButtonActionPerformed
             int numberOfCases;
             try {
-                numberOfCases = numberOfCases((String) caseNumber.getSelectedItem());
+                numberOfCases = DBGenerator.numberOfCases((String) caseNumber.getSelectedItem());
                 DBGenerator.checkCanBeSampled(net);
             } catch (InvalidArgumentException | NodeCannotBeSampled e) {
                 throw new UnrecoverableException(e);
@@ -336,24 +336,6 @@ public class DBGeneratorGUI extends JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @return the number of cases in {@code typed}, ignoring the blanks around it
-     *
-     * @throws InvalidArgumentException if it is not a whole number greater than 0
-     */
-    static int numberOfCases(String typed) {
-        int numberOfCases;
-        try {
-            numberOfCases = Integer.parseInt(typed.strip());
-        } catch (NumberFormatException notAWholeNumber) {
-            numberOfCases = 0;
-        }
-        if (numberOfCases <= 0) {
-            throw new InvalidArgumentException(typed, "number of cases", "it must be a whole number greater than 0");
-        }
-        return numberOfCases;
-    }
-    
     /**
      * It asks the user to choose a file by means of a open-file dialog box.
      *

@@ -4,7 +4,7 @@
  * this code is distributed on an "AS IS" basis,
  * WITHOUT WARRANTIES OF ANY KIND.
  */
-package org.openmarkov.dbgenerator.gui;
+package org.openmarkov.dbgenerator;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,12 +26,12 @@ class TheNumberOfCasesTypedInIsCheckedTest {
 
     @ParameterizedTest @ValueSource(strings = {"100", " 100 "})
     void aWholeNumberAbove0IsRead(String typed) {
-        assertEquals(100, DBGeneratorGUI.numberOfCases(typed));
+        assertEquals(100, DBGenerator.numberOfCases(typed));
     }
 
     @ParameterizedTest @ValueSource(strings = {"abc", "-5", "0", "", "1,5"})
     void anythingElseIsRefused(String typed) {
-        var refused = assertThrows(InvalidArgumentException.class, () -> DBGeneratorGUI.numberOfCases(typed));
+        var refused = assertThrows(InvalidArgumentException.class, () -> DBGenerator.numberOfCases(typed));
 
         assertEquals("Argument number of cases (" + typed + ") is invalid because it must be a whole number greater "
                      + "than 0.", refused.getExceptionMessage());

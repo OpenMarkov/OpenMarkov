@@ -6,6 +6,7 @@
  */
 package org.openmarkov.dbgenerator;
 
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -51,6 +52,24 @@ public class DBGenerator  {
 	 */
 	public static CaseDatabase generate(ProbNet probNet, int numberOfCases, long seed) throws NodeCannotBeSampled {
 		return generate(probNet, numberOfCases, new Random(seed));
+	}
+
+	/**
+	 * @return the number of cases in {@code typed}, ignoring the blanks around it
+	 *
+	 * @throws InvalidArgumentException if it is not a whole number greater than 0
+	 */
+	public static int numberOfCases(String typed) {
+		int numberOfCases;
+		try {
+			numberOfCases = Integer.parseInt(typed.strip());
+		} catch (NumberFormatException notAWholeNumber) {
+			numberOfCases = 0;
+		}
+		if (numberOfCases <= 0) {
+			throw new InvalidArgumentException(typed, "number of cases", "it must be a whole number greater than 0");
+		}
+		return numberOfCases;
 	}
 
 	/**
