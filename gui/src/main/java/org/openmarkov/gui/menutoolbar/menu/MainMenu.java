@@ -51,6 +51,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -365,26 +367,44 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
     
     private JMenu buildToolsMenu() {
         if (this.toolsMenu == null) {
-            this.toolsMenu = MainMenu.createMenu(MenuItemNames.TOOLS_MENU);
-            ToolPluginManager toolsMenuManager = ToolPluginManager.getInstance();
-            var pluginsByGroupIterator
-                    = new TreeMap<>(toolsMenuManager.getAllToolPlugins().stream()
-                                                    .collect(Collectors.groupingBy(ToolPlugin::pluginGroup)))
-                    .entrySet().iterator();
-            while (pluginsByGroupIterator.hasNext()) {
-                var plugins = pluginsByGroupIterator.next().getValue();
-                plugins.sort(Comparator.comparing(ToolPlugin::priorityInGroup));
-                for (ToolPlugin plugin : plugins) {
-                    this.toolsMenu.add(toolItem(plugin.toMenuItem()));
+            JMenu menu = MainMenu.createMenu(MenuItemNames.TOOLS_MENU);
+            this.toolsMenu = menu;
+            fillToolsMenu(menu);
+            // Each plugin decides whether its entry is enabled from the network it sees when the menu opens
+            menu.addMenuListener(new MenuListener() {
+                @Override public void menuSelected(MenuEvent e) {
+                    menu.removeAll();
+                    fillToolsMenu(menu);
                 }
-                if (pluginsByGroupIterator.hasNext()) {
-                    this.toolsMenu.addSeparator();
+
+                @Override public void menuDeselected(MenuEvent e) {
                 }
-            }
-            this.toolsMenu.addSeparator();
-            this.toolsMenu.add(this.items.get(ActionCommands.CONFIGURATION));
+
+                @Override public void menuCanceled(MenuEvent e) {
+                }
+            });
         }
         return this.toolsMenu;
+    }
+
+    private void fillToolsMenu(JMenu menu) {
+        ToolPluginManager toolsMenuManager = ToolPluginManager.getInstance();
+        var pluginsByGroupIterator
+                = new TreeMap<>(toolsMenuManager.getAllToolPlugins().stream()
+                                                .collect(Collectors.groupingBy(ToolPlugin::pluginGroup)))
+                .entrySet().iterator();
+        while (pluginsByGroupIterator.hasNext()) {
+            var plugins = pluginsByGroupIterator.next().getValue();
+            plugins.sort(Comparator.comparing(ToolPlugin::priorityInGroup));
+            for (ToolPlugin plugin : plugins) {
+                menu.add(toolItem(plugin.toMenuItem()));
+            }
+            if (pluginsByGroupIterator.hasNext()) {
+                menu.addSeparator();
+            }
+        }
+        menu.addSeparator();
+        menu.add(this.items.get(ActionCommands.CONFIGURATION));
     }
     
     private JMenuItem toolItem(JMenuItem item) {
