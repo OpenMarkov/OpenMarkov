@@ -98,6 +98,14 @@
         <Title value="Repeated time"/>
         <Text value="Another row of the life table already starts at this time"/>
     </RepeatedLifeTableTime>
+    <RepeatedLifeTableTimeInFile>
+        <Title value="Repeated time"/>
+        <Text value="More than one row of the data file starts at time %s, so the life table is left as it was"/>
+    </RepeatedLifeTableTimeInFile>
+    <LifeTableValueNotANumber>
+        <Title value="Not a number"/>
+        <Text value="The times and the probabilities of the life table must be numbers"/>
+    </LifeTableValueNotANumber>
     <ClipboardNotSet>
         <Text value="This panel has not access to the clipboard"/>
     </ClipboardNotSet>

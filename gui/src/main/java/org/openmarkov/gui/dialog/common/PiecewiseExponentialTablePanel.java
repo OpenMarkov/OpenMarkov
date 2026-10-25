@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +25,7 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
 
     /** Column of the time where each stretch starts; the first column is hidden. */
     private static final int TIME_COLUMN = 1;
+    private static final int PROBABILITY_COLUMN = 2;
 
     protected JFileChooser chooser = new JFileChooser();
 //    protected Pattern dataPattern = Pattern.compile(".*(\\d+)\\s*;\\s*(\\d+\\.?\\d*).*");
@@ -122,6 +125,13 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
                         }
                     }
                 }
+                Set<Double> times = new HashSet<>();
+                for (Double[] row : data) {
+                    if (!times.add(row[TIME_COLUMN])) {
+                        warnRepeatedTimeInFile(row[TIME_COLUMN]);
+                        return;
+                    }
+                }
                 if (!data.isEmpty()) {
                     // Any better way to replace all rows?
                     while (tableModel.getRowCount() > 0) {
@@ -147,7 +157,8 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
     }
 
     /**
-     * The table, which refuses a time that another row already has: the cell keeps its value and the user is told.
+     * The table, which refuses a time or a probability that is not a number, and a time that another row already has:
+     * the cell keeps its value and the user is told.
      */
     @Override
     public KeyTable getValuesTable() {
@@ -155,6 +166,10 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
             valuesTable = new KeyTable(getTableModel(), true, true, true) {
                 @Override
                 public void setValueAt(Object newValue, int row, int column, Object source) {
+                    if ((column == TIME_COLUMN || column == PROBABILITY_COLUMN) && number(newValue) == null) {
+                        warnNotANumber();
+                        return;
+                    }
                     if (column == TIME_COLUMN && times(row).contains(number(newValue))) {
                         warnRepeatedTime();
                         return;
@@ -200,6 +215,26 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
     protected void warnRepeatedTime() {
         JOptionPane.showMessageDialog(this, stringDatabase.getString("RepeatedLifeTableTime.Text"),
                                       stringDatabase.getString("RepeatedLifeTableTime.Title"),
+                                      JOptionPane.WARNING_MESSAGE);
+    }
+
+    /**
+     * Tells the user that a time or a probability was refused because it is not a number. In a method of its own so
+     * tests can silence the dialog.
+     */
+    protected void warnNotANumber() {
+        JOptionPane.showMessageDialog(this, stringDatabase.getString("LifeTableValueNotANumber.Text"),
+                                      stringDatabase.getString("LifeTableValueNotANumber.Title"),
+                                      JOptionPane.WARNING_MESSAGE);
+    }
+
+    /**
+     * Tells the user that the data file was not loaded because more than one of its rows starts at {@code time}. In a
+     * method of its own so tests can silence the dialog.
+     */
+    protected void warnRepeatedTimeInFile(double time) {
+        JOptionPane.showMessageDialog(this, stringDatabase.getString("RepeatedLifeTableTimeInFile.Text").formatted(time),
+                                      stringDatabase.getString("RepeatedLifeTableTimeInFile.Title"),
                                       JOptionPane.WARNING_MESSAGE);
     }
 
