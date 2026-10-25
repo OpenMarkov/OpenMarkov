@@ -17,9 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
- * «Expand Network» names the expanded network after the model, without the extension when the name has one, and puts
- * it in the folder of the model's file; a model created with «New network» and never saved gives a network without a
- * file.
+ * «Expand Network» names the expanded network after the model's file, without its extension, and puts it in the
+ * folder of that file; a model never saved keeps its whole name, even with a dot, and gives a network without a file.
  *
  * @author Manuel Arias
  */
@@ -30,18 +29,22 @@ class AModelNeverSavedCanBeExpandedTest {
             StringDatabase.getUniqueInstance().getString("CostEffectiveness.ExpandNetwork.FileName");
 
     @Test void aModelNeverSavedGivesANetworkWithoutAFile() {
-        String fileName = InferenceHandler.expandedFileName("New network");
+        String fileName = InferenceHandler.expandedFileName("New network", null);
 
         assertEquals("New network" + SUFFIX + ".pgmx", fileName);
         assertNull(InferenceHandler.expandedFile(null, fileName));
     }
 
+    @Test void aModelNeverSavedKeepsADotInItsName() {
+        assertEquals("Model v1.2" + SUFFIX + ".pgmx", InferenceHandler.expandedFileName("Model v1.2", null));
+    }
+
     @Test void aSavedModelGivesANetworkInItsFolder() {
         File folder = new File("a", "b");
-        String fileName = InferenceHandler.expandedFileName("MID-x.pgmx");
+        String modelFile = new File(folder, "MID-x.pgmx").getPath();
+        String fileName = InferenceHandler.expandedFileName("MID-x.pgmx", modelFile);
 
         assertEquals("MID-x" + SUFFIX + ".pgmx", fileName);
-        assertEquals(new File(folder, fileName).getPath(),
-                     InferenceHandler.expandedFile(new File(folder, "MID-x.pgmx").getPath(), fileName));
+        assertEquals(new File(folder, fileName).getPath(), InferenceHandler.expandedFile(modelFile, fileName));
     }
 }

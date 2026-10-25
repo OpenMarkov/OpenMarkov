@@ -7,6 +7,7 @@
 
 package org.openmarkov.gui.window;
 
+import org.apache.commons.io.FilenameUtils;
 import org.openmarkov.core.exception.CannotNormalizePotentialException;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
@@ -181,7 +182,7 @@ class InferenceHandler {
             return;
         }
 
-        String fileName = expandedFileName(probNet.getName());
+        String fileName = expandedFileName(probNet.getName(), networkPanelMID.getNetworkFile());
 
         TemporalNetOperations.ExpandedNetwork expanded =
                 TemporalNetOperations.expandNetwork(probNet, preResolutionEvidence, fileName);
@@ -197,12 +198,11 @@ class InferenceHandler {
     }
 
     /**
-     * @return {@code networkName} without its extension, if it has one, followed by the suffix of an expanded network
-     * and ".pgmx"
+     * @return the base name of {@code modelFile}, or {@code networkName} whole if the model has no file, followed by
+     * the suffix of an expanded network and ".pgmx"
      */
-    static String expandedFileName(String networkName) {
-        int extension = networkName.lastIndexOf('.');
-        String baseName = extension < 0 ? networkName : networkName.substring(0, extension);
+    static String expandedFileName(String networkName, String modelFile) {
+        String baseName = modelFile == null ? networkName : FilenameUtils.getBaseName(modelFile);
         return baseName + StringDatabase.getUniqueInstance().getString("CostEffectiveness.ExpandNetwork.FileName")
                + ".pgmx";
     }
