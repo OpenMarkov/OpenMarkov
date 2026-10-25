@@ -1,5 +1,6 @@
 package org.openmarkov.gui.dialog;
 
+import org.openmarkov.core.exception.IOpenMarkovException;
 import org.openmarkov.core.exception.InferenceStoppedException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
@@ -17,25 +18,15 @@ import java.util.ArrayList;
 public class OMExceptionHandler implements Thread.UncaughtExceptionHandler {
     
     @Override public void uncaughtException(Thread thread, Throwable throwable) {
-        ExceptionType exceptionType = null;
+        ExceptionType exceptionType = typeOf(throwable);
         // We get the root cause of the exception, as UnrecoverableException and UnreachableException aren't exceptions
         // themselves, but holders of other exceptions.
-        while (throwable instanceof UnrecoverableException || throwable instanceof UnreachableException) {
-            if (throwable instanceof UnreachableException) {
-                exceptionType = ExceptionType.UNREACHABLE;
-            } else if (throwable instanceof UnrecoverableException && exceptionType == null) {
-                exceptionType = ExceptionType.EXPECTED;
-            }
+        while (isHolder(throwable)) {
             ThrowableUtils.transferStackTrace(throwable, throwable.getCause());
             throwable = throwable.getCause();
         }
         if (throwable instanceof InferenceStoppedException) {
             return; // the user asked for it: there is nothing to tell
-        }
-        if (throwable instanceof RuntimeException) {
-            exceptionType = ExceptionType.RUNTIME;
-        } else if (exceptionType == null) {
-            exceptionType = ExceptionType.EXPECTED;
         }
         // We flatten the exceptions stacktrace, avoiding seeing a long stacktrace of exceptions blaming other
         // exceptions such as 'Exception X caused by Exception Y caused by Exception Z...'.
@@ -63,6 +54,31 @@ public class OMExceptionHandler implements Thread.UncaughtExceptionHandler {
         }
     }
     
+    /**
+     * How {@code throwable} is shown. A runtime exception is unexpected, unless it is an OpenMarkov exception wrapped
+     * in an {@link UnrecoverableException}, which marks it as expected.
+     */
+    static ExceptionType typeOf(Throwable throwable) {
+        ExceptionType marked = null;
+        while (isHolder(throwable)) {
+            if (throwable instanceof UnreachableException) {
+                marked = ExceptionType.UNREACHABLE;
+            } else if (marked == null) {
+                marked = ExceptionType.EXPECTED;
+            }
+            throwable = throwable.getCause();
+        }
+        if (throwable instanceof RuntimeException
+                && !(marked == ExceptionType.EXPECTED && throwable instanceof IOpenMarkovException)) {
+            return ExceptionType.RUNTIME;
+        }
+        return marked == null ? ExceptionType.EXPECTED : marked;
+    }
+
+    private static boolean isHolder(Throwable throwable) {
+        return throwable instanceof UnrecoverableException || throwable instanceof UnreachableException;
+    }
+
     enum ExceptionType {
         UNREACHABLE,
         EXPECTED,
