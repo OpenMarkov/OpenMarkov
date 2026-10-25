@@ -20,6 +20,9 @@ import java.lang.annotation.Target;
 
     boolean supportsUnobservedVariables();
 
+    /** Whether the algorithm learns the links; one that does not only learns the tables of the network it starts from. */
+    boolean learnsStructure() default true;
+
     /**
      * Names of the metrics this algorithm uses, matching {@code @MetricType(name = ...)}.
      * Order follows the algorithm constructor signature (first metric = first constructor arg).

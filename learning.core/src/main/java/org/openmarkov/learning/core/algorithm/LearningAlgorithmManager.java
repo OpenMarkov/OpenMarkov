@@ -62,6 +62,13 @@ public class LearningAlgorithmManager {
     }
 
     /**
+     * Returns the registered generative learning algorithms that learn the links, so they need no model network.
+     */
+    public Stream<Class<? extends LearningAlgorithm>> getGenerativeAlgorithmsThatLearnTheStructure() {
+        return getGenerativeAlgorithms().filter(a -> info(a).learnsStructure());
+    }
+
+    /**
      * Returns all registered discriminative learning algorithms.
      */
     public Stream<Class<? extends LearningAlgorithm>> getDiscriminativeAlgorithms() {

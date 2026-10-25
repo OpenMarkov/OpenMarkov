@@ -146,7 +146,7 @@ public final class CrossValidationDialog extends OkCancelDialog {
         JScrollPane optionsTextScrollPane = new JScrollPane();
         algorithmComboBox.addActionListener(e -> algorithmComboBoxActionPerformed());
         algorithmComboBox.removeAllItems();
-        LearningAlgorithmManager.INSTANCE.getGenerativeAlgorithms().forEach(algorithmComboBox::addItem);
+        LearningAlgorithmManager.INSTANCE.getGenerativeAlgorithmsThatLearnTheStructure().forEach(algorithmComboBox::addItem);
         
         
         variableCombobox = new JComboBox<Variable>();
@@ -381,7 +381,7 @@ public final class CrossValidationDialog extends OkCancelDialog {
                                                 SuperParentNBAlgorithm.class
                                         ));
         } else {
-            algorithms = LearningAlgorithmManager.INSTANCE.getGenerativeAlgorithms();
+            algorithms = LearningAlgorithmManager.INSTANCE.getGenerativeAlgorithmsThatLearnTheStructure();
         }
         algorithms.forEach(algorithmComboBox::addItem);
         

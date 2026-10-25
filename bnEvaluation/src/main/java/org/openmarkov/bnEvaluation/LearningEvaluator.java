@@ -14,6 +14,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.learning.core.LearningManager;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithm;
 import org.openmarkov.learning.core.exception.EmptyModelNetException;
+import org.openmarkov.learning.core.exception.NodesWithoutProbabilityException;
 import org.openmarkov.learning.core.exception.UnobservedVariablesException;
 
 import java.util.concurrent.CancellationException;
@@ -139,7 +140,7 @@ public class LearningEvaluator {
         LearningManager learningManager;
         try {
             learningManager = new LearningManager(trainDatabase, algorithmClass, null, null);
-        } catch (EmptyModelNetException | UnobservedVariablesException e) {
+        } catch (EmptyModelNetException | UnobservedVariablesException | NodesWithoutProbabilityException e) {
             throw new UnreachableException(e);
         }
         // Build the algorithm honouring the user's options; fall back to defaults when none.

@@ -120,6 +120,7 @@
     "NodeMustBeChance",
     "NodeMustBeEvent",
     "NodeMustBeUtility",
+    "NodesWithoutProbabilityException",
     "NonProjectablePotentialException",
     "NotAProbModelXMLFile",
     "NotAllNodesHavePoliciesException",

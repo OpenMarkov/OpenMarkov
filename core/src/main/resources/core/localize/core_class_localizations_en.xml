@@ -472,6 +472,8 @@
                   value="There is no network selected to use as model, and one is required."/>
     <Localization class="org.openmarkov.learning.core.exception.UnobservedVariablesException"
                   value="Algorithm {algorithmType.name} does not support unobserved variables, which are: {unobservedVariableNames}"/>
+    <Localization class="org.openmarkov.learning.core.exception.NodesWithoutProbabilityException"
+                  value="{algorithmType.name} does not learn links: it only learns the probabilities of a network that already has a table for each node, and these nodes have none: {nodeNames}. Choose a model network that has them and check «Start learning from model network»."/>
     <Localization class="org.openmarkov.core.action.base.linkEdits.MultiAddLinkEdit"
                   value="Add link(s): {edits}"/>
     <Localization class="org.openmarkov.core.action.core.EventNodeAlwaysAppendEdit"

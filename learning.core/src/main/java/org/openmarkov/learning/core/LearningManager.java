@@ -21,6 +21,7 @@ import org.openmarkov.learning.core.algorithm.LearningAlgorithmManager;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithmType;
 import org.openmarkov.core.model.network.constraint.ModelNetworkConstraint;
 import org.openmarkov.learning.core.exception.EmptyModelNetException;
+import org.openmarkov.learning.core.exception.NodesWithoutProbabilityException;
 import org.openmarkov.learning.core.exception.UnobservedVariablesException;
 import org.openmarkov.learning.core.util.ModelNetUse;
 
@@ -71,9 +72,10 @@ public class LearningManager {
      *
      * @throws EmptyModelNetException if empty model net occurs
      * @throws UnobservedVariablesException if unobserved variables occurs
+     * @throws NodesWithoutProbabilityException if the algorithm does not learn links and a node has no table
      */
     public LearningManager(CaseDatabase caseDatabase, Class<? extends LearningAlgorithm> algorithmName, ProbNet modelNet, ModelNetUse modelNetUse)
-            throws EmptyModelNetException, UnobservedVariablesException {
+            throws EmptyModelNetException, UnobservedVariablesException, NodesWithoutProbabilityException {
         
         this.caseDatabase = caseDatabase;
         /* Check ModelNet is not null */
@@ -88,8 +90,22 @@ public class LearningManager {
                 learnedNet.addNode(variable, NodeType.CHANCE);
             }
         }
+        checkEachNodeHasATable(algorithmName, learnedNet);
         
         this.modelNetUse = modelNetUse;
+    }
+    
+    /** Refuses an algorithm that does not learn links when a node of the network it starts from has no table. */
+    private static void checkEachNodeHasATable(Class<? extends LearningAlgorithm> algorithmClass, ProbNet probNet)
+            throws NodesWithoutProbabilityException {
+        LearningAlgorithmType type = algorithmClass.getAnnotation(LearningAlgorithmType.class);
+        if (type == null || type.learnsStructure()) {
+            return;
+        }
+        List<Node> nodesWithoutTable = probNet.getNodes().stream().filter(node -> node.getNumPotentials() == 0).toList();
+        if (!nodesWithoutTable.isEmpty()) {
+            throw new NodesWithoutProbabilityException(algorithmClass, nodesWithoutTable);
+        }
     }
     
     /**

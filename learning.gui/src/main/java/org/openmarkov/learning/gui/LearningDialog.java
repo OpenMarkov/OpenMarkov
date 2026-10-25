@@ -57,6 +57,7 @@ import org.openmarkov.learning.core.LearningManager;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithm;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithmManager;
 import org.openmarkov.learning.core.exception.EmptyModelNetException;
+import org.openmarkov.learning.core.exception.NodesWithoutProbabilityException;
 import org.openmarkov.learning.core.exception.UnobservedVariablesException;
 import org.openmarkov.learning.core.preprocess.Discretization;
 import org.openmarkov.learning.core.preprocess.MissingValues;
@@ -939,7 +940,7 @@ public class LearningDialog extends JDialog {
             JOptionPane.showMessageDialog(this,
                     e.getExceptionMessage() + "\n" + stringDatabase.getString("Learning.Alpha.SmoothingAdvice"),
                     e.getExceptionTitle(), JOptionPane.ERROR_MESSAGE);
-        } catch (UnobservedVariablesException e) {
+        } catch (UnobservedVariablesException | NodesWithoutProbabilityException e) {
             throw new UnrecoverableException(e);
         } catch (EmptyModelNetException | DoEditException e) {
             throw new UnreachableException(e);

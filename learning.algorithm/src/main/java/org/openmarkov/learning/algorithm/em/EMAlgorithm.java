@@ -66,7 +66,8 @@ import java.util.concurrent.Callable;
  * Algorithm on Wikipedia</a>
  * @since OpenMarkov 0.3.0
  */
-@LearningAlgorithmType(name = "Expectation maximization (EM)", discriminative = false, supportsUnobservedVariables = true)
+@LearningAlgorithmType(name = "Expectation maximization (EM)", discriminative = false, supportsUnobservedVariables = true,
+        learnsStructure = false)
 public class EMAlgorithm extends LearningAlgorithm {
     
     private static final Logger logger = LogManager.getLogger(EMAlgorithm.class);

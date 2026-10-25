@@ -8,6 +8,7 @@ import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.learning.core.LearningManager;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithm;
 import org.openmarkov.learning.core.exception.EmptyModelNetException;
+import org.openmarkov.learning.core.exception.NodesWithoutProbabilityException;
 import org.openmarkov.learning.core.exception.UnobservedVariablesException;
 import org.openmarkov.learning.core.preprocess.Discretization;
 import org.openmarkov.learning.core.preprocess.FilterDatabase;
@@ -70,7 +71,7 @@ public class LearningController {
             ProbNet modelNet,
             ModelNetUse modelNetUse,
             AlgorithmParametersDialog optionsGUI,
-            String classVariable) throws EmptyModelNetException, UnobservedVariablesException {
+            String classVariable) throws EmptyModelNetException, UnobservedVariablesException, NodesWithoutProbabilityException {
         LearningManager learningManager = new LearningManager(preprocessedDb, algorithm, modelNet, modelNetUse);
         LearningAlgorithm learningAlgorithm;
         if (optionsGUI != null) {
