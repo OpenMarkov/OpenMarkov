@@ -91,6 +91,9 @@ import java.util.stream.Stream;
 
 public class PGMXReader_0_2 {
     
+    /** What the messages of the reader call the text of an element. */
+    private static final String TEXT = "value";
+    
     public final Map<Class<? extends Potential>, PotentialParser> potentialParsers;
     
     public PGMXReader_0_2() {
@@ -231,28 +234,24 @@ public class PGMXReader_0_2 {
      *
      */
     protected void getNetworkAdvancedInformation(Element xMLProbNet, ProbNet probNet, String netName,
-                                                 Map<String, ProbNet> classes) {
+                                                 Map<String, ProbNet> classes)
+            throws PGMXParserException.DataNotValid {
         getTemporaUnit(xMLProbNet, probNet);
         getAdditionalProperties(xMLProbNet, probNet);
     }
     
-    protected static void getTemporaUnit(Element xMLProbNet, ProbNet probNet) {
+    protected static void getTemporaUnit(Element xMLProbNet, ProbNet probNet) throws PGMXParserException.DataNotValid {
         Element temporalUnit = xMLProbNet.getChild(XMLTags.TIME_UNIT.toString());
         CycleLength temporalUnitProbNet = new CycleLength();
         if (temporalUnit != null) {
-            try {
-                String scaleAttribute = temporalUnit.getAttributeValue(XMLTags.VALUE.toString());
-                if (scaleAttribute != null) {
-                    double scale = Double.parseDouble(scaleAttribute);
-                    temporalUnitProbNet.setValue(scale);
-                }
-            } catch (NumberFormatException e) {
-                // TODO - Check this exception
+            String scaleAttribute = temporalUnit.getAttributeValue(XMLTags.VALUE.toString());
+            if (scaleAttribute != null) {
+                temporalUnitProbNet.setValue(doubleIn(temporalUnit, XMLTags.VALUE.toString(), scaleAttribute));
             }
             String unitAttribute = temporalUnit.getAttributeValue(XMLAttributes.UNIT.toString());
             if (unitAttribute != null) {
-                CycleLength.Unit unit = CycleLength.Unit.valueOf(unitAttribute);
-                temporalUnitProbNet.setUnit(unit);
+                temporalUnitProbNet.setUnit(enumIn(CycleLength.Unit.class, temporalUnit, XMLAttributes.UNIT.toString(),
+                                                   unitAttribute));
             }
         }
         probNet.setCycleLength(temporalUnitProbNet);
@@ -384,7 +383,9 @@ public class PGMXReader_0_2 {
      * @param root    Root element
      * @param probNet ProbNet
      */
-    protected void getInferenceOptions(Element root, ProbNet probNet) throws PGMXParserException.DiscountOutOfRange, PGMXParserException.DiscountMissing {
+    protected void getInferenceOptions(Element root, ProbNet probNet)
+            throws PGMXParserException.DiscountOutOfRange, PGMXParserException.DiscountMissing,
+                   PGMXParserException.DataMissing, PGMXParserException.DataNotValid {
         Element inferenceOptions = root.getChild(XMLTags.INFERENCE_OPTIONS.toString());
         if (inferenceOptions != null) {
             getMulticriteriaOptions(inferenceOptions, probNet);
@@ -399,14 +400,16 @@ public class PGMXReader_0_2 {
      * @param inferenceOptions Inference options
      * @param probNet          ProbNet
      */
-    protected void getMulticriteriaOptions(Element inferenceOptions, ProbNet probNet) {
+    protected void getMulticriteriaOptions(Element inferenceOptions, ProbNet probNet)
+            throws PGMXParserException.DataMissing, PGMXParserException.DataNotValid {
         Element multicriteriaOptions = inferenceOptions.getChild(XMLTags.MULTICRITERIA_OPTIONS.toString());
         if (multicriteriaOptions != null) {
-            Element multiCriteriaType = multicriteriaOptions.getChild(XMLTags.SELECTED_ANALYSIS_TYPE.toString());
+            Element multiCriteriaType = requiredChild(multicriteriaOptions, XMLTags.SELECTED_ANALYSIS_TYPE.toString());
             
             probNet.getInferenceOptions()
                    .getMultiCriteriaOptions()
-                   .setMulticriteriaType(MulticriteriaOptions.Type.valueOf(multiCriteriaType.getValue()));
+                   .setMulticriteriaType(enumIn(MulticriteriaOptions.Type.class, multiCriteriaType, TEXT,
+                                                multiCriteriaType.getText()));
             
             Element unicriteria = multicriteriaOptions.getChild(XMLTags.UNICRITERION.toString());
             if (unicriteria != null) {
@@ -415,11 +418,10 @@ public class PGMXReader_0_2 {
                 if (scalesTag != null) {
                     List<Element> scales = getXMLChildren(scalesTag);
                     for (Element element : scales) {
+                        String criterionVariableString = requiredAttribute(element, XMLTags.CRITERION.toString());
                         for (Criterion probNetCriterion : probNet.getDecisionCriteria()) {
-                            String criterionVariableString =
-                                    element.getAttribute(XMLTags.CRITERION.toString()).getValue();
                             if (criterionVariableString.equals(probNetCriterion.getCriterionName())) {
-                                probNetCriterion.setUnicriterizationScale(Double.parseDouble(element.getAttributeValue(XMLTags.VALUE.toString())));
+                                probNetCriterion.setUnicriterizationScale(scaleIn(element));
                             }
                         }
                     }
@@ -437,11 +439,10 @@ public class PGMXReader_0_2 {
                 if (scalesTag != null) {
                     List<Element> scales = getXMLChildren(scalesTag);
                     for (Element element : scales) {
+                        String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
                         for (Criterion criterion : probNet.getDecisionCriteria()) {
-                            if (element.getAttribute(XMLTags.CRITERION.toString())
-                                       .getValue()
-                                       .equals(criterion.getCriterionName())) {
-                                criterion.setCeScale(Double.parseDouble(element.getAttributeValue(XMLTags.VALUE.toString())));
+                            if (criterionName.equals(criterion.getCriterionName())) {
+                                criterion.setCeScale(scaleIn(element));
                             }
                         }
                     }
@@ -451,11 +452,12 @@ public class PGMXReader_0_2 {
                 if (ceCriteria != null) {
                     List<Element> ce_criterion = getXMLChildren(ceCriteria);
                     for (Element element : ce_criterion) {
+                        String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
                         for (Criterion criterion : probNet.getDecisionCriteria()) {
-                            if (element.getAttribute(XMLTags.CRITERION.toString())
-                                       .getValue()
-                                       .equals(criterion.getCriterionName())) {
-                                criterion.setCECriterion(Criterion.CECriterion.valueOf(element.getAttributeValue(XMLTags.VALUE.toString())));
+                            if (criterionName.equals(criterion.getCriterionName())) {
+                                String value = requiredAttribute(element, XMLTags.VALUE.toString());
+                                criterion.setCECriterion(enumIn(Criterion.CECriterion.class, element,
+                                                                XMLTags.VALUE.toString(), value));
                             }
                         }
                     }
@@ -465,38 +467,113 @@ public class PGMXReader_0_2 {
     }
     
     /**
+     * @return the scale that {@code scaleElement} writes in its attribute {@code Value}
+     */
+    private static double scaleIn(Element scaleElement)
+            throws PGMXParserException.DataMissing, PGMXParserException.DataNotValid {
+        String value = requiredAttribute(scaleElement, XMLTags.VALUE.toString());
+        return doubleIn(scaleElement, XMLTags.VALUE.toString(), value);
+    }
+    
+    /**
      * Get Temporal Evolution Options from the PGMX
      *
      * @param inferenceOptions Inference Options
      * @param probNet          ProbNet
      */
-    protected void getTemporalOptions(Element inferenceOptions, ProbNet probNet) throws PGMXParserException.DiscountOutOfRange, PGMXParserException.DiscountMissing {
+    protected void getTemporalOptions(Element inferenceOptions, ProbNet probNet)
+            throws PGMXParserException.DiscountOutOfRange, PGMXParserException.DiscountMissing,
+                   PGMXParserException.DataMissing, PGMXParserException.DataNotValid {
         Element temporalOptions = inferenceOptions.getChild(XMLTags.TEMPORAL_OPTIONS.toString());
         if (temporalOptions != null) {
             
-            Element slices = temporalOptions.getChild(XMLTags.SLICES.toString());
-            probNet.getInferenceOptions().getTemporalOptions().setHorizon(parseInteger(slices.getValue()));
+            Element slices = requiredChild(temporalOptions, XMLTags.SLICES.toString());
+            probNet.getInferenceOptions().getTemporalOptions().setHorizon(integerIn(slices, TEXT, slices.getText()));
             
-            Element transition = temporalOptions.getChild(XMLTags.TRANSITION.toString());
+            Element transition = requiredChild(temporalOptions, XMLTags.TRANSITION.toString());
             probNet.getInferenceOptions()
                    .getTemporalOptions()
-                   .setTransition(TemporalOptions.TransitionTime.valueOf(transition.getText()));
+                   .setTransition(enumIn(TemporalOptions.TransitionTime.class, transition, TEXT, transition.getText()));
             
             Element discountsTag = temporalOptions.getChild(XMLTags.DISCOUNT_RATES.toString());
             List<Element> discounts = getXMLChildren(discountsTag);
             for (Element element : discounts) {
+                String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
                 for (Criterion criterion : probNet.getDecisionCriteria()) {
-                    if (element.getAttribute(XMLTags.CRITERION.toString())
-                               .getValue()
-                               .equals(criterion.getCriterionName())) {
+                    if (criterionName.equals(criterion.getCriterionName())) {
                         criterion.setDiscount(getXMLDiscount(element, criterion.getCriterionName()));
-                        criterion.setDiscountUnit(CycleLength.DiscountUnit.valueOf(element.getAttributeValue(XMLAttributes.UNIT.toString())));
+                        String unit = requiredAttribute(element, XMLAttributes.UNIT.toString());
+                        criterion.setDiscountUnit(enumIn(CycleLength.DiscountUnit.class, element,
+                                                         XMLAttributes.UNIT.toString(), unit));
                     }
                 }
             }
             
         }
         
+    }
+    
+    /**
+     * @return the child {@code childName} of {@code element}
+     *
+     * @throws PGMXParserException.DataMissing if {@code element} does not have it, or it has no text
+     */
+    private static Element requiredChild(Element element, String childName) throws PGMXParserException.DataMissing {
+        Element child = element.getChild(childName);
+        if (child == null || child.getText().isBlank()) {
+            throw new PGMXParserException.DataMissing(element.getName(), childName, element);
+        }
+        return child;
+    }
+    
+    /**
+     * @return the value of the attribute {@code attributeName} of {@code element}
+     *
+     * @throws PGMXParserException.DataMissing if {@code element} does not have it, or it is blank
+     */
+    private static String requiredAttribute(Element element, String attributeName)
+            throws PGMXParserException.DataMissing {
+        String written = element.getAttributeValue(attributeName);
+        if (written == null || written.isBlank()) {
+            throw new PGMXParserException.DataMissing(element.getName(), attributeName, element);
+        }
+        return written;
+    }
+    
+    /**
+     * @return the constant of {@code type} that {@code written}, the {@code dataName} of {@code element}, names
+     */
+    private static <E extends Enum<E>> E enumIn(Class<E> type, Element element, String dataName, String written)
+            throws PGMXParserException.DataNotValid {
+        try {
+            return Enum.valueOf(type, written.strip());
+        } catch (IllegalArgumentException notAConstant) {
+            throw new PGMXParserException.DataNotValid(element.getName(), dataName, written.strip(), element);
+        }
+    }
+    
+    /**
+     * @return the number that {@code written}, the {@code dataName} of {@code element}, writes
+     */
+    private static double doubleIn(Element element, String dataName, String written)
+            throws PGMXParserException.DataNotValid {
+        try {
+            return Double.parseDouble(written.strip());
+        } catch (NumberFormatException notANumber) {
+            throw new PGMXParserException.DataNotValid(element.getName(), dataName, written.strip(), element);
+        }
+    }
+    
+    /**
+     * @return the integer that {@code written}, the {@code dataName} of {@code element}, writes
+     */
+    private static int integerIn(Element element, String dataName, String written)
+            throws PGMXParserException.DataNotValid {
+        try {
+            return parseInteger(written);
+        } catch (NumberFormatException notAnInteger) {
+            throw new PGMXParserException.DataNotValid(element.getName(), dataName, written.strip(), element);
+        }
     }
     
     /**

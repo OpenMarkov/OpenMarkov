@@ -160,6 +160,32 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String criterionName;
     }
     
+    /** An element of the file without one of the data it must have. */
+    public static final class DataMissing extends PGMXParserException {
+        public DataMissing(String elementName, String dataName, Element element) {
+            super(element);
+            this.elementName = elementName;
+            this.dataName = dataName;
+        }
+        
+        public final String elementName;
+        public final String dataName;
+    }
+    
+    /** An element of the file with a value that is not one of those it can have. */
+    public static final class DataNotValid extends PGMXParserException {
+        public DataNotValid(String elementName, String dataName, String written, Element element) {
+            super(element);
+            this.elementName = elementName;
+            this.dataName = dataName;
+            this.written = written;
+        }
+        
+        public final String elementName;
+        public final String dataName;
+        public final String written;
+    }
+    
     /** An indicator of an event whose file has no time to the event. */
     public static final class TimeToEventMissing extends PGMXParserException {
         public TimeToEventMissing(String variableName, Element element) {

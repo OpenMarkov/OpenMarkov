@@ -21,6 +21,8 @@
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TimeToEventOutOfRange" value="The relation of {variableName} cannot be read: its time to event, {value}, must be a finite number not below 0."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TimeToEventMissing" value="The relation of {variableName} cannot be read: it has no time to event."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$ProbabilityOfOccurrenceMissing" value="The relation of {variableName} cannot be read: it has no probability of occurrence."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DataMissing" value="The file cannot be read: {elementName} has no {dataName}."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DataNotValid" value="The file cannot be read: {elementName} has the {dataName} {written}, which is not valid."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DiscountMissing" value="Criterion {criterionName} cannot be read: it has no discount."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DiscountOutOfRange" value="Criterion {criterionName} cannot be read: its discount, {value}, must be a finite number."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$PrecisionOutOfRange" value="Variable {variableName} cannot be read: its precision, {value}, must be a finite number not below 0."/>
