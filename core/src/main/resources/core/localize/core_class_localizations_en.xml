@@ -224,6 +224,8 @@
                   value="These findings are impossible in this network: together they have probability zero."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$EvidenceIsIncompatibleWithOther"
                   value="The new evidence {newFinding} is not compatible with an old evidence: {oldFinding}"/>
+    <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$FindingIsNotTheFixedValue"
+                  value="{variable.getName} cannot be observed as {observed}: its relation fixes its value at {fixed}. To study another value, change the relation of the node."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$FindingVariableIsMissingAState"
                   value="The variable {variable.getName} has no state {state}, so this finding cannot be translated."/>
     <Localization class="org.openmarkov.core.exception.IntervalsAreNotEvenException"

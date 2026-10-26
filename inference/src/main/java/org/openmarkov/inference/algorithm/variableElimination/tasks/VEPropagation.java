@@ -172,6 +172,8 @@ public class VEPropagation extends VariableElimination implements Propagation {
         }
         
         generalPreprocessing();
+        // A finding after the resolution that contradicts a value the network fixes is refused before joining the others
+        TaskUtilities.extendPostResolutionEvidence(probNet, getPostResolutionEvidence());
 //		unicriterionPreprocess();
         // TODO - Implement: For each super-value node, create a new node whose parents are all chance or decision nodes
         exactAlgorithmsPreprocessing();

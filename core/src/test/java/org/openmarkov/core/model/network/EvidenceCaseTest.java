@@ -190,7 +190,7 @@ public class EvidenceCaseTest {
      * front of whoever was editing. Inference keeps its own copy and is unaffected either way; the
      * panel is what this protects.
      */
-    @Test public void extendingGivesBackANewCaseAndLeavesTheOriginalAlone() {
+    @Test public void extendingGivesBackANewCaseAndLeavesTheOriginalAlone() throws Exception {
         EvidenceCase evidence = new EvidenceCase();
 
         EvidenceCase extended = evidence.extendedWith(probNet);
@@ -201,7 +201,7 @@ public class EvidenceCaseTest {
                      "the evidence given must come out of this untouched - it is the editor's own");
     }
 
-    @Test public void extendEvidence() {
+    @Test public void extendEvidence() throws Exception {
         
         assertNotNull(probNet);
         EvidenceCase evidence = new EvidenceCase();

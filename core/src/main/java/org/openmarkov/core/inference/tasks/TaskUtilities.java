@@ -44,12 +44,14 @@ public class TaskUtilities {
 	 * It used to be extended in place and the network returned instead, which quietly rewrote the
 	 * caller's own evidence - including the network editor's, the one the user is looking at.
 	 */
-	public static EvidenceCase extendPreResolutionEvidence(ProbNet probNet, EvidenceCase preResolutionEvidence) {
+	public static EvidenceCase extendPreResolutionEvidence(ProbNet probNet, EvidenceCase preResolutionEvidence)
+			throws IncompatibleEvidenceException.FindingIsNotTheFixedValue {
 		return preResolutionEvidence == null ? null : preResolutionEvidence.extendedWith(probNet);
 	}
 
 	/** As {@link #extendPreResolutionEvidence}, for the evidence gathered after resolution. */
-	public static EvidenceCase extendPostResolutionEvidence(ProbNet probNet, EvidenceCase postResolutionEvidence) {
+	public static EvidenceCase extendPostResolutionEvidence(ProbNet probNet, EvidenceCase postResolutionEvidence)
+			throws IncompatibleEvidenceException.FindingIsNotTheFixedValue {
 		return postResolutionEvidence == null ? null : postResolutionEvidence.extendedWith(probNet);
 	}
 

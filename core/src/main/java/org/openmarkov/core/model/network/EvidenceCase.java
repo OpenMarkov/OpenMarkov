@@ -308,13 +308,13 @@ public class EvidenceCase implements ClassLocalizable {
      * @param probNet Network whose deterministic potentials may force new findings
      * @return a new evidence case with this one's findings plus the induced ones
      */
-    public EvidenceCase extendedWith(ProbNet probNet) {
+    public EvidenceCase extendedWith(ProbNet probNet) throws IncompatibleEvidenceException.FindingIsNotTheFixedValue {
         EvidenceCase extended = new EvidenceCase(this);
         extended.extendInPlace(probNet);
         return extended;
     }
 
-    private void extendInPlace(ProbNet probNet) {
+    private void extendInPlace(ProbNet probNet) throws IncompatibleEvidenceException.FindingIsNotTheFixedValue {
         // No test on the network type. There used to be one - it left at once unless the network was
         // a MID - and nothing recorded why: it arrived with the very first commit of the repository.
         // Inducing findings is not a MID-only idea. TablePotential implements getInducedFindings, so
@@ -325,6 +325,10 @@ public class EvidenceCase implements ClassLocalizable {
         for (Potential potential : probNet.getPotentials()) {
             List<Finding> newFindings = (List<Finding>) potential.getInducedFindings(this);
             for (Finding newFinding : newFindings) {
+                if (!isCompatible(newFinding)) {
+                    throw new IncompatibleEvidenceException.FindingIsNotTheFixedValue(
+                            findings.get(newFinding.getVariable()), newFinding);
+                }
                 findings.put(newFinding.getVariable(), newFinding);
             }
         }

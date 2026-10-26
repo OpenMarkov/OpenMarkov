@@ -7,8 +7,10 @@
 
 package org.openmarkov.core.exception;
 
+import org.openmarkov.core.expression.ReferencedExpression;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
 
 /**
  * @author Manuel Arias
@@ -23,7 +25,8 @@ public abstract class IncompatibleEvidenceException extends UserInputException {
     //TODO: It is caught and ignored in almost every catch block, probably leading to unexpected
     // bugs.
     // Perhaps it could be turned into a RuntimeException.
-    public static final class EvidenceIsIncompatibleWithOther extends IncompatibleEvidenceException {
+    public static sealed class EvidenceIsIncompatibleWithOther extends IncompatibleEvidenceException
+            permits FindingIsNotTheFixedValue {
         public EvidenceIsIncompatibleWithOther(Finding newFinding, Finding oldFinding) {
             this.newFinding = newFinding;
             this.oldFinding = oldFinding;
@@ -31,6 +34,25 @@ public abstract class IncompatibleEvidenceException extends UserInputException {
         
         public final Finding newFinding;
         public final Finding oldFinding;
+    }
+    
+    /** A finding gives a node another value than the one its relation fixes, as a delta does. */
+    public static final class FindingIsNotTheFixedValue extends EvidenceIsIncompatibleWithOther {
+        public FindingIsNotTheFixedValue(Finding finding, Finding fixedValue) {
+            super(finding, fixedValue);
+            this.variable = finding.getVariable();
+            this.observed = valueOf(finding);
+            this.fixed = valueOf(fixedValue);
+        }
+        
+        private static String valueOf(Finding finding) {
+            return finding.getVariable().getVariableType() == VariableType.FINITE_STATES
+                    ? finding.getState() : ReferencedExpression.toExpression(finding.getNumericalValue());
+        }
+        
+        public final Variable variable;
+        public final String observed;
+        public final String fixed;
     }
     
     

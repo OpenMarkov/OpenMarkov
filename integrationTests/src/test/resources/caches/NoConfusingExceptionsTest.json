@@ -54,6 +54,7 @@
     "EvidenceIsIncompatibleWithOther",
     "FamilyDistributionRuleBrokenException",
     "FewUncertainParameters",
+    "FindingIsNotTheFixedValue",
     "FindingVariableIsMissingAState",
     "FormatNotSupportedException",
     "FoundUnknownState",
