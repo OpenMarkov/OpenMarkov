@@ -76,7 +76,7 @@ public abstract class VariableElimination extends InferenceAlgorithm {
 	/**
 	 * This operations transform a PGM into another PGM of the same type that can be evaluated by the algorithm
 	 */
-	void generalPreprocessing() throws IncompatibleEvidenceException.FindingIsNotTheFixedValue {
+	void generalPreprocessing() throws IncompatibleEvidenceException.FindingIsNotTheFixedValue, NonProjectablePotentialException {
         boolean isTemporal = !probNet.hasConstraintOfClass(OnlyAtemporalVariables.class);
 
 		// 2. If the network has temporal nodes, expand the network to the specified horizon.

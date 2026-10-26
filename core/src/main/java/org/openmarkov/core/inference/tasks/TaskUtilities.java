@@ -63,7 +63,7 @@ public class TaskUtilities {
 		}
 	}
 
-	public static ProbNet applyTransitionTime(ProbNet probNet, boolean isTemporal) {
+	public static ProbNet applyTransitionTime(ProbNet probNet, boolean isTemporal) throws NonProjectablePotentialException {
 		if (isTemporal) {
 			TemporalNetOperations.applyTransitionTime(probNet);
 		}

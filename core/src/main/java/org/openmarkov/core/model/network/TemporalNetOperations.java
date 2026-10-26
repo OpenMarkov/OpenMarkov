@@ -291,8 +291,9 @@ public class TemporalNetOperations {
      * in temporary networks is performed.
      *
      * @param network Network to be transformed
+     * @throws NonProjectablePotentialException if the relation of a utility averaged for the half cycle is not a table
      */
-    public static void applyTransitionTime(ProbNet network) {
+    public static void applyTransitionTime(ProbNet network) throws NonProjectablePotentialException {
         int numSlices = network.getNodes().stream().filter(node -> node.getVariable().isTemporal())
                                .mapToInt(node -> node.getVariable().getTimeSlice()).max().orElse(0);
         List<Node> utilityNodes = network.getNodes(NodeType.UTILITY);
@@ -321,13 +322,8 @@ public class TemporalNetOperations {
                         List<Potential> previousCyclePotentials = previousCycleNode.getPotentials();
                         List<Potential> newPotentials = new ArrayList<>();
                         for (int i = 0; i < utilityNode.getNumPotentials(); ++i) {
-
-//
-//12/09/2022 - issue #479 ; cast to ExactDistrPotential but not every utility potential is ExactDistrPotential
-//							TablePotential currentCyclePotential = (TablePotential) currentCyclePotentials.get(i);
-//							TablePotential previousCyclePotential = (TablePotential) previousCyclePotentials.get(i);
-                            TablePotential currentCyclePotential = ((ExactDistrPotential) currentCyclePotentials.get(i)).getTablePotential();
-                            TablePotential previousCyclePotential = ((ExactDistrPotential) previousCyclePotentials.get(i)).getTablePotential();
+                            TablePotential currentCyclePotential = currentCyclePotentials.get(i).tableProject(null, null);
+                            TablePotential previousCyclePotential = previousCyclePotentials.get(i).tableProject(null, null);
                             
                             TablePotential sumPotential = DiscretePotentialOperations
                                     .sum(Arrays.asList(currentCyclePotential, previousCyclePotential));
