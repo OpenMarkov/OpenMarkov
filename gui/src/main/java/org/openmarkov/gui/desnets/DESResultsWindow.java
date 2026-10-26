@@ -124,14 +124,8 @@ public class DESResultsWindow {
         // TODO: skip discounted values when there is no discount.
         interventions.forEach(intervention -> {
             criteria.forEach(criterion -> {
-                sb.append(",Mean ")
-                        .append(criterion.getCriterionName())
-                        .append(" for ")
-                        .append(intervention);
-                sb.append(",Disc. Mean ")
-                        .append(criterion.getCriterionName())
-                        .append(" for ")
-                        .append(intervention);
+                sb.append(',').append(csvField("Mean " + criterion.getCriterionName() + " for " + intervention));
+                sb.append(',').append(csvField("Disc. Mean " + criterion.getCriterionName() + " for " + intervention));
             });
         });
         sb.append("\n");
@@ -148,6 +142,13 @@ public class DESResultsWindow {
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    /** The field as CSV writes it: in double quotes, with its own doubled, if it has a comma, a quote or a line break. */
+    private static String csvField(String field) {
+        if (field.contains(",") || field.contains("\"") || field.contains("\n") || field.contains("\r"))
+            return '"' + field.replace("\"", "\"\"") + '"';
+        return field;
     }
 
     static String generateTable(SimulationSummaryResults simulationResults, boolean[] usingDiscount) {

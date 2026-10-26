@@ -13,6 +13,7 @@ import org.openmarkov.core.model.network.EqualCriterion;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.testTags.TestSpeed;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * «Export as CSV» of the results of a simulation of two options, two criteria and one series: the row of titles and
  * the row of the series have the same columns, the number of the series, and the mean and discounted mean of each
  * criterion for each option (error 103). A mean written with an exponent, or an option whose name starts with a
- * digit, keeps its own cell (error 252), and so does an option with a semicolon in its name (error 332).
+ * digit, keeps its own cell (error 252), and so does an option with a semicolon in its name (error 332). A title
+ * with a comma or a double quote is written in double quotes (error 333).
  *
  * @author Manuel Arias
  */
@@ -59,13 +61,36 @@ class TheExportedResultsHaveATitleOverEachColumnTest {
         return DESResultsWindow.csv(results).split("\n");
     }
 
+    /** The fields of a CSV row, without the double quotes around them. */
+    private static List<String> fields(String row) {
+        List<String> fields = new ArrayList<>();
+        StringBuilder field = new StringBuilder();
+        boolean quoted = false;
+        for (int i = 0; i < row.length(); i++) {
+            char c = row.charAt(i);
+            if (quoted && c == '"' && i + 1 < row.length() && row.charAt(i + 1) == '"') {
+                field.append('"');
+                i++;
+            } else if (c == '"') {
+                quoted = !quoted;
+            } else if (c == ',' && !quoted) {
+                fields.add(field.toString());
+                field.setLength(0);
+            } else {
+                field.append(c);
+            }
+        }
+        fields.add(field.toString());
+        return fields;
+    }
+
     /** Each cell of the series is the mean that its title names. */
     private void assertEachCellUnderItsTitle(String[] rows) {
-        String[] titles = rows[0].split(",", -1);
-        String[] series = rows[1].split(",", -1);
-        assertEquals(titles.length, series.length);
-        for (int column = 1; column < titles.length; column++) {
-            assertEquals(expected.get(titles[column]), Double.parseDouble(series[column]), titles[column]);
+        List<String> titles = fields(rows[0]);
+        List<String> series = fields(rows[1]);
+        assertEquals(titles.size(), series.size());
+        for (int column = 1; column < titles.size(); column++) {
+            assertEquals(expected.get(titles.get(column)), Double.parseDouble(series.get(column)), titles.get(column));
         }
     }
 
@@ -101,6 +126,24 @@ class TheExportedResultsHaveATitleOverEachColumnTest {
     @Test
     void anOptionWithASemicolonKeepsItsCells() {
         String[] rows = csvRows(new String[] { "none", "drug;10" }, new double[] { 100, 90, 2, 2 },
+                                new double[] { 150, 140, 3, 3 });
+
+        assertEachCellUnderItsTitle(rows);
+    }
+
+    @Test
+    void anOptionWithACommaKeepsItsTitles() {
+        String[] rows = csvRows(new String[] { "none", "drug, 10 mg" }, new double[] { 100, 90, 2, 2 },
+                                new double[] { 150, 140, 3, 3 });
+
+        assertEquals(9, fields(rows[0]).size());
+        assertEquals(9, fields(rows[1]).size());
+        assertEachCellUnderItsTitle(rows);
+    }
+
+    @Test
+    void anOptionWithADoubleQuoteKeepsItsTitles() {
+        String[] rows = csvRows(new String[] { "none", "drug \"A\"" }, new double[] { 100, 90, 2, 2 },
                                 new double[] { 150, 140, 3, 3 });
 
         assertEachCellUnderItsTitle(rows);
