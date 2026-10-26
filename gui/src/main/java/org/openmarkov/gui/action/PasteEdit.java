@@ -11,8 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.action.base.MultiStepEdit;
 import org.openmarkov.core.action.base.PNEdit;
+import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
 import org.openmarkov.core.action.core.AddNodeEdit;
+import org.openmarkov.core.action.core.DecisionCriteriaEdit;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Criterion;
@@ -62,14 +64,14 @@ public class PasteEdit extends MultiStepEdit {
     }
     
     
-    /** @return the criterion of the network that has the name of {@code criterion}, if there is one */
+    /** @return the criterion of the network with the name of {@code criterion}, ignoring case and outer spaces */
     private Optional<Criterion> sameCriterionOfTheNetwork(Criterion criterion) {
         if (criterion == null || this.probNet.getDecisionCriteria() == null) {
             return Optional.empty();
         }
         return this.probNet.getDecisionCriteria().stream()
-                           .filter(networkCriterion -> networkCriterion.getCriterionName()
-                                                                       .equals(criterion.getCriterionName()))
+                           .filter(networkCriterion -> networkCriterion.getCriterionName().trim()
+                                                                       .equalsIgnoreCase(criterion.getCriterionName().trim()))
                            .findFirst();
     }
 
@@ -97,7 +99,14 @@ public class PasteEdit extends MultiStepEdit {
             }
             variable.setBaseName(baseName);
             String newName = variable.getName();
-            sameCriterionOfTheNetwork(variable.getDecisionCriterion()).ifPresent(variable::setDecisionCriterion);
+            Optional<Criterion> sameCriterion = sameCriterionOfTheNetwork(variable.getDecisionCriterion());
+            if (sameCriterion.isPresent()) {
+                variable.setDecisionCriterion(sameCriterion.get());
+            } else if (variable.getDecisionCriterion() != null && this.probNet.getDecisionCriteria() != null) {
+                // The network takes the copy of the criterion, so undoing the paste removes it
+                stepExecuter.execute(new DecisionCriteriaEdit(this.probNet, StateAction.ADD,
+                                                              variable.getDecisionCriterion(), null));
+            }
             this.newVariables.put(oldName, newName);
             Point2D.Double position = new Point2D.Double(node.getCoordinateX() + 7.0, node.getCoordinateY());
             if (diff != null) {
