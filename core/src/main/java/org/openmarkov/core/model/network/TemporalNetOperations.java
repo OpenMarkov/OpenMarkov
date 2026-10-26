@@ -293,7 +293,8 @@ public class TemporalNetOperations {
      * @param network Network to be transformed
      */
     public static void applyTransitionTime(ProbNet network) {
-        int numSlices = network.getInferenceOptions().getTemporalOptions().getHorizon();
+        int numSlices = network.getNodes().stream().filter(node -> node.getVariable().isTemporal())
+                               .mapToInt(node -> node.getVariable().getTimeSlice()).max().orElse(0);
         List<Node> utilityNodes = network.getNodes(NodeType.UTILITY);
         TemporalOptions.TransitionTime transitionTime = network.getInferenceOptions()
                                                                .getTemporalOptions()
