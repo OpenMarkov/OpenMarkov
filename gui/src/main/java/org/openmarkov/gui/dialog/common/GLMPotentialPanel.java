@@ -11,6 +11,7 @@ import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.potential.GLMPotential;
+import org.openmarkov.core.model.network.potential.WeibullHazardPotential;
 import org.openmarkov.gui.configuration.GUIColors;
 
 import javax.swing.*;
@@ -39,6 +40,7 @@ import java.awt.event.ActionListener;
     private GLMPanel regressionPanel;
     private JTable uncertaintyTable;
     private JCheckBox uncertaintyCheckBox;
+    private JCheckBox logCheckBox;
     private JComboBox<String> matrixTypeComboBox;
     private JPanel uncertaintyPanel;
     private String currentMatrixType;
@@ -68,6 +70,8 @@ import java.awt.event.ActionListener;
             }
         });
         deterministicPanel.add(uncertaintyCheckBox, BorderLayout.SOUTH);
+        logCheckBox = new JCheckBox(WeibullPotentialPanel.LOG_TEXT);
+        deterministicPanel.add(logCheckBox, BorderLayout.CENTER);
         uncertaintyTable = new JTable();
         JScrollPane covarianceTablePanel = new JScrollPane(uncertaintyTable);
         covarianceTablePanel.setPreferredSize(new Dimension(500, 100));
@@ -107,6 +111,10 @@ import java.awt.event.ActionListener;
         double[] coefficients = potential.getCoefficients();
         VariableExpression[] covariates = potential.getCovariates();
         regressionPanel.setData(potential);
+        logCheckBox.setVisible(potential instanceof WeibullHazardPotential);
+        if (potential instanceof WeibullHazardPotential hazard) {
+            logCheckBox.setSelected(hazard.isLog());
+        }
         
         DefaultTableModel covarianceTableModel = new CovarianceTableModel();
         int columnCount = coefficients.length + 1;
@@ -162,6 +170,9 @@ import java.awt.event.ActionListener;
         String matrixTypeName = matrixTypeComboBox.getSelectedItem().toString();
         newPotential.setCovariates(covariates);
         newPotential.setCoefficients(coefficients);
+        if (newPotential instanceof WeibullHazardPotential hazard) {
+            hazard.setLog(logCheckBox.isSelected());
+        }
         if (matrixTypeName.equals(MATRIX_TYPE_COVARIANCE)) {
             newPotential.setCovarianceMatrix(uncertaintyMatrix);
         } else {

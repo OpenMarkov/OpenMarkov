@@ -56,6 +56,7 @@ public class PotentialPanelManager {
                     .breathFirstLevelOrderQueue()
                     .reversed()
                     .stream().map(ExtensionTree::getCurrentClass)
+                    .filter(potentialClass -> !this.potentialPanelClassesByClass.containsKey(potentialClass))
                     .forEach(potentialClass -> {
                         for (Class<?> superClass : ClassUtils.superClassesOf(potentialClass).reversed()) {
                             var potentialPanelClass = this.potentialPanelClassesByClass.get(superClass);

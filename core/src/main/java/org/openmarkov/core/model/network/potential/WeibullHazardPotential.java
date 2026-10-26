@@ -44,9 +44,9 @@ public class WeibullHazardPotential extends GLMPotential implements DESSimulable
     };
     
     /**
-     * Determines whether it represents a log hazard
+     * Whether the coefficients give the logarithm of the rate
      */
-    protected boolean log = false;
+    protected boolean log = true;
     
     /**
      * Time variable

@@ -44,12 +44,14 @@ public class WeibullPotentialPanel extends PotentialPanel implements ItemListene
     
     private static final String MATRIX_TYPE_COVARIANCE = "Covariance matrix";
     private static final String MATRIX_TYPE_CHOLESKY = "Cholesky decomposition";
+    static final String LOG_TEXT = "Coefficients give the logarithm of the rate";
     
     private Node node = null;
     private WeibullHazardPotential potential = null;
     private GLMPanel regressionPanel;
     private JTable uncertaintyTable;
     private JComboBox<String> timeVariableComboBox;
+    private JCheckBox logCheckBox;
     private JCheckBox uncertaintyCheckBox;
     private JComboBox<String> matrixTypeComboBox;
     private JPanel uncertaintyPanel;
@@ -74,6 +76,8 @@ public class WeibullPotentialPanel extends PotentialPanel implements ItemListene
         timeVariableLabel.setLabelFor(timeVariableComboBox);
         northPanel.add(timeVariableLabel);
         northPanel.add(timeVariableComboBox);
+        logCheckBox = new JCheckBox(LOG_TEXT);
+        northPanel.add(logCheckBox);
         northPanel.setBorder(new EmptyBorder(10, 25, 10, 25));
         deterministicPanel.add(northPanel, BorderLayout.NORTH);
         JPanel centerPanel = new JPanel();
@@ -132,6 +136,7 @@ public class WeibullPotentialPanel extends PotentialPanel implements ItemListene
         double[] coefficients = potential.getCoefficients();
         VariableExpression[] covariates = potential.getCovariates();
         regressionPanel.setData(potential);
+        logCheckBox.setSelected(potential.isLog());
         
         timeVariableComboBox.removeAllItems();
         timeVariableComboBox.addItem("-- No time variable");
@@ -213,6 +218,7 @@ public class WeibullPotentialPanel extends PotentialPanel implements ItemListene
         WeibullHazardPotential newPotential = new WeibullHazardPotential(oldPotential.getVariables(),
                                                                          oldPotential.getPotentialRole(), covariates, coefficients, uncertaintyMatrix, matrixType);
         newPotential.setTimeVariable(timeVariable);
+        newPotential.setLog(logCheckBox.isSelected());
         PNEdit edit = new PotentialChangeEdit(node, oldPotential, newPotential);
         ProbNet probNet = node.getProbNet();
         edit.executeEdit();

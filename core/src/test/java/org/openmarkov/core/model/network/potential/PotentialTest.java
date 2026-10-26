@@ -478,7 +478,7 @@ public class PotentialTest {
                 new VariableExpression(Collections.emptyList(), "16"),
         };
         potential.sampledCoefficients = new double[]{17, 18, 19};
-        potential.setLog(true);
+        potential.setLog(false);
         
         WeibullHazardPotential potentialCopy = (WeibullHazardPotential) potential.deepCopy(probNet);
         
