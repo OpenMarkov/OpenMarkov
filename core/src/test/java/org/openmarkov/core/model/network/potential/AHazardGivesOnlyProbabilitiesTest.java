@@ -9,6 +9,7 @@ package org.openmarkov.core.model.network.potential;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Variable;
@@ -23,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A Weibull hazard on the age and the sex gives, for each cycle, a probability between 0 and 1, or says why it
- * cannot: a negative rate is refused, and a time between 0 and 1 is the first cycle (error 278).
+ * cannot: a negative rate is refused, and a time between 0 and 1 is the first cycle (error 278). The same holds
+ * when a simulation samples it with the rate of its parent Lambda.
  *
  * @author Manuel Arias
  */
@@ -44,6 +46,20 @@ class AHazardGivesOnlyProbabilitiesTest {
         hazard.setTimeVariable(age);
         hazard.setLog(log);
         return hazard;
+    }
+
+    /** A hazard of shape 2 on a parent Lambda, sampled at the age {@code years} with that {@code lambda}. */
+    private double sample(double lambda, double years, double randomNumber) throws Exception {
+        Variable lambdaVariable = new Variable("Lambda", true, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
+                                               false, 0.001);
+        WeibullHazardPotential hazard = new WeibullHazardPotential(
+                List.of(risk, lambdaVariable, age), PotentialRole.CONDITIONAL_PROBABILITY,
+                new VariableExpression[] { VariableExpression.Common.GAMMA, VariableExpression.Common.CONSTANT },
+                new double[] { Math.log(2), 0 }, null);
+        hazard.setTimeVariable(age);
+        EvidenceCase evidence = atAge(years);
+        evidence.addFinding(new Finding(lambdaVariable, lambda));
+        return hazard.sampleConditionedVariable(new double[] { randomNumber }, evidence);
     }
 
     private EvidenceCase atAge(double years) throws Exception {
@@ -94,5 +110,21 @@ class AHazardGivesOnlyProbabilitiesTest {
         double[] values = hazard(true, 0.3, -2, 0, 0.5).tableProject(atAge(2.5), null).getValues();
 
         assertEquals(1 - Math.exp(-Math.exp(-2) * (Math.pow(2.5, shape) - Math.pow(1.5, shape))), values[1], 1e-12);
+    }
+
+    @Test
+    void aSimulationRefusesANegativeLambda() {
+        NonProjectablePotentialException.HazardLambdaIsNegative e = assertThrows(
+                NonProjectablePotentialException.HazardLambdaIsNegative.class, () -> sample(-1, 65, 0.5));
+        assertAll(() -> assertEquals(risk, e.variable),
+                  () -> assertEquals("-1", e.lambda),
+                  () -> assertTrue(e.localize().contains("the value of the parent Lambda, is -1"), e.localize()));
+    }
+
+    @Test
+    void aSimulationTakesATimeBetweenZeroAndOneAsTheFirstCycle() throws Exception {
+        // From 0 to 0.5 with rate 1 and shape 2, the event happens with probability 1 - exp(-0.25), about 0.22
+        assertAll(() -> assertEquals(1, sample(1, 0.5, 0.2)),
+                  () -> assertEquals(0, sample(1, 0.5, 0.25)));
     }
 }

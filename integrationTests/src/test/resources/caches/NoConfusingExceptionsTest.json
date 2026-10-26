@@ -58,6 +58,7 @@
     "FormatNotSupportedException",
     "FoundUnknownState",
     "HazardIsNotAProbability",
+    "HazardLambdaIsNegative",
     "HazardRateIsNegative",
     "ICIModelNotSupportedByElvira",
     "IncompatibleEvidenceException",

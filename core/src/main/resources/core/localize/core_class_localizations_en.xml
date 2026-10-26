@@ -253,6 +253,8 @@
                   value="The finding on {variable.getName} cannot be used: {where}the parameters of its {distribution} distribution, {parameters}, do not make a distribution."/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$HazardRateIsNegative"
                   value="The hazard of {variable.getName} cannot be computed: {where}its rate, Constant plus each covariate times its coefficient, is {rate}, and a rate cannot be negative. This relation takes that sum as the rate itself, not as the logarithm of the rate, so its coefficients must make the sum 0 or more for every value of the parents."/>
+    <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$HazardLambdaIsNegative"
+                  value="The hazard of {variable.getName} cannot be simulated: its rate, the value of the parent Lambda, is {lambda}, and a rate cannot be negative."/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$HazardIsNotAProbability"
                   value="The hazard of {variable.getName} cannot be computed: {where}at time {time}, the probability of the event in the cycle would be {probability}, which is not a probability."/>
     <Localization class="org.openmarkov.core.exception.NonProjectablePotentialException$UtilityIsNotDefined"

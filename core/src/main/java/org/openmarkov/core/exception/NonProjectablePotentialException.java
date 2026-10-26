@@ -128,6 +128,17 @@ public abstract sealed class NonProjectablePotentialException extends OpenMarkov
         public final String rate;
     }
 
+    /** The value of the parent Lambda, which a simulation takes as the rate of a hazard, is negative. */
+    public static final class HazardLambdaIsNegative extends NonProjectablePotentialException {
+        public HazardLambdaIsNegative(Variable variable, String lambda) {
+            this.variable = variable;
+            this.lambda = lambda;
+        }
+
+        public final Variable variable;
+        public final String lambda;
+    }
+
     /** The probability that a hazard gives for a cycle is not between 0 and 1. */
     public static final class HazardIsNotAProbability extends NonProjectablePotentialException {
         /**

@@ -317,7 +317,9 @@ public class WeibullHazardPotential extends GLMPotential implements DESSimulable
      * @throws RuntimeException if this potential has no time variable, as the hazard cannot be computed
      */
     @Override
-    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents) throws ThereIsNoTimeVariableInWeibullHazardPotential {
+    public double sampleConditionedVariable(double[] randomNumbers, EvidenceCase parents)
+            throws ThereIsNoTimeVariableInWeibullHazardPotential, NonProjectablePotentialException.HazardLambdaIsNegative,
+                   NonProjectablePotentialException.HazardIsNotAProbability {
         if (timeVariable == null) {
             throw new ThereIsNoTimeVariableInWeibullHazardPotential(this);
         }
@@ -338,9 +340,23 @@ public class WeibullHazardPotential extends GLMPotential implements DESSimulable
             throw new InvalidArgumentException("Lambda", "the evidence carries no value for the variable Lambda");
         }
         double lambda = lambdaFinding.getNumericalValue();
+        if (lambda < 0) {
+            throw new NonProjectablePotentialException.HazardLambdaIsNegative(
+                    getConditionedVariable(), ReferencedExpression.toExpression(lambda));
+        }
         double timeVariableValue = parents.getFinding(timeVariable).getNumericalValue();
         //hazard; for one year cycle; FIXME has to be revised
-        double transitionProbability = 1 - Math.exp(lambda * (Math.pow(timeVariableValue - 1, gamma) - Math.pow(timeVariableValue, gamma)));
+        double transitionProbability = 0;
+        if (timeVariableValue > 0) {
+            // The cycle that ends at the time does not start before 0
+            transitionProbability = 1 - Math.exp(lambda * (Math.pow(Math.max(timeVariableValue - 1, 0), gamma)
+                                                           - Math.pow(timeVariableValue, gamma)));
+        }
+        if (!(transitionProbability >= 0 && transitionProbability <= 1)) {
+            throw new NonProjectablePotentialException.HazardIsNotAProbability(
+                    getConditionedVariable(), "", ReferencedExpression.toExpression(timeVariableValue),
+                    String.valueOf(transitionProbability));
+        }
 //		System.out.println("Weibull Hazard: timeVariableValue "+ timeVariableValue +" transitionProbability "+ transitionProbability + " randomNumber " + randomNumbers[0]);
         if (randomNumbers[0] < transitionProbability) {
 //			System.out.println("Weibull Hazard: state corresponding to 1: " + variables.get(0).getStateName(1));
