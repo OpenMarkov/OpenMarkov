@@ -9,6 +9,7 @@ package org.openmarkov.core.model.network.type;
 
 import org.openmarkov.core.model.network.constraint.ConstraintBehavior;
 import org.openmarkov.core.model.network.constraint.NoLinkRestriction;
+import org.openmarkov.core.model.network.constraint.NoMixedParents;
 import org.openmarkov.core.model.network.constraint.NoRevelationArc;
 import org.openmarkov.core.model.network.type.plugin.NetworkTypeInfo;
 
@@ -21,6 +22,7 @@ public final class DecisionAnalysisNetworkType extends NetworkType {
 		super();
 		overrideConstraintBehavior(NoRevelationArc.class, ConstraintBehavior.NO);
 		overrideConstraintBehavior(NoLinkRestriction.class, ConstraintBehavior.NO);
+		overrideConstraintBehavior(NoMixedParents.class, ConstraintBehavior.YES);
 	}
 
 	// Methods

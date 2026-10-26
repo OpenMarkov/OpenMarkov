@@ -50,7 +50,6 @@ public class EveryConstraintReachesANetworkTest {
         ADDED_BY_HAND.put("OnlyContinuousVariables", "the dialog of properties of the network");
 
         WITHOUT_A_NETWORK.put("NoLoops", "R3");
-        WITHOUT_A_NETWORK.put("NoMixedParents", "R3");
         WITHOUT_A_NETWORK.put("NoSuperValueNode", "R3");
         WITHOUT_A_NETWORK.put("OnlyFiniteStatesVariables", "R3");
         WITHOUT_A_NETWORK.put("OnlyNumericVariables", "R3");

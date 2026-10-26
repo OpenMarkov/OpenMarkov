@@ -3,7 +3,9 @@ package org.openmarkov.core.action.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openmarkov.core.action.base.MultiStepEdit;
 import org.openmarkov.core.action.base.PNEdit;
+import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnreachableException;
@@ -12,16 +14,16 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.Potential;
-import org.openmarkov.core.action.base.CompoundPNEdit;
 import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
 import org.openmarkov.core.action.base.linkEdits.RemoveLinkEdit;
 import org.openmarkov.core.model.network.potential.TablePotential;
 
 /**
  * Compound edit that absorbs (marginalizes out) the parents of a node,
- * reconnecting grandparents and updating potentials accordingly.
+ * reconnecting grandparents and updating potentials accordingly. Each step is checked when it is done,
+ * after the parents are removed.
  */
-@SuppressWarnings("serial") public class AbsorbParentsEdit extends CompoundPNEdit {
+@SuppressWarnings("serial") public class AbsorbParentsEdit extends MultiStepEdit {
     private final Node node;
     
     public AbsorbParentsEdit(ProbNet probNet, Node node) {
@@ -30,7 +32,14 @@ import org.openmarkov.core.model.network.potential.TablePotential;
     }
     
     @Override
-    public ArrayList<PNEdit> generateEdits() throws ThereIsNoPotentialInNodeException {
+    protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException, ThereIsNoPotentialInNodeException {
+        for (PNEdit edit : steps()) {
+            stepExecuter.execute(edit);
+        }
+    }
+
+    /** Removing the parents, linking the grandparents and setting the new potential, in this order. */
+    private ArrayList<PNEdit> steps() throws ThereIsNoPotentialInNodeException {
         ArrayList<PNEdit> edits = new ArrayList<>();
         // gets neighbors of this node
         Variable nodeVariable = node.getVariable();

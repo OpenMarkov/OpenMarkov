@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.network.type;
 
 import org.openmarkov.core.model.network.constraint.ConstraintBehavior;
+import org.openmarkov.core.model.network.constraint.NoMixedParents;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.constraint.OnlyTemporalVariables;
 import org.openmarkov.core.model.network.type.plugin.NetworkTypeInfo;
@@ -22,6 +23,7 @@ public final class MIDType extends NetworkType {
 		super();
 		overrideConstraintBehavior(OnlyAtemporalVariables.class, ConstraintBehavior.NO);
 		overrideConstraintBehavior(OnlyTemporalVariables.class, ConstraintBehavior.NO);
+		overrideConstraintBehavior(NoMixedParents.class, ConstraintBehavior.YES);
 	}
 
 	// Methods

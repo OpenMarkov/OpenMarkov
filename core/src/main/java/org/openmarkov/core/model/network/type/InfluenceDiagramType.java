@@ -7,6 +7,8 @@
 
 package org.openmarkov.core.model.network.type;
 
+import org.openmarkov.core.model.network.constraint.ConstraintBehavior;
+import org.openmarkov.core.model.network.constraint.NoMixedParents;
 import org.openmarkov.core.model.network.type.plugin.NetworkTypeInfo;
 
 @NetworkTypeInfo(name = "InfluenceDiagram", visualName = "Influence Diagram")
@@ -16,6 +18,7 @@ public final class InfluenceDiagramType extends NetworkType {
 	// Constructor
 	private InfluenceDiagramType() {
 		super();
+		overrideConstraintBehavior(NoMixedParents.class, ConstraintBehavior.YES);
 	}
 
 	// Methods

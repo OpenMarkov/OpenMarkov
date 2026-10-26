@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
- * An influence diagram with A, a chance node, and V and U, utility nodes, U being a sum. Removing or adding a parent of
+ * An influence diagram with A, V and U, utility nodes, U being a sum. Removing or adding a parent of
  * U gives it a new sum, so that undoing the edit gives back the sum it had (error 296).
  *
  * @author Manuel Arias
@@ -40,10 +40,10 @@ class AddingOrRemovingAParentOfASumCanBeUndoneTest {
 
     @BeforeEach void setUp() {
         net = new ProbNet(InfluenceDiagramType.getUniqueInstance());
-        a = new Variable("A", "a0", "a1");
+        a = new Variable("A");
         v = new Variable("V");
         u = new Variable("U");
-        net.addNode(a, NodeType.CHANCE);
+        net.addNode(a, NodeType.UTILITY);
         net.addNode(v, NodeType.UTILITY);
         nodeU = net.addNode(u, NodeType.UTILITY);
         net.addLink(v, u, true);
