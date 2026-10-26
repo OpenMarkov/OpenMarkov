@@ -41,13 +41,13 @@ public class EqualCriterion extends Criterion {
 
 	/**
 	 * Indicates whether some other object is "equal to" this one.
-	 * Two EqualCriterion are equal if they have the same name; anything that is not an
-	 * EqualCriterion, including null, is answered with false instead of an exception.
+	 * Two EqualCriterion are equal if they have the same name, as {@link #sameName} compares names;
+	 * anything that is not an EqualCriterion, including null, is answered with false instead of an exception.
 	 */
 	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof EqualCriterion other)
-				&& Objects.equals(this.getCriterionName(), other.getCriterionName());
+				&& sameName(this.getCriterionName(), other.getCriterionName());
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class EqualCriterion extends Criterion {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(getCriterionName());
+		return Objects.hashCode(nameKey(getCriterionName()));
 	}
 
 

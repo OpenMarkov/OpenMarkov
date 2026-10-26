@@ -32,7 +32,7 @@ public class DecisionCriterionUnitEdit extends PNEdit {
 
 		// Search the criterion in where we want set the new unit of measure
 		for (Criterion criterion : probnet.getDecisionCriteria()) {
-			if (criterion.getCriterionName() != null && criterion.getCriterionName().equals(criterionName)) {
+			if (criterion.getCriterionName() != null && criterion.isNamed(criterionName)) {
 				this.criterion = criterion;
 				break;
 			}

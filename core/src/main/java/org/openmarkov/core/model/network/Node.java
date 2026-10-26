@@ -722,7 +722,7 @@ public class Node implements Cloneable, ClassLocalizable {
         Variable newVariable = CloneUtils.safeClone(this.variable);
         if (this.getNodeType() == NodeType.UTILITY) {
             for (Criterion criterion : probNet.getDecisionCriteria()) {
-                if (criterion.getCriterionName().equals(this.variable.getDecisionCriterion().getCriterionName())) {
+                if (criterion.isNamed(this.variable.getDecisionCriterion().getCriterionName())) {
                     newVariable.setDecisionCriterion(criterion);
                     break;
                 }

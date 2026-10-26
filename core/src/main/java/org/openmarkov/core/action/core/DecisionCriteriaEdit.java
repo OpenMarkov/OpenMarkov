@@ -52,12 +52,12 @@ import java.util.List;
                 case REMOVE, MODIFY_VALUE_INTERVAL, MODIFY_DELIMITER_INTERVAL, DOWN, UP -> {
                 }
                 case ADD, RENAME -> {
-                    String name = this.newName.trim().toLowerCase();
+                    String name = Criterion.nameKey(this.newName);
                     if (name.isEmpty()) {
                         constraintChecker.addException(new ConstraintViolatedException.CriterionNameIsEmpty(constraint, modifiedCriterion));
                     }
                     for (Criterion criterion : this.lastCriteria) {
-                        if (criterion != modifiedCriterion && criterion.getCriterionName().trim().toLowerCase().equals(name)) {
+                        if (criterion != modifiedCriterion && criterion.isNamed(this.newName)) {
                             constraintChecker.addException(new ConstraintViolatedException.CriterionNameIsAlreadyPresent(constraint, modifiedCriterion, name));
                         }
                     }

@@ -727,7 +727,7 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
         if (one == null || other == null) {
             return one == other;
         }
-        return Objects.equals(one.getCriterionName(), other.getCriterionName());
+        return Criterion.sameName(one.getCriterionName(), other.getCriterionName());
     }
 
     /**

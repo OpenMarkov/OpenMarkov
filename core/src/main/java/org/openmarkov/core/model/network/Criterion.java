@@ -12,6 +12,9 @@ import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.localize.Localizable;
 import org.openmarkov.core.stringformat.LocalizationFormatter;
 
+import java.util.Locale;
+import java.util.Objects;
+
 /**
  * A criterion has a name and the units of measure
  *
@@ -76,7 +79,7 @@ public class Criterion implements Cloneable, ClassLocalizable {
 		this.discountUnit = CycleLength.DiscountUnit.YEAR;
 		this.ceCriterion = CECriterion.Cost; // Default.
 		for (CECriterion ceCriterion : CECriterion.values()) {
-			if (ceCriterion.toString().toLowerCase().contentEquals(criterionName.toLowerCase())) {
+			if (sameName(ceCriterion.toString(), criterionName)) {
 				this.ceCriterion = ceCriterion;
 			}
 		}
@@ -110,6 +113,21 @@ public class Criterion implements Cloneable, ClassLocalizable {
 
 	public String getCriterionName() {
 		return criterionName;
+	}
+
+	/** @return whether {@code one} and {@code other} name the same criterion: capitals and outer spaces do not count */
+	public static boolean sameName(String one, String other) {
+		return Objects.equals(nameKey(one), nameKey(other));
+	}
+
+	/** @return {@code name} as {@link #sameName} compares it, or {@code null} for {@code null} */
+	public static String nameKey(String name) {
+		return name == null ? null : name.trim().toLowerCase(Locale.ROOT);
+	}
+
+	/** @return whether this criterion is named {@code name}, as {@link #sameName} compares names */
+	public boolean isNamed(String name) {
+		return sameName(criterionName, name);
 	}
 
 	public void setCriterionName(String criterionName) {

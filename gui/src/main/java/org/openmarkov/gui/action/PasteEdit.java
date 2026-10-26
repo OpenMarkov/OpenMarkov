@@ -70,8 +70,7 @@ public class PasteEdit extends MultiStepEdit {
             return Optional.empty();
         }
         return this.probNet.getDecisionCriteria().stream()
-                           .filter(networkCriterion -> networkCriterion.getCriterionName().trim()
-                                                                       .equalsIgnoreCase(criterion.getCriterionName().trim()))
+                           .filter(networkCriterion -> networkCriterion.isNamed(criterion.getCriterionName()))
                            .findFirst();
     }
 

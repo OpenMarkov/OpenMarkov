@@ -47,7 +47,7 @@ import java.util.Set;
             if (name == null || name.isBlank()) {
                 constraintChecker.addException(
                         new ConstraintViolatedException.CriterionNameIsEmpty(this, criterion));
-            } else if (!seenNames.add(name.trim().toLowerCase())) {
+            } else if (!seenNames.add(Criterion.nameKey(name))) {
                 constraintChecker.addException(
                         new ConstraintViolatedException.CriterionNameIsAlreadyPresent(this, criterion, name));
             }

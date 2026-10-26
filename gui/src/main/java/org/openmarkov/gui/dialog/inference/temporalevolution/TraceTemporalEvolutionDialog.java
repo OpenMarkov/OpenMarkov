@@ -382,8 +382,7 @@ public class TraceTemporalEvolutionDialog extends JDialog {
                                                        .stream()
                                                        .filter(node -> node.getVariable()
                                                                            .getDecisionCriterion()
-                                                                           .getCriterionName()
-                                                                           .equals(criterionName))
+                                                                           .isNamed(criterionName))
                                                        .collect(Collectors.toList());
                     
                     MIDTemporalEvolution temporalEvolutionCriterion = new MIDTemporalEvolution(probNet, criterionNodes);
@@ -648,7 +647,7 @@ public class TraceTemporalEvolutionDialog extends JDialog {
                 numDisplayedCriteria++;
                 String criterionName = (String) temporalEvolutionByCriterion.keySet().toArray()[i];
                 String criterionUnit = criteria.stream()
-                                               .filter(criterion -> criterion.getCriterionName().equals(criterionName))
+                                               .filter(criterion -> criterion.isNamed(criterionName))
                                                .findFirst()
                                                .get()
                                                .getCriterionUnit();

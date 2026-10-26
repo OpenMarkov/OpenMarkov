@@ -420,7 +420,7 @@ public class PGMXReader_0_2 {
                     for (Element element : scales) {
                         String criterionVariableString = requiredAttribute(element, XMLTags.CRITERION.toString());
                         for (Criterion probNetCriterion : probNet.getDecisionCriteria()) {
-                            if (criterionVariableString.equals(probNetCriterion.getCriterionName())) {
+                            if (probNetCriterion.isNamed(criterionVariableString)) {
                                 probNetCriterion.setUnicriterizationScale(scaleIn(element));
                             }
                         }
@@ -441,7 +441,7 @@ public class PGMXReader_0_2 {
                     for (Element element : scales) {
                         String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
                         for (Criterion criterion : probNet.getDecisionCriteria()) {
-                            if (criterionName.equals(criterion.getCriterionName())) {
+                            if (criterion.isNamed(criterionName)) {
                                 criterion.setCeScale(scaleIn(element));
                             }
                         }
@@ -454,7 +454,7 @@ public class PGMXReader_0_2 {
                     for (Element element : ce_criterion) {
                         String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
                         for (Criterion criterion : probNet.getDecisionCriteria()) {
-                            if (criterionName.equals(criterion.getCriterionName())) {
+                            if (criterion.isNamed(criterionName)) {
                                 String value = requiredAttribute(element, XMLTags.VALUE.toString());
                                 criterion.setCECriterion(enumIn(Criterion.CECriterion.class, element,
                                                                 XMLTags.VALUE.toString(), value));
@@ -500,7 +500,7 @@ public class PGMXReader_0_2 {
             for (Element element : discounts) {
                 String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
                 for (Criterion criterion : probNet.getDecisionCriteria()) {
-                    if (criterionName.equals(criterion.getCriterionName())) {
+                    if (criterion.isNamed(criterionName)) {
                         criterion.setDiscount(getXMLDiscount(element, criterion.getCriterionName()));
                         String unit = requiredAttribute(element, XMLAttributes.UNIT.toString());
                         criterion.setDiscountUnit(enumIn(CycleLength.DiscountUnit.class, element,
@@ -809,8 +809,7 @@ public class PGMXReader_0_2 {
                 Element decisionCriteria = variableElement.getChild(XMLTags.CRITERION.toString());
                 if (decisionCriteria != null) {
                     for (Criterion criterion : probNet.getDecisionCriteria()) {
-                        if (criterion.getCriterionName()
-                                     .equals(decisionCriteria.getAttributeValue(XMLAttributes.NAME.toString()))) {
+                        if (criterion.isNamed(decisionCriteria.getAttributeValue(XMLAttributes.NAME.toString()))) {
                             variable.setDecisionCriterion(criterion);
                             break;
                         }

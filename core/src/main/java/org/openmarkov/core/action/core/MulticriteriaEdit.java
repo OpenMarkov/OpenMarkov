@@ -47,7 +47,7 @@ public class MulticriteriaEdit extends PNEdit {
 		// Set the new data at the probNet criteria 
 		for (Criterion oldCriterion : probNet.getDecisionCriteria()) {
 			for (Criterion newCriterion : this.newDecisionCriteria) {
-				if (oldCriterion.getCriterionName().equals(newCriterion.getCriterionName())) {
+				if (oldCriterion.isNamed(newCriterion.getCriterionName())) {
 					oldCriterion.copy(newCriterion);
 				}
 			}
@@ -62,7 +62,7 @@ public class MulticriteriaEdit extends PNEdit {
 		//probNet.setDecisionCriteria(oldDecisionCriteria);
 		for (Criterion oldCriterion : probNet.getDecisionCriteria()) {
 			for (Criterion newCriterion : this.oldDecisionCriteria) {
-				if (oldCriterion.getCriterionName().equals(newCriterion.getCriterionName())) {
+				if (oldCriterion.isNamed(newCriterion.getCriterionName())) {
 					oldCriterion.copy(newCriterion);
 				}
 			}
