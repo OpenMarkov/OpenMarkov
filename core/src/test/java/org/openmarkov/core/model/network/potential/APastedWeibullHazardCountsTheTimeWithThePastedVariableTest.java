@@ -58,6 +58,8 @@ public class APastedWeibullHazardCountsTheTimeWithThePastedVariableTest {
         List<Variable> variables = new ArrayList<>(List.of(risk, age, sex, prosthesis));
         WeibullHazardPotential original = new WeibullHazardPotential(variables, PotentialRole.CONDITIONAL_PROBABILITY,
                                                                      COEFFICIENTS, COVARIANCES);
+        // The coefficients are those of a model of the logarithm of the rate
+        original.setLog(true);
         original.setTimeVariable(age);
         EvidenceCase sixtyFive = new EvidenceCase();
         sixtyFive.addFinding(new Finding(age, 65.0));

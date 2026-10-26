@@ -112,6 +112,40 @@ public abstract sealed class NonProjectablePotentialException extends OpenMarkov
         public final String parameters;
     }
 
+    /** The rate of a hazard taken as the rate itself, not as its logarithm, is negative in a configuration of the parents. */
+    public static final class HazardRateIsNegative extends NonProjectablePotentialException {
+        /**
+         * @param where the values of the parents, such as "with Age = 65 and Sex = 1, ", or "" if there are none
+         */
+        public HazardRateIsNegative(Variable variable, String where, String rate) {
+            this.variable = variable;
+            this.where = where;
+            this.rate = rate;
+        }
+
+        public final Variable variable;
+        public final String where;
+        public final String rate;
+    }
+
+    /** The probability that a hazard gives for a cycle is not between 0 and 1. */
+    public static final class HazardIsNotAProbability extends NonProjectablePotentialException {
+        /**
+         * @param where the values of the parents, such as "with Age = 65 and Sex = 1, ", or "" if there are none
+         */
+        public HazardIsNotAProbability(Variable variable, String where, String time, String probability) {
+            this.variable = variable;
+            this.where = where;
+            this.time = time;
+            this.probability = probability;
+        }
+
+        public final Variable variable;
+        public final String where;
+        public final String time;
+        public final String probability;
+    }
+
     /** A utility node has no numbers: its relation is the uniform one it was created with. */
     public static final class UtilityIsNotDefined extends NonProjectablePotentialException {
         public UtilityIsNotDefined(Variable utilityVariable) {

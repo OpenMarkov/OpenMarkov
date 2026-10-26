@@ -135,7 +135,7 @@ public class WeibullHazardPotential extends GLMPotential implements DESSimulable
     @Override
     public @NotNull TablePotential tableProject(EvidenceCase evidenceCase, InferenceOptions inferenceOptions,
                                                 double[] coefficients, VariableExpression[] covariates, List<Variable> evidencelessVariables,
-                                                Map<Variable, String> variableValues) throws NonProjectablePotentialException.MissingEvidenceInVariable, NonProjectablePotentialException.CannotEvaluate, NonProjectablePotentialException.CannotResolveVariable {
+                                                Map<Variable, String> variableValues) throws NonProjectablePotentialException.MissingEvidenceInVariable, NonProjectablePotentialException.CannotEvaluate, NonProjectablePotentialException.CannotResolveVariable, NonProjectablePotentialException.HazardRateIsNegative, NonProjectablePotentialException.HazardIsNotAProbability {
         Variable conditionedVariable = getConditionedVariable();
         // Fill arrays numericValues and evidencelessVariables
         
@@ -206,10 +206,20 @@ public class WeibullHazardPotential extends GLMPotential implements DESSimulable
                 if (log) {
                     lambda = Math.exp(lambda);
                 }
+                if (lambda < 0) {
+                    throw new NonProjectablePotentialException.HazardRateIsNegative(
+                            conditionedVariable, whereIn(variableValues), ReferencedExpression.toExpression(lambda));
+                }
                 double probability = 0;
                 if (t > 0) {
-                    double diff = Math.pow(t - 1, shape) - Math.pow(t, shape);
+                    // The cycle that ends at t does not start before 0
+                    double diff = Math.pow(Math.max(t - 1, 0), shape) - Math.pow(t, shape);
                     probability = 1 - Math.exp(lambda * diff);
+                }
+                if (!(probability >= 0 && probability <= 1)) {
+                    throw new NonProjectablePotentialException.HazardIsNotAProbability(
+                            conditionedVariable, whereIn(variableValues), ReferencedExpression.toExpression(t),
+                            String.valueOf(probability));
                 }
                 // p
                 projectedPotential.getValues()[configBaseIndex + 1] = probability;
@@ -219,6 +229,40 @@ public class WeibullHazardPotential extends GLMPotential implements DESSimulable
         }
         
         return projectedPotential;
+    }
+
+    /** @return the values of the parents other than the time variable, such as "with Age = 65 and Sex = Male, " */
+    private String whereIn(Map<Variable, String> variableValues) {
+        List<String> parents = new ArrayList<>();
+        for (Variable parent : variables.subList(1, variables.size())) {
+            if (parent != timeVariable && variableValues.containsKey(parent)) {
+                parents.add(parent.getName() + " = " + shownValue(parent, variableValues.get(parent)));
+            }
+        }
+        if (parents.isEmpty()) {
+            return "";
+        }
+        String last = parents.removeLast();
+        return "with " + (parents.isEmpty() ? last : String.join(", ", parents) + " and " + last) + ", ";
+    }
+
+    /** @return the state whose number, its name or else its position, is {@code value}; or {@code value} if none is */
+    private static String shownValue(Variable parent, String value) {
+        if (parent.getVariableType() == VariableType.FINITE_STATES) {
+            State[] states = parent.getStates();
+            for (int i = 0; i < states.length; i++) {
+                double stateValue = i;
+                try {
+                    stateValue = Double.parseDouble(states[i].getName());
+                } catch (NumberFormatException e) {
+                    // the position, as in tableProject
+                }
+                if (ReferencedExpression.toExpression(stateValue).equals(value)) {
+                    return states[i].getName();
+                }
+            }
+        }
+        return value;
     }
     
     // 21/11/2023 implementing DESSimulablePotential; it also samples if failure occurs in the present cycle for comparing with MIDs

@@ -57,6 +57,8 @@
     "FindingVariableIsMissingAState",
     "FormatNotSupportedException",
     "FoundUnknownState",
+    "HazardIsNotAProbability",
+    "HazardRateIsNegative",
     "ICIModelNotSupportedByElvira",
     "IncompatibleEvidenceException",
     "InferenceStoppedException",
