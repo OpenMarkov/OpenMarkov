@@ -13,16 +13,12 @@ import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.TemporalOptions;
 import org.openmarkov.core.inference.tasks.TaskUtilities;
 import org.openmarkov.core.model.network.potential.*;
-import org.openmarkov.core.model.network.potential.operation.DiscretePotentialOperations;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TemporalNetOperations {
     
@@ -291,9 +287,8 @@ public class TemporalNetOperations {
      * in temporary networks is performed.
      *
      * @param network Network to be transformed
-     * @throws NonProjectablePotentialException if the relation of a utility averaged for the half cycle is not a table
      */
-    public static void applyTransitionTime(ProbNet network) throws NonProjectablePotentialException {
+    public static void applyTransitionTime(ProbNet network) {
         int numSlices = network.getNodes().stream().filter(node -> node.getVariable().isTemporal())
                                .mapToInt(node -> node.getVariable().getTimeSlice()).max().orElse(0);
         List<Node> utilityNodes = network.getNodes(NodeType.UTILITY);
@@ -302,47 +297,22 @@ public class TemporalNetOperations {
                                                                .getTransition();
         List<Node> nodesToRemove = new ArrayList<>();
         if (transitionTime == TemporalOptions.TransitionTime.HALF) {
-            // Half cycle correction
-            Map<String, Node[]> temporalNodes = new HashMap<>();
+            // Half cycle correction: the first and the last cycle count half
             for (Node utilityNode : utilityNodes) {
                 Variable utilityVariable = utilityNode.getVariable();
-                if (utilityVariable.isTemporal() && utilityVariable.getTimeSlice() > 0 && utilityVariable
-                        .getDecisionCriterion().getCriterionName().equalsIgnoreCase("effectiveness")) {
-                    if (!temporalNodes.containsKey(utilityVariable.getBaseName()))
-                        temporalNodes.put(utilityVariable.getBaseName(), new Node[numSlices + 1]);
-                    temporalNodes.get(utilityVariable.getBaseName())[utilityVariable.getTimeSlice()] = utilityNode;
-                }
-            }
-            for (Node[] tempNodes : temporalNodes.values()) {
-                for (int k = tempNodes.length - 1; k > 0; --k) {
-                    if (tempNodes[k] != null && tempNodes[k - 1] != null) {
-                        Node utilityNode = tempNodes[k];
-                        Node previousCycleNode = tempNodes[k - 1];
-                        List<Potential> currentCyclePotentials = utilityNode.getPotentials();
-                        List<Potential> previousCyclePotentials = previousCycleNode.getPotentials();
-                        List<Potential> newPotentials = new ArrayList<>();
-                        for (int i = 0; i < utilityNode.getNumPotentials(); ++i) {
-                            TablePotential currentCyclePotential = currentCyclePotentials.get(i).tableProject(null, null);
-                            TablePotential previousCyclePotential = previousCyclePotentials.get(i).tableProject(null, null);
-                            
-                            TablePotential sumPotential = DiscretePotentialOperations
-                                    .sum(Arrays.asList(currentCyclePotential, previousCyclePotential));
-                            for (int j = 0; j < sumPotential.getValues().length; ++j)
-                                sumPotential.getValues()[j] /= 2;
-                            newPotentials.add(sumPotential);
-                        }
-                        
-                        utilityNode.setPotentials(newPotentials);
-                        for (Node parent : previousCycleNode.getParents()) {
-                            network.addLink(parent, utilityNode, true);
-                        }
-                        
+                if (utilityVariable.isTemporal()
+                    && (utilityVariable.getTimeSlice() == 0 || utilityVariable.getTimeSlice() == numSlices)
+                    && !UtilityOperations.getsItsFactorBelow(utilityNode)) {
+                    Potential potential = utilityNode.getPotentials().get(0).deepCopy(network);
+                    try {
+                        potential.scalePotential(0.5);
+                    } catch (NotSupportedOperationException e) {
+                        throw new UnreachableException(e);
                     }
+                    utilityNode.setPotential(potential);
                 }
             }
-            
-        }
-        if (transitionTime == TemporalOptions.TransitionTime.BEGINNING || transitionTime == TemporalOptions.TransitionTime.HALF) {
+        } else if (transitionTime == TemporalOptions.TransitionTime.BEGINNING) {
             // prune zero cycle utilities
             for (Node utilityNode : utilityNodes) {
                 if (utilityNode.getVariable().getTimeSlice() == 0) {

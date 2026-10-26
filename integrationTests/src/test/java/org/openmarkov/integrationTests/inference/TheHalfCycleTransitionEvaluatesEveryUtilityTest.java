@@ -17,12 +17,12 @@ import org.openmarkov.io.probmodel.reader.PGMXReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * With the transitions at half cycle, the utilities of each cycle are averaged with those of the previous one whatever
- * their relation: a tree in MID-Chancellor, an "Exact" distribution in format 1.0 (error 233). In a network without a
- * horizon, the cycles are those the network has (error 356).
+ * With the transitions at half cycle, the first and the last cycle count half, for every criterion, so the result is
+ * the mean of "Beginning" and "End" whatever the relation of the utilities: a tree, an "Exact" distribution in format
+ * 1.0 (error 233), a tree on a numeric age below a product (error 358). In a network without a horizon, the cycles are
+ * those the network has (error 356).
  *
  * @author Manuel Arias
  */
@@ -36,21 +36,32 @@ class TheHalfCycleTransitionEvaluatesEveryUtilityTest {
         return new VEEvaluation(net).getUtility().getValues()[0];
     }
 
-    @Test void aUtilityGivenByATreeIsAveraged() throws Exception {
-        double beginning = evaluate("/mid/MID-Chancellor.pgmx", TransitionTime.BEGINNING);
-        double half = evaluate("/mid/MID-Chancellor.pgmx", TransitionTime.HALF);
-        double end = evaluate("/mid/MID-Chancellor.pgmx", TransitionTime.END);
+    private static void assertHalfIsTheMeanOfBeginningAndEnd(String path) throws Exception {
+        double beginning = evaluate(path, TransitionTime.BEGINNING);
+        double end = evaluate(path, TransitionTime.END);
 
-        assertTrue(beginning < half && half < end, beginning + " < " + half + " < " + end);
+        assertEquals((beginning + end) / 2, evaluate(path, TransitionTime.HALF), 1E-6 * Math.abs(beginning));
     }
 
-    @Test void anExactDistributionOfFormat1IsAveragedAsItsTable() throws Exception {
+    @Test void aUtilityGivenByATreeCountsHalfInTheFirstAndLastCycle() throws Exception {
+        assertHalfIsTheMeanOfBeginningAndEnd("/mid/MID-Chancellor.pgmx");
+    }
+
+    @Test void theFirstCycleCountsHalfToo() throws Exception {
+        assertHalfIsTheMeanOfBeginningAndEnd("/mid/MID-hip-Briggs.pgmx");
+    }
+
+    @Test void anExactDistributionOfFormat1CountsAsItsTable() throws Exception {
         assertEquals(evaluate("/mid/MID-hip-Briggs.pgmx", TransitionTime.HALF),
                      evaluate("/mid/1-0/MID-hip-Briggs-1-0.pgmx", TransitionTime.HALF), 1E-9);
     }
 
+    @Test void aTreeOnANumericAgeBelowAProductCountsOnce() throws Exception {
+        assertHalfIsTheMeanOfBeginningAndEnd("/mid/MID-HPV.pgmx");
+    }
+
     @Test void aNetworkWithoutAHorizonTakesItsOwnCycles() throws Exception {
-        evaluate("/mid/DMHEE/MID-dmhee-3.5.pgmx", TransitionTime.HALF);
+        assertHalfIsTheMeanOfBeginningAndEnd("/mid/DMHEE/MID-dmhee-3.5.pgmx");
 
         assertNotEquals(evaluate("/mid/DMHEE/MID-dmhee-3.5.pgmx", TransitionTime.BEGINNING),
                         evaluate("/mid/DMHEE/MID-dmhee-3.5.pgmx", TransitionTime.END), 1E-6);
