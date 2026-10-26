@@ -394,11 +394,8 @@ public class DESInference {
         for (int criterionNum = 0; criterionNum < criteria.size(); criterionNum++)
             usingDiscount[criterionNum] = criteria.get(criterionNum).getDiscount() > 0;
         DESResultsWindow.presentResults(
-                simulationSummaryResults.getMonteCarloOptions().getNumSimulations(),
                 simulationTime,
-                simulationSummaryResults.toString(),
-                decisionVariable.getName(),
-                decisionVariable.getNumStates(),
+                simulationSummaryResults,
                 usingDiscount,
                 psaPanel
         );

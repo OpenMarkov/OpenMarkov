@@ -1,6 +1,7 @@
 package org.openmarkov.gui.desnets;
 
 import org.openmarkov.core.inference.MonteCarloOptions;
+import org.openmarkov.core.model.network.EqualCriterion;
 import org.openmarkov.gui.window.OMTabbedPane;
 
 import javax.swing.JButton;
@@ -22,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -36,25 +37,20 @@ public class DESResultsWindow {
     public static final Dimension DIMENSION = new Dimension(1200, 400);
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
 
-    private static List<String> interventions;
-    private static List<String> criteria;
-
     /**
      * Presents the DES simulation results in a table
      *
-     * @param simulationResults    DES simulation results
-     * @param decisionVariableName name of the decision variable
-     * @param interventionsCount   number of interventions
-     * @param usingDiscount        whether each criterion has a discount or not
+     * @param simulationResults DES simulation results
+     * @param usingDiscount     whether each criterion has a discount or not
      */
-    public static void presentResults(int numSims, double simulationTime, String simulationResults, String decisionVariableName, int interventionsCount, boolean[] usingDiscount, JPanel psaPanel) {
+    public static void presentResults(double simulationTime, SimulationSummaryResults simulationResults, boolean[] usingDiscount, JPanel psaPanel) {
 
         JPanel resultsPanel = new JPanel(new BorderLayout());
 
         JTextPane textPane = new JTextPane();
         textPane.setContentType("text/html");
         textPane.setEditable(false);
-        textPane.setText(generateTable(numSims, simulationResults, decisionVariableName, interventionsCount, usingDiscount));
+        textPane.setText(generateTable(simulationResults, usingDiscount));
 
         //FIXME use StringDatabase
         JPanel btnPanel = new JPanel();
@@ -94,8 +90,8 @@ public class DESResultsWindow {
 
     }
 
-    private static void saveCsv(String simulationResults) {
-        String csv = csv(simulationResults, interventions, criteria);
+    private static void saveCsv(SimulationSummaryResults simulationResults) {
+        String csv = csv(simulationResults);
 
         File exportDir = new File(MonteCarloOptions.DESNET_RESULTS_DIRECTORY, MonteCarloOptions.EXPORT_DIRECTORY);
         if (!exportDir.exists()) exportDir.mkdir();
@@ -113,134 +109,116 @@ public class DESResultsWindow {
         }
     }
 
+    /** The options of the decision, in the order of the results. */
+    private static List<String> options(SimulationSummaryResults simulationResults) {
+        List<HashMap<String, CriteriaValues>> seriesList = simulationResults.getSeriesList();
+        return seriesList.isEmpty() ? List.of() : List.copyOf(seriesList.get(0).keySet());
+    }
+
     /** The results as comma-separated values: a row of titles and then a row for each series. */
-    static String csv(String simulationResults, List<String> interventions, List<String> criteria) {
-        Scanner scanner = new Scanner(simulationResults);
+    static String csv(SimulationSummaryResults simulationResults) {
+        List<String> interventions = options(simulationResults);
+        List<EqualCriterion> criteria = simulationResults.getCriteria();
         StringBuilder sb = new StringBuilder();
         sb.append("SERIES");
         // TODO: skip discounted values when there is no discount.
         interventions.forEach(intervention -> {
             criteria.forEach(criterion -> {
                 sb.append(",Mean ")
-                        .append(criterion)
+                        .append(criterion.getCriterionName())
                         .append(" for ")
                         .append(intervention);
                 sb.append(",Disc. Mean ")
-                        .append(criterion)
+                        .append(criterion.getCriterionName())
                         .append(" for ")
                         .append(intervention);
             });
         });
         sb.append("\n");
 
-        // Each number is read where generateTable reads it, so that one written with an exponent, or an option whose
-        // name starts with a digit, keeps its own cell
-        while (scanner.hasNextLine()) {
-            String[] parts = scanner.nextLine().split(";");
-            sb.append(parts[1]);
-            int index = 5;
-            for (int intervNum = 0; intervNum < interventions.size(); intervNum++) {
-                for (int criterionNum = 0; criterionNum < criteria.size(); criterionNum++) {
-                    sb.append(',').append(parts[index]).append(',').append(parts[index + 2]);
-                    index += 5;
+        List<HashMap<String, CriteriaValues>> seriesList = simulationResults.getSeriesList();
+        for (int seriesNum = 0; seriesNum < seriesList.size(); seriesNum++) {
+            sb.append(seriesNum);
+            for (String intervention : interventions) {
+                for (EqualCriterion criterion : criteria) {
+                    SimulationResults values = seriesList.get(seriesNum).get(intervention).getSimulationResults(criterion);
+                    sb.append(',').append(values.getMean()).append(',').append(values.getDiscountedMean());
                 }
-                index += 2;
             }
             sb.append("\n");
         }
         return sb.toString();
     }
 
-    private static String generateTable(int numSims, String simulationResults, String decisionVariableName, int interventionsCount, boolean[] usingDiscount) {
+    static String generateTable(SimulationSummaryResults simulationResults, boolean[] usingDiscount) {
         try {
             int discountedCount = 0;
             for (boolean hasDiscount : usingDiscount) if (hasDiscount) ++discountedCount;
 
-            Scanner scanner = new Scanner(simulationResults);
+            List<String> interventions = options(simulationResults);
+            List<EqualCriterion> criteria = simulationResults.getCriteria();
             StringBuilder sb = new StringBuilder(
                     String.format("<html><style>%s</style><table><thead><tr><th rowspan=\"3\">Series #<br><small>(%d simulations each)</small></th>",
                             loadResourceAsText("resultStyle.css"),
-                            numSims
+                            simulationResults.getMonteCarloOptions().getNumSimulations()
                     )
             );
 
-            interventions = new ArrayList<>();
-            criteria = new ArrayList<>();
-
-            String line = scanner.nextLine();
-            String[] parts = line.split(";");
-            int index = 2;
-            for (int intervNum = 0; intervNum < interventionsCount; intervNum++) {
-                interventions.add(parts[index]);
+            for (String intervention : interventions) {
                 sb.append("<th colspan=\"")
                         .append(usingDiscount.length + discountedCount)
                         .append("\">")
-                        .append(decisionVariableName)
+                        .append(simulationResults.getDecisionVariable().getName())
                         .append(": ")
-                        .append(parts[index])
+                        .append(intervention)
                         .append("</th>");
-                index += usingDiscount.length * 5 + 2;
             }
             sb.append("</tr><tr>");
-            for (int intervNum = 0; intervNum < interventionsCount; intervNum++) {
-                index = 3;
-                for (boolean hasDiscount : usingDiscount) {
-                    if (intervNum == 0) criteria.add(parts[index]);
-                    if (hasDiscount)
-                        sb.append("<th colspan=\"2\">").append(parts[index]);
+            for (int intervNum = 0; intervNum < interventions.size(); intervNum++) {
+                for (int criterionNum = 0; criterionNum < usingDiscount.length; criterionNum++) {
+                    String criterionName = criteria.get(criterionNum).getCriterionName();
+                    if (usingDiscount[criterionNum])
+                        sb.append("<th colspan=\"2\">").append(criterionName);
                     else
-                        sb.append("<th colspan=\"1\" rowspan=\"2\">").append(parts[index]); //.append(" Mean");
+                        sb.append("<th colspan=\"1\" rowspan=\"2\">").append(criterionName); //.append(" Mean");
                     sb.append("</th>");
-                    index += 5;
                 }
             }
             sb.append("</tr><tr>");
 
             int counter = Math.max(0, discountedCount);
-            counter *= Math.max(0, interventionsCount);
+            counter *= Math.max(0, interventions.size());
             while (--counter >= 0) sb.append("<th>Mean</th><th>Disc. Mean</th>");
             sb.append("</tr></thead><tbody>");
             boolean evenRow = false;
-            while (true) {
+            List<HashMap<String, CriteriaValues>> seriesList = simulationResults.getSeriesList();
+            for (int seriesNum = 0; seriesNum < seriesList.size(); seriesNum++) {
                 String td = String.format("<td %s>", evenRow ? "class=even" : "");
                 evenRow = !evenRow;
                 sb.append("<tr>");
 
-                parts = line.split(";");
-                sb.append(td).append(parts[1]).append("</td>");
-                index = 5;
-                for (int intervNum = 0; intervNum < interventionsCount; intervNum++) {
-                    for (boolean hasDiscount : usingDiscount) {
+                sb.append(td).append(seriesNum).append("</td>");
+                for (String intervention : interventions) {
+                    for (int criterionNum = 0; criterionNum < usingDiscount.length; criterionNum++) {
+                        SimulationResults values = seriesList.get(seriesNum).get(intervention)
+                                                             .getSimulationResults(criteria.get(criterionNum));
                         sb.append(td)
-                                .append(formatDouble(parts[index]));
-                        index += 2;
-                        sb.append("</td>");
-                        if (hasDiscount)
+                                .append(DECIMAL_FORMAT.format(values.getMean()))
+                                .append("</td>");
+                        if (usingDiscount[criterionNum])
                             sb.append(td)
-                                    .append(formatDouble(parts[index]))
+                                    .append(DECIMAL_FORMAT.format(values.getDiscountedMean()))
                                     .append("</td>");
-                        index += 3;
                     }
-                    index += 2;
                 }
 
                 sb.append("</tr>");
-                if (scanner.hasNextLine()) line = scanner.nextLine();
-                else break;
             }
             sb.append("</tbody></table></html>");
             return sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
             return "Could not generate results table: " + e;
-        }
-    }
-
-    private static String formatDouble(String string) {
-        try {
-            return DECIMAL_FORMAT.format(Double.parseDouble(string));
-        } catch (Exception e) {
-            return string;
         }
     }
 

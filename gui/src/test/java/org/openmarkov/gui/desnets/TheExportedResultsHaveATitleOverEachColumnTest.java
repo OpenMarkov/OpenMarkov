@@ -13,11 +13,9 @@ import org.openmarkov.core.model.network.EqualCriterion;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.testTags.TestSpeed;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * «Export as CSV» of the results of a simulation of two options, two criteria and one series: the row of titles and
  * the row of the series have the same columns, the number of the series, and the mean and discounted mean of each
  * criterion for each option (error 103). A mean written with an exponent, or an option whose name starts with a
- * digit, keeps its own cell (error 252).
+ * digit, keeps its own cell (error 252), and so does an option with a semicolon in its name (error 332).
  *
  * @author Manuel Arias
  */
@@ -58,11 +56,7 @@ class TheExportedResultsHaveATitleOverEachColumnTest {
             expected.put("Disc. Mean effectiveness for " + options[i], means[i][3]);
         }
         results.calculateStatisticalProperties();
-        String dump = results.toString();
-        // The window takes the options in the order of the results, and so does this test
-        List<String> inTheirOrder = Arrays.stream(dump.split("\n")[0].split(";"))
-                                          .filter(Set.of(options)::contains).toList();
-        return DESResultsWindow.csv(dump, inTheirOrder, List.of("cost", "effectiveness")).split("\n");
+        return DESResultsWindow.csv(results).split("\n");
     }
 
     /** Each cell of the series is the mean that its title names. */
@@ -99,6 +93,14 @@ class TheExportedResultsHaveATitleOverEachColumnTest {
     @Test
     void anOptionWhoseNameStartsWithADigitKeepsItsCell() {
         String[] rows = csvRows(new String[] { "none", "10 mg" }, new double[] { 100, 90, 2, 2 },
+                                new double[] { 150, 140, 3, 3 });
+
+        assertEachCellUnderItsTitle(rows);
+    }
+
+    @Test
+    void anOptionWithASemicolonKeepsItsCells() {
+        String[] rows = csvRows(new String[] { "none", "drug;10" }, new double[] { 100, 90, 2, 2 },
                                 new double[] { 150, 140, 3, 3 });
 
         assertEachCellUnderItsTitle(rows);
