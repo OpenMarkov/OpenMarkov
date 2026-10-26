@@ -187,7 +187,23 @@ public class BasicOperations {
      * @return true iff the node has parents and are all observable
      */
     public static boolean haveParentsAndAreAllAbsorbable(Node node) {
-        return !node.getParents().isEmpty() && combinesItsParents(node) && areAllItsParentsAbsorbable(node);
+        return !node.getParents().isEmpty() && combinesItsParents(node) && areAllItsParentsAbsorbable(node)
+                && allItsParentsAreTables(node);
+    }
+
+    /** Whether the potential of every parent can be turned into the table that is absorbed. */
+    private static boolean allItsParentsAreTables(Node node) {
+        for (Node parent : node.getParents()) {
+            Potential potential = parent.getPotential();
+            try {
+                if (potential != null) {
+                    potential.tableProject(null, null);
+                }
+            } catch (NonProjectablePotentialException e) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** Only a sum, a product or a formula says how to combine the values of the parents. */
