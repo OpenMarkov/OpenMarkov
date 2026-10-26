@@ -20,8 +20,9 @@ import java.util.Set;
 
 /**
  * Every decision criterion must have a name, and no two criteria may share
- * one: criteria are matched by name wherever a utility potential declares
- * which criterion it contributes to.
+ * one, whatever their capitals and surrounding spaces: criteria are matched
+ * by name wherever a utility potential declares which criterion it
+ * contributes to.
  * <p>
  * The two exceptions this constraint reports existed for years while its body
  * was a comment, so the application announced the guarantee without imposing
@@ -43,10 +44,10 @@ import java.util.Set;
         Set<String> seenNames = new HashSet<>();
         for (Criterion criterion : criteria) {
             String name = criterion.getCriterionName();
-            if (name == null || name.isEmpty()) {
+            if (name == null || name.isBlank()) {
                 constraintChecker.addException(
                         new ConstraintViolatedException.CriterionNameIsEmpty(this, criterion));
-            } else if (!seenNames.add(name)) {
+            } else if (!seenNames.add(name.trim().toLowerCase())) {
                 constraintChecker.addException(
                         new ConstraintViolatedException.CriterionNameIsAlreadyPresent(this, criterion, name));
             }

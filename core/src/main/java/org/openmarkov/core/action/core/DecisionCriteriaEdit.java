@@ -57,7 +57,7 @@ import java.util.List;
                         constraintChecker.addException(new ConstraintViolatedException.CriterionNameIsEmpty(constraint, modifiedCriterion));
                     }
                     for (Criterion criterion : this.lastCriteria) {
-                        if (criterion.getCriterionName().trim().toLowerCase().equals(name)) {
+                        if (criterion != modifiedCriterion && criterion.getCriterionName().trim().toLowerCase().equals(name)) {
                             constraintChecker.addException(new ConstraintViolatedException.CriterionNameIsAlreadyPresent(constraint, modifiedCriterion, name));
                         }
                     }
