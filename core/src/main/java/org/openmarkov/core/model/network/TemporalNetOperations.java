@@ -13,6 +13,8 @@ import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.TemporalOptions;
 import org.openmarkov.core.inference.tasks.TaskUtilities;
 import org.openmarkov.core.model.network.potential.*;
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
 
@@ -433,6 +435,7 @@ public class TemporalNetOperations {
      * @param networkName           MID to be expanded
      *
      * @return expanded network as an influence diagram with the associated evidence extended, the evidence generated from constant potentials,and the non-observed variables discretized,
+     * the discounts and the time of the transition applied and the Weibull hazards turned into tables,
      * and the findings of {@code preResolutionEvidence} on its variables
      *
      * @throws UnsupportedOperationException - when probNet is not an MID, the network cannot be expanded.
@@ -450,15 +453,46 @@ public class TemporalNetOperations {
         // Extend pre-resolution evidence
         EvidenceCase extendedEvidence = TaskUtilities.extendPreResolutionEvidence(expandedNetwork, evidence);
 //		LogManager.getLogger().debug("Applying discounts");
-        // Apply discounts
+        // Apply discounts and the time of the transition, as the analyses do
         expandedNetwork = TaskUtilities.applyDiscounts(expandedNetwork, true);
+        applyTransitionTime(expandedNetwork);
 //		LogManager.getLogger().debug("Discretizing non-observerd numeric variables");
         // Discretize non-observed numeric variables
         expandedNetwork = TaskUtilities.discretizeNonObservedNumericVariables(expandedNetwork, extendedEvidence);
         // The discretization copies the network, and turns an observed numeric variable into one of a single state
         evidence = onVariablesOf(expandedNetwork, evidence);
+        turnWeibullHazardsIntoTables(expandedNetwork);
         transformToInfluenceDiagram(expandedNetwork);
         return new ExpandedNetwork(expandedNetwork, evidence);
+    }
+    
+    /**
+     * Turns each Weibull hazard, also in the branches of a tree, into its table: it takes its cycle from its variables,
+     * which lose it in an influence diagram.
+     */
+    private static void turnWeibullHazardsIntoTables(ProbNet expandedNetwork) throws NonProjectablePotentialException {
+        for (Node node : expandedNetwork.getNodes()) {
+            List<Potential> potentials = node.getPotentials();
+            List<Potential> withTables = new ArrayList<>();
+            for (Potential potential : potentials) {
+                withTables.add(withWeibullHazardsAsTables(potential));
+            }
+            if (!withTables.equals(potentials)) {
+                node.setPotentials(withTables);
+            }
+        }
+    }
+    
+    private static Potential withWeibullHazardsAsTables(Potential potential) throws NonProjectablePotentialException {
+        if (potential instanceof WeibullHazardPotential) {
+            return potential.tableProject(new EvidenceCase(), null);
+        }
+        if (potential instanceof TreeADDPotential tree) {
+            for (TreeADDBranch branch : tree.getBranches()) {
+                branch.setPotential(withWeibullHazardsAsTables(branch.getPotential()));
+            }
+        }
+        return potential;
     }
     
     /**
