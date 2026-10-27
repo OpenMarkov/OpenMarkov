@@ -22,6 +22,8 @@ import org.openmarkov.core.action.base.PNEdit;
     private final String currentComment;
 	private final String newComment;
 	private final boolean showCommentWhenOpening;
+	/** Whether the comment was shown when opening, before the edit, which undoing it gives back (error 33) */
+	private final boolean currentShowCommentWhenOpening;
 
 	/**
 	 * Creates a new {@code NetworkCommentEdit} with the network and new
@@ -36,6 +38,7 @@ import org.openmarkov.core.action.base.PNEdit;
 		this.newComment = newComment;
 		this.currentComment = probNet.getComment();
 		this.showCommentWhenOpening = showCommentWhenOpening;
+		this.currentShowCommentWhenOpening = probNet.getShowCommentWhenOpening();
 	}
 	
 	@Override protected void doEdit() {
@@ -46,6 +49,7 @@ import org.openmarkov.core.action.base.PNEdit;
     @Override public void undo() {
 		super.undo();
 		probNet.setComment(currentComment);
+		probNet.setShowCommentWhenOpening(currentShowCommentWhenOpening);
 
 	}
 }
