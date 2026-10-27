@@ -111,7 +111,7 @@ public class NetworkContextualMenu extends ContextualMenu {
                                 new NodeMenuGenerator(NodeType.DECISION, "Decision node", "jmenuItemCreateDecisionNode","Create a decision node",
                                                       IconBind.DECISION_ENABLED.icon(),
                                                       ActionCommands.DECISION_CREATION, !currentNetwork.hasConstraintOfClass(OnlyChanceNodes.class)),
-                                new NodeMenuGenerator(NodeType.UTILITY, "Utility node", "jmenuItemCreateUtilityNode","Create an utility node",
+                                new NodeMenuGenerator(NodeType.UTILITY, "Utility node", "jmenuItemCreateUtilityNode","Create a utility node",
                                                       IconBind.UTILITY_ENABLED.icon(),
                                                       ActionCommands.UTILITY_CREATION, !currentNetwork.hasConstraintOfClass(OnlyChanceNodes.class)),
                                 

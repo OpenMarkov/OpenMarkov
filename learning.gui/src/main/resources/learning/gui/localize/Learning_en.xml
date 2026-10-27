@@ -152,7 +152,7 @@
             <Algorithm value="Superparent naive bayes "/>
             <IncorrectParameter value="The alpha parameter must be a numeric value between 0 an 1"/>
             <SameSP value="Unique superparent ">
-                <Tooltip value="If selected only the superparent would be commont to all features"/>
+                <Tooltip value="If selected only the superparent would be common to all features"/>
             </SameSP>
         </SuperParentNaiveBayes>
         <KDB>

@@ -64,7 +64,7 @@ import java.text.ParseException;
 		namelessPanel.add(tteLabel);
 		namelessPanel.add(tteSpinner);
 		pOccurrenceSpinner = numberSpinner(finiteNumbers(0, 0, 1.0, 0.01));
-		JLabel probabilityTextLabel = new JLabel("Probability of ocurrence:");
+		JLabel probabilityTextLabel = new JLabel("Probability of occurrence:");
 		probabilityTextLabel.setLabelFor(pOccurrenceSpinner);
 		namelessPanel.add(probabilityTextLabel);
 		namelessPanel.add(pOccurrenceSpinner);
