@@ -11,12 +11,10 @@ import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.gui.dialog.AboutBox;
 import org.openmarkov.gui.dialog.LanguageDialog;
 import org.openmarkov.gui.dialog.ShortcutsBox;
-import org.openmarkov.gui.dialog.configuration.PreferencesDialog;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
-import java.util.prefs.BackingStoreException;
 
 /**
  * Handles edit operations (undo/redo, edition mode), view operations (zoom, by-title),
@@ -100,10 +98,6 @@ class EditAndViewHandler {
 
     void showLanguageChangeDialog() {
         LanguageDialog.getUniqueInstance(mainPanel.getMainFrame()).setVisible(true);
-    }
-
-    void showUserConfigurationDialog() throws BackingStoreException {
-        new PreferencesDialog(mainPanel.getMainFrame()).setVisible(true);
     }
 
     ShortcutsBox showShortcuts() {

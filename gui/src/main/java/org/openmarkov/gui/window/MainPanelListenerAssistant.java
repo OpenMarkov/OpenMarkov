@@ -309,8 +309,6 @@ public class MainPanelListenerAssistant extends WindowAdapter
                     GUIUtils.executeUIAction(() -> inferenceHandler.showCostEffectivenessDeterministic(getCurrentNetworkEditorPanel()));
                 }
             }
-            case ActionCommands.CONFIGURATION ->
-                    GUIUtils.executeUIAction(editAndViewHandler::showUserConfigurationDialog);
             case ActionCommands.OPEN_SETTINGS ->
                     ComponentUtilities.showDialog(new SettingsDialog(this.mainPanel.getMainFrame()));
             case ActionCommands.HELP_CHANGE_LANGUAGE -> editAndViewHandler.showLanguageChangeDialog();

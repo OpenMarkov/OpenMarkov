@@ -259,9 +259,6 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         createCheckBox(MenuItemNames.VIEW_NODES_BYNAME_MENUITEM, ActionCommands.BYNAME_NODES, null, this.groupByNameByTitle);
         createCheckBox(MenuItemNames.VIEW_NODES_BYTITLE_MENUITEM, ActionCommands.BYTITLE_NODES, null, this.groupByNameByTitle);
         
-        // Tools
-        createItem(MenuItemNames.CONFIGURATION_MENUITEM, ActionCommands.CONFIGURATION);
-        
         // Help
         createItem(MenuItemNames.HELP_SHORTCUTS_MENUITEM, ActionCommands.HELP_SHORTCUTS);
         createItem(MenuItemNames.HELP_ABOUT_MENUITEM, ActionCommands.HELP_ABOUT);
@@ -403,8 +400,6 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
                 menu.addSeparator();
             }
         }
-        menu.addSeparator();
-        menu.add(this.items.get(ActionCommands.CONFIGURATION));
     }
     
     private JMenuItem toolItem(JMenuItem item) {

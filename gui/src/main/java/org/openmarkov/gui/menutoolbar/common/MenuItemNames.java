@@ -486,10 +486,6 @@ public class MenuItemNames {
 	public static final String SENSITIVITYANALYSISPROBABILISTIC_MENUITEM = TOOLS_MENU
 			+ ".SensitivityAnalysisProbabilistic";
 
-	/**
-	 * String database token for the item 'Tools - Configuration'.
-	 */
-	public static final String CONFIGURATION_MENUITEM = TOOLS_MENU + ".Configuration";
 
 	/**
 	 * String database token for the menu 'Help'.

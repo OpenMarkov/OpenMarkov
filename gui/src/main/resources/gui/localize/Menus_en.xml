@@ -266,9 +266,6 @@
         <Evaluation value="Evaluation">
             <Mnemonic value="e"/>
         </Evaluation>
-        <Configuration value="OpenMarkov configuration">
-            <Mnemonic value="c"/>
-        </Configuration>
         <Plugin>
             <NotAvailable value="The functionality you are trying to run is not available"/>
             <Error value="An error occurred while trying to process command:"/>
