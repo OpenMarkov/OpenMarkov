@@ -3,6 +3,7 @@ package org.openmarkov.gui.validator;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
@@ -118,6 +119,65 @@ class AbsorbNodeValidatorTest {
                 "Do test? should not be absorbable because it has non-utility children");
     }
 
+    /**
+     * A parent does not need a table of its own: the result of a reactor, child of the decision of building it, can be
+     * absorbed, though the menu used to turn the option off because a decision has no table (error 301).
+     */
+    @Test
+    void aChanceNodeWhoseParentIsADecisionCanBeAbsorbed() {
+        ProbNet net = buildID();
+        Variable build = addDecision(net, "Build");
+        Variable result = addChance(net, "Result");
+        Variable benefit = addUtility(net, "Benefit");
+        net.addLink(build, result, true);
+        net.addLink(result, benefit, true);
+        net.addLink(build, benefit, true);
+
+        assertTrue(AbsorbNodeValidator.validate(net.getNode(result)));
+    }
+
+    /**
+     * Absorbing turns the relations of the node and of its utilities into tables, which a numeric variable cannot be
+     * in: a numeric parent of the node, or another numeric parent of its utility, makes absorbing fail (error 301).
+     */
+    @Test
+    void aNumericVariableInTheRelationsThatAreJoinedPreventsAbsorbing() {
+        ProbNet parentNet = buildID();
+        Variable age = addNumericChance(parentNet, "Age");
+        Variable disease = addChance(parentNet, "Disease");
+        net(parentNet, age, disease, addUtility(parentNet, "U"));
+        assertFalse(AbsorbNodeValidator.validate(parentNet.getNode(disease)), "The node has a numeric parent");
+
+        ProbNet utilityNet = buildID();
+        Variable otherAge = addNumericChance(utilityNet, "Age");
+        Variable otherDisease = addChance(utilityNet, "Disease");
+        Variable u = addUtility(utilityNet, "U");
+        utilityNet.addLink(otherDisease, u, true);
+        utilityNet.addLink(otherAge, u, true);
+        assertFalse(AbsorbNodeValidator.validate(utilityNet.getNode(otherDisease)),
+                    "The utility has another numeric parent");
+    }
+
+    /** A numeric variable divided into intervals has states, and can be in a table. */
+    @Test
+    void aParentDividedIntoIntervalsDoesNotPreventAbsorbing() {
+        ProbNet net = buildID();
+        Variable age = new Variable("Age", new State[]{ new State("young"), new State("old") },
+                                    new PartitionedInterval(new double[]{ 0, 50, 120 }, new boolean[]{ false, false, false }),
+                                    1);
+        net.addNode(new Node(net, age, NodeType.CHANCE));
+        Variable disease = addChance(net, "Disease");
+        net(net, age, disease, addUtility(net, "U"));
+
+        assertTrue(AbsorbNodeValidator.validate(net.getNode(disease)));
+    }
+
+    /** Links {@code parent} → {@code node} → {@code utility}. */
+    private static void net(ProbNet net, Variable parent, Variable node, Variable utility) {
+        net.addLink(parent, node, true);
+        net.addLink(node, utility, true);
+    }
+
     // --- helpers ---
 
     private static ProbNet buildID() {
@@ -132,6 +192,12 @@ class AbsorbNodeValidatorTest {
 
     private static Variable addChance(ProbNet net, String name) {
         Variable v = new Variable(name, new State[]{new State("a"), new State("b")});
+        net.addNode(new Node(net, v, NodeType.CHANCE));
+        return v;
+    }
+
+    private static Variable addNumericChance(ProbNet net, String name) {
+        Variable v = new Variable(name);
         net.addNode(new Node(net, v, NodeType.CHANCE));
         return v;
     }

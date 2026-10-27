@@ -7,11 +7,10 @@
 
 package org.openmarkov.gui.menutoolbar.menu;
 
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Point2D;
-import org.openmarkov.core.model.network.VariableType;
-import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.graphic.VisualNetwork;
 import org.openmarkov.gui.graphic.VisualNode;
@@ -348,17 +347,15 @@ public class NodeContextualMenu extends ContextualMenu {
         if (absorbNodeMenuItem == null) {
             absorbNodeMenuItem = new LocalizedMenuItem(MenuItemNames.EDIT_ABSORBNODE_MENUITEM, ActionCommands.ABSORB_NODE.getCommandName());
             absorbNodeMenuItem.addActionListener(listener);
-            var allParentsAreFiniteAndHaveTablePotentials = this.selectedNode.getNode()
-                                                                             .getParents()
-                                                                             .stream()
-                                                                             .allMatch(parent -> parent.getVariable()
-                                                                                                       .getVariableType() == VariableType.FINITE_STATES && parent.getPotential() instanceof TablePotential);
-            if (!allParentsAreFiniteAndHaveTablePotentials) {
+            // It follows what absorbing needs. The rule of issue 513 also asked every parent for a table, which a
+            // decision does not have, so it turned the option off on nodes that can be absorbed (error 301)
+            Node node = this.selectedNode.getNode();
+            if (!AbsorbNodeValidator.hasTheShape(node)) {
                 absorbNodeMenuItem.setEnabled(false);
-                absorbNodeMenuItem.setToolTipText("Not all parents have a finite states domain and a table relation, hence, this node cannot be absorbed.");
-            } else if (!AbsorbNodeValidator.validate(this.selectedNode.getNode())) {
+                absorbNodeMenuItem.setToolTipText(StringDatabase.getUniqueInstance().getString(MenuItemNames.EDIT_ABSORBNODE_MENUITEM + ".NotAbsorbable"));
+            } else if (!AbsorbNodeValidator.noVariableIsNumeric(node)) {
                 absorbNodeMenuItem.setEnabled(false);
-                absorbNodeMenuItem.setToolTipText("Only a chance or decision node whose children are all utility nodes without children can be absorbed; for a decision, those utilities can only depend on what is known when deciding.");
+                absorbNodeMenuItem.setToolTipText(StringDatabase.getUniqueInstance().getString(MenuItemNames.EDIT_ABSORBNODE_MENUITEM + ".NumericVariable"));
             }
         }
         return absorbNodeMenuItem;

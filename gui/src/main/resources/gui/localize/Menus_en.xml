@@ -80,6 +80,8 @@
         </Copy>
         <AbsorbNode value="Absorb this node">
             <Mnemonic value="b"/>
+            <NotAbsorbable value="Only a chance or decision node whose children are all utility nodes without children can be absorbed; for a decision, those utilities can only depend on what is known when deciding."/>
+            <NumericVariable value="This node cannot be absorbed because it, one of its parents or another parent of its utilities is numeric: absorbing it needs their relations as tables."/>
         </AbsorbNode>
         <AbsorbParents value="Absorb parents">
             <Mnemonic value="n"/>

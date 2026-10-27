@@ -31,8 +31,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * The menu of a node offers «Absorb this node» and «Absorb parents» only where, besides the rule of issue 513, the
- * validator of each one accepts the node (error 301).
+ * The menu of a node offers «Absorb this node» and «Absorb parents» only where the validator of each one accepts the
+ * node (error 301). «Absorb this node» no longer follows the rule of issue 513, which asked every parent for a table
+ * and so turned it off on the results of DAN-reactor, whose parent is a decision, though they can be absorbed.
  *
  * @author Manuel Arias
  */
@@ -83,6 +84,7 @@ class TheAbsorbOptionsFollowTheirValidatorsTest {
             "/bn/BN-asia.pgmx, Smoker, false",
             "/bn/BN-asia.pgmx, Dyspnea, false",
             "/id/ID-CEA-minimal.pgmx, Therapy, true",
+            "/dan/DAN-reactor.pgmx, Result of advanced reactor, true",
     })
     void absorbThisNode(String network, String node, boolean enabled) throws Exception {
         assertEquals(enabled, isEnabled(network, node, "AbsorbNode"));
