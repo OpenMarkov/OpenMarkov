@@ -89,11 +89,6 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 
 
 	/**
-	 * JCHeckBox for setting the "only summary" option.  When checked, only a summary of the simulations is recorded
-	 */
-	private JCheckBox resultsPerSeriesCheckBox;
-
-	/**
 	 * JCHeckBox for setting the "detailed textual log option"
 	 */
 	private JCheckBox textualLogCheckBox;
@@ -165,7 +160,6 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 	public MonteCarloOptions getMonteCarloOptions() {
 		this.monteCarloOptions.setNumSeries(Integer.parseInt(numSeriesTextField.getText()));
 		this.monteCarloOptions.setNumSimulations(Integer.parseInt(numSimulationsTextField.getText()));
-		this.monteCarloOptions.setResultsToExcel(resultsPerSeriesCheckBox.isSelected());
 		this.monteCarloOptions.setTextualLog(textualLogCheckBox.isSelected());
 		//26/08/2023 - set inputFile options
 		this.monteCarloOptions.setInputFilePath(inputFile);
@@ -269,7 +263,6 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 		if (desNetLogOptionsPanel == null) {
 			desNetLogOptionsPanel = new JPanel();
 			desNetLogOptionsPanel.setBorder( new TitledBorder("DES Inference Log Options"));
-			desNetLogOptionsPanel.add(getJCheckBoxExcelResultsPerSeries());
 			desNetLogOptionsPanel.add(getTextualLogCheckBox());
 		}
 		return desNetLogOptionsPanel;
@@ -289,22 +282,6 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 
 		return textualLogCheckBox;
 	}
-
-
-	/**
-	 * This method returns the JCheckBox for "Only Summary"
-	 * @return the JCheckBox for "Only Summary"
-	 */
-	private JCheckBox getJCheckBoxExcelResultsPerSeries() {
-		if (resultsPerSeriesCheckBox == null) {
-			//FIXME use stringDatabase
-			resultsPerSeriesCheckBox = new JCheckBox("Results Per Series (.xlsx file)",monteCarloOptions.isResultsToExcel());
-		}
-		//FIXME 13/01/2023 Provisional for paper .jar
-		resultsPerSeriesCheckBox.setEnabled(false);
-		return resultsPerSeriesCheckBox;
-	}
-
 
 
 	/**

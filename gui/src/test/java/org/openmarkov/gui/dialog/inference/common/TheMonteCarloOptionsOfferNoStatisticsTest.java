@@ -24,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The Monte Carlo options of a network of events had four boxes, «Mean», «Sum», «Trimmed Mean» and «Median», that
- * did nothing: the results always show the mean (error 109 of the pending list). The team decided to remove them.
+ * did nothing: the results always show the mean (error 109 of the pending list). The team decided to remove them, and
+ * with them the box «Results Per Series (.xlsx file)», which was always disabled and did nothing either (note 111).
  *
  * @author Manuel Arias
  */
@@ -54,7 +55,7 @@ class TheMonteCarloOptionsOfferNoStatisticsTest {
     @Test void thereAreNoBoxesForStatistics() {
         List<String> texts = buttonTexts(panel(), new ArrayList<>());
 
-        for (String statistic : List.of("Mean", "Sum", "Trimmed Mean", "Median")) {
+        for (String statistic : List.of("Mean", "Sum", "Trimmed Mean", "Median", "Results Per Series (.xlsx file)")) {
             assertTrue(!texts.contains(statistic), statistic + " is among " + texts);
         }
     }

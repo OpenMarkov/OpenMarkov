@@ -36,7 +36,6 @@ class OptionsAreCopiedWholeTest {
 		MonteCarloOptions original = new MonteCarloOptions();
 		original.setNumSimulations(123);
 		original.setNumSeries(7);
-		original.setResultsToExcel(true);
 		original.setInputFilePath(Path.of("values.csv"));
 		original.setPsa(true);
 		original.setTextualLog(true);
@@ -46,7 +45,6 @@ class OptionsAreCopiedWholeTest {
 		assertAll("Fields lost when copying the Monte Carlo options",
 				() -> assertEquals(123, copy.getNumSimulations()),
 				() -> assertEquals(7, copy.getNumSeries()),
-				() -> assertEquals(true, copy.isResultsToExcel()),
 				() -> assertEquals(Path.of("values.csv"), copy.getInputFilePath()),
 				() -> assertEquals(true, copy.isPsa(), "psa: the sensitivity analysis is switched off"),
 				() -> assertEquals(true, copy.isTextualLog(), "textualLog"));

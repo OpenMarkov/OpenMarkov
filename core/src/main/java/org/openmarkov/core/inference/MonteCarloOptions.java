@@ -34,15 +34,9 @@ public class MonteCarloOptions implements Cloneable {
      *
      */
     public static final String DESNET_RESULTS_DIRECTORY = "DESNetFiles";
-    public static final String EXCEL_DIRECTORY = "ExcelLog";
     public static final String TEXTUAL_LOG_DIRECTORY = "TextualLog";
     public static final String EXPORT_DIRECTORY = "Export";
 
-
-    /**
-     * When true, only a summary of the simulations is recorded
-     */
-    private boolean resultsToExcel = false;
 
     /**
      * When true, a text log with any event and the assotiated changes is created
@@ -71,7 +65,6 @@ public class MonteCarloOptions implements Cloneable {
     public MonteCarloOptions(MonteCarloOptions monteCarloOptions) {
         this.setNumSimulations(monteCarloOptions.numSimulations);
         this.setNumSeries(monteCarloOptions.numSeries);
-        this.setResultsToExcel(monteCarloOptions.isResultsToExcel());
         this.inputFilePath = monteCarloOptions.inputFilePath;
         this.psa = monteCarloOptions.isPsa();
         this.textualLog = monteCarloOptions.isTextualLog();
@@ -128,25 +121,6 @@ public class MonteCarloOptions implements Cloneable {
         this.textualLog = textualLog;
     }
 
-
-    /**
-     * This method returns true if only a summary of the simulations is shown
-     *
-     * @return - true if only a summary of the simulations is shown
-     */
-    public boolean isResultsToExcel() {
-        return resultsToExcel;
-
-    }
-
-    /**
-     * This method set  if only a summary of the simulations is shown
-     *
-     * @param resultsToExcel - true  if only a summary of the simulations is shown
-     */
-    public void setResultsToExcel(boolean resultsToExcel) {
-        this.resultsToExcel = resultsToExcel;
-    }
 
     //Input File Options
 
