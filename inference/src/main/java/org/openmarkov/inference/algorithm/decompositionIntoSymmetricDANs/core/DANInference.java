@@ -131,10 +131,14 @@ public abstract class DANInference {
      */
     @SuppressWarnings("unchecked")
     protected void conditionMaximizeAndSetProbabilityAndUtility(ProbNet dan, Variable d) throws IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
-        // We take the probability of any of the children, as it should be equal
-        setProbability(childrenProbability.get(0));
+        // The probability of a finding can depend on the option: the probability of the first child, taken as that of
+        // all, made a finding the first option rules out impossible (error 290). Merged over 'd', the elimination
+        // leaves out the options that rule it out and keeps the probability of the option chosen. Where the variable
+        // of the finding does not exist, its probability is 1: the finding does not count there (error 224).
+        TablePotential conditionedProbabilityPotential =
+                (TablePotential) DiscretePotentialOperations.merge(d, childrenProbability);
         Potential conditionedUtilityPotential = (Potential) DiscretePotentialOperations.merge(d, (List<? extends AbstractIndexedPotential>)(List<?>) childrenUtility);
-        maximizeAndSetUtility(dan, d, childrenProbability.get(0), conditionedUtilityPotential);
+        maximizeAndSetUtility(dan, d, conditionedProbabilityPotential, conditionedUtilityPotential);
     }
     
     protected void addResultsOfChildEvaluation(DANInference auxEval) {
