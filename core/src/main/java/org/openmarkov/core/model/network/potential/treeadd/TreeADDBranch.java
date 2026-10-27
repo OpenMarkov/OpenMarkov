@@ -331,7 +331,7 @@ public class TreeADDBranch implements ClassLocalizable {
     @Override public String toString() {
         String out = rootVariable.getName() + " = ";
         if (states != null) {
-            out += states.stream().map(State::getName).collect(Collectors.joining());
+            out += states.stream().map(State::getName).collect(Collectors.joining(", "));
         }
         
         if (potential != null) {

@@ -74,7 +74,9 @@ public class StrategyTree extends TreeADDPotential implements Cloneable {
             }
             if (noMatch) { // If no, add it to distinctInterventions and create a set of states in corresponding states
                 distinctStrategyTrees.add(strategyTree);
-                Set<State> statesIntervention = new HashSet<>();
+                // In the order in which they come, that of the variable: a HashSet gave them in that of the hash
+                // codes of their names, «excellentgood» instead of «good, excellent» (error 360)
+                Set<State> statesIntervention = new LinkedHashSet<>();
                 statesIntervention.add(states.get(i));
                 correspondingStates.put(strategyTree, statesIntervention);
             } else { // Intervention is equal to a previous intervention. Add the state to the corresponding states set
