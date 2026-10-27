@@ -34,7 +34,8 @@ import java.util.List;
     private GLMPotential potential = null;
     
     public GLMPanel() {
-        super(new String[]{"Covariate", "Coefficient"}, new Object[0][2], true, true, true, true);
+        // The covariates are shown: they were hidden as if they were an internal key (error 158)
+        super(new String[]{"Covariate", "Coefficient"}, new Object[0][2], true, true, true, false);
         getValuesTable().onTables(omjTable -> omjTable.setDefaultRenderer(String.class, new CoefficientTableCellRenderer()));
         listeners = new ArrayList<>();
         valuesTable.addMouseListener(new CovariatesTableMouseListener());

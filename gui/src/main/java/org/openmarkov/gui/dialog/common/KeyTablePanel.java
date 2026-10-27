@@ -194,7 +194,9 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
      */
     protected OMTableModel getTableModel() {
         if (tableModel == null) {
-            tableModel = new OMTableModel(data, columns, this.firstColumnHidden);
+            // The titles of the columns are kept whether the first one is hidden or not: hiding it used to be the only
+            // way to keep them, so the panel of a regression hid its covariates (error 158 of the pending list)
+            tableModel = new OMTableModel(data, columns, true);
         }
         return tableModel;
     }
