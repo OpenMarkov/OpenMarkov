@@ -577,17 +577,20 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
      * revised--&gt;
      */
     protected int[] getRowAndColumnForStateCombination(int[] stateIndices, TablePotential potential) {
-        int numStates = node.getVariable().getNumStates();
+        // The table of a utility has only its parents, not the variable of the node (error 154)
+        List<Variable> tableVariables = potential.getVariables();
+        boolean hasTheNode = !tableVariables.isEmpty() && tableVariables.getFirst().equals(node.getVariable());
+        int numStates = hasTheNode ? node.getVariable().getNumStates() : 1;
         int position = potential.getPosition(stateIndices);
-        int tempMultiplier = tablePotential.getTableSize() / numStates;
+        int tempMultiplier = potential.getTableSize() / numStates;
         int tempColumnPosition = 0;
         
-        // We start at index 1 because the state of the node is irrelevant for
+        // We start after the variable of the node, when the table has it, because its state is irrelevant for
         // obtain the column (only is relevant for the row)
         // We multiply the number of columns above each state and the index of
         // this variable (in wich state is)
-        for (int i = 1; i < potential.getVariables().size(); i++) {
-            Variable variable = potential.getVariables().get(i);
+        for (int i = hasTheNode ? 1 : 0; i < tableVariables.size(); i++) {
+            Variable variable = tableVariables.get(i);
             tempMultiplier = tempMultiplier / variable.getNumStates();
             tempColumnPosition += stateIndices[i] * tempMultiplier;
         }

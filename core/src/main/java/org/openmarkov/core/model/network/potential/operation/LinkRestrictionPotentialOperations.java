@@ -87,7 +87,9 @@ public class LinkRestrictionPotentialOperations {
             Variable var2 = link.getTo().getVariable();
 			State[] var2States = var2.getStates();
 			Map<Integer, Integer> independentVariables = new HashMap<>();
-			int var1Index = 0, var2Index = 0;
+			// -1 for a variable that the table does not have, such as that of a utility, whose table has only
+			// the parents: it used to take the place of the first parent (error 154)
+			int var1Index = -1, var2Index = -1;
 			for (int i = 0; i < nodeVariables.size(); i++) {
                 Variable variable = nodeVariables.get(i);
                 if (variable.equals(var1)) {
@@ -404,9 +406,14 @@ public class LinkRestrictionPotentialOperations {
 			List<Variable> variables, int var1Value, int var1Index, int var2Value, int var2Index) {
 		List<int[]> combinationList = new ArrayList<>();
 
-		int[] combination = new int[independentVariables.size() + 2];
-		combination[var1Index] = var1Value;
-		combination[var2Index] = var2Value;
+		// One coordinate for each variable of the table; a variable of the link that it does not have has none
+		int[] combination = new int[variables.size()];
+		if (var1Index >= 0) {
+			combination[var1Index] = var1Value;
+		}
+		if (var2Index >= 0) {
+			combination[var2Index] = var2Value;
+		}
 		// We add the combination of zeros to this pair of values
 		combinationList.add(combination.clone());
 
