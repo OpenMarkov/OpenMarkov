@@ -10,6 +10,7 @@ package org.openmarkov.core.action.core;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.java.cloneUtils.CloneUtils;
@@ -39,12 +40,18 @@ import java.util.List;
     
     private final List<Link<Node>> oldLinks;
     private final HashMap<Node, List<Potential>> potentialsByNode;
+    /**
+     * The intervals of the variable before the edit. Replacing the states of a variable divided into intervals gives
+     * it default ones, which undoing the edit used to leave (error 24 of the pending list)
+     */
+    private final PartitionedInterval lastPartitionedInterval;
     
     public NodeReplaceStatesEdit(Node node, State[] newStates) {
         super(node.getProbNet());
         this.node = node;
         this.newStates = newStates;
         this.lastStates = node.getVariable().getStates();
+        this.lastPartitionedInterval = node.getVariable().getPartitionedInterval();
         this.numberOfStatesChanged = this.newStates.length != this.lastStates.length;
         if (this.numberOfStatesChanged) {
             this.potentialsByNode = new HashMap<>();
@@ -70,6 +77,7 @@ import java.util.List;
     @Override public void undo() {
         super.undo();
         this.node.getVariable().replaceStates(this.node, this.lastStates);
+        this.node.getVariable().setPartitionedInterval(this.lastPartitionedInterval);
         if (this.numberOfStatesChanged) {
             for (var potentialAndNode : this.potentialsByNode.entrySet()) {
                 potentialAndNode.getKey().setPotentials(potentialAndNode.getValue());
