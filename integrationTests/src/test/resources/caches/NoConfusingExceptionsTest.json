@@ -237,6 +237,7 @@
     "WrongNumberOfCostsEffectivitiesAndInterventions",
     "WrongNumberOfStates",
     "WrongNumberOfThresholds",
+    "WrongNumberOfValues",
     "WrongRoleException",
     "WrongVersion",
     "XMLInvalid",

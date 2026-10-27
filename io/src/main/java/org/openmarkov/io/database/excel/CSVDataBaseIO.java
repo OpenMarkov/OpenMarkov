@@ -101,13 +101,14 @@ import java.util.Scanner;
      * Opens a database from a '.csv' file and creates a ProbNet
      * building the variables and states dinamically while reading, and
      * returning the cases on the database. A file that starts with a byte order mark is refused: the mark would be
-     * read as part of the name of the first column.
+     * read as part of the name of the first column. A blank line is skipped, and a line with more or fewer values
+     * than columns is refused, saying which one (error 124 of the pending list).
      *
      * @return {@code CaseDatabase} with the cases in the database.
      */
     @Override public @NotNull CaseDatabase load(File file)
             throws EmptyDatabaseException, IOException, ParsingSourceException.RepeatedVariableNames,
-            ParsingSourceException.StartsWithAByteOrderMark {
+            ParsingSourceException.StartsWithAByteOrderMark, ParsingSourceException.WrongNumberOfValues {
         ByteOrderMark.refuse(file);
         // TODO Solve: This method assumes that 1) ALL the states of every variable are always included in the dataset, 2) All the variables are discrete.
         // First row contains all the attributes names and the attributes number
@@ -129,11 +130,26 @@ import java.util.Scanner;
             variablesStates.add(new HashMap<String, Integer>());
         }
         int numRows = 0;
-        while (scanner.hasNextLine()) {
-            data.add(getDataLine(scanner.nextLine(), variablesStates, variablesStatesNames));
-            numRows++;
+        int lineNumber = 1;
+        try {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                lineNumber++;
+                // A blank line, such as the last one of many files, used to be a case with an empty state
+                if (line.isBlank()) {
+                    continue;
+                }
+                int numValues = line.split("[,;]", -1).length;
+                if (numValues != numColumns) {
+                    throw new ParsingSourceException.WrongNumberOfValues(file.getName(), lineNumber, numValues,
+                                                                         numColumns);
+                }
+                data.add(getDataLine(line, variablesStates, variablesStatesNames));
+                numRows++;
+            }
+        } finally {
+            scanner.close(); // ensure the underlying stream is always closed
         }
-        scanner.close(); // ensure the underlying stream is always closed
         // Sort states alphabetically and remap case indices
         List<int[]> remappings = new ArrayList<>(numColumns);
         for (int i = 0; i < numColumns; i++) {
