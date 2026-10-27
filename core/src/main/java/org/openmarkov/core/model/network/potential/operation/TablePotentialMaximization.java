@@ -95,13 +95,12 @@ final class TablePotentialMaximization {
         int[] initialPositions = new int[numProperPotentials];
         int[] currentPositions = new int[numProperPotentials];
         int[][] accumulatedOffsets = new int[numProperPotentials][];
-        TablePotential unionPotential = new TablePotential(unionVariables, null);
         for (int i = 0; i < numProperPotentials; i++) {
             TablePotential potential = properPotentials.get(i);
             tables[i] = potential.getValues();
             initialPositions[i] = potential.getInitialPosition();
             currentPositions[i] = initialPositions[i];
-            accumulatedOffsets[i] = unionPotential.getAccumulatedOffsets(potential.getVariables());
+            accumulatedOffsets[i] = TablePotential.getAccumulatedOffsets(unionVariables, potential.getVariables());
         }
 
         int resultSize = resultingPotential.getValues().length;
@@ -215,13 +214,12 @@ final class TablePotentialMaximization {
         int[] initialPositions = new int[numProperPotentials];
         int[] currentPositions = new int[numProperPotentials];
         int[][] accumulatedOffsets = new int[numProperPotentials][];
-        TablePotential unionPotential = new TablePotential(unionVariables, null);
         for (int i = 0; i < numProperPotentials; i++) {
             TablePotential potential = properPotentials.get(i);
             tables[i] = potential.getValues();
             initialPositions[i] = potential.getInitialPosition();
             currentPositions[i] = initialPositions[i];
-            accumulatedOffsets[i] = unionPotential.getAccumulatedOffsets(potential.getVariables());
+            accumulatedOffsets[i] = TablePotential.getAccumulatedOffsets(unionVariables, potential.getVariables());
         }
 
         int resultSize = resultingPotential.getValues().length;
