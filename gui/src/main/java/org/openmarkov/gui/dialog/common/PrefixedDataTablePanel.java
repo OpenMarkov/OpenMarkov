@@ -109,6 +109,15 @@ public class PrefixedDataTablePanel extends KeyTablePanel {
         
     }
     
+    /** @return the names of the nodes offered as new parents */
+    List<String> getOfferedNames() {
+        List<String> names = new ArrayList<>();
+        for (Object[] row : absentData) {
+            names.add((String) row[1]);
+        }
+        return names;
+    }
+    
     /**
      * Invoked when the button 'add' is pressed.
      */
@@ -173,6 +182,11 @@ public class PrefixedDataTablePanel extends KeyTablePanel {
                 //LinkEdit linkEdit = new LinkEdit(node.getProbNet(),pNode.getName(), node.getName(), true, true);
                 AddLinkEdit linkEdit = new AddLinkEdit(node.getProbNet(), otherNode.getVariable(), node.getVariable(),
                                                        true);
+                // Only the parents that the rules of the network admit, which the edit itself is asked about: the others,
+                // such as a descendant that would close a cycle, ended in an error when chosen (error 162)
+                if (!linkEdit.constraintsWillBeMet()) {
+                    continue;
+                }
                 @ToCheck(reasonKind = ToCheck.ReasonKind.PROBABLE_BUG, reasonDescription = "An edit is added without it being done")
                 var check = false;
                 edits.add(linkEdit);
