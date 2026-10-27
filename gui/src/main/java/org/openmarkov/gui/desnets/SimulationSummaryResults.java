@@ -98,7 +98,7 @@ public class SimulationSummaryResults {
             Collection<CriteriaValues> criteriaValuesCollection = series.values();
             //<CriteriaValues>
             for (CriteriaValues criteriaValues : criteriaValuesCollection) {
-                criteriaValues.calculateStatisticalProperties(monteCarloOptions);
+                criteriaValues.calculateStatisticalProperties();
             }
 //            calculateICER(cost, effectiveness, intervention1, intervention2);
         }
@@ -120,7 +120,7 @@ public class SimulationSummaryResults {
             Collection<CriteriaValues> criteriaValuesCollection = series.values();
             //<CriteriaValues>
             for (CriteriaValues criteriaValues : criteriaValuesCollection) {
-                criteriaValues.calculateStatisticalProperties(monteCarloOptions);
+                criteriaValues.calculateStatisticalProperties();
             }
             calculateICER(cost, effectiveness, intervention1, intervention2);
         }

@@ -99,28 +99,6 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 	private JCheckBox textualLogCheckBox;
 
 
-	//Statistics Panel
-	/**
-	 * Panel with the statistics options
-	 */
-	private JPanel statisticsPanel;
-	/**
-	 * JCheckBox for calculating the mean. When checked the simulations mean is computed
-	 */
-	private JCheckBox meanCheckBox;
-	/**
-	 * JCheckBox for calculating the sum. When checked the simulations sum is computed
-	 */
-	private JCheckBox sumCheckBox;
-	/**
-	 * JCheckBox for calculating the trimmed mean. When checked the simulations trimmed mean is computed
-	 */
-	private JCheckBox trimmedMeanCheckBox;
-	/**
-	 * JCheckBox for calculating the median. When checked the simulations median is computed
-	 */
-	private JCheckBox medianCheckBox;
-
 	//File Panel
 	/**
 	 * JPanel for setting the input file
@@ -175,8 +153,6 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 		this.add(Box.createRigidArea(new Dimension()));
 		this.add(getDesNetLogOptionsPanel());
 		this.add(Box.createRigidArea(new Dimension(0,10)));
-		this.add(getStatisticsPanel());
-		this.add(Box.createRigidArea(new Dimension(0,10)));
 		this.add(getInputFileJPanel());
 
 	}
@@ -191,11 +167,6 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 		this.monteCarloOptions.setNumSimulations(Integer.parseInt(numSimulationsTextField.getText()));
 		this.monteCarloOptions.setResultsToExcel(resultsPerSeriesCheckBox.isSelected());
 		this.monteCarloOptions.setTextualLog(textualLogCheckBox.isSelected());
-		//23/05/ PSA
-		this.monteCarloOptions.setMean(meanCheckBox.isSelected());
-		this.monteCarloOptions.setTrimmedMean(trimmedMeanCheckBox.isSelected());
-		this.monteCarloOptions.setMedian(medianCheckBox.isSelected());
-		this.monteCarloOptions.setSum(sumCheckBox.isSelected());
 		//26/08/2023 - set inputFile options
 		this.monteCarloOptions.setInputFilePath(inputFile);
 		return monteCarloOptions;
@@ -334,79 +305,6 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 		return resultsPerSeriesCheckBox;
 	}
 
-
-
-	/**
-	 * This method returns the statistics JPanel
-	 * @return the statistics JPanel
-	 */
-	private JPanel getStatisticsPanel(){
-		if (statisticsPanel == null) {
-			statisticsPanel = new JPanel();
-			statisticsPanel.setBorder( new TitledBorder("DES Inference Statistics"));
-			statisticsPanel.add(getJCheckBoxMean());
-			statisticsPanel.add(getJCheckBoxSum());
-			statisticsPanel.add(getJCheckBoxTrimmedMean());
-			statisticsPanel.add(getJCheckBoxMedian());
-		}
-		return statisticsPanel;
-		
-	}
-	/**
-	 * This method returns the JCheckBox for "Mean"
-	 * @return the JCheckBox for "Mean"
-	 */
-	private JCheckBox getJCheckBoxMean() {
-		if (meanCheckBox == null) {
-			//TODO use stringDatabase
-			meanCheckBox = new JCheckBox("Mean", monteCarloOptions.isMean());
-			meanCheckBox.setEnabled(true);
-			meanCheckBox.setSelected(true);		
-		}
-		return meanCheckBox;
-	}
-
-	/**
-	 * This method returns the JCheckBox for "Sum"
-	 * @return the JCheckBox for "Only Summary"
-	 */
-	private JCheckBox getJCheckBoxSum() {
-		if (sumCheckBox == null) {
-			//TODO use stringDatabase
-			sumCheckBox = new JCheckBox("Sum", monteCarloOptions.isMean());
-			sumCheckBox.setEnabled(false);
-			sumCheckBox.setSelected(false);
-		}
-		return sumCheckBox;
-	}
-
-	/**
-	 * This method returns the JCheckBox for "Trimmed Mean"
-	 * @return the JCheckBox for "Trimmed Mean"
-	 */
-	private JCheckBox getJCheckBoxTrimmedMean() {
-		if (trimmedMeanCheckBox == null) {
-			//TODO use stringDatabase
-			trimmedMeanCheckBox = new JCheckBox("Trimmed Mean", monteCarloOptions.isMean());
-			trimmedMeanCheckBox.setEnabled(false);
-			trimmedMeanCheckBox.setSelected(false);
-		}
-		return trimmedMeanCheckBox;
-	}
-
-	/**
-	 * This method returns the JCheckBox for "Median"
-	 * @return the JCheckBox for "Median"
-	 */
-	private JCheckBox getJCheckBoxMedian() {
-		if (medianCheckBox == null) {
-			//TODO use stringDatabase
-			medianCheckBox = new JCheckBox("Median", monteCarloOptions.isMean());
-			medianCheckBox.setEnabled(false);
-			medianCheckBox.setSelected(false);
-		}
-		return medianCheckBox;
-	}
 
 
 	/**

@@ -8,7 +8,6 @@ package org.openmarkov.gui.desnets;
 
 import org.apache.commons.math3.stat.StatUtils;
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.inference.MonteCarloOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -38,7 +37,7 @@ public class SimulationResultsTest {
         for (int i = 0; i < values.length; i++) {
             results.setValue(i, values[i], discountedValues[i]);
         }
-        results.calculateStatisticalProperties(new MonteCarloOptions());
+        results.calculateStatisticalProperties();
         return results;
     }
 

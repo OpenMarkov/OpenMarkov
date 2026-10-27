@@ -37,13 +37,9 @@ class OptionsAreCopiedWholeTest {
 		original.setNumSimulations(123);
 		original.setNumSeries(7);
 		original.setResultsToExcel(true);
-		original.setMean(false);
-		original.setTrimmedMean(false);
-		original.setMedian(true);
 		original.setInputFilePath(Path.of("values.csv"));
 		original.setPsa(true);
 		original.setTextualLog(true);
-		original.setSum(true);
 
 		MonteCarloOptions copy = new MonteCarloOptions(original);
 
@@ -51,28 +47,22 @@ class OptionsAreCopiedWholeTest {
 				() -> assertEquals(123, copy.getNumSimulations()),
 				() -> assertEquals(7, copy.getNumSeries()),
 				() -> assertEquals(true, copy.isResultsToExcel()),
-				() -> assertEquals(false, copy.isMean()),
-				() -> assertEquals(false, copy.isTrimmedMean()),
-				() -> assertEquals(true, copy.isMedian()),
 				() -> assertEquals(Path.of("values.csv"), copy.getInputFilePath()),
 				() -> assertEquals(true, copy.isPsa(), "psa: the sensitivity analysis is switched off"),
-				() -> assertEquals(true, copy.isTextualLog(), "textualLog"),
-				() -> assertEquals(true, copy.isSum(), "sum"));
+				() -> assertEquals(true, copy.isTextualLog(), "textualLog"));
 	}
 
-	/** {@code clone()} delegates on the copy constructor, so it lost the same three. */
+	/** {@code clone()} delegates on the copy constructor, so it lost the same ones. */
 	@Test
 	void cloningTheMonteCarloOptionsKeepsTheSameFields() {
 		MonteCarloOptions original = new MonteCarloOptions();
 		original.setPsa(true);
 		original.setTextualLog(true);
-		original.setSum(true);
 
 		MonteCarloOptions clone = (MonteCarloOptions) original.clone();
 
 		assertAll(() -> assertEquals(true, clone.isPsa()),
-				() -> assertEquals(true, clone.isTextualLog()),
-				() -> assertEquals(true, clone.isSum()));
+				() -> assertEquals(true, clone.isTextualLog()));
 	}
 
 	/** Whichever constructor built them, the sub-options are there for the copy to carry. */

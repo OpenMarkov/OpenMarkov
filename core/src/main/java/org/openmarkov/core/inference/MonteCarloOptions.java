@@ -51,26 +51,6 @@ public class MonteCarloOptions implements Cloneable {
     private boolean textualLog = false;
 
 
-    //Result options
-    /**
-     * When true, the mean and standard deviation are calculated
-     */
-    private boolean mean = true;
-    /**
-     * When true, a trimmedMean is calculated (FIXME: decide how to do the trimming)
-     */
-    private boolean trimmedMean = true;
-
-    /**
-     * When true, the median is calculated
-     */
-    private boolean median = false;
-
-    /**
-     * When true, the sum of all the simulations of a serie is calculated
-     */
-    private boolean sum = false;
-
     /**
      * Input file with values for the variables
      */
@@ -92,13 +72,9 @@ public class MonteCarloOptions implements Cloneable {
         this.setNumSimulations(monteCarloOptions.numSimulations);
         this.setNumSeries(monteCarloOptions.numSeries);
         this.setResultsToExcel(monteCarloOptions.isResultsToExcel());
-        this.mean = monteCarloOptions.isMean();
-        this.trimmedMean = monteCarloOptions.isTrimmedMean();
-        this.median = monteCarloOptions.isMedian();
         this.inputFilePath = monteCarloOptions.inputFilePath;
         this.psa = monteCarloOptions.isPsa();
         this.textualLog = monteCarloOptions.isTextualLog();
-        this.sum = monteCarloOptions.isSum();
     }
 
     /**
@@ -171,79 +147,6 @@ public class MonteCarloOptions implements Cloneable {
     public void setResultsToExcel(boolean resultsToExcel) {
         this.resultsToExcel = resultsToExcel;
     }
-
-    /**
-     * This method says is the mean of the simulations is calculated
-     *
-     * @return true if the mean of the simulations is calculated
-     */
-    public boolean isMean() {
-        return mean;
-    }
-
-    /**
-     * This method sets if the mean of the simulations is calculated
-     *
-     * @param mean - true if the mean of the simulations is calculated
-     */
-    public void setMean(boolean mean) {
-        this.mean = mean;
-    }
-
-    /**
-     * This method says if the trimmed mean of the simulations is calculated
-     *
-     * @return - true if the trimmed mean of the simulations is calculated
-     */
-    public boolean isTrimmedMean() {
-        return trimmedMean;
-    }
-
-    /**
-     * This method sets if the trimmed mean of the simulations is calculated
-     *
-     * @param trimmedMean - true if the trimmed mean of the simulations is calculated
-     */
-    public void setTrimmedMean(boolean trimmedMean) {
-        this.trimmedMean = trimmedMean;
-    }
-
-    /**
-     * This method says if the median of the simulations is calculated
-     *
-     * @return - true if the median of the simulations is calculated
-     */
-    public boolean isMedian() {
-        return median;
-    }
-
-    /**
-     * This method sets if the median of the simulations is calculated
-     *
-     * @param median - true if the median of the simulations is calculated
-     */
-    public void setMedian(boolean median) {
-        this.median = median;
-    }
-
-    /**
-     * This method says if the sum of the simulations is calculated
-     *
-     * @return - true if the sum of the simulations is calculated
-     */
-    public boolean isSum() {
-        return sum;
-    }
-
-    /**
-     * This method sets if the sum of the simulations is calculated
-     *
-     * @param sum true if the sum of the simulations is calculated
-     */
-    public void setSum(boolean sum) {
-        this.sum = sum;
-    }
-
 
     //Input File Options
 

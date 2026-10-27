@@ -1,6 +1,5 @@
 package org.openmarkov.gui.desnets;
 
-import org.openmarkov.core.inference.MonteCarloOptions;
 import org.openmarkov.core.model.network.EqualCriterion;
 
 import java.util.Collection;
@@ -182,12 +181,12 @@ public class CriteriaValues {
     }
 
     /**
-     * @param monteCarloOptions
+     * Computes the statistics of the results of every criterion
      */
-    public void calculateStatisticalProperties(MonteCarloOptions monteCarloOptions) {
+    public void calculateStatisticalProperties() {
         Collection<SimulationResults> simulationResultsCollection = criteriaValuesHashMap.values();
         for (SimulationResults simulationResult : simulationResultsCollection) {
-            simulationResult.calculateStatisticalProperties(monteCarloOptions);
+            simulationResult.calculateStatisticalProperties();
         }
     }
 
