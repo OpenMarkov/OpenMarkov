@@ -94,7 +94,7 @@
     <Localization class="org.openmarkov.gui.exception.WrongRoleException"
                   value="Expected role {expectedRole}, found: {foundRole}"/>
     <Localization class="org.openmarkov.gui.exception.ZoomOutOfRangeException"
-                  value="Requested zoomManager ({requestedZoom}) is out of the range [{minZoom}..{maxZoom}]."/>
+                  value="Requested zoom ({requestedZoom}) is out of the range [{minZoom}..{maxZoom}]."/>
     <Localization class="org.openmarkov.gui.graphic.VisualLink" value="Visual {link}"/>
     <Localization class="org.openmarkov.gui.window.edition.SelectedContent"
                   value="Selected nodes: {nodes}\nSelected links: {links}"/>

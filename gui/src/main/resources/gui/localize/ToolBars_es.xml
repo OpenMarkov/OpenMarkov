@@ -86,10 +86,10 @@
     </Redo>
     <ExpansionThreshold value="Umbral de expansión"/>
     <ZoomIn>
-        <ToolTip value="Aumenta el zoomManager de la red actual en un 20%"/>
+        <ToolTip value="Aumenta el zoom de la red actual en un 20%"/>
     </ZoomIn>
     <ZoomOut>
-        <ToolTip value="Reduce el zoomManager de la red actual en un 20%"/>
+        <ToolTip value="Reduce el zoom de la red actual en un 20%"/>
     </ZoomOut>
     <DecisionTree>
         <ToolTip value="Arbol de decisiones"/>

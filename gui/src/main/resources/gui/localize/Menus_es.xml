@@ -194,10 +194,10 @@
             <x25 value="25%"/>
             <x150 value="150%"/>
             <x50 value="50%"/>
-            <ZoomIn value="Ampliar zoomManager">
+            <ZoomIn value="Ampliar zoom">
                 <Mnemonic value="a"/>
             </ZoomIn>
-            <ZoomOut value="Reducir zoomManager">
+            <ZoomOut value="Reducir zoom">
                 <Mnemonic value="r"/>
             </ZoomOut>
         </Zoom>
