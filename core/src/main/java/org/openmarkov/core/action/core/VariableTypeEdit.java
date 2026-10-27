@@ -291,7 +291,17 @@ public class VariableTypeEdit extends MultiStepEdit {
     
     private class RawSetRevelation extends PNEdit {
         
-        private final Link<Node> link;
+        private final Node from;
+        private final Node to;
+        private final boolean directed;
+
+        /**
+         * The link of the network, looked for each time: undoing and redoing the drawing of the link replaces it by
+         * another object, and the edit used to write in the old one (error 27 of the pending list).
+         */
+        private Link<Node> link() {
+            return probNet.getLink(from, to, directed);
+        }
         private final ArrayList<PartitionedInterval> newRevealingIntervals;
         private final ArrayList<State> newRevealingStates;
         private final List<PartitionedInterval> originalRevealingIntervals;
@@ -299,7 +309,9 @@ public class VariableTypeEdit extends MultiStepEdit {
         
         public RawSetRevelation(Link<Node> link, ArrayList<PartitionedInterval> newRevealingIntervals, ArrayList<State> newRevealingStates, List<PartitionedInterval> originalRevealingIntervals, List<State> originalRevealingStates) {
             super(VariableTypeEdit.this.probNet);
-            this.link = link;
+            this.from = link.getFrom();
+            this.to = link.getTo();
+            this.directed = link.isDirected();
             this.newRevealingIntervals = newRevealingIntervals;
             this.newRevealingStates = newRevealingStates;
             this.originalRevealingIntervals = originalRevealingIntervals;
@@ -307,13 +319,13 @@ public class VariableTypeEdit extends MultiStepEdit {
         }
         
         @Override protected void doEdit() {
-            link.setRevealingIntervals(newRevealingIntervals);
-            link.setRevealingStates(newRevealingStates);
+            link().setRevealingIntervals(newRevealingIntervals);
+            link().setRevealingStates(newRevealingStates);
         }
         
         @Override public void undo() {
-            link.setRevealingIntervals(originalRevealingIntervals);
-            link.setRevealingStates(originalRevealingStates);
+            link().setRevealingIntervals(originalRevealingIntervals);
+            link().setRevealingStates(originalRevealingStates);
         }
         
         
@@ -321,24 +333,36 @@ public class VariableTypeEdit extends MultiStepEdit {
     
     private class RawSetRestriction extends PNEdit {
         
-        private final Link<Node> link;
+        private final Node from;
+        private final Node to;
+        private final boolean directed;
+
+        /**
+         * The link of the network, looked for each time: undoing and redoing the drawing of the link replaces it by
+         * another object, and the edit used to write in the old one (error 27 of the pending list).
+         */
+        private Link<Node> link() {
+            return probNet.getLink(from, to, directed);
+        }
         
         public RawSetRestriction(Link<Node> link) {
             super(VariableTypeEdit.this.probNet);
-            this.link = link;
+            this.from = link.getFrom();
+            this.to = link.getTo();
+            this.directed = link.isDirected();
         }
         
         TablePotential newRestrictionPotential;
         TablePotential oldRestrictionPotential;
         
         @Override protected void doEdit() {
-            oldRestrictionPotential = link.getRestrictionsPotential();
-            link.setRestrictionsPotential(newRestrictionPotential);
+            oldRestrictionPotential = link().getRestrictionsPotential();
+            link().setRestrictionsPotential(newRestrictionPotential);
         }
         
         @Override public void undo() {
-            newRestrictionPotential = link.getRestrictionsPotential();
-            link.setRestrictionsPotential(oldRestrictionPotential);
+            newRestrictionPotential = link().getRestrictionsPotential();
+            link().setRestrictionsPotential(oldRestrictionPotential);
         }
         
         

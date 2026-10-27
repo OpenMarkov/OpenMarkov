@@ -14,12 +14,8 @@ import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Node;
-import org.openmarkov.core.model.network.potential.Potential;
-import org.openmarkov.core.model.network.potential.TablePotential;
-import org.openmarkov.core.model.network.potential.operation.LinkRestrictionPotentialOperations;
 import org.openmarkov.gui.action.LinkRestrictionPotentialValueEdit;
 
-import java.util.ArrayList;
 
 /**
  * This table implementation is responsible for the graphical and data model
@@ -40,41 +36,26 @@ public class LinkRestrictionValuesTable extends ValuesTable {
      * The link with the link restriction.
      **/
     private final Link<Node> link;
-    /****
-     * The child node of the link
-     */
-    private final Node node2;
 
     public LinkRestrictionValuesTable(Link<Node> link, ValuesTableModel tableModel, final boolean modifiable) {
         super(link.getFrom(), tableModel, modifiable);
         this.link = link;
-        node2 = link.getTo();
     }
     
+    /**
+     * Marks the pair of states of the cell as compatible or not. The edit changes the restriction and, when the pair
+     * becomes incompatible, the table of the child, so that «Cancel» and undo give it back (error 25 of the pending
+     * list); the cell takes the value when the edit tells this table. It used to write the value in the table of the
+     * parent as well, as if the cells were its probabilities (error 155).
+     */
     @Override public void setValueAt(Object newValue, int row, int column, Object source) {
         if (newValue == null) return;
         Integer newNumericValue = Integer.valueOf(newValue.toString());
         if (!newNumericValue.equals(INCOMPATIBILITY_VALUE) && !newNumericValue.equals(COMPATIBILITY_VALUE)) {
             newNumericValue = INCOMPATIBILITY_VALUE;
         }
-        LinkRestrictionPotentialValueEdit linkPotentialEdit =
-                new LinkRestrictionPotentialValueEdit(link, newNumericValue, row, column);
         try {
-            linkPotentialEdit.executeEdit();
-            super.setValueAt(newNumericValue, row, column, source);
-            int variable1Index = column - 1;
-            int variable2Index = node2.getVariable().getNumStates() - row;
-            if (newNumericValue == 0) {
-                if (!node2.getPotentials().isEmpty() && node2.getPotentials().getFirst() instanceof TablePotential) {
-                    Potential potential = LinkRestrictionPotentialOperations
-                            .updatePotentialByAddLinkRestriction(node2,
-                                                                 link.getRestrictionsPotential(), variable1Index,
-                                                                 variable2Index);
-                    ArrayList<Potential> potentials = new ArrayList<>();
-                    potentials.add(potential);
-                    node2.setPotentials(potentials);
-                }
-            }
+            new LinkRestrictionPotentialValueEdit(link, newNumericValue, row, column).executeEdit();
         } catch (DoEditException e) {
             throw new UnrecoverableException(e);
         }
@@ -88,7 +69,7 @@ public class LinkRestrictionValuesTable extends ValuesTable {
     
     @Override public void afterUndoingEdit(PNEdit edit) {
         if (edit instanceof LinkRestrictionPotentialValueEdit lrEdit) {
-            super.getModel().setValueAt(lrEdit.getNewValue(), lrEdit.getRowPosition(), lrEdit.getColumnPosition());
+            super.getModel().setValueAt(lrEdit.getOldValue(), lrEdit.getRowPosition(), lrEdit.getColumnPosition());
         }
     }
 }

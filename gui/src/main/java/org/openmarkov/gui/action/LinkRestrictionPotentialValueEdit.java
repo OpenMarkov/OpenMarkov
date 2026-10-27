@@ -12,12 +12,22 @@ import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.LinkOperations;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.core.model.network.potential.operation.LinkRestrictionPotentialOperations;
+
+import java.util.List;
 
 /**
  * Edit that modifies a single cell value in a link restriction potential table,
  * supporting undo and redo. When the restriction becomes trivial (all ones), the
  * restriction potential is removed.
+ * <p>
+ * Marking a pair of states as incompatible also puts that cell of the table of the child at zero, spreading the
+ * probability of its column among the states still allowed. That change used to be made by the window outside any
+ * edit, so neither «Cancel» nor undo gave the table back (error 25 of the pending list); now it is part of this edit.
+ * And the link is looked for in the network each time: undoing and redoing the drawing of the link replaces it by
+ * another one, and the restriction used to be written in the old one (error 27).
  */
 public class LinkRestrictionPotentialValueEdit extends PNEdit {
 
@@ -34,10 +44,6 @@ public class LinkRestrictionPotentialValueEdit extends PNEdit {
 	 */
 	private final Integer newValue;
 
-	/***
-	 * The link with the link restriction potential.
-	 */
-	private final Link<Node> link;
 	/****
 	 * The parent node of the link.
 	 */
@@ -52,15 +58,19 @@ public class LinkRestrictionPotentialValueEdit extends PNEdit {
 	 */
 	private final double[] lastTable;
 
+	/**
+	 * The value of the cell before the edit
+	 */
+	private final int oldValue;
+
 	/***
 	 * the table potential after the edit
 	 */
 	private double[] newTable;
 
-	/**
-	 * The potential of the link restriction
-	 */
-	private TablePotential tablePotential;
+	/** The relations of the child before and after the edit, when the edit changes its table; null otherwise */
+	private List<Potential> oldChildPotentials;
+	private List<Potential> newChildPotentials;
 
 	/**
 	 * Creates a new edit for modifying a link restriction value.
@@ -72,71 +82,95 @@ public class LinkRestrictionPotentialValueEdit extends PNEdit {
 	 */
 	public LinkRestrictionPotentialValueEdit(Link<Node> link, Integer newValue, int row, int col) {
         super(link.getFrom().getProbNet());
-		this.link = link;
         this.node1 = link.getFrom();
         this.node2 = link.getTo();
 		this.col = col;
 		this.row = row;
-		this.tablePotential = link.getRestrictionsPotential();
 		this.newValue = newValue;
-		this.lastTable = link.getRestrictionsPotential().getValues().clone();
+		TablePotential restrictions = link.getRestrictionsPotential();
+		this.lastTable = restrictions.getValues().clone();
+		int[] offsets = restrictions.getOffsets();
+		this.oldValue = (int) lastTable[stateIndex1() * offsets[0] + stateIndex2() * offsets[1]];
 	}
-	
+
+	/** @return the link of the network, which may be another object than the one this edit was made with */
+	private Link<Node> link() {
+		return probNet.getLink(node1, node2, true);
+	}
+
+	private int stateIndex1() {
+		return col - 1;
+	}
+
+	private int stateIndex2() {
+		return node2.getVariable().getNumStates() - row;
+	}
+
 	@Override protected void doEdit() {
-		int numStates2 = node2.getVariable().getNumStates();
-		int stateIndex1 = col - 1;
-		int stateIndex2 = numStates2 - row;
-		State state1 = node1.getVariable().getStates()[stateIndex1];
-		State state2 = node2.getVariable().getStates()[stateIndex2];
+		Link<Node> link = link();
+		State state1 = node1.getVariable().getStates()[stateIndex1()];
+		State state2 = node2.getVariable().getStates()[stateIndex2()];
         LinkOperations.setCompatibilityValue(link, state1, state2, this.newValue);
 		newTable = link.getRestrictionsPotential().getValues().clone();
-
+		if (newValue == 0 && !node2.getPotentials().isEmpty()
+				&& node2.getPotentials().getFirst() instanceof TablePotential table) {
+			// On a copy, which the method changes in place, so that undo can give back the table
+			oldChildPotentials = node2.getPotentials();
+			node2.setPotential(table.copy());
+			LinkRestrictionPotentialOperations.updatePotentialByAddLinkRestriction(
+					node2, link.getRestrictionsPotential(), stateIndex1(), stateIndex2());
+			newChildPotentials = node2.getPotentials();
+		}
 	}
-    
+
     @Override public void redo() {
 		this.setTypicalRedo(false);
 		super.redo();
-		if (!link.hasRestrictions()) {
-			LinkOperations.initializesRestrictionsPotential(link);
-			this.tablePotential = link.getRestrictionsPotential();
+		setRestrictions(newTable);
+		if (newChildPotentials != null) {
+			node2.setPotentials(newChildPotentials);
 		}
-		tablePotential.setValues(newTable);
-		checkRestrictionPotential(newTable);
 	}
 
 	@Override public void undo() {
 		super.undo();
+		setRestrictions(lastTable);
+		if (oldChildPotentials != null) {
+			node2.setPotentials(oldChildPotentials);
+		}
+	}
+
+	private void setRestrictions(double[] table) {
+		Link<Node> link = link();
 		if (!link.hasRestrictions()) {
 			LinkOperations.initializesRestrictionsPotential(link);
-			this.tablePotential = link.getRestrictionsPotential();
 		}
-		tablePotential.setValues(lastTable);
-		checkRestrictionPotential(lastTable);
+		link.getRestrictionsPotential().setValues(table);
+		checkRestrictionPotential(table);
 	}
 
 	/**
-	 * Returns the link restriction table potential.
+	 * Returns the link restriction potential.
 	 *
-	 * @return the table potential of the link restriction
+	 * @return the restriction potential of the link
 	 */
 	public TablePotential getPotential() {
-		return tablePotential;
+		return link().getRestrictionsPotential();
 	}
 
 	/**
-	 * Gets the row position associated to value edited if priorityList no
-	 * exists
+	 * Returns the row position of the edited cell.
 	 *
-	 * @return the position in the table
+	 * @return the row index
 	 */
 	public int getRowPosition() {
 		return row;
 	}
 
 	/**
-	 * Gets the column where the value is edited
+	 * Returns the column position of the edited cell.
 	 *
-	 * @return the column edited
+	 * @return the column index
 	 */
 	public int getColumnPosition() {
 		return col;
@@ -149,6 +183,11 @@ public class LinkRestrictionPotentialValueEdit extends PNEdit {
 	 */
 	public Integer getNewValue() {
 		return newValue;
+	}
+
+	/** @return the value that the cell had before this edit, which undoing it gives back */
+	public Integer getOldValue() {
+		return oldValue;
 	}
 
 	/**
@@ -167,8 +206,7 @@ public class LinkRestrictionPotentialValueEdit extends PNEdit {
             }
 		}
 		if (!hasRestriction) {
-			tablePotential = null;
-			this.link.setRestrictionsPotential(tablePotential);
+			link().setRestrictionsPotential(null);
 		}
 
 	}

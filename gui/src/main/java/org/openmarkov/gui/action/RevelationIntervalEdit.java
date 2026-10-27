@@ -24,7 +24,17 @@ import org.openmarkov.core.model.network.PartitionedInterval;
 	/***
 	 * Object which stores the revelation conditions
 	 */
-	private final Link<Node> link;
+	private final Node from;
+	private final Node to;
+	private final boolean directed;
+
+	/**
+	 * The link of the network, looked for each time: undoing and redoing the drawing of the link replaces it by
+	 * another object, and the edit used to write in the old one (error 27 of the pending list).
+	 */
+	private Link<Node> link() {
+		return probNet.getLink(from, to, directed);
+	}
 
 	/**
 	 * The action to carry out
@@ -66,7 +76,9 @@ import org.openmarkov.core.model.network.PartitionedInterval;
 
 	public RevelationIntervalEdit(Link<Node> link, StateAction stateAction, int row, double newValue, boolean isLower) {
         super(link.getFrom().getProbNet());
-		this.link = link;
+		this.from = link.getFrom();
+		this.to = link.getTo();
+		this.directed = link.isDirected();
 		this.stateAction = stateAction;
 		this.rowSelected = row;
 		this.newValue = newValue;
@@ -79,17 +91,17 @@ import org.openmarkov.core.model.network.PartitionedInterval;
 		case ADD:
 			PartitionedInterval newPartitionedInterval = getNewPartitionedInterval();
 			lastInterval = newPartitionedInterval;
-			link.addRevealingInterval(newPartitionedInterval);
+			link().addRevealingInterval(newPartitionedInterval);
 
 			break;
 
 		case REMOVE: {
-			lastInterval = link.getRevealingIntervals().get(rowSelected);
-			link.getRevealingIntervals().remove(rowSelected);
+			lastInterval = link().getRevealingIntervals().get(rowSelected);
+			link().getRevealingIntervals().remove(rowSelected);
 		}
 		break;
 		case MODIFY_VALUE_INTERVAL: {
-			PartitionedInterval currentPartitionedInterval = link.getRevealingIntervals().get(rowSelected);
+			PartitionedInterval currentPartitionedInterval = link().getRevealingIntervals().get(rowSelected);
 			int intervalIndex = isLower ? 0 : 1;
 			oldValue = currentPartitionedInterval.getLimits()[intervalIndex];
 			currentPartitionedInterval.getLimits()[intervalIndex] = newValue;
@@ -98,7 +110,7 @@ import org.openmarkov.core.model.network.PartitionedInterval;
 		break;
 
 		case MODIFY_DELIMITER_INTERVAL: {
-			PartitionedInterval currentPartitionedInterval = link.getRevealingIntervals().get(rowSelected);
+			PartitionedInterval currentPartitionedInterval = link().getRevealingIntervals().get(rowSelected);
 			int intervalIndex = isLower ? 0 : 1;
 			currentPartitionedInterval.getBelongsToLeftSide()[intervalIndex] = !currentPartitionedInterval
 					.getBelongsToLeftSide(intervalIndex);
@@ -113,19 +125,19 @@ import org.openmarkov.core.model.network.PartitionedInterval;
 		super.undo();
 		switch (stateAction) {
 		case ADD:
-			link.getRevealingIntervals().remove(lastInterval);
+			link().getRevealingIntervals().remove(lastInterval);
 			break;
 		case REMOVE:
-			link.getRevealingIntervals().add(rowSelected, lastInterval);
+			link().getRevealingIntervals().add(rowSelected, lastInterval);
 			break;
 		case MODIFY_VALUE_INTERVAL: {
-			PartitionedInterval interval = link.getRevealingIntervals().get(rowSelected);
+			PartitionedInterval interval = link().getRevealingIntervals().get(rowSelected);
 			int intervalIndex = isLower ? 0 : 1;
 			interval.getLimits()[intervalIndex] = oldValue;
 		}
 		break;
 		case MODIFY_DELIMITER_INTERVAL: {
-			PartitionedInterval interval = link.getRevealingIntervals().get(rowSelected);
+			PartitionedInterval interval = link().getRevealingIntervals().get(rowSelected);
 			int intervalIndex = isLower ? 0 : 1;
 			interval.getBelongsToLeftSide()[intervalIndex] = !interval.getBelongsToLeftSide(intervalIndex);
 		}
@@ -142,10 +154,10 @@ import org.openmarkov.core.model.network.PartitionedInterval;
 	 */
 
 	private PartitionedInterval getNewPartitionedInterval() {
-		if (link.getRevealingIntervals().isEmpty()) {
+		if (link().getRevealingIntervals().isEmpty()) {
 			return new PartitionedInterval(true, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false);
         }
-        PartitionedInterval interval = link.getRevealingIntervals().get(link.getRevealingIntervals().size() - 1);
+        PartitionedInterval interval = link().getRevealingIntervals().get(link().getRevealingIntervals().size() - 1);
         // It starts where the previous one ends: closed if that one leaves the limit out, open if it takes it
         return new PartitionedInterval(!interval.getBelongsToLeftSide(1), interval.getLimit(1),
                                        Double.POSITIVE_INFINITY, false);

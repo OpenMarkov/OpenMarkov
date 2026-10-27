@@ -19,7 +19,17 @@ import org.openmarkov.core.model.network.State;
  */
 @SuppressWarnings("serial") public class RevelationStateEdit extends PNEdit {
 
-	private final Link<Node> link;
+	private final Node from;
+	private final Node to;
+	private final boolean directed;
+
+	/**
+	 * The link of the network, looked for each time: undoing and redoing the drawing of the link replaces it by
+	 * another object, and the edit used to write in the old one (error 27 of the pending list).
+	 */
+	private Link<Node> link() {
+		return probNet.getLink(from, to, directed);
+	}
 
 	private final State newState;
 
@@ -27,7 +37,9 @@ import org.openmarkov.core.model.network.State;
 
 	public RevelationStateEdit(Link<Node> link, State state, boolean selected) {
         super(link.getFrom().getProbNet());
-		this.link = link;
+		this.from = link.getFrom();
+		this.to = link.getTo();
+		this.directed = link.isDirected();
 		this.selected = selected;
 		this.newState = state;
 
@@ -35,18 +47,18 @@ import org.openmarkov.core.model.network.State;
 	
 	@Override protected void doEdit() {
 		if (selected) {
-			link.addRevealingState(newState);
+			link().addRevealingState(newState);
 		} else {
-			link.removeRevealingState(newState);
+			link().removeRevealingState(newState);
 		}
 	}
     
     @Override public void undo() {
 		super.undo();
 		if (selected) {
-			link.removeRevealingState(newState);
+			link().removeRevealingState(newState);
 		} else {
-			link.addRevealingState(newState);
+			link().addRevealingState(newState);
 
 		}
 	}
