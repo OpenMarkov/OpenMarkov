@@ -322,8 +322,9 @@ public final class VisualState extends VisualElement {
         
         g.setColor(GUIColors.Inference.BOX_TEXT.getColor());
         g.setFont(STATES_FONT);
-        this.stateName = adjustText(this.stateName, innerBox.getLabelColumnWidth(), 2, STATES_FONT, g);
-        g.drawString(this.stateName, (int) xName, (int) yText);
+        // Shortened only to be drawn: keeping it shortened, it stayed so when zooming in again (error 168)
+        g.drawString(adjustText(this.stateName, innerBox.getLabelColumnWidth(), 2, STATES_FONT, g), (int) xName,
+                     (int) yText);
         if (getVisualNode().getVisualNetwork().isPropagationActive()) {
             for (int i = 0; i < this.stateValues.size(); i++) {
                 g.setPaint(GUIColors.Inference.STATE_BAR_BORDER.getColor());
