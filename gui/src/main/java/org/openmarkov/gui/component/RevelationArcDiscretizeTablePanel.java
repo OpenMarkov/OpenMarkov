@@ -132,7 +132,8 @@ public class RevelationArcDiscretizeTablePanel extends DiscretizeTablePanel {
             if (lowerLimit > newValue) {
                 throw new UnrecoverableException(new InvalidArgumentException(newValue, "New value", "it is lower than the lower limit (" + lowerLimit + ")"));
             }
-            if (row < numRows) {
+            // The last interval has no next one: reading it ended in an unexpected error (error 163)
+            if (row + 1 < numRows) {
                 double nextLimit = (Double) table.getValueAt(row + 1, DiscretizeTablePanel.LOWER_BOUND_VALUE_COLUMN_INDEX);
                 if (nextLimit < newValue) {
                     throw new UnrecoverableException(new InvalidArgumentException(newValue, "New value", "it is greater than the next bound's lower limit (" + nextLimit + ")"));
