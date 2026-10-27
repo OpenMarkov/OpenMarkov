@@ -137,8 +137,8 @@ import java.util.List;
             for (VariableExpression mandatoryCovariate : mandatoryCovariates) {
                 isMandatory |= mandatoryCovariate.asStringExpression().equals(covariate.asStringExpression());
             }
+            // Only removing depends on the row: adding used to be turned off on a mandatory one too (error 157)
             setEnabledRemoveValue(!isMandatory);
-            setEnabledAddValue(!isMandatory);
         }
     }
     
