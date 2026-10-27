@@ -509,6 +509,26 @@ public final class SettingsDialog extends JDialog {
                    .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
                    .add(optionsPanel);
         }
+        
+        //Developer tools
+        {
+            var developerToolsCheckBox = new JCheckBox();
+            var developerToolsLabel = new JLabel("Show developer tools  ");
+            var helpToolTip = GUIUtils.generateTooltipElement("""
+                                                                      <html>
+                                                                      Adds to the Tools menu the tools meant for the developers of OpenMarkov:<br>
+                                                                      Edits history, Break-point and Hover GUI logger.
+                                                                      </html>
+                                                                      """);
+            developerToolsCheckBox.setSelected(UserPreferences.SHOW_DEVELOPER_TOOLS.get());
+            developerToolsCheckBox.addItemListener(
+                    e -> UserPreferences.SHOW_DEVELOPER_TOOLS.set(developerToolsCheckBox.isSelected()));
+            
+            gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, developerToolsLabel, helpToolTip))
+                   .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
+                   .add(developerToolsCheckBox);
+        }
         gridbag.addCorrectionGlue();
     }
     

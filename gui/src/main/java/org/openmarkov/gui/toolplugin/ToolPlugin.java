@@ -46,6 +46,14 @@ public interface ToolPlugin {
     
     int priorityInGroup();
     
+    /**
+     * Whether this tool is meant for the developers of OpenMarkov. The {@code Tools} menu offers it only when the
+     * user asks for the developer tools in the settings.
+     */
+    default boolean isDeveloperTool() {
+        return false;
+    }
+    
     enum ToolPluginGroup {
         ANALYSIS,
         PROCESSING,

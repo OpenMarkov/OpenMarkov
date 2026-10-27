@@ -388,6 +388,8 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
         ToolPluginManager toolsMenuManager = ToolPluginManager.getInstance();
         var pluginsByGroupIterator
                 = new TreeMap<>(toolsMenuManager.getAllToolPlugins().stream()
+                                                .filter(plugin -> !plugin.isDeveloperTool()
+                                                                  || UserPreferences.SHOW_DEVELOPER_TOOLS.get())
                                                 .collect(Collectors.groupingBy(ToolPlugin::pluginGroup)))
                 .entrySet().iterator();
         while (pluginsByGroupIterator.hasNext()) {

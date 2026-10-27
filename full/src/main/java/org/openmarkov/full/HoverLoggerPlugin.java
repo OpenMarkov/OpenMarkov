@@ -28,6 +28,10 @@ public class HoverLoggerPlugin implements ToolPlugin {
         return 0;
     }
     
+    @Override public boolean isDeveloperTool() {
+        return true;
+    }
+    
     @Override public JMenuItem toMenuItem() {
         return new JMenuItemBuilder("Hover GUI logger (Developers' tool)")
                 .asCheckbox()

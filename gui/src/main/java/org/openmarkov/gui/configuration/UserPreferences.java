@@ -32,6 +32,16 @@ public final class UserPreferences {
             .of("dev_tools/hover_logger_enabled", () -> false, null, new TypeToken<>() {
             });
     
+    /** Whether the Tools menu offers the tools meant for the developers of OpenMarkov. */
+    public static final UserPreference<Boolean> SHOW_DEVELOPER_TOOLS = UserPreference
+            .of("dev_tools/show_developer_tools", () -> false, new UserPreference.BackupInfo(true,
+                                                                                            "Show developer tools",
+                                                                                            "The tools for the developers of OpenMarkov in the Tools menu",
+                                                                                            () -> {
+                                                                                            }),
+                new TypeToken<>() {
+                });
+    
     public static final UserPreference<File> LATEST_OPEN_DIRECTORY = UserPreference
             .of("directories/latest_open_directory", () -> new File("."), null, new TypeToken<>() {
             });

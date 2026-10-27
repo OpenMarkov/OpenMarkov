@@ -22,6 +22,10 @@ public class BreakPointPlugin implements ToolPlugin {
         return 0;
     }
     
+    @Override public boolean isDeveloperTool() {
+        return true;
+    }
+    
     @Override public JMenuItem toMenuItem() {
         return new JMenuItemBuilder("Break-point (Developers' tool)")
                 .onClick(() -> {
