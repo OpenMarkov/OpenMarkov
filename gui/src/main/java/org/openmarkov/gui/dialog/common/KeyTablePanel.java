@@ -44,11 +44,6 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
     private static final long serialVersionUID = 6257314234781632512L;
     
     /**
-     * Panel to scroll the table.
-     */
-    protected JScrollPane valuesTableScrollPane = null;
-    
-    /**
      * Table where show the values.
      */
     protected KeyTable valuesTable = null;
@@ -169,17 +164,13 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
     }
     
     /**
-     * This method initializes valuesTableScrollPane.
+     * The table scrolls by itself. Inside a second scroll pane it kept its own width while the outer one showed
+     * less, so the right part of each row, where numbers are aligned, was out of sight (error 355).
      *
-     * @return a new values table scroll pane.
+     * @return the values table.
      */
     protected JScrollPane getValuesTableScrollPane() {
-        
-        if (valuesTableScrollPane == null) {
-            valuesTableScrollPane = new JScrollPane(getValuesTable());
-            valuesTableScrollPane.setName("KeyTablePanel.valuesTableScrollPane");
-        }
-        return valuesTableScrollPane;
+        return getValuesTable();
     }
     
     /**
