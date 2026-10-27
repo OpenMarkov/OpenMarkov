@@ -27,6 +27,7 @@ import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
 import org.openmarkov.core.model.network.constraint.OnlyFiniteStatesVariables;
 import org.openmarkov.core.model.network.constraint.OnlyNumericVariables;
 import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
 import org.openmarkov.core.model.network.potential.operation.PotentialOperations;
@@ -126,10 +127,14 @@ public class VariableTypeEdit extends MultiStepEdit {
                     variables.add(parent.getVariable());
                 }
                 
-                // Create and assign uniform potential
+                // Create and assign uniform potential. A node without relation, such as a numeric decision without
+                // policy turned into an event, has no role to copy: it takes that of a node which is not a decision
+                // (error 28 of the pending list)
                 UniformPotential uniformPotential = new UniformPotential(
                         variables,
-                        node.getPotentials().getFirst().getPotentialRole()
+                        node.getPotentials().isEmpty()
+                                ? PotentialRole.CONDITIONAL_PROBABILITY
+                                : node.getPotentials().getFirst().getPotentialRole()
                 );
                 
                 stepExecuter.execute(new RawSetPotentialEdit(node, uniformPotential));

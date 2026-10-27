@@ -40,7 +40,8 @@ public abstract sealed class MultiEdit extends PNEdit permits CompoundPNEdit, Li
                 edit.executeEdit();
                 doneEdits.add(edit);
             }
-        } catch (DoEditException e) {
+        } catch (DoEditException | RuntimeException e) {
+            // Also for an unexpected error, which used to leave the edits already done out of the history (error 28)
             for (PNEdit editToUndo : doneEdits.reversed()) {
                 editToUndo.undo();
             }

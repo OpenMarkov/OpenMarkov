@@ -41,7 +41,9 @@ import java.util.stream.Stream;
             this.edits.clear();
             this.doMultiStepEdit(stepExecuter);
             this.edits.addAll(stepExecuter.executedEdits);
-        } catch (DoEditException e) {
+        } catch (DoEditException | RuntimeException e) {
+            // Also for an unexpected error, which used to leave the steps already done in the network, out of the
+            // history and so impossible to undo (error 28 of the pending list)
             for (PNEdit editToUndo : stepExecuter.executedEdits.reversed()) {
                 editToUndo.undo();
             }
