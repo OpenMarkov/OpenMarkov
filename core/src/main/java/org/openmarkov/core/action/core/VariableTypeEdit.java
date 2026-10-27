@@ -22,6 +22,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes;
 import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
 import org.openmarkov.core.model.network.constraint.OnlyFiniteStatesVariables;
 import org.openmarkov.core.model.network.constraint.OnlyNumericVariables;
@@ -66,6 +67,10 @@ public class VariableTypeEdit extends MultiStepEdit {
                         .addException(new ConstraintViolatedException.OnlyFiniteStatesAllowed(constraint, this.node
                                 .getVariable()));
             }
+        }
+        if (probNet.getConstraintOfClass(NoDiscretizedChanceNodes.class) instanceof NoDiscretizedChanceNodes constraint
+                && !NoDiscretizedChanceNodes.admits(this.node.getNodeType(), this.newType)) {
+            constraintChecker.addException(new ConstraintViolatedException.DiscretizedChanceNode(constraint, this.node));
         }
         if (probNet.getConstraintOfClass(OnlyNumericVariables.class) instanceof OnlyNumericVariables constraint) {
             if (this.newType != VariableType.NUMERIC) {

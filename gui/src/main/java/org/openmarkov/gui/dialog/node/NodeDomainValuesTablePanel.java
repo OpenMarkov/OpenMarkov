@@ -23,6 +23,7 @@ import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.TemporalNetOperations;
 import org.openmarkov.core.model.network.Util;
 import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes;
 import org.openmarkov.gui.action.PartitionedIntervalEdit;
 import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.component.DiscretizeTablePanel;
@@ -893,7 +894,13 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
             jComboBoxNodeVariableType.setRenderer(new JComboBoxFunctionRender<VariableType>(VariableType::toString));
             jComboBoxNodeVariableType.setName("jComboBoxNodeVariableType");
             for (VariableType variableType : VariableType.of(node.getNodeType())) {
-                jComboBoxNodeVariableType.addItem(variableType);
+                // A network of events does not admit chance nodes divided into intervals (error 106); one that a
+                // file brings still shows its type, to be changed
+                if (variableType == node.getVariable().getVariableType()
+                        || !node.getProbNet().hasConstraintOfClass(NoDiscretizedChanceNodes.class)
+                        || NoDiscretizedChanceNodes.admits(node.getNodeType(), variableType)) {
+                    jComboBoxNodeVariableType.addItem(variableType);
+                }
             }
             // jComboBoxNodeVariableType.setSize(181, 80);
             // jComboBoxNodeVariableType.addItemListener(listener);

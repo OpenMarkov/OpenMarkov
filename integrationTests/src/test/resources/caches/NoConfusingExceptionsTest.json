@@ -44,6 +44,7 @@
     "DirectedLinkCannotMatchAnUndirectedLink",
     "DiscountMissing",
     "DiscountOutOfRange",
+    "DiscretizedChanceNode",
     "DistributionsCannotGoTogether",
     "DoEditException",
     "EmptyCaseDatabaseException",

@@ -10,6 +10,7 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.AllChanceVariablesHaveChancePotentials;
 import org.openmarkov.core.model.network.constraint.DistinctLinks;
 import org.openmarkov.core.model.network.constraint.DistinctVariableNames;
+import org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes;
 import org.openmarkov.core.model.network.constraint.MaxNumParents;
 import org.openmarkov.core.model.network.constraint.ModelNetworkConstraint;
 import org.openmarkov.core.model.network.constraint.NoAlwaysObservedDescendantOfDecision;
@@ -446,6 +447,17 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
     }
     
     
+    /** A chance node divided into intervals in a network of events (error 106 of the pending list). */
+    public static class DiscretizedChanceNode extends ConstraintViolatedException {
+
+        public final Node node;
+
+        public DiscretizedChanceNode(NoDiscretizedChanceNodes constraint, Node node) {
+            super(constraint);
+            this.node = node;
+        }
+    }
+
     public static class OnlySelfLoopsWithEventAndChanceNodesException extends ConstraintViolatedException {
         
         public final Node node;

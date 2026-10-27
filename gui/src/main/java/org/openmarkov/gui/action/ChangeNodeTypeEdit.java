@@ -12,6 +12,7 @@ import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes;
 import org.openmarkov.core.model.network.constraint.OnlyOneUtilityNode;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
@@ -47,6 +48,12 @@ public class ChangeNodeTypeEdit extends MultiStepEdit {
 
     @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException, ThereIsNoPotentialInNodeException {
         boolean becomesADecision = this.newNodeType == NodeType.DECISION && this.node.getNodeType() != NodeType.DECISION;
+        // A network of events does not admit chance nodes divided into intervals (error 106), and it checks so as soon
+        // as the node changes its type: the intervals go first
+        if (!NoDiscretizedChanceNodes.admits(this.newNodeType, this.node.getVariable().getVariableType())
+                && this.probNet.hasConstraintOfClass(NoDiscretizedChanceNodes.class)) {
+            stepExecuter.execute(new VariableTypeEdit(this.node, VariableType.FINITE_STATES, false));
+        }
         stepExecuter.execute(new SetNodeTypeEdit(this.node, this.newNodeType));
         VariableType[] availableVariableTypes = VariableType.of(this.newNodeType);
         VariableType oldVariableType = this.node.getVariable().getVariableType();

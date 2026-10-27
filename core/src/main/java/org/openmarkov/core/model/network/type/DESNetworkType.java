@@ -4,6 +4,7 @@ import org.openmarkov.core.model.network.constraint.ConstraintBehavior;
 import org.openmarkov.core.model.network.constraint.NoBackwardLink;
 import org.openmarkov.core.model.network.constraint.EveryCycleHasAnEvent;
 import org.openmarkov.core.model.network.constraint.NoCycle;
+import org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes;
 import org.openmarkov.core.model.network.constraint.NoEventNodes;
 import org.openmarkov.core.model.network.constraint.NoLoops;
 import org.openmarkov.core.model.network.constraint.NoSelfLoop;
@@ -40,6 +41,7 @@ public final class DESNetworkType extends NetworkType {
 		overrideConstraintBehavior(OnlySelfLoopsWithEventAndChanceNodes.class, ConstraintBehavior.YES);
 		overrideConstraintBehavior(OnlyOneOrphanInitialEvent.class, ConstraintBehavior.YES);
 		overrideConstraintBehavior(EveryCycleHasAnEvent.class, ConstraintBehavior.YES);
+		overrideConstraintBehavior(NoDiscretizedChanceNodes.class, ConstraintBehavior.YES);
 		//overrideConstraintBehavior(DistinctLinks.class, ConstraintBehavior.NO);
 
 	}

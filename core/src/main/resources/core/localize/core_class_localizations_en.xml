@@ -408,6 +408,8 @@
                   value="Every cycle of more than one node must contain an event node"/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlyOneOrphanInitialEvent"
                   value="There must be only one Initial Event with no parent"/>
+    <Localization class="org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes"
+                  value="Chance nodes cannot be divided into intervals"/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlySelfLoopsWithEventAndChanceNodes"
                   value="Self loops only allowed in event nodes"/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoLoops" value="There must be no loops"/>
@@ -494,6 +496,8 @@
                   value="Removal of constraint {constraint}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CannotHaveEventNodeException"
                   value="{eventNode} is of type event."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$DiscretizedChanceNode"
+                  value="{node.getName} cannot be divided into intervals: in a network of events, a chance node must have finite states or be numeric."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyOneOrphanInitialEventException"
                   value="There can be only one orphan event node which the purpose of initial, but multiple have it:\n{orphanEventNodes}"/>
     <Localization
