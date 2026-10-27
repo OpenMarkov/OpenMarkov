@@ -19,7 +19,9 @@ import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -114,6 +116,53 @@ public class DistributionTablePotential extends Potential implements DESSimulabl
 
     public DistributionTablePotential(List<Variable> variables) {
         this(variables, PotentialRole.CONDITIONAL_PROBABILITY);
+    }
+
+    /**
+     * {@inheritDoc} Each state of a new parent gets the parameters that the node had, and a new event parent those of
+     * the first event; a link from the event to itself is a parent too (error 99).
+     */
+    @Override public Potential addVariable(Variable variable) {
+        if (!keepsItsParametersWithOrWithout(variable) || variables.subList(1, variables.size()).contains(variable)) {
+            return super.addVariable(variable);
+        }
+        List<Variable> newVariables = new ArrayList<>(variables);
+        newVariables.add(variable);
+        return withParents(newVariables);
+    }
+
+    @Override public boolean keepsItsValuesWithALinkToItself() {
+        return true;
+    }
+
+    /** {@inheritDoc} The parameters kept are those with the removed parent in its first state (error 99). */
+    @Override public Potential removeVariable(Variable variable) {
+        int parent = variables.lastIndexOf(variable);
+        if (parent < 1 || !keepsItsParametersWithOrWithout(variable)) {
+            return super.removeVariable(variable);
+        }
+        List<Variable> newVariables = new ArrayList<>(variables);
+        newVariables.remove(parent);
+        return withParents(newVariables);
+    }
+
+    /** Numeric parents give the parameters by functions, which are not carried over. */
+    private boolean keepsItsParametersWithOrWithout(Variable variable) {
+        return !hasFunctionValues() && variable.getVariableType() != VariableType.NUMERIC;
+    }
+
+    /** This distribution on {@code newVariables}, with the parameters of this one for the same states. */
+    private DistributionTablePotential withParents(List<Variable> newVariables) {
+        DistributionTablePotential result = new DistributionTablePotential(newVariables, role, distributionName,
+                                                                           parametrizationName);
+        Map<Variable, Variable> sameAs = new HashMap<>();
+        sameAs.put(result.distributionVariable, distributionVariable);
+        if (result.tableWithEvents.events != null && tableWithEvents.events != null) {
+            sameAs.put(result.tableWithEvents.events, tableWithEvents.events);
+        }
+        ValuesOfTheSameStates.copy(getTablePotential(), result.getTablePotential(), sameAs);
+        result.copyAttributesFrom(this);
+        return result;
     }
 
 

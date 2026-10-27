@@ -717,6 +717,14 @@ public abstract class Potential implements Localizable {
     }
     
     /**
+     * @return whether {@link #addVariable} and {@link #removeVariable} keep the values of this potential for a link
+     * from its node to itself, which makes its variable a parent too; otherwise that link leaves a uniform potential
+     */
+    public boolean keepsItsValuesWithALinkToItself() {
+        return false;
+    }
+
+    /**
      * Creates a new uniform potential removing the received variable from the variables list of this potential,
      * with the comment, the criterion and the properties of this one.
      *

@@ -9,6 +9,7 @@ import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,6 +53,27 @@ public class TransitionTablePotential extends TableWithEvents implements DESSimu
     /** A copy has to be a transition table too: the one of the parent class cannot be sampled. */
     @Override public Potential copy() {
         return new TransitionTablePotential(this);
+    }
+
+    /** {@inheritDoc} Each state of a new parent gets the values that the node had (error 99). */
+    @Override public Potential addVariable(Variable variable) {
+        if (!keepsItsValuesWithOrWithout(variable) || variables.subList(1, variables.size()).contains(variable)) {
+            return super.addVariable(variable);
+        }
+        List<Variable> newVariables = new ArrayList<>(variables);
+        newVariables.add(variable);
+        return withParents(newVariables);
+    }
+
+    /** {@inheritDoc} The values kept are those with the removed parent in its first state (error 99). */
+    @Override public Potential removeVariable(Variable variable) {
+        int parent = variables.lastIndexOf(variable);
+        if (parent < 1 || !keepsItsValuesWithOrWithout(variable)) {
+            return super.removeVariable(variable);
+        }
+        List<Variable> newVariables = new ArrayList<>(variables);
+        newVariables.remove(parent);
+        return withParents(newVariables);
     }
 
 

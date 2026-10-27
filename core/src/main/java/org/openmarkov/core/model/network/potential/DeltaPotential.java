@@ -74,6 +74,36 @@ public class DeltaPotential extends Potential implements Projectable, Scalable, 
         stateIndex = potential.stateIndex;
         numericValue = potential.numericValue;
     }
+
+    /**
+     * {@inheritDoc} The value does not depend on the parents, so it is kept with a new one, or without one, instead
+     * of a uniform relation (error 99 of the pending list); a link from the node to itself is a parent too. Not for a
+     * variable with finite states, whose fixed state with parents is a policy or a uniform relation.
+     */
+    @Override public Potential addVariable(Variable variable) {
+        if (getConditionedVariable().getVariableType() == VariableType.FINITE_STATES
+                || variables.subList(1, variables.size()).contains(variable)) {
+            return super.addVariable(variable);
+        }
+        DeltaPotential newPotential = new DeltaPotential(this);
+        newPotential.variables.add(variable);
+        return newPotential;
+    }
+
+    @Override public boolean keepsItsValuesWithALinkToItself() {
+        return true;
+    }
+
+    /** {@inheritDoc} See {@link #addVariable}. */
+    @Override public Potential removeVariable(Variable variable) {
+        int parent = variables.lastIndexOf(variable);
+        if (parent < 1 || getConditionedVariable().getVariableType() == VariableType.FINITE_STATES) {
+            return super.removeVariable(variable);
+        }
+        DeltaPotential newPotential = new DeltaPotential(this);
+        newPotential.variables.remove(parent);
+        return newPotential;
+    }
     
     /**
      * Returns whether this type of Potential is suitable for the list of

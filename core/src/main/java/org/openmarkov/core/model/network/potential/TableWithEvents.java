@@ -17,6 +17,7 @@ import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Implement a table with Events in the configuration of parents
@@ -458,6 +459,27 @@ public class TableWithEvents extends Potential implements DESSimulablePotential 
     //TODO
     @Override public Potential copy() {
         return new TableWithEvents(this);
+    }
+
+    /**
+     * A copy of this potential on {@code newVariables}, which differ from its variables in a parent, whose table keeps
+     * the values of this one for the same states, as {@link ValuesOfTheSameStates} says; the event parents are matched
+     * by their names (error 99 of the pending list). Not for a table of functions, which numeric parents need.
+     */
+    protected TableWithEvents withParents(List<Variable> newVariables) {
+        TableWithEvents copy = (TableWithEvents) copy();
+        copy.variables = new ArrayList<>(newVariables);
+        copy.setEventAsStates(newVariables.subList(1, newVariables.size()));
+        copy.rebuildTableVariables();
+        copy.setTablePotential(new TablePotential(copy.tableVariables, role));
+        ValuesOfTheSameStates.copy(tablePotential, copy.tablePotential,
+                                   events == null || copy.events == null ? Map.of() : Map.of(copy.events, events));
+        return copy;
+    }
+
+    /** Whether {@link #withParents} can give this potential with {@code variable} added or removed as a parent. */
+    protected boolean keepsItsValuesWithOrWithout(Variable variable) {
+        return !useTableWithFunctions && variable.getVariableType() != VariableType.NUMERIC;
     }
     
     /**

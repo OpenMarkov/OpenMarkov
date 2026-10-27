@@ -25,6 +25,7 @@ import org.openmarkov.core.model.network.type.DESNetworkType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -103,6 +104,24 @@ import java.util.Random;
         return projectedPotential;
     }
     
+    /**
+     * {@inheritDoc} Each state of a new parent gets the values that the node had, as in a table, instead of a uniform
+     * relation without them (error 99 of the pending list). A numeric parent or an event, which a table of values
+     * cannot have, still gives the uniform one.
+     */
+    @Override public Potential addVariable(Variable variable) {
+        if (variables.contains(variable) || variable.getVariableType() == VariableType.NUMERIC
+                || variable.getVariableType() == VariableType.EVENT) {
+            return super.addVariable(variable);
+        }
+        List<Variable> newVariables = new ArrayList<>(variables);
+        newVariables.add(variable);
+        ExactDistrPotential newPotential = new ExactDistrPotential(newVariables, role);
+        ValuesOfTheSameStates.copy(tablePotential, newPotential.tablePotential, Map.of());
+        newPotential.copyAttributesFrom(this);
+        return newPotential;
+    }
+
     /** {@inheritDoc} The values kept are those with the removed parent in its first state. */
     @Override public Potential removeVariable(Variable variable) {
         if (!variables.subList(1, variables.size()).contains(variable)) {

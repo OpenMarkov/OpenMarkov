@@ -65,6 +65,35 @@ public class IndicatorPotential extends Potential implements DESSimulablePotenti
         this.tte = potential.getTte();
         this.pOccurrence = potential.getpOccurrence();
     }
+
+    /**
+     * {@inheritDoc} The time and the probability of the event do not depend on the parents, so they are kept with a
+     * new one instead of a uniform relation (error 99 of the pending list); a link from the event to itself is a
+     * parent too.
+     */
+    @Override public Potential addVariable(Variable variable) {
+        if (variables.subList(1, variables.size()).contains(variable)) {
+            return super.addVariable(variable);
+        }
+        IndicatorPotential newPotential = new IndicatorPotential(this);
+        newPotential.variables.add(variable);
+        return newPotential;
+    }
+
+    @Override public boolean keepsItsValuesWithALinkToItself() {
+        return true;
+    }
+
+    /** {@inheritDoc} See {@link #addVariable}. */
+    @Override public Potential removeVariable(Variable variable) {
+        int parent = variables.lastIndexOf(variable);
+        if (parent < 1) {
+            return super.removeVariable(variable);
+        }
+        IndicatorPotential newPotential = new IndicatorPotential(this);
+        newPotential.variables.remove(parent);
+        return newPotential;
+    }
     
     /**
      * Returns whether this type of Potential is suitable for the list of

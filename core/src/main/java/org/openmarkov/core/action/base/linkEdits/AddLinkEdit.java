@@ -221,7 +221,11 @@ public final class AddLinkEdit extends BaseLinkEdit {
             } else if ((nodeFrom == nodeTo ) && ( (nodeFrom.getNodeType() ==NodeType.EVENT) || (nodeFrom.getNodeType() ==NodeType.CHANCE))
                     && nodeFrom.getProbNet().getNetworkType().isApplicableConstraint(new OnlySelfLoopsWithEventAndChanceNodes())){
                 for (Potential oldPotential : oldPotentials) {
-                    // Update potential
+                    // Update potential, keeping its values when it can (error 99)
+                    if (oldPotential.keepsItsValuesWithALinkToItself()) {
+                        newPotentials.add(oldPotential.addVariable(nodeFrom.getVariable()));
+                        continue;
+                    }
                     List<Variable> variables = oldPotential.getVariables();
                     variables.add(nodeFrom.getVariable());
                     Potential newPotential = new UniformPotential(variables, oldPotential.getPotentialRole());

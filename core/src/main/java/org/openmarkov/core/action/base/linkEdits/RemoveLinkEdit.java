@@ -119,7 +119,10 @@ public final class RemoveLinkEdit extends BaseLinkEdit {
                 for (Potential oldPotential : oldPotentials) {
                     Potential newPotential;
                     
-                    if (node1.equals(node2)){
+                    if (node1.equals(node2) && oldPotential.keepsItsValuesWithALinkToItself()) {
+                        // It removes the parent, the last occurrence of the variable, keeping its values (error 99)
+                        newPotential = oldPotential.removeVariable(node1.getVariable());
+                    } else if (node1.equals(node2)){
 
 						/* Potential#removeVariable(Variable variable) removes variable when it if first encountered,
 						does not take into account self loops, then creates a new Uniform potential.
