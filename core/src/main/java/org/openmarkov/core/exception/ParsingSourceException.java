@@ -23,6 +23,18 @@ public abstract sealed class ParsingSourceException extends UserInputException {
             this.variableName = variableName;
         }
     }
+
+    /**
+     * A file of text starts with the byte order mark of UTF-8, three bytes that some programs put before the text. The
+     * formats of case databases do not allow it, and Weka refuses it too (error 250 of the pending list).
+     */
+    public static final class StartsWithAByteOrderMark extends ParsingSourceException {
+        public final String source;
+
+        public StartsWithAByteOrderMark(String source) {
+            this.source = source;
+        }
+    }
     
     @Override public String toString() {
         return IBundledOpenMarkovException.toString(this);

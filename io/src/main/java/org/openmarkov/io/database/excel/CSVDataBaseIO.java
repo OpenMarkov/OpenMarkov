@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.EmptyDatabaseException;
 import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
+import org.openmarkov.core.io.database.ByteOrderMark;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseFormat;
@@ -99,12 +100,15 @@ import java.util.Scanner;
     /**
      * Opens a database from a '.csv' file and creates a ProbNet
      * building the variables and states dinamically while reading, and
-     * returning the cases on the database.
+     * returning the cases on the database. A file that starts with a byte order mark is refused: the mark would be
+     * read as part of the name of the first column.
      *
      * @return {@code CaseDatabase} with the cases in the database.
      */
     @Override public @NotNull CaseDatabase load(File file)
-            throws EmptyDatabaseException, FileNotFoundException, ParsingSourceException.RepeatedVariableNames {
+            throws EmptyDatabaseException, IOException, ParsingSourceException.RepeatedVariableNames,
+            ParsingSourceException.StartsWithAByteOrderMark {
+        ByteOrderMark.refuse(file);
         // TODO Solve: This method assumes that 1) ALL the states of every variable are always included in the dataset, 2) All the variables are discrete.
         // First row contains all the attributes names and the attributes number
         Scanner scanner = new Scanner(file);

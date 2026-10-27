@@ -80,6 +80,10 @@
         <Title value="Estado duplicado"/>
         <Text value="Cada estado sólo puede aparecer una vez"/>
     </DuplicatedState>
+    <ByteOrderMark>
+        <Title value="Marca de orden de bytes"/>
+        <Text value="«%s» empieza con una marca de orden de bytes: tres bytes invisibles que algunos programas,&#10;como versiones antiguas del Bloc de notas de Windows, ponen al principio de un fichero, y que este formato no admite.&#10;¿Quiere guardar el fichero sin ellos, sobrescribiéndolo, y abrirlo?"/>
+    </ByteOrderMark>
     <RepeatedLifeTableTime>
         <Title value="Tiempo repetido"/>
         <Text value="Otra fila de la tabla de vida ya empieza en ese tiempo"/>

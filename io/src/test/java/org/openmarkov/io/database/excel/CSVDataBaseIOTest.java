@@ -37,7 +37,7 @@ public class CSVDataBaseIOTest {
     }
     
     @Tag(TestSpeed.SLOW)
-    @Test public void testOpenDBFile() throws EmptyDatabaseException, java.io.FileNotFoundException,
+    @Test public void testOpenDBFile() throws EmptyDatabaseException, java.io.IOException,
             org.openmarkov.core.exception.ParsingSourceException {
         CSVDataBaseIO databaseIO = new CSVDataBaseIO();
         URL file = getClass().getResource(fileName);

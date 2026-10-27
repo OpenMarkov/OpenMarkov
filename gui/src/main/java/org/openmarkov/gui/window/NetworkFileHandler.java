@@ -46,6 +46,7 @@ import org.openmarkov.gui.dialog.common.CommentHTMLScrollPane;
 import org.openmarkov.gui.dialog.common.CommonOptions;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.common.OptionDialog;
+import org.openmarkov.gui.dialog.io.CaseDatabaseLoading;
 import org.openmarkov.gui.dialog.io.DBReaderOMFileChooser;
 import org.openmarkov.gui.dialog.io.FileFilterByExtension;
 import org.openmarkov.gui.dialog.io.NetsIO;
@@ -489,7 +490,12 @@ public class NetworkFileHandler {
                 throw new UnrecoverableException(e);
             }
             ProbNet currentNet = currentNetworkEditorPanel.getProbNet();
-            CaseDatabase caseDatabase = caseDbReader.load(evidenceOMFileChooser.getSelectedFile());
+            CaseDatabase caseDatabase = CaseDatabaseLoading.load(ComponentUtilities.getOwner(mainPanel), caseDbReader,
+                                                                 evidenceOMFileChooser.getSelectedFile());
+            if (caseDatabase == null) {
+                // The file starts with a byte order mark, and the user did not want it removed
+                return;
+            }
             List<Variable> variables = caseDatabase.getVariables();
             int[][] cases = caseDatabase.getCases();
             for (int i = 0; i < cases.length; ++i) {

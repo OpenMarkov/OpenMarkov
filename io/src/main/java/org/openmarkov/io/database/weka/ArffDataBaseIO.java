@@ -10,6 +10,7 @@ package org.openmarkov.io.database.weka;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
+import org.openmarkov.core.io.database.ByteOrderMark;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseFormat;
@@ -48,11 +49,14 @@ public class ArffDataBaseIO implements CaseDatabaseReader, CaseDatabaseWriter {
      * @throws IOException if the file cannot be read.
      * @throws ParsingSourceException.CouldNotParseSourceException if the file is not a case database in this format,
      *         with the line where it fails.
+     * @throws ParsingSourceException.StartsWithAByteOrderMark if the file starts with a byte order mark, which the
+     *         format does not allow: Weka refuses it too.
      */
     @Override
     public @NotNull CaseDatabase load(File file)
             throws IOException, ParsingSourceException.CouldNotParseSourceException,
-            ParsingSourceException.RepeatedVariableNames {
+            ParsingSourceException.RepeatedVariableNames, ParsingSourceException.StartsWithAByteOrderMark {
+        ByteOrderMark.refuse(file);
         try {
             return CaseDatabaseReader.withDistinctVariableNames(file, ArffReader.read(file.toPath()));
         } catch (ParseException e) {

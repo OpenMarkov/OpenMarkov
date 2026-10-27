@@ -220,6 +220,8 @@
     <Localization class="org.openmarkov.core.exception.EmptyDatabaseException" value="Dataset from {source} is empty."/>
     <Localization class="org.openmarkov.core.exception.ParsingSourceException$RepeatedVariableNames"
                   value="Dataset from {source} has more than one column named {variableName}. A case could not say which of them it means, so the dataset cannot be read. Give each column a different name."/>
+    <Localization class="org.openmarkov.core.exception.ParsingSourceException$StartsWithAByteOrderMark"
+                  value="{source} starts with a byte order mark: three invisible bytes that some programs, such as older versions of Windows Notepad, write at the start of a file, and that this format does not allow. Save the file in UTF-8 without the mark to open it."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$EvidenceIsImpossible"
                   value="These findings are impossible in this network: together they have probability zero."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$EvidenceIsIncompatibleWithOther"

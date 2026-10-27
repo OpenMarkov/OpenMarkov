@@ -34,6 +34,7 @@ import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.gui.action.AutoArrangeEdit;
+import org.openmarkov.gui.dialog.io.CaseDatabaseLoading;
 import org.openmarkov.gui.dialog.io.DBReaderOMFileChooser;
 import org.openmarkov.gui.dialog.io.DBWriterOMFileChooser;
 import org.openmarkov.gui.dialog.io.NetsIO;
@@ -744,7 +745,13 @@ public class LearningDialog extends JDialog {
         try {
             // Load the database
             CaseDatabaseReader reader = caseDbManager.getReader(FilenameUtils.getExtension(file.getName()));
-            database = reader.load(file);
+            CaseDatabase loaded = CaseDatabaseLoading.load(this, reader, file);
+            if (loaded == null) {
+                // The file starts with a byte order mark, and the user did not want it removed
+                resetCaseDatabaseFile();
+                return;
+            }
+            database = loaded;
             updateVariableSelectionPanel();
             learnButton.setEnabled(true);
             numIntervalsCheckBox.setSelected(false);

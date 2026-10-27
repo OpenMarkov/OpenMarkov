@@ -94,6 +94,10 @@
         <Title value="Duplicated state"/>
         <Text value="Each state can only appear once"/>
     </DuplicatedState>
+    <ByteOrderMark>
+        <Title value="Byte order mark"/>
+        <Text value="«%s» starts with a byte order mark: three invisible bytes that some programs,&#10;such as older versions of Windows Notepad, write at the start of a file, and that this format does not allow.&#10;Do you want to save the file without them, overwriting it, and open it?"/>
+    </ByteOrderMark>
     <RepeatedLifeTableTime>
         <Title value="Repeated time"/>
         <Text value="Another row of the life table already starts at this time"/>

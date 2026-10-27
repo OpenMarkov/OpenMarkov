@@ -3,14 +3,18 @@ package org.openmarkov.bnEvaluation.component;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.bnEvaluation.view.BackgroundEvaluation;
+import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
+import org.openmarkov.gui.dialog.io.CaseDatabaseLoading;
 import org.openmarkov.gui.dialog.io.DBReaderOMFileChooser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * Reusable Swing panel that lets the user open a case database file.
@@ -78,18 +82,39 @@ public class DBOpenerPanel extends JPanel {
         if (this.databaseFileChooser.showOpenDialog(this.parent) != JFileChooser.APPROVE_OPTION) {
             return;
         }
-        File file = this.databaseFileChooser.getSelectedFile();
+        load(this.databaseFileChooser.getSelectedFile());
+    }
+
+    private void load(File file) {
         Window window = SwingUtilities.getWindowAncestor(this);
         // Load off the event-dispatch thread so the window stays responsive; a read error becomes a
-        // message instead of crashing the application.
+        // message instead of crashing the application. A file that starts with a byte order mark comes
+        // back empty, so that the user is asked here, on the event-dispatch thread, whether to remove it.
         BackgroundEvaluation.run(window, "Loading dataset",
-                progress -> this.caseDbManager.getReader(FilenameUtils.getExtension(file.getName())).load(file),
-                loadedDatabase -> {
-                    this.database = loadedDatabase;
+                progress -> {
+                    try {
+                        return Optional.of(this.caseDbManager.getReader(FilenameUtils.getExtension(file.getName()))
+                                                             .load(file));
+                    } catch (ParsingSourceException.StartsWithAByteOrderMark mark) {
+                        return Optional.<CaseDatabase>empty();
+                    }
+                },
+                loadedDatabase -> loadedDatabase.ifPresentOrElse(database -> {
+                    this.database = database;
                     this.databaseFile = file;
                     this.caseFileTextPane.setText(file.getName());
                     this.onOpen.forEach(callback -> callback.onOpen(this.databaseFile, this.database));
-                });
+                }, () -> loadWithoutTheByteOrderMark(file)));
+    }
+
+    private void loadWithoutTheByteOrderMark(File file) {
+        try {
+            if (CaseDatabaseLoading.removeTheMarkIfTheUserAgrees(this, file)) {
+                load(file);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     /**
