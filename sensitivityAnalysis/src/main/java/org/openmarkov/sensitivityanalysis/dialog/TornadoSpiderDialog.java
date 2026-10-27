@@ -19,6 +19,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.renderer.category.IntervalBarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -40,7 +41,6 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
 import org.openmarkov.core.model.network.modelUncertainty.DeterministicAxisVariationType;
 import org.openmarkov.core.model.network.modelUncertainty.DomainInterval;
-import org.openmarkov.core.model.network.modelUncertainty.Tools;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
@@ -275,6 +275,11 @@ public class TornadoSpiderDialog extends JDialog {
         tornadoChartPanel = new ChartPanel(tornadoChart);
         
         return tornadoChartPanel;
+    }
+    
+    /** @return the spider chart shown in its tab */
+    ChartPanel getSpiderChartPanel() {
+        return spiderChartPanel;
     }
     
     /**
@@ -548,20 +553,27 @@ public class TornadoSpiderDialog extends JDialog {
         
         double minRangeUtility = Double.POSITIVE_INFINITY;
         double maxRangeUtility = Double.NEGATIVE_INFINITY;
-        double[] minVariationValues = new double[uncertainParameters.size()];
-        double[] maxVariationValues = new double[uncertainParameters.size()];
-        int iParam = 0;
+        double minOfTheShown = Double.POSITIVE_INFINITY;
+        double maxOfTheShown = Double.NEGATIVE_INFINITY;
+        // With a ratio or a percentage of the probability, the variation of each parameter is measured in proportion
+        // to its reference value, which cannot be done when it is 0: those parameters are left out and named below
+        // the title (error 317). Dividing by 0 left their line out and, with the percentage, made the axis infinite,
+        // so that no line was drawn
+        List<String> notShown = new ArrayList<>();
         
         HashMap<UncertainParameter, DomainInterval> sampledIntervals = veSensAnTornadoSpider.getSampledInterval();
         for (UncertainParameter uncertainParameter : uncertainParameters) {
-            //if (variationType.equals(DeterministicAxisVariationType.POPP)){
             if (isVariationTypePOPPOrRORV) {
                 double referenceValue = uncertainParameter.getBaseLineValue();
+                if (referenceValue == 0) {
+                    notShown.add(uncertainParameter.getLabel());
+                    continue;
+                }
                 DomainInterval sampledInterval = sampledIntervals.get(uncertainParameter);
                 minVariationValue = -Math.abs(sampledInterval.min() - referenceValue) / Math.abs(referenceValue);
                 maxVariationValue = Math.abs(sampledInterval.max() - referenceValue) / Math.abs(referenceValue);
-                minVariationValues[iParam] = minVariationValue;
-                maxVariationValues[iParam] = maxVariationValue;
+                minOfTheShown = Math.min(minOfTheShown, minVariationValue);
+                maxOfTheShown = Math.max(maxOfTheShown, maxVariationValue);
                 variationInterval = (maxVariationValue - minVariationValue) / iterations;
             }
             TablePotential uncertainParameterPotential = veSensAnTornadoSpider.getUncertainParametersPotentials()
@@ -592,8 +604,6 @@ public class TornadoSpiderDialog extends JDialog {
             // Set series presentation settings
             renderer.setSeriesShapesVisible(seriesIndex, false);
             renderer.setSeriesStroke(seriesIndex, new BasicStroke(2.5f));
-            iParam++;
-            
         }
         
         // Set the JFreeChart parameters call
@@ -616,13 +626,20 @@ public class TornadoSpiderDialog extends JDialog {
         // Set the domain axis
         NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
         if (isVariationTypePOPPOrRORV) {
-            minVariationValue = Tools.min(minVariationValues);
-            maxVariationValue = Tools.max(maxVariationValues);
+            minVariationValue = minOfTheShown;
+            maxVariationValue = maxOfTheShown;
         }
-        domainAxis.setRange(minVariationValue - (maxVariationValue - minVariationValue) * 0.02, maxVariationValue + (maxVariationValue - minVariationValue) * 0.02);
-        double size = (domainAxis.getUpperBound() - domainAxis.getLowerBound()) / 10;
-        domainAxis.setTickUnit(new NumberTickUnit(size, new DecimalFormat()));
+        // Without a line that spans an interval, as when every parameter is left out, the axis keeps its own range
+        if (minVariationValue < maxVariationValue) {
+            domainAxis.setRange(minVariationValue - (maxVariationValue - minVariationValue) * 0.02, maxVariationValue + (maxVariationValue - minVariationValue) * 0.02);
+            double size = (domainAxis.getUpperBound() - domainAxis.getLowerBound()) / 10;
+            domainAxis.setTickUnit(new NumberTickUnit(size, new DecimalFormat()));
+        }
         domainAxis.setNumberFormatOverride(decimalFormat);
+        if (!notShown.isEmpty()) {
+            chart.addSubtitle(new TextTitle(stringDatabase.getString("SensitivityAnalysis.General.NotShownInTheSpider")
+                                                          .replace("~", String.join(", ", notShown))));
+        }
         
         // Set the range axis
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();

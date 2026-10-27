@@ -46,6 +46,7 @@
             </Invalid>
         </Axis>
         <General>
+            <NotShownInTheSpider value="Not shown, as their reference value is 0: ~"/>
             <Decision value="Decision:"/>
             <From value="From:"/>
             <To value="To:"/>
