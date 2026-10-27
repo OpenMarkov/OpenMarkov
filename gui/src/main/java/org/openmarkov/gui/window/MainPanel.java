@@ -429,6 +429,10 @@ public class MainPanel extends JPanel {
         this.getMainPanelListenerAssistant().openNetwork(fileName);
     }
     
+    public void openNetworkSource(NetworkEditorPanel.NetworkSource source) throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
+        this.getMainPanelListenerAssistant().openNetworkSource(source);
+    }
+    
     /**
      * Returns instance of toolbarManager
      *
@@ -622,5 +626,6 @@ public class MainPanel extends JPanel {
         }
         return uniqueTitle;
     }
+    
     
 }

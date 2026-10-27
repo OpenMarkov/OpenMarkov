@@ -93,7 +93,9 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
 import java.io.Serial;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -1335,5 +1337,23 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void removeDecisionTreeWindows(DecisionTreeEditor decisionTreeWindows) {
         this.decisionTreeEditors.remove(decisionTreeWindows);
     }
-
+    
+    public sealed interface NetworkSource {
+        public record SourceFile(@Nullable File file) implements NetworkSource {
+        }
+        
+        public record SourceURL(@Nullable URL url) implements NetworkSource {
+        }
+    }
+    
+    private @Nullable NetworkSource source;
+    
+    public @Nullable NetworkSource source() {
+        return source;
+    }
+    
+    public void setSource(@Nullable NetworkSource source) {
+        this.source = source;
+    }
+    
 }

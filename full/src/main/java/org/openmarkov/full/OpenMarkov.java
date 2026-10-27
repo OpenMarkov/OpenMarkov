@@ -129,12 +129,12 @@ public class OpenMarkov {
             MainGUI.INSTANCE.setVisible(true);
             if (OpenMarkov.STARTED_AS_MAIN_INSTANCE &&
                     UserPreferences.STARTUP_ACTIONS.get().contains(StartupAction.RESTORE_LAST_SESSION)) {
-                ArrayList<String> lastOpenFiles = UserPreferences.LAST_SESSION_NETWORK_FILES.get();
-                for (var lastSessionFile : lastOpenFiles) {
+                var lastOpenSource = UserPreferences.LAST_SESSION_NETWORK_FILES.get();
+                for (var lastSessionFile : lastOpenSource) {
                     try {
-                        MainGUI.INSTANCE.openNetwork(lastSessionFile);
+                        MainGUI.INSTANCE.openNetworkSource(lastSessionFile);
                     } catch (ProbNetParserException | IOException | NoReaderForFileException | CorruptNetworkFile e) {
-                        Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                        // Purposedly ignored. Networks that could not be restored are not notified.
                     }
                 }
             }

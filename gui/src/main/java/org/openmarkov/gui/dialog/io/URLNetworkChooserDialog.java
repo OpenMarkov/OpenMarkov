@@ -20,6 +20,7 @@ import java.awt.GridLayout;
 import java.awt.Window;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 
 /**
@@ -136,7 +137,7 @@ public class URLNetworkChooserDialog extends OkCancelDialog {
     @Override protected boolean doOkClickBeforeHide() throws IOException {
         networkURL = null;
         if (!urlTextField.getText().isEmpty()) {
-            networkURL = new URL(getFinalURL(urlTextField.getText().trim()));
+            networkURL = URI.create(urlTextField.getText().trim()).toURL();
         }
         return true;
     }

@@ -9,10 +9,10 @@ package org.openmarkov.gui.window;
 
 import org.openmarkov.core.action.base.linkEdits.InvertLinkAndUpdatePotentialsEdit;
 import org.openmarkov.core.action.core.AddNodeEdit;
-import org.openmarkov.core.exception.InferenceStoppedException;
 import org.openmarkov.core.exception.CannotNormalizePotentialException;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.InferenceStoppedException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.ProbNetParserException;
@@ -20,6 +20,7 @@ import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.exception.WriterException;
+import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.LinkOperations;
@@ -31,6 +32,7 @@ import org.openmarkov.gui.action.RemoveLinkRestrictionEdit;
 import org.openmarkov.gui.configuration.LastOpenFiles;
 import org.openmarkov.gui.dialog.link.LinkRestrictionEditDialog;
 import org.openmarkov.gui.dialog.link.RevelationArcEditDialog;
+import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.graphic.VisualLink;
 import org.openmarkov.gui.graphic.VisualNode;
@@ -362,7 +364,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
             var listeners = source.getActionListeners();
         } else if (actionCommandConstant != null
                 && actionCommandConstant.openRecentFileIndex().orElse(null) instanceof Integer recentFileIndex) {
-            GUIUtils.executeUIAction(() -> fileHandler.openNetwork(LastOpenFiles.getFilePathAt(recentFileIndex)));
+            GUIUtils.executeUIAction(() -> fileHandler.openNetworkSource(LastOpenFiles.getSourceAt(recentFileIndex)));
         }
     }
     
@@ -378,6 +380,10 @@ public class MainPanelListenerAssistant extends WindowAdapter
     
     public void openNetwork(String fileName) throws ProbNetParserException, IOException, org.openmarkov.core.io.format.annotation.NoReaderForFileException, org.openmarkov.gui.exception.CorruptNetworkFile {
         fileHandler.openNetwork(fileName);
+    }
+    
+    public void openNetworkSource(NetworkEditorPanel.NetworkSource source) throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
+        fileHandler.openNetworkSource(source);
     }
     
     public void openNetwork(ProbNet probNet) {

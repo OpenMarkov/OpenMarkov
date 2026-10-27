@@ -15,6 +15,7 @@ import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.common.WindowDimensions;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
+import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
 import javax.swing.JFrame;
 import javax.swing.ToolTipManager;
@@ -147,4 +148,7 @@ public class MainGUI extends JFrame {
         mainPanel.openNetwork(fileName);
     }
     
+    public void openNetworkSource(NetworkEditorPanel.NetworkSource source) throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
+        mainPanel.openNetworkSource(source);
+    }
 }

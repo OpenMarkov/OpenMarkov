@@ -679,10 +679,13 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
     private List<LastRecentFilesMenuItem> getLastOpenFiles() {
         var lastOpenFilesItems = new ArrayList<LastRecentFilesMenuItem>();
         int index = 0;
-        for (String recentFile : UserPreferences.LAST_OPEN_NETWORKS_FILES.get()) {
+        for (NetworkEditorPanel.NetworkSource source : UserPreferences.LAST_OPEN_NETWORKS_FILES.get()) {
             LastRecentFilesMenuItem item = new LastRecentFilesMenuItem();
             item.setName("lastRecentFilesMenuItem" + index);
-            item.setText(recentFile);
+            item.setText(switch (source) {
+                case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getAbsolutePath();
+                case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> sourceURL.url().getPath();
+            });
             ActionCommands command = ActionCommands.openLastFileCommandAt(index);
             if (command != null) {
                 item.setActionCommand(command.getCommandName());

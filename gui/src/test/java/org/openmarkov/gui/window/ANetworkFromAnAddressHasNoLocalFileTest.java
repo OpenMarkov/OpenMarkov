@@ -71,7 +71,7 @@ class ANetworkFromAnAddressHasNoLocalFileTest {
             SwingUtilities.invokeAndWait(() -> {
                 try {
                     mainPanel.getMainPanelListenerAssistant().getFileHandler()
-                             .openNetworkSource(new NetworkFileHandler.NetworkSource.SourceURL(file.toUri().toURL()));
+                             .openNetworkSource(new NetworkEditorPanel.NetworkSource.SourceURL(file.toUri().toURL()));
                 } catch (Exception e) {
                     throw new IllegalStateException(e);
                 }

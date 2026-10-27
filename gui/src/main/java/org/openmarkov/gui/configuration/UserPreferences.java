@@ -6,6 +6,7 @@ import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.gui.bindings.InputCombination;
 import org.openmarkov.gui.dialog.common.WindowDimensions;
 import org.openmarkov.gui.dialog.io.OMFileChooser;
+import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_1_0;
 
@@ -58,7 +59,7 @@ public final class UserPreferences {
             .of("directories/latest_saved_dataset_directory", () -> new File("."), null, new TypeToken<>() {
             });
     
-    public static final UserPreference<ArrayList<String>> LAST_OPEN_NETWORKS_FILES = UserPreference
+    public static final UserPreference<ArrayList<NetworkEditorPanel.NetworkSource>> LAST_OPEN_NETWORKS_FILES = UserPreference
             .of("directories/last_open_networks_files", () -> new ArrayList<>(), null, new TypeToken<>() {
             });
     
@@ -73,7 +74,7 @@ public final class UserPreferences {
                 new TypeToken<>() {
                 });
     
-    public static final UserPreference<ArrayList<String>> LAST_SESSION_NETWORK_FILES = UserPreference
+    public static final UserPreference<ArrayList<NetworkEditorPanel.NetworkSource>> LAST_SESSION_NETWORK_FILES = UserPreference
             .of("directories/last_session_networks_files", ArrayList::new, null, new TypeToken<>() {
             });
     

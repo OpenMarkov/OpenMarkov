@@ -318,12 +318,11 @@ public class EditorCommandHandlerGenerator {
                                    }),
                 
                 
-                BindingCommandGroup.of(Bindings.Network.SELECTION_ELEMENT, Binding.MeetCondition.ON_GAIN, false, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_PRESSED))
-                                   .processIf((_, _) -> {
-                                       return this.selectionState == SelectionState.NOTHING &&
-                                               this.visualNetwork.getElementInPosition(this.cursorPosition, this.graphics) instanceof VisualElement element
-                                               && !this.visualNetwork.isSelected(element);
-                                   })
+                BindingCommandGroup.of(Bindings.Network.SELECTION_ELEMENT, Binding.MeetCondition.ON_LOSE, false, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_RELEASED))
+                                   .processIf((_, _) ->
+                                                      this.selectionState == SelectionState.NOTHING &&
+                                                              this.visualNetwork.getElementInPosition(this.cursorPosition, this.graphics) instanceof VisualElement element
+                                   )
                                    .withAction((_, _) -> {
                                        VisualElement selectedElement = this.visualNetwork.getElementInPosition(this.cursorPosition, this.graphics);
                                        this.networkEditorPanel.getVisualNetwork().setSelectedAllObjects(false);
@@ -331,7 +330,7 @@ public class EditorCommandHandlerGenerator {
                                                               .setSelectionOfElement(selectedElement, true);
                                    }),
                 
-                BindingCommandGroup.of(Bindings.Network.SELECTION_ELEMENT, Binding.MeetCondition.ON_GAIN, false, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_PRESSED))
+                BindingCommandGroup.of(Bindings.Network.SELECTION_ELEMENT, Binding.MeetCondition.ON_LOSE, false, MouseEvent.class, List.of(BindingCommandGroup.OnEvent.MOUSE_RELEASED))
                                    .processIf((_, _) -> networkEditorPanel.getBaseTool() == NetworkEditorPanel.BaseTool.SELECTION && this.selectionState == SelectionState.NOTHING &&
                                            this.visualNetwork.getElementInPosition(this.cursorPosition, this.graphics) == null)
                                    .withAction((_, _) -> this.visualNetwork.setSelectedAllObjects(false)),
@@ -685,7 +684,9 @@ public class EditorCommandHandlerGenerator {
                                        // Pressed on what is selected: from the empty canvas, with Shift or Control,
                                        // the band is not met and this would move nodes far from the mouse
                                        case NOTHING -> !this.mouseIgnoredUntilReleased
-                                               && !this.networkEditorPanel.getVisualNetwork().getSelectedNodes().isEmpty()
+                                               && !this.networkEditorPanel.getVisualNetwork()
+                                                                          .getSelectedNodes()
+                                                                          .isEmpty()
                                                && this.visualNetwork.getElementInPosition(this.pressPosition, this.graphics) instanceof VisualElement pressed
                                                && this.visualNetwork.isSelected(pressed);
                                        case MOVING -> true;
