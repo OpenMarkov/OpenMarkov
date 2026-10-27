@@ -329,7 +329,7 @@
         </Title>
     </HTMLTextEditor>
     <ZoomValues>
-        <Title value="Valores de zoomManager:"/>
+        <Title value="Valores de zoom:"/>
     </ZoomValues>
     <NetworkURLValues>
         <Title value="URL de la red."/>
@@ -674,13 +674,21 @@
                 <Function value="Alternar entre modo de edición y de inferencia"/>
             </ToggleEditionInference>
             <PreviousNext>
-                <Shortcut value="Ctrl + A/Q"/>
-                <Function value="Anterior/siguiente sub-ventana de OpenMarkov"/>
+                <Shortcut value="Ctrl + Shift + ←/→"/>
+                <Function value="Pestaña de red anterior/siguiente"/>
             </PreviousNext>
             <SaveReopen>
-                <Shortcut value="Ctrl + W"/>
+                <Shortcut value="Ctrl + Alt + S"/>
                 <Function value="Guardar y reabrir"/>
             </SaveReopen>
+            <CloseNetwork>
+                <Shortcut value="Ctrl + W"/>
+                <Function value="Cerrar la red"/>
+            </CloseNetwork>
+            <Exit>
+                <Shortcut value="Ctrl + Q"/>
+                <Function value="Salir de OpenMarkov"/>
+            </Exit>
         </Specific>
         <CommonTableTitle value="Atajos genéricos"/>
         <Common>
@@ -879,7 +887,7 @@
         </Title>
     </NodeRelation>
     <SelectZoom>
-        <Title value="Seleccionar zoomManager"/>
+        <Title value="Seleccionar zoom"/>
     </SelectZoom>
     <SelectNetworkURL>
         <Title value="Abrir red desde URL"/>

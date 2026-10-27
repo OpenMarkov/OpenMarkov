@@ -42,7 +42,9 @@ public class ShortcutsBox extends JDialog implements ActionListener {
 			"MoveNodes",
 			"ToggleEditionInference",
 			"PreviousNext",
-			"SaveReopen"};
+			"SaveReopen",
+			"CloseNetwork",
+			"Exit"};
 
 
 	private final String[] commonShortcuts = new String[]{

@@ -715,13 +715,21 @@
                 <Function value="Toggle edition/inference mode"/>
             </ToggleEditionInference>
             <PreviousNext>
-                <Shortcut value="Ctrl + A/Q"/>
-                <Function value="Previous/Next OpenMarkov sub-window"/>
+                <Shortcut value="Ctrl + Shift + ←/→"/>
+                <Function value="Previous/Next network tab"/>
             </PreviousNext>
             <SaveReopen>
-                <Shortcut value="Ctrl + W"/>
+                <Shortcut value="Ctrl + Alt + S"/>
                 <Function value="Save and reopen"/>
             </SaveReopen>
+            <CloseNetwork>
+                <Shortcut value="Ctrl + W"/>
+                <Function value="Close network"/>
+            </CloseNetwork>
+            <Exit>
+                <Shortcut value="Ctrl + Q"/>
+                <Function value="Exit OpenMarkov"/>
+            </Exit>
         </Specific>
         <CommonTableTitle value="Common shortcuts"/>
         <Common>
@@ -906,7 +914,7 @@
         </Title>
     </NodeRelation>
     <SelectZoom>
-        <Title value="Select zoomManager"/>
+        <Title value="Select zoom"/>
     </SelectZoom>
     <SelectNetworkURL>
         <Title value="Open network from URL"/>
