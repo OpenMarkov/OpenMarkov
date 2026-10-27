@@ -81,7 +81,8 @@ public class TablePotential extends AbstractIndexedPotential
      *                  Condition: All variables must be discrete.
      */
     public TablePotential(List<Variable> variables, PotentialRole role, double[] table) {
-        this(variables, role);
+        // Not this(variables, role): it made a uniform table of the same size, only to throw it away (error 190)
+        super(variables, role); // AbstractIndexedPotential: computes dimensions, offsets, tableSize
         if (table.length != tableSize) {
             throw new InvalidArgumentException(table.length, "table",
                     "its length must be " + tableSize + ", the product of the numbers of states of the variables");
@@ -533,7 +534,6 @@ public class TablePotential extends AbstractIndexedPotential
                         // Do nothing
                         break;
                 } // When role = UTILITY -> value = 0.0 (default)
-                Arrays.fill(values, value);
             } else if (numVariables == 0) {
                 setValue = true;
                 if (role == PotentialRole.JOINT_PROBABILITY) {
