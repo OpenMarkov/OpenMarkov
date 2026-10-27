@@ -97,10 +97,6 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
      * networkPanel that is currently selected.
      */
     private NetworkEditorPanel currentNetworkEditorPanel = null;
-    /**
-     * Variable to know if a network was opened from a URL
-     */
-    private boolean networkOpenedURL = false;
     
     /**
      * Constructor that registers the arrays of menus.
@@ -308,8 +304,9 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         // changed by mpalacios
         checkInferenceOptions();
         updateUndoRedo(canUndo, canRedo);
-        // If the network has been opened from a URL the save button has to remain disabled
-        setOptionEnabled(ActionCommands.SAVE_NETWORK, !networkOpenedURL);
+        // A network opened from an address used to turn «Save» off here for every network, for the rest of the
+        // session; it has no file now, so saving it asks where (error 171)
+        setOptionEnabled(ActionCommands.SAVE_NETWORK, true);
     }
     
     /**
@@ -889,12 +886,6 @@ public class MainPanelMenuAssistant extends MenuAssistant implements PNEditListe
         //mainPanel.getStandardToolBar().getDecisionTreeButton().setSelected(true);
         setZoom(decisionTreeEditor.getZoom());
         mainPanel.updateFor(currentNetworkEditorPanel);
-    }
-    
-    public void updateOptionsNetworkOpenedURL(boolean networkOpenedURL) {
-        this.networkOpenedURL = networkOpenedURL;
-        setOptionEnabled(ActionCommands.SAVE_NETWORK, !networkOpenedURL);
-        setOptionEnabled(ActionCommands.SAVE_OPEN_NETWORK, !networkOpenedURL);
     }
     
 }

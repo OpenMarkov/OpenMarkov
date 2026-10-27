@@ -203,13 +203,16 @@ public class NetworkFileHandler {
             case NetworkSource.SourceFile sourceFile -> sourceFile.file;
             case NetworkSource.SourceURL sourceURL -> new File(sourceURL.url.getFile());
         }).getName());
+        // A network brought from an address has no local file, as a new one: saving it asks where. It used to take
+        // the path of the address, such as /redes/asia.pgmx, and could be saved there (error 171)
         String networkFile = switch (source) {
             case NetworkSource.SourceFile sourceFile -> sourceFile.file.getAbsolutePath();
-            case NetworkSource.SourceURL sourceURL -> sourceURL.url.getFile();
+            case NetworkSource.SourceURL sourceURL -> null;
         };
         var networksMatchingThisOne = mainPanel.getNetworkEditors()
                                                .stream()
-                                               .filter(editor -> networkFile.equals(editor.getNetworkFile()))
+                                               .filter(editor -> networkFile != null
+                                                       && networkFile.equals(editor.getNetworkFile()))
                                                .toList();
         var anyOfTheNetworksIsModified = networksMatchingThisOne.stream().anyMatch(NetworkEditorPanel::getModified);
         
@@ -240,8 +243,6 @@ public class NetworkFileHandler {
                 UserPreferences.LATEST_OPEN_DIRECTORY.set(sourceFile.file.getAbsoluteFile());
             }
             case NetworkSource.SourceURL sourceURL -> {
-                //LastOpenFiles.setLastFileName(sourceURL.url.getFile());
-                mainPanel.getMainPanelMenuAssistant().updateOptionsNetworkOpenedURL(true);
             }
         }
         System.out.println(stringDatabase.getString("NetworkLoaded.Text"));
@@ -351,7 +352,10 @@ public class NetworkFileHandler {
         if (fileName != null) {
             this.createBackUpNetworkFile(fileName, toBakExtension(networkPanel.getNetworkFile()));
         }
-        this.saveNetwork(networkPanel);
+        // Without a file, saving asks where; if the user does not choose, there is nothing to reopen
+        if (!this.saveNetwork(networkPanel)) {
+            return;
+        }
         fileName = networkPanel.getNetworkFile();
         this.closeCurrentNetwork();
         this.openNetwork(fileName);
