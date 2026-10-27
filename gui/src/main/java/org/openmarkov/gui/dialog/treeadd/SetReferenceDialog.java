@@ -26,6 +26,8 @@ import java.util.Map;
 
 	public SetReferenceDialog(Window owner, TreeADDBranch branch, TreeADDPotential rootTreeADDPotential) {
 		super(owner);
+		// Named as the entry of the menu that opens it: it opened without a title (error 181)
+		setTitle(stringDatabase.getString("TreeADD.SetReference"));
 		this.branch = branch;
 		labels = new JComboBox<>();
 		labels.setSize(new Dimension(150, 25));

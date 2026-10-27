@@ -28,6 +28,8 @@ import java.awt.*;
 
 	public ChangeIntervalDialog(Window owner, TreeADDBranch treeBranch) {
 		super(owner);
+		// Named as the entry of the menu that opens it: it opened without a title (error 181)
+		setTitle(stringDatabase.getString("TreeADD.ChangeInterval"));
 		this.treeBranch = treeBranch;
 		// add(checkBoxPanel, BorderLayout.NORTH );
 		initialize();

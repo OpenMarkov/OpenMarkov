@@ -25,6 +25,8 @@ import java.awt.*;
 
 	public RemoveVariablesDialog(Window owner, TreeADDBranch treeADDBranch, TreeADDPotential parentTreeADD) {
 		super(owner);
+		// Named as the entry of the menu that opens it: it opened without a title (error 181)
+		setTitle(stringDatabase.getString("TreeADD.RemoveVariables"));
 		this.treeADDBranch = treeADDBranch;
 		this.parentTreeADD = parentTreeADD;
 		initialize();
