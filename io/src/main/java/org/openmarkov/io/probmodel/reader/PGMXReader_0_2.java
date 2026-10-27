@@ -1386,7 +1386,7 @@ public class PGMXReader_0_2 {
                 } else if (xmlReference != null) {
                     reference = xmlReference.getText();
                 } else {
-                    throw new PGMXParserException.TreeADDWithoutPotentialOrReferenfe(xmlBranch);
+                    throw new PGMXParserException.TreeADDWithoutPotentialOrReference(xmlBranch);
                 }
                 TreeADDBranch branch = null;
                 if (rootVariable.getVariableType() == VariableType.FINITE_STATES

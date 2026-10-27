@@ -227,7 +227,7 @@
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$EvidenceIsImpossible"
                   value="These findings are impossible in this network: together they have probability zero."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$EvidenceIsIncompatibleWithOther"
-                  value="The new evidence {newFinding} is not compatible with an old evidence: {oldFinding}"/>
+                  value="The finding {newFinding.getVariable.getName} = {newFinding.getValueName} contradicts the finding {oldFinding.getVariable.getName} = {oldFinding.getValueName}, already in the evidence."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$FindingIsNotTheFixedValue"
                   value="{variable.getName} cannot be observed as {observed}: its relation fixes its value at {fixed}. To study another value, change the relation of the node."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$FindingVariableIsMissingAState"
@@ -322,8 +322,8 @@
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$ProbabilisticNetworkTypeNotRecognized"
                   value="Cannot recognize network type {networkType}."/>
     <Localization
-            class="org.openmarkov.core.exception.ProbNetParserException$SomeSubpotentialsArentLinkedToAnICIPotential"
-            value="There are {subPotentials.size} not linked no an ICIPotential ({subPotentials})."/>
+            class="org.openmarkov.core.exception.ProbNetParserException$SomeSubpotentialsAreNotLinkedToAnICIPotential"
+            value="{subPotentials.size} relations are not linked to an ICI potential ({subPotentials})."/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$WrongNumberOfStates"
                   value="There was expected to find {expectedLength} states in variable {variableName}, but {actualLength} were found."/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$WrongVersion"

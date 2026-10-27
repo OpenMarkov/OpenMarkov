@@ -23,23 +23,34 @@ public interface IBundledOpenMarkovException extends IOpenMarkovException, Class
         return IBundledOpenMarkovException.titlifyExceptionName(this);
     }
     
-    List<String> UPPERCASE_LETTERS = List.of("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
-    
+    /**
+     * The title of an exception made of its name: «WrongVersionException» gives «Wrong version». A series of capitals
+     * stays together and in capitals, so that «TreeADDWithoutPotential» gives «Tree ADD without potential» and
+     * «XMLInvalid» «XML invalid»: letter by letter, they used to give «Tree a d d…» and «X m l invalid» (error 182).
+     */
     @NotNull static String titlifyExceptionName(@NotNull Object exception) {
         String simpleName = exception.getClass().getSimpleName();
         if (simpleName.endsWith("Exception")) {
             simpleName = simpleName.substring(0, simpleName.length() - "Exception".length());
         }
-        for (var uppercaseLetter : IBundledOpenMarkovException.UPPERCASE_LETTERS) {
-            simpleName = simpleName.replace(uppercaseLetter, " " + uppercaseLetter.toLowerCase());
+        // A word starts at a capital after a small letter or a digit, and at the last capital of a series followed by
+        // a small letter
+        String[] words = simpleName.split("(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])");
+        StringBuilder title = new StringBuilder();
+        for (String word : words) {
+            if (word.isEmpty()) {
+                continue;
+            }
+            if (!title.isEmpty()) {
+                title.append(' ');
+            }
+            boolean acronym = word.length() > 1 && word.equals(word.toUpperCase());
+            title.append(acronym ? word : word.toLowerCase());
         }
-        while (simpleName.startsWith(" ")) {
-            simpleName = simpleName.substring(1);
+        if (!title.isEmpty()) {
+            title.setCharAt(0, Character.toUpperCase(title.charAt(0)));
         }
-        if (!simpleName.isBlank()) {
-            simpleName = simpleName.substring(0, 1).toUpperCase() + simpleName.substring(1);
-        }
-        return simpleName.replace("\\n", System.lineSeparator());
+        return title.toString().replace("\\n", System.lineSeparator());
     }
     
     static @NotNull String toString(IBundledOpenMarkovException exception) {

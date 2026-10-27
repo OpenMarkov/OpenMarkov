@@ -131,6 +131,17 @@ public class Finding implements ClassLocalizable {
     }
     
     /**
+     * @return the value of the finding as the user names it: the state of a variable with states, or the number of a
+     * numeric one. The message of incompatible findings named them by their inner form (error 186 of the pending list)
+     */
+    public String getValueName() {
+        if (variable.getVariableType() == VariableType.NUMERIC) {
+            return Double.toString(numericalValue);
+        }
+        return getState();
+    }
+    
+    /**
      * @return numericalValue. {@code double}
      * Condition: This finding stores a hybrid or continuous variable
      */

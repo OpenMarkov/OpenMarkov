@@ -110,8 +110,8 @@ public abstract class ProbNetParserException extends UserInputException {
         public final String variableName;
     }
     
-    public static final class SomeSubpotentialsArentLinkedToAnICIPotential extends ProbNetParserException {
-        public SomeSubpotentialsArentLinkedToAnICIPotential(HashMap<String, TablePotential> subPotentials) {
+    public static final class SomeSubpotentialsAreNotLinkedToAnICIPotential extends ProbNetParserException {
+        public SomeSubpotentialsAreNotLinkedToAnICIPotential(HashMap<String, TablePotential> subPotentials) {
             this.subPotentials = subPotentials;
         }
         

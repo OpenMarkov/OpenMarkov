@@ -291,8 +291,8 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String stateName;
     }
     
-    public static final class TreeADDWithoutPotentialOrReferenfe extends PGMXParserException {
-        public TreeADDWithoutPotentialOrReferenfe(Element element) {
+    public static final class TreeADDWithoutPotentialOrReference extends PGMXParserException {
+        public TreeADDWithoutPotentialOrReference(Element element) {
             super(element);
         }
     }

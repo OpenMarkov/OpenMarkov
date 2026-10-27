@@ -548,7 +548,7 @@ import java.util.List;
 	 * @throws ProbNetParserException if remains one or more sub-potential or there are
 	 *                         some missing relation.
 	 */
-	private void addSubPotentials() throws ProbNetParserException.MissingPotential, ProbNetParserException.SomeSubpotentialsArentLinkedToAnICIPotential {
+	private void addSubPotentials() throws ProbNetParserException.MissingPotential, ProbNetParserException.SomeSubpotentialsAreNotLinkedToAnICIPotential {
 		for (ICIPotential potential : iciPotentials) {
 			String[] relations = (String[]) potential.properties.get("Relations");
 			for (String relation : relations) {
@@ -567,7 +567,7 @@ import java.util.List;
             }
         }
         if (!subPotentials.isEmpty()) {
-			throw new ProbNetParserException.SomeSubpotentialsArentLinkedToAnICIPotential(subPotentials);
+			throw new ProbNetParserException.SomeSubpotentialsAreNotLinkedToAnICIPotential(subPotentials);
 		}
 	}
 
