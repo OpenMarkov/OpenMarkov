@@ -72,6 +72,8 @@
     "InvalidNetworkTypeException",
     "InvalidState",
     "LearningException",
+    "LifeTableProbabilityOutOfRange",
+    "LifeTableRateOutOfRange",
     "LimitsValuesAreWrong",
     "LinkAlreadyExists",
     "LinkCannotBePaintedException",

@@ -137,6 +137,38 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String value;
     }
     
+    /** A value of a life table, given as probabilities, that is not a number between 0 and 1. */
+    public static final class LifeTableProbabilityOutOfRange extends PGMXParserException {
+        public LifeTableProbabilityOutOfRange(String variableName, String time, String value, Element element) {
+            super(element);
+            this.variableName = variableName;
+            this.time = time;
+            this.value = value;
+        }
+
+        public final String variableName;
+        /** The time where the stretch of the value starts, as the file writes it. */
+        public final String time;
+        /** The value as the file writes it. */
+        public final String value;
+    }
+
+    /** A value of a life table, given as rates, that is not a finite number not below 0. */
+    public static final class LifeTableRateOutOfRange extends PGMXParserException {
+        public LifeTableRateOutOfRange(String variableName, String time, String value, Element element) {
+            super(element);
+            this.variableName = variableName;
+            this.time = time;
+            this.value = value;
+        }
+
+        public final String variableName;
+        /** The time where the stretch of the value starts, as the file writes it. */
+        public final String time;
+        /** The value as the file writes it. */
+        public final String value;
+    }
+
     /** A discount of a criterion that is not a finite number. */
     public static final class DiscountOutOfRange extends PGMXParserException {
         public DiscountOutOfRange(String criterionName, String value, Element element) {

@@ -25,6 +25,8 @@
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DataNotValid" value="The file cannot be read: {elementName} has the {dataName} {written}, which is not valid."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DiscountMissing" value="Criterion {criterionName} cannot be read: it has no discount."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DiscountOutOfRange" value="Criterion {criterionName} cannot be read: its discount, {value}, must be a finite number."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$LifeTableProbabilityOutOfRange" value="The relation of {variableName} cannot be read: its probability at time {time}, {value}, must be a number between 0 and 1."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$LifeTableRateOutOfRange" value="The relation of {variableName} cannot be read: its rate at time {time}, {value}, must be a finite number not below 0."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$PrecisionOutOfRange" value="Variable {variableName} cannot be read: its precision, {value}, must be a finite number not below 0."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$ProbabilityOfOccurrenceOutOfRange" value="The relation of {variableName} cannot be read: its probability of occurrence, {value}, must be a number between 0 and 1."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UncertaintyInAnEventTable" value="The relation of {variableName} cannot be read: the table of an event or of a transition cannot carry uncertainty."/>

@@ -106,6 +106,14 @@
         <Title value="Not a number"/>
         <Text value="The times and the probabilities of the life table must be numbers"/>
     </LifeTableValueNotANumber>
+    <LifeTableProbabilityOutOfRange>
+        <Title value="Probability out of range"/>
+        <Text value="The probability at time %s, %s, must be a number between 0 and 1"/>
+    </LifeTableProbabilityOutOfRange>
+    <LifeTableRateOutOfRange>
+        <Title value="Rate out of range"/>
+        <Text value="The rate at time %s, %s, must be a finite number not below 0"/>
+    </LifeTableRateOutOfRange>
     <ClipboardNotSet>
         <Text value="This panel has not access to the clipboard"/>
     </ClipboardNotSet>

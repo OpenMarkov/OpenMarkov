@@ -92,7 +92,12 @@ public class PiecewiseExponentialPanel
         });
         ratesCheck = new JCheckBox("Use rates");
         ratesCheck.setSelected(piecewiseExponentialPotential.isUseRates());
-        ratesCheck.setEnabled(false);
+        ratesCheck.addActionListener(actionEvent -> {
+            // Refused if a value of the table would be out of range
+            if (!piecewiseExponentialTablePanel.setRates(ratesCheck.isSelected())) {
+                ratesCheck.setSelected(!ratesCheck.isSelected());
+            }
+        });
         JPanel checksPanel = new JPanel(new FlowLayout());
         checksPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         checksPanel.add(initValueCheck);
@@ -101,6 +106,7 @@ public class PiecewiseExponentialPanel
         upperPanel.add(functionPanel, BorderLayout.SOUTH);
         this.add(upperPanel, BorderLayout.NORTH);
         piecewiseExponentialTablePanel = createTablePanel(data);
+        piecewiseExponentialTablePanel.setRates(piecewiseExponentialPotential.isUseRates());
         this.add(piecewiseExponentialTablePanel, BorderLayout.SOUTH);
         repaint();
     }
@@ -123,9 +129,10 @@ public class PiecewiseExponentialPanel
                 treeMapTable.put(Double.parseDouble(piecewiseExponentialTablePanel.valuesTable.getValueAt(i,1, null).toString()),
                         Double.parseDouble(piecewiseExponentialTablePanel.valuesTable.getValueAt(i,2, null).toString()));
             }
+            // Before the table, whose values are checked as rates or as probabilities
+            newPotential.setUseRates(ratesCheck.isSelected());
             newPotential.setPiecewiseTable(treeMapTable);
             newPotential.setInitTimeFunction(new FunctionPotential(oldPotential.getVariables(), oldPotential.getPotentialRole(),functionPanel.getFunction()));
-            newPotential.setUseRates(ratesCheck.isSelected());
         }catch(Exception e){
             e.printStackTrace();
             throw  new RuntimeException(e);

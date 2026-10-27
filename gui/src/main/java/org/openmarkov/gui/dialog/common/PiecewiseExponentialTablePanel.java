@@ -1,5 +1,6 @@
 package org.openmarkov.gui.dialog.common;
 
+import org.openmarkov.core.model.network.potential.PiecewiseExponentialPotential;
 import org.openmarkov.gui.loader.element.IconBind;
 
 import javax.swing.GroupLayout;
@@ -25,7 +26,11 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
 
     /** Column of the time where each stretch starts; the first column is hidden. */
     private static final int TIME_COLUMN = 1;
-    private static final int PROBABILITY_COLUMN = 2;
+    /** Column of the probability, or the rate, of each stretch. */
+    private static final int VALUE_COLUMN = 2;
+
+    /** Whether the values are rates instead of probabilities. */
+    private boolean rates;
 
     protected JFileChooser chooser = new JFileChooser();
 //    protected Pattern dataPattern = Pattern.compile(".*(\\d+)\\s*;\\s*(\\d+\\.?\\d*).*");
@@ -131,6 +136,10 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
                         warnRepeatedTimeInFile(row[TIME_COLUMN]);
                         return;
                     }
+                    if (!PiecewiseExponentialPotential.isValidValue(row[VALUE_COLUMN], rates)) {
+                        warnValueOutOfRange(row[TIME_COLUMN], row[VALUE_COLUMN], rates);
+                        return;
+                    }
                 }
                 if (!data.isEmpty()) {
                     // Any better way to replace all rows?
@@ -157,8 +166,8 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
     }
 
     /**
-     * The table, which refuses a time or a probability that is not a number, and a time that another row already has:
-     * the cell keeps its value and the user is told.
+     * The table, which refuses a time or a value that is not a number, a value out of range and a time that another
+     * row already has: the cell keeps its value and the user is told.
      */
     @Override
     public KeyTable getValuesTable() {
@@ -166,8 +175,12 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
             valuesTable = new KeyTable(getTableModel(), true, true, true) {
                 @Override
                 public void setValueAt(Object newValue, int row, int column, Object source) {
-                    if ((column == TIME_COLUMN || column == PROBABILITY_COLUMN) && number(newValue) == null) {
+                    if ((column == TIME_COLUMN || column == VALUE_COLUMN) && number(newValue) == null) {
                         warnNotANumber();
+                        return;
+                    }
+                    if (column == VALUE_COLUMN && !PiecewiseExponentialPotential.isValidValue(number(newValue), rates)) {
+                        warnValueOutOfRange(tableModel.getValueAt(row, TIME_COLUMN), number(newValue), rates);
                         return;
                     }
                     if (column == TIME_COLUMN && times(row).contains(number(newValue))) {
@@ -181,6 +194,30 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
             valuesTable.onTables(omjTable -> omjTable.setListSelectionListener(this));
         }
         return valuesTable;
+    }
+
+    /**
+     * Makes the values of the table rates, or probabilities, and titles their column so. Refused, and the user told, if
+     * a value would be out of range.
+     *
+     * @return whether the values are now what was asked
+     */
+    public boolean setRates(boolean rates) {
+        for (int row = 0; row < tableModel.getRowCount(); row++) {
+            Double value = number(tableModel.getValueAt(row, VALUE_COLUMN));
+            if (value != null && !PiecewiseExponentialPotential.isValidValue(value, rates)) {
+                warnValueOutOfRange(tableModel.getValueAt(row, TIME_COLUMN), value, rates);
+                return false;
+            }
+        }
+        this.rates = rates;
+        String title = stringDatabase.getString(rates ? "LifeTable.Columns.Rate" : "LifeTable.Columns.Probability");
+        getValuesTable().onScrollableTable(scrollable -> {
+            // The hidden column is not in the scrollable table
+            scrollable.getColumnModel().getColumn(VALUE_COLUMN - 1).setHeaderValue(title);
+            scrollable.getTableHeader().repaint();
+        });
+        return true;
     }
 
     /**
@@ -226,6 +263,17 @@ public class PiecewiseExponentialTablePanel extends KeyTablePanel {
         JOptionPane.showMessageDialog(this, stringDatabase.getString("LifeTableValueNotANumber.Text"),
                                       stringDatabase.getString("LifeTableValueNotANumber.Title"),
                                       JOptionPane.WARNING_MESSAGE);
+    }
+
+    /**
+     * Tells the user that {@code value}, in the stretch that starts at {@code time}, was refused because it is not a
+     * probability between 0 and 1 or, if {@code rates}, a finite rate not below 0. In a method of its own so tests can
+     * silence the dialog.
+     */
+    protected void warnValueOutOfRange(Object time, double value, boolean rates) {
+        String message = rates ? "LifeTableRateOutOfRange" : "LifeTableProbabilityOutOfRange";
+        JOptionPane.showMessageDialog(this, stringDatabase.getString(message + ".Text").formatted(time, value),
+                                      stringDatabase.getString(message + ".Title"), JOptionPane.WARNING_MESSAGE);
     }
 
     /**

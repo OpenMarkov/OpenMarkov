@@ -544,8 +544,13 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     
     /** @return the number written in {@code element}, or NaN if it is not a number */
     private static double numberIn(Element element) {
+        return numberIn(element.getText());
+    }
+
+    /** @return the number written in {@code text}, or NaN if it is not a number */
+    private static double numberIn(String text) {
         try {
-            return Double.parseDouble(element.getText().strip());
+            return Double.parseDouble(text.strip());
         } catch (NumberFormatException notANumber) {
             return Double.NaN;
         }
@@ -559,19 +564,27 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     
     // 25/10/2023
     protected Potential getPiecewiseExponentialPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
-                                                         List<Variable> variables) {
+                                                         List<Variable> variables) throws PGMXParserException {
         FunctionPotential initTimeFunction = (FunctionPotential) PGMXPotentialParsers.getFunctionPotential(xmlPotential, probNet, xmlRole, variables);
         String lifeTableIntervalsStr = xmlPotential.getChildText(XMLTags.SLICES.toString());
-        String[] numbersString = lifeTableIntervalsStr.split("\\s+");
-        double[] lifeTableIntervals = Arrays.stream(numbersString).mapToDouble(Double::parseDouble).toArray();
-        String lifeTableProbString = xmlPotential.getChildText(XMLTags.VALUES.toString());
-        numbersString = lifeTableProbString.split("\\s+");
-        double[] lifeTableProb = Arrays.stream(numbersString).mapToDouble(Double::parseDouble).toArray();
+        String[] timesString = lifeTableIntervalsStr.split("\\s+");
+        double[] lifeTableIntervals = Arrays.stream(timesString).mapToDouble(Double::parseDouble).toArray();
+        Element xmlValues = xmlPotential.getChild(XMLTags.VALUES.toString());
+        String[] valuesString = xmlValues.getText().split("\\s+");
+        boolean useRates = Boolean.parseBoolean(xmlPotential.getChildText(XMLTags.RATES.toString()));
         TreeMap<Double, Double> lifeTableValues = new TreeMap<>();
         for (int i = 0; i < lifeTableIntervals.length; i++) {
-            lifeTableValues.put(lifeTableIntervals[i], lifeTableProb[i]);
+            double value = numberIn(valuesString[i]);
+            // The values follow the rule of the relation: the file used to be opened with any of them, without a
+            // warning, and the simulation drew times that were not numbers
+            if (!PiecewiseExponentialPotential.isValidValue(value, useRates)) {
+                String variableName = variables.getFirst().getName();
+                throw useRates
+                      ? new PGMXParserException.LifeTableRateOutOfRange(variableName, timesString[i], valuesString[i], xmlValues)
+                      : new PGMXParserException.LifeTableProbabilityOutOfRange(variableName, timesString[i], valuesString[i], xmlValues);
+            }
+            lifeTableValues.put(lifeTableIntervals[i], value);
         }
-        boolean useRates = Boolean.parseBoolean(xmlPotential.getChildText(XMLTags.RATES.toString()));
         return new PiecewiseExponentialPotential(variables, xmlRole, lifeTableValues, initTimeFunction, useRates);
     }
 }

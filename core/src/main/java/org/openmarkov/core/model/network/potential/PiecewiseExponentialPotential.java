@@ -64,7 +64,7 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 	private TreeMap<Double, Double> piecewiseTable= new TreeMap<>();
 
 	/**
-	 * a_i = (1-p_i)^(t_i+1-t_i)
+	 * a_i = (1-p_i)^(t_i+1-t_i), or e^(-rate_i*(t_i+1-t_i)) with rates
 	 * Product(a_i) = a_0*a_1*...*a_i
 	 * <t_i, a_i-1*...*a_0>
 	 */
@@ -82,7 +82,7 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 
 
 	/**
-	 * a_i = (1-p_i)^(t_i+1-t_i)
+	 * a_i = (1-p_i)^(t_i+1-t_i), or e^(-rate_i*(t_i+1-t_i)) with rates
 	 * Product(a_i) = a_0*a_1*...*a_i
 	 * Log(Product(a_i)) = log(a_0*a_1*...*a_i)
 	 */
@@ -147,9 +147,10 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 	 */
 	public PiecewiseExponentialPotential(List<Variable> variables, PotentialRole role, TreeMap piecewiseTable, FunctionPotential initTimeFunction, boolean useRates) {
 		this(variables,role);
+		// Before the table: its values are checked, and the survival computed, as rates or as probabilities
+		this.useRates = useRates;
 		setPiecewiseTable(piecewiseTable);
 		this.initTimeFunction = initTimeFunction;
-		this.useRates = useRates;
 	}
 
 
@@ -183,6 +184,14 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 
 	// Methods
 	public void setPiecewiseTable(TreeMap<Double, Double> piecewiseTable) {
+		// A value out of range used to give times that were not numbers, or negative, without a warning
+		for (double value : piecewiseTable.values()) {
+			if (!isValidValue(value, useRates)) {
+				throw useRates
+				      ? new InvalidArgumentException(value, "rate", "must be a finite number not below 0")
+				      : new InvalidArgumentException(value, "probability", "must be a number between 0 and 1");
+			}
+		}
 		this.piecewiseTable = piecewiseTable;
 		aProduct = new TreeMap<>();
 		inverseAProduct = new TreeMap<>();
@@ -192,13 +201,35 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 		for (int i = 0; i < timeI.size(); i++) {
 			aProduct.put(timeI.get(i),a);
 			if (i<timeI.size() -1) {
-				a *= Math.pow(1 - probI.get(i), timeI.get(i + 1) - timeI.get(i));
+				a *= survival(probI.get(i), timeI.get(i + 1) - timeI.get(i));
 			} else {
 				a = 0;
 			}
 			inverseAProduct.put(a, timeI.get(i));
 		}
 
+	}
+
+	/**
+	 * Whether {@code value} can be in the table: a probability per unit of time between 0 and 1 or, if
+	 * {@code useRates}, a rate that is a finite number not below 0.
+	 */
+	public static boolean isValidValue(double value, boolean useRates) {
+		// Written so that NaN does not pass either
+		return useRates ? value >= 0 && value < Double.POSITIVE_INFINITY : value >= 0 && value <= 1;
+	}
+
+	/**
+	 * The probability that the event does not happen during {@code duration} in a stretch whose value is
+	 * {@code value}. The only place, with {@link #logSurvivalPerUnitOfTime}, where rates and probabilities differ.
+	 */
+	private double survival(double value, double duration) {
+		return useRates ? Math.exp(-value * duration) : Math.pow(1 - value, duration);
+	}
+
+	/** The logarithm of {@link #survival} during one unit of time. */
+	private double logSurvivalPerUnitOfTime(double value) {
+		return useRates ? -value : Math.log(1 - value);
 	}
 	/**
 	 * Returns if an instance of a certain Potential type makes sense given the
@@ -247,7 +278,7 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 		double initValueFloor = piecewiseTable.floorEntry(initValue).getKey().doubleValue(); //time_i
 		double initValueProb = piecewiseTable.floorEntry(initValue).getValue().doubleValue(); //p_i
  		double initValueProduct = aProduct.floorEntry(initValue).getValue().doubleValue() ; //a_i
-		double initValueSurv = Math.pow(1- initValueProb, initValue - initValueFloor)*initValueProduct;
+		double initValueSurv = survival(initValueProb, initValue - initValueFloor)*initValueProduct;
 		//Get logarithm of conditioned random number:
 		double u =randomNumbers[0]*initValueSurv;
 
@@ -273,7 +304,7 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 			prodAi = aProduct.get(tI);
 			pI = piecewiseTable.get(tI);
 		}
-		double sample = tI + (Math.log(u) - Math.log(prodAi))/Math.log(1 - pI);
+		double sample = tI + (Math.log(u) - Math.log(prodAi))/logSurvivalPerUnitOfTime(pI);
 		return sample - initValue;
 
 
@@ -354,7 +385,8 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 	}
 
 	/**
-	 * TreeMap with pairs {@code <lower_bound_interval, probability_per_time_unit>}
+	 * TreeMap with pairs {@code <lower_bound_interval, probability_per_time_unit>}, or
+	 * {@code <lower_bound_interval, rate>} if {@link #isUseRates()}
 	 */
 	public TreeMap<Double, Double> getPiecewiseTable() {
 		return piecewiseTable;
@@ -379,8 +411,20 @@ public class PiecewiseExponentialPotential extends Potential implements DESSimul
 		return useRates;
 	}
 
+	/**
+	 * @throws InvalidArgumentException if a value of the table is out of range as a rate or as a probability; the
+	 *         relation is left as it was
+	 */
 	public void setUseRates(boolean useRates) {
+		boolean before = this.useRates;
 		this.useRates = useRates;
+		try {
+			// The values are checked again, and the survival computed again, as what they now are
+			setPiecewiseTable(piecewiseTable);
+		} catch (InvalidArgumentException valueOutOfRange) {
+			this.useRates = before;
+			throw valueOutOfRange;
+		}
 	}
 
 

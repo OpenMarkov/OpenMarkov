@@ -32,6 +32,12 @@
     <TemporalEvolutionChart>
         <Title value="Chart"/>
     </TemporalEvolutionChart>
+    <LifeTable>
+        <Columns>
+            <Probability value="Probability"/>
+            <Rate value="Rate"/>
+        </Columns>
+    </LifeTable>
     <Dialog>
         <Close value="Close"/>
         <SaveReport value="Save report"/>
