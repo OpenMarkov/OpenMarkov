@@ -314,6 +314,11 @@ public class Util {
         double xRounded;
         
         double scale = Math.pow(10, numDecimals);
+        // From 2^52 on, a double has no decimals to round, and Math.round gave the largest long instead of the
+        // number: the tables showed 922337203.685478 for any value above that size (error 156)
+        if (Math.abs(x * scale) >= 0x1p52) {
+            return x;
+        }
         xRounded = Math.round(x * scale);
         xRounded = xRounded / scale;
         
