@@ -73,8 +73,13 @@ public abstract class GenericEvaluation<T extends DESRecord> {
                 desRecordHashMap.put(node, recordConstructor.newInstance(node));
             }
 
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException e) {
+        } catch (InvocationTargetException e) {
+            // The records refuse a node they cannot simulate with a message that names it, which is not unexpected
+            if (e.getCause() instanceof OpenMarkovException refusal) {
+                throw refusal;
+            }
+            throw new UnreachableException(e);
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             throw new UnreachableException(e);
         }
         setOrphanNodes();

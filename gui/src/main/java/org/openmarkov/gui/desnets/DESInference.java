@@ -3,6 +3,8 @@ package org.openmarkov.gui.desnets;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.model.network.constraint.EveryCycleHasAnEvent;
 import org.openmarkov.core.exception.OpenMarkovException;
+import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
+import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.inference.MonteCarloOptions;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.EqualCriterion;
@@ -12,15 +14,23 @@ import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
+import org.openmarkov.core.model.network.potential.DESSimulablePotential;
 import org.openmarkov.core.model.network.potential.DistributionTablePotential;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
+import org.openmarkov.core.model.network.potential.Potential;
+import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.TransitionTablePotential;
+import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.inference.DES.DESRandomProvider;
 import org.openmarkov.inference.DES.DESRecord;
+import org.openmarkov.inference.DES.exception.ChanceNodeCannotBeDiscretized;
 import org.openmarkov.inference.DES.exception.OnlyDESNetsAllowedException;
+import org.openmarkov.inference.DES.exception.RelationCannotBeSimulated;
+import org.openmarkov.inference.DES.exception.RelationDoesNotTakeEventsIntoAccount;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -112,7 +122,8 @@ public class DESInference {
             if (!initialize(probNet))
                 return;
         } catch (OpenMarkovException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Cannot simulate", JOptionPane.ERROR_MESSAGE);
+            // Its text, which getMessage does not give
+            JOptionPane.showMessageDialog(null, e.toString(), "Cannot simulate", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (monteCarloOptions.isPsa()) {
@@ -217,7 +228,8 @@ public class DESInference {
             if (!initialize(probNet))
                 return;
         } catch (OpenMarkovException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Cannot simulate", JOptionPane.ERROR_MESSAGE);
+            // Its text, which getMessage does not give
+            JOptionPane.showMessageDialog(null, e.toString(), "Cannot simulate", JOptionPane.ERROR_MESSAGE);
             return;
         }
         // Create list with the results of the criteria
@@ -285,6 +297,50 @@ public class DESInference {
     }
     
     
+    /**
+     * Refuses, naming the node, a chance node, event or utility that the simulation cannot use: one without a
+     * relation; a chance node divided into intervals (error 106); a relation of a kind that cannot be simulated, such
+     * as the uniform one that adding or removing a link leaves (error 99); and a relation that has an event among its
+     * parents but does not take events into account, such as a table, which the simulation would read out of when the
+     * event happens (error 98). Whether a relation takes them into account is what the editor asks to offer it. Those
+     * networks used to start the simulation and end in an unexpected error that named no node.
+     */
+    static void checkThatEveryNodeCanBeSimulated(ProbNet probNet) throws OpenMarkovException {
+        for (Node node : probNet.getNodes()) {
+            NodeType nodeType = node.getNodeType();
+            if (nodeType != NodeType.CHANCE && nodeType != NodeType.EVENT && nodeType != NodeType.UTILITY) {
+                continue;
+            }
+            if (node.getPotentials().isEmpty()) {
+                throw new ThereIsNoPotentialInNodeException(node.getName());
+            }
+            if (nodeType == NodeType.CHANCE && node.getVariable().getVariableType() == VariableType.DISCRETIZED) {
+                throw new ChanceNodeCannotBeDiscretized(node);
+            }
+            Potential relation = node.getPotentials().getFirst();
+            String relationName = PotentialUtils.getPotentialName(relation.getClass());
+            if (!(relation instanceof DESSimulablePotential)) {
+                throw new RelationCannotBeSimulated(node, relationName);
+            }
+            for (Variable variable : relation.getVariables()) {
+                if (variable != node.getVariable() && variable.getVariableType() == VariableType.EVENT
+                        && !takesEventsIntoAccount(node, relation)) {
+                    throw new RelationDoesNotTakeEventsIntoAccount(node, relationName, probNet.getNode(variable));
+                }
+            }
+        }
+    }
+
+    /** @return whether the kind of {@code relation} admits its variables in {@code node}, as the editor asks it */
+    private static boolean takesEventsIntoAccount(Node node, Potential relation) {
+        try {
+            return (Boolean) relation.getClass().getMethod("validate", Node.class, List.class, PotentialRole.class)
+                                     .invoke(null, node, relation.getVariables(), relation.getPotentialRole());
+        } catch (ReflectiveOperationException e) {
+            throw new UnreachableException(e);
+        }
+    }
+
     /** Prepares the simulation of {@code probNet} without running it, to simulate one individual at a time. */
     DESInference(ProbNet probNet) throws OpenMarkovException, IOException {
         initialize(probNet);
@@ -449,6 +505,7 @@ public class DESInference {
         for (Criterion standardCriterion : probNet.getDecisionCriteria()) {
             this.criteria.add(new EqualCriterion(standardCriterion));
         }
+        checkThatEveryNodeCanBeSimulated(probNet);
 
 
 // Individual text log.

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClassLocalizations>
+    <Localization class="org.openmarkov.inference.DES.exception.ChanceNodeCannotBeDiscretized"
+                  value="{node.getName} is a numeric variable divided into intervals, which the simulation does not admit: its chance nodes must have finite states or be numeric."/>
     <Localization class="org.openmarkov.inference.DES.exception.EventIsNotParentOf"
                   value="{eventNode} must be parent of {node}."/>
     <Localization class="org.openmarkov.inference.DES.exception.NodeMustBeChance"
@@ -8,6 +10,10 @@
                   value="{node} must be event."/>
     <Localization class="org.openmarkov.inference.DES.exception.NodeMustBeUtility"
                   value="{node} must be utility."/>
+    <Localization class="org.openmarkov.inference.DES.exception.RelationCannotBeSimulated"
+                  value="The relation of {node.getName} is «{relation}», which the simulation cannot use; adding or removing a link may have left it there. Choose another relation in the window of the node."/>
+    <Localization class="org.openmarkov.inference.DES.exception.RelationDoesNotTakeEventsIntoAccount"
+                  value="The relation of {node.getName}, «{relation}», does not take events into account, and {event.getName} is one of its parents: the simulation would fail when it happens. Choose a relation for events in the window of the node."/>
     <Localization class="org.openmarkov.inference.DES.exception.OnlyDESNetsAllowedException"
                   value="Network {probNet.metadata.name} must be a DESNet."/>
 </ClassLocalizations>

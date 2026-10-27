@@ -18,10 +18,11 @@ import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.IndicatorPotential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
-import org.openmarkov.core.model.network.potential.TablePotential;
+import org.openmarkov.core.model.network.potential.TransitionTablePotential;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.core.testTags.TestSpeed;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,7 +67,11 @@ class ACumulativeUtilityIsValuedFromTheStartTest {
         probNet.addLink(illNode, qalyNode, true);
         probNet.addLink(illNode, careNode, true);
         onsetNode.setPotential(new IndicatorPotential(List.of(onset), PotentialRole.CONDITIONAL_PROBABILITY, 20, 1));
-        illNode.setPotential(new TablePotential(List.of(ill, onset), PotentialRole.CONDITIONAL_PROBABILITY));
+        // A transition table: a plain table does not take «Onset» into account, so the simulation refuses it (error 98)
+        TransitionTablePotential illTransition = new TransitionTablePotential(new ArrayList<>(List.of(ill, onset)),
+                                                                              PotentialRole.CONDITIONAL_PROBABILITY);
+        illTransition.setValues(new double[] { 0, 1 });
+        illNode.setPotential(illTransition);
         qalyNode.setPotential(new ExactDistrPotential(List.of(qaly, ill), PotentialRole.UNSPECIFIED, new double[] { 1.0, 0.6 }));
         careNode.setPotential(new ExactDistrPotential(List.of(care, ill), PotentialRole.UNSPECIFIED, new double[] { 100, 2000 }));
         monitoringNode.setPotential(new ExactDistrPotential(List.of(monitoring), PotentialRole.UNSPECIFIED, new double[] { 10 }));
