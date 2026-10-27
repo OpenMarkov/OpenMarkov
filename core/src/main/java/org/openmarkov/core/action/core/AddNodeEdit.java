@@ -87,7 +87,7 @@ public class AddNodeEdit extends PNEdit {
         }
         if (probNet.getConstraintOfClass(NoEventNodes.class) instanceof NoEventNodes constraint) {
             if (this.nodeType == NodeType.EVENT) {
-                constraintChecker.addException(new ConstraintViolatedException.CannotHaveEventNodeException(constraint, this.newNode));
+                constraintChecker.addException(new ConstraintViolatedException.CannotHaveEventNodeException(constraint, this.variable));
             }
         }
         if (probNet.getConstraintOfClass(OnlyContinuousVariables.class) instanceof OnlyContinuousVariables constraint) {

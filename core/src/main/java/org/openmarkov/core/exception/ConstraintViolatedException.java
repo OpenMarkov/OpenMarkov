@@ -424,13 +424,17 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         private final Variable variable;
     }
     
+    /**
+     * A network that does not admit events would get one. It names the variable, which exists before the node: the
+     * node, when it was to be added, did not, and the message said «>>> eventNode is null <<<» (error 178)
+     */
     public static class CannotHaveEventNodeException extends ConstraintViolatedException {
         
-        public final Node eventNode;
+        public final Variable eventVariable;
         
-        public CannotHaveEventNodeException(NoEventNodes constraint, Node eventNode) {
+        public CannotHaveEventNodeException(NoEventNodes constraint, Variable eventVariable) {
             super(constraint);
-            this.eventNode = eventNode;
+            this.eventVariable = eventVariable;
         }
         
     }

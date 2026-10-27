@@ -497,7 +497,7 @@
     <Localization class="org.openmarkov.core.action.core.RemoveConstraintEdit"
                   value="Removal of constraint {constraint}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CannotHaveEventNodeException"
-                  value="{eventNode} is of type event."/>
+                  value="{eventVariable.getName} is an event node, which this network does not admit."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$DiscretizedChanceNode"
                   value="{node.getName} cannot be divided into intervals: in a network of events, a chance node must have finite states or be numeric."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyOneOrphanInitialEventException"

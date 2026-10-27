@@ -28,7 +28,7 @@ public class NoEventNodes extends PNConstraint {
 	@Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {
 		List<Node> eventNodes = probNet.getNodes(NodeType.EVENT);
 		for(Node node : eventNodes) {
-			constraintChecker.addException(new ConstraintViolatedException.CannotHaveEventNodeException(this, node));
+			constraintChecker.addException(new ConstraintViolatedException.CannotHaveEventNodeException(this, node.getVariable()));
 		}
 	}
 
