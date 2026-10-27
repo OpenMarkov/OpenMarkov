@@ -193,8 +193,8 @@
         <Values>0.0 350.0 100.0</Values>
         <UncertainValues>
           <Value />
-          <Value distribution="Gamma-mv" name="cost of therapy 1 (system)">350.0 70.0</Value>
-          <Value distribution="Gamma-mv" name="cost of therapy 2 (system)">100.0 20.0</Value>
+          <Value distribution="Gamma-mv" name="cost of therapy 1 (patient)">350.0 70.0</Value>
+          <Value distribution="Gamma-mv" name="cost of therapy 2 (patient)">100.0 20.0</Value>
         </UncertainValues>
       </Potential>
     </Potentials>

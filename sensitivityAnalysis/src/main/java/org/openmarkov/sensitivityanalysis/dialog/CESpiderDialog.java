@@ -434,7 +434,7 @@ public class CESpiderDialog extends JDialog {
                 if (cepIndex == relativeDecisionIndex)
                     continue;
                 // One series for each parameter no considered
-                XYSeries series = new XYSeries(uncertainParameter.getName());
+                XYSeries series = new XYSeries(uncertainParameter.getLabel());
                 
                 for (GTablePotential gTablePotential : uncertParamPotentials) {
                     ArrayList<CEP> cepsForDecision = (ArrayList<CEP>) gTablePotential.elementTable;

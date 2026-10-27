@@ -334,7 +334,7 @@ public class MapDialog extends JDialog {
         dataset.addSeries("Series 1", data);
         
         // Set the x axis format
-        NumberAxis xAxis = new NumberAxis(hUncertainParameter.getName() + " - " + stringDatabase
+        NumberAxis xAxis = new NumberAxis(hUncertainParameter.getLabel() + " - " + stringDatabase
                 .getString(hAxisVariation.getVariationType().toString()));
         xAxis.setLowerMargin(0);
         xAxis.setUpperMargin(0);
@@ -343,7 +343,7 @@ public class MapDialog extends JDialog {
         xAxis.setNumberFormatOverride(hDecimalFormat);
         
         // Set the y axis format
-        NumberAxis yAxis = new NumberAxis(vUncertainParameter.getName() + " - " + stringDatabase
+        NumberAxis yAxis = new NumberAxis(vUncertainParameter.getLabel() + " - " + stringDatabase
                 .getString(vAxisVariation.getVariationType().toString()));
         yAxis.setLowerMargin(0);
         yAxis.setUpperMargin(0);

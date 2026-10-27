@@ -24,7 +24,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Controller of the sensitivity analysis
@@ -100,18 +103,39 @@ public class SensitivityAnalysisController {
 			// Get uncertain Parameters from the ProbNet
 			List<UncertainParameter> listUncertainParameters = SystematicSampling
 					.getUncertainParameters(this.probNet);
-			orderedUncertainParametersKeys = new ArrayList<>();
-
 			// Gets the named uncertain parameters of the network
-			int unnamedParameter = 1;
-			for (UncertainParameter uncertainParameter : listUncertainParameters) {
-				String parameterName = uncertainParameter.getName();
-				if (parameterName != null && !parameterName.isEmpty()) {
-					this.uncertainParameters.put(parameterName, uncertainParameter);
-					orderedUncertainParametersKeys.add(parameterName);
-				}
-			}
+			LinkedHashMap<String, UncertainParameter> named = byLabel(listUncertainParameters);
+			this.uncertainParameters.putAll(named);
+			orderedUncertainParametersKeys = new ArrayList<>(named.keySet());
 		}
+	}
+
+	/**
+	 * The named parameters, in their order, by the name the analysis shows. Two parameters with the same name, which
+	 * a file can bring, are told apart by the node of their relation: the second used to replace the first, which
+	 * could not be analysed, and the tornado failed on the repeated name (error 308).
+	 */
+	public static LinkedHashMap<String, UncertainParameter> byLabel(List<UncertainParameter> parameters) {
+		Map<String, Long> timesOfEachName = parameters.stream()
+				.filter(UncertainParameter::hasName)
+				.collect(Collectors.groupingBy(UncertainParameter::getName, Collectors.counting()));
+		LinkedHashMap<String, UncertainParameter> byLabel = new LinkedHashMap<>();
+		for (UncertainParameter parameter : parameters) {
+			if (!parameter.hasName()) {
+				continue;
+			}
+			String label = timesOfEachName.get(parameter.getName()) == 1
+					? parameter.getName()
+					: parameter.getName() + " [" + parameter.getPotential().getVariable(0).getName() + "]";
+			// Still repeated within the same node
+			String uniqueLabel = label;
+			for (int copy = 2; byLabel.containsKey(uniqueLabel); copy++) {
+				uniqueLabel = label + " (" + copy + ")";
+			}
+			parameter.setLabel(uniqueLabel);
+			byLabel.put(uniqueLabel, parameter);
+		}
+		return byLabel;
 	}
 
 	public SensitivityAnalysisModel getSensitivityAnalysisModel() {

@@ -708,6 +708,7 @@ public class TablePotentialPanel extends ProbabilityTablePanel {
         } else {
             uncertDialog = new UncertainValuesDialog(ComponentUtilities.getOwner(this), evidenceCase, tablePotential);
         }
+        uncertDialog.refuseTheNamesOfTheOtherParameters(node.getProbNet());
         var button = uncertDialog.requestUncertainValues();
         if (button != OkCancelDialog.ChosenOption.Ok) {
             return;

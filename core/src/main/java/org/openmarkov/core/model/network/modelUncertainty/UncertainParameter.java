@@ -96,4 +96,24 @@ public class UncertainParameter {
 		return uncertainValue.hasName();
 	}
 
+	/** The name an analysis shows, when it is not the name of the value. */
+	private String label;
+
+	/**
+	 * @return the name to show: that of the value or, when another parameter of the network has the same one, the
+	 * one the analysis gave this parameter to tell them apart
+	 */
+	public String getLabel() {
+		return label == null ? getName() : label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	/** @return the potential that owns this parameter */
+	public Potential getPotential() {
+		return potential;
+	}
+
 }

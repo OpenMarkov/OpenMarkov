@@ -11,6 +11,7 @@ import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.modelUncertainty.ComplementFamily;
@@ -21,7 +22,9 @@ import org.openmarkov.core.model.network.modelUncertainty.FamilyDistribution;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunction;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionManager;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionType;
+import org.openmarkov.core.model.network.modelUncertainty.SystematicSampling;
 import org.openmarkov.core.model.network.modelUncertainty.Tools;
+import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
 import org.openmarkov.core.model.network.potential.DistributionsOfAColumn;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
@@ -51,7 +54,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
@@ -89,6 +96,9 @@ public class UncertainValuesDialog extends OkCancelDialog {
     
     // 20/05/2025 Begin DES uncertainty
     private boolean isDES = false;
+    
+    /** The names of the other parameters of the network, each with the node whose relation has it. */
+    private Map<String, String> namesOfTheOtherParameters = Map.of();
     
     /**
      * @param owner
@@ -368,6 +378,66 @@ public class UncertainValuesDialog extends OkCancelDialog {
         return uncertainColumn;
     }
     
+    /**
+     * Makes OK refuse a name that another parameter of {@code probNet} already has. The analyses tell parameters
+     * apart by their names: two with the same one used to show as one, and the tornado failed (error 308).
+     */
+    public void refuseTheNamesOfTheOtherParameters(ProbNet probNet) {
+        List<String> namesOfThisColumn = new ArrayList<>();
+        for (int row = 0; row < distributionTableModel.getRowCount(); row++) {
+            namesOfThisColumn.add((String) distributionTableModel.getValueAt(row, NAME_COLUMN_INDEX));
+        }
+        namesOfTheOtherParameters = namesOfTheOtherParameters(SystematicSampling.getUncertainParameters(probNet),
+                                                              variable, namesOfThisColumn);
+    }
+    
+    /**
+     * @param namesOfThisColumn the names the column being edited has in the network; each one, in the node of
+     *                          {@code variable}, is not another parameter
+     *
+     * @return the names of the other parameters, each with the node whose relation has it
+     */
+    static Map<String, String> namesOfTheOtherParameters(List<UncertainParameter> parameters, Variable variable,
+                                                         List<String> namesOfThisColumn) {
+        List<String> ofThisColumn = new ArrayList<>(namesOfThisColumn);
+        Map<String, String> nodeOfEachName = new HashMap<>();
+        for (UncertainParameter parameter : parameters) {
+            if (!parameter.hasName()) {
+                continue;
+            }
+            String node = parameter.getPotential().getVariable(0).getName();
+            if (variable != null && node.equals(variable.getName()) && ofThisColumn.remove(parameter.getName())) {
+                continue;
+            }
+            nodeOfEachName.putIfAbsent(parameter.getName(), node);
+        }
+        return nodeOfEachName;
+    }
+    
+    /**
+     * @return what is wrong if a name of {@code uncertainValues} is that of another parameter of the network or is
+     * repeated in the column, or null
+     */
+    static String repeatedName(List<UncertainValue> uncertainValues, Map<String, String> namesOfTheOtherParameters) {
+        Set<String> namesOfThisColumn = new HashSet<>();
+        for (UncertainValue uncertainValue : uncertainValues) {
+            if (!uncertainValue.hasName()) {
+                continue;
+            }
+            String name = uncertainValue.getName();
+            String node = namesOfTheOtherParameters.get(name);
+            if (node != null) {
+                return "«" + name + "» is already the name of a parameter of " + node + ".\n"
+                       + "Each parameter needs a name of its own.";
+            }
+            if (!namesOfThisColumn.add(name)) {
+                return "«" + name + "» is the name of two parameters of this column.\n"
+                       + "Each parameter needs a name of its own.";
+            }
+        }
+        return null;
+    }
+    
     public int getPosBase() {
         return posBase;
     }
@@ -526,6 +596,11 @@ public class UncertainValuesDialog extends OkCancelDialog {
                     + "(it is only optional when there is a single Complement entry).",
                     "Invalid distribution parameter",
                     JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        String repeated = repeatedName(uncertainValues, namesOfTheOtherParameters);
+        if (repeated != null) {
+            JOptionPane.showMessageDialog(this, repeated, "Repeated parameter name", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if (isChanceVariable) {

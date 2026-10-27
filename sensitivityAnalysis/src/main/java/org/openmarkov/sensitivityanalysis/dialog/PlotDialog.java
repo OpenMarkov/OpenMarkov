@@ -241,7 +241,7 @@ public class PlotDialog extends JDialog {
                 series = new XYSeries(
                         decisionVariable.getName() + " = " + decisionVariable.getStateName(decisionStateIndex));
             } else {
-                series = new XYSeries(uncertainParameter.getName());
+                series = new XYSeries(uncertainParameter.getLabel());
             }
             
             int seriesIndex = 0;
@@ -277,7 +277,7 @@ public class PlotDialog extends JDialog {
         /* Plot diagram chart */
         JFreeChart chart = ChartFactory.createXYLineChart(stringDatabase.getString(AnalysisType.PLOT.toString()),
                                                           // Chart title
-                                                          uncertainParameter.getName(),                                           // X axis label
+                                                          uncertainParameter.getLabel(),                                           // X axis label
                                                           stringDatabase.getString("SensitivityAnalysis.General.GlobalUtility"),  // Y axis label
                                                           dataset,                                                                // data
                                                           PlotOrientation.VERTICAL,                                               // Orientation

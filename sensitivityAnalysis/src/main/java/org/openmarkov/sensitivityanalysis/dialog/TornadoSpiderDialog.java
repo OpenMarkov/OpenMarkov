@@ -396,7 +396,7 @@ public class TornadoSpiderDialog extends JDialog {
         
         // Iterates through the series
         for (TornadoBar tornadoBar : tornadoBars) {
-            categoryKeys[series] = tornadoBar.getUncertainParameter().getName();
+            categoryKeys[series] = tornadoBar.getUncertainParameter().getLabel();
             double minValue = tornadoBar.getMinValue();
             double maxValue = tornadoBar.getMaxValue();
             
@@ -566,7 +566,7 @@ public class TornadoSpiderDialog extends JDialog {
             }
             TablePotential uncertainParameterPotential = veSensAnTornadoSpider.getUncertainParametersPotentials()
                                                                               .get(uncertainParameter);
-            XYSeries series = new XYSeries(uncertainParameter.getName());
+            XYSeries series = new XYSeries(uncertainParameter.getLabel());
             int seriesIndex = 0;
             
             // Get the count of the iteration
