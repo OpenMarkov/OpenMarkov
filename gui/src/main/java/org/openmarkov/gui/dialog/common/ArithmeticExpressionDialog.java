@@ -110,7 +110,8 @@ import java.util.List;
         variableList.addMouseListener(new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (e.getClickCount() < 1) {
+                // On the double click that its help asks for, once: each click of it inserted the text (error 165)
+                if (e.getClickCount() != 2) {
                     return;
                 }
                 try {
@@ -132,7 +133,8 @@ import java.util.List;
         functionList.addMouseListener(new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (e.getClickCount() < 1) {
+                // On the double click that its help asks for, once: each click of it inserted the text (error 165)
+                if (e.getClickCount() != 2) {
                     return;
                 }
                 try {
