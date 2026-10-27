@@ -9,6 +9,7 @@ package org.openmarkov.gui.dialog.node;
 
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 
+import javax.swing.JRadioButton;
 import java.awt.BorderLayout;
 import java.awt.Window;
 import java.util.List;
@@ -31,8 +32,15 @@ import java.util.List;
 	}
 
 	private void initialize() {
-
+		// The title is that of the button that opens it, as nothing said what the window was for (error 180)
+		setTitle(stringDatabase.getString("StandardDomain.Text"));
 		configureComponentsPanel();
+		// «OK» waits for a choice: accepting without one ended in an unexpected error (error 173)
+		getOKButton().setEnabled(false);
+		for (JRadioButton radioButton : standardDomainsPanel.getRadioButtons()) {
+			radioButton.addItemListener(event -> getOKButton().setEnabled(
+					standardDomainsPanel.getRadioButtons().stream().anyMatch(JRadioButton::isSelected)));
+		}
 		pack();
 	}
 
@@ -71,8 +79,7 @@ import java.util.List;
 	 * @return true if the dialog box can be closed.
 	 */
 	@Override protected boolean doOkClickBeforeHide() {
-
-		return true;
+		return standardDomainsPanel.hasChosenStates();
 	}
 
 	/**

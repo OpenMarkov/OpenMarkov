@@ -55,7 +55,14 @@ public class StandardCriteriaDialog extends OkCancelDialog {
     }
     
     private void initialize() {
+        // The title is that of the button that opens it, as nothing said what the window was for (error 180)
+        setTitle(stringDatabase.getString("StandardCriteria.Text"));
         configureComponentsPanel();
+        // «OK» waits for a choice: accepting without one removed the criteria of the network (error 174)
+        getOKButton().setEnabled(false);
+        for (JRadioButton radioButton : standardCriteriaPanel.getRadioButtons()) {
+            radioButton.addItemListener(event -> getOKButton().setEnabled(getSelectedCriteria() != null));
+        }
         pack();
     }
     
@@ -82,35 +89,55 @@ public class StandardCriteriaDialog extends OkCancelDialog {
      * @return true if the dialog box can be closed.
      */
     @Override protected boolean doOkClickBeforeHide() throws DoEditException {
-        
-        // This must be a single operation
-        probNet.getPNESupport().openNewSubEditHistory();
-        
-        // Remove all criterion in the probNet with edits
-        while (!probNet.getDecisionCriteria().isEmpty()) {
-            Criterion criterionToBeDeleted = probNet.getDecisionCriteria().get(0);
-            DecisionCriteriaEdit edit = new DecisionCriteriaEdit(probNet, StateAction.REMOVE, criterionToBeDeleted, null);
-            edit.executeEdit();
+        // Nothing is changed before the choice is known (error 174)
+        if (getSelectedCriteria() == null) {
+            return false;
         }
-        
-        //Get the list with the new criteria
         List<Criterion> defaultCriteria = getDefaultCriteria();
         
-        // Add new criteria to the probNet
-        for (Criterion criterion : defaultCriteria) {
-            DecisionCriteriaEdit edit = new DecisionCriteriaEdit(probNet, StateAction.ADD, criterion, null);
-            edit.executeEdit();
+        // This must be a single operation, closed even if an edit fails: an open sub-history left the network
+        // unmarked as modified for the rest of the session
+        probNet.getPNESupport().openNewSubEditHistory();
+        boolean done = false;
+        try {
+            // Remove all criterion in the probNet with edits
+            while (!probNet.getDecisionCriteria().isEmpty()) {
+                Criterion criterionToBeDeleted = probNet.getDecisionCriteria().get(0);
+                DecisionCriteriaEdit edit = new DecisionCriteriaEdit(probNet, StateAction.REMOVE, criterionToBeDeleted, null);
+                edit.executeEdit();
+            }
+            
+            // Add new criteria to the probNet
+            for (Criterion criterion : defaultCriteria) {
+                DecisionCriteriaEdit edit = new DecisionCriteriaEdit(probNet, StateAction.ADD, criterion, null);
+                edit.executeEdit();
+            }
+            
+            // Set as default the first criteria of the probNet
+            Criterion defaultCriterion = probNet.getDecisionCriteria().get(0);
+            for (Variable variable : probNet.getVariables(NodeType.UTILITY)) {
+                variable.setDecisionCriterion(defaultCriterion);
+            }
+            done = true;
+        } finally {
+            if (done) {
+                probNet.getPNESupport().closeSubEditHistory();
+            } else {
+                probNet.getPNESupport().cancelLastSubEditHistory();
+            }
         }
-        
-        // Set as default the first criteria of the probNet
-        Criterion defaultCriterion = probNet.getDecisionCriteria().get(0);
-        for (Variable variable : probNet.getVariables(NodeType.UTILITY)) {
-            variable.setDecisionCriterion(defaultCriterion);
-        }
-        
-        probNet.getPNESupport().closeSubEditHistory();
         this.getParent().repaint();
         return true;
+    }
+
+    /** @return the text of the chosen option, or null if none is chosen yet */
+    private String getSelectedCriteria() {
+        for (JRadioButton radioButton : standardCriteriaPanel.getRadioButtons()) {
+            if (radioButton.isSelected()) {
+                return radioButton.getText();
+            }
+        }
+        return null;
     }
     
     public ChosenOption requestValues() {
@@ -128,12 +155,7 @@ public class StandardCriteriaDialog extends OkCancelDialog {
     private List<Criterion> getDefaultCriteria() {
         List<Criterion> defaultCriteria = new ArrayList<Criterion>();
         
-        String selectedDefaultCriteria = null;
-        for (JRadioButton radioButton : standardCriteriaPanel.getRadioButtons()) {
-            if (radioButton.isSelected()) {
-                selectedDefaultCriteria = radioButton.getText();
-            }
-        }
+        String selectedDefaultCriteria = getSelectedCriteria();
         
         if (selectedDefaultCriteria.equals(stringDatabase.getString("defaultCriteria.costBenefitQALY.Text"))) {
             Criterion costCriterion = new Criterion(stringDatabase.getString("defaultCriteria.cost.Text"),

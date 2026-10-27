@@ -15,6 +15,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import java.awt.BorderLayout;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +46,11 @@ import java.util.List;
 			// radioButton.addItemListener(this);
 			radioButtons.add(radioButton);
 			buttonGroup.add(radioButton);
-            radioButton.addItemListener(e -> chosenStates = defaultState);
+            radioButton.addItemListener(e -> {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    chosenStates = defaultState;
+                }
+            });
 			add(radioButton, BorderLayout.CENTER);
 		}
 	}
@@ -57,6 +62,11 @@ import java.util.List;
     
     public List<String> getChosenStates() {
         return Collections.unmodifiableList(this.chosenStates);
+    }
+
+    /** @return whether a domain has been chosen */
+    public boolean hasChosenStates() {
+        return chosenStates != null;
     }
     
     private List<String> chosenStates;
