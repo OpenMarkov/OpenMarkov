@@ -19,13 +19,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Reads a case database in ARFF, the format of Weka: a header with {@code @relation}, an {@code @attribute} line per
- * column and {@code @data}, followed by one case per line, its values separated by commas. Only nominal columns,
- * those that list their values between braces, can be read. The keywords may be written in any case, a name or a
+ * column and {@code @data}, followed by one case per line, its values separated by commas. Nominal columns, those
+ * that list their values between braces, and numeric ones ({@code numeric}, {@code real} or {@code integer}) can be
+ * read; those of text or dates cannot. The states of a numeric column are the numbers its cases have, in increasing
+ * order, so that the window of learning can discretize it. The keywords may be written in any case, a name or a
  * value may be quoted with {@code '} or {@code "}, and a {@code %} that is not quoted starts a comment, which ends
  * with the line, if it starts a word: within an unquoted word, such as {@code 50%}, it is part of it, as the
  * writers of OpenMarkov before October 2026 wrote it and its former reader read it.
@@ -50,6 +55,8 @@ final class ArffReader {
     private final List<List<String>> states = new ArrayList<>();
     /** How many of the states of each column its header declares; the unknown value of the cases goes after them */
     private final List<Integer> declared = new ArrayList<>();
+    /** For each numeric column, the state of each number its cases have; null for a nominal column */
+    private final List<Map<Double, Integer>> statesOfTheNumbers = new ArrayList<>();
     private final List<int[]> cases = new ArrayList<>();
 
     private ArffReader() {
@@ -63,6 +70,7 @@ final class ArffReader {
     static CaseDatabase read(Path file) throws IOException, ParseException {
         ArffReader reader = new ArffReader();
         reader.readLines(text(file).lines().toList());
+        reader.sortTheNumericColumns();
         List<Variable> variables = new ArrayList<>();
         for (int column = 0; column < reader.names.size(); column++) {
             variables.add(new Variable(reader.names.get(column), reader.states.get(column).toArray(new String[0])));
@@ -122,10 +130,18 @@ final class ArffReader {
         if (name.isEmpty()) {
             throw new ParseException("Line " + lineNumber + ": the attribute has no name", lineNumber);
         }
+        if (List.of("numeric", "real", "integer").contains(type.toLowerCase(Locale.ROOT))) {
+            // Its states are the numbers of its cases (error 120 of the pending list)
+            names.add(name);
+            states.add(new ArrayList<>());
+            declared.add(0);
+            statesOfTheNumbers.add(new HashMap<>());
+            return;
+        }
         if (!type.startsWith("{") || !type.endsWith("}")) {
             throw new ParseException("Line " + lineNumber + ": the attribute «" + name + "» is of type «" + type
-                                     + "»; only attributes that list their values between braces can be read",
-                                     lineNumber);
+                                     + "»; only attributes that list their values between braces, or numeric ones, "
+                                     + "can be read", lineNumber);
         }
         List<String> values = new ArrayList<>();
         String list = type.substring(1, type.length() - 1);
@@ -142,6 +158,7 @@ final class ArffReader {
         names.add(name);
         states.add(values);
         declared.add(values.size());
+        statesOfTheNumbers.add(null);
     }
 
     /** Where the name of an attribute ends: at its closing quote, or else at the first blank or brace. */
@@ -178,6 +195,10 @@ final class ArffReader {
                 continue;
             }
             String value = unquote(field);
+            if (statesOfTheNumbers.get(column) != null) {
+                example[column] = stateOfTheNumber(column, value, lineNumber);
+                continue;
+            }
             // A quoted ? is a value of that name, which the header must declare
             List<String> declaredValues = values.subList(0, declared.get(column));
             example[column] = declaredValues.indexOf(value);
@@ -187,6 +208,51 @@ final class ArffReader {
             }
         }
         cases.add(example);
+    }
+
+    /**
+     * @return the state of {@code value} in a numeric column: the one of the same number, however a case before wrote
+     * it, or a new one
+     */
+    private int stateOfTheNumber(int column, String value, int lineNumber) throws ParseException {
+        double number;
+        try {
+            number = Double.parseDouble(value);
+        } catch (NumberFormatException notANumber) {
+            number = Double.NaN;
+        }
+        if (!Double.isFinite(number)) {
+            throw new ParseException("Line " + lineNumber + ": the value «" + value + "» of the numeric attribute «"
+                                     + names.get(column) + "» is not a number", lineNumber);
+        }
+        List<String> values = states.get(column);
+        Integer state = statesOfTheNumbers.get(column).putIfAbsent(number, values.size());
+        if (state != null) {
+            return state;
+        }
+        values.add(value);
+        return values.size() - 1;
+    }
+
+    /** Puts the states of each numeric column in increasing order, the unknown value last, and renumbers the cases. */
+    private void sortTheNumericColumns() {
+        for (int column = 0; column < names.size(); column++) {
+            if (statesOfTheNumbers.get(column) == null) {
+                continue;
+            }
+            List<String> values = states.get(column);
+            List<String> sorted = new ArrayList<>(values);
+            sorted.sort(Comparator.comparing((String value) -> value.equals(MISSING))
+                                  .thenComparingDouble(value -> value.equals(MISSING) ? 0 : Double.parseDouble(value)));
+            Map<String, Integer> sortedState = new HashMap<>();
+            for (int state = 0; state < sorted.size(); state++) {
+                sortedState.put(sorted.get(state), state);
+            }
+            for (int[] example : cases) {
+                example[column] = sortedState.get(values.get(example[column]));
+            }
+            states.set(column, sorted);
+        }
     }
 
     /**

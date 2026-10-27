@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A file of Weka is read one case per line, whatever characters its names have (errors 118, 119, 121 and 123), and
- * with the comments that follow what a line says (error 247).
+ * with the comments that follow what a line says (error 247); its numeric columns too (error 120).
  *
  * @author Manuel Arias
  */
@@ -172,12 +172,40 @@ class WekaFilesAreReadLineByLineTest {
         assertTrue(refusal("@relation r\nX {a,b}\n@data\na\n").contains("Line 2"));
     }
 
-    /** Which columns can be read is a decision still to be taken (error 120): until then, they are refused. */
+    /**
+     * The states of a numeric column are the numbers of its cases, in increasing order and each one once, however it
+     * is written, so that the window of learning can discretize it; the unknown value goes last (error 120).
+     */
     @Test
-    void aColumnOfNumbersIsRefusedNamingIt() throws Exception {
-        String message = refusal("@relation r\n@attribute age numeric\n@data\n32\n");
+    void aColumnOfNumbersHasItsNumbersAsStates() throws Exception {
+        CaseDatabase database = read("@relation r\n@attribute age numeric\n@attribute X {a,b}\n@data\n"
+                                     + "32,a\n7.5,b\n?,a\n32.0,b\n1e2,a\n");
 
-        assertTrue(message.contains("«age»"), message);
+        assertEquals(List.of("7.5", "32", "1e2", "?"), states(database.getVariables().getFirst()));
+        assertArrayEquals(new int[][]{{1, 0}, {0, 1}, {3, 0}, {1, 1}, {2, 0}}, database.getCases());
+    }
+
+    @Test
+    void realAndIntegerAreNumericToo() throws Exception {
+        CaseDatabase database = read("@relation r\n@attribute w REAL\n@attribute n Integer\n@data\n2.5,3\n1,3\n");
+
+        assertEquals(List.of("1", "2.5"), states(database.getVariables().getFirst()));
+        assertEquals(List.of("3"), states(database.getVariables().get(1)));
+    }
+
+    @Test
+    void aValueOfANumericColumnThatIsNotANumberIsRefused() throws Exception {
+        assertEquals("Line 5: the value «old» of the numeric attribute «age» is not a number",
+                     refusal("@relation r\n@attribute age numeric\n@data\n32\nold\n"));
+    }
+
+    /** As the team decided (error 120), columns of text or dates are not variables of a network. */
+    @Test
+    void aColumnOfTextOrDatesIsRefusedNamingIt() throws Exception {
+        assertEquals("Line 2: the attribute «name» is of type «string»; only attributes that list their values between "
+                     + "braces, or numeric ones, can be read",
+                     refusal("@relation r\n@attribute name string\n@data\nAna\n"));
+        assertTrue(refusal("@relation r\n@attribute day date 'yyyy-MM-dd'\n@data\n'2026-10-27'\n").contains("«day»"));
     }
 
     @Test
@@ -235,8 +263,8 @@ class WekaFilesAreReadLineByLineTest {
     /** What a comment leaves out is missing, as in Weka. */
     @Test
     void aCommentThatLeavesOutPartOfALineMakesItBeRefused() throws Exception {
-        assertEquals("Line 2: the attribute «X» is of type «{a,»; only attributes that list their values between braces "
-                     + "can be read", refusal("""
+        assertEquals("Line 2: the attribute «X» is of type «{a,»; only attributes that list their values between braces, "
+                     + "or numeric ones, can be read", refusal("""
                                                      @relation test
                                                      @attribute X {a, %b}
                                                      @data
