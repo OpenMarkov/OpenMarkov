@@ -305,7 +305,7 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 
 La lista tiene \textbf{359 errores}; 215 de ellos son defectos nuevos: 98 encontrados al
 comprobar o corregir los demás, 103 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{50} necesitan antes una decisión del equipo. Por esfuerzo estimado: 318 pequeños, 41 medios y 0 grandes.
-De los 359, 349 están ya corregidos, 1 lo está en parte y 2 están cerrados sin arreglo.
+De los 359, 350 están ya corregidos, 1 lo está en parte y 2 están cerrados sin arreglo.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -336,18 +336,7 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \end{center}
 
 \paragraph{Errores que hay que corregir antes que otros}
-El grafo recoge las filas \emph{Corregir antes} de las fichas. Una flecha de A a B dice que A hay que
-corregirlo antes que B, o a la vez como mínimo. Solo aparecen errores sin corregir. Los demás errores sin corregir no esperan a ninguno.
-
-\begin{center}
-\begin{tikzpicture}[>=stealth,
-  err/.style={circle,draw=black!70,fill=fichafondo,minimum size=9.5mm,inner sep=0pt,font=\small\bfseries}]
-\node[err] (e37) at (2.4,-3.4) {\hyperref[err:37]{37}};
-\node[err] (e31) at (2.4,-5.0) {\hyperref[err:31]{31}};
-\draw[->,thick,black!70] (e37) -- (e31);
-
-\end{tikzpicture}
-\end{center}
+Ya no queda ninguno. El único orden pendiente era corregir el \hyperref[err:37]{error~37} antes que el \hyperref[err:31]{31}, y los dos están corregidos; ningún error sin corregir tiene una fila \emph{Corregir antes}.
 
 La tabla siguiente es la lista completa, en el orden del documento. La última columna da el
 esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisión de equipo.
@@ -723,7 +712,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:346]{346} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un cambio que rompe dos restricciones distintas se titula «Multiple constraints violateds» & \texttt{core} & S \hfill No\\
 \hyperref[err:360]{360} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un plan escribe los estados de una rama en el orden de un HashSet, no en el de la variable & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:rendimiento}.\ Rendimiento}}\\
-\hyperref[err:189]{189} & Entrar en modo inferencia con una red grande congela la ventana & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:189]{189} & \textcolor{corregidoverde}{\textbf{Corregido}} · Entrar en modo inferencia con una red grande congela la ventana & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:190]{190} & \textcolor{corregidoverde}{\textbf{Corregido}} · Cada resultado de una operación sobre tablas reserva una tabla que tira & \texttt{core} & S \hfill No\\
 \hyperref[err:191]{191} & \textcolor{corregidoverde}{\textbf{Corregido}} · Cada tabla de probabilidad nueva se rellena dos veces con el mismo valor & \texttt{core} & S \hfill No\\
 \hyperref[err:192]{192} & \textcolor{corregidoverde}{\textbf{Corregido}} · La maximización reserva la tabla de la unión de variables sin usarla & \texttt{core} & S \hfill No\\
@@ -4667,7 +4656,7 @@ Prueba de regresión: el fichero con A→B y B→A debe dar la excepción o el a
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.constraint
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/constraint/ValidState.java:23-83} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:123-124} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:147-152} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Variable.java:292-307} \newline \path{gui/src/main/java/org/openmarkov/gui/component/DiscretizeTablePanel.java:733-746} \newline \path{gui/src/main/java/org/openmarkov/gui/component/DiscretizeTablePanel.java:907-940}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/constraint/ValidState.java:23-85} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:123-124} \newline \path{core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:144-149} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Variable.java:293-308} \newline \path{gui/src/main/java/org/openmarkov/gui/component/DiscretizeTablePanel.java:726-739} \newline \path{gui/src/main/java/org/openmarkov/gui/component/DiscretizeTablePanel.java:900-933}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si «dos estados con el mismo nombre» se decide ignorando mayúsculas o no, y si la regla vive en una restricción activa o directamente en la variable y en las ediciones
@@ -4688,7 +4677,7 @@ Las copias de la regla ya no coinciden entre sí, aunque hoy no se note porque l
 
 Hay además una trampa para el arreglo: para \texttt{RENAME}, \texttt{Node\allowbreak{}State\allowbreak{}Edit} guarda en \texttt{new\allowbreak{}State} el estado \textbf{seleccionado} (línea 124), no uno con el nombre nuevo, y la comprobación usa \texttt{get\allowbreak{}New\allowbreak{}State(\allowbreak{}).\allowbreak{}get\allowbreak{}Name(\allowbreak{})}. Si se activara \texttt{Valid\allowbreak{}State} tal cual, cada renombrado preguntaría por el nombre actual del propio estado, que existe siempre, y \textbf{todos} los renombrados se rechazarían.
 \paragraph{El código}
-core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:123-124, 147-152
+core/src/main/java/org/openmarkov/core/action/core/NodeStateEdit.java:123-124, 144-149
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4716,7 +4705,7 @@ core/src/main/java/org/openmarkov/core/model/network/constraint/ValidState.java:
 \end{Highlighting}
 \end{Shaded}
 
-core/src/main/java/org/openmarkov/core/model/network/Variable.java:292-299
+core/src/main/java/org/openmarkov/core/model/network/Variable.java:293-300
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4780,7 +4769,7 @@ Pruebas: añadir un estado con nombre repetido y renombrar un estado a ``\,'' de
 \fichakey{Estado}Corregido en parte en el commit \texttt{d50cce8} (26-10-2026), con lo que decidió Manuel Arias. \texttt{No\allowbreak{}Mixed\allowbreak{}Parents}, la única de las ocho que pide un algoritmo (la eliminación de variables), es ahora obligatoria en los diagramas de influencia, los de Markov y las redes de análisis de decisiones: el editor rechaza el enlace que mezcla padres de utilidad y de azar, con el mismo mensaje que antes salía al evaluar. Para ello, «Absorb parents» comprueba cada paso al hacerlo, después de quitar los padres; comprobándolos todos antes, veía los enlaces nuevos junto a los padres viejos y se rechazaba en \texttt{ID-\allowbreak{}used-\allowbreak{}car-\allowbreak{}buyer.\allowbreak{}pgmx} y \texttt{ID-\allowbreak{}mediastinet.\allowbreak{}pgmx}. Ninguna de las 148 redes del repositorio que se leen tiene padres mezclados. Sigue la decisión sobre las otras siete y sobre qué significa OPTIONAL; medido el mismo día, ningún algoritmo las pide y la mayoría de las redes del repositorio incumplen alguna (\texttt{No\allowbreak{}Loops}, 12 de las 20 redes bayesianas; \texttt{Only\allowbreak{}One\allowbreak{}Utility\allowbreak{}Node}, casi todos los diagramas de influencia), así que ninguna puede ser obligatoria tal como está.
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.constraint
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/constraint/ConstraintManager.java:57-106} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:115-124} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:311-331} \newline \path{core/src/test/java/org/openmarkov/core/model/network/constraint/EveryConstraintReachesANetworkTest.java:34-52} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:99-130} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VariableElimination.java:127-132}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/constraint/ConstraintManager.java:57-106} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:116-125} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:349-369} \newline \path{core/src/test/java/org/openmarkov/core/model/network/constraint/EveryConstraintReachesANetworkTest.java:34-52} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:107-140} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VariableElimination.java:150-155}
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué significa OPTIONAL: la activa el tipo de red; la activa el usuario y el formato la guarda; o el nivel desaparece
@@ -7180,7 +7169,7 @@ Prueba de regresión: evaluar \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{
 \fichakey{Estado}Cerrado sin arreglo el 08-10-2026. El defecto sigue en el código: en \texttt{DAN-delayed-result-of-test.\allowbreak{}pgmx}, \texttt{DAN-king.\allowbreak{}pgmx} y \texttt{DAN-used-car-buyer.\allowbreak{}pgmx} la red instanciada queda con dos enlaces entre el mismo par de nodos (tres en la última). No se ha encontrado nada que un usuario pueda ver por su causa. Medido comparando el código de \texttt{9841b95} con el arreglo descrito abajo (reutilizar el enlace que ya existe): \texttt{DANDecomposition\allowbreak{}Into\allowbreak{}Symmetric\allowbreak{}DANs\allowbreak{}Evaluation} da la misma utilidad y la misma estrategia óptima en 31 redes de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}dan} (todas las que se leen menos \texttt{DAN-7-test-problem} y \texttt{DAN-CE-8-test-problem}, que se dejaron fuera por su duración), y el árbol de decisión de las tres redes afectadas es idéntico nodo a nodo. Las tres se evalúan hoy enteras.
 \fichakey{Módulo}inference
 \fichakey{Paquete}org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core
-\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANOperations.java:79-97} \newline \path{core/src/main/java/org/openmarkov/core/model/graph/Graph.java:186-205} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:815-835} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:413-425}
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANOperations.java:85-103} \newline \path{core/src/main/java/org/openmarkov/core/model/graph/Graph.java:186-205} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetOperations.java:936-956} \newline \path{core/src/main/java/org/openmarkov/core/inference/BasicOperations.java:442-454}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
@@ -7204,11 +7193,11 @@ Qué puede cambiar: quienes leen si un nodo queda revelado toman el primer enlac
 
 No se ha podido medir si esto cambia la utilidad o la estrategia final: dos de las tres redes no se evalúan enteras por otros motivos (\texttt{Potential\allowbreak{}Cannot\allowbreak{}Be\allowbreak{}Converted\allowbreak{}To\allowbreak{}ATable}), y la tercera (\texttt{DAN-used-car-buyer}, utilidad 32,96) no tiene con qué compararse sin modificar el código.
 
-Por qué pasa. Una DAN se evalúa descomponiéndola: \texttt{DANOperations.\allowbreak{}instantiate} fija una variable en uno de sus estados y devuelve una copia de la red simplificada para esa rama. Cuando un enlace sale de la variable instanciada con estados reveladores (el destino pasa a conocerse si la variable toma ese estado) y el destino tiene decisiones predecesoras todavía por tomar, el código no lo marca como observado, sino que traza un enlace revelador desde cada una de esas decisiones hasta el destino (líneas 89-95), con todos los estados de la decisión como reveladores.
+Por qué pasa. Una DAN se evalúa descomponiéndola: \texttt{DANOperations.\allowbreak{}instantiate} fija una variable en uno de sus estados y devuelve una copia de la red simplificada para esa rama. Cuando un enlace sale de la variable instanciada con estados reveladores (el destino pasa a conocerse si la variable toma ese estado) y el destino tiene decisiones predecesoras todavía por tomar, el código no lo marca como observado, sino que traza un enlace revelador desde cada una de esas decisiones hasta el destino (líneas 95-101), con todos los estados de la decisión como reveladores.
 
 \texttt{Prob\allowbreak{}Net.\allowbreak{}add\allowbreak{}Link} delega en \texttt{Graph.\allowbreak{}add\allowbreak{}Link}, que por diseño crea siempre un enlace nuevo (su javadoc dice que impedir duplicados es trabajo de la restricción \texttt{Distinct\allowbreak{}Links}). Si la decisión predecesora ya era padre directo del destino ---lo corriente: la decisión que revela algo suele además influir en ello---, la copia queda con dos enlaces entre el mismo par de nodos: el original (sin esos estados reveladores, y a veces con restricciones) y el nuevo.
 \paragraph{El código}
-inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANOperations.java:82-95
+inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANOperations.java:88-101
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10989,7 +10978,7 @@ Prueba: con una tabla de un tramo de tasa λ, comprobar que la media de muchos s
 \fichakey{Estado}Presente
 \fichakey{Módulo}core
 \fichakey{Paquete}org.openmarkov.core.model.network.potential
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/ExternalPotential.java:17-24,67-70,137-144} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/ChanceEvaluation.java:63-89,123-161} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:117-134} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:228-253, 488-522, 584-587} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PotentialPanelManager.java:95-117} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:117,515-519} \newline \path{integrationTests/src/test/java/org/openmarkov/integrationTests/gui/AllPotentialsHaveAPanelTest.java:13-16}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/ExternalPotential.java:17-24,67-70,137-144} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/ChanceEvaluation.java:66-90,148-187} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:118-135} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:237-264, 495-532, 594-597} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PotentialPanelManager.java:97-118} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:120,559-563} \newline \path{integrationTests/src/test/java/org/openmarkov/integrationTests/gui/AllPotentialsHaveAPanelTest.java:13-16}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Medio (días)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si la relación «External» se completa (ligada al fichero de datos de Monte Carlo, con su panel) o se deja de ofrecer como tipo de relación
@@ -10998,15 +10987,15 @@ Prueba: con una tabla de un tramo de tasa λ, comprobar que la media de muchos s
 \paragraph{Qué pasa}
 En una red de simulación de eventos discretos (DES), el selector de clase de relación del editor ofrece «External» para cualquier nodo de azar. Si el usuario la elige, sale un error no previsto (\texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}) porque no tiene panel, y el nodo no puede editarse. Y un nodo con esta relación (por ejemplo, leído de un fichero) no trae ningún valor de fuera: cuando el fichero de datos de la simulación no le da valor, la simulación sigue con un valor sin sentido en vez de avisar.
 
-\texttt{External\allowbreak{}Potential} (módulo \texttt{core}) se declara como tipo de relación con \texttt{@Potential\allowbreak{}Type(\allowbreak{}names\ =\ "External")} y su comentario dice que representa «un valor que se toma de una fuente externa, como un fichero». La clase no guarda ninguna fuente (ni fichero, ni columna, ni nombre) y su único método de simulación devuelve siempre \texttt{Double.\allowbreak{}MAX\_\allowbreak{}VALUE} (líneas 137-144), que el comentario de la interfaz \texttt{DESSimulable\allowbreak{}Potential} usa como «no hay muestra». Medido: \texttt{sample\allowbreak{}Conditioned\allowbreak{}Variable} devuelve \texttt{1.\allowbreak{}7976931348623157E308}. El lector de ProbModelXML sí la reconoce (\texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0}, líneas 117 y 515-519), así que un fichero puede traerla.
+\texttt{External\allowbreak{}Potential} (módulo \texttt{core}) se declara como tipo de relación con \texttt{@Potential\allowbreak{}Type(\allowbreak{}names\ =\ "External")} y su comentario dice que representa «un valor que se toma de una fuente externa, como un fichero». La clase no guarda ninguna fuente (ni fichero, ni columna, ni nombre) y su único método de simulación devuelve siempre \texttt{Double.\allowbreak{}MAX\_\allowbreak{}VALUE} (líneas 137-144), que el comentario de la interfaz \texttt{DESSimulable\allowbreak{}Potential} usa como «no hay muestra». Medido: \texttt{sample\allowbreak{}Conditioned\allowbreak{}Variable} devuelve \texttt{1.\allowbreak{}7976931348623157E308}. El lector de ProbModelXML sí la reconoce (\texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0}, líneas 120 y 559-563), así que un fichero puede traerla.
 
-La simulación DES sí tiene un fichero de datos de entrada, elegido en las opciones de Monte Carlo (\texttt{Monte\allowbreak{}Carlo\allowbreak{}Options.\allowbreak{}get\allowbreak{}Input\allowbreak{}File\allowbreak{}Path}, \texttt{DESInference}, línea 404). Al empezar cada individuo, \texttt{Chance\allowbreak{}Evaluation.\allowbreak{}add\allowbreak{}Values\allowbreak{}Orphan\allowbreak{}Nodes} (módulo \texttt{gui}, líneas 63-89) toma del fichero el valor de cada nodo de azar \textbf{sin sucesos antecesores} cuyo nombre sea una columna del fichero, y solo si no lo encuentra muestrea su relación.
+La simulación DES sí tiene un fichero de datos de entrada, elegido en las opciones de Monte Carlo (\texttt{Monte\allowbreak{}Carlo\allowbreak{}Options.\allowbreak{}get\allowbreak{}Input\allowbreak{}File\allowbreak{}Path}, \texttt{DESInference}, línea 476). Al empezar cada individuo, \texttt{Chance\allowbreak{}Evaluation.\allowbreak{}add\allowbreak{}Values\allowbreak{}Orphan\allowbreak{}Nodes} (módulo \texttt{gui}, líneas 66-90) toma del fichero el valor de cada nodo de azar \textbf{sin sucesos antecesores} cuyo nombre sea una columna del fichero, y solo si no lo encuentra muestrea su relación.
 
 Esa lectura no depende de la clase de relación: vale igual para una tabla que para «External». Por tanto, «External» funciona de hecho como una etiqueta que no comprueba nada. Si no hay fichero, si el nombre del nodo no es una columna, o si el nodo tiene un suceso antecesor (entonces se recalcula con \texttt{compute\allowbreak{}Chance\allowbreak{}Value} sin mirar el fichero), la simulación usa \texttt{Double.\allowbreak{}MAX\_\allowbreak{}VALUE} como valor del nodo (para una variable de estados, \texttt{(\allowbreak{}int)\ Double.\allowbreak{}MAX\_\allowbreak{}VALUE} como índice de estado) sin avisar. Esto último es lectura del código; no se ha lanzado una simulación.
 
-El selector de clase de relación del editor (\texttt{Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}get\allowbreak{}Potential\allowbreak{}Type\allowbreak{}JCombobox}, líneas 227-241) ofrece todo tipo cuyo \texttt{validate} acepte el nodo (\texttt{Potential\allowbreak{}Utils.\allowbreak{}get\allowbreak{}Filtered\allowbreak{}Potential\allowbreak{}Classes}, líneas 121-138), sin mirar si tiene panel, y \texttt{External\allowbreak{}Potential.\allowbreak{}validate} (líneas 67-70) acepta cualquier nodo de azar de una red DES. Medido con un pequeño programa de prueba en una red \texttt{DESNetwork\allowbreak{}Type} con un nodo de azar: los tipos ofrecidos son \texttt{{[}External\allowbreak{}Potential,\allowbreak{}\ Delta\allowbreak{}Potential,\allowbreak{}\ Weibull\allowbreak{}Hazard\allowbreak{}Potential,\allowbreak{}\ Table\allowbreak{}Potential{]}}.
+El selector de clase de relación del editor (\texttt{Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}get\allowbreak{}Potential\allowbreak{}Type\allowbreak{}JCombobox}, líneas 237-264) ofrece todo tipo cuyo \texttt{validate} acepte el nodo (\texttt{Potential\allowbreak{}Utils.\allowbreak{}get\allowbreak{}Filtered\allowbreak{}Potential\allowbreak{}Classes}, líneas 118-135), sin mirar si tiene panel, y \texttt{External\allowbreak{}Potential.\allowbreak{}validate} (líneas 67-70) acepta cualquier nodo de azar de una red DES. Medido con un pequeño programa de prueba en una red \texttt{DESNetwork\allowbreak{}Type} con un nodo de azar: los tipos ofrecidos son \texttt{{[}External\allowbreak{}Potential,\allowbreak{}\ Delta\allowbreak{}Potential,\allowbreak{}\ Weibull\allowbreak{}Hazard\allowbreak{}Potential,\allowbreak{}\ Table\allowbreak{}Potential{]}}.
 
-Si el usuario la elige, \texttt{potential\allowbreak{}Type\allowbreak{}Changed} (líneas 476-507) instala la relación nueva en el nodo y recarga el panel; \texttt{Potential\allowbreak{}Panel\allowbreak{}Manager.\allowbreak{}create\allowbreak{}Potential\allowbreak{}Panel} (líneas 95-114) busca el panel de esa clase, obtiene \texttt{null} y lanza \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}. Medido llamando a ese método con un nodo que tiene \texttt{External\allowbreak{}Potential}:
+Si el usuario la elige, \texttt{potential\allowbreak{}Type\allowbreak{}Changed} (líneas 495-532) instala la relación nueva en el nodo y recarga el panel; \texttt{Potential\allowbreak{}Panel\allowbreak{}Manager.\allowbreak{}create\allowbreak{}Potential\allowbreak{}Panel} (líneas 97-118) busca el panel de esa clase, obtiene \texttt{null} y lanza \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}. Medido llamando a ese método con un nodo que tiene \texttt{External\allowbreak{}Potential}:
 
 \begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
 panel THREW java.lang.NullPointerException: Cannot invoke "java.lang.Class.getConstructor(java.lang.Class[])" because "potentialPanelClass" is null
@@ -11747,14 +11736,14 @@ Prueba: como \texttt{The\allowbreak{}Exported\allowbreak{}Results\allowbreak{}Ha
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui, core
 \fichakey{Paquete}org.openmarkov.gui.dialog.common; org.openmarkov.core.model.network.potential
-\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/IncrementPotential.java:73-77} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:118-138} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PotentialPanelManager.java:96-116}
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/IncrementPotential.java:73-77} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:118-135} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/common/PotentialPanelManager.java:97-118}
 \fichakey{Comprobado}Ejecutándolo (los tipos que ofrece el selector y la creación del panel, sin ventana)
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}Sí
 \fichakey{Relacionados}\hyperref[err:101]{error~101}
 \end{ficha}
 \paragraph{Qué pasa}
-El selector de la relación del editor de nodos (\texttt{Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}get\allowbreak{}Potential\allowbreak{}Type\allowbreak{}JCombobox}) ofrece todo tipo cuyo \texttt{validate} acepte el nodo (\texttt{Potential\allowbreak{}Utils.\allowbreak{}get\allowbreak{}Filtered\allowbreak{}Potential\allowbreak{}Classes}, líneas 118-138), sin mirar si tiene panel, como ya cuenta el \hyperref[err:101]{error~101}. \texttt{Increment\allowbreak{}Potential.\allowbreak{}validate} (líneas 73-77) acepta cualquier nodo numérico de una red de sucesos, y «Increment» no tiene panel.
+El selector de la relación del editor de nodos (\texttt{Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}get\allowbreak{}Potential\allowbreak{}Type\allowbreak{}JCombobox}) ofrece todo tipo cuyo \texttt{validate} acepte el nodo (\texttt{Potential\allowbreak{}Utils.\allowbreak{}get\allowbreak{}Filtered\allowbreak{}Potential\allowbreak{}Classes}, líneas 118-135), sin mirar si tiene panel, como ya cuenta el \hyperref[err:101]{error~101}. \texttt{Increment\allowbreak{}Potential.\allowbreak{}validate} (líneas 73-77) acepta cualquier nodo numérico de una red de sucesos, y «Increment» no tiene panel.
 
 Visto al ejecutar la prueba desactivada \texttt{All\allowbreak{}Potentials\allowbreak{}Have\allowbreak{}APanel\allowbreak{}Test}, que da tres tipos sin panel: \texttt{External\allowbreak{}Potential}, que es el \hyperref[err:101]{error~101}; \texttt{Table\allowbreak{}With\allowbreak{}Events}, que no se ofrece nunca porque su \texttt{validate} devuelve siempre \texttt{false}; y \texttt{Increment\allowbreak{}Potential}. Medido el 18-10-2026 con el código de \texttt{a67b170}, en una red \texttt{DESNetwork\allowbreak{}Type} con un nodo de azar numérico X:
 
@@ -12211,20 +12200,20 @@ Prueba de regresión: para las siete redes citadas, guardar con \texttt{PGMXWrit
 \fichakey{Estado}Presente
 \fichakey{Módulo}io
 \fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.io.probmodel.writer
-\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1375-1387,1563-1571} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:70-97,733-753} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/PotentialRole.java:31-42} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:256-264, 318-334, 378-398} \newline \path{0_miscellaneous/networks/id/ID-CEA-test-2therapies-new-test.pgmx:148} \newline \path{0_miscellaneous/networks/mid/MID-CHAP-Ryan-Griffin.pgmx:808} \newline \path{0_miscellaneous/networks/mid/MID-Cochlear.pgmx:4854} \newline \path{integrationTests/src/main/resources/networks/mid/MID-Cochlear.pgmx}
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1547-1559,1755-1763} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:75-104,790-810} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/PotentialRole.java:31-42} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:307-315, 386-402, 446-467} \newline \path{0_miscellaneous/networks/id/ID-CEA-test-2therapies-new-test.pgmx:148} \newline \path{0_miscellaneous/networks/mid/MID-CHAP-Ryan-Griffin.pgmx:808} \newline \path{0_miscellaneous/networks/mid/MID-Cochlear.pgmx:4854} \newline \path{integrationTests/src/main/resources/networks/mid/MID-Cochlear.pgmx} \newline \path{integrationTests/src/main/resources/networks/id/ID-CEA-test-2therapies-new-test.pgmx:148}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el lector rechaza un papel de potencial desconocido (corrigiendo antes los ficheros que lo traen) o lo acepta como sinónimo avisando
 \fichakey{Relacionados}\hyperref[err:71]{error~71}, \hyperref[err:111]{error~111}, \hyperref[err:112]{error~112}, \hyperref[err:113]{error~113}
 \end{ficha}
 \paragraph{Qué pasa}
-Abrir \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx}, \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-CHAP-Ryan-Griffin.\allowbreak{}pgmx} o \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-Cochlear.\allowbreak{}pgmx}, cambiar algo y pulsar «Save» termina en la ventana de error no previsto con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception:\ Cannot\ invoke\ "Potential\allowbreak{}Role.\allowbreak{}to\allowbreak{}String(\allowbreak{})"\ because\ "potential\allowbreak{}Role"\ is\ null}. La red no se guarda y sigue marcada como modificada. Al cerrarla contestando que sí a guardar, falla igual y la pestaña no se cierra (por lectura: \texttt{Network\allowbreak{}File\allowbreak{}Handler.\allowbreak{}network\allowbreak{}Can\allowbreak{}Be\allowbreak{}Closed}, líneas 372-392). «Save network as\ldots» con el formato «OpenMarkov.0.2» falla también; con «OpenMarkov.1.0» guarda, pero las utilidades quedan como describe \hyperref[err:112]{error~112}.
+Abrir \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx}, \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-CHAP-Ryan-Griffin.\allowbreak{}pgmx} o \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-Cochlear.\allowbreak{}pgmx}, cambiar algo y pulsar «Save» termina en la ventana de error no previsto con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception:\ Cannot\ invoke\ "Potential\allowbreak{}Role.\allowbreak{}to\allowbreak{}String(\allowbreak{})"\ because\ "potential\allowbreak{}Role"\ is\ null}. La red no se guarda y sigue marcada como modificada. Al cerrarla contestando que sí a guardar, falla igual y la pestaña no se cierra (por lectura: \texttt{Network\allowbreak{}File\allowbreak{}Handler.\allowbreak{}network\allowbreak{}Can\allowbreak{}Be\allowbreak{}Closed}, líneas 446-467). «Save network as\ldots» con el formato «OpenMarkov.0.2» falla también; con «OpenMarkov.1.0» guarda, pero las utilidades quedan como describe \hyperref[err:112]{error~112}.
 
-El fichero no se estropea: \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}write} (líneas 70-97) construye el documento entero antes de abrir el fichero, y la excepción salta al construirlo. Antes de escribir, «Save» ya ha copiado el fichero a uno \texttt{.\allowbreak{}bak} junto a él (\texttt{create\allowbreak{}Back\allowbreak{}Up\allowbreak{}Network\allowbreak{}File}, líneas 312-328).
+El fichero no se estropea: \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}write} (líneas 75-104) construye el documento entero antes de abrir el fichero, y la excepción salta al construirlo. Antes de escribir, «Save» ya ha copiado el fichero a uno \texttt{.\allowbreak{}bak} junto a él (\texttt{create\allowbreak{}Back\allowbreak{}Up\allowbreak{}Network\allowbreak{}File}, líneas 386-402).
 
-Por qué pasa. Los tres ficheros, en formato 0.2, traen un potencial con \texttt{role="join\allowbreak{}Probability"}, y el nombre que usa el programa es \texttt{joint\allowbreak{}Probability} (\texttt{Potential\allowbreak{}Role.\allowbreak{}JOINT\_\allowbreak{}PROBABILITY} escrito con su \texttt{to\allowbreak{}String}). Es la tabla de probabilidad condicionada de un nodo de azar: «New test» en la primera red (línea 148 del fichero), «AIDS {[}0{]}» en la segunda (línea 808) e «Intervention applied» en la tercera (línea 4854). La copia \texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-Cochlear.\allowbreak{}pgmx} tiene la misma errata.
+Por qué pasa. Los tres ficheros, en formato 0.2, traen un potencial con \texttt{role="join\allowbreak{}Probability"}, y el nombre que usa el programa es \texttt{joint\allowbreak{}Probability} (\texttt{Potential\allowbreak{}Role.\allowbreak{}JOINT\_\allowbreak{}PROBABILITY} escrito con su \texttt{to\allowbreak{}String}). Es la tabla de probabilidad condicionada de un nodo de azar: «New test» en la primera red (línea 148 del fichero), «AIDS {[}0{]}» en la segunda (línea 808) e «Intervention applied» en la tercera (línea 4854). Tienen la misma errata dos copias: \texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-Cochlear.\allowbreak{}pgmx} y \texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx}, también en su línea 148.
 
-\texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Potential\allowbreak{}Role} (módulo \texttt{io}, líneas 1375-1387) rechaza un potencial sin papel con \texttt{Potential\allowbreak{}Without\allowbreak{}Role}, pero un papel que no reconoce lo pasa a \texttt{get\allowbreak{}Potential\allowbreak{}Rol\allowbreak{}By\allowbreak{}Label} (líneas 1563-1571), que devuelve \texttt{null} sin avisar. Los cálculos no usan ese papel, así que las redes se abren y se evalúan con normalidad. Al guardar, \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}set\allowbreak{}Potential\allowbreak{}Role} (líneas 746-753) llama a \texttt{potential\allowbreak{}Role.\allowbreak{}to\allowbreak{}String(\allowbreak{})} y falla. \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0} no escribe el papel dentro del potencial, y por eso ese formato sí guarda. Validar el fichero contra su esquema (\hyperref[err:111]{error~111}) tampoco lo detectaría: el esquema no comprueba los atributos del potencial.
+\texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Potential\allowbreak{}Role} (módulo \texttt{io}, líneas 1547-1559) rechaza un potencial sin papel con \texttt{Potential\allowbreak{}Without\allowbreak{}Role}, pero un papel que no reconoce lo pasa a \texttt{get\allowbreak{}Potential\allowbreak{}Rol\allowbreak{}By\allowbreak{}Label} (líneas 1755-1763), que devuelve \texttt{null} sin avisar. Los cálculos no usan ese papel, así que las redes se abren y se evalúan con normalidad. Al guardar, \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}set\allowbreak{}Potential\allowbreak{}Role} (líneas 803-810) llama a \texttt{potential\allowbreak{}Role.\allowbreak{}to\allowbreak{}String(\allowbreak{})} y falla. \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0} no escribe el papel dentro del potencial, y por eso ese formato sí guarda. Validar el fichero contra su esquema (\hyperref[err:111]{error~111}) tampoco lo detectaría: el esquema no comprueba los atributos del potencial.
 
 Medido con un pequeño programa de prueba:
 
@@ -12238,9 +12227,9 @@ Medido con un pequeño programa de prueba:
   Cambiando en otra copia \texttt{join\allowbreak{}Probability} por \texttt{conditional\allowbreak{}Probability}, o por \texttt{joint\allowbreak{}Probability}, la red se guarda, se reabre y la evaluación sin hallazgos da lo mismo que la original: 271 387,976 en \texttt{ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx} y 156 890,28 en \texttt{MID-Cochlear.\allowbreak{}pgmx}. \texttt{MID-CHAP-Ryan-Griffin.\allowbreak{}pgmx} no se evalúa ni antes ni después, por \hyperref[err:71]{error~71}.
 \end{itemize}
 
-Hay otro sitio de la ventana que decide por el papel, leído en el código y no ejecutado. En la ventana del nodo «New test», el botón «Reorder variables» se ofrece para una tabla de probabilidad de más de dos variables, como esta, que tiene tres (\texttt{Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}enable\allowbreak{}Reorder\allowbreak{}Variable\allowbreak{}Button}, líneas 659-670). \texttt{Reorder\allowbreak{}Variables\allowbreak{}Panel} quita de la lista la primera variable, que es la del propio nodo, solo si el papel es \texttt{CONDITIONAL\_\allowbreak{}PROBABILITY} (\texttt{is\allowbreak{}Conditional\allowbreak{}Probability\allowbreak{}Not\allowbreak{}Exact\allowbreak{}Distr\allowbreak{}Potential}, líneas 81-84, 93-95 y 146-148). Con el papel nulo no la quita: la lista ofrece reordenar «New test» junto con sus padres, y al aceptar no la vuelve a poner la primera. En las otras dos redes no pasa: las tablas de «AIDS {[}0{]}» y de «Intervention applied» también salen con el papel nulo, pero tienen dos variables, y el botón no se ofrece (los papeles y el número de variables, medidos el 15-10-2026 abriendo las tres redes con el lector del programa).
+Hay otro sitio de la ventana que decide por el papel, leído en el código y no ejecutado. En la ventana del nodo «New test», el botón «Reorder variables» se ofrece para una tabla de probabilidad de más de dos variables, como esta, que tiene tres (\texttt{Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}enable\allowbreak{}Reorder\allowbreak{}Variable\allowbreak{}Button}, líneas 668-679). \texttt{Reorder\allowbreak{}Variables\allowbreak{}Panel} quita de la lista la primera variable, que es la del propio nodo, solo si el papel es \texttt{CONDITIONAL\_\allowbreak{}PROBABILITY} (\texttt{is\allowbreak{}Conditional\allowbreak{}Probability\allowbreak{}Not\allowbreak{}Exact\allowbreak{}Distr\allowbreak{}Potential}, líneas 81-84, 93-95 y 146-148). Con el papel nulo no la quita: la lista ofrece reordenar «New test» junto con sus padres, y al aceptar no la vuelve a poner la primera. En las otras dos redes no pasa: las tablas de «AIDS {[}0{]}» y de «Intervention applied» también salen con el papel nulo, pero tienen dos variables, y el botón no se ofrece (los papeles y el número de variables, medidos el 15-10-2026 abriendo las tres redes con el lector del programa).
 \paragraph{El código}
-io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader\_0\_2.java:1375-1386
+io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader\_0\_2.java:1547-1558
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -12259,7 +12248,7 @@ io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader\_0\_2.java:1375-1
 \end{Highlighting}
 \end{Shaded}
 
-io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader\_0\_2.java:1563-1571
+io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader\_0\_2.java:1755-1763
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -12275,7 +12264,7 @@ io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader\_0\_2.java:1563-1
 \end{Highlighting}
 \end{Shaded}
 
-io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter\_0\_2.java:746-748
+io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter\_0\_2.java:803-805
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -12290,11 +12279,11 @@ Hay tres cosas que hacer, y la primera exige decidir:
 \begin{itemize}
 \tightlist
 \item
-  Qué hace el lector con un papel desconocido. Una opción es rechazar el fichero con una excepción que nombre el papel y el nodo, como ya hace con un potencial sin papel; entonces hay que corregir antes los cuatro ficheros citados, o dejarán de abrirse. La otra es aceptar \texttt{join\allowbreak{}Probability} como sinónimo y avisar al abrir. En los dos casos, lo que no puede hacer es dejar el papel en \texttt{null} en silencio. Para estas tablas de nodos de azar, el papel que corresponde es el de probabilidad condicionada, que es también el que hace que la ventana de reordenar variables deje fija la del nodo.
+  Qué hace el lector con un papel desconocido. Una opción es rechazar el fichero con una excepción que nombre el papel y el nodo, como ya hace con un potencial sin papel; entonces hay que corregir antes los cinco ficheros citados, o dejarán de abrirse. La otra es aceptar \texttt{join\allowbreak{}Probability} como sinónimo y avisar al abrir. En los dos casos, lo que no puede hacer es dejar el papel en \texttt{null} en silencio. Para estas tablas de nodos de azar, el papel que corresponde es el de probabilidad condicionada, que es también el que hace que la ventana de reordenar variables deje fija la del nodo.
 \item
   El escritor no debería fallar con un papel nulo: o deduce el papel del tipo de nodo, o lanza \texttt{Writer\allowbreak{}Exception} con un mensaje que nombre el nodo, que la ventana enseñaría como error normal.
 \item
-  Corregir la errata en los cuatro ficheros.
+  Corregir la errata en los cinco ficheros.
 \end{itemize}
 
 Prueba: leer las tres redes, guardarlas con \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2} en un fichero temporal, reabrirlas y comprobar que \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx} sigue dando una utilidad esperada de 271 387,976; y una prueba del lector con un papel inventado que dé el comportamiento que se decida.
@@ -12650,7 +12639,7 @@ Prueba: las dos copias dañadas se rechazan con un mensaje que nombra el nodo, y
 \fichakey{Estado}Presente
 \fichakey{Módulo}io; core
 \fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.core.model.network.potential.treeadd; org.openmarkov.core.model.network.modelUncertainty
-\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/ReaderFactory.java:24-35} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/Version.java:7-13} \newline \path{core/src/main/resources/version.xsd:11-12} \newline \path{io/src/test/resources/version.xsd:11-12} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/treeadd/TreeWithExcludedEventsPotential.java:39} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/ExponentialFunction.java:17}
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/ReaderFactory.java:24-35} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/Version.java:7-13} \newline \path{core/src/main/resources/version.xsd:11-12} \newline \path{io/src/test/resources/version.xsd:11-12} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/treeadd/TreeWithExcludedEventsPotential.java:38} \newline \path{core/src/main/java/org/openmarkov/core/model/network/modelUncertainty/ExponentialFunction.java:17}
 \fichakey{Comprobado}Ejecutándolo por programa (la versión) y leyendo el código (el nombre del árbol y la exponencial); no hay redes reales de esa versión
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Si el programa debe abrir los ficheros de esa versión. Para comprobarlo hacen falta las redes de Carmen Yago (Osteo, Cochlear, TSD-15\ldots), que no están en el repositorio
@@ -12664,8 +12653,8 @@ Hoy \texttt{Version} solo conoce 0.2 y 1.0, \texttt{Reader\allowbreak{}Factory.\
 Aunque se aceptara la versión, quedan dos diferencias, vistas leyendo el código:
 \begin{itemize}
 \tightlist
-\item Su rama guardaba el árbol de sucesos excluidos con el nombre «Tree with Exclued Events», con una errata, que al traerlo se corrigió a «Tree with Excluded Events» (línea 39). El lector busca la clase por ese nombre, así que esos ficheros darían «Potential type Tree with Exclued Events is not supported.».
-\item Su rama registraba la distribución exponencial poniendo en la clase \texttt{Exponential\allowbreak{}Function} la anotación \texttt{@Prob\allowbreak{}Dens\allowbreak{}Function\allowbreak{}Type}, con el nombre «Exponential» y el parámetro \texttt{lambda}, y al traer la clase no se trajo la anotación. Sin ella, un parámetro incierto con distribución exponencial no se puede leer (\texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2}, línea 1367, busca la distribución por su nombre), y la exponencial tampoco se ofrece en el diálogo de incertidumbre.
+\item Su rama guardaba el árbol de sucesos excluidos con el nombre «Tree with Exclued Events», con una errata, que al traerlo se corrigió a «Tree with Excluded Events» (línea 38). El lector busca la clase por ese nombre, así que esos ficheros darían «Potential type Tree with Exclued Events is not supported.».
+\item Su rama registraba la distribución exponencial poniendo en la clase \texttt{Exponential\allowbreak{}Function} la anotación \texttt{@Prob\allowbreak{}Dens\allowbreak{}Function\allowbreak{}Type}, con el nombre «Exponential» y el parámetro \texttt{lambda}, y al traer la clase no se trajo la anotación. Sin ella, un parámetro incierto con distribución exponencial no se puede leer (\texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2}, línea 1522, busca la distribución por su nombre), y la exponencial tampoco se ofrece en el diálogo de incertidumbre.
 \end{itemize}
 Según el código, el resto de lo que escribía su versión lo entiende el lector 1.0: usa las mismas etiquetas, y las tablas simples que guardaba como \texttt{Univariate\allowbreak{}Distr} «exact» se traducen hoy igual. No hay en el repositorio ninguna red de sucesos de esa versión; la única 0.5.0, \path{0_miscellaneous/networks/id/ID-decide-test-0.5.0.pgmx}, no es de sucesos, y \texttt{Nets\allowbreak{}IOTest} la excluye («only for 'Augmented bayesian networks' branch»).
 \paragraph{Cómo arreglarlo}
@@ -19947,7 +19936,7 @@ Prueba: red bayesiana o diagrama de influencia, \texttt{Add\allowbreak{}Node\all
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui, core
 \fichakey{Paquete}org.openmarkov.gui.dialog.node; org.openmarkov.core.model.network.potential.plugin
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:228-256} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:34-46} \newline \path{gui/src/main/resources/gui/localize/Selectables_en.xml:3-49} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_1_0.java:116, 191}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:237-264} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/plugin/PotentialUtils.java:34-46} \newline \path{gui/src/main/resources/gui/localize/Selectables_en.xml:3-49} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_1_0.java:126, 201}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}\textcolor{decisionrojo}{\textbf{Sí.}} Qué nombre legible se enseña para cada tipo de relación
@@ -19955,7 +19944,7 @@ Prueba: red bayesiana o diagrama de influencia, \texttt{Add\allowbreak{}Node\all
 \paragraph{Qué pasa}
 En el diálogo de editar el potencial de un nodo, el desplegable «tipo de relación» mezcla nombres legibles («Same as previous», «Linear combination», «OR / MAX») con identificadores pegados («ProbTable», «AugmentedProbTable», «DistributionTable», «UnivariateDistr») o poco claros («Exact»). \texttt{Cycle\allowbreak{}Length\allowbreak{}Shift} también sale con su identificador, aunque no apareció en los nodos probados.
 
-\texttt{Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}get\allowbreak{}Potential\allowbreak{}Type\allowbreak{}JCombobox} (líneas 227-241) llena el desplegable con las clases de potencial permitidas para el nodo y las pinta con \texttt{Potential\allowbreak{}Utils::get\allowbreak{}Potential\allowbreak{}Name}, que devuelve el primer valor de \texttt{names} de la anotación \texttt{@Potential\allowbreak{}Type}. Ese mismo nombre es el que los escritores de \texttt{.\allowbreak{}pgmx} guardan como tipo del potencial (\texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0}, líneas 116 y 191), así que es un identificador de formato.
+\texttt{Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}get\allowbreak{}Potential\allowbreak{}Type\allowbreak{}JCombobox} (líneas 237-264) llena el desplegable con las clases de potencial permitidas para el nodo y las pinta con \texttt{Potential\allowbreak{}Utils::get\allowbreak{}Potential\allowbreak{}Name}, que devuelve el primer valor de \texttt{names} de la anotación \texttt{@Potential\allowbreak{}Type}. Ese mismo nombre es el que los escritores de \texttt{.\allowbreak{}pgmx} guardan como tipo del potencial (\texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0}, líneas 126 y 201), así que es un identificador de formato.
 
 \texttt{Selectables\_\allowbreak{}en.\allowbreak{}xml} tiene un bloque \texttt{algorithm\allowbreak{}Relation\allowbreak{}Type} con textos legibles, pero ningún código Java lo lee, y sus claves (\texttt{Table}, \texttt{Same\allowbreak{}As\allowbreak{}Previous}, \texttt{Tree\_\allowbreak{}ADD}, \texttt{ICI-OR}, \texttt{ICI-MAXCausal}\ldots) no coinciden con los nombres actuales de las anotaciones.
 
@@ -19971,7 +19960,7 @@ Medido con un pequeño programa de prueba que llama a \texttt{Potential\allowbre
   nodo de azar numérico («Duration of treatment {[}0{]}» de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}DMHEE/\allowbreak{}MID-dmhee-2.\allowbreak{}5.\allowbreak{}pgmx}): Binomial, Delta, DistributionTable, Exact, Exponential, Function, Linear combination, Product, Sum, Uniform, UnivariateDistr.
 \end{itemize}
 \paragraph{El código}
-gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:235-237
+gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:248-250
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -19990,7 +19979,7 @@ No cambiar \texttt{names} de las anotaciones, porque es lo que se escribe y se l
 \item
   un método que devuelva el texto si existe y el identificador si no;
 \item
-  usarlo en el pintor del desplegable y también en la ordenación de la línea 235, para que el orden sea el que ve el usuario.
+  usarlo en el pintor del desplegable y también en la ordenación de la línea 248, para que el orden sea el que ve el usuario.
 \end{itemize}
 
 Hay que decidir los textos.
@@ -20607,9 +20596,9 @@ Prueba: con la variable \texttt{Result\ of\ test} de estados \texttt{bad}, \text
 Trabajo de más en el camino que más se recorre, y operaciones largas que bloquean la ventana.
 
 \setcounter{subsection}{188}
-\subsection[Entrar en modo inferencia con una red grande congela la ventana]{Entrar en modo inferencia con una red grande deja la ventana entera congelada durante decenas de segundos, sin progreso ni forma de cancelar}\label{err:189}
+\subsection[Entrar en modo inferencia con una red grande congela la ventana]{\textcolor{corregidoverde}{[Corregido]} Entrar en modo inferencia con una red grande deja la ventana entera congelada durante decenas de segundos, sin progreso ni forma de cancelar}\label{err:189}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Corregido en el commit \texttt{1e8b521} (09-10-2026); no se marcó entonces porque el error estaba asignado a Jorge Rico, y se vio al repasar la lista el 28-10-2026. La propagación ya no ocupa el hilo de la ventana: \texttt{Evidence\allowbreak{}Manager.\allowbreak{}do\allowbreak{}Propagation}, por donde pasan todos los caminos que enumera esta ficha, la calcula en otro hilo con \texttt{Propagation\allowbreak{}Progress\allowbreak{}Dialog}. Si tarda más de dos segundos, un diálogo muestra el avance y tiene un botón para pararla, y al pararla se deshace el gesto que la lanzó, sin mensaje de error; esos dos primeros segundos la ventana espera sin responder. Medido el 28-10-2026 con \texttt{BN-\allowbreak{}cpcs422b.\allowbreak{}pgmx}: preparar la propagación, que sigue en el hilo de la ventana, tarda 22~ms, y el cálculo, que va en el otro hilo, 26 171~ms. Sigue igual lo que la ficha cuenta aparte: \texttt{Main\allowbreak{}GUI.\allowbreak{}freeze(\allowbreak{})} y \texttt{unfreeze(\allowbreak{})} empiezan con \texttt{if\ (\allowbreak{}true)\ return;} (hoy, líneas 110-119), no tiene efecto visible, y queda por decidir si se borran o se reactivan. Las líneas que cita la ficha son las del código de antes del arreglo.
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:147-164, 181-182} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:73-134} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EvidenceManager.java:324-363, 580-599} \newline \path{gui/src/main/java/org/openmarkov/gui/util/GUIUtils.java:58-82} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainGUI.java:108-118} \newline \path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/NetworkEditorPanel.java:472-479}
@@ -20862,14 +20851,14 @@ En \texttt{assign\allowbreak{}Utilities}, poner como utilidad parcial el coste y
 \fichakey{Estado}Cerrado sin arreglo el 26-10-2026, por decisión de Manuel Arias. El código sigue igual, pero las probabilidades de las ramas que recibe el exportador suman siempre uno, porque el algoritmo del árbol las normaliza. Medido con \texttt{Decision\allowbreak{}Tree\allowbreak{}Expansion}, el algoritmo de la ventana, hasta 5 niveles: en las 85 redes del repositorio que dan un árbol (\texttt{integration\allowbreak{}Tests/\allowbreak{}src/\allowbreak{}main/\allowbreak{}resources/\allowbreak{}networks}), sus 716 nodos de azar suman uno, sin ningún \texttt{NaN}; y también con todas las tablas de \texttt{03.4-\allowbreak{}ID-\allowbreak{}decide-\allowbreak{}test} y \texttt{04.5-\allowbreak{}ID-\allowbreak{}CEA-\allowbreak{}one-\allowbreak{}test} estropeadas a propósito (una mitad de cada tabla por 1,3 y la otra por 0,9), de modo que ninguna columna suma uno
 \fichakey{Módulo}io
 \fichakey{Paquete}org.openmarkov.io.amua.adatper
-\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/amua/adatper/AmuaDTConverter.java:89-133}
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/amua/adatper/AmuaDTConverter.java:101-145}
 \fichakey{Comprobado}Leyendo el código
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}Sí: qué hacer con unas probabilidades que no suman uno (rechazar la exportación, o normalizar si el error es pequeño como se decidió en el \hyperref[err:5]{error~5} y rechazar si es mayor)
 \fichakey{Relacionados}\hyperref[err:5]{error~5}, \hyperref[err:198]{error~198}
 \end{ficha}
 \paragraph{Qué pasa}
-Después de convertir los hijos de un nodo de azar, \texttt{convert\allowbreak{}To\allowbreak{}Amua\allowbreak{}Tree} suma sus probabilidades y, si la suma se aparta de uno más de $10^{-4}$, pone todas a $1/n$. No lo avisa ni lo anota en ningún sitio. Además, una probabilidad \texttt{NaN} en una rama se cambia antes por 0 (líneas 93-96), así que una sola rama \texttt{NaN} basta para que todo el nodo pase a uniforme. El fichero de Amua describe entonces un modelo distinto del de OpenMarkov.
+Después de convertir los hijos de un nodo de azar, \texttt{convert\allowbreak{}To\allowbreak{}Amua\allowbreak{}Tree} suma sus probabilidades y, si la suma se aparta de uno más de $10^{-4}$, pone todas a $1/n$. No lo avisa ni lo anota en ningún sitio. Además, una probabilidad \texttt{NaN} en una rama se cambia antes por 0 (líneas 105-108), así que una sola rama \texttt{NaN} basta para que todo el nodo pase a uniforme. El fichero de Amua describe entonces un modelo distinto del de OpenMarkov.
 
 No se ha buscado una red del repositorio en la que la evaluación del árbol deje probabilidades que no sumen uno; la consecuencia se ha deducido leyendo el código.
 \paragraph{Cómo arreglarlo}
