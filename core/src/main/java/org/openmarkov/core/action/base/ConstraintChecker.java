@@ -5,6 +5,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.function.Consumer;
@@ -61,6 +62,11 @@ public class ConstraintChecker {
         checker.accept(exceptions);
         this.exceptions.addAll(exceptions);
         return this;
+    }
+    
+    /** The violations recorded so far, each one with the message that says where it is. */
+    public List<ConstraintViolatedException> getViolations() {
+        return new ArrayList<>(this.exceptions);
     }
     
     /**

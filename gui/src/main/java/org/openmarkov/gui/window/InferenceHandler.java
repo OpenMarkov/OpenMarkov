@@ -72,6 +72,11 @@ class InferenceHandler {
     // ── Working mode ──────────────────────────────────────────────
     
     void toggleWorkingMode() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
+        if (getCurrentNetworkEditorPanel().getWorkingMode() == NetworkEditorPanel.WorkingMode.EDITION) {
+            // A network that breaks the constraints of its type is not evaluated (error 37 of the pending list): the
+            // message says which. Without this, no algorithm accepted it and the message said nothing of the reason
+            getCurrentNetworkEditorPanel().getProbNet().checkConstraints();
+        }
        emptyPotentialChecker();
         NetworkEditorPanel.WorkingMode currentWorkingMode = getCurrentNetworkEditorPanel().getWorkingMode();
         NetworkEditorPanel.WorkingMode newWorkingMode = switch (currentWorkingMode) {

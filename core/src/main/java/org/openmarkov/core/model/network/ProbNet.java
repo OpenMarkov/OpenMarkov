@@ -31,6 +31,7 @@ import org.openmarkov.core.model.network.type.NetworkType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -214,6 +215,43 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
         for (PNConstraint constraint : this.constraints) {
             constraint.checkProbNet(this, constraintChecker);
         }
+    }
+    
+    /**
+     * Checks the constraints of this network except those it did not meet already, before an edit: what the edit
+     * broke. A network read from a file may arrive breaking some, a cycle in a Bayesian network say (error 37 of the
+     * pending list), and an edit is refused only for what it breaks, not for what was broken before it (error 31).
+     *
+     * @param unmetBefore the constraints that the network did not meet before the edit, as
+     *                    {@link #getUnsatisfiedConstraints()} gave them
+     *
+     * @throws ConstraintViolatedException if the network breaks any other constraint
+     */
+    public void checkConstraintsExcept(Collection<PNConstraint> unmetBefore) throws ConstraintViolatedException {
+        this.checkConstraints(this.constraintsExcept(unmetBefore));
+    }
+    
+    /** As {@link #checkConstraintsExcept(Collection)}, recording the violations in a checker instead of throwing. */
+    public void checkConstraintsIn(ConstraintChecker constraintChecker, Collection<PNConstraint> unmetBefore) {
+        for (PNConstraint constraint : this.constraintsExcept(unmetBefore)) {
+            constraint.checkProbNet(this, constraintChecker);
+        }
+    }
+    
+    private List<PNConstraint> constraintsExcept(Collection<PNConstraint> unmetBefore) {
+        return this.constraints.stream().filter(constraint -> !unmetBefore.contains(constraint)).toList();
+    }
+    
+    /**
+     * Each breach of the constraints of this network, with the message that says where it is, in the order of those
+     * messages; empty when the network meets them all.
+     */
+    public List<ConstraintViolatedException> getConstraintViolations() {
+        ConstraintChecker checker = new ConstraintChecker(this);
+        this.checkConstraintsIn(checker);
+        return checker.getViolations().stream()
+                      .sorted(Comparator.comparing(ConstraintViolatedException::toString))
+                      .toList();
     }
     
     /**

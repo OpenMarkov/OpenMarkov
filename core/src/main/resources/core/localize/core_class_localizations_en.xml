@@ -100,7 +100,7 @@
     <Localization class="org.openmarkov.core.exception.CannotNormalizePotentialException$AllValuesForAParentsConfigurationAreZero"
                   value="All the values for a configuration of the parents are 0.0 in potential {potential}"/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException"
-                  value="Could not met the constraint: {constraint}"/>
+                  value="Could not meet the constraint: {constraint}"/>
     <Localization
             class="org.openmarkov.core.exception.ConstraintViolatedException$AlwaysObservedVariableIsDescendantOfDecisionNode"
             value="Always observed variable {alwaysObservedNode} is a descendant of decision node {decisionNode}."/>
@@ -190,7 +190,7 @@
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CycleWithoutAnEvent"
                   value="The link from {parent.getName} to {child.getName} is part of a cycle with no event node. Every cycle of more than one node must contain an event node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ThereIsACycle"
-                  value="There is a cycle traversing between {parent} and {child}."/>
+                  value="The link {parent.getName} → {child.getName} closes a cycle."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ThereIsALoop"
                   value="There is a loop traversing between {node1} and {node2}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$UtilityNodeHasNoPotentials"

@@ -97,6 +97,9 @@ public abstract class InferenceAlgorithm implements Task {
     public void checkEvaluability() throws NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
         checkApplicability();
         checkConstraintsApplicability();
+        // A network read from a file may break the constraints of its type, a cycle in a Bayesian network say: it
+        // opens, so that it can be corrected, but it is not evaluated until then (error 37 of the pending list)
+        probNet.checkConstraints();
     }
     
     /**

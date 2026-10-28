@@ -106,6 +106,8 @@ import java.util.List;
     }
     
     @Override protected void doEdit() throws DoEditException.CannotInvertLink {
+        // What the network already broke does not count against the inversion (error 31 of the pending list)
+        List<PNConstraint> unmetBefore = probNet.getUnsatisfiedConstraints();
         // Remove links first
         probNet.removeLink(parent, child, isDirected);
         if (child.getNodeType() != NodeType.DECISION) {
@@ -133,9 +135,11 @@ import java.util.List;
         }
         
         // Checks that the inversion is legal, i.e. it does not produce cycles.
-        if (!probNet.checkProbNet()) {
+        List<PNConstraint> broken = new ArrayList<>(probNet.getUnsatisfiedConstraints());
+        broken.removeAll(unmetBefore);
+        if (!broken.isEmpty()) {
             undo();
-            throw new DoEditException.CannotInvertLink(parent, child, probNet, this, probNet.getUnsatisfiedConstraints());
+            throw new DoEditException.CannotInvertLink(parent, child, probNet, this, broken);
         }
     }
     

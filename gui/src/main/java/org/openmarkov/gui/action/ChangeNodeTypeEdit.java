@@ -14,6 +14,7 @@ import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes;
 import org.openmarkov.core.model.network.constraint.OnlyOneUtilityNode;
+import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 
@@ -85,9 +86,11 @@ public class ChangeNodeTypeEdit extends MultiStepEdit {
         }
         
         @Override protected void doEdit() throws DoEditException {
+            // What the network already broke does not count against the change (error 31 of the pending list)
+            List<PNConstraint> unmetBefore = this.probNet.getUnsatisfiedConstraints();
             this.node.setNodeType(this.newNodeType);
             try {
-                this.probNet.checkConstraints();
+                this.probNet.checkConstraintsExcept(unmetBefore);
             } catch (ConstraintViolatedException e) {
                 // A step that fails is not written down, so nothing else undoes this one.
                 this.node.setNodeType(this.oldNodeType);

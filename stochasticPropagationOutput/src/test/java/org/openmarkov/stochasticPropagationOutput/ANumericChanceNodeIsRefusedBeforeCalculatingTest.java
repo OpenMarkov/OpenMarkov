@@ -57,7 +57,7 @@ class ANumericChanceNodeIsRefusedBeforeCalculatingTest {
     }
 
     /** The message names the variable, not its type and states, as it used to. */
-    private static final String REFUSAL = "Could not met the constraint: All variables must be discrete\nVariable N must be discrete.";
+    private static final String REFUSAL = "Could not meet the constraint: All variables must be discrete\nVariable N must be discrete.";
 
     private static void refusesN(Executable building) {
         var refused = assertThrows(ConstraintViolatedException.class, building);

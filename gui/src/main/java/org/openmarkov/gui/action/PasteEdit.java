@@ -26,6 +26,7 @@ import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.NoLinkRestriction;
 import org.openmarkov.core.model.network.constraint.NoRevelationArc;
+import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
@@ -75,6 +76,8 @@ public class PasteEdit extends MultiStepEdit {
     }
 
     @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException {
+        // What the network already broke does not count against the paste (error 31 of the pending list)
+        List<PNConstraint> unmetBefore = this.probNet.getUnsatisfiedConstraints();
         this.newVariables = new HashMap<>();
         // Gather new node creation edits
         List<Node> nodes = this.clipboardContent.nodes();
@@ -198,7 +201,7 @@ public class PasteEdit extends MultiStepEdit {
         PNEdit verifier = new PNEdit(probNet) {
             
             @Override public void checkConstraintsWillBeMet(ConstraintChecker constraintChecker) {
-                probNet.checkConstraintsIn(constraintChecker);
+                probNet.checkConstraintsIn(constraintChecker, unmetBefore);
             }
             
             @Override protected void doEdit() {

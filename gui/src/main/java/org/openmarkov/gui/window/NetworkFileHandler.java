@@ -254,9 +254,20 @@ public class NetworkFileHandler {
         if (!wrongDistributions.isEmpty()) {
             this.showColumns(netReadFrom, wrongDistributions, "DistributionsCannotGoTogether");
         }
+        // A file may hold a network that breaks the constraints of its type, a cycle in a Bayesian network say. It
+        // opens, so that it can be corrected, with a warning; it opened without one (error 37 of the pending list)
+        List<String> violations = constraintsNotMet(netReadFrom);
+        if (!violations.isEmpty()) {
+            this.showColumns(netReadFrom, violations, "ConstraintsNotMet");
+        }
         if (netReadFrom.getShowCommentWhenOpening()) {
             this.showNetworkComment(netReadFrom);
         }
+    }
+    
+    /** What the network does not meet of the constraints of its type, a paragraph for each breach. */
+    static List<String> constraintsNotMet(ProbNet probNet) {
+        return probNet.getConstraintViolations().stream().map(violation -> violation.toString() + "\n").toList();
     }
     
     /** Warns about some lines on a network, with the title and the text that the messages have under a key. */

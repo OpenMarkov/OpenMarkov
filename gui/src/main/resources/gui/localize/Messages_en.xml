@@ -166,6 +166,10 @@
         <Title value="Distributions that cannot go together"/>
         <Text value="In these probability columns of the network &quot;~&quot; the distributions of the uncertainty cannot go together. Sensitivity analysis will not run until they are corrected, in the uncertainty dialog of each column."/>
     </DistributionsCannotGoTogether>
+    <ConstraintsNotMet>
+        <Title value="Constraints that the network does not meet"/>
+        <Text value="The network &quot;~&quot; does not meet these constraints of its type. It can be edited to correct it, but it will not be evaluated until then."/>
+    </ConstraintsNotMet>
     <NotEnoughMemoryForExactInference>
         <Title value="Not enough memory for exact inference"/>
         <Text value="There is not enough memory available "/>

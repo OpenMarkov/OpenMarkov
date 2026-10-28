@@ -128,6 +128,10 @@
         <Title value="Probabilidades que no suman uno"/>
         <Text value="Estas columnas de probabilidad de la red &quot;~&quot; no suman uno. El muestreo y el cálculo exacto darán resultados distintos."/>
     </ColumnsDoNotAddUpToOne>
+    <ConstraintsNotMet>
+        <Title value="Restricciones que la red no cumple"/>
+        <Text value="La red &quot;~&quot; no cumple estas restricciones de su tipo. Se puede editar para corregirla, pero no se evaluará hasta entonces."/>
+    </ConstraintsNotMet>
     <NotEnoughMemoryForExactInference>
         <Title value="Memoria insuficiente para la inferencia exacta"/>
         <Text value="No hay memoria suficiente para llevar a cabo inferencia exacta.&#10; Se utilizará un algoritmo de inferencia aproximada. "/>
