@@ -21,6 +21,7 @@ import org.openmarkov.gui.configuration.JavaSerializationUtils;
 import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.Theme;
 import org.openmarkov.gui.configuration.UserPreferences;
+import org.openmarkov.gui.dialog.Disclaimer;
 import org.openmarkov.gui.dialog.OMExceptionHandler;
 import org.openmarkov.gui.dialog.SplashScreenLoader;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
@@ -127,6 +128,10 @@ public class OpenMarkov {
         
         SplashScreenLoader.asyncLoadWithSplash(() -> {
             MainGUI.INSTANCE.setVisible(true);
+            // OpenMarkov is used only once its disclaimer is accepted, which is asked the first time it starts
+            if (!Disclaimer.isAcceptedBy(MainGUI.INSTANCE)) {
+                System.exit(0);
+            }
             if (OpenMarkov.STARTED_AS_MAIN_INSTANCE &&
                     UserPreferences.STARTUP_ACTIONS.get().contains(StartupAction.RESTORE_LAST_SESSION)) {
                 var lastOpenSource = UserPreferences.LAST_SESSION_NETWORK_FILES.get();

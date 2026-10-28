@@ -801,6 +801,17 @@
             <Text value="Version ~ (built ~)"/>
         </Version>
     </AboutBox>
+    <Disclaimer>
+        <Title>
+            <Text value="Disclaimer"/>
+        </Title>
+        <Message>
+            <Text value="OpenMarkov is provided &quot;as is&quot;, without warranty of any kind. In no event shall its authors or CISIAD, UNED be liable for any damage arising from its use, nor for any decision based on its results, which remain the sole responsibility of the user."/>
+        </Message>
+        <Accept>
+            <Text value="Accept"/>
+        </Accept>
+    </Disclaimer>
     <OKCancelApplyHorizontalDialog>
         <jButtonUndo>
             <Text value="Undo"/>

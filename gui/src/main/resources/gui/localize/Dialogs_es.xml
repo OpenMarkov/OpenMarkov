@@ -774,6 +774,17 @@
             <Text value="Versión"/>
         </Version>
     </AboutBox>
+    <Disclaimer>
+        <Title>
+            <Text value="Exención de responsabilidad"/>
+        </Title>
+        <Message>
+            <Text value="OpenMarkov se ofrece tal cual, sin garantía de ningún tipo. En ningún caso sus autores ni el CISIAD de la UNED serán responsables de ningún daño derivado de su uso, ni de ninguna decisión basada en sus resultados, que son responsabilidad exclusiva del usuario."/>
+        </Message>
+        <Accept>
+            <Text value="Aceptar"/>
+        </Accept>
+    </Disclaimer>
     <OKCancelApplyHorizontalDialog>
         <jButtonUndo>
             <Text value="Deshacer"/>

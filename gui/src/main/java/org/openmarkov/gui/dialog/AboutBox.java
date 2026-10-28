@@ -110,7 +110,14 @@ public class AboutBox extends JDialog implements ActionListener {
         jPanelAboutText.add(jLabelCopyright);
         jPanelAboutText.add(jLabelLicense);
         jPanelAboutText.add(jLabelAdvertisement);
-        this.getContentPane().add(jPanelAboutText, BorderLayout.CENTER);
+        // the disclaimer, below the lines of the same height, as wide as the logo without the margins
+        JPanel jPanelDisclaimer = new JPanel(new BorderLayout());
+        jPanelDisclaimer.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
+        jPanelDisclaimer.add(Disclaimer.labelWithTitle(splash.getWidth(null) / 2 - 40), BorderLayout.CENTER);
+        JPanel jPanelAboutTextAndDisclaimer = new JPanel(new BorderLayout());
+        jPanelAboutTextAndDisclaimer.add(jPanelAboutText, BorderLayout.CENTER);
+        jPanelAboutTextAndDisclaimer.add(jPanelDisclaimer, BorderLayout.SOUTH);
+        this.getContentPane().add(jPanelAboutTextAndDisclaimer, BorderLayout.CENTER);
         // set the OK button and action associated
         jButtonOK.setText(stringDatabase.getString("AboutBox.OK.Text"));
         jButtonOK.addActionListener(this);

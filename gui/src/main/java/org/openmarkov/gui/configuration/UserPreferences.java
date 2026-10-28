@@ -88,6 +88,11 @@ public final class UserPreferences {
                 new TypeToken<>() {
                 });
     
+    /** Whether the user accepted the disclaimer, which OpenMarkov asks for each time it starts until then. */
+    public static final UserPreference<Boolean> DISCLAIMER_ACCEPTED = UserPreference
+            .of("user_interface/disclaimer_accepted", () -> false, null, new TypeToken<>() {
+            });
+    
     public static final UserPreference<WindowDimensions> LATEST_MAIN_GUI_DIMENSIONS = UserPreference
             .of("user_interface/latest_main_gui_dimensions",
                 () -> new WindowDimensions(new Point(0, 0), new Dimension(600, 400), 0),
