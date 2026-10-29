@@ -11,6 +11,7 @@ import org.openmarkov.core.localize.ClassLocalizable;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -37,6 +38,16 @@ public class State implements Cloneable, ClassLocalizable {
     }
     
     // Methods
+    /** @return whether {@code one} and {@code other} name the same state: capitals and surrounding spaces do not count */
+    public static boolean sameName(String one, String other) {
+        return Objects.equals(nameKey(one), nameKey(other));
+    }
+
+    /** @return {@code name} as {@link #sameName} compares it, or {@code null} for {@code null} */
+    public static String nameKey(String name) {
+        return name == null ? null : name.trim().toLowerCase(Locale.ROOT);
+    }
+
     public String getName() {
         return name;
     }

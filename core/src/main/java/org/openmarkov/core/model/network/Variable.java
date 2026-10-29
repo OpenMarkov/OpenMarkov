@@ -290,14 +290,31 @@ public class Variable implements Cloneable, Comparable<Variable>, ClassLocalizab
         return stateProperties != null ? stateProperties.get(propertyName) : null;
     }
     
-    public void renameState(State state, String newName) {
-        for (State s : states) {
-            // The state being renamed is skipped: renaming it to its own current name is a no-op,
-            // not a collision.
-            if ((s != state) && s.getName().contentEquals(newName)) {
-                throw new InvalidArgumentException(newName, "new name", "that name already belongs to another state");
-            }
+    /** @return whether the states of this variable have names: the only state of a numeric variable has none */
+    public boolean hasNamedStates() {
+        return variableType == VariableType.FINITE_STATES || variableType == VariableType.DISCRETIZED;
+    }
+
+    /** @return whether a state of this variable other than {@code except} is named {@code name}, as {@link State#sameName} compares */
+    public boolean isStateNameTaken(String name, @Nullable State except) {
+        return Arrays.stream(states).anyMatch(s -> s != except && State.sameName(s.getName(), name));
+    }
+
+    /**
+     * Refuses {@code name} for a state of this variable, other than {@code except}, if it is empty or another state
+     * already has it.
+     */
+    public void checkStateName(String name, @Nullable State except) {
+        if (hasNamedStates() && (name == null || name.isBlank())) {
+            throw new InvalidArgumentException(name, "new name", "the name of a state cannot be empty");
         }
+        if (isStateNameTaken(name, except)) {
+            throw new InvalidArgumentException(name, "new name", "that name already belongs to another state");
+        }
+    }
+
+    public void renameState(State state, String newName) {
+        checkStateName(newName, state);
         String oldName = state.getName();
         // Move additional properties from old key to new key if they exist
         HashMap<String, String> additionalPropertiesOldName = statesAdditionalProperties.remove(oldName);

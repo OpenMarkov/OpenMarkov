@@ -112,6 +112,7 @@ public final class VariableStateOperations {
     // -------------------------------------------------------------------------
 
     private static void addStateAt(Variable variable, Node node, int stateIndex, String newName) {
+        variable.checkStateName(newName, null);
         State[] oldStates = variable.getStates();
         ArrayList<State> list = Arrays.stream(oldStates)
                                       .collect(Collectors.toCollection(ArrayList::new));

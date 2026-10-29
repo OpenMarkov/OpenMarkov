@@ -9,8 +9,8 @@ package org.openmarkov.gui.dialog.common;
 
 import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.action.core.NodeStateEdit;
+import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
@@ -304,16 +304,17 @@ public class PrefixedKeyTablePanel extends KeyTablePanel implements TableModelLi
             ProbNet probNet = node.getProbNet();
             try {
                 nodeStateEdit.executeEdit();
-            } catch (InvalidArgumentException rejected) {
-                // The variable refused the new name because another state already has it.
-                // The cell keeps the old name and the user is told, instead of dying.
+            } catch (DoEditException ex) {
+                if (!(ex instanceof DoEditException.CannotDoEditException refused
+                        && refused.originException instanceof ConstraintViolatedException)) {
+                    throw new UnrecoverableException(ex);
+                }
+                // The name is empty or another state has it: the cell keeps the old name and the user is told why
                 renameAction = false;
                 ((DefaultTableModel) e.getSource()).setValueAt(oldName, row, e.getColumn());
                 renameAction = true;
-                warnStateRenameRejected();
+                warnStateRenameRejected(ex.getExceptionMessage());
                 return;
-            } catch (DoEditException ex) {
-                throw new UnrecoverableException(ex);
             }
             // @ 2014/11/18. Issue 145.
             // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables

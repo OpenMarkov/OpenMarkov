@@ -7,11 +7,13 @@
 
 package org.openmarkov.core.action.core;
 
+import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.core.model.network.State;
+import org.openmarkov.core.model.network.constraint.ValidState;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.java.cloneUtils.CloneUtils;
 
@@ -70,6 +72,12 @@ import java.util.List;
     }
     
     // Methods
+    @Override public void checkConstraintsWillBeMet(ConstraintChecker constraintChecker) {
+        if (this.probNet.getConstraintOfClass(ValidState.class) instanceof ValidState constraint) {
+            constraint.checkStates(constraintChecker, this.node, this.newStates);
+        }
+    }
+    
     @Override protected void doEdit() {
         this.node.getVariable().replaceStates(this.node, this.newStates);
     }

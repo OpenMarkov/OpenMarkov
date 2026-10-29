@@ -21,6 +21,7 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for renaming a state from the states table of the interface: a name another state already
@@ -40,13 +41,15 @@ class DiscretizeTablePanelStateRenameTest {
     /** The panel under test, with the warning dialog silenced and counted. */
     private static final class WatchedPanel extends DiscretizeTablePanel {
         private int warnings;
+        private String reason;
 
         private WatchedPanel(Node node) {
             super(COLUMNS, node);
         }
 
-        @Override protected void warnStateRenameRejected() {
+        @Override protected void warnStateRenameRejected(String reason) {
             warnings++;
+            this.reason = reason;
         }
     }
 
@@ -79,6 +82,22 @@ class DiscretizeTablePanelStateRenameTest {
         assertEquals("b", panel.getValuesTable().getModel().getValueAt(0, 1),
                      "the cell must show the name the state still has");
         assertEquals(1, panel.warnings, "the user must be told why their name was not kept");
+        assertTrue(panel.reason.contains("X already has a state named a"), panel.reason);
+    }
+
+    @Test
+    void renamingToTheNameOfAnotherStateWithOtherCapitalsKeepsTheOldNameAndWarns() {
+        panel.getValuesTable().getModel().setValueAt("A", 0, 1);
+        assertArrayEquals(new String[]{"a", "b"}, stateNames());
+        assertEquals(1, panel.warnings);
+    }
+
+    @Test
+    void renamingToAnEmptyNameKeepsTheOldNameAndWarns() {
+        panel.getValuesTable().getModel().setValueAt("", 0, 1);
+        assertArrayEquals(new String[]{"a", "b"}, stateNames());
+        assertEquals("b", panel.getValuesTable().getModel().getValueAt(0, 1));
+        assertTrue(panel.reason.contains("The name of a state of X cannot be empty"), panel.reason);
     }
 
     @Test

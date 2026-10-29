@@ -9,8 +9,8 @@ package org.openmarkov.gui.component;
 
 import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.action.core.NodeStateEdit;
+import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.localize.StringDatabase;
@@ -53,7 +53,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
-import java.util.stream.Collectors;
 
 /**
  * This class implements a panel to encapsulate a Discretize Table with the
@@ -724,11 +723,8 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
      * Invoked when the button 'add' is pressed.
      */
     @Override protected void actionPerformedAddValue(ActionEvent e) throws DoEditException {
-        var currentStateNames = Arrays.stream(node.getVariable().getStates())
-                                      .map(State::getName)
-                                      .collect(Collectors.toSet());
         String newStateName = null;
-        for (int i = 1; newStateName == null || currentStateNames.contains(newStateName); i++) {
+        for (int i = 1; newStateName == null || node.getVariable().isStateNameTaken(newStateName, null); i++) {
             newStateName = stringDatabase.getString("AddState.DefaultValue") + " " + i;
         }
         Variable variable = node.getVariable();
@@ -919,18 +915,15 @@ public class DiscretizeTablePanel extends KeyTablePanel implements TableModelLis
                     nodeStateEdit.executeEdit();
                     propagateNodeStateEditRelatedVariables(StateAction.RENAME, row, newName);
                     //
-                } catch (InvalidArgumentException rejected) {
-                    // The variable refused the new name because another state already has it.
-                    // The cell keeps the old name and the user is told, instead of dying.
-                    valuesTable.setValueAt(node.getVariable().getStateName(indexState), row, column,
-                                           tableEvent.getSource());
-                    warnStateRenameRejected();
                 } catch (DoEditException e) {
-                    // If an error occurred or a constraint is broken
-                    // we restore the old name of the edited state
+                    // The cell keeps the old name. A name that is empty or that another state has is told to the user
                     String oldState = node.getVariable().getStateName(indexState);
                     valuesTable.setValueAt(oldState, row, column, tableEvent.getSource());
-                    throw new UnrecoverableException(e);
+                    if (!(e instanceof DoEditException.CannotDoEditException refused
+                            && refused.originException instanceof ConstraintViolatedException)) {
+                        throw new UnrecoverableException(e);
+                    }
+                    warnStateRenameRejected(e.getExceptionMessage());
                 }
             }
         }

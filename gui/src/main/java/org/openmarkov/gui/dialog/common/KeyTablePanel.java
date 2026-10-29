@@ -105,12 +105,11 @@ public class KeyTablePanel extends JPanel implements ActionListener, ListSelecti
     private final boolean firstColumnHidden;
 
     /**
-     * Tells the user that renaming a state was refused because another state already has the new
-     * name. In a method of its own so tests can silence the dialog.
+     * Tells the user that renaming a state was refused, and why. In a method of its own so tests can silence the
+     * dialog.
      */
-    protected void warnStateRenameRejected() {
-        JOptionPane.showMessageDialog(this, stringDatabase.getString("DuplicatedState.Text"),
-                                      stringDatabase.getString("DuplicatedState.Title"),
+    protected void warnStateRenameRejected(String reason) {
+        JOptionPane.showMessageDialog(this, reason, stringDatabase.getString("StateNotRenamed.Title"),
                                       JOptionPane.WARNING_MESSAGE);
     }
     

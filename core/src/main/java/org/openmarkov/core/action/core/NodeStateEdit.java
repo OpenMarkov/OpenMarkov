@@ -143,8 +143,8 @@ public class NodeStateEdit extends PNEdit {
     
     @Override public void checkConstraintsWillBeMet(ConstraintChecker constraintChecker) {
         if (probNet.getConstraintOfClass(ValidState.class) instanceof ValidState constraint) {
-            constraint.checkState(constraintChecker, this.getNewState()
-                                                         .getName(), this.getNode(), this.getStateAction());
+            constraint.checkState(constraintChecker, this.newName, this.node, this.stateAction,
+                                  this.stateAction == StateAction.RENAME ? this.oldState : null);
         }
     }
     

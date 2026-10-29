@@ -132,7 +132,7 @@
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$MultipleConstraintsViolated"
                   value="Multiple constraints have been violated:"/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfStateCannotBeEmpty"
-                  value="Cannot use an empty name of state in node {node}."/>
+                  value="The name of a state of {node.getName} cannot be empty."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfVariableCannotBeEmpty"
                   value="Name of variable {variable} cannot be empty."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfVariableIsAlreadyPresent"
@@ -184,9 +184,9 @@
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyUndirectedLinksCannotHaveParents"
                   value="Node {node} must have only undirected links to other nodes, but it has directed links to parent nodes: {parents}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$StateAlreadyExists"
-                  value="State {newState} already exists in node {node}."/>
+                  value="{node.getName} already has a state named {newState}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$StateDuplicated"
-                  value="State {stateName} is duplicated in node {node}."/>
+                  value="{node.getName} has two states named {stateName}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CycleWithoutAnEvent"
                   value="The link from {parent.getName} to {child.getName} is part of a cycle with no event node. Every cycle of more than one node must contain an event node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ThereIsACycle"
@@ -461,7 +461,7 @@
     <Localization class="org.openmarkov.core.model.network.constraint.ValidName"
                   value="Variable names must not be empty and it two variables cannot have the same name"/>
     <Localization class="org.openmarkov.core.model.network.constraint.ValidState"
-                  value="All state have names and two states cannot have the same name"/>
+                  value="Every state has a name, and no two states of a variable have the same name"/>
     <Localization class="org.openmarkov.core.model.network.constraint.ValidStateName"
                   value="All states must have a different name, and no state can have no name"/>
     <Localization class="org.openmarkov.core.model.network.potential.treeadd.Threshold"

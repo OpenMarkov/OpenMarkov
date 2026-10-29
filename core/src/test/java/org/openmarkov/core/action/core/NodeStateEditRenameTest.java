@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.exception.DoEditException;
-import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
@@ -68,7 +67,7 @@ class NodeStateEditRenameTest {
     @Test
     void renamingToASiblingNameThroughTheEditIsRefused() {
         NodeStateEdit rename = new NodeStateEdit(node, StateAction.RENAME, 0, "s0");
-        assertThrows(InvalidArgumentException.class, rename::executeEdit);
+        assertThrows(DoEditException.CannotDoEditException.class, rename::executeEdit);
         assertArrayEquals(new String[]{"s0", "s1", "s2"}, stateNames());
     }
 }
