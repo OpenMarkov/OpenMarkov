@@ -23,6 +23,7 @@ import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.modelUncertainty.ProbDensFunctionManager;
 import org.openmarkov.core.model.network.potential.CycleLengthShift;
@@ -31,6 +32,7 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.UniformPotential;
 import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
 import org.openmarkov.core.model.network.potential.operation.LinkRestrictionPotentialOperations;
+import org.openmarkov.core.model.network.potential.plugin.PotentialType;
 import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.gui.action.AugmentedPotentialValueEdit;
@@ -247,9 +249,10 @@ public class PotentialEditPanel extends JPanel {
             if (!filteredPotentialNames.contains(potentialClass)) {
                 filteredPotentialNames.add(potentialClass);
             }
-            filteredPotentialNames.sort(Comparator.comparing(PotentialUtils::getPotentialName));
+            filteredPotentialNames.sort(Comparator.comparing(relationType -> relationTypeName(relationType, this.node)));
             this.potentialTypeComboBox = new JComboBox<Class<? extends Potential>>(filteredPotentialNames.toArray(new Class[0]));
-            this.potentialTypeComboBox.setRenderer(new JComboBoxFunctionRender<Class<? extends Potential>>(PotentialUtils::getPotentialName));
+            this.potentialTypeComboBox.setRenderer(new JComboBoxFunctionRender<Class<? extends Potential>>(
+                    relationType -> relationTypeName(relationType, this.node)));
             this.potentialTypeComboBox.setSelectedItem(potentialClass);
             this.potentialTypeComboBox.setBorder(new LineBorder(UIManager.getColor("List.dropLineColor"), 1, false));
             this.potentialTypeComboBox.setName("jComboBoxRelationType");
@@ -263,6 +266,24 @@ public class PotentialEditPanel extends JPanel {
             this.potentialTypeComboBox.setEnabled(!this.readOnly);
         }
         return this.potentialTypeComboBox;
+    }
+    
+    /**
+     * The name the selector of the type of relation shows for {@code relationType} in {@code node}: its text in the
+     * block {@code relationType} of the selectables, or else the name it has in the files.
+     */
+    static String relationTypeName(Class<? extends Potential> relationType, Node node) {
+        Class<?> annotated = relationType;
+        while (!annotated.isAnnotationPresent(PotentialType.class) && annotated.getSuperclass() != null) {
+            annotated = annotated.getSuperclass();
+        }
+        String block = "relationType." + annotated.getSimpleName() + ".";
+        StringDatabase strings = StringDatabase.getUniqueInstance();
+        String name = node.getNodeType() == NodeType.UTILITY ? strings.getNullableString(block + "UtilityNode") : null;
+        if (name == null) {
+            name = strings.getNullableString(block + "Text");
+        }
+        return name != null ? name : PotentialUtils.getPotentialName(relationType);
     }
     
     /**

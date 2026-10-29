@@ -1,52 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
-    <algorithmRelationType>
-        <ICI-MINCausal>
-            <Text value="ICI-Causal MIN"/>
-        </ICI-MINCausal>
-        <Product>
-            <Text value="Product"/>
-        </Product>
-        <Table>
-            <Text value="Table"/>
-        </Table>
-        <Sum>
-            <Text value="Sum"/>
-        </Sum>
-        <ICI-OR>
-            <Text value="ICI-OR"/>
-        </ICI-OR>
+    <relationType>
+        <AugmentedProbTablePotential>
+            <Text value="Table with formulas"/>
+        </AugmentedProbTablePotential>
         <CycleLengthShift>
-            <Text value="Cycle Length Shift"/>
+            <Text value="Cycle length shift"/>
         </CycleLengthShift>
-        <XOR>
-            <Text value="XOR"/>
-        </XOR>
-        <ICI-AND>
-            <Text value="ICI-AND"/>
-        </ICI-AND>
-        <Uniform>
-            <Text value="Uniform"/>
-        </Uniform>
-        <ICI-Tuning>
-            <Text value="ICI-Tuning"/>
-        </ICI-Tuning>
-        <SameAsPrevious>
-            <Text value="Same as previous"/>
-        </SameAsPrevious>
-        <Tree_ADD>
-            <Text value="Tree - ADD"/>
-        </Tree_ADD>
-        <ICI-MINGeneral>
-            <Text value="ICI-General MIN"/>
-        </ICI-MINGeneral>
-        <ICI-MAXCausal>
-            <Text value="ICI-Causal MAX"/>
-        </ICI-MAXCausal>
-        <ICI-MAXGeneral>
-            <Text value="ICI-General MAX"/>
-        </ICI-MAXGeneral>
-    </algorithmRelationType>
+        <DistributionTablePotential>
+            <Text value="Table of distributions"/>
+        </DistributionTablePotential>
+        <ExactDistrPotential>
+            <Text value="Table of values"/>
+            <UtilityNode value="Table of utilities"/>
+        </ExactDistrPotential>
+        <TablePotential>
+            <Text value="Table of probabilities"/>
+        </TablePotential>
+        <TransitionTablePotential>
+            <Text value="Transition table"/>
+        </TransitionTablePotential>
+        <UnivariateDistrPotential>
+            <Text value="Probability distribution"/>
+        </UnivariateDistrPotential>
+    </relationType>
     <defaultStates>
         <medium>
             <Text value="medium"/>
