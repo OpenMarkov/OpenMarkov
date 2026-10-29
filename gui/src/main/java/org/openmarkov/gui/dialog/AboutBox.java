@@ -110,10 +110,12 @@ public class AboutBox extends JDialog implements ActionListener {
         jPanelAboutText.add(jLabelCopyright);
         jPanelAboutText.add(jLabelLicense);
         jPanelAboutText.add(jLabelAdvertisement);
-        // the disclaimer, below the lines of the same height, as wide as the logo without the margins
-        JPanel jPanelDisclaimer = new JPanel(new BorderLayout());
+        // the authors and the disclaimer, below the lines of the same height, as wide as the logo without the margins
+        int paragraphWidth = splash.getWidth(null) / 2 - 40;
+        JPanel jPanelDisclaimer = new JPanel(new BorderLayout(0, 10));
         jPanelDisclaimer.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
-        jPanelDisclaimer.add(Disclaimer.labelWithTitle(splash.getWidth(null) / 2 - 40), BorderLayout.CENTER);
+        jPanelDisclaimer.add(authorsLabel(paragraphWidth), BorderLayout.NORTH);
+        jPanelDisclaimer.add(Disclaimer.labelWithTitle(paragraphWidth), BorderLayout.CENTER);
         JPanel jPanelAboutTextAndDisclaimer = new JPanel(new BorderLayout());
         jPanelAboutTextAndDisclaimer.add(jPanelAboutText, BorderLayout.CENTER);
         jPanelAboutTextAndDisclaimer.add(jPanelDisclaimer, BorderLayout.SOUTH);
@@ -129,6 +131,17 @@ public class AboutBox extends JDialog implements ActionListener {
         setLocationRelativeTo(parent);
         this.setVisible(true);
         anAboutBox = this;
+    }
+
+    /**
+     * The authors of OpenMarkov, opened by their title in bold, as a centred paragraph of the given width, in pixels,
+     * whose lines do not break inside a name.
+     */
+    static JLabel authorsLabel(int width) {
+        StringDatabase strings = StringDatabase.getUniqueInstance();
+        String names = strings.getString("AboutBox.Authors.Text").replace(" ", "&nbsp;").replace(",&nbsp;", ", ");
+        return Disclaimer.wrapped("<html><div style='text-align: center'><b>" + strings.getString("AboutBox.Authors.Title")
+                + ".</b> " + names + "</div></html>", width);
     }
 
     /**

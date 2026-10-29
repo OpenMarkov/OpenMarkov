@@ -17,7 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The About window takes the version and the date from the build, not from text written by hand.
+ * The About window takes the version and the date from the build, not from text written by hand, and names the
+ * authors.
  *
  * @author Manuel Arias
  */
@@ -30,5 +31,13 @@ class AboutBoxTest {
         String version = build.getProperty("version");
         assertTrue(version.matches("\\d+\\.\\d+\\.\\d+(-SNAPSHOT)?"), version);
         assertDoesNotThrow(() -> LocalDate.parse(build.getProperty("date")));
+    }
+
+    @Test
+    void itNamesTheAuthorsInTheirOrder() {
+        String names = AboutBox.authorsLabel(400).getText().replace("&nbsp;", " ");
+        assertTrue(names.contains("<b>Authors.</b> Manuel Arias, Francisco Javier Díez, Manuel Luque, Íñigo Bermejo, "
+                + "Jorge Pérez, Jorge Rico, José Andrés Mota, Carmen María Yago, Jesús Oliva, Antonio Sáez, "
+                + "Caroline König</div>"), names);
     }
 }

@@ -70,7 +70,7 @@ public final class Disclaimer {
      * A label with the HTML, whose lines break at the given width, in pixels. A width written in the HTML would not
      * do: Swing takes each of its pixels as 1.3.
      */
-    private static JLabel wrapped(String html, int width) {
+    static JLabel wrapped(String html, int width) {
         JLabel label = new JLabel(html);
         View view = (View) label.getClientProperty(BasicHTML.propertyKey);
         view.setSize(width, 0);

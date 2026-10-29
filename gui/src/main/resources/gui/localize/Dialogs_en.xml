@@ -782,6 +782,10 @@
         <Advertisement>
             <Text value="Please visit OpenMarkov's web page (www.openmarkov.org) for the latest updates"/>
         </Advertisement>
+        <Authors>
+            <Title value="Authors"/>
+            <Text value="Manuel Arias, Francisco Javier Díez, Manuel Luque, Íñigo Bermejo, Jorge Pérez, Jorge Rico, José Andrés Mota, Carmen María Yago, Jesús Oliva, Antonio Sáez, Caroline König"/>
+        </Authors>
         <Copyright>
             <Text value="© 2008–~ CISIAD, UNED"/>
         </Copyright>
