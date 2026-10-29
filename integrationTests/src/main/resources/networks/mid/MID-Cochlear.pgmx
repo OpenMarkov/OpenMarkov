@@ -4852,7 +4852,7 @@
           <Value distribution="Gamma-mv" name="habilitation-sequential">600.0 120.0</Value>
         </UncertainValues>
       </Potential>
-      <Potential type="Table" role="joinProbability">
+      <Potential type="Table" role="conditionalProbability">
         <Comment><![CDATA[<html>
   <head>
     

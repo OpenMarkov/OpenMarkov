@@ -11,6 +11,7 @@
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$NoNetworkTypeFound" value="No network type found."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$PotentialTypeNotSupported" value="Potential type {potentialType} is not supported."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$PotentialWithoutRole" value="A potential has no role attribute."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownPotentialRole" value="The relation of {nodeName} has the role {role}, which does not exist."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TreeADDWithoutPotentialOrReference" value="TreeADD branch should specify either a potential or a reference."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$ReferenceWithoutLabel" value="The relation of {variableName} cannot be read: a branch of its tree uses the label {reference}, which no branch of that tree has."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$TreeADDWithoutTwoThresholds" value="TreeADD branch has {thresholds.size} thresholds, but it should have only 2."/>

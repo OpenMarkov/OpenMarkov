@@ -805,7 +805,7 @@
           </Branch>
         </Branches>
       </Potential>
-      <Potential type="Table" role="joinProbability">
+      <Potential type="Table" role="conditionalProbability">
         <Variables>
           <Variable name="AIDS" timeSlice="0" />
           <Variable name="State" timeSlice="0" />

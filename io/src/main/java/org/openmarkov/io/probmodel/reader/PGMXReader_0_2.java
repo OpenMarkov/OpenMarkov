@@ -1554,8 +1554,23 @@ public class PGMXReader_0_2 {
             xmlRole = PotentialRole.UNSPECIFIED;
         } else {
             xmlRole = PGMXReader_0_2.getPotentialRolByLabel(xmlPotentialRole);
+            if (xmlRole == null) {
+                throw new PGMXParserException.UnknownPotentialRole(xmlPotentialRole, firstVariableOf(xmlPotential), xmlPotential);
+            }
         }
         return xmlRole;
+    }
+
+    /** @return the name of the first variable of {@code xmlPotential}, which is its node, or "?" if it has none */
+    private static String firstVariableOf(Element xmlPotential) {
+        Element variables = xmlPotential.getChild(XMLTags.VARIABLES.toString());
+        Element variable = variables == null ? null : variables.getChild(XMLTags.VARIABLE.toString());
+        if (variable == null) {
+            return "?";
+        }
+        String name = variable.getAttributeValue(XMLAttributes.NAME.toString());
+        String timeSlice = variable.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
+        return (timeSlice == null || name.endsWith(" [" + timeSlice + "]")) ? name : name + " [" + timeSlice + "]";
     }
     
     /**

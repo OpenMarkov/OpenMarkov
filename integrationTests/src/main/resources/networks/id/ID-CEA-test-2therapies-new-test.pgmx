@@ -145,7 +145,7 @@
           <Value distribution="Beta" name="prevalence">14.0 86.0</Value>
         </UncertainValues>
       </Potential>
-      <Potential type="Table" role="joinProbability">
+      <Potential type="Table" role="conditionalProbability">
         <Variables>
           <Variable name="New test" />
           <Variable name="Dec: New test" />

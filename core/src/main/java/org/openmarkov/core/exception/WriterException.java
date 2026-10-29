@@ -64,6 +64,15 @@ public abstract sealed class WriterException extends UserInputException {
         public final String formatVersion;
     }
     
+    /** A potential without a role, in a format that writes the role of each potential, so the network is not saved. */
+    public static final class PotentialWithoutRole extends WriterException {
+        public PotentialWithoutRole(String nodeName) {
+            this.nodeName = nodeName;
+        }
+        
+        public final String nodeName;
+    }
+    
     /** A type of network whose options or relations the format cannot save, so the network is not saved. */
     public static final class NetworkTypeNotSupportedByFormat extends WriterException {
         public NetworkTypeNotSupportedByFormat(NetworkType networkType, String formatVersion) {

@@ -72,7 +72,7 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
      */
     @SuppressWarnings("ThrowInsideCatchBlockWhichIgnoresCaughtException")
     @Override
-    public void write(String netName, ProbNet probNet, List<EvidenceCase> evidences) throws WriterException.TryingToWriteANullProbNet, WriterException.TryingToWriteAProbNetWithoutName, WriterException.CannotCreateFile, WriterException.NetworkTypeNotSupportedByFormat, WriterException.RelationNotSupportedByFormat {
+    public void write(String netName, ProbNet probNet, List<EvidenceCase> evidences) throws WriterException.TryingToWriteANullProbNet, WriterException.TryingToWriteAProbNetWithoutName, WriterException.CannotCreateFile, WriterException.NetworkTypeNotSupportedByFormat, WriterException.RelationNotSupportedByFormat, WriterException.PotentialWithoutRole {
         if (probNet == null) {
             throw new WriterException.TryingToWriteANullProbNet();
         }
@@ -81,6 +81,14 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
         }
         if (probNet.getNetworkType() instanceof DESNetworkType && !this.savesNetworksOfEvents()) {
             throw new WriterException.NetworkTypeNotSupportedByFormat(probNet.getNetworkType(), formatVersion);
+        }
+        if (this.writesPotentialRoles()) {
+            for (Potential potential : probNet.getPotentials()) {
+                if (potential.getPotentialRole() == null) {
+                    String nodeName = potential.getNumVariables() == 0 ? "?" : potential.getVariable(0).getName();
+                    throw new WriterException.PotentialWithoutRole(nodeName);
+                }
+            }
         }
         // PrintWriter out = new PrintWriter(new FileOutputStream(netName));
         Element root = new Element("ProbModelXML");
@@ -106,6 +114,11 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
     /** Whether this format saves the networks of discrete events, with their Monte Carlo options. */
     protected boolean savesNetworksOfEvents() {
         return false;
+    }
+    
+    /** Whether this format writes the role of each potential, which then cannot be missing. */
+    protected boolean writesPotentialRoles() {
+        return true;
     }
     
     /** @return the reader of this format, which has to be able to read back every relation saved */

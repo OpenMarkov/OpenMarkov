@@ -365,6 +365,18 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String potentialType;
     }
 
+    /** A potential whose role is not one of {@link PotentialRole}; the node is the first variable of the potential. */
+    public static final class UnknownPotentialRole extends PGMXParserException {
+        public UnknownPotentialRole(String role, String nodeName, Element element) {
+            super(element);
+            this.role = role;
+            this.nodeName = nodeName;
+        }
+
+        public final String role;
+        public final String nodeName;
+    }
+
     public static final class PotentialWithoutRole extends PGMXParserException {
         public PotentialWithoutRole(Element element) {
             super(element);

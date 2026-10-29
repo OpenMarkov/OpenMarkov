@@ -45,13 +45,17 @@ public class PGMXWriter_1_0 extends PGMXWriter_0_2 {
      * @param evidences list of evidence cases to include
      */
     @Override
-    public void write(String netName, ProbNet probNet, List<EvidenceCase> evidences) throws WriterException.CannotCreateFile, WriterException.TryingToWriteAProbNetWithoutName, WriterException.TryingToWriteANullProbNet, WriterException.NetworkTypeNotSupportedByFormat, WriterException.RelationNotSupportedByFormat {
+    public void write(String netName, ProbNet probNet, List<EvidenceCase> evidences) throws WriterException.CannotCreateFile, WriterException.TryingToWriteAProbNetWithoutName, WriterException.TryingToWriteANullProbNet, WriterException.NetworkTypeNotSupportedByFormat, WriterException.RelationNotSupportedByFormat, WriterException.PotentialWithoutRole {
         formatVersion = "1.0.0";
         super.write(netName, probNet, evidences);
     }
     
     @Override protected boolean savesNetworksOfEvents() {
         return true;
+    }
+    
+    @Override protected boolean writesPotentialRoles() {
+        return false;
     }
     
     @Override protected PGMXReader_0_2 readerOfThisFormat() {
