@@ -90,18 +90,17 @@ public class PotentialPanelManager {
     }
     
     /**
-     * Returns a potential panel by name or family.
-     *
-     * @return a new Potential instance given the parameters.
+     * Returns a new panel for editing the potential of the node, or a {@link NotEditablePotentialPanel} if its type has
+     * no editing panel.
      */
     public final PotentialPanel createPotentialPanel(Node node, PotentialEditPanel potentialEditPanel) {
-
-
-
         Object potentialClass = node.getPotential().getClass();
 
         Class<? extends PotentialPanel> potentialPanelClass =
                 potentialPanelClassesByClass.get(potentialClass);
+        if (potentialPanelClass == null) {
+            return new NotEditablePotentialPanel(node);
+        }
 
         try {
             return potentialPanelClass.getConstructor(Node.class, JComponent.class)

@@ -241,7 +241,9 @@ public class PotentialEditPanel extends JPanel {
             }
             Class<? extends Potential> potentialClass = this.node.getPotential().getClass();
             List<Class<? extends Potential>> filteredPotentialNames = new ArrayList<>(PotentialUtils.getFilteredPotentialClasses(this.node));
-            filteredPotentialNames.removeIf(availablePotentialClass -> !ClassUtils.isConcrete(availablePotentialClass));
+            // A type without an editing panel is not offered; a node that already has one still shows it
+            filteredPotentialNames.removeIf(availablePotentialClass -> !ClassUtils.isConcrete(availablePotentialClass)
+                    || PotentialPanelManager.getInstance().getPotentialPanelClassOf(availablePotentialClass) == null);
             if (!filteredPotentialNames.contains(potentialClass)) {
                 filteredPotentialNames.add(potentialClass);
             }

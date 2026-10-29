@@ -106,6 +106,9 @@
         <jLabelRelationType>
             <Text value="Relation Type:"/>
         </jLabelRelationType>
+        <jLabelNotEditable>
+            <Text value="This type of relation cannot be edited here. Choose another relation type to edit the node."/>
+        </jLabelNotEditable>
         <jRadioButtonDeterministicType>
             <Text value="Deterministic policy"/>
         </jRadioButtonDeterministicType>
