@@ -8,7 +8,6 @@
 package org.openmarkov.integrationTests.inference.dan;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -204,13 +203,6 @@ public abstract class DANEvaluationTest extends NetworkEvaluationInferenceTest {
     }
     
     
-    @Disabled @Test public void testDANTutorial33()
-            throws
-            NotEvaluableNetworkException, ProbNetParserException, URISyntaxException, IOException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
-        testNetworkEvaluation("tutorial-3-3", 7.73);
-    }
-    
-    
     /**
      * The expected value is settled by hand, outside OpenMarkov, from the tables in the file:
      * NCExp is a noisy-OR with leak 0.99/0.01, so going to the club is worth
@@ -356,11 +348,6 @@ public abstract class DANEvaluationTest extends NetworkEvaluationInferenceTest {
         }
     }
     
-    @Disabled @Test public void testDANOnlyTwoUtilityAndChanceFunctionSV()
-            throws
-            NotEvaluableNetworkException, ProbNetParserException, URISyntaxException, IOException, IncompatibleEvidenceException, NonProjectablePotentialException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
-        testNetworkEvaluation("only-two-utility-and-chance-function-sv", Math.abs(12 * 0.7 + (-20) * 0.3) + 3 * Math.abs(-2));
-    }
 		
 
 

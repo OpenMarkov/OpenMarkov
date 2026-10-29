@@ -9,7 +9,8 @@ package org.openmarkov.integrationTests.integrationTests;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
@@ -53,49 +54,11 @@ public class danAlgorithmTests {
         
     }
     
-    @Disabled("Missing test net DAN-2tests.pgmx")
-    @Test
-    public void testDAN2tests() throws ProbNetParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
-        String networkName = "DAN-2tests.pgmx";
-        String path = "networks/IDCEAnTherapies/";
-        double lambda = 30000;
-        PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();
-        
-        PGMXReader.NetworkAndEvidence probNetInfo = pgmxReader.read(getClass().getClassLoader()
-                                                                              .getResource(path + networkName));
-        ProbNet probNet = probNetInfo.probNet();
-        
-        CEP resultCEA = new DANDecompositionIntoSymmetricDANsCEA(probNet).getCEP();
-        TablePotential resultUNI = new DANDecompositionIntoSymmetricDANsEvaluation(probNet).getUtility();
-        
-        Assertions.assertEquals(resultUNI.getValues()[0], resultCEA.getEffectiveness(lambda) * lambda - resultCEA.getCost(lambda), deltaEquals);
-        
-    }
-    
-    @Disabled("Missing test net DAN-3tests.pgmx")
-    @Test
-    public void testDAN3tests() throws ProbNetParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
-        String networkName = "DAN-3tests.pgmx";
-        String path = "networks/IDCEAnTherapies/";
-        double lambda = 30000;
-        PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();
-        
-        PGMXReader.NetworkAndEvidence probNetInfo = pgmxReader.read(getClass().getClassLoader()
-                                                                              .getResource(path + networkName));
-        ProbNet probNet = probNetInfo.probNet();
-        
-        CEP resultCEA = new DANDecompositionIntoSymmetricDANsCEA(probNet).getCEP();
-        TablePotential resultUNI = new DANDecompositionIntoSymmetricDANsEvaluation(probNet).getUtility();
-        
-        Assertions.assertEquals(resultUNI.getValues()[0], resultCEA.getEffectiveness(lambda) * lambda - resultCEA.getCost(lambda), deltaEquals);
-        
-    }
-    
-    @Disabled("Missing test net DAN-4tests.pgmx")
-    @Test
-    public void testDAN4tests() throws ProbNetParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
-        String networkName = "DAN-4tests.pgmx";
-        String path = "networks/IDCEAnTherapies/";
+    /** The networks with two, three and four tests before the therapy. */
+    @ParameterizedTest
+    @ValueSource(strings = { "DAN-CE-2-test-problem.pgmx", "DAN-CE-3-test-problem.pgmx", "DAN-CE-4-test-problem.pgmx" })
+    public void testSeveralTests(String networkName) throws ProbNetParserException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NonProjectablePotentialException, IncompatibleEvidenceException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
+        String path = "networks/dan/";
         double lambda = 30000;
         PGMXReader_0_2 pgmxReader = new PGMXReader_0_2();
         

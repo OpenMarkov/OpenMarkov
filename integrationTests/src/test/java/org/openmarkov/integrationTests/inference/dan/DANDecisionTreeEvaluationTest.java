@@ -40,18 +40,15 @@ public class DANDecisionTreeEvaluationTest extends DANEvaluationTest {
 		testNetworkEvaluationAndDecisionTree(loadNetwork("king-noble-descent-yes-first-task-1-second-task-2"), true, 9.03);
 	}
 
-	//Next tests are commented because running them very often takes too much time
-	@Override @Disabled("Old DAN evaluation") @Test public void testDANKingNobleDescentNo() {
-		//testDANEvaluation("king-noble-descent-no",6.43);
-
+	// These three pass, but with the decision tree they take about 56 s together (15.6, 12.9 and 27.2 s on 29-10-2026).
+	// To enable them, remove these overrides and tag them @Tag(TestSpeed.SLOW) in DANEvaluationTest.
+	@Override @Disabled("Slow: about 16 s; if enabled, tag it as slow") @Test public void testDANKingNobleDescentNo() {
 	}
 
-	@Override @Disabled("Old DAN evaluation") @Test public void testDANKingNobleDescentYes() {
-		//testDANEvaluation("king-noble-descent-yes",9.03);
+	@Override @Disabled("Slow: about 13 s; if enabled, tag it as slow") @Test public void testDANKingNobleDescentYes() {
 	}
 
-	@Override @Disabled("Old DAN evaluation") @Test public void testDANKing() {
-		//testDANEvaluation("king",7.73);
+	@Override @Disabled("Slow: about 27 s; if enabled, tag it as slow") @Test public void testDANKing() {
 	}
 
 
