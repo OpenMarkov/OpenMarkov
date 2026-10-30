@@ -250,6 +250,9 @@ El \hyperref[err:323]{error~323} salió al corregir el \hyperref[err:134]{134}, 
 \paragraph{Errores añadidos el 27 de octubre}
 El \hyperref[err:359]{error~359} salió al plantear la decisión del \hyperref[err:100]{100}, midiendo el sorteo de una tabla de vida con valores fuera de rango. Se ha comprobado ejecutándolo sin ventana, y se añade ya corregido, por el mismo commit que el 100. El \hyperref[err:360]{error~360} se encontró al llevar a la versión en C++ y Qt los arreglos del 25 al 27 de octubre, al volver a medir las ventanas del análisis de coste-efectividad con todas las redes de prueba. Se ha comprobado con el jar del 27 de octubre, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo.
 
+\paragraph{Errores añadidos el 30 de octubre}
+El \hyperref[err:361]{error~361} se encontró al llevar a la versión en C++ y Qt los arreglos del 28 y 29 de octubre, al comprobar si el lector que dejó el arreglo del \hyperref[err:114]{114} (\texttt{f98f97e}) mira las mayúsculas del papel de una relación. Se ha comprobado con el jar del 30 de octubre, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo.
+
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
 
@@ -303,9 +306,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{359 errores}; 215 de ellos son defectos nuevos: 98 encontrados al
-comprobar o corregir los demás, 103 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{50} necesitan antes una decisión del equipo. Por esfuerzo estimado: 318 pequeños, 41 medios y 0 grandes.
-De los 359, 355 están ya corregidos, 1 lo está en parte y 2 están cerrados sin arreglo.
+La lista tiene \textbf{360 errores}; 216 de ellos son defectos nuevos: 98 encontrados al
+comprobar o corregir los demás, 104 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{50} necesitan antes una decisión del equipo. Por esfuerzo estimado: 319 pequeños, 41 medios y 0 grandes.
+De los 360, 355 están ya corregidos, 1 lo está en parte y 2 están cerrados sin arreglo.
 El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -323,7 +326,7 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 14 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 29 \\
 \ref{sec:des}. Simulación de sucesos discretos & 23 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 19 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 20 \\
 \ref{sec:casos}. Bases de casos & 17 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 38 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 48 \\
@@ -560,6 +563,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:338]{338} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un descuento sin el atributo «value» hace caer la lectura con un puntero nulo & \texttt{io} & S \hfill No\\
 \hyperref[err:352]{352} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un número entero con blancos alrededor impide abrir un .pgmx & \texttt{io} & S \hfill No\\
 \hyperref[err:353]{353} & \textcolor{corregidoverde}{\textbf{Corregido}} · Si a las opciones de inferencia de un .pgmx les falta un dato, el fichero no se abre y el aviso no dice cuál & \texttt{io} & S \hfill No\\
+\hyperref[err:361]{361} & Un nodo de un tipo que no existe impide abrir un .pgmx con un puntero nulo, sin decir cuál & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -12900,6 +12904,69 @@ Como en el \hyperref[err:338]{error~338}: que el lector se niegue con una excepc
 
 Prueba: cada cambio de la lista hace que \texttt{PGMXReader.\allowbreak{}read} se niegue con un mensaje que nombra el elemento y el dato; el fichero sin cambios se sigue abriendo.
 
+\setcounter{subsection}{360}
+\subsection[Un nodo de un tipo que no existe impide abrir un .pgmx con un puntero nulo, sin decir cuál]{Un .pgmx en el que una variable lleva en \texttt{role} un tipo de nodo que no existe, o uno que existe escrito con otras mayúsculas («Chance», «UTILITY»), o no lleva \texttt{role}, no se abre: el lector cae con un NullPointerException, y el aviso solo dice que la red está estropeada, sin nombrar el nodo ni el tipo}\label{err:361}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.core.model.network
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:718-725, 855, 1036-1047} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:214-215} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:796-803} \newline \path{core/src/main/java/org/openmarkov/core/model/network/NodeTypeDepot.java:85-87}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el jar del 30-10-2026: \texttt{PGMXReader.\allowbreak{}read} con las cinco variantes de \emph{Qué pasa}, cada una con un solo cambio a mano en el \texttt{role} de la primera variable que lo lleva; y \texttt{Nets\allowbreak{}IO.\allowbreak{}open\allowbreak{}Network\allowbreak{}File}, lo que llama la ventana, con dos de ellas
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:114]{error~114}, \hyperref[err:353]{error~353}
+\end{ficha}
+\paragraph{Qué pasa}
+El atributo \texttt{role} de un \texttt{\textless{}Variable\textgreater{}} dice el tipo del nodo: \texttt{chance}, \texttt{decision}, \texttt{utility}, \texttt{event}, \texttt{svSum} o \texttt{svProduct}. \texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}XMLNode\allowbreak{}Type} (líneas 1036-1047) lo busca entre los de \texttt{Node\allowbreak{}Type.\allowbreak{}values(\allowbreak{})} con \texttt{content\allowbreak{}Equals}, que mira las mayúsculas, y si no es ninguno devuelve \texttt{null}. Nadie mira ese nulo: \texttt{load\allowbreak{}Variable} (línea 724) sigue, y \texttt{load\allowbreak{}Variable\allowbreak{}Advanced\allowbreak{}Information} llama a \texttt{Prob\allowbreak{}Net.\allowbreak{}add\allowbreak{}Node} (línea 855), que busca la lista de nodos de ese tipo en \texttt{Node\allowbreak{}Type\allowbreak{}Depot.\allowbreak{}get\allowbreak{}Node} (línea 86); como no hay lista para \texttt{null}, revienta. Si el atributo falta, revienta antes, en la propia comparación (línea 1041). El lector de la versión 1.0 hereda el método y cae igual, pasando por \texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0.\allowbreak{}load\allowbreak{}Variable\allowbreak{}Advanced\allowbreak{}Information} (línea 215). En ningún caso sale una \texttt{PGMXParser\allowbreak{}Exception} que diga qué nodo ni qué tipo.
+
+Medido con el jar del 30-10-2026, cambiando solo la primera variable que lleva ese \texttt{role}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+inference/src/test/resources/asia.pgmx (0.2.0), role="invented"
+    NullPointerException: Cannot invoke "NodeTypeDepot$NodesHashMap.get(Variable)" because the return value of "java.util.LinkedHashMap.get(Object)" is null
+    at NodeTypeDepot.getNode(NodeTypeDepot.java:86)
+    at ProbNet.addNode(ProbNet.java:797)
+    at PGMXReader_0_2.loadVariableAdvancedInformation(PGMXReader_0_2.java:855)
+asia.pgmx (0.2.0), role="Chance"                                   lo mismo
+asia.pgmx (0.2.0), sin role
+    NullPointerException: Cannot invoke "String.contentEquals(java.lang.CharSequence)" because "type" is null
+    at PGMXReader_0_2.getXMLNodeType(PGMXReader_0_2.java:1041)
+id/ID-CEA-test-2therapies-new-test.pgmx (0.2.0), role="UTILITY"    como con "invented"
+  en el nodo de utilidad «C: Test»
+id/1-0/ID-decide-test-1-0.pgmx (1.0.0), role="invented"            como con "invented", pasando por
+    at PGMXReader_1_0.loadVariableAdvancedInformation(PGMXReader_1_0.java:215)
+\end{Verbatim}
+
+Las rutas de los dos últimos son relativas a \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks}. En la ventana, \texttt{Nets\allowbreak{}IO.\allowbreak{}open\allowbreak{}Network\allowbreak{}URL} convierte el puntero nulo en \texttt{Corrupt\allowbreak{}Network\allowbreak{}File}, y sale «Network from … is corrupted and could not be loaded.», que no dice qué nodo ni qué tipo. El escritor escribe siempre el tipo, y en minúsculas, así que solo pasa con un fichero escrito a mano o por otro programa. El lector ya trata así, desde el arreglo del \hyperref[err:114]{error~114}, el papel de una relación: se niega a leer uno que no existe, nombrando el papel y el nodo (\texttt{PGMXParser\allowbreak{}Exception.\allowbreak{}Unknown\allowbreak{}Potential\allowbreak{}Role}), y uno que falta (\texttt{Potential\allowbreak{}Without\allowbreak{}Role}).
+
+La versión en C++ y Qt lee, de momento, un tipo que no conoce, o que falta, como nodo de azar y sin avisar; seguirá lo que se haga aquí.
+
+\paragraph{El código}
+
+io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader\_0\_2.java:1036-1047
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{protected} \NormalTok{NodeType }\FunctionTok{getXMLNodeType}\OperatorTok{(}\NormalTok{Element variableElement}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{        NodeType nodeType }\OperatorTok{=} \KeywordTok{null}\OperatorTok{;}
+        \CommentTok{// int i=0;}
+        \BuiltInTok{String}\NormalTok{ type }\OperatorTok{=}\NormalTok{ variableElement}\OperatorTok{.}\FunctionTok{getAttributeValue}\OperatorTok{(}\NormalTok{XMLAttributes}\OperatorTok{.}\FunctionTok{ROLE}\OperatorTok{.}\FunctionTok{toString}\OperatorTok{());}
+        \ControlFlowTok{for} \OperatorTok{(}\NormalTok{NodeType iNodeType }\OperatorTok{:}\NormalTok{ NodeType}\OperatorTok{.}\FunctionTok{values}\OperatorTok{())} \OperatorTok{\{}
+            \ControlFlowTok{if} \OperatorTok{(}\NormalTok{type}\OperatorTok{.}\FunctionTok{contentEquals}\OperatorTok{(}\NormalTok{iNodeType}\OperatorTok{.}\FunctionTok{toString}\OperatorTok{()))} \OperatorTok{\{}
+\NormalTok{                nodeType }\OperatorTok{=}\NormalTok{ iNodeType}\OperatorTok{;}
+                \ControlFlowTok{break}\OperatorTok{;}
+            \OperatorTok{\}}
+        \OperatorTok{\}}
+        \ControlFlowTok{return}\NormalTok{ nodeType}\OperatorTok{;}
+    \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Que \texttt{get\allowbreak{}XMLNode\allowbreak{}Type} se niegue en vez de devolver \texttt{null}, como hace ya \texttt{get\allowbreak{}Potential\allowbreak{}Role} con el papel de una relación: con dos excepciones nuevas en \texttt{PGMXParser\allowbreak{}Exception}, una para un tipo que no existe, que nombre el nodo y el tipo («The node Positive X-ray? has the role invented, which does not exist.»), y otra para la falta del atributo, que nombre el nodo. Si se prefiere aceptar el tipo con otras mayúsculas, basta comparar con \texttt{equals\allowbreak{}Ignore\allowbreak{}Case}; el escritor no las escribe nunca, así que no hace falta.
+
+Prueba: \texttt{asia.\allowbreak{}pgmx} con \texttt{role="invented"} en la variable «Positive X-ray?» no se abre, y la excepción es la nueva, con el nodo y el tipo; sin \texttt{role}, la otra, con el nodo; lo mismo con \texttt{ID-decide-test-1-0.\allowbreak{}pgmx}, en formato 1.0; el fichero sin cambios se sigue abriendo.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
 
@@ -21599,6 +21666,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:358]{Error 358} & hallazgo nuevo, al comprobar el arreglo del \hyperref[err:233]{error~233} \\
 \hyperref[err:359]{Error 359} & hallazgo nuevo, al plantear la decisión del \hyperref[err:100]{error~100} \\
 \hyperref[err:360]{Error 360} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 25 al 27 de octubre \\
+\hyperref[err:361]{Error 361} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 28 y 29 de octubre \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
