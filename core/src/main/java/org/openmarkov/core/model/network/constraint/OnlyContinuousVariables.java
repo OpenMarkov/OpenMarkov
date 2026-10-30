@@ -23,7 +23,7 @@ import java.util.List;
  * @version 1.0
  */
 
-@Constraint(name = "OnlyContinuousVariables", defaultBehavior = ConstraintBehavior.OPTIONAL) public class OnlyContinuousVariables
+@Constraint(name = "OnlyContinuousVariables", defaultBehavior = ConstraintBehavior.ADDED_BY_CALLER) public class OnlyContinuousVariables
 		extends PNConstraint {
     
     @Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {

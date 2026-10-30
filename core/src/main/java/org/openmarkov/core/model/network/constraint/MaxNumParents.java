@@ -19,7 +19,7 @@ import org.openmarkov.core.model.network.constraint.annotation.Constraint;
  * created explicitly — {@code probNet.addConstraint(new MaxNumParents(k))} — and not by
  * {@link ConstraintManager}.
  */
-@Constraint(name = "MaxNumParents", defaultBehavior = ConstraintBehavior.OPTIONAL)
+@Constraint(name = "MaxNumParents", defaultBehavior = ConstraintBehavior.ADDED_BY_CALLER)
 public class MaxNumParents extends PNConstraint {
     
     private final int maxNumParents;

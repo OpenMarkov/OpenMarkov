@@ -22,9 +22,7 @@ import java.util.stream.Collectors;
 /**
  * {@link ConstraintManager} builds the constraints of a network type by reflection, through the
  * no-argument constructor of every class annotated with {@link Constraint}. These tests pin what
- * the list must contain: no repeated constraint, nothing the network type forbids, and the optional
- * ones when they are asked for — including when a constraint keeps data inside and can only be
- * created by its caller.
+ * the list must contain: no repeated constraint and nothing the network type forbids.
  *
  * @author Manuel Arias
  */
@@ -37,32 +35,6 @@ public class ConstraintManagerTest {
 
 	private static Map<Class<?>, Long> countByClass(List<PNConstraint> constraints) {
 		return constraints.stream().collect(Collectors.groupingBy(PNConstraint::getClass, Collectors.counting()));
-	}
-
-	/**
-	 * A constraint that keeps data inside, such as {@code MaxNumParents} or
-	 * {@code ModelNetworkConstraint}, cannot be built without arguments: the manager leaves it out
-	 * instead of failing.
-	 */
-	@Test public void everyNetworkTypeCanBuildItsOptionalConstraints() {
-		for (NetworkType type : allNetworkTypes()) {
-			Assertions.assertDoesNotThrow(
-					() -> ConstraintManager.getUniqueInstance().buildConstraintList(type, true),
-					"Building the optional constraints of " + type.getClass().getSimpleName() + " failed");
-		}
-	}
-
-	/**
-	 * Asking for the optionals has to give more than asking only for the mandatory ones; otherwise the
-	 * previous test would also pass on a version that quietly returned nothing.
-	 */
-	@Test public void theOptionalsAddSomethingToTheMandatoryOnes() {
-		for (NetworkType type : allNetworkTypes()) {
-			List<PNConstraint> mandatory = ConstraintManager.getUniqueInstance().buildConstraintList(type, false);
-			List<PNConstraint> withOptionals = ConstraintManager.getUniqueInstance().buildConstraintList(type, true);
-			Assertions.assertTrue(withOptionals.size() > mandatory.size(),
-					type.getClass().getSimpleName() + " gained no constraint when asked for the optional ones");
-		}
 	}
 
 	/**

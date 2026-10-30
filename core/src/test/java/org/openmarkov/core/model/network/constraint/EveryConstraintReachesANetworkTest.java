@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -55,6 +56,22 @@ public class EveryConstraintReachesANetworkTest {
 
         assertTrue(unaccounted.isEmpty(),
                 "These constraints reach no network and are not named in this test: " + unaccounted);
+    }
+
+    /**
+     * The constraints named in the list are exactly those whose default behaviour says that whoever
+     * needs them adds them.
+     */
+    @Tag(TestSpeed.FAST)
+    @Test public void theConstraintsAddedByHandAreThoseMarkedSo() {
+        ConstraintManager manager = ConstraintManager.getUniqueInstance();
+        Set<String> marked = ConstraintManager.findAllConstraints()
+                                              .filter(constraint -> manager.getDefaultBehavior(constraint)
+                                                                    == ConstraintBehavior.ADDED_BY_CALLER)
+                                              .map(Class::getSimpleName)
+                                              .collect(Collectors.toSet());
+
+        assertEquals(ADDED_BY_HAND.keySet(), marked);
     }
 
     /**

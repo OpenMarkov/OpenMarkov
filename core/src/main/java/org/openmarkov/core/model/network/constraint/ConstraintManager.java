@@ -45,22 +45,14 @@ public class ConstraintManager {
     }
 
     /**
-     * Generates the minimal (i.e. not including optional constraints)
-     * constraint list given the network type and the Constraints annotated as
-     * such.
-     *
-     * @param includeOptionals If include optional constraints
-     * @param type             of the network the list is being generated for.
-     *
-     * @return a minimal list of constraint.
+     * The constraints every network of the given type has: those that are YES by default, plus those
+     * the type declares YES, minus those it declares NO.
      */
-    public ArrayList<PNConstraint> buildConstraintList(NetworkType type, boolean includeOptionals) {
+    public ArrayList<PNConstraint> buildConstraintList(NetworkType type) {
         // Init the list with those constraints that have the default value set to YES
         ArrayList<PNConstraint> constraints = new ArrayList<>();
         for (Class<? extends PNConstraint> constraintClass : defaultConstraintBehaviors.keySet()) {
-            boolean isMandatoryConstraint = getDefaultBehavior(constraintClass) == ConstraintBehavior.YES;
-            boolean isOptionalConstraintToUse = includeOptionals && getDefaultBehavior(constraintClass) == ConstraintBehavior.OPTIONAL;
-            if (isMandatoryConstraint || isOptionalConstraintToUse) {
+            if (getDefaultBehavior(constraintClass) == ConstraintBehavior.YES) {
                 addIfInstantiable(constraints, constraintClass);
             }
         }
@@ -99,10 +91,6 @@ public class ConstraintManager {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new UnreachableException(e);
         }
-    }
-
-    public final ArrayList<PNConstraint> buildConstraintList(NetworkType type) {
-        return buildConstraintList(type, false);
     }
 
     public ConstraintBehavior getDefaultBehavior(Class<?> constraintClass) {

@@ -19,7 +19,7 @@ import org.openmarkov.core.model.network.potential.Potential;
 
 import java.util.List;
 
-@Constraint(name = "UtilityNodes", defaultBehavior = ConstraintBehavior.OPTIONAL) public class UtilityNodes
+@Constraint(name = "UtilityNodes", defaultBehavior = ConstraintBehavior.NO) public class UtilityNodes
 		extends PNConstraint {
 
     @Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {

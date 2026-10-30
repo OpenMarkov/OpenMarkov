@@ -13,5 +13,11 @@ import java.io.Serializable;
  * @author manuel
  */
 public enum ConstraintBehavior implements Serializable {
-	YES, NO, OPTIONAL
+	/** Every network of the type has the constraint. */
+	YES,
+	/** No network of the type has the constraint. */
+	NO,
+	/** The type does not put the constraint, but whoever needs it adds it to a network, and it is kept
+	 * when the network changes its type. */
+	ADDED_BY_CALLER
 }

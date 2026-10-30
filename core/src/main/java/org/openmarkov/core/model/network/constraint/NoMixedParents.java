@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.groupingBy;
  *
  * @author ckonig
  */
-@Constraint(name = "NoMixedParents", defaultBehavior = ConstraintBehavior.OPTIONAL)
+@Constraint(name = "NoMixedParents", defaultBehavior = ConstraintBehavior.NO)
 public class NoMixedParents extends PNConstraint {
     
     @Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {

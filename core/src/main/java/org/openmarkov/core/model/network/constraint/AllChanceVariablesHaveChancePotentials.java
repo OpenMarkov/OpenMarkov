@@ -18,7 +18,7 @@ import org.openmarkov.core.model.network.potential.Potential;
 
 import java.util.List;
 
-@Constraint(name = "AllChanceVariablesHaveChancePotentials", defaultBehavior = ConstraintBehavior.OPTIONAL)
+@Constraint(name = "AllChanceVariablesHaveChancePotentials", defaultBehavior = ConstraintBehavior.NO)
 public class AllChanceVariablesHaveChancePotentials extends PNConstraint {
     
     @Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {

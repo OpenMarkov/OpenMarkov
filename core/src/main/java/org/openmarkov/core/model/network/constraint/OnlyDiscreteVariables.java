@@ -33,7 +33,7 @@ import org.openmarkov.core.model.network.constraint.annotation.Constraint;
  * whose variables were all finite-states, and the moment it was on it reported every one of them as a
  * violation. All four now ask {@link #isDiscrete}.
  */
-@Constraint(name = "OnlyDiscreteVariables", defaultBehavior = ConstraintBehavior.OPTIONAL) public class OnlyDiscreteVariables
+@Constraint(name = "OnlyDiscreteVariables", defaultBehavior = ConstraintBehavior.ADDED_BY_CALLER) public class OnlyDiscreteVariables
 		extends PNConstraint {
 
 	@Override public void checkProbNet(GraphNetwork probNet, ConstraintChecker constraintChecker) {

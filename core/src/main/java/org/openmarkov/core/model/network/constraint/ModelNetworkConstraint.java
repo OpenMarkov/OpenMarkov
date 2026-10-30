@@ -27,7 +27,7 @@ import java.util.Set;
  * <p>It needs the model network and the three permissions, so {@code LearningManager} creates it
  * explicitly and not {@link ConstraintManager}.
  */
-@Constraint(name = "ModelNetworkConstraint", defaultBehavior = ConstraintBehavior.OPTIONAL)
+@Constraint(name = "ModelNetworkConstraint", defaultBehavior = ConstraintBehavior.ADDED_BY_CALLER)
 public class ModelNetworkConstraint extends PNConstraint {
     
     private final Set<Tuple2Record<String, String>> forbiddenLinksToModify;
