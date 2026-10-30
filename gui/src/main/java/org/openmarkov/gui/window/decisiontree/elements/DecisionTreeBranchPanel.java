@@ -54,7 +54,7 @@ public non-sealed class DecisionTreeBranchPanel extends DecisionTreeElementPanel
 		}
 		txtLeft += "<td align=center border=0>";
 		if (treeBranch.getBranchVariable() != null) {
-			txtLeft += treeBranch.getBranchVariable().getName() + "=" + treeBranch.getBranchState().getName();
+			txtLeft += treeBranch.getBranchVariable().getName() + " = " + treeBranch.getBranchState().getName();
 		}
 		if (parent != null && parent.getNodeType() == NodeType.CHANCE) {
 			txtLeft += " /  P=" + df.format(treeBranch.getBranchProbability());

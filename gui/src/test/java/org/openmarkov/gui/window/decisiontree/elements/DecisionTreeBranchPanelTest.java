@@ -36,7 +36,7 @@ class DecisionTreeBranchPanelTest {
 
         String html = new DecisionTreeBranchPanel(absent).getBranchDescriptiontHTML();
 
-        assertTrue(html.contains("Disease (X)=absent /  P=0.86</td>"), html);
+        assertTrue(html.contains("Disease (X) = absent /  P=0.86</td>"), html);
         assertFalse(html.contains("U="), html);
     }
 
@@ -53,7 +53,7 @@ class DecisionTreeBranchPanelTest {
 
         assertTrue(htmlYes.contains(BEST_DECISION_MARK), htmlYes);
         assertFalse(htmlNo.contains(BEST_DECISION_MARK), htmlNo);
-        assertTrue(htmlYes.contains("Therapy (T)=yes"), htmlYes);
+        assertTrue(htmlYes.contains("Therapy (T) = yes"), htmlYes);
         assertFalse(htmlYes.contains("P="), htmlYes);
         assertFalse(htmlYes.contains("U="), htmlYes);
     }
