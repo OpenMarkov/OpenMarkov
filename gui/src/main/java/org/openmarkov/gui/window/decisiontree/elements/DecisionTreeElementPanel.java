@@ -35,8 +35,8 @@ public abstract sealed class DecisionTreeElementPanel extends JPanel permits Dec
     /** List of child panels in the tree hierarchy. */
 	protected final List<DecisionTreeElementPanel> children;
 	
-    /** Formatter for displaying numerical values with four decimal places. */
-    final DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(Locale.US));
+    /** Formatter for displaying numerical values with at least one and at most four decimal places. */
+    final DecimalFormat df = new DecimalFormat("0.0###", new DecimalFormatSymbols(Locale.US));
 	
 	public abstract JComponent makeSummary();
 	

@@ -40,14 +40,14 @@ class DecisionTreeNodePanelTest {
         DecisionTreeNode node = new DecisionTreeNode(new Node(null, new Variable("X"), type));
         node.setEvaluation(new ProbAndUtilityAndStrategy(1.0, 9.72));
 
-        assertTrue(description(new DecisionTreeNodePanel(node)).startsWith(" U=9.7200"));
+        assertEquals(" U=9.72", description(new DecisionTreeNodePanel(node)).replace("  \u2026", ""));
     }
 
     @Test
     void aLeafTheTreeCanGoOnFromEndsWithAnEllipsisAndIsDrawnDarker() {
         DecisionTreeNodePanel panel = new DecisionTreeNodePanel(evaluated(NodeType.DECISION, 1.0));
 
-        assertEquals(" U=9.7200  \u2026", description(panel));
+        assertEquals(" U=9.72  \u2026", description(panel));
         assertTrue(panel.canBeExpanded());
     }
 
@@ -57,7 +57,7 @@ class DecisionTreeNodePanelTest {
         node.addChild(new DecisionTreeBranch(new State("present")));
         DecisionTreeNodePanel panel = new DecisionTreeNodePanel(node);
 
-        assertEquals(" U=9.7200", description(panel));
+        assertEquals(" U=9.72", description(panel));
         assertFalse(panel.canBeExpanded());
     }
 
@@ -65,7 +65,7 @@ class DecisionTreeNodePanelTest {
     void theUtilityNodeWhereTheTreeEndsHasNoMark() {
         DecisionTreeNodePanel panel = new DecisionTreeNodePanel(evaluated(NodeType.UTILITY, 1.0));
 
-        assertEquals(" U=9.7200", description(panel));
+        assertEquals(" U=9.72", description(panel));
         assertFalse(panel.canBeExpanded());
     }
 
@@ -99,8 +99,7 @@ class DecisionTreeNodePanelTest {
 
         String text = description(new DecisionTreeNodePanel(node));
 
-        assertTrue(text.contains("Cost=10.0000"), text);
-        assertTrue(text.contains("Effectiveness=2.0000"), text);
+        assertTrue(text.contains("Cost=10.0 / Effectiveness=2.0"), text);
     }
 
     private static String description(DecisionTreeNodePanel panel) {

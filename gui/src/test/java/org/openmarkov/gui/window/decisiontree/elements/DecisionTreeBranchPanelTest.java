@@ -36,7 +36,7 @@ class DecisionTreeBranchPanelTest {
 
         String html = new DecisionTreeBranchPanel(absent).getBranchDescriptiontHTML();
 
-        assertTrue(html.contains("Disease (X)=absent /  P=0.8600"), html);
+        assertTrue(html.contains("Disease (X)=absent /  P=0.86</td>"), html);
         assertFalse(html.contains("U="), html);
     }
 
