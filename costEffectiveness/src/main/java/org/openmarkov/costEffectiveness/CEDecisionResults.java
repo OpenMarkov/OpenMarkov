@@ -452,6 +452,7 @@ public class CEDecisionResults extends JDialog {
 		// Set colors in jTable
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 		renderer.setBackground(Color.decode(CLICKABLE_COLUMN_COLOR));
+		renderer.setForeground(Color.BLACK);
 
 		if (hasInterventions) {
 			jtable.getColumnModel().getColumn(COLUMN_INTERVENTION).setCellRenderer(renderer);

@@ -241,6 +241,7 @@ import java.util.EventObject;
         
         if (color != null) {
             renderer.setBackground(color);
+            renderer.setForeground(Color.BLACK);
         }
         
         if (columnIndex == CEPColumns.LAMBDA_INF.ordinal()) {
