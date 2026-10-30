@@ -100,17 +100,6 @@ public class AddNodeEdit extends PNEdit {
                 constraintChecker.addException(new ConstraintViolatedException.OnlyDiscreteVariablesAllowed(constraint, this.variable));
             }
         }
-        if (probNet.getConstraintOfClass(OnlyFiniteStatesVariables.class) instanceof OnlyFiniteStatesVariables constraint) {
-            if (!OnlyFiniteStatesVariables.nodeIsFinite(
-                    this.nodeType, this.variable.getVariableType())) {
-                constraintChecker.addException(new ConstraintViolatedException.OnlyFiniteStatesAllowed(constraint, this.variable));
-            }
-        }
-        if (probNet.getConstraintOfClass(OnlyNumericVariables.class) instanceof OnlyNumericVariables constraint) {
-            if (this.variable.getVariableType() != VariableType.NUMERIC) {
-                constraintChecker.addException(new ConstraintViolatedException.OnlyNumericVariablesAllowed(constraint, this.variable));
-            }
-        }
         if (probNet.getConstraintOfClass(OnlyOneAgent.class) instanceof OnlyOneAgent constraint) {
             if (this.variable.getAgent() != null) {
                 constraintChecker.addException(new ConstraintViolatedException.OnlyOneAgentAllowed(constraint, this.variable));
@@ -119,23 +108,6 @@ public class AddNodeEdit extends PNEdit {
         if (probNet.getConstraintOfClass(OnlyTemporalVariables.class) instanceof OnlyTemporalVariables constraint) {
             if (!this.variable.isTemporal()) {
                 constraintChecker.addException(new ConstraintViolatedException.OnlyTemporalVariablesAllowed(constraint, this.variable));
-            }
-        }
-        if (probNet.getConstraintOfClass(OnlyOneUtilityNode.class) instanceof OnlyOneUtilityNode constraint) {
-            if (this.nodeType == NodeType.UTILITY && probNet.getNumNodes(NodeType.UTILITY) > 0) {
-                constraintChecker.addException(new ConstraintViolatedException.NetworkAlreadyHasAUtilityNode(constraint,
-                        probNet.getNodes(NodeType.UTILITY).get(0)));
-            }
-        }
-        if (probNet.getConstraintOfClass(ProperUtilityPotentials.class) instanceof ProperUtilityPotentials constraint) {
-            if (!this.variable.isTemporal()) {
-                int numUtilities = probNet.getNumNodes(NodeType.UTILITY);
-                if (this.nodeType == NodeType.UTILITY) {
-                    numUtilities = numUtilities + 1;
-                }
-                if (numUtilities <= 0) {
-                    constraintChecker.addException(new ConstraintViolatedException.NetworkHasNoUtilityNodes(constraint, this.probNet));
-                }
             }
         }
         

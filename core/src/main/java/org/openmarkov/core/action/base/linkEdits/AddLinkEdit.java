@@ -104,13 +104,6 @@ public final class AddLinkEdit extends BaseLinkEdit {
                 constraintChecker.addException(new ConstraintViolatedException.CycleWithoutAnEvent(constraint, node1, node2));
             }
         }
-        if (probNet.getConstraintOfClass(NoLoops.class) instanceof NoLoops constraint) {
-            Node node1 = probNet.getNode(this.getVariableFrom());
-            Node node2 = probNet.getNode(this.getVariableTo());
-            if (probNet.existsPath(node2, node1, false, Collections.emptyList())) {
-                constraintChecker.addException(new ConstraintViolatedException.ThereIsALoop(constraint, node1, node2));
-            }
-        }
         if (probNet.getConstraintOfClass(NoMixedParents.class) instanceof NoMixedParents constraint) {
             if (this.isDirected()) {
                 Node nodeTo = probNet.getNode(this.getVariableTo());
@@ -131,11 +124,6 @@ public final class AddLinkEdit extends BaseLinkEdit {
         if (probNet.getConstraintOfClass(NoSelfLoop.class) instanceof NoSelfLoop constraint) {
             if (this.getVariableFrom().equals(this.getVariableTo())) {
                 constraintChecker.addException(new ConstraintViolatedException.CannotSelfLink(constraint, this.getNodeFrom()));
-            }
-        }
-        if (probNet.getConstraintOfClass(NoSuperValueNode.class) instanceof NoSuperValueNode constraint) {
-            if (this.getNodeFrom().getNodeType() == NodeType.UTILITY) {
-                constraintChecker.addException(new ConstraintViolatedException.NoSuperValueNodeAllowed(constraint, this.getNodeFrom()));
             }
         }
         if (probNet.getConstraintOfClass(NoUtilityParent.class) instanceof NoUtilityParent constraint) {

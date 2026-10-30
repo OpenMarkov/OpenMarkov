@@ -9,7 +9,6 @@ package org.openmarkov.inference.algorithm.variableElimination.tasks;//package o
 //import org.openmarkov.core.model.network.ProbNetOperations;
 //import org.openmarkov.core.model.network.Variable;
 //import org.openmarkov.core.model.network.constraint.NoMixedParents;
-//import org.openmarkov.core.model.network.constraint.NoSuperValueNode;
 //import org.openmarkov.core.model.network.constraint.PNConstraint;
 //import org.openmarkov.core.model.network.potential.TablePotential;
 //import org.openmarkov.core.model.network.type.BayesianNetworkType;
@@ -73,7 +72,6 @@ package org.openmarkov.inference.algorithm.variableElimination.tasks;//package o
 //    public List<PNConstraint> initializeAdditionalConstraints() {
 //        List<PNConstraint> constraints = new ArrayList<>();
 //        constraints.add(new NoMixedParents());
-//        constraints.add(new NoSuperValueNode());
 //        return constraints;
 //    }
 //

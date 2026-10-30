@@ -95,7 +95,6 @@ public class VEOptimalIntervention implements OptimalIntervention {
     public static List<PNConstraint> initializeAdditionalConstraints() {
 		List<PNConstraint> constraints = new ArrayList<>();
 		constraints.add(new NoMixedParents());
-		//constraints.add(new NoSuperValueNode());
 		return constraints;
 	}
 

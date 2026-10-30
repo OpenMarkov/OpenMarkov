@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * A constraint that no network carries defends nobody. For each class annotated with
  * {@code @Constraint}, either some type of network puts it in its list, or it is named below as
- * one of those that somebody adds by hand, or as one that reaches no network at all.
+ * one of those that somebody adds by hand.
  *
  * @author Manuel Arias
  */
@@ -36,26 +36,11 @@ public class EveryConstraintReachesANetworkTest {
      */
     private static final Map<String, String> ADDED_BY_HAND = new LinkedHashMap<>();
 
-    /**
-     * Constraints that reach no network at all. They are marked OPTIONAL, and the list of optional
-     * constraints is only built by the tests: in the program, ProbNet always asks for the list
-     * without them. Emptying this list is the decision the plan calls F3-c.
-     */
-    private static final Map<String, String> WITHOUT_A_NETWORK = new LinkedHashMap<>();
-
     static {
         ADDED_BY_HAND.put("MaxNumParents", "five learning algorithms, each with its own number");
         ADDED_BY_HAND.put("ModelNetworkConstraint", "the learning manager, with the network the user chose");
         ADDED_BY_HAND.put("OnlyDiscreteVariables", "the dialog of properties of the network");
         ADDED_BY_HAND.put("OnlyContinuousVariables", "the dialog of properties of the network");
-
-        WITHOUT_A_NETWORK.put("NoLoops", "R3");
-        WITHOUT_A_NETWORK.put("NoSuperValueNode", "R3");
-        WITHOUT_A_NETWORK.put("OnlyFiniteStatesVariables", "R3");
-        WITHOUT_A_NETWORK.put("OnlyNumericVariables", "R3");
-        WITHOUT_A_NETWORK.put("OnlyOneUtilityNode", "R3, the clearest case: the edits ask for it and get nothing");
-        WITHOUT_A_NETWORK.put("ProperUtilityPotentials", "R3");
-        WITHOUT_A_NETWORK.put("OnlyUnlabeledLinks", "R3");
     }
 
     @Tag(TestSpeed.FAST)
@@ -65,7 +50,6 @@ public class EveryConstraintReachesANetworkTest {
         List<String> unaccounted = annotatedConstraints().stream()
                                                          .filter(name -> !carried.contains(name))
                                                          .filter(name -> !ADDED_BY_HAND.containsKey(name))
-                                                         .filter(name -> !WITHOUT_A_NETWORK.containsKey(name))
                                                          .sorted()
                                                          .toList();
 
@@ -74,7 +58,7 @@ public class EveryConstraintReachesANetworkTest {
     }
 
     /**
-     * The constraints named in the two lists must still be out of every type of network. When one
+     * The constraints named in the list must still be out of every type of network. When one
      * of them ends up in a type, this test asks for its entry to be removed.
      */
     @Tag(TestSpeed.FAST)
@@ -102,7 +86,7 @@ public class EveryConstraintReachesANetworkTest {
     }
 
     private static Stream<String> namesUsedHere() {
-        return Stream.concat(ADDED_BY_HAND.keySet().stream(), WITHOUT_A_NETWORK.keySet().stream());
+        return ADDED_BY_HAND.keySet().stream();
     }
 
     private static Set<String> annotatedConstraints() {

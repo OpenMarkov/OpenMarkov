@@ -65,7 +65,7 @@ public class OnlyDiscreteVariablesTest {
 
 	/**
 	 * The variable of a utility node is a number by construction — VariableType allows it nothing else —
-	 * so it is left alone, as OnlyFiniteStatesVariables already does. Otherwise this constraint could
+	 * so it is left alone. Otherwise this constraint could
 	 * never be satisfied by an influence diagram.
 	 */
 	@Test public void theNumericVariableOfAUtilityNodeDoesNotBreakTheConstraint() {

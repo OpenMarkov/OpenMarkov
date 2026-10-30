@@ -50,9 +50,8 @@ import org.openmarkov.core.model.network.constraint.annotation.Constraint;
 	 * Whether a variable counts as discrete: one that takes a finite set of values, be it a symbolic
 	 * finite-states variable or a continuous one already cut into intervals.
 	 * <p>
-	 * The variable of a node that is neither chance nor decision is left alone, exactly as
-	 * {@code OnlyFiniteStatesVariables.nodeIsFinite} does: the variable of a utility node is a number
-	 * by construction — {@code VariableType.getVariableTypesFor(UTILITY)} allows it nothing else — so
+	 * The variable of a node that is neither chance nor decision is left alone: the variable of a
+	 * utility node is a number by construction — {@code VariableType.getVariableTypesFor(UTILITY)} allows it nothing else — so
 	 * demanding that it be discrete would ask for the impossible and leave this constraint unusable in
 	 * any influence diagram.
 	 *

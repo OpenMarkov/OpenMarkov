@@ -1,7 +1,6 @@
 package org.openmarkov.gui.action;
 
 import org.jetbrains.annotations.NotNull;
-import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.action.base.MultiStepEdit;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.action.core.SetPotentialEdit;
@@ -13,7 +12,6 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes;
-import org.openmarkov.core.model.network.constraint.OnlyOneUtilityNode;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
@@ -30,21 +28,6 @@ public class ChangeNodeTypeEdit extends MultiStepEdit {
         super(node.getProbNet());
         this.node = node;
         this.newNodeType = newNodeType;
-    }
-
-    @Override public void checkConstraintsWillBeMet(ConstraintChecker constraintChecker) {
-        if (probNet.getConstraintOfClass(OnlyOneUtilityNode.class) instanceof OnlyOneUtilityNode constraint) {
-            if (this.newNodeType == NodeType.UTILITY) {
-                for (Node utilityNode : probNet.getNodes(NodeType.UTILITY)) {
-                    if (utilityNode != this.node) {
-                        constraintChecker.addException(
-                                new ConstraintViolatedException.NetworkAlreadyHasAUtilityNode(constraint, utilityNode));
-                        break;
-                    }
-                }
-            }
-        }
-        super.checkConstraintsWillBeMet(constraintChecker);
     }
 
     @Override protected void doMultiStepEdit(StepExecuter stepExecuter) throws DoEditException, ThereIsNoPotentialInNodeException {

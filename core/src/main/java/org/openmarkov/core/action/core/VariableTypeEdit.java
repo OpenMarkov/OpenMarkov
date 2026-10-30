@@ -24,8 +24,6 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes;
 import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
-import org.openmarkov.core.model.network.constraint.OnlyFiniteStatesVariables;
-import org.openmarkov.core.model.network.constraint.OnlyNumericVariables;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -61,24 +59,9 @@ public class VariableTypeEdit extends MultiStepEdit {
                                 .getVariable()));
             }
         }
-        if (probNet.getConstraintOfClass(
-                OnlyFiniteStatesVariables.class) instanceof OnlyFiniteStatesVariables constraint) {
-            if (!OnlyFiniteStatesVariables.nodeIsFinite(this.node.getNodeType(), this.newType)) {
-                constraintChecker
-                        .addException(new ConstraintViolatedException.OnlyFiniteStatesAllowed(constraint, this.node
-                                .getVariable()));
-            }
-        }
         if (probNet.getConstraintOfClass(NoDiscretizedChanceNodes.class) instanceof NoDiscretizedChanceNodes constraint
                 && !NoDiscretizedChanceNodes.admits(this.node.getNodeType(), this.newType)) {
             constraintChecker.addException(new ConstraintViolatedException.DiscretizedChanceNode(constraint, this.node));
-        }
-        if (probNet.getConstraintOfClass(OnlyNumericVariables.class) instanceof OnlyNumericVariables constraint) {
-            if (this.newType != VariableType.NUMERIC) {
-                constraintChecker.addException(
-                        new ConstraintViolatedException.OnlyNumericVariablesAllowed(constraint, this.node
-                                .getVariable()));
-            }
         }
         super.checkConstraintsWillBeMet(constraintChecker);
     }

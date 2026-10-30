@@ -389,7 +389,7 @@ public class Graph<T> {
         // The search walks links, not neighbours. It used to translate the links to ignore into
         // the neighbours they lead to and then walk the adjacency lists, which are lists of nodes:
         // ignoring one link therefore ignored the pair of nodes, and any second link joining that
-        // same pair went with it. Two nodes joined both ways were a loop that NoLoops could not
+        // same pair went with it. Two nodes joined both ways were a loop that a search for loops could not
         // see, because ignoring one of the two links hid the other one as well.
         while (!nodesToExpand.isEmpty()) {
             T expandingNode = nodesToExpand.pop(); // the top of the stack

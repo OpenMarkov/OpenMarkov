@@ -18,26 +18,21 @@ import org.openmarkov.core.model.network.constraint.NoBackwardLink;
 import org.openmarkov.core.model.network.constraint.EveryCycleHasAnEvent;
 import org.openmarkov.core.model.network.constraint.NoCycle;
 import org.openmarkov.core.model.network.constraint.NoEventNodes;
-import org.openmarkov.core.model.network.constraint.NoLoops;
 import org.openmarkov.core.model.network.constraint.NoMixedParents;
 import org.openmarkov.core.model.network.constraint.NoMultipleLinks;
 import org.openmarkov.core.model.network.constraint.NoSelfLoop;
-import org.openmarkov.core.model.network.constraint.NoSuperValueNode;
 import org.openmarkov.core.model.network.constraint.NoUtilityParent;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.core.model.network.constraint.OnlyContinuousVariables;
 import org.openmarkov.core.model.network.constraint.OnlyDirectedLinks;
 import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
-import org.openmarkov.core.model.network.constraint.OnlyFiniteStatesVariables;
-import org.openmarkov.core.model.network.constraint.OnlyNumericVariables;
 import org.openmarkov.core.model.network.constraint.OnlyOneAgent;
 import org.openmarkov.core.model.network.constraint.OnlyOneOrphanInitialEvent;
 import org.openmarkov.core.model.network.constraint.OnlySelfLoopsWithEventAndChanceNodes;
 import org.openmarkov.core.model.network.constraint.OnlyTemporalVariables;
 import org.openmarkov.core.model.network.constraint.OnlyUndirectedLinks;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
-import org.openmarkov.core.model.network.constraint.ProperUtilityPotentials;
 import org.openmarkov.core.model.network.constraint.UtilityNodes;
 import org.openmarkov.core.model.network.constraint.ValidCriterionName;
 import org.openmarkov.core.model.network.constraint.ValidState;
@@ -321,17 +316,6 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         private final String variableName;
     }
     
-    public static class ThereIsALoop extends ConstraintViolatedException {
-        
-        public ThereIsALoop(NoLoops constraint, Node node1, Node node2) {
-            super(constraint);
-            this.node1 = node1;
-            this.node2 = node2;
-        }
-        
-        private final Node node1;
-        private final Node node2;
-    }
     
     public static class MixedParentDoesntAllowThisNodeType extends ConstraintViolatedException {
         
@@ -382,15 +366,6 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         private final Node node;
     }
     
-    public static class NoSuperValueNodeAllowed extends ConstraintViolatedException {
-        
-        public NoSuperValueNodeAllowed(NoSuperValueNode constraint, Node node) {
-            super(constraint);
-            this.node = node;
-        }
-        
-        private final Node node;
-    }
     
     public static class CannotHaveUtilityParent extends ConstraintViolatedException {
         
@@ -507,25 +482,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         private final String variable;
     }
     
-    public static class OnlyFiniteStatesAllowed extends ConstraintViolatedException {
-        
-        public OnlyFiniteStatesAllowed(OnlyFiniteStatesVariables constraint, Variable variable) {
-            super(constraint);
-            this.variable = variable;
-        }
-        
-        private final Variable variable;
-    }
     
-    public static class OnlyNumericVariablesAllowed extends ConstraintViolatedException {
-        
-        public OnlyNumericVariablesAllowed(OnlyNumericVariables constraint, Variable variable) {
-            super(constraint);
-            this.variable = variable;
-        }
-        
-        private final Variable variable;
-    }
     
     public static class OnlyOneAgentAllowed extends ConstraintViolatedException {
         
@@ -591,40 +548,6 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         private final ProbNet probNet;
     }
 
-    public static class NetworkCanHaveOnlyOneUtilityNode extends ConstraintViolatedException {
-
-        public NetworkCanHaveOnlyOneUtilityNode(PNConstraint constraint, List<Node> utilityNodes) {
-            super(constraint);
-            this.numUtilityNodes = utilityNodes.size();
-            this.utilityNodes = utilityNodes.stream().map(Node::getName).sorted().collect(Collectors.joining(", "));
-        }
-
-        private final int numUtilityNodes;
-        private final String utilityNodes;
-    }
-
-    /**
-     * The network already has its one utility node, so the edit under way would give it a second one.
-     */
-    public static class NetworkAlreadyHasAUtilityNode extends ConstraintViolatedException {
-
-        public NetworkAlreadyHasAUtilityNode(PNConstraint constraint, Node utilityNode) {
-            super(constraint);
-            this.utilityNode = utilityNode;
-        }
-
-        private final Node utilityNode;
-    }
-
-    public static class UtilityNodeHasNoPotentials extends ConstraintViolatedException {
-        
-        public UtilityNodeHasNoPotentials(ProperUtilityPotentials constraint, Node utilityNode) {
-            super(constraint);
-            this.utilityNode = utilityNode;
-        }
-        
-        private final Node utilityNode;
-    }
     
     public static class NumOfPotentialsMismatchesNumOfUtilities extends ConstraintViolatedException {
         

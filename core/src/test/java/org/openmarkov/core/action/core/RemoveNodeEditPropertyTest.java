@@ -10,12 +10,9 @@ package org.openmarkov.core.action.core;
 import net.jqwik.api.*;
 import net.jqwik.api.constraints.IntRange;
 import org.openmarkov.core.action.base.linkEdits.AddLinkEdit;
-import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.model.network.*;
-import org.openmarkov.core.model.network.constraint.ProperUtilityPotentials;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
-import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +23,7 @@ import static org.assertj.core.api.Assertions.*;
  * Property-based tests for {@link RemoveNodeEdit}.
  *
  * <p>Verifies that the do / undo / redo cycle preserves the structural
- * invariants of a {@link ProbNet} when removing nodes. Also tests that
- * the {@code ProperUtilityPotentials} constraint blocks removal of the
- * last utility node in an Influence Diagram.
+ * invariants of a {@link ProbNet} when removing nodes.
  */
 class RemoveNodeEditPropertyTest {
 
@@ -38,12 +33,6 @@ class RemoveNodeEditPropertyTest {
 
     private ProbNet freshBayesianNet() {
         ProbNet net = new ProbNet(BayesianNetworkType.getUniqueInstance());
-        net.getPNESupport().setWithUndo(true);
-        return net;
-    }
-
-    private ProbNet freshInfluenceDiagram() {
-        ProbNet net = new ProbNet(InfluenceDiagramType.getUniqueInstance());
         net.getPNESupport().setWithUndo(true);
         return net;
     }
@@ -194,55 +183,6 @@ class RemoveNodeEditPropertyTest {
         edit.undo();
         edit.redo();
         assertThat(net.getNumNodes(NodeType.CHANCE)).isEqualTo(afterDo);
-    }
-
-    // -----------------------------------------------------------------------
-    // Constraint invariants
-    // -----------------------------------------------------------------------
-
-    /**
-     * Removing the only UTILITY node from a network with the
-     * {@code ProperUtilityPotentials} constraint must be rejected.
-     * The constraint is OPTIONAL and added after building the network
-     * to avoid blocking the AddNodeEdit calls themselves.
-     */
-    @Example
-    void removeLastUtilityNode_throwsConstraintViolatedException() throws DoEditException {
-        ProbNet net = freshInfluenceDiagram();
-        Variable vC = new Variable("C", 2);
-        Variable vU = new Variable("U");
-        new AddNodeEdit(net, vC, NodeType.CHANCE, null).executeEdit();
-        new AddNodeEdit(net, vU, NodeType.UTILITY, null).executeEdit();
-        // Add the constraint AFTER the network has its utility node
-        net.addConstraint(new ProperUtilityPotentials());
-
-        RemoveNodeEdit edit = new RemoveNodeEdit(net, vU);
-        assertThatThrownBy(edit::executeEdit)
-                .as("removing the only utility node should be rejected")
-                .isInstanceOf(DoEditException.CannotDoEditException.class)
-                .hasCauseInstanceOf(ConstraintViolatedException.class);
-    }
-
-    /**
-     * Removing one of two UTILITY nodes must succeed even when
-     * {@code ProperUtilityPotentials} is active — the constraint
-     * only blocks removing the <em>last</em> one.
-     */
-    @Example
-    void removeOneOfTwoUtilityNodes_succeeds() throws DoEditException {
-        ProbNet net = freshInfluenceDiagram();
-        Variable vC = new Variable("C", 2);
-        Variable vU1 = new Variable("U1");
-        Variable vU2 = new Variable("U2");
-        new AddNodeEdit(net, vC, NodeType.CHANCE, null).executeEdit();
-        new AddNodeEdit(net, vU1, NodeType.UTILITY, null).executeEdit();
-        new AddNodeEdit(net, vU2, NodeType.UTILITY, null).executeEdit();
-        // Add the constraint AFTER the network has its utility nodes
-        net.addConstraint(new ProperUtilityPotentials());
-
-        new RemoveNodeEdit(net, vU1).executeEdit();
-        assertThat(net.getNode(vU1)).isNull();
-        assertThat(net.getNumNodes(NodeType.UTILITY)).isEqualTo(1);
     }
 
     // -----------------------------------------------------------------------

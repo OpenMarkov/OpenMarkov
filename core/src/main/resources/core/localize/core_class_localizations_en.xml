@@ -141,14 +141,8 @@
                   value="This kind of network cannot have revelation arcs; the link from {parentVariable} to {childVariable} has revealing conditions."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkCannotHaveLinkRestrictions"
                   value="This kind of network cannot have link restrictions; the link from {parentVariable} to {childVariable} has a restrictions potential."/>
-    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkCanHaveOnlyOneUtilityNode"
-                  value="This kind of network can have only one utility node, but it has {numUtilityNodes}: {utilityNodes}."/>
-    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkAlreadyHasAUtilityNode"
-                  value="This kind of network can have only one utility node, and it already has {utilityNode}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkHasNoUtilityNodes"
                   value="Network {probNet} must have at least one utility node."/>
-    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NoSuperValueNodeAllowed"
-                  value="Node {node} cannot be a super value node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NodeCannotHaveMoreParents"
                   value="Node {node} already has {parentsSize} parents. No more can be added."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NodeHasMoreParentsThanAllowed"
@@ -168,10 +162,6 @@
                   value="Node {node} must have only directed links to other nodes. But it has undirected links to nodes: {siblings}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyDiscreteVariablesAllowed"
                   value="Variable {variable} must be discrete."/>
-    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyFiniteStatesAllowed"
-                  value="Variable {variable} must be finite."/>
-    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyNumericVariablesAllowed"
-                  value="Variable {variable} must be numeric."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyOneAgentAllowed"
                   value="Variable {variable} must have one and a single one agent."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyOneAgentAllowedInNetwork"
@@ -191,10 +181,6 @@
                   value="The link from {parent.getName} to {child.getName} is part of a cycle with no event node. Every cycle of more than one node must contain an event node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ThereIsACycle"
                   value="The link {parent.getName} → {child.getName} closes a cycle."/>
-    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ThereIsALoop"
-                  value="There is a loop traversing between {node1} and {node2}."/>
-    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$UtilityNodeHasNoPotentials"
-                  value="Utility node {utilityNode} has no potentials, and at least one is required."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$VariableHasNoPotentials"
                   value="Variable {variable} has no potentials."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$VariableNameIsAlreadyPresent"
@@ -416,7 +402,6 @@
                   value="Chance nodes cannot be divided into intervals"/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlySelfLoopsWithEventAndChanceNodes"
                   value="Self loops only allowed in event nodes"/>
-    <Localization class="org.openmarkov.core.model.network.constraint.NoLoops" value="There must be no loops"/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoMixedParents"
                   value="Utility nodes can not have mixed parents."/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoMultipleLinks"
@@ -424,8 +409,6 @@
     <Localization class="org.openmarkov.core.model.network.constraint.NoRevelationArc"
                   value="There are no revelation arcs"/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoSelfLoop" value="No self loops are allowed"/>
-    <Localization class="org.openmarkov.core.model.network.constraint.NoSuperValueNode"
-                  value="Super values must not be present in nodes"/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoUtilityParent"
                   value="Utility nodes only can have utility children"/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables"
@@ -438,22 +421,12 @@
                   value="Only directed links allowed"/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables"
                   value="All variables must be discrete"/>
-    <Localization class="org.openmarkov.core.model.network.constraint.OnlyFiniteStatesVariables"
-                  value="All chance and decision variables must be finite state or discrete"/>
-    <Localization class="org.openmarkov.core.model.network.constraint.OnlyNumericVariables"
-                  value="All variables must be purely numeric."/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlyOneAgent"
                   value="There can be no more than one agent"/>
-    <Localization class="org.openmarkov.core.model.network.constraint.OnlyOneUtilityNode"
-                  value="There must be only one utility node"/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlyTemporalVariables"
                   value="All variables must be temporal."/>
     <Localization class="org.openmarkov.core.model.network.constraint.OnlyUndirectedLinks"
                   value="No directed links allowed"/>
-    <Localization class="org.openmarkov.core.model.network.constraint.OnlyUnlabeledLinks"
-                  value="Links must be unlabeled"/>
-    <Localization class="org.openmarkov.core.model.network.constraint.ProperUtilityPotentials"
-                  value="Utility variables must have utility potentials and there must be at least one utility potential"/>
     <Localization class="org.openmarkov.core.model.network.constraint.UtilityNodes"
                   value="All nodes must be utility potentials"/>
     <Localization class="org.openmarkov.core.model.network.constraint.ValidCriterionName"

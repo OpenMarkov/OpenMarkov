@@ -150,7 +150,6 @@ public abstract class VariableElimination extends InferenceAlgorithm {
 	@Override protected List<PNConstraint> getAdditionalConstraints() {
 		List<PNConstraint> constraints = new ArrayList<>();
 		constraints.add(new NoMixedParents());
-		//constraints.add(new NoSuperValueNode());
 		return constraints;
 	}
 

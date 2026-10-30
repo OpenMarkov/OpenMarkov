@@ -61,7 +61,6 @@ import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.constraint.OnlyDiscreteVariables;
-import org.openmarkov.core.model.network.constraint.OnlyNumericVariables;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
@@ -304,7 +303,7 @@ final class EditUndoCases {
             return new RemoveConstraintEdit(net, net.getConstraints().getLast());
         }));
         cases.add(passes(VariableTypeConstraintEdit.class, "changing the constraint on the type of variable",
-                () -> new VariableTypeConstraintEdit(bayesianNetwork(), new OnlyNumericVariables())));
+                () -> new VariableTypeConstraintEdit(bayesianNetwork(), new OnlyDiscreteVariables())));
 
         return cases;
     }
