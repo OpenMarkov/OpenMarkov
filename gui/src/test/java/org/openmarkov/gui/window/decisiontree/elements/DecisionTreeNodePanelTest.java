@@ -19,6 +19,7 @@ import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.StrategyTree;
+import org.openmarkov.gui.graphic.VisualNode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -75,6 +76,15 @@ class DecisionTreeNodePanelTest {
 
         assertEquals(" impossible scenario", description(panel));
         assertFalse(panel.canBeExpanded());
+    }
+
+    @Test
+    void theNodeIsDrawnAtTheSizeOfTheTextBesideIt() {
+        DecisionTreeNodePanel panel = new DecisionTreeNodePanel(evaluated(NodeType.CHANCE, 1.0));
+        double scale = panel.descriptionLabel.getFont().getSize2D() / VisualNode.TEXT_FONT.getSize2D();
+        int width = DecisionTreeNodePanel.visualNodePanel(NodeType.CHANCE, "X").getPreferredSize().width - 4;
+
+        assertEquals(width * scale, panel.summaryLabel.get().getPreferredSize().width - 4, 1);
     }
 
     private static DecisionTreeNode evaluated(NodeType type, double probability) {

@@ -42,7 +42,7 @@ public final class VisualNode extends VisualElement implements ClassLocalizable 
     /**
      * Font of the name of the node.
      */
-    private static final Font TEXT_FONT = GUIFonts.of(Font.PLAIN, 17);
+    public static final Font TEXT_FONT = GUIFonts.of(Font.PLAIN, 17);
     
     /**
      * Default width of a node when it is contracted. It is the width that it

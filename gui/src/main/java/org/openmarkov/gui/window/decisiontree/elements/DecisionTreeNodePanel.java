@@ -43,23 +43,27 @@ public non-sealed class DecisionTreeNodePanel extends DecisionTreeElementPanel {
     }
     
     @Override public JComponent makeSummary() {
-        return visualNodePanel(this.treeNode.getNodeType(), this.treeNode.getVariable().getName(), canBeExpanded());
+        double scale = this.descriptionLabel.getFont().getSize2D() / VisualNode.TEXT_FONT.getSize2D();
+        return visualNodePanel(this.treeNode.getNodeType(), this.treeNode.getVariable().getName(), canBeExpanded(),
+                               scale);
     }
     
     public static @NotNull JPanel visualNodePanel(NodeType nodeType, String nodeName) {
-        return visualNodePanel(nodeType, nodeName, false);
+        return visualNodePanel(nodeType, nodeName, false, 1);
     }
     
     /**
      * @param shaded whether the node is drawn darker, as one that can still be expanded.
+     * @param scale  the factor the node is drawn at.
      */
-    private static @NotNull JPanel visualNodePanel(NodeType nodeType, String nodeName, boolean shaded) {
+    private static @NotNull JPanel visualNodePanel(NodeType nodeType, String nodeName, boolean shaded, double scale) {
         var visualNode = new VisualNode(new Node(null,
                                                  new Variable(nodeName),
                                                  nodeType), null);
         JPanel panel = new JPanel() {
             @Override public void paint(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
+                g2.scale(scale, scale);
                 visualNode.paint(g2);
                 if (shaded) {
                     g2.setColor(GUIColors.DecisionTree.EXPANDABLE_NODE_SHADE.getColor());
@@ -68,8 +72,8 @@ public non-sealed class DecisionTreeNodePanel extends DecisionTreeElementPanel {
             }
         };
         Shape nodeDimensions = visualNode.getShape((Graphics2D) panel.getGraphics());
-        double width = nodeDimensions.getBounds2D().getWidth();
-        double height = nodeDimensions.getBounds2D().getHeight();
+        double width = nodeDimensions.getBounds2D().getWidth() * scale;
+        double height = nodeDimensions.getBounds2D().getHeight() * scale;
         visualNode.setTemporalPosition(new org.openmarkov.core.model.network.Point2D.Double(2, 0));
         panel.setSize(new Dimension((int) width + 2 + 2, (int) height + 2));
         panel.setMinimumSize(new Dimension((int) width + 2 + 2, (int) height + 2));
