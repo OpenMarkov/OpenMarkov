@@ -46,18 +46,18 @@ public class GlobalInputTracker {
     static {
         // Initialize timer on EDT
         SwingUtilities.invokeLater(() -> {
-            wheelReleaseTimer = new Timer(WHEEL_RELEASE_DELAY_MS, e -> resetWheelState());
-            wheelReleaseTimer.setRepeats(false);
+            GlobalInputTracker.wheelReleaseTimer = new Timer(GlobalInputTracker.WHEEL_RELEASE_DELAY_MS, e -> GlobalInputTracker.resetWheelState());
+            GlobalInputTracker.wheelReleaseTimer.setRepeats(false);
         });
         
         // 1. Global Key Tracking (KeyEventDispatcher)
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
             if (e.getID() == KeyEvent.KEY_PRESSED) {
-                HELD_KEY_CODES.add(e.getKeyCode());
-                updateState("Global listener - Key Pressed: " + KeyEvent.getKeyText(e.getKeyCode()), e);
+                GlobalInputTracker.HELD_KEY_CODES.add(e.getKeyCode());
+                GlobalInputTracker.updateState("Global listener - Key Pressed: " + KeyEvent.getKeyText(e.getKeyCode()), e);
             } else if (e.getID() == KeyEvent.KEY_RELEASED) {
-                HELD_KEY_CODES.remove(e.getKeyCode());
-                updateState("Global listener - Key Released: " + KeyEvent.getKeyText(e.getKeyCode()), e);
+                GlobalInputTracker.HELD_KEY_CODES.remove(e.getKeyCode());
+                GlobalInputTracker.updateState("Global listener - Key Released: " + KeyEvent.getKeyText(e.getKeyCode()), e);
             }
             return false;
         });
@@ -67,76 +67,81 @@ public class GlobalInputTracker {
             if (event instanceof MouseWheelEvent wheelEvent) {
                 int rotation = wheelEvent.getWheelRotation();
                 if (rotation < 0) {
-                    currentMouseWheelState = MouseWheel.UP;
-                    if (wheelReleaseTimer != null) {
-                        wheelReleaseTimer.restart();
+                    GlobalInputTracker.currentMouseWheelState = MouseWheel.UP;
+                    if (GlobalInputTracker.wheelReleaseTimer != null) {
+                        GlobalInputTracker.wheelReleaseTimer.restart();
                     }
-                    updateState("Global listener - Wheel UP", wheelEvent);
+                    GlobalInputTracker.updateState("Global listener - Wheel UP", wheelEvent);
                 } else if (rotation > 0) {
-                    currentMouseWheelState = MouseWheel.DOWN;
-                    if (wheelReleaseTimer != null) {
-                        wheelReleaseTimer.restart();
+                    GlobalInputTracker.currentMouseWheelState = MouseWheel.DOWN;
+                    if (GlobalInputTracker.wheelReleaseTimer != null) {
+                        GlobalInputTracker.wheelReleaseTimer.restart();
                     }
-                    updateState("Global listener - Wheel DOWN", wheelEvent);
+                    GlobalInputTracker.updateState("Global listener - Wheel DOWN", wheelEvent);
                 }
             } else if (event instanceof MouseEvent mouseEvent) {
                 int button = mouseEvent.getButton();
-                
                 switch (mouseEvent.getID()) {
                     case MouseEvent.MOUSE_PRESSED -> {
                         if (button != MouseEvent.NOBUTTON) {
-                            HELD_MOUSE_BUTTONS.add(button);
-                            MOUSE_CLICK_COUNTS.put(button, mouseEvent.getClickCount());
-                            updateState("Global listener - Mouse Pressed: " + getButtonName(button), mouseEvent);
+                            GlobalInputTracker.HELD_MOUSE_BUTTONS.add(button);
+                            GlobalInputTracker.MOUSE_CLICK_COUNTS.put(button, mouseEvent.getClickCount());
+                            GlobalInputTracker.updateState("Global listener - Mouse Pressed: " + GlobalInputTracker.getButtonName(button), mouseEvent);
                         }
                     }
                     case MouseEvent.MOUSE_RELEASED -> {
                         if (button != MouseEvent.NOBUTTON) {
-                            HELD_MOUSE_BUTTONS.remove(button);
-                            updateState("Global listener - Mouse Released: " + getButtonName(button), mouseEvent);
+                            GlobalInputTracker.HELD_MOUSE_BUTTONS.remove(button);
+                            GlobalInputTracker.updateState("Global listener - Mouse Released: " + GlobalInputTracker.getButtonName(button), mouseEvent);
                         }
+                    }
+                    case MouseEvent.MOUSE_MOVED -> {
+                        GlobalInputTracker.updateState("Global listener - Mouse Moved: " + GlobalInputTracker.getButtonName(button), mouseEvent);
+                    }
+                    case MouseEvent.MOUSE_DRAGGED -> {
+                        GlobalInputTracker.updateState("Global listener - Mouse Dragged: " + GlobalInputTracker.getButtonName(button), mouseEvent);
                     }
                     case MouseEvent.MOUSE_CLICKED -> {
                         if (button != MouseEvent.NOBUTTON) {
-                            MOUSE_CLICK_COUNTS.put(button, mouseEvent.getClickCount());
-                            updateState("Global listener - Mouse Clicked: " + getButtonName(button), mouseEvent);
+                            GlobalInputTracker.MOUSE_CLICK_COUNTS.put(button, mouseEvent.getClickCount());
+                            GlobalInputTracker.updateState("Global listener - Mouse Clicked: " + GlobalInputTracker.getButtonName(button), mouseEvent);
                         }
                     }
                 }
             }
-        }, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_WHEEL_EVENT_MASK);
+        }, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.MOUSE_WHEEL_EVENT_MASK);
         
         // 3. Focus loss cleanup
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("focusOwner", evt -> {
             if (evt.getNewValue() == null) {
-                HELD_KEY_CODES.clear();
-                HELD_MOUSE_BUTTONS.clear();
-                currentMouseWheelState = MouseWheel.NONE;
-                if (wheelReleaseTimer != null) wheelReleaseTimer.stop();
-                updateState("Global listener - Focus Lost (Cleared)", null);
+                GlobalInputTracker.HELD_KEY_CODES.clear();
+                GlobalInputTracker.HELD_MOUSE_BUTTONS.clear();
+                GlobalInputTracker.currentMouseWheelState = MouseWheel.NONE;
+                if (GlobalInputTracker.wheelReleaseTimer != null) GlobalInputTracker.wheelReleaseTimer.stop();
+                GlobalInputTracker.updateState("Global listener - Focus Lost (Cleared)", null);
             }
         });
     }
     
     private static void resetWheelState() {
-        currentMouseWheelState = MouseWheel.NONE;
-        updateState("Global listener - Wheel Auto-Reset (NONE)", null);
+        GlobalInputTracker.currentMouseWheelState = MouseWheel.NONE;
+        GlobalInputTracker.updateState("Global listener - Wheel Auto-Reset (NONE)", null);
     }
     
     public static Set<Integer> getHeldKeyCodes() {
-        return new HashSet<>(HELD_KEY_CODES);
+        return new HashSet<>(GlobalInputTracker.HELD_KEY_CODES);
     }
     
     public static Set<Integer> getHeldMouseButtons() {
-        return new HashSet<>(HELD_MOUSE_BUTTONS);
+        return new HashSet<>(GlobalInputTracker.HELD_MOUSE_BUTTONS);
     }
     
     public static Map<Integer, Integer> getMouseClickCounts() {
-        return new HashMap<>(MOUSE_CLICK_COUNTS);
+        return new HashMap<>(GlobalInputTracker.MOUSE_CLICK_COUNTS);
     }
     
     public static MouseWheel getMouseWheelState() {
-        return currentMouseWheelState;
+        return GlobalInputTracker.currentMouseWheelState;
     }
     
     private static void updateState(String sourceTag, InputEvent event) {
@@ -144,13 +149,13 @@ public class GlobalInputTracker {
             return;
         }
         StringBuilder keys = new StringBuilder();
-        for (int code : getHeldKeyCodes()) {
+        for (int code : GlobalInputTracker.getHeldKeyCodes()) {
             keys.append(KeyEvent.getKeyText(code)).append(" ");
         }
         
         StringBuilder buttons = new StringBuilder();
-        for (int btn : getHeldMouseButtons()) {
-            buttons.append(getButtonName(btn)).append(" ");
+        for (int btn : GlobalInputTracker.getHeldMouseButtons()) {
+            buttons.append(GlobalInputTracker.getButtonName(btn)).append(" ");
         }
 //        System.out.println("[" + sourceTag + "] -> Held Keys: [" +
 //                                   (keys.length() > 0 ? keys.toString().trim() : "None") +
@@ -182,12 +187,12 @@ public class GlobalInputTracker {
             testPanel.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    updateState("Component listener - Key Pressed: " + KeyEvent.getKeyText(e.getKeyCode()), e);
+                    GlobalInputTracker.updateState("Component listener - Key Pressed: " + KeyEvent.getKeyText(e.getKeyCode()), e);
                 }
                 
                 @Override
                 public void keyReleased(KeyEvent e) {
-                    updateState("Component listener - Key Released: " + KeyEvent.getKeyText(e.getKeyCode()), e);
+                    GlobalInputTracker.updateState("Component listener - Key Released: " + KeyEvent.getKeyText(e.getKeyCode()), e);
                 }
             });
             
@@ -195,22 +200,22 @@ public class GlobalInputTracker {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     testPanel.requestFocusInWindow();
-                    updateState("Component listener - Mouse Pressed: " + getButtonName(e.getButton()), e);
+                    GlobalInputTracker.updateState("Component listener - Mouse Pressed: " + GlobalInputTracker.getButtonName(e.getButton()), e);
                 }
                 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    updateState("Component listener - Mouse Released: " + getButtonName(e.getButton()), e);
+                    GlobalInputTracker.updateState("Component listener - Mouse Released: " + GlobalInputTracker.getButtonName(e.getButton()), e);
                 }
                 
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    updateState("Component listener - Mouse Clicked: " + getButtonName(e.getButton()), e);
+                    GlobalInputTracker.updateState("Component listener - Mouse Clicked: " + GlobalInputTracker.getButtonName(e.getButton()), e);
                 }
             });
             
             testPanel.addMouseWheelListener(e -> {
-                updateState("Component listener - Wheel Scrolled: " + (e.getWheelRotation() < 0 ? "UP" : "DOWN"), e);
+                GlobalInputTracker.updateState("Component listener - Wheel Scrolled: " + (e.getWheelRotation() < 0 ? "UP" : "DOWN"), e);
             });
             
             JButton openDialogBtn = new JButton("Open Modal Dialog");

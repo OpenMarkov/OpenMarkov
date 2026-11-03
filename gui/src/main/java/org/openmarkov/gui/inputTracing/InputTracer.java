@@ -108,7 +108,7 @@ public class InputTracer {
         this.changeCausingEvent = event;
         updateChangeState();
         
-        OpenMarkovLogger.LOGGER.debug("Input tracer updated: " + this);
+        OpenMarkovLogger.LOGGER.trace("Input tracer updated: " + this);
     }
     
     private void updateChangeState() {

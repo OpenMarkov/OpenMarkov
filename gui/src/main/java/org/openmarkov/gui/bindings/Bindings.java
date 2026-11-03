@@ -133,7 +133,7 @@ public class Bindings {
                             Binding.Exclusivity.EXCLUSIVE
                 );
         
-        public static final BindingCommandGroup.BindingGroup ADD_ELEMENT_TO_SELECTION =
+        public static final Binding ADD_ELEMENT_TO_SELECTION =
                 new Binding("network/general/add_to_selection",
                             "Add to selection",
                             """

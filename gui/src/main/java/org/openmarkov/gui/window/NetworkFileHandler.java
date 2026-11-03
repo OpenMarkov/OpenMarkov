@@ -29,6 +29,7 @@ import org.openmarkov.core.io.exception.NoWriterForExtensionException;
 import org.openmarkov.core.io.format.annotation.FormatManager;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -305,7 +306,11 @@ public class NetworkFileHandler {
     // ── Save ──────────────────────────────────────────────────────
     
     boolean saveNetwork(NetworkEditorPanel networkPanel) throws WriterException {
-        String fileName = networkPanel.getNetworkFile();
+        String fileName = switch (networkPanel.source()) {
+            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getAbsolutePath();
+            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> null;
+            case null -> null;
+        };
         if (fileName != null) {
             this.createBackUpNetworkFile(fileName, toBakExtension(networkPanel.getNetworkFile()));
         }
@@ -396,9 +401,8 @@ public class NetworkFileHandler {
                 out.write(c);
             }
         } catch (IOException e) {
-            System.out.println(stringDatabase.getString("NetworkBackupError.Text"));
+            OpenMarkovLogger.LOGGER.error(stringDatabase.getString("NetworkBackupError.Text"));
         }
-        System.out.println(stringDatabase.getString("NetworkBackup.Text"));
     }
     
     private static String toBakExtension(String nameFile) {
