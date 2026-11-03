@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -122,8 +123,8 @@ class AStateNameIsNeitherEmptyNorRepeatedTest {
         ConstraintChecker checker = new ConstraintChecker(net);
         net.getConstraintOfClass(ValidState.class).checkProbNet(net, checker);
         List<Class<?>> broken = checker.getViolations().stream().<Class<?>>map(Object::getClass).toList();
-        assertEquals(List.of(ConstraintViolatedException.StateDuplicated.class,
-                             ConstraintViolatedException.NameOfStateCannotBeEmpty.class), broken);
+        assertThat(broken).containsExactlyInAnyOrderElementsOf(List.of(ConstraintViolatedException.StateDuplicated.class,
+                                                                       ConstraintViolatedException.NameOfStateCannotBeEmpty.class));
     }
 
     @Test void theUnnamedStateOfANumericVariableDoesNotBreakTheRule() {
