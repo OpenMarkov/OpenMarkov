@@ -186,8 +186,12 @@ class InferenceHandler {
         if (costEffectivenessDialog.getSelectedOption() == OkCancelDialog.ChosenOption.Cancel) {
             return;
         }
-
-        String fileName = expandedFileName(probNet.getName(), networkPanelMID.getNetworkFile());
+        
+        String fileName = expandedFileName(probNet.getName(), switch (networkPanelMID.source()) {
+            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getAbsolutePath();
+            case NetworkEditorPanel.NetworkSource.NoSource noSource -> null;
+            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> null;
+        });
 
         TemporalNetOperations.ExpandedNetwork expanded =
                 TemporalNetOperations.expandNetwork(probNet, preResolutionEvidence, fileName);
@@ -195,7 +199,13 @@ class InferenceHandler {
         NetworkEditorPanel networkPanel = fileHandler.createNewFrame(expanded.probNet(), null);
         mainPanel.getMainPanelMenuAssistant()
                  .setOptionEnabled(ActionCommands.SAVE_OPEN_NETWORK.getCommandName(), false);
-        networkPanel.setNetworkFile(expandedFile(networkPanelMID.getNetworkFile(), fileName));
+        
+        if (networkPanelMID.source() instanceof NetworkEditorPanel.NetworkSource.SourceFile sourceFile) {
+            networkPanel.setSource(new NetworkEditorPanel.NetworkSource.SourceFile(sourceFile.file()
+                                                                                             .toPath()
+                                                                                             .resolveSibling(fileName)
+                                                                                             .toFile()));
+        }
         networkPanel.getEditorPanel()
                     .getEvidenceManager()
                     .setEvidence(expanded.evidence(), new ArrayList<>());

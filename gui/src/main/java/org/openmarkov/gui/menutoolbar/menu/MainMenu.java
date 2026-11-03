@@ -685,6 +685,7 @@ public class MainMenu extends JMenuBar implements MenuToolBarBasic {
             item.setText(switch (source) {
                 case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getAbsolutePath();
                 case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> sourceURL.url().getPath();
+                case NetworkEditorPanel.NetworkSource.NoSource noSource -> "None";
             });
             ActionCommands command = ActionCommands.openLastFileCommandAt(index);
             if (command != null) {

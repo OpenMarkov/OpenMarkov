@@ -966,17 +966,8 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public String getNetworkFile() {
         return networkFile;
     }
-
-
-    /**
-     * Sets the name of the file where the network is saved.
-     *
-     * @param name name of the file.
-     */
-    public void setNetworkFile(String name) {
-        networkFile = name;
-    }
-
+    
+    
     /**
      * Returns the current working mode.
      *
@@ -1093,7 +1084,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     /**
      * This method removes findings from selected nodes.
      */
-    public void removeFinding() throws PreResolutionNodeInInferenceException, ThereIsNoPotentialInNodeException {
+    public void removeFinding() throws PreResolutionNodeInInferenceException {
         this.getEvidenceManager().removeFinding();
     }
 
@@ -1101,7 +1092,7 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
      * This method updates the value of each state for each node in the network
      * with the current individual probabilities.
      */
-    public void updateIndividualProbabilitiesAndUtilities() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException, ThereIsNoPotentialInNodeException {
+    public void updateIndividualProbabilitiesAndUtilities() throws NotEvaluableNetworkException, NonProjectablePotentialException, NotEnoughMemoryException, IncompatibleEvidenceException, ConstraintViolatedException, CannotNormalizePotentialException {
         this.getEvidenceManager().updateIndividualProbabilitiesAndUtilities();
     }
 
@@ -1339,16 +1330,40 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     }
     
     public sealed interface NetworkSource {
-        public record SourceFile(@Nullable File file) implements NetworkSource {
+        
+        public record SourceFile(File file) implements NetworkSource {
+            
+            @Override public boolean equals(Object other) {
+                return other instanceof SourceFile otherSource && Objects.equals(this.file, otherSource.file);
+            }
         }
         
-        public record SourceURL(@Nullable URL url) implements NetworkSource {
+        public record SourceURL(URL url) implements NetworkSource {
+            
+            @Override public boolean equals(Object other) {
+                return other instanceof SourceURL otherSource && Objects.equals(this.url, otherSource.url);
+            }
+        }
+        
+        public record NoSource() implements NetworkSource {
+            
+            @Override public boolean equals(Object other) {
+                return other instanceof SourceURL NoSource;
+            }
+        }
+        
+        public default boolean isSpecific() {
+            return switch (this) {
+                case NoSource noSource -> false;
+                case SourceFile sourceFile -> true;
+                case SourceURL sourceURL -> true;
+            };
         }
     }
     
-    private @Nullable NetworkSource source;
+    private @NotNull NetworkSource source = new NetworkSource.NoSource();
     
-    public @Nullable NetworkSource source() {
+    public @NotNull NetworkSource source() {
         return source;
     }
     

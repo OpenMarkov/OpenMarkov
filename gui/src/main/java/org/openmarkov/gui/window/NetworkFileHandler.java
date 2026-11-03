@@ -58,6 +58,8 @@ import org.openmarkov.gui.dialog.network.NetworkPropertiesDialog;
 import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
+import org.openmarkov.io.probmodel.reader.PGMXReader;
+import org.openmarkov.io.probmodel.writer.PGMXWriter_1_0;
 import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.JDialog;
@@ -76,7 +78,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Handles all file I/O operations: open, save, close, backup, evidence, and network creation.
@@ -127,7 +128,7 @@ public class NetworkFileHandler {
         probNet.getPNESupport().setWithUndo(true);
         NetworkEditorPanel networkPanel = new NetworkEditorPanel(probNet, mainPanel);
         if (networkFile != null) {
-            networkPanel.setNetworkFile(networkFile);
+            networkPanel.setSource(new NetworkEditorPanel.NetworkSource.SourceFile(new File(networkFile)));
         }
         probNet.getPNESupport().addListener(mainPanel.getMainPanelMenuAssistant());
         mainPanel.addCloseableTab(probNet.getName(), networkPanel);
@@ -153,57 +154,46 @@ public class NetworkFileHandler {
     }
     
     void openNetwork(@Nullable String fileName) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
-        openNetworkSource(new NetworkEditorPanel.NetworkSource.SourceFile(fileName == null || fileName.isBlank() ? null : new File(fileName)));
+        File file = fileName == null || fileName.isBlank() ? new File(this.requestNetworkFileToOpen()) : new File(fileName);
+        if (file == null) {
+            return;
+        }
+        openNetworkSource(new NetworkEditorPanel.NetworkSource.SourceFile(file));
     }
     
     void openNetworkURL() throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
-        openNetworkSource(new NetworkEditorPanel.NetworkSource.SourceURL(null));
+        URL url = this.requestURLFileToOpen();
+        if (url == null) {
+            return;
+        }
+        openNetworkSource(new NetworkEditorPanel.NetworkSource.SourceURL(url));
     }
     
     void openNetworkSource(NetworkEditorPanel.NetworkSource source) throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
-        source = switch (source) {
-            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> {
-                if (sourceFile.file() != null) {
-                    yield source;
-                }
-                String pathname = this.requestNetworkFileToOpen();
-                if (pathname == null) {
-                    yield new NetworkEditorPanel.NetworkSource.SourceFile(null);
-                }
-                yield new NetworkEditorPanel.NetworkSource.SourceFile(new File(pathname));
-            }
-            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> {
-                if (sourceURL.url() != null) {
-                    yield sourceURL;
-                }
-                yield new NetworkEditorPanel.NetworkSource.SourceURL(this.requestURLFileToOpen());
-            }
-        };
-        if (null == switch (source) {
-            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file();
-            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> sourceURL.url();
-        }) {
-            return;
-        }
         ProbNetInfo probNetInfo = switch (source) {
             case NetworkEditorPanel.NetworkSource.SourceFile sourceFile ->
                     NetsIO.openNetworkFile(sourceFile.file().getAbsolutePath());
             case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> NetsIO.openNetworkURL(sourceURL.url());
+            case NetworkEditorPanel.NetworkSource.NoSource noSource ->
+                    new ProbNetInfo(new ProbNet(), new ArrayList<>(), new PGMXReader(), new PGMXWriter_1_0());
         };
         ProbNet netReadFrom = probNetInfo.probNet();
         netReadFrom.getPNESupport().addListener(mainPanel.getMainPanelMenuAssistant());
         netReadFrom.getPNESupport().setWithUndo(true);
         netReadFrom.setName((switch (source) {
-            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file();
-            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> new File(sourceURL.url().getFile());
-        }).getName());
+            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getName();
+            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> new File(sourceURL.url().getFile()).getName();
+            case NetworkEditorPanel.NetworkSource.NoSource noSource -> "Untitled";
+        }));
         String networkFile = switch (source) {
             case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getAbsolutePath();
             case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> sourceURL.url().getFile();
+            case NetworkEditorPanel.NetworkSource.NoSource noSource -> null;
         };
         var networksMatchingThisOne = mainPanel.getNetworkEditors()
                                                .stream()
-                                               .filter(editor -> networkFile.equals(editor.getNetworkFile()))
+                                               .filter(editor -> editor.source().isSpecific() && editor.source()
+                                                                                                       .equals(source))
                                                .toList();
         var anyOfTheNetworksIsModified = networksMatchingThisOne.stream().anyMatch(NetworkEditorPanel::getModified);
         
@@ -237,15 +227,21 @@ public class NetworkFileHandler {
             case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> {
                 LastOpenFiles.setLastSource(source);
             }
+            case NetworkEditorPanel.NetworkSource.NoSource noSource -> {
+            }
         }
         System.out.println(stringDatabase.getString("NetworkLoaded.Text"));
         mainPanel.getMainMenu().rechargeFileMenu();
-        List<String> schemaProblems = FormatManager.getInstance().schemaProblems(switch (source) {
-            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().toURI().toURL();
-            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> sourceURL.url();
-        });
-        if (!schemaProblems.isEmpty()) {
-            this.showColumns(netReadFrom, schemaProblems, "FileDoesNotFollowTheSchema");
+        
+        if (source.isSpecific()) {
+            List<String> schemaProblems = FormatManager.getInstance().schemaProblems(switch (source) {
+                case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().toURI().toURL();
+                case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> sourceURL.url();
+                case NetworkEditorPanel.NetworkSource.NoSource noSource -> null;
+            });
+            if (!schemaProblems.isEmpty()) {
+                this.showColumns(netReadFrom, schemaProblems, "FileDoesNotFollowTheSchema");
+            }
         }
         List<String> wrongColumns = ColumnsThatDoNotAddUpToOne.in(netReadFrom);
         if (!wrongColumns.isEmpty()) {
@@ -308,11 +304,10 @@ public class NetworkFileHandler {
     boolean saveNetwork(NetworkEditorPanel networkPanel) throws WriterException {
         String fileName = switch (networkPanel.source()) {
             case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getAbsolutePath();
-            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> null;
-            case null -> null;
+            case NetworkEditorPanel.NetworkSource.SourceURL _, NetworkEditorPanel.NetworkSource.NoSource _ -> null;
         };
         if (fileName != null) {
-            this.createBackUpNetworkFile(fileName, toBakExtension(networkPanel.getNetworkFile()));
+            this.createBackUpNetworkFile(fileName, toBakExtension(fileName));
         }
         return (fileName != null && networkPanel.getWriter() != null)
                 ? this.saveNetworkActions(networkPanel, fileName)
@@ -327,12 +322,8 @@ public class NetworkFileHandler {
         }
         String fileFormat = (String) fileNameAndFormat.get(1);
         // If the network cannot be saved in that format, the tab keeps its file and its format
-        String previousFile = networkPanel.getNetworkFile();
-        String previousName = networkPanel.getProbNet().getName();
         ProbNetWriter previousWriter = networkPanel.getWriter();
         ProbNetReader previousReader = networkPanel.getReader();
-        networkPanel.setNetworkFile(fileName);
-        networkPanel.getProbNet().setName(new File(fileName).getName());
         var formatInfo = FormatManager.info((Class<?>) fileNameAndFormat.get(2));
         networkPanel.setWriter(
                 FormatManager.writersInstances()
@@ -347,8 +338,6 @@ public class NetworkFileHandler {
         try {
             return this.saveNetworkActions(networkPanel, fileName, fileFormat);
         } catch (WriterException notSaved) {
-            networkPanel.setNetworkFile(previousFile);
-            networkPanel.getProbNet().setName(previousName);
             networkPanel.setWriter(previousWriter);
             networkPanel.setReader(previousReader);
             throw notSaved;
@@ -356,27 +345,32 @@ public class NetworkFileHandler {
     }
     
     void saveOpenNetwork(NetworkEditorPanel networkPanel) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile, WriterException {
-        String fileName = networkPanel.getNetworkFile();
+        String fileName = switch (networkPanel.source()) {
+            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getAbsolutePath();
+            case NetworkEditorPanel.NetworkSource.SourceURL _, NetworkEditorPanel.NetworkSource.NoSource _ -> null;
+        };
         if (fileName != null) {
-            this.createBackUpNetworkFile(fileName, toBakExtension(networkPanel.getNetworkFile()));
+            this.createBackUpNetworkFile(fileName, toBakExtension(fileName));
         }
         // Without a file, saving asks where; if the user does not choose, there is nothing to reopen
         if (!this.saveNetwork(networkPanel)) {
             return;
         }
-        fileName = networkPanel.getNetworkFile();
+        var source = (NetworkEditorPanel.NetworkSource.SourceFile) networkPanel.source();
         this.closeCurrentNetwork();
-        this.openNetwork(fileName);
+        this.openNetworkSource(source);
     }
     
     private boolean saveNetworkActions(NetworkEditorPanel networkPanel, String fileName, String fileFormat) throws WriterException {
         System.out.println(stringDatabase.getString("SavingNetwork.Text") + " " + fileName);
         NetsIO.saveNetworkFile(networkPanel, fileName);
         networkPanel.onSave();
-        networkPanel.setNetworkFile(fileName);
-        networkPanel.setSource(new NetworkEditorPanel.NetworkSource.SourceFile(new File(fileName)));
+        NetworkEditorPanel.NetworkSource.SourceFile sourceFile = new NetworkEditorPanel.NetworkSource.SourceFile(new File(fileName));
+        networkPanel.setSource(sourceFile);
+        networkPanel.getProbNet().setName(sourceFile.file().getName());
+        
         mainPanel.getMainPanelMenuAssistant().updateOptionsNetworkSaved();
-        LastOpenFiles.setLastSource(networkPanel.source());
+        LastOpenFiles.setLastSource(sourceFile);
         UserPreferences.LATEST_SAVED_DIRECTORY.set(new File(fileName).getAbsoluteFile());
         System.out.println(stringDatabase.getString("NetworkSaved.Text"));
         mainPanel.getMainMenu().rechargeFileMenu();
@@ -476,8 +470,8 @@ public class NetworkFileHandler {
             if (UserPreferences.STARTUP_ACTIONS.get().contains(StartupAction.RESTORE_LAST_SESSION)) {
                 var sources = editors.stream()
                                      .map(NetworkEditorPanel::source)
-                                           .filter(Objects::nonNull)
-                                           .toList();
+                                     .filter(s -> s.getClass() != NetworkEditorPanel.NetworkSource.NoSource.class)
+                                     .toList();
                 UserPreferences.LAST_SESSION_NETWORK_FILES.set(new ArrayList<>(sources));
             }
             System.exit(0);
@@ -565,9 +559,13 @@ public class NetworkFileHandler {
     }
     
     private ArrayList<Object> requestNetworkFileAndFormatToSave(NetworkEditorPanel networkPanel) {
-        String fileName = networkPanel.getNetworkFile();
-        String suggestedFileName = (fileName != null) ? fileName : new File(networkPanel.getProbNet()
-                                                                                        .getName()).getName();
+        String suggestedFileName = switch (networkPanel.source()) {
+            case NetworkEditorPanel.NetworkSource.NoSource noSource -> new File(networkPanel.getProbNet()
+                                                                                            .getName()).getName();
+            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getName();
+            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> new File(networkPanel.getProbNet()
+                                                                                              .getName()).getName();
+        };
         NetworkOMFileChooser fileChooser = new NetworkOMFileChooser(false, false);
         String title = stringDatabase.getString("SaveNetwork.Title");
         fileChooser.setDialogTitle(title);

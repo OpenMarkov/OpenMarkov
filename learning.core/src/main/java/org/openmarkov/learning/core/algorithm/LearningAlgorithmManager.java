@@ -11,10 +11,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.InvalidArgumentException;
+import org.openmarkov.java.classUtils.ClassUtils;
 import org.openmarkov.plugin.PluginSearch;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -58,6 +62,7 @@ public class LearningAlgorithmManager {
      */
     public Stream<Class<? extends LearningAlgorithm>> getGenerativeAlgorithms() {
         return learningAlgorithms.stream()
+                                 .filter(ClassUtils::isProductionClass)
                 .filter(a -> !info(a).discriminative());
     }
 
@@ -73,6 +78,7 @@ public class LearningAlgorithmManager {
      */
     public Stream<Class<? extends LearningAlgorithm>> getDiscriminativeAlgorithms() {
         return learningAlgorithms.stream()
+                                 .filter(ClassUtils::isProductionClass)
                 .filter(a -> info(a).discriminative());
     }
     

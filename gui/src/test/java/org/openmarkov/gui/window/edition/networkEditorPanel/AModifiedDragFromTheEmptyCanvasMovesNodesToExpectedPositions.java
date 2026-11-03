@@ -14,13 +14,14 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.gui.configuration.UserPreference;
-import org.openmarkov.gui.inputTracing.GlobalInputTracker;
 import org.openmarkov.gui.graphic.VisualNode;
+import org.openmarkov.gui.inputTracing.GlobalInputTracker;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.edition.ZoomManager;
 
@@ -33,14 +34,13 @@ import java.awt.event.MouseEvent;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * In the network editor, with A selected, a drag from the empty canvas with Shift or Control held does not move A:
- * moving the nodes needs the button to be pressed on what is selected (error 313).
+ * In the network editor, with A selected, a drag from the empty canvas with Shift or Control held does move A.
  *
  * @author Manuel Arias
  */
 @Tag(TestSpeed.MEDIUM)
 @DisabledIf(value = "java.awt.GraphicsEnvironment#isHeadless", disabledReason = "The main window needs a screen")
-class AModifiedDragFromTheEmptyCanvasMovesNothingTest {
+class AModifiedDragFromTheEmptyCanvasMovesNodesToExpectedPositions {
 
     private static boolean ignoreStorage;
 
@@ -117,18 +117,22 @@ class AModifiedDragFromTheEmptyCanvasMovesNothingTest {
         return tab.getVisualNetwork().getAllNodes().stream().filter(node -> node.getNode().getName().equals(name))
                   .findFirst().orElseThrow();
     }
-
-    @Test void withShiftTheSelectedNodeStaysWhereItWas() throws Exception {
+    
+    @Test void withShiftTheSelectedNodeMovesProperly() throws Exception {
+        Point2D.Double originalPosition = node("A").getPosition().clone();
         dragFromTheEmptyCanvasHolding(KeyEvent.VK_SHIFT, InputEvent.SHIFT_DOWN_MASK);
-
-        assertEquals(100, node("A").getPosition().x, 1e-9);
-        assertEquals(100, node("A").getPosition().y, 1e-9);
+        
+        Point2D.Double newPosition = node("A").getPosition();
+        assertEquals(originalPosition.x, newPosition.x - 100, 1e-9);
+        assertEquals(originalPosition.y, newPosition.y - 100, 1e-9);
     }
-
-    @Test void withControlTheSelectedNodeStaysWhereItWas() throws Exception {
+    
+    @Test void withControlTheSelectedNodeMovesProperly() throws Exception {
+        Point2D.Double originalPosition = node("A").getPosition().clone();
         dragFromTheEmptyCanvasHolding(KeyEvent.VK_CONTROL, InputEvent.CTRL_DOWN_MASK);
-
-        assertEquals(100, node("A").getPosition().x, 1e-9);
-        assertEquals(100, node("A").getPosition().y, 1e-9);
+        
+        Point2D.Double newPosition = node("A").getPosition();
+        assertEquals(originalPosition.x, newPosition.x - 100, 1e-9);
+        assertEquals(originalPosition.y, newPosition.y - 100, 1e-9);
     }
 }

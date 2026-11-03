@@ -10,13 +10,13 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.AllChanceVariablesHaveChancePotentials;
 import org.openmarkov.core.model.network.constraint.DistinctLinks;
 import org.openmarkov.core.model.network.constraint.DistinctVariableNames;
-import org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes;
+import org.openmarkov.core.model.network.constraint.EveryCycleHasAnEvent;
 import org.openmarkov.core.model.network.constraint.MaxNumParents;
 import org.openmarkov.core.model.network.constraint.ModelNetworkConstraint;
 import org.openmarkov.core.model.network.constraint.NoAlwaysObservedDescendantOfDecision;
 import org.openmarkov.core.model.network.constraint.NoBackwardLink;
-import org.openmarkov.core.model.network.constraint.EveryCycleHasAnEvent;
 import org.openmarkov.core.model.network.constraint.NoCycle;
+import org.openmarkov.core.model.network.constraint.NoDiscretizedChanceNodes;
 import org.openmarkov.core.model.network.constraint.NoEventNodes;
 import org.openmarkov.core.model.network.constraint.NoMixedParents;
 import org.openmarkov.core.model.network.constraint.NoMultipleLinks;
@@ -151,8 +151,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.to = to;
         }
         
-        private final Node from;
-        private final Node to;
+        public final Node from;
+        public final Node to;
     }
     
     public static class VariableNameIsAlreadyPresent extends ConstraintViolatedException {
@@ -162,7 +162,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.name = name;
         }
         
-        private final String name;
+        public final String name;
     }
     
     public static class NodeCannotHaveMoreParents extends ConstraintViolatedException {
@@ -173,8 +173,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.parentsSize = parentsSize;
         }
         
-        private final Node node;
-        private final int parentsSize;
+        public final Node node;
+        public final int parentsSize;
     }
     
     public static class ModelDoesNotAllowAddingLink extends ConstraintViolatedException {
@@ -185,8 +185,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.to = to;
         }
         
-        private final Variable from;
-        private final Variable to;
+        public final Variable from;
+        public final Variable to;
     }
     
     public static class ModelDoesNotAllowInvertingLink extends ConstraintViolatedException {
@@ -197,8 +197,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.to = to;
         }
         
-        private final Variable from;
-        private final Variable to;
+        public final Variable from;
+        public final Variable to;
     }
     
     public static class ModelDoesNotAllowRemovingLink extends ConstraintViolatedException {
@@ -209,8 +209,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.to = to;
         }
         
-        private final Variable from;
-        private final Variable to;
+        public final Variable from;
+        public final Variable to;
     }
     
     public static class VariableHasNoPotentials extends ConstraintViolatedException {
@@ -220,7 +220,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.variable = variable;
         }
         
-        private final Variable variable;
+        public final Variable variable;
     }
     
     public static class NodeHasRepeatedLinks extends ConstraintViolatedException {
@@ -230,7 +230,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.node = node;
         }
         
-        private final Node node;
+        public final Node node;
     }
     
     public static class NodeHasMoreParentsThanAllowed extends ConstraintViolatedException {
@@ -242,9 +242,9 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.maxNumOfParentsAllowed = maxNumOfParentsAllowed;
         }
         
-        private final Node child;
-        private final int numParents;
-        private final int maxNumOfParentsAllowed;
+        public final Node child;
+        public final int numParents;
+        public final int maxNumOfParentsAllowed;
     }
     
     public static class AlwaysObservedVariableIsDescendantOfDecisionNode extends ConstraintViolatedException {
@@ -255,8 +255,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.decisionNode = decisionNode;
         }
         
-        private final Node alwaysObservedNode;
-        private final Node decisionNode;
+        public final Node alwaysObservedNode;
+        public final Node decisionNode;
     }
     
     
@@ -268,8 +268,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.childVariable = childVariable;
         }
         
-        private final Variable parentVariable;
-        private final Variable childVariable;
+        public final Variable parentVariable;
+        public final Variable childVariable;
     }
     
     public static class CycleWithoutAnEvent extends ConstraintViolatedException {
@@ -280,8 +280,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.child = child;
         }
         
-        private final Node parent;
-        private final Node child;
+        public final Node parent;
+        public final Node child;
     }
     
     public static class ThereIsACycle extends ConstraintViolatedException {
@@ -292,8 +292,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.child = child;
         }
         
-        private final Node parent;
-        private final Node child;
+        public final Node parent;
+        public final Node child;
     }
     
     public static class NameOfVariableCannotBeEmpty extends ConstraintViolatedException {
@@ -303,7 +303,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.variable = variable;
         }
         
-        private final Variable variable;
+        public final Variable variable;
     }
     
     public static class NameOfVariableIsAlreadyPresent extends ConstraintViolatedException {
@@ -313,7 +313,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.variableName = variableName;
         }
         
-        private final String variableName;
+        public final String variableName;
     }
     
     
@@ -352,8 +352,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.node2 = node2;
         }
         
-        private final Node node1;
-        private final Node node2;
+        public final Node node1;
+        public final Node node2;
     }
     
     public static class CannotSelfLink extends ConstraintViolatedException {
@@ -363,7 +363,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.node = node;
         }
         
-        private final Node node;
+        public final Node node;
     }
     
     
@@ -375,8 +375,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.utilityNode = utilityNode;
         }
         
-        private final Node child;
-        private final Node utilityNode;
+        public final Node child;
+        public final Node utilityNode;
     }
     
     public static class OnlyAtemporalVariablesAllowed extends ConstraintViolatedException {
@@ -386,7 +386,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.variable = variable;
         }
         
-        private final Variable variable;
+        public final Variable variable;
     }
     
     public static class OnlyChanceNodesAllowed extends ConstraintViolatedException {
@@ -396,7 +396,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.variable = variable;
         }
         
-        private final Variable variable;
+        public final Variable variable;
     }
     
     /**
@@ -455,7 +455,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.variable = variable;
         }
         
-        private final Variable variable;
+        public final Variable variable;
     }
     
     public static class OnlyDirectedLinksAllowed extends ConstraintViolatedException {
@@ -467,8 +467,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         }
         
         
-        private final Node node;
-        private final List<Node> siblings;
+        public final Node node;
+        public final List<Node> siblings;
     }
     
     public static class OnlyDiscreteVariablesAllowed extends ConstraintViolatedException {
@@ -479,7 +479,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.variable = variable.getName();
         }
         
-        private final String variable;
+        public final String variable;
     }
     
     
@@ -491,7 +491,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.variable = variable;
         }
         
-        private final Variable variable;
+        public final Variable variable;
     }
     
     public static class OnlyTemporalVariablesAllowed extends ConstraintViolatedException {
@@ -501,7 +501,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.variable = variable;
         }
         
-        private final Variable variable;
+        public final Variable variable;
     }
     
     public static class OnlyOneAgentAllowedInNetwork extends ConstraintViolatedException {
@@ -511,7 +511,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.probNet = probNet;
         }
         
-        private final ProbNet probNet;
+        public final ProbNet probNet;
     }
     
     public static class OnlyUndirectedLinksCannotHaveChildren extends ConstraintViolatedException {
@@ -522,8 +522,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.children = children;
         }
         
-        private final Node node;
-        private final List<Node> children;
+        public final Node node;
+        public final List<Node> children;
     }
     
     public static class OnlyUndirectedLinksCannotHaveParents extends ConstraintViolatedException {
@@ -534,8 +534,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.parents = parents;
         }
         
-        private final Node node;
-        private final List<Node> parents;
+        public final Node node;
+        public final List<Node> parents;
     }
     
     public static class NetworkHasNoUtilityNodes extends ConstraintViolatedException {
@@ -545,7 +545,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.probNet = probNet;
         }
         
-        private final ProbNet probNet;
+        public final ProbNet probNet;
     }
 
     
@@ -557,8 +557,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.numUtilityPotentials = numUtilityPotentials;
         }
         
-        private final int numUtilityNodes;
-        private final int numUtilityPotentials;
+        public final int numUtilityNodes;
+        public final int numUtilityPotentials;
     }
     
     public static class NetworkCannotHaveRevelationArcs extends ConstraintViolatedException {
@@ -569,9 +569,9 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.parentVariable = parentVariable;
             this.childVariable = childVariable;
         }
-
-        private final Variable parentVariable;
-        private final Variable childVariable;
+        
+        public final Variable parentVariable;
+        public final Variable childVariable;
     }
 
     public static class NetworkCannotHaveLinkRestrictions extends ConstraintViolatedException {
@@ -582,9 +582,9 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.parentVariable = parentVariable;
             this.childVariable = childVariable;
         }
-
-        private final Variable parentVariable;
-        private final Variable childVariable;
+        
+        public final Variable parentVariable;
+        public final Variable childVariable;
     }
 
     public static class CriterionNameIsEmpty extends ConstraintViolatedException {
@@ -594,7 +594,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.criterion = criterion;
         }
         
-        private final Criterion criterion;
+        public final Criterion criterion;
     }
     
     public static class CriterionNameIsAlreadyPresent extends ConstraintViolatedException {
@@ -605,8 +605,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.name = name;
         }
         
-        private final Criterion criterion;
-        private final String name;
+        public final Criterion criterion;
+        public final String name;
     }
     
     public static class NameOfStateCannotBeEmpty extends ConstraintViolatedException {
@@ -616,7 +616,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.node = node;
         }
         
-        private final Node node;
+        public final Node node;
     }
     
     public static class StateAlreadyExists extends ConstraintViolatedException {
@@ -627,8 +627,8 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.newState = newState;
         }
         
-        private final Node node;
-        private final String newState;
+        public final Node node;
+        public final String newState;
     }
     
     public static class StateDuplicated extends ConstraintViolatedException {
@@ -639,7 +639,7 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             this.stateName = stateName;
         }
         
-        private final Node node;
-        private final String stateName;
+        public final Node node;
+        public final String stateName;
     }
 }

@@ -50,7 +50,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -488,9 +487,14 @@ public class MainPanel extends JPanel {
                 }
                 String uniqueTitleOnChange = this.getUniqueTitle(name, Set.of(this.tabPanels.indexOfTabComponent(tabComponent)));
                 header.titleLabel.setText(uniqueTitleOnChange);
-                header.titleLabel.setToolTipText(Optional.ofNullable(networkP.getNetworkFile())
-                                                         .map(filepath -> "Network located at: " + filepath)
-                                                         .orElse(null));
+                
+                header.titleLabel.setToolTipText(switch (networkP.source()) {
+                    case NetworkEditorPanel.NetworkSource.NoSource noSource -> "This network hasn't been saved yet.";
+                    case NetworkEditorPanel.NetworkSource.SourceFile sourceFile ->
+                            "This network is located at: " + sourceFile.file().getAbsolutePath();
+                    case NetworkEditorPanel.NetworkSource.SourceURL sourceURL ->
+                            "This network comes from: " + sourceURL.url();
+                });
                 networkP.getEditorPanel().updateName(uniqueTitleOnChange);
             };
             networkPanel.addOnModification(reloadNamesAndColor);

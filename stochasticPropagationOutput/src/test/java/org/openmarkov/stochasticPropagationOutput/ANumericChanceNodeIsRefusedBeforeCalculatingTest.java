@@ -8,6 +8,7 @@ package org.openmarkov.stochasticPropagationOutput;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -21,7 +22,6 @@ import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.inference.algorithm.huginPropagation.HuginPropagation;
 import org.openmarkov.inference.algorithm.likelihoodWeighting.LikelihoodWeighting;
 import org.openmarkov.inference.algorithm.likelihoodWeighting.LogicSampling;
-import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +56,12 @@ class ANumericChanceNodeIsRefusedBeforeCalculatingTest {
         return net;
     }
 
-    /** The message names the variable, not its type and states, as it used to. */
-    private static final String REFUSAL = "Could not meet the constraint: All variables must be discrete\nVariable N must be discrete.";
-
     private static void refusesN(Executable building) {
         var refused = assertThrows(ConstraintViolatedException.class, building);
-        assertEquals(REFUSAL, refused.getExceptionMessage());
+        assertInstanceOf(ConstraintViolatedException.OnlyDiscreteVariablesAllowed.class, refused);
+        var onlyDiscreteVariablesAllowed = (ConstraintViolatedException.OnlyDiscreteVariablesAllowed) refused;
+        
+        assertEquals(onlyDiscreteVariablesAllowed.variable, "N", "Variable N is the variable that was expected to make this test to fail.");
     }
 
     @Test void theAlgorithmsRefuseIt() {
@@ -74,9 +74,11 @@ class ANumericChanceNodeIsRefusedBeforeCalculatingTest {
 
     @Test void theToolRefusesItWhenOpened() {
         Exception error = StochasticPropagationOutputFrame.boundError(aNumericChild());
-
-        assertInstanceOf(ConstraintViolatedException.class, error);
-        assertEquals(REFUSAL, ((ConstraintViolatedException) error).getExceptionMessage());
+        
+        assertInstanceOf(ConstraintViolatedException.OnlyDiscreteVariablesAllowed.class, error);
+        var onlyDiscreteVariablesAllowed = (ConstraintViolatedException.OnlyDiscreteVariablesAllowed) error;
+        
+        assertEquals(onlyDiscreteVariablesAllowed.variable, "N", "Variable N is the variable that was expected to make this test to fail.");
     }
 
     @Test void aNetworkOfFiniteStatesIsStillAccepted() {

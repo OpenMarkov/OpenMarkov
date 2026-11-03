@@ -23,7 +23,9 @@ public class GsonCommon {
                                                 .registerSubtype(Input.MouseWheel.class, "mouse_wheel"))
             .registerTypeAdapterFactory(new SealedTypeAdapterFactory(NetworkEditorPanel.NetworkSource.class, "type")
                                                 .registerSubtype(NetworkEditorPanel.NetworkSource.SourceFile.class, "file")
-                                                .registerSubtype(NetworkEditorPanel.NetworkSource.SourceURL.class, "url"))
+                                                .registerSubtype(NetworkEditorPanel.NetworkSource.SourceURL.class, "url")
+                                                .registerSubtype(NetworkEditorPanel.NetworkSource.NoSource.class, "unsourced")
+            )
             .enableComplexMapKeySerialization()
             .create();
 }
