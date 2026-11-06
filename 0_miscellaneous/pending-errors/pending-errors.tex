@@ -254,7 +254,7 @@ El \hyperref[err:359]{error~359} salió al plantear la decisión del \hyperref[e
 El \hyperref[err:361]{error~361} se encontró al llevar a la versión en C++ y Qt los arreglos del 28 y 29 de octubre, al comprobar si el lector que dejó el arreglo del \hyperref[err:114]{114} (\texttt{f98f97e}) mira las mayúsculas del papel de una relación. Se ha comprobado con el jar del 30 de octubre, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo.
 
 \paragraph{Errores añadidos el 6 de noviembre}
-Los \hyperref[err:362]{errores~362} a \hyperref[err:364]{364} y la \hyperref[nota:200]{nota~200} salieron de una revisión del diseño de los potenciales y de las clases que los rodean. Se han comprobado con el código de \texttt{9739e8f}, ejecutándolos sin ventana con las mismas ediciones, lectores y escritores que usa la ventana, y la fila \emph{Comprobado} de cada ficha dice cómo. La misma revisión volvió a dar dos cosas que ya estaban: la \hyperref[nota:141]{nota~141}, un OR ruidoso guardado que vuelve como MAX general, y la \hyperref[nota:192]{nota~192}, el análisis de sensibilidad probabilístico de una red de sucesos, que escribiría en la red abierta.
+Los \hyperref[err:362]{errores~362} a \hyperref[err:364]{364} y la \hyperref[nota:200]{nota~200} salieron de una revisión del diseño de los potenciales y de las clases que los rodean. Se han comprobado con el código de \texttt{9739e8f}, ejecutándolos sin ventana con las mismas ediciones, lectores y escritores que usa la ventana, y la fila \emph{Comprobado} de cada ficha dice cómo. La misma revisión volvió a dar dos cosas que ya estaban: la \hyperref[nota:141]{nota~141}, un OR ruidoso guardado que vuelve como MAX general, y la \hyperref[nota:192]{nota~192}, el análisis de sensibilidad probabilístico de una red de sucesos, que escribiría en la red abierta. Los \hyperref[err:365]{errores~365} a \hyperref[err:368]{368} y la \hyperref[nota:201]{nota~201} se encontraron al llevar a la versión en C++ y Qt los arreglos del 3 de noviembre, \texttt{88bd46f}, \texttt{e2857b5} y \texttt{9739e8f}, todos de lo que trajeron esos commits. Se han comprobado con el código de \texttt{9739e8f}, y la fila \emph{Comprobado} de cada ficha dice cómo: el \hyperref[err:365]{365}, con el programa entero en una pantalla anidada; el \hyperref[err:367]{367}, pasando la prueba en Linux; el \hyperref[err:368]{368} y la nota, ejecutándolos sin ventana; y el \hyperref[err:366]{366}, leyendo el código. El \hyperref[err:365]{365} es el \hyperref[err:313]{313} otra vez, y pide una decisión. No se ha añadido, por la decisión de equipo sobre los textos, que las tres ayudas nuevas de la pestaña de una red estén escritas en inglés en \texttt{Main\allowbreak{}Panel}.
 
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
@@ -309,10 +309,10 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{363 errores}; 219 de ellos son defectos nuevos: 98 encontrados al
-comprobar o corregir los demás, 104 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes y 3 al revisar el diseño de los potenciales. \textbf{50} necesitan antes una decisión del equipo. Por esfuerzo estimado: 322 pequeños, 41 medios y 0 grandes.
-De los 363, 356 están ya corregidos y 2 están cerrados sin arreglo.
-El apéndice recoge además 200 notas con lo que se comprobó y no entra en la lista.
+La lista tiene \textbf{367 errores}; 223 de ellos son defectos nuevos: 98 encontrados al
+comprobar o corregir los demás, 108 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes y 3 al revisar el diseño de los potenciales. \textbf{51} necesitan antes una decisión del equipo. Por esfuerzo estimado: 326 pequeños, 41 medios y 0 grandes.
+De los 367, 356 están ya corregidos y 2 están cerrados sin arreglo.
+El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
 \begin{tabular}{@{}lr@{}}
@@ -326,13 +326,13 @@ El apéndice recoge además 200 notas con lo que se comprobó y no entra en la l
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 27 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 24 \\
-\ref{sec:temporal}. Modelos temporales y evolución temporal & 14 \\
+\ref{sec:temporal}. Modelos temporales y evolución temporal & 15 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 29 \\
 \ref{sec:des}. Simulación de sucesos discretos & 23 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 21 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 23 \\
 \ref{sec:casos}. Bases de casos & 17 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 38 \\
-\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 48 \\
+\ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 49 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 25 \\
 \ref{sec:textos}. Textos y títulos que se ven mal & 18 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
@@ -494,6 +494,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:320]{320} & \textcolor{corregidoverde}{\textbf{Corregido}} · La red que da «Expand Network» no calcula lo mismo que el modelo de Markov & \texttt{core} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:324]{324} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Expand Network» no ve los hallazgos puestos en el modelo & \texttt{core}, \texttt{gui} & S \hfill No\\
 \hyperref[err:350]{350} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Expand Network» en un modelo que nunca se ha guardado cae con un puntero nulo & \texttt{gui} & S \hfill No\\
+\hyperref[err:368]{368} & Desde 9739e8f, la red expandida de un modelo traído de una dirección lleva dos veces la extensión & \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:coste}.\ Coste-efectividad y análisis de sensibilidad}}\\
 \hyperref[err:74]{74} & \textcolor{corregidoverde}{\textbf{Corregido}} · El jar publicado mezcla dos JFreeChart y muchas gráficas no se abren & \texttt{full} & S \hfill No\\
 \hyperref[err:75]{75} & \textcolor{corregidoverde}{\textbf{Corregido}} · La araña de coste-efectividad reescribe la red abierta con las medias & \texttt{core} & M \hfill No\\
@@ -570,6 +571,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:353]{353} & \textcolor{corregidoverde}{\textbf{Corregido}} · Si a las opciones de inferencia de un .pgmx les falta un dato, el fichero no se abre y el aviso no dice cuál & \texttt{io} & S \hfill No\\
 \hyperref[err:361]{361} & Un nodo de un tipo que no existe impide abrir un .pgmx con un puntero nulo, sin decir cuál & \texttt{io} & S \hfill No\\
 \hyperref[err:364]{364} & Una gaussiana condicional o una Cauchy discretizada se guarda sin sus parámetros, y el fichero no se abre & \texttt{io} & S \hfill No\\
+\hyperref[err:366]{366} & Desde 9739e8f, cancelar la ventana de «Open» acaba en un NullPointerException & \texttt{gui} & S \hfill No\\
+\hyperref[err:367]{367} & VersionValidatorTest, recuperada en 9739e8f, falla fuera de Windows & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -676,6 +679,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:351]{351} & \textcolor{corregidoverde}{\textbf{Corregido}} · En la tabla de vida, un tiempo o una probabilidad que no es un número hace caer el guardado, y «Load data file» mete tiempos repetidos & \texttt{gui} & S \hfill No\\
 \hyperref[err:354]{354} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un riesgo de Weibull se edita en el panel de las regresiones, sin variable de tiempo ni logaritmo & \texttt{gui} & S \hfill No\\
 \hyperref[err:355]{355} & \textcolor{corregidoverde}{\textbf{Corregido}} · En el panel de una regresión o de un riesgo no se ven los coeficientes & \texttt{gui} & S \hfill No\\
+\hyperref[err:365]{365} & Desde 88bd46f, con mayúsculas o Control, arrastrar desde el lienzo vacío vuelve a mover los nodos señalados & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:menus}.\ Interfaz: menús, diálogos y herramientas}}\\
 \hyperref[err:171]{171} & \textcolor{corregidoverde}{\textbf{Corregido}} · Abrir una red desde internet apaga «Guardar» para todas las redes & \texttt{gui} & M \hfill No\\
 \hyperref[err:172]{172} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Edits history» deja un núcleo al cien por cien y puede colgar el programa & \texttt{full} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -8606,6 +8610,32 @@ Que el nombre de la red expandida salga del de la red quitándole la extensión 
 
 Prueba: con un MID sin fichero y llamado «New network», «Expand Network» abre la red expandida, sin fichero y con un nombre que empieza por «New network».
 
+\setcounter{subsection}{367}
+\subsection[Desde 9739e8f, la red expandida de un modelo traído de una dirección lleva dos veces la extensión]{Desde \texttt{9739e8f}, «Expand Network» sobre un modelo abierto desde una dirección de internet da a la red expandida un nombre con la extensión dos veces: «MID-x.pgmx\_extended.pgmx»}\label{err:368}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.window
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:190-194, 219-223} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:183-187}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{9739e8f} (6-11-2026): el nombre que \texttt{open\allowbreak{}Network\allowbreak{}Source} da a una red traída de una dirección, pasado a \texttt{Inference\allowbreak{}Handler.\allowbreak{}expanded\allowbreak{}File\allowbreak{}Name} como lo pasa \texttt{expand\allowbreak{}Network}
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:350]{error~350}
+\end{ficha}
+\paragraph{Qué pasa}
+Una red abierta desde una dirección se llama como el fichero de la dirección, con su extensión (\texttt{Network\allowbreak{}File\allowbreak{}Handler.\allowbreak{}open\allowbreak{}Network\allowbreak{}Source}, línea 185): «MID-x.pgmx». Desde \texttt{9739e8f}, \texttt{expand\allowbreak{}Network} solo pasa a \texttt{expanded\allowbreak{}File\allowbreak{}Name} el fichero del modelo si viene de un fichero; si viene de una dirección, pasa \texttt{null}, y \texttt{expanded\allowbreak{}File\allowbreak{}Name}, como decidió el arreglo del \hyperref[err:350]{error~350} (\texttt{aac32e0}) para un modelo sin fichero, conserva el nombre entero. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+modelo traído de https://www.cisiad.uned.es/redes/MID-x.pgmx   «MID-x.pgmx_extended.pgmx»   (antes de 9739e8f, «MID-x_extended.pgmx»)
+modelo abierto de /tmp/MID-x.pgmx                               «MID-x_extended.pgmx»
+\end{Verbatim}
+
+Antes de \texttt{9739e8f} el nombre salía bien, del camino de la dirección, pero a la red expandida se le daba como fichero ese camino en esta máquina, \texttt{/redes/MID-x\_extended.pgmx}, y «Save» intentaba escribir allí; eso ya no pasa.
+\paragraph{Cómo arreglarlo}
+Que \texttt{expand\allowbreak{}Network}, con un modelo traído de una dirección, pase a \texttt{expanded\allowbreak{}File\allowbreak{}Name} el camino de la dirección (\texttt{url.\allowbreak{}get\allowbreak{}File()}) para sacar el nombre, aunque no le dé fichero.
+
+Prueba: abrir un MID desde una dirección y expandirlo: la red expandida se llama «MID-x\_extended.pgmx» y no tiene fichero.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Coste-efectividad y análisis de sensibilidad}\label{sec:coste}
 
@@ -13154,6 +13184,65 @@ io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXPotentialParsers.java:30
 Que el escritor escriba los dos parámetros de cada una, cada uno con su tabla dentro, en la forma que el lector ya lee: la de las dos redes del repositorio. Y que el lector, si falta un parámetro, se niegue con una \texttt{PGMXParser\allowbreak{}Exception} que nombre el nodo y el elemento que falta, como pide el \hyperref[err:361]{error~361} para el tipo de un nodo. La otra opción, que el escritor se niegue a guardarlas con la \texttt{Writer\allowbreak{}Exception.\allowbreak{}Relation\allowbreak{}Not\allowbreak{}Supported\allowbreak{}By\allowbreak{}Format} que ya existe, es peor: el lector ya sabe leerlas.
 
 Prueba: guardar en 0.2 y en 1.0 las dos redes del repositorio y abrirlas; la relación vuelve con la misma media y varianza, o la misma mediana y escala.
+
+\setcounter{subsection}{365}
+\subsection[Desde 9739e8f, cancelar la ventana de «Open» acaba en un NullPointerException]{Desde \texttt{9739e8f}, cerrar sin escoger nada la ventana en que «Open» pide el fichero acaba en la ventana de los errores imprevistos, con un NullPointerException}\label{err:366}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.window
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:156-162, 543-551} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelListenerAssistant.java:108}
+\fichakey{Comprobado}Leyendo el código de \texttt{9739e8f} (6-11-2026); que \texttt{new File(\allowbreak{}(String) null)} lanza \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}, ejecutándolo
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:350]{error~350}
+\end{ficha}
+\paragraph{Qué pasa}
+«Open» llama a \texttt{Network\allowbreak{}File\allowbreak{}Handler.\allowbreak{}open\allowbreak{}Network(\allowbreak{}(String) null)}, dentro de \texttt{GUI\allowbreak{}Utils.\allowbreak{}execute\allowbreak{}UIAction}, que deja pasar las excepciones de tiempo de ejecución. Desde \texttt{9739e8f}, ese método hace el fichero antes de mirar si hay nombre:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+File file = fileName == null || fileName.isBlank() ? new File(this.requestNetworkFileToOpen()) : new File(fileName);
+if (file == null) {
+    return;
+}
+\end{Verbatim}
+
+\texttt{request\allowbreak{}Network\allowbreak{}File\allowbreak{}To\allowbreak{}Open} (líneas 543-551) devuelve \texttt{null} cuando el usuario cierra el selector de ficheros sin escoger ninguno, y \texttt{new File(\allowbreak{}null)} lanza \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}. La comprobación de debajo no se cumple nunca: un constructor no devuelve \texttt{null}. Antes de ese commit el \texttt{null} se miraba antes de hacer el fichero, y cancelar no hacía nada.
+\paragraph{Cómo arreglarlo}
+Pedir el nombre, salir si es \texttt{null} y solo entonces hacer el \texttt{File}.
+
+Prueba: «Open» y cerrar el selector sin escoger nada no abre ninguna ventana de error ni ninguna pestaña.
+
+\setcounter{subsection}{366}
+\subsection[VersionValidatorTest, recuperada en 9739e8f, falla fuera de Windows]{\texttt{Version\allowbreak{}Validator\allowbreak{}Test}, a la que \texttt{9739e8f} quita el \texttt{@Disabled}, junta la carpeta y el nombre de cada fichero con una barra invertida, que solo separa carpetas en Windows: en Linux y en macOS no encuentra ningún fichero y falla}\label{err:367}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.probmodel
+\fichakey{Ficheros}\path{io/src/test/java/org/openmarkov/io/probmodel/VersionValidatorTest.java:21-31}
+\fichakey{Comprobado}Ejecutándolo en Linux con el código de \texttt{9739e8f} (6-11-2026): \texttt{mvn -o -pl io test -Dtest=\allowbreak{}Version\allowbreak{}Validator\allowbreak{}Test}
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}---
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{9739e8f} vuelve a activar la prueba, que estaba desactivada con \texttt{@Disabled("Jenkins compilation failure")}, porque «it was thought to fail on Jenkins, but it was due to a wrong implementation», y la reescribe para buscar sus ficheros junto a \texttt{version.\allowbreak{}xsd}. Pero sigue juntando la carpeta y el nombre con \texttt{"\textbackslash\textbackslash"}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+Document document = parser.parse(new File(ABSOLUTE_PATH + "\\" + name));
+Source schemaFile = new StreamSource(new File(ABSOLUTE_PATH + "\\version.xsd"));
+\end{Verbatim}
+
+En Linux el camino sale con la barra invertida dentro del último nombre, y no existe:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+java.io.FileNotFoundException: .../io/target/test-classes\BN-conditional-gaussian.pgmx (No existe el fichero o el directorio)
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+\texttt{new File(\allowbreak{}ABSOLUTE\_\allowbreak{}PATH, name)} y \texttt{new File(\allowbreak{}ABSOLUTE\_\allowbreak{}PATH, "version.xsd")}.
+
+Prueba: la propia prueba pasa en Linux y en Windows.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
@@ -18596,14 +18685,14 @@ Prueba: con el editor en pantalla, Escape a mitad de un arrastre y 30 píxeles m
 \setcounter{subsection}{312}
 \subsection[Con mayúsculas o Control, arrastrar desde el lienzo vacío mueve los nodos señalados]{\textcolor{corregidoverde}{[Corregido]} En el editor de red, arrastrar desde una zona vacía del lienzo con mayúsculas o con Control apretadas no tira una banda de señalar: mueve los nodos que ya estaban señalados, aunque estén lejos del puntero}\label{err:313}
 \begin{ficha}
-\fichakey{Estado}Corregido en el commit \texttt{1c5ec20} (19-10-2026): en el estado \texttt{NOTHING}, el atajo de mover con el ratón pide además que el botón se apretara sobre un elemento señalado, como la banda pide el lienzo vacío; arrastrar un nodo sigue moviendo lo señalado, porque apretar sobre un nodo lo señala antes. No se ha hecho que mayúsculas o Control tiren una banda que añada a lo señalado: sería una función nueva. Con «A» señalado, arrastrar desde el lienzo vacío con mayúsculas, y con Control, lo deja donde estaba (\texttt{AModified\allowbreak{}Drag\allowbreak{}From\allowbreak{}The\allowbreak{}Empty\allowbreak{}Canvas\allowbreak{}Moves\allowbreak{}Nothing\allowbreak{}Test}, con la ventana de verdad).
+\fichakey{Estado}Corregido en el commit \texttt{1c5ec20} (19-10-2026): en el estado \texttt{NOTHING}, el atajo de mover con el ratón pide además que el botón se apretara sobre un elemento señalado, como la banda pide el lienzo vacío; arrastrar un nodo sigue moviendo lo señalado, porque apretar sobre un nodo lo señala antes. No se ha hecho que mayúsculas o Control tiren una banda que añada a lo señalado: sería una función nueva. Con «A» señalado, arrastrar desde el lienzo vacío con mayúsculas, y con Control, lo deja donde estaba (\texttt{AModified\allowbreak{}Drag\allowbreak{}From\allowbreak{}The\allowbreak{}Empty\allowbreak{}Canvas\allowbreak{}Moves\allowbreak{}Nothing\allowbreak{}Test}, con la ventana de verdad). \textbf{Vuelve} con \texttt{88bd46f} (3-11-2026), que quita esa condición para arreglar el arrastre de un nodo sin señalar, y \texttt{9739e8f} cambia la prueba para que lo exija: ver el \hyperref[err:365]{error~365}.
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel; org.openmarkov.gui.bindings
 \fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:334-337, 349-359, 684-695} \newline \path{gui/src/main/java/org/openmarkov/gui/bindings/Bindings.java:124-134, 150-164, 166-176}
 \fichakey{Comprobado}Leyendo el código y ejecutándolo con pantalla (el programa entero en una pantalla anidada, manejado con \texttt{java.\allowbreak{}awt.\allowbreak{}Robot}, con el guion \texttt{Canvas\allowbreak{}Gestures.\allowbreak{}java} de la versión en C++ y Qt)
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
-\fichakey{Relacionados}\hyperref[err:300]{error~300}, \hyperref[err:303]{error~303}
+\fichakey{Relacionados}\hyperref[err:300]{error~300}, \hyperref[err:303]{error~303}, \hyperref[err:365]{error~365}
 \end{ficha}
 \paragraph{Qué pasa}
 Cada atajo del editor tiene una combinación de teclas y botones, y dice si es exclusiva: si solo se cumple cuando no hay nada más apretado. La banda de señalar (\texttt{SELECTION\_\allowbreak{}RECTANGLE}, \texttt{Bindings}, líneas 150-164) y «Select element» (\texttt{SELECTION\_\allowbreak{}ELEMENT}, líneas 124-134) lo son; mover nodos con el ratón (\texttt{MOVE\_\allowbreak{}NODE\_\allowbreak{}MOUSE}, líneas 166-176) no lo es. En el estado \texttt{NOTHING}, la condición del atajo de mover (\texttt{Editor\allowbreak{}Command\allowbreak{}Handler\allowbreak{}Generator}, líneas 684-695) solo pide que haya nodos señalados y, desde \texttt{070f868} (\hyperref[err:303]{error~303}), que el ratón no esté parado después de un Escape; no mira dónde se apretó el botón. La de la banda (líneas 349-359), en cambio, pide que se apretara sobre el lienzo vacío. Sin otra tecla, al arrastrar desde el lienzo vacío empieza la banda, que deja el editor en \texttt{SELECTING}, y el atajo de mover ya no se cumple; con mayúsculas o con Control la banda no se cumple, y el único atajo que queda es el de mover: los nodos señalados se van con el ratón, estén donde estén. Por lectura, ya pasaba antes de \texttt{295a7a3}.
@@ -18900,6 +18989,36 @@ Las otras siete clases que heredan de \texttt{Key\allowbreak{}Table\allowbreak{}
 Que la tabla se ajuste al ancho de lo que la enseña: quitar una de las dos barras de desplazamiento, o que la de fuera no tenga barra horizontal propia y la de dentro tome su ancho.
 
 Prueba: en el panel de una regresión con los coeficientes 1,5 y 2,5, la celda de cada coeficiente cae entera dentro de la vista que la enseña.
+
+\setcounter{subsection}{364}
+\subsection[Desde 88bd46f, con mayúsculas o Control, arrastrar desde el lienzo vacío vuelve a mover los nodos señalados]{Desde \texttt{88bd46f}, arrastrar desde una zona vacía del lienzo con mayúsculas o con Control apretadas vuelve a mover los nodos señalados, aunque estén lejos del puntero, que es lo que corrigió el error~313; y arrastrar desde un enlace que no está señalado también los mueve}\label{err:365}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}org.openmarkov.gui.window.edition.networkEditorPanel
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/edition/networkEditorPanel/EditorCommandHandlerGenerator.java:681-699} \newline \path{gui/src/test/java/org/openmarkov/gui/window/edition/networkEditorPanel/AModifiedDragFromTheEmptyCanvasMovesNodesToExpectedPositions.java}
+\fichakey{Comprobado}Ejecutándolo con pantalla, con el código de \texttt{9739e8f} (6-11-2026): el programa entero en una pantalla anidada, manejado con \texttt{java.\allowbreak{}awt.\allowbreak{}Robot}, con el guion \texttt{Canvas\allowbreak{}Gestures.\allowbreak{}java} de la versión en C++ y Qt, al que se añadieron los clics con mayúsculas y con Control y el arrastre desde un enlace sin señalar
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}Sí
+\fichakey{Relacionados}\hyperref[err:313]{error~313}, \hyperref[err:303]{error~303}
+\end{ficha}
+\paragraph{Qué pasa}
+El commit \texttt{88bd46f} (3-11-2026, «Moving a node is now possible again») arregla que, desde \texttt{a5f5a687}, un nodo que no estaba señalado no se pudiera arrastrar: «Select element» actúa al soltar el botón, y mover pedía, desde el arreglo del \hyperref[err:313]{error~313}, que el botón hubiera bajado sobre algo señalado. Para arreglarlo, la condición del atajo de mover en el estado \texttt{NOTHING} (líneas 683-697) señala el nodo que hay bajo el botón si no lo estaba ---solo, salvo con Control---, pero deja de pedir que lo que hay bajo el botón esté señalado: solo pide que haya nodos señalados. Con eso vuelve todo lo del error~313. Medido con \texttt{asia.\allowbreak{}pgmx} y «Smoker?» señalado:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+mayúsculas y una banda alrededor de «Has tuberculosis»   «Smoker?» va de (568, 52) a (776, 132); no se señala nada más
+Control y la misma banda                                  lo mismo
+un arrastre de 60 desde el enlace «Smoker?» -> «Has bronchitis», que no está señalado
+                                                          «Smoker?» va de (568, 52) a (628, 52); el enlace no se señala
+\end{Verbatim}
+
+Lo último es nuevo: antes de \texttt{1c5ec20}, apretar sobre un enlace lo señalaba solo, y desde \texttt{1c5ec20} arrastrar desde un enlace sin señalar no movía nada. No parece un descuido: \texttt{9739e8f} cambia el nombre de la prueba del arreglo del 313, que pasa a ser \texttt{AModified\allowbreak{}Drag\allowbreak{}From\allowbreak{}The\allowbreak{}Empty\allowbreak{}Canvas\allowbreak{}Moves\allowbreak{}Nodes\allowbreak{}To\allowbreak{}Expected\allowbreak{}Positions}, y le hace exigir que el nodo señalado se mueva lo que se movió el ratón. Por eso hace falta una decisión: o se quiere que mayúsculas y Control muevan lo señalado desde cualquier sitio, y el error~313 deja de serlo, o se devuelve la condición.
+
+El mismo cambio trae otros dos gestos, que no son errores: con Control, arrastrar un nodo señalado lo mueve y lo deja señalado (un clic sin mover lo quita, como antes); y con mayúsculas, arrastrar un nodo sin señalar lo deja solo señalado y lo mueve solo. Y arrastrar un nodo sin señalarlo antes vuelve a funcionar, que era lo que se buscaba.
+\paragraph{Cómo arreglarlo}
+Si se decide que es un error: en el estado \texttt{NOTHING}, después de señalar el nodo que hay bajo el botón, mover solo si lo que hay bajo el botón queda señalado (\texttt{visual\allowbreak{}Network.\allowbreak{}get\allowbreak{}Element\allowbreak{}In\allowbreak{}Position(\allowbreak{}press\allowbreak{}Position,\ graphics)}), que es la condición de \texttt{1c5ec20}. Así se conserva el arreglo de \texttt{88bd46f} ---el nodo apretado se señala y se arrastra---, y desde el lienzo vacío o desde un enlace sin señalar no se mueve nada. La prueba renombrada tendría que volver a pedir que el nodo se quede donde estaba.
+
+Prueba: con el editor de \texttt{asia.\allowbreak{}pgmx} en pantalla y «Smoker?» señalado, arrastrar con mayúsculas, y después con Control, desde el lienzo vacío, y arrastrar sin teclas desde el enlace «Smoker?» → «Has bronchitis» sin señalar, deja «Smoker?» donde estaba; arrastrar «Has tuberculosis» sin señalar lo mueve.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: menús, diálogos y herramientas}\label{sec:menus}
@@ -21312,6 +21431,7 @@ cambia algo (por ejemplo, un código que hoy no llama nadie empieza a usarse), s
 \textbf{191}\phantomsection\label{nota:191} & \textbf{El orden de la lista de tipos de red es el del descubrimiento de clases}\newline \texttt{Network\allowbreak{}Definition\allowbreak{}Panel.\allowbreak{}get\allowbreak{}JCombo\allowbreak{}Box\allowbreak{}Network\allowbreak{}Types} llena el selector del tipo de red con \texttt{Network\allowbreak{}Type\allowbreak{}Utils.\allowbreak{}NETWORK\_\allowbreak{}TYPE\_\allowbreak{}CLASSES} sin ordenar, en el orden en que \texttt{Plugin\allowbreak{}Search} encuentra las clases; es lo mismo que la \hyperref[nota:31]{nota~31}, en otra lista. Visto el 8 de octubre en una captura automática, ejecutando desde directorios de clases: los catorce tipos salen sin orden reconocible (LIMID, MDP, \ldots, con la red bayesiana en el puesto doce). No se ha mirado el orden en el jar publicado. Nada falla: el tipo elegido al crear una red se fija aparte, y es la red bayesiana. \\[3pt]
 \textbf{196}\phantomsection\label{nota:196} & \textbf{La copia de un enlace comparte con el original su tabla de restricciones y sus listas de revelación, y \texttt{Link} gana un \texttt{equals} sin \texttt{hash\allowbreak{}Code}}\newline \texttt{Link.\allowbreak{}clone}, nuevo en \texttt{461cd46} (líneas 377-387), construye una copia con su propia tabla de restricciones y sus propias listas de estados e intervalos reveladores y luego no la devuelve: devuelve \texttt{super.\allowbreak{}clone(\allowbreak{})}, la copia superficial de \texttt{Object.\allowbreak{}clone}, que apunta a la misma tabla y a las mismas listas que el original (medido el 15-10-2026 sin ventana sobre \texttt{Node\allowbreak{}States\allowbreak{}Replace\allowbreak{}Test.\allowbreak{}pgmx}: la tabla de restricciones de la copia es el mismo objeto que la del original). Su único llamador es \texttt{Node\allowbreak{}Replace\allowbreak{}States\allowbreak{}Edit} (línea 54), que guarda esas copias para deshacer un cambio de dominio, y hoy no se pierde nada: \texttt{Variable\allowbreak{}State\allowbreak{}Operations.\allowbreak{}reset\allowbreak{}Link} no modifica la tabla ni las listas de un enlace, sino que las sustituye (\texttt{set\allowbreak{}Restrictions\allowbreak{}Potential(\allowbreak{}null)} y listas nuevas), así que lo guardado queda intacto, y en la misma medida deshacer devuelve las restricciones de los cuatro enlaces de la red tal como estaban. Se notaría si algo modificara en el sitio la tabla o las listas de un enlace entre el cambio y su deshacer: \texttt{get\allowbreak{}Revealing\allowbreak{}States} y \texttt{get\allowbreak{}Revealing\allowbreak{}Intervals} entregan la lista viva a propósito, para \texttt{Revelation\allowbreak{}Interval\allowbreak{}Edit}. En el mismo commit \texttt{Link} gana un \texttt{equals} por contenido sin su \texttt{hash\allowbreak{}Code}, contra lo que dice el comentario de la clase (líneas 34-37): que la igualdad es por identidad a propósito, porque \texttt{Graph.\allowbreak{}remove\allowbreak{}Link} cuenta con ello. Leído en el código: no se ha encontrado nada que compare dos enlaces distintos con el mismo contenido, ni que guarde enlaces en una tabla de dispersión y los busque con otro objeto (los mapas de \texttt{Node\allowbreak{}State\allowbreak{}Edit} y de \texttt{reset\allowbreak{}Link}, \hyperref[nota:5]{nota~5}, buscan con el mismo), así que tampoco esto tiene hoy consecuencia. Es de la familia del \hyperref[err:24]{error~24}. \\[3pt]
 \textbf{200}\phantomsection\label{nota:200} & \textbf{En formato 1.0, una política impuesta vuelve como probabilidad condicionada}\newline El formato 1.0 no escribe el papel de las relaciones (\texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0}, línea 170), y su lector da a todas el papel \texttt{conditional\allowbreak{}Probability} (\texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0.\allowbreak{}get\allowbreak{}Potential}, líneas 79-84), también a las que lee del elemento \texttt{\textless{}Policies\textgreater{}}. Medido el 6-11-2026 sin ventana con \texttt{ID-\allowbreak{}decide-\allowbreak{}test.\allowbreak{}pgmx}: imponer a «Do test?» la política «no» con \texttt{Impose\allowbreak{}Policy\allowbreak{}Edit}, como la ventana, guardar en 1.0 y abrir. La relación de la decisión vuelve con papel \texttt{conditional\allowbreak{}Probability} en vez de \texttt{policy}. La utilidad esperada es la misma (9,16), y la política óptima de «Therapy» también. Guardada después en 0.2, la política se escribe en \texttt{\textless{}Policies\textgreater{}} con \texttt{role="conditional\allowbreak{}Probability"}, y el fichero se abre igual. No se ha encontrado código que trate de forma distinta los dos papeles en una decisión: el que mira \texttt{POLICY} la trata como \texttt{CONDITIONAL\_\allowbreak{}PROBABILITY}. Si algún día se distinguen, el lector de 1.0 tendría que dar el papel \texttt{policy} a lo que lee en \texttt{\textless{}Policies\textgreater{}}. \\[3pt]
+\textbf{201}\phantomsection\label{nota:201} & \textbf{Desde 9739e8f, el \texttt{equals} de una red sin origen da por igual cualquier red traída de una dirección, y no a sí misma}\newline \texttt{Network\allowbreak{}Editor\allowbreak{}Panel.\allowbreak{}Network\allowbreak{}Source.\allowbreak{}No\allowbreak{}Source.\allowbreak{}equals} (\texttt{Network\allowbreak{}Editor\allowbreak{}Panel}, líneas 1350-1352) dice \texttt{return other instanceof SourceURL NoSource;}: pregunta si el otro es una \texttt{Source\allowbreak{}URL}, y \texttt{NoSource} es el nombre de la variable del patrón. Por la forma, quería decir \texttt{other instanceof NoSource}. Ejecutado con el código de \texttt{9739e8f}: \texttt{new NoSource().\allowbreak{}equals(\allowbreak{}una\allowbreak{}SourceURL)} da \texttt{true}, y \texttt{none.\allowbreak{}equals(\allowbreak{}none)} da \texttt{false}, así que ni siquiera es reflexivo; tampoco redefine \texttt{hash\allowbreak{}Code}. Hoy no se nota: el único sitio que compara orígenes, el de \texttt{open\allowbreak{}Network\allowbreak{}Source} que busca si la red ya está abierta, solo compara los que son \texttt{is\allowbreak{}Specific()}. Los \texttt{equals} de \texttt{Source\allowbreak{}File} y \texttt{Source\allowbreak{}URL} sobran: un \texttt{record} ya compara así sus campos. Arreglo: \texttt{return other instanceof NoSource;}, o quitar los tres. \\[3pt]
 \end{longtable}
 
 \subsection*{Defectos que hoy no alcanza nadie}\addcontentsline{toc}{subsection}{Defectos que hoy no alcanza nadie}
@@ -21859,6 +21979,10 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:362]{Error 362} & hallazgo nuevo, al revisar el diseño de los potenciales y de las clases que los rodean \\
 \hyperref[err:363]{Error 363} & hallazgo nuevo, al revisar el diseño de los potenciales y de las clases que los rodean \\
 \hyperref[err:364]{Error 364} & hallazgo nuevo, al revisar el diseño de los potenciales y de las clases que los rodean \\
+\hyperref[err:365]{Error 365} & registro de fallos de la versión en C++/Qt, nº 406, al llevar a ella los arreglos del 3 de noviembre \\
+\hyperref[err:366]{Error 366} & registro de fallos de la versión en C++/Qt, nº 407, al llevar a ella los arreglos del 3 de noviembre \\
+\hyperref[err:367]{Error 367} & registro de fallos de la versión en C++/Qt, nº 409, al llevar a ella los arreglos del 3 de noviembre \\
+\hyperref[err:368]{Error 368} & registro de fallos de la versión en C++/Qt, nº 411, al llevar a ella los arreglos del 3 de noviembre \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
@@ -22058,6 +22182,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[nota:198]{Nota 198} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 13 y 14 de octubre \\
 \hyperref[nota:199]{Nota 199} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 13 y 14 de octubre \\
 \hyperref[nota:200]{Nota 200} & hallazgo nuevo, al revisar el diseño de los potenciales y de las clases que los rodean \\
+\hyperref[nota:201]{Nota 201} & registro de fallos de la versión en C++/Qt, nº 408, al llevar a ella los arreglos del 3 de noviembre \\
 \bottomrule
 \end{longtable}
 }
