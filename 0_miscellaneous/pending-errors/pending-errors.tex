@@ -253,6 +253,9 @@ El \hyperref[err:359]{error~359} salió al plantear la decisión del \hyperref[e
 \paragraph{Errores añadidos el 30 de octubre}
 El \hyperref[err:361]{error~361} se encontró al llevar a la versión en C++ y Qt los arreglos del 28 y 29 de octubre, al comprobar si el lector que dejó el arreglo del \hyperref[err:114]{114} (\texttt{f98f97e}) mira las mayúsculas del papel de una relación. Se ha comprobado con el jar del 30 de octubre, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo.
 
+\paragraph{Errores añadidos el 6 de noviembre}
+Los \hyperref[err:362]{errores~362} a \hyperref[err:364]{364} y la \hyperref[nota:200]{nota~200} salieron de una revisión del diseño de los potenciales y de las clases que los rodean. Se han comprobado con el código de \texttt{9739e8f}, ejecutándolos sin ventana con las mismas ediciones, lectores y escritores que usa la ventana, y la fila \emph{Comprobado} de cada ficha dice cómo. La misma revisión volvió a dar dos cosas que ya estaban: la \hyperref[nota:141]{nota~141}, un OR ruidoso guardado que vuelve como MAX general, y la \hyperref[nota:192]{nota~192}, el análisis de sensibilidad probabilístico de una red de sucesos, que escribiría en la red abierta.
+
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
 
@@ -306,10 +309,10 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{360 errores}; 216 de ellos son defectos nuevos: 98 encontrados al
-comprobar o corregir los demás, 104 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development} y 9 al revisar el código de la edición de redes. \textbf{50} necesitan antes una decisión del equipo. Por esfuerzo estimado: 319 pequeños, 41 medios y 0 grandes.
-De los 360, 356 están ya corregidos y 2 están cerrados sin arreglo.
-El apéndice recoge además 199 notas con lo que se comprobó y no entra en la lista.
+La lista tiene \textbf{363 errores}; 219 de ellos son defectos nuevos: 98 encontrados al
+comprobar o corregir los demás, 104 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes y 3 al revisar el diseño de los potenciales. \textbf{50} necesitan antes una decisión del equipo. Por esfuerzo estimado: 322 pequeños, 41 medios y 0 grandes.
+De los 363, 356 están ya corregidos y 2 están cerrados sin arreglo.
+El apéndice recoge además 200 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
 \begin{tabular}{@{}lr@{}}
@@ -319,14 +322,14 @@ El apéndice recoge además 199 notas con lo que se comprobó y no entra en la l
 \ref{sec:potenciales}. Operaciones con potenciales & 3 \\
 \ref{sec:canonicos}. Modelos canónicos y modelo de ajuste & 3 \\
 \ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 25 \\
-\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 32 \\
+\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 34 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 27 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 24 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 14 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 29 \\
 \ref{sec:des}. Simulación de sucesos discretos & 23 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 20 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 21 \\
 \ref{sec:casos}. Bases de casos & 17 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 38 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 48 \\
@@ -417,6 +420,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:295]{295} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una utilidad pegada queda juzgada por una copia del criterio, que la red no tiene & \texttt{core}, \texttt{gui} & S \hfill No\\
 \hyperref[err:296]{296} & \textcolor{corregidoverde}{\textbf{Corregido}} · Quitar o añadir un padre a una suma cambia la suma misma, y deshacerlo no la devuelve & \texttt{core} & S \hfill No\\
 \hyperref[err:312]{312} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una utilidad pegada donde ningún criterio se llama como el suyo sigue juzgada por una copia que la red no tiene & \texttt{gui}, \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
+\hyperref[err:362]{362} & Pegar un nodo y renombrar un estado del pegado renombra también el del original & \texttt{core}, \texttt{gui} & S \hfill No\\
+\hyperref[err:363]{363} & Añadir un padre a una tabla con incertidumbre pierde la incertidumbre y el comentario & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:restricciones}.\ Restricciones de red}}\\
 \hyperref[err:37]{37} & \textcolor{corregidoverde}{\textbf{Corregido}} · Abrir un fichero no comprueba las restricciones de la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:38]{38} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un estado puede quedarse con el nombre vacío o repetido & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -564,6 +569,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:352]{352} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un número entero con blancos alrededor impide abrir un .pgmx & \texttt{io} & S \hfill No\\
 \hyperref[err:353]{353} & \textcolor{corregidoverde}{\textbf{Corregido}} · Si a las opciones de inferencia de un .pgmx les falta un dato, el fichero no se abre y el aviso no dice cuál & \texttt{io} & S \hfill No\\
 \hyperref[err:361]{361} & Un nodo de un tipo que no existe impide abrir un .pgmx con un puntero nulo, sin decir cuál & \texttt{io} & S \hfill No\\
+\hyperref[err:364]{364} & Una gaussiana condicional o una Cauchy discretizada se guarda sin sus parámetros, y el fichero no se abre & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -4595,6 +4601,118 @@ El lector (\texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2}, líneas 730-743)
 Que \texttt{Paste\allowbreak{}Edit} no deje nunca a la variable pegada con un criterio que no es de la red: si \texttt{same\allowbreak{}Criterion\allowbreak{}Of\allowbreak{}The\allowbreak{}Network} no encuentra ninguno, darle el que se decida. Lo más sencillo es el primero de la red, que es lo que ya hace el lector con una utilidad cuyo fichero no nombra ninguno (líneas 741-742). Si se decide añadir el criterio a la red, tiene que ir en la misma edición, para que deshacer el pegado lo quite.
 
 Prueba: copiar «Cost» de \texttt{ID-CEA-minimal.\allowbreak{}pgmx} y pegarlo en una red que solo tiene el criterio «Effectiveness», y en la misma red después de cambiar el nombre de «Cost» a «Coste»: en los dos casos el criterio de la utilidad pegada es uno de los de la red ---el mismo objeto---, y después de guardar y abrir la utilidad sigue teniendo criterio.
+
+
+\setcounter{subsection}{361}
+\subsection[Pegar un nodo y renombrar un estado del pegado renombra también el del original]{Un nodo pegado comparte sus estados con el nodo que se copió: renombrar un estado de uno de los dos, en la pestaña de dominio de sus propiedades, lo renombra también en el otro, sin aviso}\label{err:362}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core, gui
+\fichakey{Paquete}org.openmarkov.core.model.network; org.openmarkov.gui.action; org.openmarkov.gui.graphic
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/Variable.java:148-160, 316-325} \newline \path{gui/src/main/java/org/openmarkov/gui/graphic/VisualNetwork.java:1153-1182} \newline \path{gui/src/main/java/org/openmarkov/gui/action/PasteEdit.java:96}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{9739e8f} (6-11-2026), con las mismas llamadas que hace la ventana: el nodo copiado se toma de una copia profunda de la red, como en \texttt{Visual\allowbreak{}Network.\allowbreak{}export\allowbreak{}To\allowbreak{}Clipboard}; se pega con \texttt{Paste\allowbreak{}Edit}, y se renombra el estado con \texttt{Node\allowbreak{}State\allowbreak{}Edit}, la edición de la pestaña de dominio
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:295]{error~295}, \hyperref[nota:196]{nota~196}
+\end{ficha}
+\paragraph{Qué pasa}
+Al copiar un nodo y pegarlo, el nodo pegado parece tener sus propios estados, pero son los mismos objetos que los del nodo copiado. Si el usuario abre las propiedades del nodo pegado y cambia el nombre de un estado en la pestaña de dominio, el estado del nodo original cambia también de nombre, y al revés. Nada avisa. El cambio llega al fichero al guardar. Deshacer el cambio de nombre devuelve el nombre de antes a los dos.
+
+Medido con el código de \texttt{9739e8f}, copiando y pegando «Positive X-ray?» de \texttt{inference/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}asia.\allowbreak{}pgmx} en la misma red:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+antes:    original [no, yes]        pegado «Positive X-ray?'» [no, yes]
+renombrar «yes» como «renamed» en el pegado
+después:  original [no, renamed]    pegado [no, renamed]
+\end{Verbatim}
+
+Por qué pasa: el constructor de copia de \texttt{Variable} (líneas 148-160) copia la lista de estados con \texttt{clone}, que da una lista nueva con los mismos objetos \texttt{State} dentro. \texttt{Variable.\allowbreak{}rename\allowbreak{}State} (líneas 316-325) cambia el nombre en el propio objeto (\texttt{state.\allowbreak{}set\allowbreak{}Name}). Al copiar, la ventana toma el nodo de una copia profunda de la red (\texttt{Visual\allowbreak{}Network.\allowbreak{}taken\allowbreak{}From\allowbreak{}ACopy\allowbreak{}Of\allowbreak{}The\allowbreak{}Network}, líneas 1169-1182), que tampoco copia los estados: medido, la variable de la copia es otra, pero sus estados son los del original. \texttt{Paste\allowbreak{}Edit} (línea 96) hace con ella una variable nueva con el mismo constructor, así que el nodo pegado sigue con los estados del original.
+
+Por lectura, sin medirlo: lo mismo pasa al pegar en otra red, y renombrar un estado del original después de copiar cambia lo que se pegará, que es justo lo que la copia profunda de \texttt{export\allowbreak{}To\allowbreak{}Clipboard} quiere evitar.
+
+\paragraph{El código}
+
+core/src/main/java/org/openmarkov/core/model/network/Variable.java:148-160
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{public} \FunctionTok{Variable}\OperatorTok{(}\NormalTok{Variable variable}\OperatorTok{)} \OperatorTok{\{}
+        \KeywordTok{this}\OperatorTok{.}\FunctionTok{states} \OperatorTok{=}\NormalTok{ variable}\OperatorTok{.}\FunctionTok{states}\OperatorTok{.}\FunctionTok{clone}\OperatorTok{();}
+        \KeywordTok{this}\OperatorTok{.}\FunctionTok{variableType} \OperatorTok{=}\NormalTok{ variable}\OperatorTok{.}\FunctionTok{variableType}\OperatorTok{;}
+        \KeywordTok{this}\OperatorTok{.}\FunctionTok{partitionedInterval} \OperatorTok{=}\NormalTok{ CloneUtils}\OperatorTok{.}\FunctionTok{safeClone}\OperatorTok{(}\NormalTok{variable}\OperatorTok{.}\FunctionTok{partitionedInterval}\OperatorTok{);}
+        \KeywordTok{this}\OperatorTok{.}\FunctionTok{additionalProperties} \OperatorTok{=}\NormalTok{ variable}\OperatorTok{.}\FunctionTok{additionalProperties} \OperatorTok{!=} \KeywordTok{null}
+                \OperatorTok{?} \KeywordTok{new} \BuiltInTok{HashMap}\OperatorTok{\textless{}\textgreater{}(}\NormalTok{variable}\OperatorTok{.}\FunctionTok{additionalProperties}\OperatorTok{)} \OperatorTok{:} \KeywordTok{new} \BuiltInTok{HashMap}\OperatorTok{\textless{}\textgreater{}();}
+        \KeywordTok{this}\OperatorTok{.}\FunctionTok{statesAdditionalProperties} \OperatorTok{=}\NormalTok{ CloneUtils}\OperatorTok{.}\FunctionTok{safeClone}\OperatorTok{(}\NormalTok{variable}\OperatorTok{.}\FunctionTok{statesAdditionalProperties}\OperatorTok{);}
+        \KeywordTok{this}\OperatorTok{.}\FunctionTok{precision} \OperatorTok{=}\NormalTok{ variable}\OperatorTok{.}\FunctionTok{precision}\OperatorTok{;}
+        \KeywordTok{this}\OperatorTok{.}\FunctionTok{unit} \OperatorTok{=}\NormalTok{ CloneUtils}\OperatorTok{.}\FunctionTok{safeClone}\OperatorTok{(}\NormalTok{variable}\OperatorTok{.}\FunctionTok{unit}\OperatorTok{);}
+        \KeywordTok{this}\OperatorTok{.}\FunctionTok{agent} \OperatorTok{=}\NormalTok{ CloneUtils}\OperatorTok{.}\FunctionTok{safeClone}\OperatorTok{(}\NormalTok{variable}\OperatorTok{.}\FunctionTok{agent}\OperatorTok{);}
+        \KeywordTok{this}\OperatorTok{.}\FunctionTok{decisionCriterion} \OperatorTok{=}\NormalTok{ CloneUtils}\OperatorTok{.}\FunctionTok{safeClone}\OperatorTok{(}\NormalTok{variable}\OperatorTok{.}\FunctionTok{decisionCriterion}\OperatorTok{);}
+        \FunctionTok{parseNameIntoParts}\OperatorTok{(}\NormalTok{variable}\OperatorTok{.}\FunctionTok{name}\OperatorTok{);}
+    \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Que el constructor de copia de \texttt{Variable} copie también cada estado, con el constructor de copia que \texttt{State} ya tiene. Así la copia profunda de la red y el pegado dejan cada variable con sus propios estados. Antes hay que buscar quién guarda estados de una variable fuera de ella y los compara por identidad con los de una copia: por ejemplo, los estados reveladores de un enlace, que la copia profunda tendría que apuntar a los estados de la variable copiada.
+
+Prueba: copiar y pegar un nodo, renombrar un estado del pegado, y el original conserva el nombre; lo mismo al revés; deshacer devuelve el nombre solo al que se cambió.
+
+\setcounter{subsection}{362}
+\subsection[Añadir un padre a una tabla con incertidumbre pierde la incertidumbre y el comentario]{Al añadir un padre a un nodo cuya tabla de probabilidad tiene incertidumbre, la tabla nueva repite los números, pero pierde la incertidumbre y el comentario, sin aviso; el análisis de sensibilidad probabilístico deja de sortear esos parámetros}\label{err:363}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network.potential; org.openmarkov.core.action.base.linkEdits
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:663-678} \newline \path{core/src/main/java/org/openmarkov/core/action/base/linkEdits/AddLinkEdit.java:225-232}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{9739e8f} (6-11-2026): \texttt{Add\allowbreak{}Link\allowbreak{}Edit}, la edición que hace la ventana al dibujar un enlace, sobre una red de dos nodos en la que la tabla del hijo tiene incertidumbre y un comentario; y \texttt{Remove\allowbreak{}Link\allowbreak{}Edit} sobre una tabla igual que ya tiene el padre
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:99]{error~99}
+\end{ficha}
+\paragraph{Qué pasa}
+Una tabla de probabilidad puede llevar incertidumbre: en cada casilla, una distribución que el análisis de sensibilidad probabilístico sortea en cada simulación. Se pone desde el panel de la tabla, con «Assign uncertainty». Si después se dibuja un enlace hacia ese nodo, la tabla nueva repite los números de antes para cada estado del padre nuevo, pero ya no tiene incertidumbre ni comentario. El análisis probabilístico trata esas casillas como fijas. Nada avisa. Quitar un padre, en cambio, conserva las dos cosas.
+
+Medido con el código de \texttt{9739e8f}, con una tabla de X con Beta(3,~7) y Beta(7,~3) y el comentario «from the literature»:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+antes:               UncertainTablePotential, con incertidumbre, comentario «from the literature»
+añadir el padre P:   TablePotential, sin incertidumbre, comentario vacío, valores [0.3, 0.7, 0.3, 0.7]
+quitar el padre P:   UncertainTablePotential, con incertidumbre, comentario «from the literature»
+\end{Verbatim}
+
+La última línea es otra tabla igual, que ya tenía a P como padre. Por lectura, deshacer el enlace devuelve la tabla de antes, con su incertidumbre (\texttt{Add\allowbreak{}Link\allowbreak{}Edit.\allowbreak{}undo}).
+
+Por qué pasa: \texttt{Uncertain\allowbreak{}Table\allowbreak{}Potential} no tiene su propio \texttt{add\allowbreak{}Variable} y usa el de \texttt{Table\allowbreak{}Potential} (líneas 663-678). Ese método crea una \texttt{Table\allowbreak{}Potential} corriente con las variables y el papel, y copia solo los valores: la copia de la incertidumbre está comentada, y el comentario no se copia. \texttt{Add\allowbreak{}Link\allowbreak{}Edit.\allowbreak{}do\allowbreak{}Edit} (líneas 225-232) pone en el nodo lo que devuelve \texttt{add\allowbreak{}Variable}.
+
+\paragraph{El código}
+
+core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.java:663-678
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \AttributeTok{@Override} \KeywordTok{public}\NormalTok{ TablePotential }\FunctionTok{addVariable}\OperatorTok{(}\NormalTok{Variable newVariable}\OperatorTok{)} \OperatorTok{\{}
+        \CommentTok{// creates the new potential}
+        \BuiltInTok{List}\OperatorTok{\textless{}}\NormalTok{Variable}\OperatorTok{\textgreater{}}\NormalTok{ newVariables }\OperatorTok{=} \KeywordTok{new} \BuiltInTok{ArrayList}\OperatorTok{\textless{}\textgreater{}(}\NormalTok{variables}\OperatorTok{);}
+\NormalTok{        newVariables}\OperatorTok{.}\FunctionTok{add}\OperatorTok{(}\NormalTok{newVariable}\OperatorTok{);}
+\NormalTok{        TablePotential newPotential }\OperatorTok{=} \KeywordTok{new} \FunctionTok{TablePotential}\OperatorTok{(}\NormalTok{newVariables}\OperatorTok{,}\NormalTok{ role}\OperatorTok{);}
+        \CommentTok{// assigns the values of the new potential}
+        \DataTypeTok{int}\NormalTok{ newVariableNumStates }\OperatorTok{=}\NormalTok{ newVariable}\OperatorTok{.}\FunctionTok{getNumStates}\OperatorTok{();}
+        \ControlFlowTok{for} \OperatorTok{(}\DataTypeTok{int}\NormalTok{ i }\OperatorTok{=} \DecValTok{0}\OperatorTok{;}\NormalTok{ i }\OperatorTok{\textless{}}\NormalTok{ newVariableNumStates}\OperatorTok{;}\NormalTok{ i}\OperatorTok{++)} \OperatorTok{\{}
+            \ControlFlowTok{for} \OperatorTok{(}\DataTypeTok{int}\NormalTok{ j }\OperatorTok{=} \DecValTok{0}\OperatorTok{;}\NormalTok{ j }\OperatorTok{\textless{}}\NormalTok{ values}\OperatorTok{.}\FunctionTok{length}\OperatorTok{;}\NormalTok{ j}\OperatorTok{++)} \OperatorTok{\{}
+\NormalTok{                newPotential}\OperatorTok{.}\FunctionTok{values}\OperatorTok{[}\NormalTok{j }\OperatorTok{+}\NormalTok{ i }\OperatorTok{*}\NormalTok{ values}\OperatorTok{.}\FunctionTok{length}\OperatorTok{]} \OperatorTok{=}\NormalTok{ values}\OperatorTok{[}\NormalTok{j}\OperatorTok{];}
+                \CommentTok{// newPotential.uncertainValues[j + i * values.length] =}
+                \CommentTok{// uncertainValues[j];}
+            \OperatorTok{\}}
+        \OperatorTok{\}}
+        \ControlFlowTok{return}\NormalTok{ newPotential}\OperatorTok{;}
+    \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Que \texttt{Uncertain\allowbreak{}Table\allowbreak{}Potential} tenga su propio \texttt{add\allowbreak{}Variable}: que devuelva una tabla con incertidumbre en la que cada estado del padre nuevo repite la distribución de la casilla de la que copia el número, como ya repite el número, y con el mismo comentario.
+
+Prueba: añadir un padre de dos estados a una tabla con incertidumbre y comentario; la tabla nueva tiene incertidumbre, cada casilla con la distribución de la casilla de la que viene, y el mismo comentario; deshacer devuelve la tabla de antes.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Restricciones de red}\label{sec:restricciones}
@@ -12967,6 +13085,76 @@ Que \texttt{get\allowbreak{}XMLNode\allowbreak{}Type} se niegue en vez de devolv
 
 Prueba: \texttt{asia.\allowbreak{}pgmx} con \texttt{role="invented"} en la variable «Positive X-ray?» no se abre, y la excepción es la nueva, con el nodo y el tipo; sin \texttt{role}, la otra, con el nodo; lo mismo con \texttt{ID-decide-test-1-0.\allowbreak{}pgmx}, en formato 1.0; el fichero sin cambios se sigue abriendo.
 
+
+\setcounter{subsection}{363}
+\subsection[Una gaussiana condicional o una Cauchy discretizada se guarda sin sus parámetros, y el fichero no se abre]{Una red con una relación «Conditional Gaussian» o «Discretized Cauchy» se guarda sin aviso, en 0.2 y en 1.0, pero sin sus parámetros: al abrir el fichero, el lector cae con un NullPointerException y el aviso solo dice que la red está estropeada}\label{err:364}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.probmodel.writer; org.openmarkov.io.probmodel.reader
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:937-964} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXPotentialParsers.java:304-320, 343-349}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{9739e8f} (6-11-2026): guardar con \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2} y con \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0} y abrir con \texttt{PGMXReader}, los mismos que usan «Save» y «Open», las dos redes del repositorio que llevan estas relaciones y una red nueva de dos nodos con una gaussiana condicional recién creada
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:112]{error~112}, \hyperref[err:361]{error~361}
+\end{ficha}
+\paragraph{Qué pasa}
+Para un nodo de azar de estados finitos, el selector de relaciones ofrece «Conditional Gaussian» y «Discretized Cauchy», cada una con su panel. La primera se define con una media y una varianza; la segunda, con una mediana y una escala; cada parámetro es una tabla sobre los padres. Guardar la red no protesta, en ninguno de los dos formatos, pero el fichero lleva la relación solo con su tipo y sus variables, sin los parámetros. Al abrirlo, el lector busca el parámetro que falta y cae.
+
+Medido con el código de \texttt{9739e8f}; las dos redes son de \texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+BN-conditional-gaussian.pgmx: se abre; guardada en 0.2 o en 1.0, no se vuelve a abrir
+    NullPointerException: Cannot invoke "org.jdom2.Element.getChild(String)" because "wrapper" is null
+    at PGMXPotentialParsers.readNestedTablePotential(PGMXPotentialParsers.java:314)
+    at PGMXPotentialParsers.getConditionalGaussianPotential(PGMXPotentialParsers.java:307)
+    at PGMXReader_0_2.autoGetPotential(PGMXReader_0_2.java:1617)
+BN-discretized-cauchy.pgmx: lo mismo, desde getDiscretizedCauchyPotential
+red nueva, P -> X, X con «Conditional Gaussian» por omisión: lo mismo
+lo que se escribe:
+    <Potential type="Conditional Gaussian" role="conditionalProbability">
+      <Variables>
+        <Variable name="X" />
+        <Variable name="P" />
+      </Variables>
+    </Potential>
+\end{Verbatim}
+
+En la ventana, el puntero nulo sale como «Network from … is corrupted and could not be loaded.», que no dice qué nodo ni qué falta. Los parámetros se pierden: la red solo se recupera escribiéndolos a mano en el fichero. La ficha del \hyperref[err:112]{error~112} ya decía que estas dos redes no se reabrían, sin mirar por qué.
+
+Por qué pasa: \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Potential\allowbreak{}Body} (líneas 937-964), que usa también el escritor de 1.0, escribe el contenido de cada relación según su clase, y no tiene rama para \texttt{Conditional\allowbreak{}Gaussian\allowbreak{}Potential} ni para \texttt{Discretized\allowbreak{}Cauchy\allowbreak{}Potential}: queda el envoltorio sin nada dentro. El lector (\texttt{PGMXPotential\allowbreak{}Parsers.\allowbreak{}get\allowbreak{}Conditional\allowbreak{}Gaussian\allowbreak{}Potential}, líneas 304-310, y \texttt{get\allowbreak{}Discretized\allowbreak{}Cauchy\allowbreak{}Potential}, líneas 343-349) lee \texttt{\textless{}Mean\textgreater{}} y \texttt{\textless{}Variance\textgreater{}}, o \texttt{\textless{}Median\textgreater{}} y \texttt{\textless{}Scale\textgreater{}}, con \texttt{read\allowbreak{}Nested\allowbreak{}Table\allowbreak{}Potential} (líneas 312-320), que no comprueba que estén.
+
+\paragraph{El código}
+
+io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXPotentialParsers.java:304-320
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{public} \DataTypeTok{static}\NormalTok{ Potential }\FunctionTok{getConditionalGaussianPotential}\OperatorTok{(}\BuiltInTok{Element}\NormalTok{ xmlPotential}\OperatorTok{,}\NormalTok{ ProbNet probNet}\OperatorTok{,}\NormalTok{ PotentialRole xmlRole}\OperatorTok{,}
+                                                             \BuiltInTok{List}\OperatorTok{\textless{}}\NormalTok{Variable}\OperatorTok{\textgreater{}}\NormalTok{ variables}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{        ConditionalGaussianPotential cg }\OperatorTok{=} \KeywordTok{new} \FunctionTok{ConditionalGaussianPotential}\OperatorTok{(}\NormalTok{variables}\OperatorTok{,}\NormalTok{ xmlRole}\OperatorTok{);}
+\NormalTok{        cg}\OperatorTok{.}\FunctionTok{setMean}\OperatorTok{(}\FunctionTok{readNestedTablePotential}\OperatorTok{(}\NormalTok{xmlPotential}\OperatorTok{,}\NormalTok{ XMLTags}\OperatorTok{.}\FunctionTok{MEAN}\OperatorTok{,}\NormalTok{ probNet}\OperatorTok{));}
+\NormalTok{        cg}\OperatorTok{.}\FunctionTok{setVariance}\OperatorTok{(}\FunctionTok{readNestedTablePotential}\OperatorTok{(}\NormalTok{xmlPotential}\OperatorTok{,}\NormalTok{ XMLTags}\OperatorTok{.}\FunctionTok{VARIANCE}\OperatorTok{,}\NormalTok{ probNet}\OperatorTok{));}
+        \ControlFlowTok{return}\NormalTok{ cg}\OperatorTok{;}
+    \OperatorTok{\}}
+
+    \KeywordTok{private} \DataTypeTok{static}\NormalTok{ TablePotential }\FunctionTok{readNestedTablePotential}\OperatorTok{(}\BuiltInTok{Element}\NormalTok{ parent}\OperatorTok{,}\NormalTok{ XMLTags childTag}\OperatorTok{,}\NormalTok{ ProbNet probNet}\OperatorTok{)} \OperatorTok{\{}
+        \BuiltInTok{Element}\NormalTok{ wrapper }\OperatorTok{=}\NormalTok{ parent}\OperatorTok{.}\FunctionTok{getChild}\OperatorTok{(}\NormalTok{childTag}\OperatorTok{.}\FunctionTok{toString}\OperatorTok{());}
+        \BuiltInTok{Element}\NormalTok{ nestedPotential }\OperatorTok{=}\NormalTok{ wrapper}\OperatorTok{.}\FunctionTok{getChild}\OperatorTok{(}\NormalTok{XMLTags}\OperatorTok{.}\FunctionTok{POTENTIAL}\OperatorTok{.}\FunctionTok{toString}\OperatorTok{());}
+        \BuiltInTok{List}\OperatorTok{\textless{}}\NormalTok{Variable}\OperatorTok{\textgreater{}}\NormalTok{ nestedVariables }\OperatorTok{=} \KeywordTok{new}\NormalTok{ java}\OperatorTok{.}\FunctionTok{util}\OperatorTok{.}\FunctionTok{ArrayList}\OperatorTok{\textless{}\textgreater{}();}
+        \ControlFlowTok{for} \OperatorTok{(}\BuiltInTok{Element}\NormalTok{ v }\OperatorTok{:}\NormalTok{ nestedPotential}\OperatorTok{.}\FunctionTok{getChild}\OperatorTok{(}\NormalTok{XMLTags}\OperatorTok{.}\FunctionTok{VARIABLES}\OperatorTok{.}\FunctionTok{toString}\OperatorTok{()).}\FunctionTok{getChildren}\OperatorTok{())} \OperatorTok{\{}
+\NormalTok{            nestedVariables}\OperatorTok{.}\FunctionTok{add}\OperatorTok{(}\FunctionTok{getVariable}\OperatorTok{(}\NormalTok{v}\OperatorTok{,}\NormalTok{ probNet}\OperatorTok{));}
+        \OperatorTok{\}}
+        \ControlFlowTok{return} \FunctionTok{getTablePotential}\OperatorTok{(}\NormalTok{nestedPotential}\OperatorTok{,}\NormalTok{ probNet}\OperatorTok{,}\NormalTok{ PotentialRole}\OperatorTok{.}\FunctionTok{CONDITIONAL\_PROBABILITY}\OperatorTok{,}\NormalTok{ nestedVariables}\OperatorTok{);}
+    \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Que el escritor escriba los dos parámetros de cada una, cada uno con su tabla dentro, en la forma que el lector ya lee: la de las dos redes del repositorio. Y que el lector, si falta un parámetro, se niegue con una \texttt{PGMXParser\allowbreak{}Exception} que nombre el nodo y el elemento que falta, como pide el \hyperref[err:361]{error~361} para el tipo de un nodo. La otra opción, que el escritor se niegue a guardarlas con la \texttt{Writer\allowbreak{}Exception.\allowbreak{}Relation\allowbreak{}Not\allowbreak{}Supported\allowbreak{}By\allowbreak{}Format} que ya existe, es peor: el lector ya sabe leerlas.
+
+Prueba: guardar en 0.2 y en 1.0 las dos redes del repositorio y abrirlas; la relación vuelve con la misma media y varianza, o la misma mediana y escala.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
 
@@ -21123,6 +21311,7 @@ cambia algo (por ejemplo, un código que hoy no llama nadie empieza a usarse), s
 \textbf{188}\phantomsection\label{nota:188} & \textbf{La exactitud del Bayes ingenuo suma sus logaritmos en un orden que depende de la memoria}\newline \texttt{Accuracy.\allowbreak{}score\allowbreak{}NB} reúne las características en un \texttt{Hash\allowbreak{}Set\textless{}Variable\textgreater{}}, y \texttt{Variable} no redefine \texttt{hash\allowbreak{}Code}, así que \texttt{predict\allowbreak{}Class\allowbreak{}Value} las recorre en un orden que puede cambiar de una ejecución a otra. Lo que acumula al recorrerlas es una suma de logaritmos, y una suma en coma flotante depende del orden en su último decimal. Solo podría cambiar la clase predicha en un empate casi exacto entre dos clases. Comprobado leyendo el código; no se ha observado ningún cambio (la medida de 80 clasificadores hecha el 8 de octubre al portar OpenMarkov a C++/Qt dio los mismos números en dos ejecuciones). Es de la familia del \hyperref[err:135]{error~135} y de la segunda fuente de variación del \hyperref[err:136]{error~136}. \\[3pt]
 \textbf{191}\phantomsection\label{nota:191} & \textbf{El orden de la lista de tipos de red es el del descubrimiento de clases}\newline \texttt{Network\allowbreak{}Definition\allowbreak{}Panel.\allowbreak{}get\allowbreak{}JCombo\allowbreak{}Box\allowbreak{}Network\allowbreak{}Types} llena el selector del tipo de red con \texttt{Network\allowbreak{}Type\allowbreak{}Utils.\allowbreak{}NETWORK\_\allowbreak{}TYPE\_\allowbreak{}CLASSES} sin ordenar, en el orden en que \texttt{Plugin\allowbreak{}Search} encuentra las clases; es lo mismo que la \hyperref[nota:31]{nota~31}, en otra lista. Visto el 8 de octubre en una captura automática, ejecutando desde directorios de clases: los catorce tipos salen sin orden reconocible (LIMID, MDP, \ldots, con la red bayesiana en el puesto doce). No se ha mirado el orden en el jar publicado. Nada falla: el tipo elegido al crear una red se fija aparte, y es la red bayesiana. \\[3pt]
 \textbf{196}\phantomsection\label{nota:196} & \textbf{La copia de un enlace comparte con el original su tabla de restricciones y sus listas de revelación, y \texttt{Link} gana un \texttt{equals} sin \texttt{hash\allowbreak{}Code}}\newline \texttt{Link.\allowbreak{}clone}, nuevo en \texttt{461cd46} (líneas 377-387), construye una copia con su propia tabla de restricciones y sus propias listas de estados e intervalos reveladores y luego no la devuelve: devuelve \texttt{super.\allowbreak{}clone(\allowbreak{})}, la copia superficial de \texttt{Object.\allowbreak{}clone}, que apunta a la misma tabla y a las mismas listas que el original (medido el 15-10-2026 sin ventana sobre \texttt{Node\allowbreak{}States\allowbreak{}Replace\allowbreak{}Test.\allowbreak{}pgmx}: la tabla de restricciones de la copia es el mismo objeto que la del original). Su único llamador es \texttt{Node\allowbreak{}Replace\allowbreak{}States\allowbreak{}Edit} (línea 54), que guarda esas copias para deshacer un cambio de dominio, y hoy no se pierde nada: \texttt{Variable\allowbreak{}State\allowbreak{}Operations.\allowbreak{}reset\allowbreak{}Link} no modifica la tabla ni las listas de un enlace, sino que las sustituye (\texttt{set\allowbreak{}Restrictions\allowbreak{}Potential(\allowbreak{}null)} y listas nuevas), así que lo guardado queda intacto, y en la misma medida deshacer devuelve las restricciones de los cuatro enlaces de la red tal como estaban. Se notaría si algo modificara en el sitio la tabla o las listas de un enlace entre el cambio y su deshacer: \texttt{get\allowbreak{}Revealing\allowbreak{}States} y \texttt{get\allowbreak{}Revealing\allowbreak{}Intervals} entregan la lista viva a propósito, para \texttt{Revelation\allowbreak{}Interval\allowbreak{}Edit}. En el mismo commit \texttt{Link} gana un \texttt{equals} por contenido sin su \texttt{hash\allowbreak{}Code}, contra lo que dice el comentario de la clase (líneas 34-37): que la igualdad es por identidad a propósito, porque \texttt{Graph.\allowbreak{}remove\allowbreak{}Link} cuenta con ello. Leído en el código: no se ha encontrado nada que compare dos enlaces distintos con el mismo contenido, ni que guarde enlaces en una tabla de dispersión y los busque con otro objeto (los mapas de \texttt{Node\allowbreak{}State\allowbreak{}Edit} y de \texttt{reset\allowbreak{}Link}, \hyperref[nota:5]{nota~5}, buscan con el mismo), así que tampoco esto tiene hoy consecuencia. Es de la familia del \hyperref[err:24]{error~24}. \\[3pt]
+\textbf{200}\phantomsection\label{nota:200} & \textbf{En formato 1.0, una política impuesta vuelve como probabilidad condicionada}\newline El formato 1.0 no escribe el papel de las relaciones (\texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0}, línea 170), y su lector da a todas el papel \texttt{conditional\allowbreak{}Probability} (\texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0.\allowbreak{}get\allowbreak{}Potential}, líneas 79-84), también a las que lee del elemento \texttt{\textless{}Policies\textgreater{}}. Medido el 6-11-2026 sin ventana con \texttt{ID-\allowbreak{}decide-\allowbreak{}test.\allowbreak{}pgmx}: imponer a «Do test?» la política «no» con \texttt{Impose\allowbreak{}Policy\allowbreak{}Edit}, como la ventana, guardar en 1.0 y abrir. La relación de la decisión vuelve con papel \texttt{conditional\allowbreak{}Probability} en vez de \texttt{policy}. La utilidad esperada es la misma (9,16), y la política óptima de «Therapy» también. Guardada después en 0.2, la política se escribe en \texttt{\textless{}Policies\textgreater{}} con \texttt{role="conditional\allowbreak{}Probability"}, y el fichero se abre igual. No se ha encontrado código que trate de forma distinta los dos papeles en una decisión: el que mira \texttt{POLICY} la trata como \texttt{CONDITIONAL\_\allowbreak{}PROBABILITY}. Si algún día se distinguen, el lector de 1.0 tendría que dar el papel \texttt{policy} a lo que lee en \texttt{\textless{}Policies\textgreater{}}. \\[3pt]
 \end{longtable}
 
 \subsection*{Defectos que hoy no alcanza nadie}\addcontentsline{toc}{subsection}{Defectos que hoy no alcanza nadie}
@@ -21667,6 +21856,9 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:359]{Error 359} & hallazgo nuevo, al plantear la decisión del \hyperref[err:100]{error~100} \\
 \hyperref[err:360]{Error 360} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 25 al 27 de octubre \\
 \hyperref[err:361]{Error 361} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 28 y 29 de octubre \\
+\hyperref[err:362]{Error 362} & hallazgo nuevo, al revisar el diseño de los potenciales y de las clases que los rodean \\
+\hyperref[err:363]{Error 363} & hallazgo nuevo, al revisar el diseño de los potenciales y de las clases que los rodean \\
+\hyperref[err:364]{Error 364} & hallazgo nuevo, al revisar el diseño de los potenciales y de las clases que los rodean \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
@@ -21865,6 +22057,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[nota:197]{Nota 197} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 13 y 14 de octubre \\
 \hyperref[nota:198]{Nota 198} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 13 y 14 de octubre \\
 \hyperref[nota:199]{Nota 199} & hallazgo nuevo, al llevar a la versión en C++/Qt los arreglos del 13 y 14 de octubre \\
+\hyperref[nota:200]{Nota 200} & hallazgo nuevo, al revisar el diseño de los potenciales y de las clases que los rodean \\
 \bottomrule
 \end{longtable}
 }
