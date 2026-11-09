@@ -264,7 +264,7 @@ public class Bindings {
                             "Inference",
                             Binding.KeyAcceptance.ALLOWED,
                             Binding.MouseAcceptance.REQUIRED_WITH_JUST_ONE_MOUSE,
-                            new InputCombination(new Input.Click(MouseEvent.BUTTON1, 1)),
+                            new InputCombination(new Input.Click(MouseEvent.BUTTON1, 2)),
                             Binding.Exclusivity.EXCLUSIVE
                 );
         
