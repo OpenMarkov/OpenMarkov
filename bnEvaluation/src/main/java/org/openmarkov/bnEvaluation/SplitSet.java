@@ -2,10 +2,18 @@ package org.openmarkov.bnEvaluation;
 
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.State;
+import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.util.JTableGeneration;
 
-import javax.swing.*;
-import java.util.*;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
+import java.awt.Component;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
@@ -75,7 +83,27 @@ public class SplitSet {
                              );
                          });
         });
-        return JTableGeneration.dataToJTable(Stream.of("Variable", "State", "Dataset (%)", "Testing (%)", "Training (%)"), rows);
+        JTable rawTable = JTableGeneration.dataToJTable(Stream.of("Variable", "State", "Dataset (%)", "Testing (%)", "Training (%)"), rows);
+        
+        JTable table = new JTable(rawTable.getModel()) {
+            @Override public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                var isVariableLine = !this.getValueAt(row, 0).toString().isEmpty();
+                if (row != 0 && isVariableLine && c instanceof JComponent jc) {
+                    jc.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, GUIColors.SplitSet.Dialog.VARIABLE_SEPARATOR.getColor()));
+                }
+                return c;
+            }
+        };
+        
+        DefaultTableCellRenderer rightAlignRender = new DefaultTableCellRenderer();
+        rightAlignRender.setHorizontalAlignment(JLabel.RIGHT);
+        
+        table.getColumnModel().getColumn(2).setCellRenderer(rightAlignRender);
+        table.getColumnModel().getColumn(3).setCellRenderer(rightAlignRender);
+        table.getColumnModel().getColumn(4).setCellRenderer(rightAlignRender);
+        
+        return table;
     }
     
 }

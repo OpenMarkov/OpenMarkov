@@ -13,7 +13,18 @@ import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithm;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithmManager;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import java.awt.event.KeyEvent;
 
 /**
@@ -100,8 +111,8 @@ class GeneralTabPanel extends JPanel {
         optionsTextArea.setEditable(false);
 
         jPanel3.setBorder(BorderFactory.createTitledBorder(stringDatabase.getString("Learning.Algorithm")));
-
-        generativeAlgorithmType.setText(stringDatabase.getString("Learning.Algorithm.Type.Generative"));
+        
+        generativeAlgorithmType.setText(stringDatabase.getString("Learning.Algorithm.Type.Generative") + "    ");
         discriminativeAlgorithmType.setText(stringDatabase.getString("Learning.Algorithm.Type.Discriminative"));
         generativeAlgorithmType.setSelected(true);
         algorithmTypeGroup.add(generativeAlgorithmType);

@@ -17,9 +17,20 @@ import org.openmarkov.gui.component.NumericSpinner;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.io.DBWriterOMFileChooser;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.io.File;
 
 /**
@@ -262,29 +273,30 @@ public final class SplitDatasetDialog extends OkCancelDialog {
         setNumOfTestsTrainsAndFraction(numTest, numTrain, fraction);
     }
     
+    
     @Override protected boolean doOkClickBeforeHide() throws Exception {
         SplitSetManager splitSetManager = new SplitSetManager(this.dbOpenerPanel.getDatabase());
         int numTest = testNumberSpinner.getCurrentValue();
         int numTrain = trainNumberSpinner.getCurrentValue();
-        double fraction = 100. * (numTest) / numCases;
-        String title = "Division of the dataset " + this.dbOpenerPanel.getDatabaseFile()
-                                                                  .getAbsolutePath() + " with " + numCases +
-                " cases into " + numTrain + " training-cases and " + numTest + " test-cases\n" +
-                "Test sampling fraction=" + String.format("%3.2f", fraction) + "%.\n";
-        if (randomCasesButton.isSelected()) {
-            sets = splitSetManager.generateRandomTestSet(numTest);
-            sets.setTitle(title + "Random selected.\n");
-        } else {
-            if (firstCasesButton.isSelected()) {
-                sets = splitSetManager.generateFirstTestSet(numTest);
-                sets.setTitle(title + "First selected.\n");
-            } else {
-                sets = splitSetManager.generateLastTestSet(numTest);
-                sets.setTitle(title + "Last selected.\n");
-            }
-        }
-        CaseDatabaseManager caseDbManager = new CaseDatabaseManager();
+        double testFraction = 100. * (numTest) / numCases;
+        double trainingFraction = 100. - testFraction;
+        SplitSetManager.GenerationOrder generationOrder = randomCasesButton.isSelected() ? SplitSetManager.GenerationOrder.Random
+                : firstCasesButton.isSelected() ? SplitSetManager.GenerationOrder.TestsFirst
+                : SplitSetManager.GenerationOrder.TestsLast;
         
+        sets = splitSetManager.generateTestSet(numTest, generationOrder);
+        
+        
+        String casesDescription = switch (generationOrder) {
+            case TestsFirst ->
+                    "<li>The first " + numTest + " (" + testFraction + "%) cases for testing.</li><li>" + numTrain + " (" + trainingFraction + "%) cases for training.</li>";
+            case TestsLast ->
+                    "<li>The last " + numTest + " (" + testFraction + "%) cases for testing.</li><li>" + numTrain + " (" + trainingFraction + "%) cases for training.</li>";
+            case Random ->
+                    "<li>" + numTest + " (" + testFraction + "%) randomly selected cases for testing.</li><li>" + numTrain + " (" + trainingFraction + "%) remanining cases for training.</li>";
+        };
+        sets.setTitle("<html>The " + numCases + " cases in the original dataset have been split as follows:<ul>" + casesDescription + "</ul></html>");
+        CaseDatabaseManager caseDbManager = new CaseDatabaseManager();
         
         String extension = FilenameUtils.getExtension(this.dbOpenerPanel.getDatabaseFile().getName());
         String name = FilenameUtils.getBaseName(this.dbOpenerPanel.getDatabaseFile().getName());
@@ -302,14 +314,12 @@ public final class SplitDatasetDialog extends OkCancelDialog {
         }
         var trainFile = this.trainWriter.getSelectedFile();
         
+        ResultsDialog resultsDialog = new ResultsDialog(owner, sets);
         caseDbManager.getWriter(FilenameUtils.getExtension(testFile.getName())).save(testFile, sets.getTestDatabase());
         caseDbManager.getWriter(FilenameUtils.getExtension(trainFile.getName()))
                      .save(trainFile, sets.getTrainDatabase());
         
-        JOptionPane.showMessageDialog(this,
-                                      "The train and test datasets have been saved.",
-                                      "Information", JOptionPane.INFORMATION_MESSAGE);
-        new ResultsDialog(owner, sets).setVisible(true);
+        resultsDialog.setVisible(true);
         this.setVisible(false);
         return super.doOkClickBeforeHide();
     }

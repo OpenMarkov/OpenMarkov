@@ -43,6 +43,22 @@ public class SplitSetManager {
         this.random = random;
     }
     
+    
+    public enum GenerationOrder {
+        TestsFirst,
+        TestsLast,
+        Random,
+    }
+    
+    public SplitSet generateTestSet(int numTest, GenerationOrder generationOrder) {
+        return switch (generationOrder) {
+            case TestsFirst -> generateFirstTestSet(numTest);
+            case TestsLast -> generateLastTestSet(numTest);
+            case Random -> generateRandomTestSet(numTest);
+        };
+    }
+    
+    
     /**
      * This method creates the test and training caseDatabases by
      * random selection

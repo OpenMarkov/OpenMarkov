@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Naive Bayes learning algorithm. Creates a star-shaped network structure where
  * the class variable is the parent of all feature variables with no inter-feature links.
  */
-@LearningAlgorithmType(name = "Naive bayes", discriminative = true, supportsUnobservedVariables = false)
+@LearningAlgorithmType(name = "Naive Bayes", discriminative = true, supportsUnobservedVariables = false)
 public class NaiveBayesAlgorithm extends LearningAlgorithm implements IDiscriminativeBayes {
     
     

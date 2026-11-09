@@ -276,4 +276,11 @@ public class GUIColors {
         public static final GUIColor INVALID = new GUIColor(new Color(217, 70, 70));
     }
     
+    public static final class SplitSet {
+        public static final class Dialog {
+            public static final GUIColor VARIABLE_SEPARATOR = new GUIColor(new Color(97, 97, 97))
+                    .inDark(new Color(186, 186, 186));
+        }
+    }
+    
 }

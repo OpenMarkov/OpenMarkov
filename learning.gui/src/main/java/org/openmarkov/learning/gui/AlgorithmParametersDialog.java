@@ -12,14 +12,26 @@ import org.openmarkov.core.developmentStaticAnalysis.requirements.Implementation
 import org.openmarkov.core.developmentStaticAnalysis.requirements.RequiredConstructor;
 import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithm;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithmType;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 /**
  * Base class for dialogs that configure learning algorithm parameters.
@@ -48,7 +60,9 @@ public abstract class AlgorithmParametersDialog extends JDialog {
 	 * Text field for the alpha parameter, created by {@link #initStandardLayout}.
 	 */
 	protected JTextField alphaText;
-
+    
+    protected JLabel alphaLabel;
+	
 	/**
 	 * The main panel containing the algorithm fields, created by {@link #initStandardLayout}.
 	 */
@@ -60,6 +74,10 @@ public abstract class AlgorithmParametersDialog extends JDialog {
 	 */
 	public AlgorithmParametersDialog(Frame parent, boolean modal) {
 		super(parent, modal);
+        alphaText = new JTextField(5);
+        alphaText.setText(alphaParameter);
+        alphaLabel = new JLabel(stringDatabase.getString("Learning.Alpha") + ":");
+        alphaLabel.setToolTipText(stringDatabase.getString("Learning.Alpha.Tooltip"));
 	}
 
 	/**
@@ -83,13 +101,8 @@ public abstract class AlgorithmParametersDialog extends JDialog {
 		mainPanel = new JPanel(new GridBagLayout());
 		JPanel panel = mainPanel;
 		panel.setBorder(BorderFactory.createTitledBorder(stringDatabase.getString(titleKey)));
-
-		alphaText = new JTextField(5);
-		alphaText.setText(alphaParameter);
-		JLabel alphaLabel = new JLabel(stringDatabase.getString("Learning.Alpha") + ":");
-		alphaLabel.setToolTipText(stringDatabase.getString("Learning.Alpha.Tooltip"));
-
-		JButton acceptButton = new JButton(stringDatabase.getString("Learning.Ok"));
+        
+        JButton acceptButton = new JButton(stringDatabase.getString("Learning.Ok"));
 		acceptButton.addActionListener(evt -> {
 			try {
 				applyAlpha();
@@ -119,12 +132,14 @@ public abstract class AlgorithmParametersDialog extends JDialog {
 			panel.add(fr.field(), fc);
 			row++;
 		}
-
-		lc.gridy = row;
-		fc.gridy = row;
-		panel.add(alphaLabel, lc);
-		panel.add(alphaText, fc);
-		row++;
+        
+        if (alphaLabel.getParent() == null && alphaText.getParent() == null) {
+            lc.gridy = row;
+            fc.gridy = row;
+            panel.add(alphaLabel, lc);
+            panel.add(alphaText, fc);
+            row++;
+        }
 
 		GridBagConstraints bc = new GridBagConstraints();
 		bc.gridy = row;
@@ -189,5 +204,6 @@ public abstract class AlgorithmParametersDialog extends JDialog {
 	public abstract String getDescription();
 
 	public abstract LearningAlgorithm getInstance(ProbNet probNet, CaseDatabase database);
-
+ 
+ 
 }

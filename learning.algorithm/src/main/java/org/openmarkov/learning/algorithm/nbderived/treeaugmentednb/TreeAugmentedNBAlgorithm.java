@@ -8,18 +8,18 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.MaxNumParents;
 import org.openmarkov.core.model.network.constraint.NoCycle;
-import org.openmarkov.learning.metric.Metric;
+import org.openmarkov.learning.algorithm.nbderived.common.DiscriminativeAlgorithm;
+import org.openmarkov.learning.algorithm.nbderived.common.MaximumWeightSpanningTree;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithmType;
 import org.openmarkov.learning.core.util.LearningEditProposal;
 import org.openmarkov.learning.core.util.ModelNetUse;
-import org.openmarkov.learning.algorithm.nbderived.common.DiscriminativeAlgorithm;
-import org.openmarkov.learning.algorithm.nbderived.common.MaximumWeightSpanningTree;
+import org.openmarkov.learning.metric.Metric;
 import org.openmarkov.learning.metric.cmi.mutualInformation.MutualInformationMetric;
 
 import java.util.List;
 
 
-@LearningAlgorithmType(name = "Tree augmented naive bayes", discriminative = true, supportsUnobservedVariables = false,
+@LearningAlgorithmType(name = "Tree augmented naive Bayes", discriminative = true, supportsUnobservedVariables = false,
 		metrics = "ConditionalMutualInformation")
 public class TreeAugmentedNBAlgorithm extends DiscriminativeAlgorithm {
 

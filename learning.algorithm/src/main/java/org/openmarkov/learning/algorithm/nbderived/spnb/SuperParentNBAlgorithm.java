@@ -10,13 +10,13 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.DistinctLinks;
 import org.openmarkov.core.model.network.constraint.MaxNumParents;
-import org.openmarkov.learning.metric.Metric;
+import org.openmarkov.learning.algorithm.nbderived.common.DiscriminativeAlgorithm;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithmType;
 import org.openmarkov.learning.core.util.LearningEditProposal;
 import org.openmarkov.learning.core.util.ModelNetUse;
 import org.openmarkov.learning.core.util.ScoreEditMotivation;
+import org.openmarkov.learning.metric.Metric;
 import org.openmarkov.learning.metric.cmi.accuracy.Accuracy;
-import org.openmarkov.learning.algorithm.nbderived.common.DiscriminativeAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,7 +28,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 
-@LearningAlgorithmType(name = "Superparent naive bayes", discriminative = true, supportsUnobservedVariables = false,
+@LearningAlgorithmType(name = "Superparent naive Bayes", discriminative = true, supportsUnobservedVariables = false,
 		metrics = "Accuracy")
 public class SuperParentNBAlgorithm extends DiscriminativeAlgorithm {
     

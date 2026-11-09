@@ -21,7 +21,11 @@ import org.openmarkov.learning.core.algorithm.LearningAlgorithm;
 import org.openmarkov.learning.gui.AlgorithmConfiguration;
 import org.openmarkov.learning.gui.AlgorithmParametersDialog;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 /**
  * Dialog showing the options and parameters of the PC algorithm.
@@ -53,32 +57,19 @@ public class PCParametersDialog extends AlgorithmParametersDialog {
         JLabel sigLabel = new JLabel(stringDatabase.getString("Learning.PC.SignificanceLevel") + ":");
         sigLabel.setToolTipText(stringDatabase.getString("Learning.PC.SignificanceLevel.Tooltip"));
         significanceLevelText = new JTextField(significanceLevel, 5);
-
-        useANMCheckBox = new JCheckBox("Use ANM causal direction test (phase 3)");
+        
+        useANMCheckBox = new JCheckBox("");
         useANMCheckBox.setSelected(true);
-        useANMCheckBox.setToolTipText("Orient remaining undirected links using the Additive Noise Model instead of an arbitrary acyclic order");
-
+        useANMCheckBox.setToolTipText("");
+        
+        JLabel anmLabel = new JLabel("Use ANM causal direction test (phase 3)");
+        anmLabel.setToolTipText("Orient remaining undirected links using the Additive Noise Model instead of an arbitrary acyclic order");
         initStandardLayout("Learning.PC.Title",
-                new FieldRow(testerLabel, independenceTesterComboBox),
-                new FieldRow(sigLabel, significanceLevelText));
-
-        // Add ANM checkbox below the main panel
-        GroupLayout layout = (GroupLayout) getContentPane().getLayout();
-        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup().addContainerGap()
-                        .addComponent(mainPanel, GroupLayout.PREFERRED_SIZE,
-                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(layout.createSequentialGroup().addContainerGap()
-                        .addComponent(useANMCheckBox)
-                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup().addContainerGap()
-                        .addComponent(mainPanel, GroupLayout.PREFERRED_SIZE,
-                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(useANMCheckBox)
-                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                           new FieldRow(testerLabel, independenceTesterComboBox),
+                           new FieldRow(sigLabel, significanceLevelText),
+                           new FieldRow(alphaLabel, alphaText),
+                           new FieldRow(anmLabel, useANMCheckBox)
+        );
         pack();
     }
 

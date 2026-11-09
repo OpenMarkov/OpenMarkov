@@ -95,8 +95,8 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         // add components with a BoxLayout
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
         this.add(mainPanel);
-        mainPanel.add(getResultsPanel());
         mainPanel.add(getMetaInformationPanel());
+        mainPanel.add(getResultsPanel());
         JButton exportButton = new JButton("Export to Excel file");
         JButton closeButton = DialogBase.generateGenericCancelButton();
         closeButton.setText("Close");
@@ -148,6 +148,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         informationPanel.setBorder(BorderFactory.createTitledBorder("Information"));
         // informationPanel components
         JTextPane textMetaInformation = new JTextPane();
+        textMetaInformation.setContentType("text/html");
         textMetaInformation.setText(switch (resultKind){
             case Measures -> measures.getMeasureInformation();
             case SplitSet -> splitSet.getTitle();

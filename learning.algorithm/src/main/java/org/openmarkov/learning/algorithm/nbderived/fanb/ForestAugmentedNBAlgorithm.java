@@ -8,20 +8,20 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.constraint.MaxNumParents;
 import org.openmarkov.core.model.network.constraint.NoCycle;
-import org.openmarkov.learning.metric.Metric;
+import org.openmarkov.learning.algorithm.nbderived.common.DiscriminativeAlgorithm;
+import org.openmarkov.learning.algorithm.nbderived.common.MaximumWeightSpanningTree;
 import org.openmarkov.learning.core.algorithm.LearningAlgorithmType;
 import org.openmarkov.learning.core.util.LearningEditMotivation;
 import org.openmarkov.learning.core.util.LearningEditProposal;
 import org.openmarkov.learning.core.util.ModelNetUse;
 import org.openmarkov.learning.core.util.ScoreEditMotivation;
-import org.openmarkov.learning.algorithm.nbderived.common.DiscriminativeAlgorithm;
-import org.openmarkov.learning.algorithm.nbderived.common.MaximumWeightSpanningTree;
+import org.openmarkov.learning.metric.Metric;
 import org.openmarkov.learning.metric.cmi.mutualInformation.MutualInformationMetric;
 
 import java.util.List;
 
 
-@LearningAlgorithmType(name = "Forest augmented naive bayes", discriminative = true, supportsUnobservedVariables = false,
+@LearningAlgorithmType(name = "Forest augmented naive Bayes", discriminative = true, supportsUnobservedVariables = false,
 		metrics = {"ConditionalMutualInformation", "MutualInformation"})
 public class ForestAugmentedNBAlgorithm extends DiscriminativeAlgorithm {
 
