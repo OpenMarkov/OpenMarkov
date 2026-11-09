@@ -188,8 +188,11 @@ public abstract sealed class VisualElement permits InnerBox, VisualArrow, Visual
 		double x = g.getTransform().getTranslateX();
 		double y = g.getTransform().getTranslateY();
 		if (this instanceof VisualState visualState) {
-			x /= visualState.getVisualNode().getVisualNetwork().networkEditorPanel().getZoom();
-			y /= visualState.getVisualNode().getVisualNetwork().networkEditorPanel().getZoom();
+			NetworkEditorPanel networkEditorPanel = visualState.getVisualNode().getVisualNetwork().networkEditorPanel();
+			if (networkEditorPanel != null) {
+				x /= networkEditorPanel.getZoom();
+				y /= networkEditorPanel.getZoom();
+			}
 		}
 		return VisualElement.boundsAddingXandY(bounds2D, x, y);
     }
