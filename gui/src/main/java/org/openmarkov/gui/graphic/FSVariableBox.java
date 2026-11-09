@@ -12,7 +12,8 @@ import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.gui.configuration.GUIColors;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 
@@ -141,7 +142,7 @@ public non-sealed class FSVariableBox extends InnerBox {
 	 */
 	@Override public void paint(Graphics2D g) {
 		Shape shape = getShape(g);
-		this.drawnBounds=VisualElement.boundsWithTranslate(shape.getBounds2D(), g);
+		this.drawnBounds = this.boundsWithTranslate(shape.getBounds2D(), g);
         g.setPaint(GUIColors.Inference.BOX_BACKGROUND.getColor());
 		g.fill(shape);
 		g.setStroke(NORMAL_STROKE);

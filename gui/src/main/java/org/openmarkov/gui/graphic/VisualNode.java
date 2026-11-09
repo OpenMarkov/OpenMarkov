@@ -9,7 +9,6 @@ package org.openmarkov.gui.graphic;
 
 import io.github.jorgericovivas.rust_essentials.tuples.Tuples;
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.gui.configuration.GUIFonts;
 import org.openmarkov.core.localize.ClassLocalizable;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -17,10 +16,16 @@ import org.openmarkov.core.model.network.Point2D;
 import org.openmarkov.core.model.network.PurposeType;
 import org.openmarkov.gui.configuration.GUIColor;
 import org.openmarkov.gui.configuration.GUIColors;
+import org.openmarkov.gui.configuration.GUIFonts;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.BasicStroke;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
@@ -412,7 +417,7 @@ public final class VisualNode extends VisualElement implements ClassLocalizable 
     @Override public void paint(Graphics2D g) {
         NodeType nodeType = this.node.getNodeType();
         Shape shape = this.getShape(g);
-        this.drawnBounds=VisualElement.boundsWithTranslate(shape.getBounds2D(), g);
+        this.drawnBounds = this.boundsWithTranslate(shape.getBounds2D(), g);
         switch (nodeType) {
             case CHANCE, EVENT -> {
                 String text = this.getNodeName();

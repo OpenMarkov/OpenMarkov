@@ -7,12 +7,14 @@
 
 package org.openmarkov.gui.graphic;
 
-import org.openmarkov.gui.configuration.GUIFonts;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.gui.configuration.GUIColors;
+import org.openmarkov.gui.configuration.GUIFonts;
 
-import java.awt.*;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -318,7 +320,9 @@ public final class VisualState extends VisualElement {
                     InnerBox.STATES_VERTICAL_SEPARATION * getStatePosition()
             ) - InnerBox.BAR_HEIGHT - 1;
         }
-        this.drawnBounds= VisualElement.boundsAddingXandY(VisualElement.boundsWithTranslate(getShape(g).getBounds2D(), g), 0, yFirstBar);
+        Shape baseShape = getShape(g);
+        Rectangle2D translatedShape = this.boundsWithTranslate(baseShape.getBounds2D(), g);
+        this.drawnBounds = VisualElement.boundsAddingXandY(translatedShape, 0, yFirstBar);
         
         g.setColor(GUIColors.Inference.BOX_TEXT.getColor());
         g.setFont(STATES_FONT);

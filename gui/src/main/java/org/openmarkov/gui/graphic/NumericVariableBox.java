@@ -7,11 +7,13 @@
 
 package org.openmarkov.gui.graphic;
 
-import org.openmarkov.gui.configuration.GUIFonts;
 import org.openmarkov.core.model.network.PartitionedInterval;
 import org.openmarkov.gui.configuration.GUIColors;
+import org.openmarkov.gui.configuration.GUIFonts;
 
-import java.awt.*;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
@@ -208,7 +210,7 @@ public non-sealed class NumericVariableBox extends InnerBox {
      */
     @Override public void paint(Graphics2D g) {
         Shape shape = getShape(g);
-        this.drawnBounds=VisualElement.boundsWithTranslate(shape.getBounds2D(), g);
+        this.drawnBounds = this.boundsWithTranslate(shape.getBounds2D(), g);
         g.setPaint(GUIColors.Inference.BOX_BACKGROUND.getColor());
         g.fill(shape);
         g.setStroke(NORMAL_STROKE);

@@ -173,6 +173,10 @@ public class VisualNetwork implements PNEditListener {
         
     }
     
+    public NetworkEditorPanel networkEditorPanel() {
+        return networkEditorPanel;
+    }
+    
     @FunctionalInterface
     interface NodeIsToKeep {
         boolean nodeIsToKeep(VisualNode visualNode, List<Node> currentNodesToAdd);
@@ -363,19 +367,15 @@ public class VisualNetwork implements PNEditListener {
      * else, returns null.
      */
     public VisualNode whatNodeInPosition(Point2D.Double position, Graphics2D g) {
-        
         VisualNode nodeFound = null;
         int index = 0, length = this.visualNodes.size();
-        
         while ((nodeFound == null) && (index < length)) {
             VisualNode node = this.visualNodes.get(index++);
             if (node.pointIsInsideShape(position, this.networkEditorPanel)) {
                 nodeFound = node;
             }
         }
-        
         return nodeFound;
-        
     }
     
     /**

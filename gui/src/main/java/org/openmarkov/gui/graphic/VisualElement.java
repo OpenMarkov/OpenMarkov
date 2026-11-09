@@ -112,13 +112,14 @@ public abstract sealed class VisualElement permits InnerBox, VisualArrow, Visual
 		double x = point.x;
 		double y = point.y;
 		//Nodes are offset
-		if (this instanceof VisualNode) {
+		if (this instanceof VisualNode || this instanceof VisualState) {
 			y -= networkEditorPanel.getScrollPanel().getVerticalScrollBar().getValue();
 			x -= networkEditorPanel.getScrollPanel().getHorizontalScrollBar().getValue();
 		}
-		return shape != null && shape.contains(new java.awt.geom.Point2D.Double(x, y));
+		boolean res = shape != null && shape.contains(new java.awt.geom.Point2D.Double(x, y));
+		return res;
     }
-
+	
 	/**
      * Adjusts the foreground that should be shown in a limited space.
      * Used when foreground's length is greater than the assigned space
@@ -182,9 +183,15 @@ public abstract sealed class VisualElement permits InnerBox, VisualArrow, Visual
 	}
 	
 	protected Rectangle2D drawnBounds;
-    
-    protected static Rectangle2D boundsWithTranslate(Rectangle2D bounds2D, Graphics2D g) {
-        return VisualElement.boundsAddingXandY(bounds2D, g.getTransform().getTranslateX(), g.getTransform().getTranslateY());
+	
+	protected Rectangle2D boundsWithTranslate(Rectangle2D bounds2D, Graphics2D g) {
+		double x = g.getTransform().getTranslateX();
+		double y = g.getTransform().getTranslateY();
+		if (this instanceof VisualState visualState) {
+			x /= visualState.getVisualNode().getVisualNetwork().networkEditorPanel().getZoom();
+			y /= visualState.getVisualNode().getVisualNetwork().networkEditorPanel().getZoom();
+		}
+		return VisualElement.boundsAddingXandY(bounds2D, x, y);
     }
 	
 	protected static Rectangle2D boundsAddingXandY(Rectangle2D bounds2D, double plusX,  double plusY) {
