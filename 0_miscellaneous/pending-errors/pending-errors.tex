@@ -256,6 +256,9 @@ El \hyperref[err:361]{error~361} se encontró al llevar a la versión en C++ y Q
 \paragraph{Errores añadidos el 6 de noviembre}
 Los \hyperref[err:362]{errores~362} a \hyperref[err:364]{364} y la \hyperref[nota:200]{nota~200} salieron de una revisión del diseño de los potenciales y de las clases que los rodean. Se han comprobado con el código de \texttt{9739e8f}, ejecutándolos sin ventana con las mismas ediciones, lectores y escritores que usa la ventana, y la fila \emph{Comprobado} de cada ficha dice cómo. La misma revisión volvió a dar dos cosas que ya estaban: la \hyperref[nota:141]{nota~141}, un OR ruidoso guardado que vuelve como MAX general, y la \hyperref[nota:192]{nota~192}, el análisis de sensibilidad probabilístico de una red de sucesos, que escribiría en la red abierta. Los \hyperref[err:365]{errores~365} a \hyperref[err:368]{368} y la \hyperref[nota:201]{nota~201} se encontraron al llevar a la versión en C++ y Qt los arreglos del 3 de noviembre, \texttt{88bd46f}, \texttt{e2857b5} y \texttt{9739e8f}, todos de lo que trajeron esos commits. Se han comprobado con el código de \texttt{9739e8f}, y la fila \emph{Comprobado} de cada ficha dice cómo: el \hyperref[err:365]{365}, con el programa entero en una pantalla anidada; el \hyperref[err:367]{367}, pasando la prueba en Linux; el \hyperref[err:368]{368} y la nota, ejecutándolos sin ventana; y el \hyperref[err:366]{366}, leyendo el código. El \hyperref[err:365]{365} es el \hyperref[err:313]{313} otra vez, y pide una decisión. No se ha añadido, por la decisión de equipo sobre los textos, que las tres ayudas nuevas de la pestaña de una red estén escritas en inglés en \texttt{Main\allowbreak{}Panel}. Los \hyperref[err:369]{errores~369} a \hyperref[err:372]{372} se encontraron antes, el 28 de octubre, al llevar a la versión en C++ y Qt los arreglos del 25 al 28 de octubre: los tres primeros, de lo que trajo \texttt{a5f5a687}, y el último, al medir \texttt{9dd78b9}. Se han vuelto a comprobar con el código de \texttt{9739e8f}, y la fila \emph{Comprobado} de cada ficha dice cómo: el \hyperref[err:369]{369}, con el programa entero en una pantalla anidada; el \hyperref[err:370]{370}, contra un servidor local que redirige; el \hyperref[err:372]{372}, sin ventana; y el \hyperref[err:371]{371}, leyendo el código. Del primero, \texttt{88bd46f} ya arregló lo principal: que no se pudiera arrastrar un nodo sin señalarlo antes.
 
+\paragraph{Errores añadidos el 11 de noviembre}
+Los \hyperref[err:373]{errores~373} y \hyperref[err:374]{374} se encontraron al llevar a la versión en C++ y Qt los arreglos del 9 de noviembre, de lo que trajo \texttt{4a2cc85} (incidencia 693). El \hyperref[err:375]{375} salió en esa versión al pesar los enlaces de los modelos de coste-efectividad. Se han comprobado con el código de \texttt{8e7d88d}, y la fila \emph{Comprobado} de cada ficha dice cómo. No se ha añadido, por la decisión de equipo sobre los textos, que las frases nuevas de «Split dataset» estén escritas en inglés en el código.
+
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
 
@@ -309,9 +312,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{371 errores}; 227 de ellos son defectos nuevos: 98 encontrados al
-comprobar o corregir los demás, 112 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes y 3 al revisar el diseño de los potenciales. \textbf{51} necesitan antes una decisión del equipo. Por esfuerzo estimado: 330 pequeños, 41 medios y 0 grandes.
-De los 371, 356 están ya corregidos y 2 están cerrados sin arreglo.
+La lista tiene \textbf{374 errores}; 230 de ellos son defectos nuevos: 98 encontrados al
+comprobar o corregir los demás, 115 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes y 3 al revisar el diseño de los potenciales. \textbf{52} necesitan antes una decisión del equipo. Por esfuerzo estimado: 333 pequeños, 41 medios y 0 grandes.
+De los 374, 356 están ya corregidos y 2 están cerrados sin arreglo.
 El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -327,14 +330,14 @@ El apéndice recoge además 201 notas con lo que se comprobó y no entra en la l
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 27 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 24 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 15 \\
-\ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 29 \\
+\ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 30 \\
 \ref{sec:des}. Simulación de sucesos discretos & 23 \\
 \ref{sec:ficheros}. Abrir y guardar redes & 24 \\
 \ref{sec:casos}. Bases de casos & 17 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 38 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 50 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 26 \\
-\ref{sec:textos}. Textos y títulos que se ven mal & 19 \\
+\ref{sec:textos}. Textos y títulos que se ven mal & 21 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
 \ref{sec:amua}. Exportación a Amua & 7 \\
 \bottomrule
@@ -525,6 +528,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:309]{309} & \textcolor{corregidoverde}{\textbf{Corregido}} · El análisis de sensibilidad determinista toma el número de una Dirichlet por una probabilidad & \texttt{core} & S \hfill No\\
 \hyperref[err:317]{317} & \textcolor{corregidoverde}{\textbf{Corregido}} · Con la razón o el porcentaje de la probabilidad, un parámetro de valor de referencia 0 dejaría la araña sin eje & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill Sí\\
 \hyperref[err:328]{328} & \textcolor{corregidoverde}{\textbf{Corregido}} · El mapa de dos parámetros, en una red sin ninguno con nombre, pide «al menos 1» & \texttt{sensitivity\allowbreak{}Analysis} & S \hfill No\\
+\hyperref[err:375]{375} & Un modelo de coste-efectividad evaluado con un solo criterio suma el coste en vez de restarlo & \texttt{gui}, \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:des}.\ Simulación de sucesos discretos}}\\
 \hyperref[err:95]{95} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una utilidad acumulativa vale cero hasta el primer suceso que la alcanza & \texttt{gui}, \texttt{inference.\allowbreak{}des} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:96]{96} & \textcolor{corregidoverde}{\textbf{Corregido}} · La simulación se cae si un nodo espera a un padre de un suceso no ocurrido & \texttt{gui} & S \hfill No\\
@@ -729,6 +733,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:346]{346} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un cambio que rompe dos restricciones distintas se titula «Multiple constraints violateds» & \texttt{core} & S \hfill No\\
 \hyperref[err:360]{360} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un plan escribe los estados de una rama en el orden de un HashSet, no en el de la variable & \texttt{core} & S \hfill No\\
 \hyperref[err:372]{372} & Las negativas de muchas restricciones nombran cada nodo por su descripción entera & \texttt{core} & S \hfill No\\
+\hyperref[err:373]{373} & Desde 4a2cc85, lo que dicen de sí mismas una validación cruzada y la evaluación de una red sale en un solo renglón & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
+\hyperref[err:374]{374} & La frase nueva de «Split dataset» escribe sus porcentajes con todas las cifras de un double y dice «remanining» & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:rendimiento}.\ Rendimiento}}\\
 \hyperref[err:189]{189} & \textcolor{corregidoverde}{\textbf{Corregido}} · Entrar en modo inferencia con una red grande congela la ventana & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:190]{190} & \textcolor{corregidoverde}{\textbf{Corregido}} · Cada resultado de una operación sobre tablas reserva una tabla que tira & \texttt{core} & S \hfill No\\
@@ -10526,6 +10532,37 @@ De paso, la frase (\texttt{sensitivityanalysis\_\allowbreak{}class\_\allowbreak{
 Una sola comprobación con el número que pide el análisis elegido, \texttt{Few\allowbreak{}Uncertain\allowbreak{}Parameters(\allowbreak{}is\allowbreak{}Biaxial\ ?\ 2\ :\ 1,\allowbreak{}\ …)}; y un texto que valga para cualquier número, por ejemplo «The network has \{actual\} uncertain parameters, but this analysis needs at least \{required\}.».
 
 Prueba: en \texttt{BN-asia.\allowbreak{}pgmx}, el mapa se niega pidiendo al menos 2, y el tornado y la gráfica, al menos 1.
+
+\setcounter{subsection}{374}
+\subsection[Un modelo de coste-efectividad evaluado con un solo criterio suma el coste en vez de restarlo]{Un modelo de coste-efectividad evaluado con un solo criterio suma el coste en vez de restarlo: los juegos de coste-efectividad de «Standard criteria» dejan la escala del coste en 1, y la evaluación da por mejor la opción más cara}\label{err:375}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui, core
+\fichakey{Paquete}org.openmarkov.gui.dialog.network; org.openmarkov.core.model.network
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/dialog/network/StandardCriteriaDialog.java:160-234} \newline \path{core/src/main/java/org/openmarkov/core/model/network/Criterion.java:77} \newline \path{core/src/main/java/org/openmarkov/core/model/network/UtilityOperations.java:44-65} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:97-104}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{8e7d88d} (11-11-2026): la evaluación de \texttt{ID-CEA-minimal.\allowbreak{}pgmx} con las escalas que guarda, con el generador \texttt{Task\allowbreak{}Answers.\allowbreak{}java} de la versión en C++ y Qt; y la misma red con el tratamiento a 20\,000
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}Sí: si el arreglo va solo en el diálogo o en la conversión a un solo criterio, y qué hacer con las redes guardadas con el coste a 1
+\fichakey{Relacionados}\hyperref[err:174]{error~174}
+\end{ficha}
+\paragraph{Qué pasa}
+Para evaluar un modelo con varios criterios con uno solo, \texttt{Utility\allowbreak{}Operations.\allowbreak{}transform\allowbreak{}To\allowbreak{}Unicriterion} multiplica cada utilidad por la escala de su criterio, y nada más (líneas 44-65). Un \texttt{Criterion} empieza con la escala en 1 (línea 77). \texttt{Standard\allowbreak{}Criteria\allowbreak{}Dialog} la pone a $-1$ para el coste en los cuatro juegos de coste-beneficio (líneas 160-195), pero no en los tres de coste-efectividad ---euros, libras o dólares por AVAC---, que la dejan en 1 (líneas 196-234). Al pasar a modo de inferencia una red con varios criterios, \texttt{Inference\allowbreak{}Handler} abre las opciones de inferencia con la parte de un solo criterio (líneas 97-104), que propone las escalas de la red. Con el coste a 1, la utilidad es el coste \emph{más} la efectividad por su escala, y gastar sale a cuenta.
+
+En \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}id/\allowbreak{}ID-CEA-minimal.\allowbreak{}pgmx} (coste 1, efectividad 30\,000~€/AVAC), tratar cuesta 14\,000 y da 1,3 AVAC en vez de 0,8. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+                              no tratar  tratar
+ID-CEA-minimal.pgmx              24000   53000 = 14000 + 39000   elige tratar
+  en beneficio neto a 30 000     24000   25000 = 39000 - 14000
+con el tratamiento a 20 000      24000   59000 = 20000 + 39000   elige tratar
+  en beneficio neto a 30 000     24000   19000                   mejor no tratar
+\end{Verbatim}
+
+En la primera la decisión no cambia; en la segunda, sí. En \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks}, de las redes con dos criterios o más en las que uno hace de coste, 15 llevan su escala a $-1$ (las \texttt{DAN-CE-…}, \texttt{ID-CEA-test-2therapies}, \texttt{ID-mediastinet-ce}…) y 14 a 1 (\texttt{ID-CEA-minimal}, \texttt{DAN-mediastinet-ce}, \texttt{MID-Chancellor}, \texttt{MID-HPV}…).
+\paragraph{Cómo arreglarlo}
+Lo mínimo: que los juegos de coste-efectividad de \texttt{Standard\allowbreak{}Criteria\allowbreak{}Dialog} pongan el coste a $-1$, como los de coste-beneficio. Mejor: que un criterio que hace de coste (\texttt{CECriterion.\allowbreak{}Cost}) entre con signo menos al llevar los criterios a uno solo, sea cual sea su escala, y que el diálogo lo diga. En los dos casos hay que revisar las redes de ejemplo que llevan el coste a 1.
+
+Prueba: \texttt{ID-CEA-minimal.\allowbreak{}pgmx} evaluada con un solo criterio da a tratar 25\,000 (39\,000 menos 14\,000), y con el tratamiento a 20\,000 elige no tratar.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Simulación de sucesos discretos}\label{sec:des}
@@ -21068,6 +21105,53 @@ Usar \texttt{\{node.\allowbreak{}getName\}}, \texttt{\{variable.\allowbreak{}get
 
 Prueba: hacer de C una decisión en una red bayesiana se niega con «Node C must be a chance node.» o una frase parecida que lo nombre.
 
+\setcounter{subsection}{372}
+\subsection[Desde 4a2cc85, lo que dicen de sí mismas una validación cruzada y la evaluación de una red sale en un solo renglón]{Desde \texttt{4a2cc85}, el recuadro «Information» de los resultados de una validación cruzada y de la evaluación de una red junta sus renglones en uno solo, porque lee HTML y su texto es llano}\label{err:373}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.dialog; org.openmarkov.bnEvaluation.measures
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/ResultsDialog.java:145-155} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/measures/MeasuresSet.java:145-159}
+\fichakey{Comprobado}Leyendo el código de \texttt{8e7d88d} (11-11-2026) y ejecutándolo sin ventana: un \texttt{JText\allowbreak{}Pane} que lee HTML, como el de \texttt{Results\allowbreak{}Dialog}, con un texto de tres renglones como los de \texttt{get\allowbreak{}Measure\allowbreak{}Information}
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:146]{error~146}, \hyperref[err:374]{error~374}
+\end{ficha}
+\paragraph{Qué pasa}
+El commit \texttt{4a2cc85} (9-11-2026, Jorge Rico, tarea 5 de la incidencia 693) pone el panel de texto del recuadro «Information» a leer HTML (\texttt{set\allowbreak{}Content\allowbreak{}Type(\allowbreak{}"text/html")}, línea 151), para que la frase nueva de «Split dataset» salga con su lista. Pero el panel es el mismo para las dos clases de resultados, y el texto de la otra ---el de \texttt{Measures\allowbreak{}Set.\allowbreak{}get\allowbreak{}Measure\allowbreak{}Information}, que enseñan «Cross validation» y «Bayesian network evaluation»--- es texto llano, con los renglones separados por saltos de línea (líneas 146-157). En HTML un salto de línea es un blanco más: un \texttt{JText\allowbreak{}Pane} así al que se le dan «Evaluation of the network X», «Confusion matrix are calculated with 10 cases.» y «The scores used 10 cases.», cada uno en su renglón, guarda «Evaluation of the network X Confusion matrix are calculated with 10 cases. The scores used 10 cases.», sin ningún salto. Además, un \texttt{<} o un \texttt{\&} en el nombre de la red se leería como marca.
+\paragraph{Cómo arreglarlo}
+Leer HTML solo con los resultados de una partición (\texttt{Result\allowbreak{}Kind.\allowbreak{}Split\allowbreak{}Set}); o escribir el texto de las medidas en HTML, con \texttt{<br>} entre renglones y escapando lo que lleve \texttt{<} o \texttt{\&}.
+
+Prueba: el texto del recuadro de una evaluación tiene tantos renglones como \texttt{get\allowbreak{}Measure\allowbreak{}Information}.
+
+\setcounter{subsection}{373}
+\subsection[La frase nueva de «Split dataset» escribe sus porcentajes con todas las cifras de un double y dice «remanining»]{La frase nueva de «Split dataset» escribe sus porcentajes con todas las cifras de un \texttt{double} ---«3 (42.857142857142854\char37{}) randomly selected cases for testing.»--- y dice «remanining» por «remaining»}\label{err:374}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.dialog
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/SplitDatasetDialog.java:281-298}
+\fichakey{Comprobado}Leyendo el código de \texttt{8e7d88d} (11-11-2026) y evaluando su misma expresión en la máquina virtual de Java
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:145]{error~145}, \hyperref[err:373]{error~373}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{4a2cc85} (9-11-2026, tarea 5 de la incidencia 693), \texttt{Split\allowbreak{}Dataset\allowbreak{}Dialog.\allowbreak{}do\allowbreak{}Ok\allowbreak{}Click\allowbreak{}Before\allowbreak{}Hide} une a su frase dos \texttt{double} tal cual, \texttt{test\allowbreak{}Fraction} y \texttt{training\allowbreak{}Fraction} (líneas 281-282 y 290-297), y Java los escribe con todas sus cifras. La frase de antes los escribía con dos decimales (\texttt{String.\allowbreak{}format(\allowbreak{}"\char37{}3.2f",\allowbreak{}\ …)}). Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+7 casos, 3 al azar:  3 (42.857142857142854%) randomly selected cases for testing.
+                     4 (57.142857142857146%) remanining cases for training.
+3 casos, el último:  The last 1 (33.333333333333336%) cases for testing.
+                     2 (66.66666666666666%) cases for training.
+\end{Verbatim}
+
+Y la frase de los casos elegidos al azar dice «remanining» (línea 296).
+\paragraph{Cómo arreglarlo}
+Escribir los dos números con \texttt{String.\allowbreak{}format(\allowbreak{}"\char37{}.2f",\allowbreak{}\ …)}, como antes, y «remaining».
+
+Prueba: partir 7 casos con 3 al azar da «3 (42.86\char37{}) randomly selected cases for testing.» y «4 (57.14\char37{}) remaining cases for training.».
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Rendimiento}\label{sec:rendimiento}
 
@@ -22091,6 +22175,9 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:370]{Error 370} & registro de fallos de la versión en C++/Qt, nº 399, al llevar a ella los arreglos del 25 al 28 de octubre \\
 \hyperref[err:371]{Error 371} & registro de fallos de la versión en C++/Qt, nº 400, al llevar a ella los arreglos del 25 al 28 de octubre \\
 \hyperref[err:372]{Error 372} & registro de fallos de la versión en C++/Qt, nº 401, al llevar a ella los arreglos del 25 al 28 de octubre \\
+\hyperref[err:373]{Error 373} & registro de fallos de la versión en C++/Qt, nº 412, al llevar a ella los arreglos del 9 de noviembre \\
+\hyperref[err:374]{Error 374} & registro de fallos de la versión en C++/Qt, nº 413, al llevar a ella los arreglos del 9 de noviembre \\
+\hyperref[err:375]{Error 375} & registro de fallos de la versión en C++/Qt, nº 414, al pesar en ella los enlaces de los modelos de coste-efectividad \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
