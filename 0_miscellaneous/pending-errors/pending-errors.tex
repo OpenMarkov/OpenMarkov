@@ -259,6 +259,9 @@ Los \hyperref[err:362]{errores~362} a \hyperref[err:364]{364} y la \hyperref[not
 \paragraph{Errores añadidos el 11 de noviembre}
 Los \hyperref[err:373]{errores~373} y \hyperref[err:374]{374} se encontraron al llevar a la versión en C++ y Qt los arreglos del 9 de noviembre, de lo que trajo \texttt{4a2cc85} (incidencia 693). El \hyperref[err:375]{375} salió en esa versión al pesar los enlaces de los modelos de coste-efectividad. Se han comprobado con el código de \texttt{8e7d88d}, y la fila \emph{Comprobado} de cada ficha dice cómo. No se ha añadido, por la decisión de equipo sobre los textos, que las frases nuevas de «Split dataset» estén escritas en inglés en el código.
 
+\paragraph{Errores añadidos el 12 de noviembre}
+El \hyperref[err:376]{error~376} salió en la versión en C++ y Qt al comprobar que el lector de \texttt{.pgmx} conserva las propiedades de un nodo que no conoce, que es donde esa versión guarda el orden de los estados y el estado normal que deja declarar el coloreado de enlaces. Se ha comprobado leyendo el código de \texttt{8e7d88d}.
+
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
 
@@ -312,9 +315,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{374 errores}; 230 de ellos son defectos nuevos: 98 encontrados al
-comprobar o corregir los demás, 115 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes y 3 al revisar el diseño de los potenciales. \textbf{52} necesitan antes una decisión del equipo. Por esfuerzo estimado: 333 pequeños, 41 medios y 0 grandes.
-De los 374, 356 están ya corregidos y 2 están cerrados sin arreglo.
+La lista tiene \textbf{375 errores}; 231 de ellos son defectos nuevos: 98 encontrados al
+comprobar o corregir los demás, 116 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes y 3 al revisar el diseño de los potenciales. \textbf{52} necesitan antes una decisión del equipo. Por esfuerzo estimado: 334 pequeños, 41 medios y 0 grandes.
+De los 375, 356 están ya corregidos y 2 están cerrados sin arreglo.
 El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -332,7 +335,7 @@ El apéndice recoge además 201 notas con lo que se comprobó y no entra en la l
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 15 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 30 \\
 \ref{sec:des}. Simulación de sucesos discretos & 23 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 24 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 25 \\
 \ref{sec:casos}. Bases de casos & 17 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 38 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 50 \\
@@ -578,6 +581,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:366]{366} & Desde 9739e8f, cancelar la ventana de «Open» acaba en un NullPointerException & \texttt{gui} & S \hfill No\\
 \hyperref[err:367]{367} & VersionValidatorTest, recuperada en 9739e8f, falla fuera de Windows & \texttt{io} & S \hfill No\\
 \hyperref[err:370]{370} & Desde a5f5a687, una red de una dirección que redirige a otra no se abre & \texttt{gui}, \texttt{io} & S \hfill No\\
+\hyperref[err:376]{376} & El lector de .pgmx no quita la propiedad «Title», que él mismo llama obsoleta & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -13312,6 +13316,27 @@ Seguir las redirecciones a mano, como hacía \texttt{get\allowbreak{}Final\allow
 
 Prueba: con un servidor que contesta «302» desde una dirección sin extensión hacia un .pgmx, y «301» de \texttt{http} a \texttt{https}, las dos se abren, con el nombre del fichero final.
 
+\setcounter{subsection}{375}
+\subsection[El lector de .pgmx no quita la propiedad «Title», que él mismo llama obsoleta]{El lector de \texttt{.pgmx} quiere quitar la propiedad obsoleta «Title» de cada variable, y una «Relevance» que valga lo de omisión, pero las busca con la constante del enumerado en un mapa de cadenas y no las encuentra nunca: la «Title» se queda en el nodo y se escribe de vuelta al guardar}\label{err:376}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:844-852,861-869,884-886} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/strings/XMLTags.java:87}
+\fichakey{Comprobado}Leyendo el código de \texttt{8e7d88d} (12-11-2026), y contando con \texttt{git grep} las redes del repositorio que llevan la propiedad
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}Ninguno
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{PGMX\allowbreak{}Reader\_0\_2.\allowbreak{}load\allowbreak{}Variable\allowbreak{}Advanced\allowbreak{}Information} lee las propiedades de una variable en un \texttt{Linked\allowbreak{}Hash\allowbreak{}Map<\allowbreak{}String,\allowbreak{}String>} y, bajo el comentario «Remove obsolete properties», quiere quitar dos (líneas 844-852): la «Title», que \texttt{XMLTags} marca como obsoleta («Included for compatibility with older networks», línea 87), y una «Relevance» que valga lo de omisión. Pero las busca con \texttt{properties.\allowbreak{}get(\allowbreak{}XMLTags.\allowbreak{}TITLE)} y \texttt{properties.\allowbreak{}get(\allowbreak{}XMLTags.\allowbreak{}RELEVANCE)}: la clave es la constante del enumerado y no su texto, y un mapa de cadenas no la encuentra nunca. Unas líneas más abajo, para «Purpose» y «Relevance», sí escribe \texttt{.toString()} (líneas 861-869), y esas funcionan.
+
+Lo de la relevancia no se nota: la de omisión, que debería quitarse sin más, se lee después como relevancia y da lo mismo. La «Title» sí: se queda entre las propiedades del nodo (línea 885), sale en la pestaña «Other properties» de sus propiedades y \texttt{PGMX\allowbreak{}Writer\_0\_2} la escribe de vuelta al guardar, para siempre. La llevan 82 redes del repositorio, entre ellas \texttt{BN-\allowbreak{}asia.\allowbreak{}pgmx} y \texttt{ID-\allowbreak{}decide-\allowbreak{}test.\allowbreak{}pgmx}.
+\paragraph{Cómo arreglarlo}
+Escribir \texttt{XMLTags.\allowbreak{}TITLE.\allowbreak{}toString()} y \texttt{XMLTags.\allowbreak{}RELEVANCE.\allowbreak{}toString()} en esas cuatro llamadas, como en las de «Purpose». Las redes que ya llevan la propiedad la pierden la próxima vez que se guarden, que es lo que el comentario pretendía.
+
+Prueba: abrir \texttt{BN-\allowbreak{}asia.\allowbreak{}pgmx} y comprobar que ningún nodo lleva la propiedad «Title»; guardarla y comprobar que el fichero tampoco.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
 
@@ -22178,6 +22203,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:373]{Error 373} & registro de fallos de la versión en C++/Qt, nº 412, al llevar a ella los arreglos del 9 de noviembre \\
 \hyperref[err:374]{Error 374} & registro de fallos de la versión en C++/Qt, nº 413, al llevar a ella los arreglos del 9 de noviembre \\
 \hyperref[err:375]{Error 375} & registro de fallos de la versión en C++/Qt, nº 414, al pesar en ella los enlaces de los modelos de coste-efectividad \\
+\hyperref[err:376]{Error 376} & registro de fallos de la versión en C++/Qt, nº 415, al comprobar que el lector conserva las propiedades de un nodo que no conoce \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
