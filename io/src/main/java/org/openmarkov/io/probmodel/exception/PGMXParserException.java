@@ -382,4 +382,26 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
             super(element);
         }
     }
+
+    /** A variable whose role is not the name of a node type, such as «chance» or «svSum». */
+    public static final class UnknownNodeRole extends PGMXParserException {
+        public UnknownNodeRole(String role, String nodeName, Element element) {
+            super(element);
+            this.role = role;
+            this.nodeName = nodeName;
+        }
+
+        public final String role;
+        public final String nodeName;
+    }
+
+    /** A variable without the role that gives the type of its node. */
+    public static final class NodeWithoutRole extends PGMXParserException {
+        public NodeWithoutRole(String nodeName, Element element) {
+            super(element);
+            this.nodeName = nodeName;
+        }
+
+        public final String nodeName;
+    }
 }

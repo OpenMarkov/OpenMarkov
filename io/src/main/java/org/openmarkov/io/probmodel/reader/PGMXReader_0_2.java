@@ -695,7 +695,7 @@ public class PGMXReader_0_2 {
      * @param root    {@code Element}
      * @param probNet {@code ProbNet}
      */
-    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange {
+    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole {
         Element xmlVariablesRoot = getXMLVariables(root);
         if (xmlVariablesRoot == null) {
             return;
@@ -709,14 +709,16 @@ public class PGMXReader_0_2 {
     }
     
     protected void loadVariables(List<Element> xmlVariables, ProbNet probNet)
-            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange {
+            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange,
+                   PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole {
         for (Element variableElement : xmlVariables) {
             loadVariable(variableElement, probNet);
         }
     }
     
     protected void loadVariable(Element variableElement, ProbNet probNet)
-            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange {
+            throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange,
+                   PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole {
         VariableType variableType = getXMLVariableType(variableElement);
         NodeType nodeType = getXMLNodeType(variableElement);
         String variableName = getVariableName(variableElement);
@@ -1028,22 +1030,19 @@ public class PGMXReader_0_2 {
                 .orElse(null);
     }
     
-    /**
-     * @param variableElement . {@code Element}
-     *
-     * @return node type. {@code NodeType}
-     */
-    protected NodeType getXMLNodeType(Element variableElement) {
-        NodeType nodeType = null;
-        // int i=0;
-        String type = variableElement.getAttributeValue(XMLAttributes.ROLE.toString());
-        for (NodeType iNodeType : NodeType.values()) {
-            if (type.contentEquals(iNodeType.toString())) {
-                nodeType = iNodeType;
-                break;
+    /** @return the node type written in the role of {@code variableElement}, which must match it exactly */
+    protected NodeType getXMLNodeType(Element variableElement)
+            throws PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole {
+        String role = variableElement.getAttributeValue(XMLAttributes.ROLE.toString());
+        if (role == null) {
+            throw new PGMXParserException.NodeWithoutRole(nodeNameOf(variableElement), variableElement);
+        }
+        for (NodeType nodeType : NodeType.values()) {
+            if (role.equals(nodeType.toString())) {
+                return nodeType;
             }
         }
-        return nodeType;
+        throw new PGMXParserException.UnknownNodeRole(role, nodeNameOf(variableElement), variableElement);
     }
     
     /**
@@ -1565,9 +1564,11 @@ public class PGMXReader_0_2 {
     private static String firstVariableOf(Element xmlPotential) {
         Element variables = xmlPotential.getChild(XMLTags.VARIABLES.toString());
         Element variable = variables == null ? null : variables.getChild(XMLTags.VARIABLE.toString());
-        if (variable == null) {
-            return "?";
-        }
+        return variable == null ? "?" : nodeNameOf(variable);
+    }
+
+    /** @return the name of the node of {@code variable}, with its time slice if it has one */
+    private static String nodeNameOf(Element variable) {
         String name = variable.getAttributeValue(XMLAttributes.NAME.toString());
         String timeSlice = variable.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
         return (timeSlice == null || name.endsWith(" [" + timeSlice + "]")) ? name : name + " [" + timeSlice + "]";
