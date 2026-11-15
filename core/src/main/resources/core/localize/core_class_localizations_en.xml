@@ -103,76 +103,76 @@
                   value="Could not meet the constraint: {constraint}"/>
     <Localization
             class="org.openmarkov.core.exception.ConstraintViolatedException$AlwaysObservedVariableIsDescendantOfDecisionNode"
-            value="Always observed variable {alwaysObservedNode} is a descendant of decision node {decisionNode}."/>
+            value="Always observed variable {alwaysObservedNode.getName} is a descendant of decision node {decisionNode.getName}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CannotAddLinkToAPreviousTimeSlice"
-                  value="Cannot add link from {parentVariable} to {childVariable}, as {childVariable} belongs to a previous time slice."/>
+                  value="Cannot add link from {parentVariable.getName} to {childVariable.getName}, as {childVariable.getName} belongs to a previous time slice."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CannotHaveUtilityParent"
-                  value="Node {child} cannot be a child of utility parent: {utilityNode}."/>
+                  value="Node {child.getName} cannot be a child of utility parent: {utilityNode.getName}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CannotSelfLink"
-                  value="Cannot link a node to itself (In this case, the node {node})."/>
+                  value="Cannot link a node to itself (In this case, the node {node.getName})."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CriterionNameIsAlreadyPresent"
                   value="Criterion name {name} is already present, so it cannot be used for {criterion}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$CriterionNameIsEmpty"
                   value="Criterion name cannot be empty for {criterion}."/>
     <Localization
             class="org.openmarkov.core.exception.ConstraintViolatedException$DirectedLinkCannotMatchAnUndirectedLink"
-            value="There is both a directed and an undirected link from {node1} to {node2}."/>
+            value="There is both a directed and an undirected link from {node1.getName} to {node2.getName}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$LinkAlreadyExists"
-                  value="There is a link from {from} to {to}."/>
+                  value="There is a link from {from.getName} to {to.getName}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$MixedParentContainsMoreThanOneSet"
-                  value="Node {child} must have parents that are only be utility nodes, or chance or decision nodes, but it has parents that belong to both:\nChance/Decision nodes: {chanceOrDecisionNodes}\nUtility nodes: {utilityNodes}."/>
+                  value="Node {child.getName} must have parents that are only be utility nodes, or chance or decision nodes, but it has parents that belong to both:&#10;Chance/Decision nodes: {chanceOrDecisionNodes, om, short}&#10;Utility nodes: {utilityNodes, om, short}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$MixedParentDoesntAllowThisNodeType"
-                  value="Node {child} cannot be child of {parent}, as parents can only be utility nodes, or chance or decision nodes."/>
+                  value="Node {child.getName} cannot be child of {parent.getName}, as parents can only be utility nodes, or chance or decision nodes."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ModelDoesNotAllowAddingLink"
-                  value="Model doesn't allow adding links, meaning it is impossible to add one from {from} to {to}."/>
+                  value="Model doesn't allow adding links, meaning it is impossible to add one from {from.getName} to {to.getName}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ModelDoesNotAllowInvertingLink"
-                  value="Model doesn't allow inverting links, meaning it is impossible to invert link from {from} to {to}."/>
+                  value="Model doesn't allow inverting links, meaning it is impossible to invert link from {from.getName} to {to.getName}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ModelDoesNotAllowRemovingLink"
-                  value="Model doesn't allow removing links, meaning it is imposible to remove link from {from} to {to}."/>
+                  value="Model doesn't allow removing links, meaning it is imposible to remove link from {from.getName} to {to.getName}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$MultipleConstraintsViolated"
                   value="Multiple constraints have been violated:"/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfStateCannotBeEmpty"
                   value="The name of a state of {node.getName} cannot be empty."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfVariableCannotBeEmpty"
-                  value="Name of variable {variable} cannot be empty."/>
+                  value="The name of a variable cannot be empty."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfVariableIsAlreadyPresent"
                   value="Name of variable {variableName} already belongs to another variable."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkCannotHaveRevelationArcs"
-                  value="This kind of network cannot have revelation arcs; the link from {parentVariable} to {childVariable} has revealing conditions."/>
+                  value="This kind of network cannot have revelation arcs; the link from {parentVariable.getName} to {childVariable.getName} has revealing conditions."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkCannotHaveLinkRestrictions"
-                  value="This kind of network cannot have link restrictions; the link from {parentVariable} to {childVariable} has a restrictions potential."/>
+                  value="This kind of network cannot have link restrictions; the link from {parentVariable.getName} to {childVariable.getName} has a restrictions potential."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkHasNoUtilityNodes"
-                  value="Network {probNet} must have at least one utility node."/>
+                  value="The network must have at least one utility node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NodeCannotHaveMoreParents"
-                  value="Node {node} already has {parentsSize} parents. No more can be added."/>
+                  value="Node {node.getName} already has {parentsSize} parents. No more can be added."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NodeHasMoreParentsThanAllowed"
-                  value="Node {child} has {numParents} parents, but only {maxNumOfParentsAllowed} are allowed."/>
+                  value="Node {child.getName} has {numParents} parents, but only {maxNumOfParentsAllowed} are allowed."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NodeHasRepeatedLinks"
-                  value="Node {node} has repeated links."/>
+                  value="Node {node.getName} has repeated links."/>
     <Localization
             class="org.openmarkov.core.exception.ConstraintViolatedException$NumOfPotentialsMismatchesNumOfUtilities"
             value="There should be the same amount of potentials as utilities nodes, but there is {numUtilityNodes} utility node(s) and {numUtilityPotentials} potential(s)."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyAtemporalVariablesAllowed"
-                  value="Variable {variable} must be atemporal."/>
+                  value="Variable {variable.getName} must be atemporal."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyChanceNodesAllowed"
-                  value="Node for {variable} must be a chance node."/>
+                  value="Node {variable.getName} must be a chance node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyContinuousVariablesAllowed"
-                  value="Variable {variable} must be continuous."/>
+                  value="Variable {variable.getName} must be continuous."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyDirectedLinksAllowed"
-                  value="Node {node} must have only directed links to other nodes. But it has undirected links to nodes: {siblings}."/>
+                  value="Node {node.getName} must have only directed links to other nodes. But it has undirected links to nodes: {siblings, om, short}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyDiscreteVariablesAllowed"
                   value="Variable {variable} must be discrete."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyOneAgentAllowed"
-                  value="Variable {variable} must have one and a single one agent."/>
+                  value="Variable {variable.getName} must have one and a single one agent."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyOneAgentAllowedInNetwork"
-                  value="Network {probNet} must have only one agent."/>
+                  value="The network must have only one agent."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyTemporalVariablesAllowed"
-                  value="Variable {variable} must be temporal."/>
+                  value="Variable {variable.getName} must be temporal."/>
     <Localization
             class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyUndirectedLinksCannotHaveChildren"
-            value="Node {node} must have only undirected links to other nodes, but it has directed links to children nodes: {children}."/>
+            value="Node {node.getName} must have only undirected links to other nodes, but it has directed links to children nodes: {children, om, short}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyUndirectedLinksCannotHaveParents"
-                  value="Node {node} must have only undirected links to other nodes, but it has directed links to parent nodes: {parents}."/>
+                  value="Node {node.getName} must have only undirected links to other nodes, but it has directed links to parent nodes: {parents, om, short}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$StateAlreadyExists"
                   value="{node.getName} already has a state named {newState}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$StateDuplicated"
@@ -182,7 +182,7 @@
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ThereIsACycle"
                   value="The link {parent.getName} → {child.getName} closes a cycle."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$VariableHasNoPotentials"
-                  value="Variable {variable} has no potentials."/>
+                  value="Variable {variable.getName} has no potentials."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$VariableNameIsAlreadyPresent"
                   value="There is already a variable named {name} in the network."/>
     <Localization
@@ -361,7 +361,8 @@
                   short="Evidence case with {findings.size} findings"/>
     <Localization class="org.openmarkov.core.model.network.Finding"
                   value="Finding of variable {variable} with numerical value {numericalValue} and state index {stateIndex}"/>
-    <Localization class="org.openmarkov.core.model.network.Node" value="{nodeType} node of {variable}"/>
+    <Localization class="org.openmarkov.core.model.network.Node" value="{nodeType} node of {variable}"
+                  short="{variable.getName}"/>
     <Localization class="org.openmarkov.core.model.network.PartitionedInterval" value="Interval with limits"/>
     <Localization class="org.openmarkov.core.model.network.Point2D$Double" value="{ x: {x}, y: {y} }"/>
     <Localization class="org.openmarkov.core.model.network.ProbNet"
@@ -388,7 +389,7 @@
                   value="Always-observed variable are not descendant of a decision nodes"/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoBackwardLink"
                   value="Links can only be drawn to future slices or from nodes in slice 0 towards atemporal nodes"/>
-    <Localization class="org.openmarkov.core.model.network.constraint.NoCycle" value="No cycles paths are allowed."/>
+    <Localization class="org.openmarkov.core.model.network.constraint.NoCycle" value="No cycles are allowed."/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoEmptyName" value="Names aren't empty"/>
     <Localization class="org.openmarkov.core.model.network.constraint.NoLinkRestriction"
                   value="Links must have no restrictions"/>
@@ -476,10 +477,10 @@
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$DiscretizedChanceNode"
                   value="{node.getName} cannot be divided into intervals: in a network of events, a chance node must have finite states or be numeric."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyOneOrphanInitialEventException"
-                  value="There can be only one orphan event node which the purpose of initial, but multiple have it:\n{orphanEventNodes}"/>
+                  value="There can be only one orphan event node which the purpose of initial, but multiple have it:&#10;{orphanEventNodes, om, short}"/>
     <Localization
             class="org.openmarkov.core.exception.ConstraintViolatedException$OnlySelfLoopsWithEventAndChanceNodesException"
-            value="Self loop can only be used if the node is event or chance, which is not applicable to {node}."/>
+            value="Self loop can only be used if the node is event or chance, which is not applicable to {node.getName}."/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$SamplesWeightIsZero"
                   value="Samples weight is 0"/>
     <Localization class="org.openmarkov.core.exception.IncompatibleEvidenceException$VariableMustBeEvent"
