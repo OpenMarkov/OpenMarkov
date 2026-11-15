@@ -115,6 +115,27 @@ public class UncertainTablePotential extends TablePotential implements Uncertain
         return p;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>Each new cell also takes a copy of the uncertain value of the cell whose number it repeats.
+     */
+    @Override
+    public UncertainTablePotential addVariable(Variable newVariable) {
+        double[] newValues = super.addVariable(newVariable).getValues();
+        List<Variable> newVariables = new ArrayList<>(variables);
+        newVariables.add(newVariable);
+        UncertainTablePotential newPotential = new UncertainTablePotential(newVariables, role, newValues);
+        newPotential.copyAttributesFrom(this);
+        if (uncertainValues != null) {
+            newPotential.uncertainValues = new UncertainValue[newValues.length];
+            for (int i = 0; i < newValues.length; i++) {
+                UncertainValue repeated = uncertainValues[i % getValues().length];
+                newPotential.uncertainValues[i] = (repeated == null) ? null : repeated.copy();
+            }
+        }
+        return newPotential;
+    }
+
     // -----------------------------------------------------------------------
     // Overrides — reorder must return UncertainTablePotential and copy uncertainValues
     // -----------------------------------------------------------------------

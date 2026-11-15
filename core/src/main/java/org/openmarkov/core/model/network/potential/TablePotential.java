@@ -670,10 +670,9 @@ public class TablePotential extends AbstractIndexedPotential
         for (int i = 0; i < newVariableNumStates; i++) {
             for (int j = 0; j < values.length; j++) {
                 newPotential.values[j + i * values.length] = values[j];
-                // newPotential.uncertainValues[j + i * values.length] =
-                // uncertainValues[j];
             }
         }
+        newPotential.copyAttributesFrom(this);
         return newPotential;
     }
     
