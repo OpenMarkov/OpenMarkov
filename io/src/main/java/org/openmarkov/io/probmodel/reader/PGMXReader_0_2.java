@@ -844,13 +844,13 @@ public class PGMXReader_0_2 {
         LinkedHashMap<String, String> properties = getProperties(variableElement);
         
         // Remove obsolete properties
-        if (properties.get(XMLTags.TITLE) != null) {
-            properties.remove(XMLTags.TITLE);
+        if (properties.get(XMLTags.TITLE.toString()) != null) {
+            properties.remove(XMLTags.TITLE.toString());
         }
-        if (properties.get(XMLTags.RELEVANCE) != null) {
-            String relevance = properties.get(XMLTags.RELEVANCE);
+        if (properties.get(XMLTags.RELEVANCE.toString()) != null) {
+            String relevance = properties.get(XMLTags.RELEVANCE.toString());
             if (Double.parseDouble(relevance) == Node.DEFAULT_RELEVANCE) {
-                properties.remove(XMLTags.RELEVANCE);
+                properties.remove(XMLTags.RELEVANCE.toString());
             }
         }
         
