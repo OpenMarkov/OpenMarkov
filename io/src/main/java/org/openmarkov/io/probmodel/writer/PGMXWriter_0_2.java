@@ -961,7 +961,22 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
             getBinomialPotential(potentialElement, potential);
         } else if (potential instanceof AugmentedProbTablePotential) {
             getAugmentedProbTablePotential(potentialElement, ((AugmentedProbTablePotential) potential).getAugmentedProbTable());
+        } else if (potential instanceof ConditionalGaussianPotential gaussian) {
+            getParameter(probNet, XMLTags.MEAN, gaussian.getMean(), potentialElement);
+            getParameter(probNet, XMLTags.VARIANCE, gaussian.getVariance(), potentialElement);
+        } else if (potential instanceof DiscretizedCauchyPotential cauchy) {
+            getParameter(probNet, XMLTags.MEDIAN, cauchy.getMedian(), potentialElement);
+            getParameter(probNet, XMLTags.SCALE, cauchy.getScale(), potentialElement);
         }
+    }
+
+    /** Writes {@code parameter} as a relation nested in a child of {@code potentialElement} named by {@code tag}. */
+    private void getParameter(ProbNet probNet, XMLTags tag, Potential parameter, Element potentialElement) {
+        Element nestedPotential = new Element(XMLTags.POTENTIAL.toString());
+        getPotential(probNet, parameter, nestedPotential);
+        Element parameterElement = new Element(tag.toString());
+        parameterElement.addContent(nestedPotential);
+        potentialElement.addContent(parameterElement);
     }
     
     

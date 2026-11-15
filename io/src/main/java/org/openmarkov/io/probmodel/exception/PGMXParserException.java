@@ -218,6 +218,18 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String written;
     }
     
+    /** A relation whose file lacks one of its parameters, such as the mean of a Conditional Gaussian. */
+    public static final class RelationParameterMissing extends PGMXParserException {
+        public RelationParameterMissing(String variableName, String parameterName, Element element) {
+            super(element);
+            this.variableName = variableName;
+            this.parameterName = parameterName;
+        }
+
+        public final String variableName;
+        public final String parameterName;
+    }
+
     /** An indicator of an event whose file has no time to the event. */
     public static final class TimeToEventMissing extends PGMXParserException {
         public TimeToEventMissing(String variableName, Element element) {

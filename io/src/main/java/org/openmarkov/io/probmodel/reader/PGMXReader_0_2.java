@@ -124,8 +124,8 @@ public class PGMXReader_0_2 {
         map.put(SumPotential.class, PGMXPotentialParsers::getSumPotential);
         map.put(SameAsPrevious.class, PGMXPotentialParsers::getSameAsPrevious);
         map.put(CycleLengthShift.class, PGMXPotentialParsers::getCycleLengthShiftPotential);
-        map.put(ConditionalGaussianPotential.class, PGMXPotentialParsers::getConditionalGaussianPotential);
-        map.put(DiscretizedCauchyPotential.class, PGMXPotentialParsers::getDiscretizedCauchyPotential);
+        map.put(ConditionalGaussianPotential.class, this::getConditionalGaussianPotential);
+        map.put(DiscretizedCauchyPotential.class, this::getDiscretizedCauchyPotential);
         return map;
     }
     
@@ -1645,6 +1645,36 @@ public class PGMXReader_0_2 {
         return xmlPotential.getAttributeValue(XMLAttributes.TYPE.toString());
     }
     
+    /** Reads a Conditional Gaussian, whose mean and variance are relations nested in {@code <Mean>} and {@code <Variance>}. */
+    protected Potential getConditionalGaussianPotential(Element xmlPotential, ProbNet probNet, PotentialRole role,
+                                                        List<Variable> variables) throws PGMXParserException {
+        ConditionalGaussianPotential gaussian = new ConditionalGaussianPotential(variables, role);
+        gaussian.setMean(getParameter(xmlPotential, XMLTags.MEAN, probNet, variables));
+        gaussian.setVariance(getParameter(xmlPotential, XMLTags.VARIANCE, probNet, variables));
+        return gaussian;
+    }
+
+    /** Reads a Discretized Cauchy, whose median and scale are relations nested in {@code <Median>} and {@code <Scale>}. */
+    protected Potential getDiscretizedCauchyPotential(Element xmlPotential, ProbNet probNet, PotentialRole role,
+                                                      List<Variable> variables) throws PGMXParserException {
+        DiscretizedCauchyPotential cauchy = new DiscretizedCauchyPotential(variables, role);
+        cauchy.setMedian(getParameter(xmlPotential, XMLTags.MEDIAN, probNet, variables));
+        cauchy.setScale(getParameter(xmlPotential, XMLTags.SCALE, probNet, variables));
+        return cauchy;
+    }
+
+    /** @return the relation nested in the child {@code tag} of {@code xmlPotential}, which the file must have */
+    private Potential getParameter(Element xmlPotential, XMLTags tag, ProbNet probNet, List<Variable> variables)
+            throws PGMXParserException {
+        Element parameter = xmlPotential.getChild(tag.toString());
+        Element nestedPotential = parameter == null ? null : parameter.getChild(XMLTags.POTENTIAL.toString());
+        if (nestedPotential == null) {
+            throw new PGMXParserException.RelationParameterMissing(variables.getFirst().getName(), tag.toString(),
+                                                                   xmlPotential);
+        }
+        return getPotential(nestedPotential, probNet, PotentialRole.CONDITIONAL_PROBABILITY);
+    }
+
     /** @author myebra */
     protected TreeADDPotential getTreeADDPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
                                                    List<Variable> variables)

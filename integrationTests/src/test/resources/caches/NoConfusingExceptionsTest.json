@@ -176,6 +176,7 @@
     "RelationCannotBeSimulated",
     "RelationDoesNotTakeEventsIntoAccount",
     "RelationNotSupportedByFormat",
+    "RelationParameterMissing",
     "RemovingAllStatesIsNotAllowedException",
     "RepeatedVariableNames",
     "ResourceNotFoundException",
