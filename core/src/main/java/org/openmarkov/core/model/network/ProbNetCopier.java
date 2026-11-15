@@ -170,7 +170,7 @@ final class ProbNetCopier {
                     newIntervals.add(new PartitionedInterval(interval.limits, interval.belongsToLeftSide));
                 }
                 destLink.setRevealingIntervals(newIntervals);
-                destLink.setRevealingStates(new ArrayList<>(link.getRevealingStates()));
+                destLink.setRevealingStates(destFrom.getVariable().ownStates(link.getRevealingStates()));
             } else {
                 destLink.setRestrictionsPotential(link.getRestrictionsPotential());
                 destLink.setRevealingIntervals(link.getRevealingIntervals());

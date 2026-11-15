@@ -229,12 +229,28 @@ public class DeltaPotential extends Potential implements Projectable, Scalable, 
         potential.numericValue = this.numericValue;
         
         if (this.state != null) {
-            potential.setValue(new State(this.state));
+            potential.setValue(potential.getConditionedVariable().ownState(this.state));
         }
         potential.stateIndex = this.stateIndex;
-        
+
         return potential;
-        
+
+    }
+
+    /** Besides the variable, the fixed state becomes the one of the new conditioned variable with its name. */
+    @Override public void replaceVariable(int position, Variable variable) {
+        super.replaceVariable(position, variable);
+        if (position == 0 && state != null) {
+            state = variable.ownState(state);
+        }
+    }
+
+    /** Besides the variables, the fixed state becomes the one of the shifted conditioned variable with its name. */
+    @Override public void shift(ProbNet probNet, int timeDifference) {
+        super.shift(probNet, timeDifference);
+        if (state != null) {
+            state = getConditionedVariable().ownState(state);
+        }
     }
     
     /**

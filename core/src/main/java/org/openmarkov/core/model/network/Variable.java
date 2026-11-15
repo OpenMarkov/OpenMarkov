@@ -18,6 +18,7 @@ import org.openmarkov.java.cloneUtils.CloneUtils;
 import org.openmarkov.java.nullUtils.NullUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -140,13 +141,9 @@ public class Variable implements Cloneable, Comparable<Variable>, ClassLocalizab
         parseNameIntoParts(name);
     }
     
-    /**
-     * Copy constructor for Variable.
-     *
-     * @param variable Variable
-     */
+    /** Copy constructor: the copy has its own states, with the same names and properties. */
     public Variable(Variable variable) {
-        this.states = variable.states.clone();
+        this.states = Arrays.stream(variable.states).map(State::new).toArray(State[]::new);
         this.variableType = variable.variableType;
         this.partitionedInterval = CloneUtils.safeClone(variable.partitionedInterval);
         this.additionalProperties = variable.additionalProperties != null
@@ -350,7 +347,21 @@ public class Variable implements Cloneable, Comparable<Variable>, ClassLocalizab
         }
         return -1;
     }
-    
+
+    /**
+     * @return the state of this variable with the name of {@code state}, or {@code state} itself if this variable has
+     * none; renaming a state changes the object, so whatever names a state of this variable must hold its own one
+     */
+    public State ownState(State state) {
+        int index = getStateIndex(state);
+        return index < 0 ? state : states[index];
+    }
+
+    /** @return {@link #ownState} of each of {@code states}, in a new list */
+    public List<State> ownStates(List<State> states) {
+        return states.stream().map(this::ownState).collect(Collectors.toCollection(ArrayList::new));
+    }
+
     /**
      * @param value . {@code double}
      *

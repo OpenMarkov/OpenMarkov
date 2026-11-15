@@ -263,8 +263,12 @@ public class TreeADDBranch implements ClassLocalizable {
         return this.rootVariable;
     }
     
+    /** Makes {@code topVariable} the root of this branch, whose states become the ones of that variable with their names. */
     public void setRootVariable(Variable topVariable) {
         this.rootVariable = topVariable;
+        if (topVariable != null && states != null) {
+            states = topVariable.ownStates(states);
+        }
     }
     
     public Potential getPotential() {
@@ -392,12 +396,12 @@ public class TreeADDBranch implements ClassLocalizable {
     }
     
     public TreeADDBranch deepCopy(ProbNet copyNet) {
+        Variable newRootVariable = Potential.findVariableToCopy(copyNet, this.rootVariable, "a branch of a tree");
         List<State> newStates = null;
         if (states != null) {
-            newStates = new ArrayList<>(states);
+            newStates = newRootVariable.ownStates(states);
         }
-        Variable newRootVariable = Potential.findVariableToCopy(copyNet, this.rootVariable, "a branch of a tree");
-        
+
         List<Variable> newParentVariables = new ArrayList<>();
         for (Variable variable : this.parentVariables) {
             newParentVariables.add(Potential.findVariableToCopy(copyNet, variable, "a branch of a tree"));

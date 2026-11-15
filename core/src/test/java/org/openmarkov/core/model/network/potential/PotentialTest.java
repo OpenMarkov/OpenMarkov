@@ -232,7 +232,7 @@ public class PotentialTest {
         DeltaPotential deltaPotentialCopy = (DeltaPotential) deltaPotential.deepCopy(probNet);
         
         compareBasicCopiedAttributesPotential(deltaPotential, deltaPotentialCopy);
-        assertNotSame(deltaPotential.getState(), deltaPotentialCopy.getState());
+        assertSame(probNet.getVariable("DeltaVariable").getStates()[0], deltaPotentialCopy.getState());
     }
     
     @Test public void tablePotentialDeepCopyTest() {
