@@ -154,11 +154,13 @@ public class NetworkFileHandler {
     }
     
     void openNetwork(@Nullable String fileName) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
-        File file = fileName == null || fileName.isBlank() ? new File(this.requestNetworkFileToOpen()) : new File(fileName);
-        if (file == null) {
-            return;
+        if (fileName == null || fileName.isBlank()) {
+            fileName = this.requestNetworkFileToOpen();
+            if (fileName == null) {
+                return;
+            }
         }
-        openNetworkSource(new NetworkEditorPanel.NetworkSource.SourceFile(file));
+        openNetworkSource(new NetworkEditorPanel.NetworkSource.SourceFile(new File(fileName)));
     }
     
     void openNetworkURL() throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
