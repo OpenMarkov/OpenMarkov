@@ -1,5 +1,6 @@
 package org.openmarkov.bnEvaluation.component;
 
+import org.jdesktop.swingx.VerticalLayout;
 import org.openmarkov.bnEvaluation.Coherence;
 import org.openmarkov.bnEvaluation.measures.MeasureMatrix;
 import org.openmarkov.bnEvaluation.measures.MeasureType;
@@ -9,8 +10,18 @@ import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Stream;
 
@@ -33,6 +44,9 @@ public class MeasuresPanel extends JPanel {
     private JCheckBox BdeMetricCheck;
     private JCheckBox K2MetricCheck;
     private JCheckBox MDLMetricCheck;
+    
+    private JPanel variablesPanel;
+    private JScrollPane variablesScrollPanel;
     
     public MeasuresPanel() {
         initialize();
@@ -60,7 +74,27 @@ public class MeasuresPanel extends JPanel {
         BdeMetricCheck = new JCheckBox("BDe");
         K2MetricCheck = new JCheckBox("K2");
         MDLMetricCheck = new JCheckBox("MDL");
+        logLikelihoodMeasureCheck.setSelected(true);
+        scoreMeasuresCheck.setSelected(true);
+        BayesianMetricCheck.setSelected(true);
+        AicMetricCheck.setSelected(true);
+        EntropyMetricCheck.setSelected(true);
+        BdeMetricCheck.setSelected(true);
+        K2MetricCheck.setSelected(true);
+        MDLMetricCheck.setSelected(true);
+        logLikelihoodMeasureCheck.setVisible(false);
+        scoreMeasuresCheck.setVisible(false);
+        BayesianMetricCheck.setVisible(false);
+        AicMetricCheck.setVisible(false);
+        EntropyMetricCheck.setVisible(false);
+        BdeMetricCheck.setVisible(false);
+        K2MetricCheck.setVisible(false);
+        MDLMetricCheck.setVisible(false);
         
+        variablesPanel = new JPanel();
+        variablesPanel.setLayout(new VerticalLayout());
+        variablesPanel.setBorder(BorderFactory.createTitledBorder("Show individual probabilities for"));
+        variablesScrollPanel = new JScrollPane(variablesPanel);
         
         CMMeasuresCheck.addActionListener(e -> CMMeasuresCheckActionPerformed());
         CMMeasuresCheckActionPerformed();
@@ -81,34 +115,47 @@ public class MeasuresPanel extends JPanel {
         // add components to measuresPanel with a GroupLayout
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
-        layout.setHorizontalGroup(layout.createSequentialGroup()
-                                        .addGap(10)
-                                        .addGroup(layout.createParallelGroup()
-                                                        .addComponent(CMMeasuresCheck)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                        .addGap(20)
-                                                                        .addComponent(clasVariableLabel))
-                                                        .addComponent(logLikelihoodMeasureCheck)
-                                                        .addComponent(scoreMeasuresCheck)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                        .addGap(20)
-                                                                        .addComponent(EntropyMetricCheck))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                        .addGap(20)
-                                                                        .addComponent(AicMetricCheck))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                        .addGap(20)
-                                                                        .addComponent(BayesianMetricCheck)))
-                                        .addGroup(layout.createParallelGroup()
-                                                        .addComponent(existingVariablesComboBox, 250, 250, 250)
-                                                        .addComponent(BdeMetricCheck)
-                                                        .addComponent(K2MetricCheck)
-                                                        .addComponent(MDLMetricCheck))
-                                        .addGap(20)
-                                        .addGroup(layout.createParallelGroup()
+        
+        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        // 1. Existing layout wrapped in a sequential group with margins
+                                        .addGroup(layout.createSequentialGroup()
+                                                        .addGap(10)
+                                                        .addGroup(layout.createParallelGroup()
+                                                                        .addComponent(CMMeasuresCheck)
+                                                                        .addGroup(layout.createSequentialGroup()
+                                                                                        .addGap(20)
+                                                                                        .addComponent(clasVariableLabel))
+                                                                        .addComponent(logLikelihoodMeasureCheck)
+                                                                        .addComponent(scoreMeasuresCheck)
+                                                                        .addGroup(layout.createSequentialGroup()
+                                                                                        .addGap(20)
+                                                                                        .addComponent(EntropyMetricCheck))
+                                                                        .addGroup(layout.createSequentialGroup()
+                                                                                        .addGap(20)
+                                                                                        .addComponent(AicMetricCheck))
+                                                                        .addGroup(layout.createSequentialGroup()
+                                                                                        .addGap(20)
+                                                                                        .addComponent(BayesianMetricCheck))
+                                                        )
+                                                        .addGroup(layout.createParallelGroup()
+                                                                        .addComponent(existingVariablesComboBox, 250, 250, 250)
+                                                                        .addComponent(BdeMetricCheck)
+                                                                        .addComponent(K2MetricCheck)
+                                                                        .addComponent(MDLMetricCheck))
                                                         .addGap(20)
-                                                        .addComponent(showIndProbCheckBox))
-                                        .addGap(20));
+                                                        .addGroup(layout.createParallelGroup()
+                                                                        .addGap(20)
+                                                                        .addComponent(showIndProbCheckBox))
+                                                        .addGap(20)
+                                        )
+                                        // 2. Scroll panel spanning the maximum width (matching margins)
+                                        .addGroup(layout.createSequentialGroup()
+                                                        .addGap(10)
+                                                        .addComponent(variablesScrollPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addGap(20)
+                                        )
+        );
+        
         layout.setVerticalGroup(layout.createSequentialGroup()
                                       .addComponent(CMMeasuresCheck)
                                       .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -127,8 +174,41 @@ public class MeasuresPanel extends JPanel {
                                                       .addComponent(K2MetricCheck))
                                       .addGroup(layout.createParallelGroup()
                                                       .addComponent(AicMetricCheck)
-                                                      .addComponent(MDLMetricCheck)));
+                                                      .addComponent(MDLMetricCheck))
+                                      .addGap(15) // Spacing before the panel
+                                      .addComponent(variablesScrollPanel, 200, GroupLayout.DEFAULT_SIZE, 200) // Height bounds & vertical stretch
+        );
+        showIndProbCheckBox.addChangeListener(e -> {
+            recheckCheckboxes();
+        });
+        existingVariablesComboBox.addItemListener(new ItemListener() {
+            @Override public void itemStateChanged(ItemEvent e) {
+                recheckCheckboxes();
+            }
+        });
         return this;
+    }
+    
+    private void recheckCheckboxes() {
+        var selected = existingVariablesComboBox.getSelectedItem();
+        Arrays.stream(variablesPanel.getComponents())
+              .map(JCheckBox.class::cast)
+              .forEach(checkbox -> {
+                  boolean equals = checkbox.getText().equals(selected);
+                  checkbox.setEnabled(!equals && showIndProbCheckBox.isSelected() && isEnabled());
+                  if (equals) {
+                      checkbox.setSelected(true);
+                  }
+              });
+        variablesPanel.setEnabled(isEnabled() && showIndProbCheckBox.isSelected());
+    }
+    
+    public Collection<String> getSelectedVariables() {
+        return Arrays.stream(this.variablesPanel.getComponents())
+                     .map(JCheckBox.class::cast)
+                     .filter(JCheckBox::isSelected)
+                     .map(JCheckBox::getText)
+                     .toList();
     }
     
     /**
@@ -169,6 +249,9 @@ public class MeasuresPanel extends JPanel {
     public void changeVariables(Collection<String> variables) {
         existingVariablesComboBox.removeAllItems();
         variables.forEach(existingVariablesComboBox::addItem);
+        variablesPanel.removeAll();
+        variables.stream().sorted().forEach(var -> variablesPanel.add(new JCheckBox(var)));
+        recheckCheckboxes();
     }
     
     /**
@@ -179,6 +262,7 @@ public class MeasuresPanel extends JPanel {
      * select and evaluating would fail later with a null reference.
      *
      * @param netdatabase the database whose variables back the classification combo box
+     *
      * @return an error message to show the user, or {@code null} if the selection is valid
      */
     public String validateSelection(CaseDatabase netdatabase) {
@@ -190,7 +274,7 @@ public class MeasuresPanel extends JPanel {
         }
         return null;
     }
-
+    
     /**
      * Builds a {@link MeasuresSet} based on the currently selected checkboxes and options.
      * Call {@link #validateSelection(CaseDatabase)} first: this method assumes the selection is
@@ -199,6 +283,7 @@ public class MeasuresPanel extends JPanel {
      * @param title       descriptive title for the evaluation
      * @param coherence   the coherence level between network and database
      * @param netdatabase the case database aligned to the network variables
+     *
      * @return a configured {@link MeasuresSet} ready for evaluation
      */
     public MeasuresSet measuresSet(String title, Coherence coherence, CaseDatabase netdatabase) {
@@ -217,7 +302,10 @@ public class MeasuresPanel extends JPanel {
             }
             MeasureMatrix measureCM = new MeasureMatrix(MeasureType.CONFUSIONMATRIX,
                                                         statesNames, var.getName());
-            if (showIndProbCheckBox.isSelected()) measureCM.setShowIndividualProb();
+            if (showIndProbCheckBox.isSelected()) {
+                var variablesForProbabilities = this.getSelectedVariables();
+                measureCM.setShowIndividualProb();
+            }
             measuresSet.addMeasureMatrix(measureCM);
         }
         if (logLikelihoodMeasureCheck.isSelected()) {
@@ -247,6 +335,7 @@ public class MeasuresPanel extends JPanel {
     
     @Override public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
+        recheckCheckboxes();
         if (enabled) {
             this.allMeasureRelatedCheckboxes().forEach(checkbox -> checkbox.setEnabled(true));
             CMMeasuresCheckActionPerformed();

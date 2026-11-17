@@ -10,6 +10,7 @@ package org.openmarkov.bnEvaluation.dialog;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jetbrains.annotations.Nullable;
 import org.openmarkov.bnEvaluation.SplitSet;
 import org.openmarkov.bnEvaluation.export.ExcelExporter;
 import org.openmarkov.bnEvaluation.measures.MeasureMatrix;
@@ -17,12 +18,13 @@ import org.openmarkov.bnEvaluation.measures.MeasuresSet;
 import org.openmarkov.bnEvaluation.view.ConfusionMatrixTableModel;
 import org.openmarkov.bnEvaluation.view.IndicatorsTableModel;
 import org.openmarkov.bnEvaluation.view.IndividualProbabilityTableModel;
-import org.openmarkov.bnEvaluation.view.OverwriteAwareFileChooser;
 import org.openmarkov.bnEvaluation.view.ScoresTableModel;
 import org.openmarkov.bnEvaluation.view.ScoresTableStyler;
 import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.gui.dialog.common.BottomPanelButtonDialog;
 import org.openmarkov.gui.dialog.common.DialogBase;
+import org.openmarkov.gui.dialog.io.FileFilterByExtension;
+import org.openmarkov.gui.dialog.io.OMFileChooser;
 import org.openmarkov.gui.util.JTableGeneration;
 import org.openmarkov.gui.window.OMTabbedPane;
 
@@ -49,6 +51,7 @@ import java.awt.Frame;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * This class is the frame in which the results are presented.
@@ -63,9 +66,8 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
     private SplitSet splitSet = null;
     private final ResultKind resultKind;
     
-    enum ResultKind{
-        Measures,
-        SplitSet
+    enum ResultKind {
+        Measures, SplitSet
     }
     
     public ResultsDialog(Frame owner, MeasuresSet measures) {
@@ -106,9 +108,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
             } catch (IOException ex) {
                 // An I/O failure while exporting is expectable (e.g. the file is open or read-only);
                 // report it and keep the dialog open instead of aborting the application.
-                JOptionPane.showMessageDialog(this,
-                        "The results could not be exported: " + ex.getMessage(),
-                        "Export error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "The results could not be exported: " + ex.getMessage(), "Export error", JOptionPane.ERROR_MESSAGE);
             }
         });
         addButtonToButtonsPanel(exportButton);
@@ -130,7 +130,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         };
         resultsPanel.setBorder(BorderFactory.createTitledBorder(title + " results:"));
         resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.PAGE_AXIS));
-        resultsPanel.add(switch (resultKind){
+        resultsPanel.add(switch (resultKind) {
             case Measures -> generateTableResultsMeasurePanel();
             case SplitSet -> generateTableResultsDatasetSplitPanel();
         });
@@ -149,7 +149,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         // informationPanel components
         JTextPane textMetaInformation = new JTextPane();
         textMetaInformation.setContentType("text/html");
-        textMetaInformation.setText(switch (resultKind){
+        textMetaInformation.setText(switch (resultKind) {
             case Measures -> measures.getMeasureInformation();
             case SplitSet -> splitSet.getTitle();
         });
@@ -161,11 +161,8 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         informationPanel.setLayout(layout);
         layout.setHorizontalGroup(layout.createSequentialGroup()
                                         .addComponent(jScrollPaneMetaInf)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED,
-                                                         GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(layout.createParallelGroup()
-                                      .addComponent(jScrollPaneMetaInf));
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        layout.setVerticalGroup(layout.createParallelGroup().addComponent(jScrollPaneMetaInf));
         return informationPanel;
     }
     
@@ -205,12 +202,11 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
             tabbedPane.addTab("Confusion matrix", tabMatrix);
             JTable jTablaMatrix = new JTable(new ConfusionMatrixTableModel(measureMatrix));
             tabMatrix.add(fittingScrollPane(jTablaMatrix));
-
+            
             JPanel tabIndicators = new JPanel();
             tabIndicators.setLayout(new BoxLayout(tabIndicators, BoxLayout.PAGE_AXIS));
             tabbedPane.addTab("Indicators", tabIndicators);
-            JTable jTableIndicators = new JTable(new IndicatorsTableModel(
-                    measureMatrix.getIndicators(), measureMatrix.getVarName(), measureMatrix.getStatesNames()));
+            JTable jTableIndicators = new JTable(new IndicatorsTableModel(measureMatrix.getIndicators(), measureMatrix.getVarName(), measureMatrix.getStatesNames()));
             addIndicatorHeaderTooltips(jTableIndicators);
             tabIndicators.add(fittingScrollPane(jTableIndicators));
         }
@@ -229,8 +225,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
                 JPanel tabIndvProb = new JPanel();
                 tabIndvProb.setLayout(new BoxLayout(tabIndvProb, BoxLayout.PAGE_AXIS));
                 tabbedPane.addTab("Probabilities", tabIndvProb);
-                JTable jTableIndivProb = new JTable(new IndividualProbabilityTableModel(
-                        measureMatrix.getIndividualProb(), measureMatrix.getStatesNames(), measureMatrix.getVarName()));
+                JTable jTableIndivProb = new JTable(new IndividualProbabilityTableModel(measureMatrix.getIndividualProb(), measureMatrix.getStatesNames(), measureMatrix.getVarName()));
                 tabIndvProb.add(fittingScrollPane(jTableIndivProb));
             }
         }
@@ -240,43 +235,41 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
     /**
      * This method manages the export of results, either to
      * an Excel file or by copying to the clipboard.
+     *
+     * @return
      */
-    private void exportButtonActionPerformed() throws IOException {
-        
-        OverwriteAwareFileChooser omFileChooser = new OverwriteAwareFileChooser();
+    @Nullable File exportButtonActionPerformed() throws IOException {
+        OMFileChooser omFileChooser = new OMFileChooser();
         omFileChooser.setCurrentDirectory(UserPreferences.LATEST_OPEN_DIRECTORY.get());
         // Choose where to save the file
-        String nameDefect = switch (resultKind){
+        String nameDefect = switch (resultKind) {
             case Measures -> "EvaluationNet";
             case SplitSet -> "SplitSet";
         };
-        omFileChooser.setSelectedFile(new File(FilenameUtils.removeExtension(nameDefect + ".xlsx")));
+        omFileChooser.setSelectedFile(new File(FilenameUtils.removeExtension(nameDefect) + ".xlsx"));
+        omFileChooser.setFileFilter(new FileFilterByExtension(null, List.of("xlsx"), "Excel"));
         omFileChooser.setDialogTitle("Save results");
         int optionChosen = omFileChooser.showSaveDialog(this);
         if (optionChosen != JFileChooser.APPROVE_OPTION) {
-            return;
+            return null;
         }
         String fileName = omFileChooser.getSelectedFile().getAbsolutePath();
-        if (!fileName.endsWith(".xlsx")) {
-            fileName += ".xlsx";
-        }
         // Build the workbook only after the destination is confirmed; the workbook and the
         // output stream are always closed, even if writing fails.
-        try (Workbook workbook = buildWorkbook();
-             FileOutputStream outputStream = new FileOutputStream(fileName)) {
+        try (Workbook workbook = buildWorkbook(); FileOutputStream outputStream = new FileOutputStream(fileName)) {
             workbook.write(outputStream);
         }
         dispose(); // Closes the dialog
+        return omFileChooser.getSelectedFile();
     }
-
+    
     /** Builds the Excel workbook with the results, according to the kind of result shown. */
     private Workbook buildWorkbook() {
         return switch (resultKind) {
             case Measures -> new ExcelExporter(measures).export();
             case SplitSet -> {
                 Workbook resWorkbook = new XSSFWorkbook();
-                JTableGeneration.saveTableToSheet(splitSet.toTable(),
-                                                  resWorkbook.createSheet("Dataset Split info"));
+                JTableGeneration.saveTableToSheet(splitSet.toTable(), resWorkbook.createSheet("Dataset Split info"));
                 yield resWorkbook;
             }
         };
@@ -296,8 +289,8 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         sp.setPreferredSize(new Dimension(500, Math.min(contentH + 4, 350)));
         return sp;
     }
-
-
+    
+    
     /**
      * Installs tooltips on the column headers of the Indicators table.
      */
@@ -311,46 +304,37 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
             return c;
         });
     }
-
+    
     private static String indicatorHeaderTooltip(String header) {
         return switch (header) {
-            case "TP rate"   -> "<html>True Positive rate (sensitivity / recall):<br>"
-                                + "proportion of actual positives correctly classified</html>";
-            case "FP rate"   -> "<html>False Positive rate (1 − specificity):<br>"
-                                + "proportion of actual negatives incorrectly classified as positive</html>";
-            case "F Measure" -> "<html>F-measure (F1-score):<br>"
-                                + "harmonic mean of Precision and Recall</html>";
-            default          -> null;
+            case "TP rate" ->
+                    "<html>True Positive rate (sensitivity / recall):<br>" + "proportion of actual positives correctly classified</html>";
+            case "FP rate" ->
+                    "<html>False Positive rate (1 − specificity):<br>" + "proportion of actual negatives incorrectly classified as positive</html>";
+            case "F Measure" -> "<html>F-measure (F1-score):<br>" + "harmonic mean of Precision and Recall</html>";
+            default -> null;
         };
     }
-
+    
     private static String scoreRowTooltip(String label) {
         if (label == null) return null;
         if (label.contains("LOGLIKELIHOOD") && label.contains("score"))
-            return "<html>Log-Likelihood score:<br>"
-                   + "logarithm of the probability of observing the dataset given the model</html>";
+            return "<html>Log-Likelihood score:<br>" + "logarithm of the probability of observing the dataset given the model</html>";
         if (label.contains("LOGLIKELIHOOD") && label.contains("Loss"))
-            return "<html>Log-Likelihood Loss:<br>"
-                   + "average negative log-likelihood per case (lower is better)</html>";
+            return "<html>Log-Likelihood Loss:<br>" + "average negative log-likelihood per case (lower is better)</html>";
         if (label.startsWith("BAYES"))
-            return "<html>Bayesian score:<br>"
-                   + "marginal likelihood of the network structure under a Bayesian Dirichlet prior</html>";
+            return "<html>Bayesian score:<br>" + "marginal likelihood of the network structure under a Bayesian Dirichlet prior</html>";
         if (label.startsWith("AIC"))
-            return "<html>AIC (Akaike Information Criterion):<br>"
-                   + "log-likelihood penalised by the number of free parameters</html>";
+            return "<html>AIC (Akaike Information Criterion):<br>" + "log-likelihood penalised by the number of free parameters</html>";
         if (label.startsWith("ENTROPY"))
-            return "<html>Entropy score:<br>"
-                   + "total conditional entropy of the network structure</html>";
+            return "<html>Entropy score:<br>" + "total conditional entropy of the network structure</html>";
         if (label.startsWith("BDE"))
-            return "<html>BDe (Bayesian Dirichlet equivalent):<br>"
-                   + "likelihood score with an equivalent sample size prior</html>";
+            return "<html>BDe (Bayesian Dirichlet equivalent):<br>" + "likelihood score with an equivalent sample size prior</html>";
         if (label.startsWith("K2"))
-            return "<html>K2:<br>"
-                   + "scoring function from the K2 structure-learning algorithm (Cooper & Herskovits, 1992)</html>";
+            return "<html>K2:<br>" + "scoring function from the K2 structure-learning algorithm (Cooper & Herskovits, 1992)</html>";
         if (label.startsWith("MDL"))
-            return "<html>MDL (Minimum Description Length):<br>"
-                   + "information-theoretic measure balancing model fit and complexity</html>";
+            return "<html>MDL (Minimum Description Length):<br>" + "information-theoretic measure balancing model fit and complexity</html>";
         return null;
     }
-
+    
 }

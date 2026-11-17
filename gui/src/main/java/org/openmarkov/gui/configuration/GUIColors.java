@@ -283,4 +283,12 @@ public class GUIColors {
         }
     }
     
+    public static final class BayesianNetworkEvaluation {
+        public static final class ResultingExcel {
+            public static final GUIColor HEADER = new GUIColor(new Color(0, 111, 255));
+            public static final GUIColor LIGHT_HEADER = new GUIColor(new Color(100, 169, 255));
+            public static final GUIColor MARKED = new GUIColor(new Color(255, 192, 132));
+        }
+    }
+    
 }

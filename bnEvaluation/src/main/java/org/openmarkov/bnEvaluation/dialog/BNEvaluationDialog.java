@@ -18,6 +18,7 @@ import org.openmarkov.bnEvaluation.measures.MeasuresSet;
 import org.openmarkov.bnEvaluation.view.BackgroundEvaluation;
 import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
 import org.openmarkov.core.exception.ProbNetParserException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
@@ -44,6 +45,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ItemEvent;
@@ -89,7 +91,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         }
         
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
+        
         JPanel mainPanel = new JPanel();
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         mainPanel.setPreferredSize(new Dimension(840, 520));
@@ -102,7 +104,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         this.measuresPanel = new MeasuresPanel();
         this.measuresPanel.setEnabled(false);
         this.measuresPanel.allMeasureRelatedCheckboxes()
-                           .forEach(metricCheckbox -> metricCheckbox.addChangeListener(e -> this.checkOkButton()));
+                          .forEach(metricCheckbox -> metricCheckbox.addChangeListener(e -> this.checkOkButton()));
         mainPanel.add(this.measuresPanel);
         this.add(mainPanel);
         JRadioButton buttonToClick = currentlyOpenNetIsElegible ? this.fromOpenMarkovRadioButton : this.fromFileRadioButton;
@@ -173,8 +175,8 @@ public final class BNEvaluationDialog extends OkCancelDialog {
                 // A bad file, an unsupported format or a non-evaluable network are expectable user
                 // errors; report them and keep the dialog open instead of aborting the application.
                 JOptionPane.showMessageDialog(this,
-                        "The network could not be loaded: " + ex.getMessage(),
-                        "Network error", JOptionPane.ERROR_MESSAGE);
+                                              "The network could not be loaded: " + ex.getMessage(),
+                                              "Network error", JOptionPane.ERROR_MESSAGE);
             }
         });
         
@@ -320,7 +322,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
     
     private void checkOkButton() {
         boolean aMeasureIsSelected = this.measuresPanel.allMeasureRelatedCheckboxes()
-                                                        .anyMatch(AbstractButton::isSelected);
+                                                       .anyMatch(AbstractButton::isSelected);
         this.getOKButton()
             .setEnabled(aMeasureIsSelected && this.dbOpenerPanel.getDatabase() != null && this.probNet != null);
     }
@@ -349,10 +351,14 @@ public final class BNEvaluationDialog extends OkCancelDialog {
                 result.level() == Coherence.ZERO ? Collections.emptyList() : result.matchedVariableNames());
         if (!result.variablesNotInDatabase().isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                                          "Network variable/s: " + result.variablesNotInDatabase().stream()
-                                                                         .map(Variable::getName)
-                                                                         .collect(Collectors.joining(", ")) +
-                                                  " are not included in dataset",
+                                          "<html>The following variable(s) are not included in the dataset:<ul>"
+                                                  + result.variablesNotInDatabase()
+                                                          .stream()
+                                                          .map(Variable::getName)
+                                                          .sorted()
+                                                          .map(name -> "<li>" + name + "</li>")
+                                                          .collect(Collectors.joining()) +
+                                                  "</ul></html>",
                                           "Information", JOptionPane.INFORMATION_MESSAGE);
         }
         if (result.netDatabase() != null) {
@@ -364,7 +370,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
     @Override
     protected boolean doOkClickBeforeHide() {
         boolean aMeasureIsSeleteced = this.measuresPanel.allMeasureRelatedCheckboxes()
-                                                         .anyMatch(AbstractButton::isSelected);
+                                                        .anyMatch(AbstractButton::isSelected);
         if (!aMeasureIsSeleteced) {
             JOptionPane.showMessageDialog(this,
                                           "There are no measures selected",
@@ -382,11 +388,19 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         NetEvaluator evaluator = new NetEvaluator(this.probNet, this.netdatabase, measuresSet);
         // Run off the event-dispatch thread so the window stays responsive (indeterminate progress + cancel).
         BackgroundEvaluation.run(this.owner, "Evaluation",
-                progress -> evaluator.runEvaluator(),
-                measures -> {
-                    this.setVisible(false);
-                    new ResultsDialog(this.owner, measures).setVisible(true);
-                });
+                                 progress -> evaluator.runEvaluator(),
+                                 measures -> {
+                                     try {
+                                         var file = new ResultsDialog(this.owner, measures).exportButtonActionPerformed();
+                                         if (file == null) {
+                                             return;
+                                         }
+                                         Desktop.getDesktop().open(file);
+                                         this.setVisible(false);
+                                     } catch (IOException e) {
+                                         throw new UnrecoverableException(e);
+                                     }
+                                 });
         return false;
     }
 }

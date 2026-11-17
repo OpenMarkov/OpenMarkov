@@ -14,4 +14,5 @@ open module org.openmarkov.bnEvaluation {
     requires swing.layout;
     requires org.apache.logging.log4j;
     requires org.openmarkov.io;
+    requires swingx;
 }
