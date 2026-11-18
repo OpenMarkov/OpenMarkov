@@ -169,7 +169,7 @@
                                                     <xs:element name="Branches" minOccurs="0">
                                                         <xs:complexType>
                                                             <xs:sequence>
-                                                                <xs:element name="Branch" maxOccurs="unbounded">
+                                                                <xs:element name="Branch" minOccurs="0" maxOccurs="unbounded">
                                                                     <xs:complexType>
                                                                         <xs:all>
                                                                             <xs:element name="States" minOccurs="0">
@@ -188,7 +188,7 @@
                                                                                     </xs:sequence>
                                                                                 </xs:complexType>
                                                                             </xs:element>
-                                                                            <xs:element name="Potential"/>
+                                                                            <xs:element name="Potential" minOccurs="0"/>
                                                                             <xs:element name="Label" minOccurs="0"/>
                                                                             <xs:element name="Reference" minOccurs="0"/>
                                                                         </xs:all>
@@ -248,6 +248,18 @@
                                                     <xs:element name="Parameters" minOccurs="0"/>
                                                     <!--Event potentials structure -->
                                                     <xs:element name="Value" minOccurs="0"/>
+                                                    <xs:element name="TTE" minOccurs="0"/>
+                                                    <xs:element name="ProbabilityOccurrence" minOccurs="0"/>
+                                                    <xs:element name="Rates" minOccurs="0"/>
+                                                    <xs:element name="Slices" minOccurs="0"/>
+                                                    <!-- Hazard (Weibull) with its time variable, and Cholesky decomposition of a regression -->
+                                                    <xs:element name="TimeVariable" minOccurs="0"/>
+                                                    <xs:element name="CholeskyDecomposition" minOccurs="0"/>
+                                                    <!-- Binomial -->
+                                                    <xs:element name="NumberOfCases" minOccurs="0"/>
+                                                    <xs:element name="Theta" minOccurs="0"/>
+                                                    <!-- Distribution table -->
+                                                    <xs:element name="FunctionValues" minOccurs="0"/>
                                                 </xs:choice>
                                                 <xs:anyAttribute processContents="skip"/>
                                             </xs:complexType>
@@ -316,6 +328,15 @@
                                                 </xs:sequence>
                                             </xs:complexType>
                                         </xs:element>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="MonteCarlo" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="NumberOfSimulations" minOccurs="0"/>
+                                        <xs:element name="NumberOfSeries" minOccurs="0"/>
+                                        <xs:element name="InputDataFile" minOccurs="0"/>
                                     </xs:all>
                                 </xs:complexType>
                             </xs:element>
