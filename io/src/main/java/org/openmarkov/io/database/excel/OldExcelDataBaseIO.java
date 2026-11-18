@@ -2,6 +2,7 @@ package org.openmarkov.io.database.excel;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -144,6 +145,7 @@ import java.util.List;
     
     @Override
     public void save(File file, CaseDatabase database) throws IOException {
+        ExcelDataBaseIO.checkItFits(database, SpreadsheetVersion.EXCEL97, ".xls");
         int numCell = 0;
         
         // create a workbook
@@ -165,7 +167,7 @@ import java.util.List;
         /* Cases */
         int[][] cases = database.getCases();
         for (int i = 0; i < cases.length; i++) {
-            row = sheet.createRow((short) i + 1);
+            row = sheet.createRow(i + 1);
             for (int j = 0; j < cases[i].length; j++) {
                 // Create a cell and put a value in it.
                 Cell cell = row.createCell(j);

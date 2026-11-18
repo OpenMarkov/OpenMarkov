@@ -8,6 +8,7 @@
 package org.openmarkov.io.database.excel;
 
 
+import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -36,6 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This class contains some routines to load a database from a '.xls' file
@@ -171,6 +173,23 @@ import java.util.List;
         return variableStates.size() - 1;
     }
     
+    /**
+     * Refuses a database that a sheet of {@code version} cannot hold, before anything is written.
+     *
+     * @throws IOException saying the limits of the format, and the formats that have none
+     */
+    static void checkItFits(CaseDatabase database, SpreadsheetVersion version, String extension) throws IOException {
+        int cases = database.getCases().length;
+        int variables = database.getVariables().size();
+        int maxCases = version.getMaxRows() - 1;
+        if (cases > maxCases || variables > version.getMaxColumns()) {
+            throw new IOException(String.format(Locale.ROOT, "The dataset has %d cases and %d variables, but a %s file "
+                                                + "holds at most %d cases and %d variables. Save it as CSV or as Weka "
+                                                + "(.arff).", cases, variables, extension, maxCases,
+                                                version.getMaxColumns()));
+        }
+    }
+    
     /** @return the name of the state that a numeric cell with {@code value} is read as */
     static String stateNameOf(double value) {
         return value == Math.round(value) ? Integer.toString((int) value) : Double.toString(value);
@@ -200,6 +219,7 @@ import java.util.List;
     }
     
     @Override public void save(File file, CaseDatabase database) throws IOException {
+        checkItFits(database, SpreadsheetVersion.EXCEL2007, ".xlsx");
         int numCell = 0;
         
         // create a workbook
@@ -221,7 +241,7 @@ import java.util.List;
         /* Cases */
         int[][] cases = database.getCases();
         for (int i = 0; i < cases.length; i++) {
-            row = sheet.createRow((short) i + 1);
+            row = sheet.createRow(i + 1);
             for (int j = 0; j < cases[i].length; j++) {
                 // Create a cell and put a value in it.
                 Cell cell = row.createCell(j);
