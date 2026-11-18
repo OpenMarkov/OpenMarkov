@@ -119,6 +119,16 @@ public class AmuaDTValidator {
             throw new IllegalStateException("Unsupported node type: " + type);
         }
 
+        // A node that ends the tree takes in Amua one cost and one effectiveness
+        if (isCE && node.getChildBranches().isEmpty()) {
+            CEP cep = ((ProbAndCEP) node.getEvaluation()).getCep();
+            if (cep != null && !cep.isZero() && cep.getNumIntervals() > 1) {
+                throw new IllegalStateException("The node \"" + node.getVariable().getName() + "\" ends the tree, "
+                                                + "but its cost and its effectiveness depend on the willingness to "
+                                                + "pay, and Amua takes only one of each. Expand the tree down to it.");
+            }
+        }
+
         // A decision without branches ends the tree in Amua, as a terminal node
         if (type == NodeType.DECISION && !node.getChildBranches().isEmpty()) {
             decisionNodeCount++;
