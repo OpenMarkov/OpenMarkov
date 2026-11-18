@@ -18,11 +18,23 @@ public class VariableExpression extends ReferencedExpression<Variable> {
     
     public VariableExpression(List<Variable> possibleVariables, String expression) {
         super(
-                possibleVariables.stream().collect(Collectors.toMap(Variable::getName, v -> v)),
+                possibleVariables.stream().collect(Collectors.toMap(Variable::getName, v -> v,
+                                                                    VariableExpression::sameVariable)),
                 withBraces(expression, possibleVariables.stream().map(Variable::getName).toList()),
                 Variable::getName,
                 v -> null
         );
+    }
+
+    /**
+     * The same variable may be given twice, as in the relation of an event with a link to itself; two different
+     * variables with one name may not.
+     */
+    private static Variable sameVariable(Variable one, Variable other) {
+        if (one != other) {
+            throw new IllegalStateException("Duplicate key " + one.getName());
+        }
+        return one;
     }
 
     /**
