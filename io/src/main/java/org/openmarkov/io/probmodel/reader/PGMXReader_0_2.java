@@ -1437,7 +1437,7 @@ public class PGMXReader_0_2 {
                 throw new PGMXParserException.TreeADDWithoutTwoThresholds(xmlThresholds, xmlBranch);
             for (int i = 0; i < numThresholds; i++) {
                 Element xmlThreshold = xmlThresholds.get(i);
-                float value = Float.parseFloat(xmlThreshold.getAttributeValue(XMLAttributes.VALUE.toString()));
+                double value = Double.parseDouble(xmlThreshold.getAttributeValue(XMLAttributes.VALUE.toString()));
                 String belongsTo = xmlThreshold.getAttributeValue(XMLAttributes.BELONGS_TO.toString());
                 boolean belongsToLeft = false;
                 if (belongsTo.equals("left")) {
