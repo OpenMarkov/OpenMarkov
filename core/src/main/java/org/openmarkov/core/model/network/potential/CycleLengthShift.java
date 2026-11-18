@@ -55,6 +55,10 @@ public class CycleLengthShift extends Potential {
         return cycleLength;
     }
     
+    public void setCycleLength(CycleLength cycleLength) {
+        this.cycleLength = cycleLength;
+    }
+    
     /**
      * Returns if an instance of a certain Potential type makes sense given the
      * variables and the potential role

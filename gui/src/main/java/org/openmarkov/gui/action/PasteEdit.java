@@ -27,6 +27,7 @@ import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.NoLinkRestriction;
 import org.openmarkov.core.model.network.constraint.NoRevelationArc;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
+import org.openmarkov.core.model.network.potential.CycleLengthShift;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
@@ -178,6 +179,9 @@ public class PasteEdit extends MultiStepEdit {
                                 ((ExactDistrPotential) potential)
                                         .setChildVariable(this.probNet.getVariable(PasteEdit.this.newVariables.get(child.getName())));
                             }
+                        }
+                        if (potential instanceof CycleLengthShift shift && this.probNet.getCycleLength() != null) {
+                            shift.setCycleLength(this.probNet.getCycleLength());
                         }
                         newPotentials.add(potential);
                     }

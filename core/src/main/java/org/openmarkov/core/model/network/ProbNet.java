@@ -21,6 +21,7 @@ import org.openmarkov.core.model.network.Criterion.CECriterion;
 import org.openmarkov.core.model.network.constraint.ConstraintManager;
 import org.openmarkov.core.model.network.constraint.OnlyUndirectedLinks;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
+import org.openmarkov.core.model.network.potential.CycleLengthShift;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 import org.openmarkov.core.model.network.potential.TablePotential;
@@ -1188,8 +1189,14 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
         return metadata.getCycleLength();
     }
     
-    public void setCycleLength(CycleLength temporalUnit) {
-        metadata.setCycleLength(temporalUnit);
+    /** Sets the cycle length of the network, which every cycle length shift of the network also takes. */
+    public void setCycleLength(CycleLength cycleLength) {
+        metadata.setCycleLength(cycleLength);
+        if (cycleLength != null) {
+            for (Potential potential : getPotentials(CycleLengthShift.class::isInstance)) {
+                ((CycleLengthShift) potential).setCycleLength(cycleLength);
+            }
+        }
     }
     
     /**
