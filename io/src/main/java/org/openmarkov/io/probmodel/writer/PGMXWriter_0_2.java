@@ -1100,8 +1100,8 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
      */
     protected static void getDeltaPotential(Element potentialElement, Potential potential) {
         DeltaPotential deltaPotential = (DeltaPotential) potential;
-        if (deltaPotential.getConditionedVariable().getVariableType() == VariableType.NUMERIC
-                || deltaPotential.getConditionedVariable().getVariableType() == VariableType.EVENT) {
+        // The delta of a variable that is not of finite states keeps a number, and only that one keeps a state
+        if (deltaPotential.getConditionedVariable().getVariableType() != VariableType.FINITE_STATES) {
             Element numericValueElement = new Element(XMLTags.NUMERIC_VALUE.toString());
             numericValueElement.setText(String.valueOf(deltaPotential.getNumericValue()));
             potentialElement.addContent(numericValueElement);
