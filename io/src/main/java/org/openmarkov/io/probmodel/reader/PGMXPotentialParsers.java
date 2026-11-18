@@ -22,6 +22,7 @@ import org.openmarkov.io.probmodel.exception.PGMXParserException;
 import org.openmarkov.io.probmodel.strings.XMLAttributes;
 import org.openmarkov.io.probmodel.strings.XMLTags;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -242,7 +243,7 @@ public class PGMXPotentialParsers {
 
     public static Potential getDeltaPotential(Element xmlPotential, ProbNet probNet, PotentialRole role,
                                                List<Variable> variables)
-            throws PGMXParserException.DeltaPotentialWithoutState {
+            throws PGMXParserException.DeltaPotentialWithoutState, PGMXParserException.FoundUnknownState {
         Element xmlNumericValue = xmlPotential.getChild(XMLTags.NUMERIC_VALUE.toString());
         Element xmlState = xmlPotential.getChild(XMLTags.STATE.toString());
         Element xmlStateIndex = xmlPotential.getChild(XMLTags.STATE_INDEX.toString());
@@ -250,14 +251,30 @@ public class PGMXPotentialParsers {
             double value = Double.parseDouble(xmlNumericValue.getText());
             return new DeltaPotential(variables, role, value);
         } else if (xmlState != null) {
-            State state = variables.getFirst().getState(xmlState.getText());
-            return new DeltaPotential(variables, role, state);
+            return new DeltaPotential(variables, role, stateNamed(variables.getFirst(), xmlState));
         } else if (xmlStateIndex != null) {
             int stateIndex = PGMXReader_0_2.parseInteger(xmlStateIndex.getText());
             State state = variables.getFirst().getStates()[stateIndex];
             return new DeltaPotential(variables, role, state);
         }
         throw new PGMXParserException.DeltaPotentialWithoutState(role, xmlPotential);
+    }
+
+    /**
+     * @return the state of {@code variable} that {@code xmlState} names; the writer formats the file trimming the
+     * blanks at the ends of a text, so a state whose name has them is also found without them
+     */
+    private static State stateNamed(Variable variable, Element xmlState) throws PGMXParserException.FoundUnknownState {
+        String name = xmlState.getText();
+        State state = variable.getState(name);
+        if (state == null) {
+            state = Arrays.stream(variable.getStates()).filter(s -> s.getName().trim().equals(name.trim()))
+                          .findFirst().orElse(null);
+        }
+        if (state == null) {
+            throw new PGMXParserException.FoundUnknownState(variable, name, xmlState);
+        }
+        return state;
     }
 
     /** @author carmenyago */
