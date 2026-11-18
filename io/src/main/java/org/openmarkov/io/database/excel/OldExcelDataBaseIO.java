@@ -51,7 +51,6 @@ import java.util.List;
                 throw new EmptyDatabaseException(file.getName());
             }
             int numVariables = sheet.getRow(0).getPhysicalNumberOfCells();
-            int[][] cases = new int[rows - 1][numVariables];
             List<State>[] variableStates = (ArrayList<State>[]) new ArrayList[numVariables];
             
             // the first row contains the names of the variables
@@ -67,9 +66,11 @@ import java.util.List;
             // is the row index of the excel datasheet. (IT'S THE OTHER WAY)
             // A cell contains the StateName index corresponding to
             // the String in the excel file cell
-            for (int i = 1; i < rows; i++) {
+            List<int[]> rowCases = new ArrayList<>();
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 row = sheet.getRow(i);
-                if (row != null) {
+                if (row != null && ExcelDataBaseIO.hasAValue(row, numVariables)) {
+                    int[] aCase = new int[numVariables];
                     for (int j = 0; j < numVariables; j++) {
                         HSSFCell cell = row.getCell(j);
                         /*
@@ -101,10 +102,12 @@ import java.util.List;
                                     Integer.toString((int) doubleValue) :
                                     Double.toString(doubleValue);
                         }
-                        cases[i - 1][j] = findVariableStateIndexOrCreate(variableStates[j], stateName);
+                        aCase[j] = findVariableStateIndexOrCreate(variableStates[j], stateName);
                     }
+                    rowCases.add(aCase);
                 }
             }
+            int[][] cases = rowCases.toArray(new int[0][]);
             
             /* Creation of the probNet. The probNet only contains variables but
              * no links. */

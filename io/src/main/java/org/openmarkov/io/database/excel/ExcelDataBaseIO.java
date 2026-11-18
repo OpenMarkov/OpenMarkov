@@ -94,11 +94,11 @@ import java.util.List;
             // is the row index of the excel datasheet. (IT'S THE OTHER WAY)
             // A cell contains the StateName index corresponding to
             // the String in the excel file cell
-            int[][] cases = new int[rows - 1][numVariables];
-            for (int i = 1; i < rows; i++) {
+            List<int[]> rowCases = new ArrayList<>();
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 row = sheet.getRow(i);
-                if (row != null) {
-                    row.getPhysicalNumberOfCells();
+                if (row != null && hasAValue(row, numVariables)) {
+                    int[] aCase = new int[numVariables];
                     for (int j = 0; j < numVariables; j++) {
                         
                         Cell cell = row.getCell(j);
@@ -130,10 +130,12 @@ import java.util.List;
                                     ? Integer.toString((int) doubleValue)
                                     : Double.toString(doubleValue);
                         }
-                        cases[i - 1][j] = findVariableStateIndexOrCreate(variableStates[j], stateName);
+                        aCase[j] = findVariableStateIndexOrCreate(variableStates[j], stateName);
                     }
+                    rowCases.add(aCase);
                 }
             }
+            int[][] cases = rowCases.toArray(new int[0][]);
             
             /* Creation of the probNet. The probNet only contains variables but
              * no links. */
@@ -170,6 +172,18 @@ import java.util.List;
         }
         variableStates.add(new State(stateName));
         return variableStates.size() - 1;
+    }
+    
+    /** @return whether some of the first {@code numberOfColumns} cells of {@code row} has a value */
+    static boolean hasAValue(Row row, int numberOfColumns) {
+        for (int j = 0; j < numberOfColumns; j++) {
+            Cell cell = row.getCell(j);
+            if (cell != null && cell.getCellType() != CellType.BLANK
+                    && !(cell.getCellType() == CellType.STRING && cell.getRichStringCellValue().length() == 0)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     @Override public void save(File file, CaseDatabase database) throws IOException {
