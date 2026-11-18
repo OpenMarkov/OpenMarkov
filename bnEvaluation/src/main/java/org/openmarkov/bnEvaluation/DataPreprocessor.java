@@ -92,14 +92,18 @@ public final class DataPreprocessor {
     }
 
     /**
-     * Checks the combinations that need a class variable. Supervised discretization (MDLP or
-     * ChiMerge) and feature selection both require a class variable, and that class variable may not
-     * itself be discretized by a supervised method.
+     * Checks that at least one variable is selected, and the combinations that need a class variable.
+     * Supervised discretization (MDLP or ChiMerge) and feature selection both require a class variable,
+     * and that class variable may not itself be discretized by a supervised method.
      *
      * @param request the preprocessing parameters
      * @return {@code null} if the request is valid, otherwise the reason it is not
      */
     public static ValidationError validate(Request request) {
+        if (request.selectedVariables().isEmpty()) {
+            return new ValidationError("No variables selected",
+                    "Select at least one variable to save the preprocessed dataset.");
+        }
         boolean supervisedUsed = request.discretizeOptions().values().stream().anyMatch(
                 option -> option == Discretization.Option.MDLP || option == Discretization.Option.CHIMERGE);
         FeatureSelection.Method method = request.featureSelectionMethod();

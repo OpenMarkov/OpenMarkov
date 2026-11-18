@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
@@ -71,6 +72,19 @@ class DataPreprocessorTest {
         CaseDatabase database = new CaseDatabase(List.of(a), new int[][] { { 0 } });
 
         assertNull(DataPreprocessor.validate(neutralRequest(database, List.of(a))));
+    }
+
+    @Test
+    void aRequestWithoutVariablesIsRejected() {
+        Variable a = new Variable("A", "x", "y");
+        CaseDatabase database = new CaseDatabase(List.of(a), new int[][] { { 0 } });
+        DataPreprocessor.Request request = new DataPreprocessor.Request(database, List.of(),
+                Map.of(), Outliers.Option.NONE, Map.of(), Map.of(), null, FeatureSelection.Method.NONE, 5);
+
+        DataPreprocessor.ValidationError error = DataPreprocessor.validate(request);
+
+        assertNotNull(error);
+        assertEquals("No variables selected", error.title());
     }
 
     @Test
