@@ -7,15 +7,11 @@
 
 package org.openmarkov.io.database.weka;
 
+import org.openmarkov.core.io.database.DatabaseText;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Variable;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.CodingErrorAction;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -63,13 +59,13 @@ final class ArffReader {
     }
 
     /**
-     * @param file a file in UTF-8, or else in ISO-8859-1, as older files were written
+     * @param file a file in UTF-8, or else in Windows-1252, as older files were written
      *
      * @throws ParseException with the number of the line that cannot be read
      */
     static CaseDatabase read(Path file) throws IOException, ParseException {
         ArffReader reader = new ArffReader();
-        reader.readLines(text(file).lines().toList());
+        reader.readLines(DatabaseText.read(file).lines().toList());
         reader.sortTheNumericColumns();
         List<Variable> variables = new ArrayList<>();
         for (int column = 0; column < reader.names.size(); column++) {
@@ -78,16 +74,7 @@ final class ArffReader {
         return new CaseDatabase(variables, reader.cases.toArray(new int[0][]));
     }
 
-    private static String text(Path file) throws IOException {
-        byte[] bytes = Files.readAllBytes(file);
-        try {
-            return StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
-                                         .onUnmappableCharacter(CodingErrorAction.REPORT)
-                                         .decode(ByteBuffer.wrap(bytes)).toString();
-        } catch (CharacterCodingException notUtf8) {
-            return new String(bytes, StandardCharsets.ISO_8859_1);
-        }
-    }
+
 
     private void readLines(List<String> lines) throws ParseException {
         boolean inData = false;

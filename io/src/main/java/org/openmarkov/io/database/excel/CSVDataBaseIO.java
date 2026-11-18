@@ -13,6 +13,7 @@ import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.io.database.ByteOrderMark;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
+import org.openmarkov.core.io.database.DatabaseText;
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseFormat;
 import org.openmarkov.core.model.network.Node;
@@ -112,7 +113,7 @@ import java.util.Scanner;
         ByteOrderMark.refuse(file);
         // TODO Solve: This method assumes that 1) ALL the states of every variable are always included in the dataset, 2) All the variables are discrete.
         // First row contains all the attributes names and the attributes number
-        Scanner scanner = new Scanner(file);
+        Scanner scanner = new Scanner(DatabaseText.read(file.toPath()));
         // first use a Scanner to get each line
         if (!scanner.hasNextLine()) {
             scanner.close();
