@@ -21,7 +21,6 @@ import org.xml.sax.SAXParseException;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
@@ -139,12 +138,7 @@ public class FormatManager {
         if (fileExtension.equals("elv")) {
             fileVersion = "";
         } else {
-            DocumentBuilder docBuilder;
-            try {
-                docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            } catch (ParserConfigurationException e) {
-                throw new UnreachableException(e);
-            }
+            DocumentBuilder docBuilder = XMLParsers.documentBuilder();
             Document doc;
             try {
                 doc = docBuilder.parse(url.openStream());
@@ -200,15 +194,14 @@ public class FormatManager {
         
         InputStream xsd = getClass().getClassLoader().getResourceAsStream("version.xsd");
         
-        DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = parser.parse(input);
+        Document document = XMLParsers.documentBuilder().parse(input);
         
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         
         Source schemaFile = new StreamSource(xsd);
         Schema schema = factory.newSchema(schemaFile);
         
-        Validator validator = schema.newValidator();
+        Validator validator = XMLParsers.validator(schema);
         validator.validate(new DOMSource(document));
     }
     
@@ -217,14 +210,8 @@ public class FormatManager {
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Source schemaFile = new StreamSource(xsd);
         Schema schema = factory.newSchema(schemaFile);
-        Validator validator = schema.newValidator();
-        DocumentBuilder db;
-        try {
-            db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            throw new UnreachableException(e);
-        }
-        Document document = db.parse(url.openStream());
+        Validator validator = XMLParsers.validator(schema);
+        Document document = XMLParsers.documentBuilder().parse(url.openStream());
         validator.validate(new DOMSource(document));
     }
     
@@ -240,9 +227,8 @@ public class FormatManager {
         List<String> problems = new ArrayList<>();
         try (InputStream xsd = getClass().getClassLoader().getResourceAsStream("val_v4.xsd");
              InputStream file = url.openStream()) {
-            Validator validator = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-                                               .newSchema(new StreamSource(xsd))
-                                               .newValidator();
+            Validator validator = XMLParsers.validator(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+                                                                    .newSchema(new StreamSource(xsd)));
             validator.setProperty("http://apache.org/xml/properties/locale", Locale.ROOT); // messages in English
             validator.setErrorHandler(new ErrorHandler() {
                 @Override public void warning(SAXParseException exception) {
@@ -274,7 +260,7 @@ public class FormatManager {
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Source schemaFile = new StreamSource(xsd);
         Schema schema = factory.newSchema(schemaFile);
-        Validator validator = schema.newValidator();
+        Validator validator = XMLParsers.validator(schema);
         try {
             validator.validate(new StreamSource(inputStream));
         } catch (SAXParseException e) {

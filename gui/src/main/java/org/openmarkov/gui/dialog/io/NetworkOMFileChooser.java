@@ -7,11 +7,11 @@
 
 package org.openmarkov.gui.dialog.io;
 
-import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.core.io.format.annotation.FormatManager;
+import org.openmarkov.core.io.format.annotation.XMLParsers;
 import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.io.elvira.ElviraParser;
 import org.openmarkov.io.elvira.ElviraWriter;
@@ -22,8 +22,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.swing.JFileChooser;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -135,14 +133,10 @@ public class NetworkOMFileChooser extends OMFileChooser {
      */
     
     public String getPgmxFileFormat() throws SAXException, IOException {
-        try {
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(getSelectedFile());
-            String version = doc.getDocumentElement().getAttribute("formatVersion");
-            // Removing the last digit of the version
-            version = version.substring(0, version.lastIndexOf('.'));
-            return "OpenMarkov." + version;
-        } catch (ParserConfigurationException e) {
-            throw new UnreachableException(e);
-        }
+        Document doc = XMLParsers.documentBuilder().parse(getSelectedFile());
+        String version = doc.getDocumentElement().getAttribute("formatVersion");
+        // Removing the last digit of the version
+        version = version.substring(0, version.lastIndexOf('.'));
+        return "OpenMarkov." + version;
     }
 }

@@ -21,6 +21,7 @@ import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.inference.TemporalOptions;
 import org.openmarkov.core.io.format.annotation.FormatManager;
+import org.openmarkov.core.io.format.annotation.XMLParsers;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.graph.Link;
 import org.openmarkov.core.model.network.Criterion;
@@ -177,7 +178,7 @@ public class PGMXReader_0_2 {
      */
     @SuppressWarnings("ThrowInsideCatchBlockWhichIgnoresCaughtException")
     public static Element getRootElement(URL networkSource) throws ProbNetParserException.XMLInvalid, ProbNetParserException.CannotOpenFile {
-        SAXBuilder builder = new SAXBuilder();
+        SAXBuilder builder = XMLParsers.saxBuilder();
         builder.setJDOMFactory(new LocatedJDOMFactory());
         Document document;
         try {
