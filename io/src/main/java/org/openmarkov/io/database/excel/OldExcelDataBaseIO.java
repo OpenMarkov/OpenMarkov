@@ -97,10 +97,7 @@ import java.util.List;
                         } else if (cell.getCellType() == CellType.BOOLEAN) {
                             stateName = Boolean.toString(cell.getBooleanCellValue());
                         } else {
-                            double doubleValue = cell.getNumericCellValue();
-                            stateName = doubleValue == Math.round(doubleValue) ?
-                                    Integer.toString((int) doubleValue) :
-                                    Double.toString(doubleValue);
+                            stateName = ExcelDataBaseIO.stateNameOf(cell.getNumericCellValue());
                         }
                         aCase[j] = findVariableStateIndexOrCreate(variableStates[j], stateName);
                     }
@@ -175,14 +172,12 @@ import java.util.List;
                 String data = database.getVariables().get(j).getStates()[cases[i][j]].getName();
                 if (data.equals("?"))
                     continue;
-                double numericData;
-                try {
-                    numericData = Double.parseDouble(data);
-                } catch (NumberFormatException e) {
+                Double number = ExcelDataBaseIO.numberToWrite(data);
+                if (number == null) {
                     cell.setCellValue(new HSSFRichTextString(data));
-                    continue;
+                } else {
+                    cell.setCellValue(number);
                 }
-                cell.setCellValue(numericData);
             }
         }
         

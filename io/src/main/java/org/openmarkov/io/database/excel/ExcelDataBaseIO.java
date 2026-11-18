@@ -125,10 +125,7 @@ import java.util.List;
                             
                             stateName = Boolean.toString(cell.getBooleanCellValue());
                         } else {
-                            double doubleValue = cell.getNumericCellValue();
-                            stateName = doubleValue == Math.round(doubleValue)
-                                    ? Integer.toString((int) doubleValue)
-                                    : Double.toString(doubleValue);
+                            stateName = stateNameOf(cell.getNumericCellValue());
                         }
                         aCase[j] = findVariableStateIndexOrCreate(variableStates[j], stateName);
                     }
@@ -174,6 +171,22 @@ import java.util.List;
         return variableStates.size() - 1;
     }
     
+    /** @return the name of the state that a numeric cell with {@code value} is read as */
+    static String stateNameOf(double value) {
+        return value == Math.round(value) ? Integer.toString((int) value) : Double.toString(value);
+    }
+    
+    /** @return the number to write for the state {@code stateName}, or {@code null} if it would not be read back as it is */
+    static Double numberToWrite(String stateName) {
+        double value;
+        try {
+            value = Double.parseDouble(stateName);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        return Double.isFinite(value) && stateNameOf(value).equals(stateName) ? value : null;
+    }
+    
     /** @return whether some of the first {@code numberOfColumns} cells of {@code row} has a value */
     static boolean hasAValue(Row row, int numberOfColumns) {
         for (int j = 0; j < numberOfColumns; j++) {
@@ -215,14 +228,12 @@ import java.util.List;
                 String data = database.getVariables().get(j).getStates()[cases[i][j]].getName();
                 if (data.equals("?"))
                     continue;
-                double numericData;
-                try {
-                    numericData = Double.parseDouble(data);
-                } catch (NumberFormatException e) {
+                Double number = numberToWrite(data);
+                if (number == null) {
                     cell.setCellValue(new XSSFRichTextString(data));
-                    continue;
+                } else {
+                    cell.setCellValue(number);
                 }
-                cell.setCellValue(numericData);
             }
         }
         
