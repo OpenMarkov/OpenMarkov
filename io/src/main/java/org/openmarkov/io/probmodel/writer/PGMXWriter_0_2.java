@@ -843,12 +843,13 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
      */
     protected static void getPotentialAttributesAndVariables(ProbNet probNet, Potential potential, Element potentialElement) {
         // TODO - Change in new version. compatibility with this version of pgmx  format
-        // The parents of a utility node that adds or multiplies them
+        // The parents of a utility node, written after its <UtilityVariable>
         List<Variable> parents = null;
         if (potential instanceof ExactDistrPotential exactDistrPotential) {
             potential = exactDistrPotential.getTablePotential();
             Variable utilityVariable = exactDistrPotential.getChildVariable(); // it could be null in Branches potentials
             getUtilityElement(potentialElement, utilityVariable);
+            parents = potential.getVariables();
             
         } else if (potential instanceof SumPotential || potential instanceof ProductPotential) {
             if (potential.getPotentialRole() != PotentialRole.CONDITIONAL_PROBABILITY) {
@@ -910,7 +911,8 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
      * @param probNet the prob net
      */
     protected static void getPotentialVariables(Potential potential, Element potentialElement, ProbNet probNet) {
-        List<Variable> potentialVariables = potential.getVariables();
+        // Some relations give their own list, which must not change
+        List<Variable> potentialVariables = new ArrayList<>(potential.getVariables());
         if (!potentialVariables.isEmpty()
                 && probNet.getNode(potentialVariables.get(0)).getNodeType() == NodeType.UTILITY) {
             Variable utilityVariable = potential.getVariable(0);
