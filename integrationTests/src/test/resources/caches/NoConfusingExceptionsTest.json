@@ -209,6 +209,7 @@
     "UnexpectedInferenceException",
     "UnexpectedMenuActionException",
     "UnknownAgent",
+    "UnknownCriterion",
     "UnknownDistribution",
     "UnknownNetworkType",
     "UnknownNetworkType",

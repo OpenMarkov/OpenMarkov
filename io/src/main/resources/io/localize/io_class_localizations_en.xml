@@ -35,6 +35,7 @@
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$ProbabilityOfOccurrenceOutOfRange" value="The relation of {variableName} cannot be read: its probability of occurrence, {value}, must be a number between 0 and 1."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UncertaintyInAnEventTable" value="The relation of {variableName} cannot be read: the table of an event or of a transition cannot carry uncertainty."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownAgent" value="Variable {variableName} has the agent {agentName}, which is not in the list of agents of the network."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownCriterion" value="The file cannot be read: {elementName} names the criterion {criterionName}, which is not in the list of decision criteria of the network."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$VariableHasNoStates" value="Variable {variableName} has no states, while a list of states must be provided."/>
     <Localization
             class="org.openmarkov.io.probmodel.exception.PGMXParserException$CannotAssignPotentialToStaticVariable"

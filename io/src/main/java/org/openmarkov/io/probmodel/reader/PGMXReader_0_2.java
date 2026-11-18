@@ -386,7 +386,8 @@ public class PGMXReader_0_2 {
      */
     protected void getInferenceOptions(Element root, ProbNet probNet)
             throws PGMXParserException.DiscountOutOfRange, PGMXParserException.DiscountMissing,
-                   PGMXParserException.DataMissing, PGMXParserException.DataNotValid {
+                   PGMXParserException.DataMissing, PGMXParserException.DataNotValid,
+                   PGMXParserException.UnknownCriterion {
         Element inferenceOptions = root.getChild(XMLTags.INFERENCE_OPTIONS.toString());
         if (inferenceOptions != null) {
             getMulticriteriaOptions(inferenceOptions, probNet);
@@ -402,7 +403,8 @@ public class PGMXReader_0_2 {
      * @param probNet          ProbNet
      */
     protected void getMulticriteriaOptions(Element inferenceOptions, ProbNet probNet)
-            throws PGMXParserException.DataMissing, PGMXParserException.DataNotValid {
+            throws PGMXParserException.DataMissing, PGMXParserException.DataNotValid,
+                   PGMXParserException.UnknownCriterion {
         Element multicriteriaOptions = inferenceOptions.getChild(XMLTags.MULTICRITERIA_OPTIONS.toString());
         if (multicriteriaOptions != null) {
             Element multiCriteriaType = requiredChild(multicriteriaOptions, XMLTags.SELECTED_ANALYSIS_TYPE.toString());
@@ -419,12 +421,9 @@ public class PGMXReader_0_2 {
                 if (scalesTag != null) {
                     List<Element> scales = getXMLChildren(scalesTag);
                     for (Element element : scales) {
-                        String criterionVariableString = requiredAttribute(element, XMLTags.CRITERION.toString());
-                        for (Criterion probNetCriterion : probNet.getDecisionCriteria()) {
-                            if (probNetCriterion.isNamed(criterionVariableString)) {
-                                probNetCriterion.setUnicriterizationScale(scaleIn(element));
-                            }
-                        }
+                        String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
+                        criterionOfTheNetwork(probNet, criterionName, element.getName(), element)
+                                .setUnicriterizationScale(scaleIn(element));
                     }
                 }
                 
@@ -441,11 +440,8 @@ public class PGMXReader_0_2 {
                     List<Element> scales = getXMLChildren(scalesTag);
                     for (Element element : scales) {
                         String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
-                        for (Criterion criterion : probNet.getDecisionCriteria()) {
-                            if (criterion.isNamed(criterionName)) {
-                                criterion.setCeScale(scaleIn(element));
-                            }
-                        }
+                        criterionOfTheNetwork(probNet, criterionName, element.getName(), element)
+                                .setCeScale(scaleIn(element));
                     }
                 }
                 
@@ -454,13 +450,10 @@ public class PGMXReader_0_2 {
                     List<Element> ce_criterion = getXMLChildren(ceCriteria);
                     for (Element element : ce_criterion) {
                         String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
-                        for (Criterion criterion : probNet.getDecisionCriteria()) {
-                            if (criterion.isNamed(criterionName)) {
-                                String value = requiredAttribute(element, XMLTags.VALUE.toString());
-                                criterion.setCECriterion(enumIn(Criterion.CECriterion.class, element,
-                                                                XMLTags.VALUE.toString(), value));
-                            }
-                        }
+                        Criterion criterion = criterionOfTheNetwork(probNet, criterionName, element.getName(), element);
+                        String value = requiredAttribute(element, XMLTags.VALUE.toString());
+                        criterion.setCECriterion(enumIn(Criterion.CECriterion.class, element,
+                                                        XMLTags.VALUE.toString(), value));
                     }
                 }
             }
@@ -484,7 +477,8 @@ public class PGMXReader_0_2 {
      */
     protected void getTemporalOptions(Element inferenceOptions, ProbNet probNet)
             throws PGMXParserException.DiscountOutOfRange, PGMXParserException.DiscountMissing,
-                   PGMXParserException.DataMissing, PGMXParserException.DataNotValid {
+                   PGMXParserException.DataMissing, PGMXParserException.DataNotValid,
+                   PGMXParserException.UnknownCriterion {
         Element temporalOptions = inferenceOptions.getChild(XMLTags.TEMPORAL_OPTIONS.toString());
         if (temporalOptions != null) {
             
@@ -500,14 +494,11 @@ public class PGMXReader_0_2 {
             List<Element> discounts = getXMLChildren(discountsTag);
             for (Element element : discounts) {
                 String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
-                for (Criterion criterion : probNet.getDecisionCriteria()) {
-                    if (criterion.isNamed(criterionName)) {
-                        criterion.setDiscount(getXMLDiscount(element, criterion.getCriterionName()));
-                        String unit = requiredAttribute(element, XMLAttributes.UNIT.toString());
-                        criterion.setDiscountUnit(enumIn(CycleLength.DiscountUnit.class, element,
-                                                         XMLAttributes.UNIT.toString(), unit));
-                    }
-                }
+                Criterion criterion = criterionOfTheNetwork(probNet, criterionName, element.getName(), element);
+                criterion.setDiscount(getXMLDiscount(element, criterion.getCriterionName()));
+                String unit = requiredAttribute(element, XMLAttributes.UNIT.toString());
+                criterion.setDiscountUnit(enumIn(CycleLength.DiscountUnit.class, element,
+                                                 XMLAttributes.UNIT.toString(), unit));
             }
             
         }
@@ -696,7 +687,7 @@ public class PGMXReader_0_2 {
      * @param root    {@code Element}
      * @param probNet {@code ProbNet}
      */
-    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole {
+    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole, PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
         Element xmlVariablesRoot = getXMLVariables(root);
         if (xmlVariablesRoot == null) {
             return;
@@ -711,7 +702,8 @@ public class PGMXReader_0_2 {
     
     protected void loadVariables(List<Element> xmlVariables, ProbNet probNet)
             throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange,
-                   PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole {
+                   PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole,
+                   PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
         for (Element variableElement : xmlVariables) {
             loadVariable(variableElement, probNet);
         }
@@ -719,7 +711,8 @@ public class PGMXReader_0_2 {
     
     protected void loadVariable(Element variableElement, ProbNet probNet)
             throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange,
-                   PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole {
+                   PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole,
+                   PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
         VariableType variableType = getXMLVariableType(variableElement);
         NodeType nodeType = getXMLNodeType(variableElement);
         String variableName = getVariableName(variableElement);
@@ -747,6 +740,21 @@ public class PGMXReader_0_2 {
      * @return the agent of {@code probNet} that {@code agentElement} names
      * @throws PGMXParserException.UnknownAgent if the network has no agent with that name
      */
+    /**
+     * @return the decision criterion of the network named {@code criterionName}
+     *
+     * @throws PGMXParserException.UnknownCriterion if the network has none with that name
+     */
+    private static Criterion criterionOfTheNetwork(ProbNet probNet, String criterionName, String elementName,
+                                                   Element element) throws PGMXParserException.UnknownCriterion {
+        for (Criterion criterion : probNet.getDecisionCriteria()) {
+            if (criterion.isNamed(criterionName)) {
+                return criterion;
+            }
+        }
+        throw new PGMXParserException.UnknownCriterion(elementName, criterionName, element);
+    }
+    
     private static StringWithProperties agentOfTheNetwork(ProbNet probNet, String variableName, Element agentElement)
             throws PGMXParserException.UnknownAgent {
         String agentName = agentElement.getAttributeValue(XMLAttributes.NAME.toString());
@@ -767,7 +775,8 @@ public class PGMXReader_0_2 {
             NodeType nodeType,
             String variableName)
             throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent,
-                   PGMXParserException.PrecisionOutOfRange {
+                   PGMXParserException.PrecisionOutOfRange, PGMXParserException.DataMissing,
+                   PGMXParserException.UnknownCriterion {
         
         String stringTimeSlice = variableElement.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
         String nameWithTimeSlice = variableName;
@@ -811,12 +820,10 @@ public class PGMXReader_0_2 {
             if (nodeType == NodeType.UTILITY) {
                 Element decisionCriteria = variableElement.getChild(XMLTags.CRITERION.toString());
                 if (decisionCriteria != null) {
-                    for (Criterion criterion : probNet.getDecisionCriteria()) {
-                        if (criterion.isNamed(decisionCriteria.getAttributeValue(XMLAttributes.NAME.toString()))) {
-                            variable.setDecisionCriterion(criterion);
-                            break;
-                        }
-                    }
+                    String criterionName = requiredAttribute(decisionCriteria, XMLAttributes.NAME.toString());
+                    variable.setDecisionCriterion(criterionOfTheNetwork(probNet, criterionName,
+                                                                        "Variable " + nameWithTimeSlice,
+                                                                        decisionCriteria));
                     // If the node has not have Decision Criteria, set the first of the probNet.
                 } else {
                     variable.setDecisionCriterion(probNet.getDecisionCriteria().getFirst());

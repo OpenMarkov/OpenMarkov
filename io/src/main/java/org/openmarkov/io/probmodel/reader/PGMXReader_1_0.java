@@ -211,7 +211,7 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     
     
     @Override
-    protected void loadVariableAdvancedInformation(Element variableElement, ProbNet probNet, VariableType variableType, NodeType nodeType, String variableName) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange {
+    protected void loadVariableAdvancedInformation(Element variableElement, ProbNet probNet, VariableType variableType, NodeType nodeType, String variableName) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
         super.loadVariableAdvancedInformation(variableElement, probNet, variableType, nodeType, variableName);
         if (nodeType.equals(NodeType.EVENT)) {
             Node node = probNet.getNode(variableName);
@@ -240,7 +240,7 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     @Override
     protected void getInferenceOptions(Element root, ProbNet probNet)
             throws PGMXParserException.DiscountOutOfRange, PGMXParserException.DiscountMissing,
-                   PGMXParserException.DataMissing, PGMXParserException.DataNotValid {
+                   PGMXParserException.DataMissing, PGMXParserException.DataNotValid, PGMXParserException.UnknownCriterion {
         super.getInferenceOptions(root, probNet);
         this.getMonteCarloOptions(root.getChild(XMLTags.INFERENCE_OPTIONS.toString()), probNet);
         

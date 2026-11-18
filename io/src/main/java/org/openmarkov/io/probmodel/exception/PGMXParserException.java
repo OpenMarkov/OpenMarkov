@@ -274,6 +274,17 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String agentName;
     }
     
+    public static final class UnknownCriterion extends PGMXParserException {
+        public UnknownCriterion(String elementName, String criterionName, Element element) {
+            super(element);
+            this.elementName = elementName;
+            this.criterionName = criterionName;
+        }
+        
+        public final String elementName;
+        public final String criterionName;
+    }
+    
     public static final class DataCouldNotBeConverted extends PGMXParserException {
         public DataCouldNotBeConverted(String reason, Element element) {
             super(element);
