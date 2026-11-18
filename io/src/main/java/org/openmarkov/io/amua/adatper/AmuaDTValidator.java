@@ -60,7 +60,9 @@ public class AmuaDTValidator {
         if (criteria.size() == 1 || hasCE) {
             try {
                 decisionNodeCount = 0;
+                decisionNode = null;
                 hasValidStructure(treeNode, 1, false);
+                checkDecisionIsTheRoot(treeNode);
                 return AmuaModel.UNICRITERIA_DT;
             } catch (IllegalStateException e) {
                 if (isCriticalError(e)) {
