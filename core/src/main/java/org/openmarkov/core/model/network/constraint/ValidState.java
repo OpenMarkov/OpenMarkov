@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.network.constraint;
 
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.core.model.network.FileCharacters;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.action.base.StateAction;
 import org.openmarkov.core.exception.ConstraintViolatedException;
@@ -40,6 +41,9 @@ public class ValidState extends PNConstraint {
         Variable variable = node.getVariable();
         if (variable.hasNamedStates() && (newName == null || newName.isBlank())) {
             constraintChecker.addException(new ConstraintViolatedException.NameOfStateCannotBeEmpty(this, node));
+        } else if (FileCharacters.firstThatCannotBeKept(newName) != null) {
+            constraintChecker.addException(new ConstraintViolatedException.NameOfStateHasACharacterAFileCannotKeep(
+                    this, node, newName, FileCharacters.firstThatCannotBeKept(newName)));
         } else if (variable.isStateNameTaken(newName, renamed)) {
             constraintChecker.addException(new ConstraintViolatedException.StateAlreadyExists(this, node, newName));
         }
@@ -54,6 +58,9 @@ public class ValidState extends PNConstraint {
         for (State state : states) {
             if (state.getName() == null || state.getName().isBlank()) {
                 constraintChecker.addException(new ConstraintViolatedException.NameOfStateCannotBeEmpty(this, node));
+            } else if (FileCharacters.firstThatCannotBeKept(state.getName()) != null) {
+                constraintChecker.addException(new ConstraintViolatedException.NameOfStateHasACharacterAFileCannotKeep(
+                        this, node, state.getName(), FileCharacters.firstThatCannotBeKept(state.getName())));
             } else if (!seen.add(State.nameKey(state.getName()))) {
                 constraintChecker.addException(new ConstraintViolatedException.StateDuplicated(this, node, state.getName()));
             }

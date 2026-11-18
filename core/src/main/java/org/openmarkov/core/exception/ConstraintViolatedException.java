@@ -306,6 +306,19 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         public final Variable variable;
     }
     
+    public static class NameOfVariableHasACharacterAFileCannotKeep extends ConstraintViolatedException {
+        
+        public NameOfVariableHasACharacterAFileCannotKeep(PNConstraint constraint, String variableName,
+                                                          String character) {
+            super(constraint);
+            this.variableName = variableName;
+            this.character = character;
+        }
+        
+        public final String variableName;
+        public final String character;
+    }
+    
     public static class NameOfVariableIsAlreadyPresent extends ConstraintViolatedException {
         
         public NameOfVariableIsAlreadyPresent(PNConstraint constraint, String variableName) {
@@ -617,6 +630,21 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         }
         
         public final Node node;
+    }
+    
+    public static class NameOfStateHasACharacterAFileCannotKeep extends ConstraintViolatedException {
+        
+        public NameOfStateHasACharacterAFileCannotKeep(ValidState constraint, Node node, String stateName,
+                                                       String character) {
+            super(constraint);
+            this.node = node;
+            this.stateName = stateName;
+            this.character = character;
+        }
+        
+        public final Node node;
+        public final String stateName;
+        public final String character;
     }
     
     public static class StateAlreadyExists extends ConstraintViolatedException {

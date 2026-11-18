@@ -135,6 +135,8 @@
                   value="The name of a state of {node.getName} cannot be empty."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfVariableCannotBeEmpty"
                   value="The name of a variable cannot be empty."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfVariableHasACharacterAFileCannotKeep"
+                  value="The name {variableName} has the character {character}, which a network file cannot keep. It is often the manual line break of a word processor."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfVariableIsAlreadyPresent"
                   value="Name of variable {variableName} already belongs to another variable."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NetworkCannotHaveRevelationArcs"
@@ -173,6 +175,8 @@
             value="Node {node.getName} must have only undirected links to other nodes, but it has directed links to children nodes: {children, om, short}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$OnlyUndirectedLinksCannotHaveParents"
                   value="Node {node.getName} must have only undirected links to other nodes, but it has directed links to parent nodes: {parents, om, short}."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NameOfStateHasACharacterAFileCannotKeep"
+                  value="The state {stateName} of {node.getName} has the character {character}, which a network file cannot keep. It is often the manual line break of a word processor."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$StateAlreadyExists"
                   value="{node.getName} already has a state named {newState}."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$StateDuplicated"
@@ -331,6 +335,8 @@
                   value="ICI Model {modelType} is not supported by Elvira."/>
     <Localization class="org.openmarkov.core.exception.WriterException$RelationNotSupportedByFormat"
                   value="The network is not saved: the relation of {nodeName}, of type {relationType}, cannot be saved in format {formatVersion}, which could not read it back. Save the network in another format."/>
+    <Localization class="org.openmarkov.core.exception.WriterException$CharacterAFileCannotKeep"
+                  value="The network is not saved: one of its texts has a character that a network file cannot keep. {reason}"/>
     <Localization class="org.openmarkov.core.exception.WriterException$PotentialWithoutRole"
                   value="The network is not saved: the relation of {nodeName} has no role, and this format needs one. Save the network in another format."/>
     <Localization class="org.openmarkov.core.exception.WriterException$NetworkTypeNotSupportedByFormat"

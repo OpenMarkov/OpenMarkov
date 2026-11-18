@@ -64,6 +64,15 @@ public abstract sealed class WriterException extends UserInputException {
         public final String formatVersion;
     }
     
+    /** A text of the network has a character that a network file cannot keep, so the network is not saved. */
+    public static final class CharacterAFileCannotKeep extends WriterException {
+        public CharacterAFileCannotKeep(String reason) {
+            this.reason = reason;
+        }
+        
+        public final String reason;
+    }
+    
     /** A potential without a role, in a format that writes the role of each potential, so the network is not saved. */
     public static final class PotentialWithoutRole extends WriterException {
         public PotentialWithoutRole(String nodeName) {

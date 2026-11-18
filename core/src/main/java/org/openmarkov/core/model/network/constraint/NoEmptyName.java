@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.model.network.constraint;
 
+import org.openmarkov.core.model.network.FileCharacters;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.model.network.GraphNetwork;
@@ -24,6 +25,9 @@ import java.util.List;
 			String name = variable.getName();
 			if ((name == null) || (name.contentEquals(""))) {
                 constraintChecker.addException(new ConstraintViolatedException.NameOfVariableCannotBeEmpty(this, variable));
+			} else if (FileCharacters.firstThatCannotBeKept(name) != null) {
+                constraintChecker.addException(new ConstraintViolatedException.NameOfVariableHasACharacterAFileCannotKeep(
+                        this, name, FileCharacters.firstThatCannotBeKept(name)));
 			}
 		}
 	}

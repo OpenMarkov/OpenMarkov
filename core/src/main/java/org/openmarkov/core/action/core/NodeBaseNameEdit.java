@@ -7,6 +7,7 @@
 
 package org.openmarkov.core.action.core;
 
+import org.openmarkov.core.model.network.FileCharacters;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.model.network.Node;
@@ -55,6 +56,10 @@ import org.openmarkov.core.action.base.PNEdit;
         if (probNet.getConstraintOfClass(NoEmptyName.class) instanceof NoEmptyName constraint) {
             if ((this.newName == null) || (this.newName.contentEquals(""))) {
                 constraintChecker.addException(new ConstraintViolatedException.NameOfVariableCannotBeEmpty(constraint, this.node.getVariable()));
+            }
+            if (FileCharacters.firstThatCannotBeKept(this.newName) != null) {
+                constraintChecker.addException(new ConstraintViolatedException.NameOfVariableHasACharacterAFileCannotKeep(
+                        constraint, this.newName, FileCharacters.firstThatCannotBeKept(this.newName)));
             }
         }
         if (probNet.getConstraintOfClass(ValidName.class) instanceof ValidName constraint) {

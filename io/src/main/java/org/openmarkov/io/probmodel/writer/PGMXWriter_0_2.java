@@ -10,6 +10,7 @@ package org.openmarkov.io.probmodel.writer;
 import org.jdom2.CDATA;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.IllegalDataException;
 import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -72,7 +73,7 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
      */
     @SuppressWarnings("ThrowInsideCatchBlockWhichIgnoresCaughtException")
     @Override
-    public void write(String netName, ProbNet probNet, List<EvidenceCase> evidences) throws WriterException.TryingToWriteANullProbNet, WriterException.TryingToWriteAProbNetWithoutName, WriterException.CannotCreateFile, WriterException.NetworkTypeNotSupportedByFormat, WriterException.RelationNotSupportedByFormat, WriterException.PotentialWithoutRole {
+    public void write(String netName, ProbNet probNet, List<EvidenceCase> evidences) throws WriterException.TryingToWriteANullProbNet, WriterException.TryingToWriteAProbNetWithoutName, WriterException.CannotCreateFile, WriterException.NetworkTypeNotSupportedByFormat, WriterException.RelationNotSupportedByFormat, WriterException.PotentialWithoutRole, WriterException.CharacterAFileCannotKeep {
         if (probNet == null) {
             throw new WriterException.TryingToWriteANullProbNet();
         }
@@ -93,12 +94,16 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
         // PrintWriter out = new PrintWriter(new FileOutputStream(netName));
         Element root = new Element("ProbModelXML");
         root.setAttribute(XMLAttributes.FORMAT_VERSION.toString(), formatVersion);
-        writeXMLProbNet(probNet, root);
-        writeInferenceOptions(probNet, root);
-        writePolicies(probNet, root);
-        writeEvidence(probNet, evidences, root);
-        writeVariableType(probNet, root);
-        writeDefaultStates(probNet,root);
+        try {
+            writeXMLProbNet(probNet, root);
+            writeInferenceOptions(probNet, root);
+            writePolicies(probNet, root);
+            writeEvidence(probNet, evidences, root);
+            writeVariableType(probNet, root);
+            writeDefaultStates(probNet, root);
+        } catch (IllegalDataException textThatCannotBeKept) {
+            throw new WriterException.CharacterAFileCannotKeep(textThatCannotBeKept.getMessage());
+        }
         this.checkTheRelationsCanBeReadBack(root);
         Document document = new Document(root);
         XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
@@ -412,7 +417,7 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
     
     protected static void getProbNetComment(ProbNet probNet, Element probNetElement, Element commentElement) {
         if (probNet.getComment() != null && !probNet.getComment().isEmpty()) {
-            CDATA cdata = new CDATA(probNet.getComment());
+            CDATA cdata = new CDATA(FileCharacters.withoutThoseThatCannotBeKept(probNet.getComment()));
             /*
              * probNetElement.addContent( commentElement.setText( probNet.
              * getComment() ) );
@@ -625,7 +630,7 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
      */
     protected static void getCommment(Element variableElement, Node node) {
         if (node.getComment() != null && !node.getComment().isEmpty()) {
-            CDATA cdata = new CDATA(node.getComment());
+            CDATA cdata = new CDATA(FileCharacters.withoutThoseThatCannotBeKept(node.getComment()));
             variableElement.addContent(new Element(XMLTags.COMMENT.toString()).setContent(cdata));
         }
     }
@@ -898,7 +903,7 @@ public class PGMXWriter_0_2 implements ProbNetWriter {
     protected static void getPotentialComment(Potential potential, Element potentialElement) {
         if (potential.getComment() != null && !potential.getComment().isEmpty()) {
             Element commentElement = new Element(XMLTags.COMMENT.toString());
-            CDATA cdata = new CDATA(potential.getComment());
+            CDATA cdata = new CDATA(FileCharacters.withoutThoseThatCannotBeKept(potential.getComment()));
             potentialElement.addContent(commentElement.setContent(cdata));
         }
     }

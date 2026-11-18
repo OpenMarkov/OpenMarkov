@@ -8,6 +8,7 @@
 package org.openmarkov.core.action.core;
 
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.core.model.network.FileCharacters;
 import org.openmarkov.core.action.base.ConstraintChecker;
 import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.exception.ConstraintViolatedException;
@@ -73,6 +74,10 @@ public class AddNodeEdit extends PNEdit {
             String name = this.variable.getName();
             if ((name == null) || (name.contentEquals(""))) {
                 constraintChecker.addException(new ConstraintViolatedException.NameOfVariableCannotBeEmpty(constraint, variable));
+            }
+            if (FileCharacters.firstThatCannotBeKept(name) != null) {
+                constraintChecker.addException(new ConstraintViolatedException.NameOfVariableHasACharacterAFileCannotKeep(
+                        constraint, name, FileCharacters.firstThatCannotBeKept(name)));
             }
         }
         if (probNet.getConstraintOfClass(OnlyAtemporalVariables.class) instanceof OnlyAtemporalVariables constraint) {
