@@ -307,8 +307,8 @@
                             <xs:element name="TemporalOptions" minOccurs="0">
                                 <xs:complexType>
                                     <xs:all>
-                                        <xs:element name="Slices" minOccurs="0"/>
-                                        <xs:element name="Transition" minOccurs="0"/>
+                                        <xs:element name="Slices"/>
+                                        <xs:element name="Transition"/>
                                         <xs:element name="DiscountRates" minOccurs="0">
                                             <xs:complexType>
                                                 <xs:sequence>
