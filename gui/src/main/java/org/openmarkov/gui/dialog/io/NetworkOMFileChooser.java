@@ -7,24 +7,19 @@
 
 package org.openmarkov.gui.dialog.io;
 
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.core.io.format.annotation.FormatManager;
-import org.openmarkov.core.io.format.annotation.XMLParsers;
 import org.openmarkov.gui.configuration.UserPreferences;
 import org.openmarkov.io.elvira.ElviraParser;
 import org.openmarkov.io.elvira.ElviraWriter;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_0_2;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_1_0;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import javax.swing.JFileChooser;
 import java.awt.Component;
 import java.io.File;
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
@@ -91,11 +86,6 @@ public class NetworkOMFileChooser extends OMFileChooser {
         int result = super.showOpenDialog(parent);
         if (result == JFileChooser.APPROVE_OPTION) {
             UserPreferences.LATEST_OPEN_DIRECTORY.set(getSelectedFile());
-            try {
-                UserPreferences.LATEST_NETWORK_FORMAT.set(getPgmxFileFormat());
-            } catch (SAXException | IOException e) {
-                throw new UnrecoverableException(e);
-            }
         }
         return result;
     }
@@ -120,23 +110,5 @@ public class NetworkOMFileChooser extends OMFileChooser {
             }
         }
         return result;
-    }
-    
-    /**
-     * Extracts the version of a pgmx file and concatenate it to the String
-     * "OpenMarkov" for having the description of the file
-     *
-     * @return the format OpenMarkov.version of a pgmx file
-     *
-     * @throws IOException  if an I/O error occurs
-     * @throws SAXException if an XML parsing error occurs
-     */
-    
-    public String getPgmxFileFormat() throws SAXException, IOException {
-        Document doc = XMLParsers.documentBuilder().parse(getSelectedFile());
-        String version = doc.getDocumentElement().getAttribute("formatVersion");
-        // Removing the last digit of the version
-        version = version.substring(0, version.lastIndexOf('.'));
-        return "OpenMarkov." + version;
     }
 }
