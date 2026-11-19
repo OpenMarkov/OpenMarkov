@@ -35,6 +35,9 @@ public class PGMXReader implements ProbNetReader {
         if (!root.getName().equals("ProbModelXML")) {
             throw new PGMXParserException.NotAProbModelXMLFile(networkSource.getFile(), root);
         }
+        if (!root.getNamespaceURI().isEmpty()) {
+            throw new PGMXParserException.FileWithNamespace(networkSource.getFile(), root);
+        }
         String formatVersion = root.getAttributeValue(XMLAttributes.FORMAT_VERSION.toString());
         if (formatVersion == null) {
             throw new PGMXParserException.FileWithoutFormatVersion(networkSource.getFile(), root);

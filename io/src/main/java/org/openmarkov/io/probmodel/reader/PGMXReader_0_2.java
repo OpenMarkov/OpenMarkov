@@ -194,9 +194,9 @@ public class PGMXReader_0_2 {
      * @param root    Root element
      * @param netName Network name
      *
-     * @return ProbNet or null
+     * @return the network
      *
-     * @throws PGMXParserException if the PGMX file cannot be parsed
+     * @throws PGMXParserException if the PGMX file cannot be parsed or has no network
      */
     public ProbNet getProbNet(Element root, String netName) throws ProbNetParserException {
         return getProbNet(root, netName, new HashMap<>());
@@ -207,20 +207,20 @@ public class PGMXReader_0_2 {
      * @param netName Network name
      * @param classes Classes
      *
-     * @return ProbNet or null
+     * @return the network
      *
-     * @throws PGMXParserException if the PGMX file cannot be parsed
+     * @throws PGMXParserException if the PGMX file cannot be parsed or has no network
      */
     protected ProbNet getProbNet(Element root, String netName, Map<String, ProbNet> classes) throws ProbNetParserException {
         Element xMLProbNet = root.getChild(getStringTagNetwork());
-        ProbNet probNet = null;
-        if (xMLProbNet != null) { // Read prob net if the xml file exists
-            probNet = initializeProbNet(xMLProbNet, netName);
-            // Before the variables, which name their agent
-            getAgents(xMLProbNet, probNet);
-            getVariablesLinksAndPotentials(xMLProbNet, probNet);
-            getNetworkAdvancedInformation(xMLProbNet, probNet, netName, classes);
+        if (xMLProbNet == null) {
+            throw new PGMXParserException.FileWithoutNetwork(netName, getStringTagNetwork(), root);
         }
+        ProbNet probNet = initializeProbNet(xMLProbNet, netName);
+        // Before the variables, which name their agent
+        getAgents(xMLProbNet, probNet);
+        getVariablesLinksAndPotentials(xMLProbNet, probNet);
+        getNetworkAdvancedInformation(xMLProbNet, probNet, netName, classes);
         return probNet;
     }
     

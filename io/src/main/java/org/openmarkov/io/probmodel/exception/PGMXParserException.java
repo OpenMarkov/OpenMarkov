@@ -79,6 +79,28 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
 
         public final String fileName;
     }
+
+    public static final class FileWithNamespace extends PGMXParserException {
+        public FileWithNamespace(String fileName, Element root) {
+            super(root);
+            this.fileName = fileName;
+            this.namespace = root.getNamespaceURI();
+        }
+
+        public final String fileName;
+        public final String namespace;
+    }
+
+    public static final class FileWithoutNetwork extends PGMXParserException {
+        public FileWithoutNetwork(String fileName, String networkTag, Element root) {
+            super(root);
+            this.fileName = fileName;
+            this.networkTag = networkTag;
+        }
+
+        public final String fileName;
+        public final String networkTag;
+    }
     
     public static final class UnknownDistribution extends PGMXParserException {
         public UnknownDistribution(String variableName, String distributionName, @Nullable String parametrizationName,
