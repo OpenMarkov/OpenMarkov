@@ -118,7 +118,8 @@ public class FormatManager {
      *
      * @return a ProbNetReader object
      */
-    public ProbNetReader getProbNetReader(URL url) throws NoReaderForFileException, ProbNetParserException.BadlyStructuredFile {
+    public ProbNetReader getProbNetReader(URL url)
+            throws NoReaderForFileException, ProbNetParserException.BadlyStructuredFile, ProbNetParserException.CannotOpenFile {
         //checkVersion(url);
         String fileName = url.getFile();
         String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
@@ -133,7 +134,8 @@ public class FormatManager {
         return reader;
     }
     
-    private static @NotNull String getFileVersion(URL url, String fileExtension) throws ProbNetParserException.BadlyStructuredFile {
+    private static @NotNull String getFileVersion(URL url, String fileExtension)
+            throws ProbNetParserException.BadlyStructuredFile, ProbNetParserException.CannotOpenFile {
         String fileVersion;
         if (fileExtension.equals("elv")) {
             fileVersion = "";
@@ -147,7 +149,7 @@ public class FormatManager {
             } catch (SAXException e) {
                 throw new UnreachableException("Unexpected SAX error reading " + url, e);
             } catch (IOException e) {
-                throw new ProbNetParserException.BadlyStructuredFile(url, e);
+                throw new ProbNetParserException.CannotOpenFile(url.getFile(), e);
             }
             fileVersion = doc.getDocumentElement().getAttribute("formatVersion");
             //Removing the last index of the version

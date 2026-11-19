@@ -176,7 +176,6 @@ public class PGMXReader_0_2 {
      *
      * @return root Element
      */
-    @SuppressWarnings("ThrowInsideCatchBlockWhichIgnoresCaughtException")
     public static Element getRootElement(URL networkSource) throws ProbNetParserException.XMLInvalid, ProbNetParserException.CannotOpenFile {
         SAXBuilder builder = XMLParsers.saxBuilder();
         builder.setJDOMFactory(new LocatedJDOMFactory());
@@ -186,7 +185,7 @@ public class PGMXReader_0_2 {
         } catch (JDOMException e) {
             throw new ProbNetParserException.XMLInvalid(networkSource.getFile(), e);
         } catch (IOException e) {
-            throw new ProbNetParserException.CannotOpenFile(networkSource.getFile());
+            throw new ProbNetParserException.CannotOpenFile(networkSource.getFile(), e);
         }
         return document.getRootElement();
     }

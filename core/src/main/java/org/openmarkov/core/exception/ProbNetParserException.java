@@ -163,11 +163,14 @@ public abstract class ProbNetParserException extends UserInputException {
     }
     
     public static final class CannotOpenFile extends ProbNetParserException {
-        public CannotOpenFile(String filename) {
+        public CannotOpenFile(String filename, IOException ioException) {
+            initCause(ioException);
             this.filename = filename;
+            this.ioException = ioException;
         }
         
         public final String filename;
+        public final IOException ioException;
     }
     
     public static final class WrongVersion extends ProbNetParserException {
@@ -186,14 +189,8 @@ public abstract class ProbNetParserException extends UserInputException {
             this.saxParseException = saxParseException;
         }
 
-        public BadlyStructuredFile(URL url, IOException ioException) {
-            ThrowableUtils.transferStackTrace(ioException, this);
-            this.url = url;
-            this.saxParseException = null;
-        }
-
         public final URL url;
-        public final @Nullable SAXParseException saxParseException;
+        public final SAXParseException saxParseException;
     }
     
     public static final class CannotParseFile extends ProbNetParserException {
