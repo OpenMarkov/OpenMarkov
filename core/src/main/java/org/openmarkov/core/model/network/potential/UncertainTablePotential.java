@@ -14,6 +14,7 @@ import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
 
 import java.util.ArrayList;
@@ -259,7 +260,8 @@ public class UncertainTablePotential extends TablePotential implements Uncertain
         for (int i = 0; i < variables.size(); i++) {
             Variable variable = variables.get(i);
             if ((evidenceCase != null) && evidenceCase.contains(variable)) {
-                int state = evidenceCase.getState(variable);
+                // A numeric variable has a single cell, whatever its value
+                int state = variable.getVariableType() == VariableType.NUMERIC ? 0 : evidenceCase.getState(variable);
                 firstPosition += state * offsets[i];
             }
         }
