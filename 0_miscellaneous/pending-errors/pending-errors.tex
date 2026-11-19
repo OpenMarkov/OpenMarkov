@@ -265,6 +265,9 @@ El \hyperref[err:376]{error~376} salió en la versión en C++ y Qt al comprobar 
 \paragraph{Errores añadidos el 18 de noviembre}
 Los \hyperref[err:377]{errores~377} a \hyperref[err:425]{425} salen de una revisión del módulo \texttt{io} con sondas, pequeños programas de prueba que se ejecutan sin ventana: abren, guardan y vuelven a abrir todas las redes del repositorio y otras construidas para cubrir lo que el editor deja crear; abren ficheros estropeados a propósito; leen y escriben bases de casos; y exportan árboles a Amua. Cada hallazgo se midió dos veces por separado, y la segunda vez con el propósito de desmentirlo. Se han comprobado con el código de \texttt{46b8e85}, y la fila \emph{Comprobado} de cada ficha dice cómo. 14 de ellos recogen defectos que ya describía el informe de revisión de ese módulo del 30 de julio y que no habían pasado a esta lista. El \hyperref[err:390]{error~390} se añade ya corregido. Los \hyperref[err:426]{errores~426} y \hyperref[err:427]{427} se vieron al redactar esas fichas, y se añaden ya corregidos.
 
+\paragraph{Errores añadidos el 19 de noviembre}
+El \hyperref[err:428]{error~428} se vio al investigar el \hyperref[err:389]{389}. Se ha comprobado con el código de \texttt{4474203}, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo.
+
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
 
@@ -318,9 +321,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{426 errores}; 282 de ellos son defectos nuevos: 100 encontrados al
-comprobar o corregir los demás, 116 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 377 pequeños, 48 medios y 1 grandes.
-De los 426, 383 están ya corregidos y 2 están cerrados sin arreglo.
+La lista tiene \textbf{427 errores}; 283 de ellos son defectos nuevos: 101 encontrados al
+comprobar o corregir los demás, 116 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 377 pequeños, 49 medios y 1 grandes.
+De los 427, 383 están ya corregidos y 2 están cerrados sin arreglo.
 El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -333,7 +336,7 @@ El apéndice recoge además 201 notas con lo que se comprobó y no entra en la l
 \ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 25 \\
 \ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 34 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
-\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 28 \\
+\ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 29 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 24 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 16 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 30 \\
@@ -464,6 +467,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:272]{272} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una beta con un parámetro 0 solo se rechaza como tal en su extremo; dentro, el mensaje dice otra cosa & \texttt{core} & S \hfill No\\
 \hyperref[err:314]{314} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un intervalo hecho con sus dos extremos queda abierto por abajo donde se pide cerrado, y al revés & \texttt{core} & S \hfill No\\
 \hyperref[err:389]{389} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un nodo de azar numérico con relación «Exact» y un padre numérico impide propagar y evaluar & \texttt{core} & S \hfill No\\
+\hyperref[err:428]{428} & La evaluación da una utilidad con hallazgos imposibles, sin avisar, y la propagación también si todos los nodos de azar tienen hallazgo & \texttt{inference} & M \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:decisiones}.\ Decisiones: políticas, criterios, agentes y árbol de decisión}}\\
 \hyperref[err:50]{50} & \textcolor{corregidoverde}{\textbf{Corregido}} · El árbol de decisión falla en casi todas las redes en formato 1.0 & \texttt{inference} & M \hfill No\\
 \hyperref[err:51]{51} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Show optimal policy» y «Show expected utility» no llegan a abrirse & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -6430,6 +6434,40 @@ core/src/main/java/org/openmarkov/core/model/network/Finding.java:82-91
 Que la proyección de una tabla tome, para una variable numérica con hallazgo, su única casilla, la de índice 0, en \texttt{Uncertain\allowbreak{}Table\allowbreak{}Potential.\allowbreak{}table\allowbreak{}Project} y en \texttt{Table\allowbreak{}Potential.\allowbreak{}table\allowbreak{}Project}, que hacen la misma cuenta. Otra salida es que \texttt{for\allowbreak{}Each\allowbreak{}Configuration\allowbreak{}Of\allowbreak{}Parents} no meta los padres numéricos en la configuración con que se proyecta la relación; pero las relaciones con fórmulas sí necesitan su valor, así que la primera es más segura.
 
 Prueba: la red bayesiana Age → Dose con la «Exact» de 7,5 se propaga; y el diagrama de influencia da una utilidad esperada de $-75$, en memoria y tras guardarlo en 0.2 y abrirlo.
+
+\setcounter{subsection}{427}
+\subsection[La evaluación da una utilidad con hallazgos imposibles, sin avisar]{La evaluación de un diagrama de influencia acepta hallazgos que el modelo hace imposibles y da una utilidad calculada como si fueran posibles; la propagación solo los rechaza cuando calcula la probabilidad de un nodo de azar sin hallazgo}\label{err:428}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}inference
+\fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination.tasks
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEEvaluation.java:65-98} \newline \path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VEPropagation.java:315-323, 357-389} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/TornadoSpiderDialog.java:181-183} \newline \path{sensitivityAnalysis/src/main/java/org/openmarkov/sensitivityanalysis/dialog/PlotDialog.java:117-119} \newline \path{costEffectiveness/src/main/java/org/openmarkov/costEffectiveness/CostEffectivenessPlugin.java:106-108}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{4474203} (19-11-2026): \texttt{VEEvaluation}, \texttt{VEExpected\allowbreak{}Utility\allowbreak{}Decision} y \texttt{VEPropagation} en el diagrama de influencia de abajo, y \texttt{VEEvaluation} y \texttt{VEPropagation} en la red del \hyperref[err:389]{error~389} con un hallazgo sobre Dose. Lo que enseña la ventana está leído en el código, no se ha pintado
+\fichakey{Esfuerzo}Medio (días)
+\fichakey{Decisión de equipo}No: qué responder a la evidencia imposible se decidió en el \hyperref[err:48]{error~48}
+\fichakey{Relacionados}\hyperref[err:48]{error~48}, \hyperref[err:194]{error~194}, \hyperref[err:389]{error~389}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde el arreglo del \hyperref[err:48]{error~48}, la propagación rechaza unos hallazgos que juntos tienen probabilidad cero con \texttt{Incompatible\allowbreak{}Evidence\allowbreak{}Exception.\allowbreak{}Evidence\allowbreak{}Is\allowbreak{}Impossible} («These findings are impossible in this network: together they have probability zero.»). Pero solo lo mira cuando no puede normalizar la probabilidad de una variable sin hallazgo (\texttt{VEPropagation}, líneas 315-323): si no queda ningún nodo de azar sin hallazgo, no hay nada que normalizar y la propagación da sus números sin avisar. La evaluación (\texttt{VEEvaluation.\allowbreak{}resolve}) no lo mira nunca: calcula la utilidad esperada como si los hallazgos fueran posibles. El análisis de coste-efectividad global sí lo comprueba, por su cuenta (\texttt{Cost\allowbreak{}Effectiveness\allowbreak{}Plugin}, líneas 106-108).
+
+Medido en un diagrama de influencia con Disease (absent 0,9; present 0,1) → Result, que copia Disease sin error; Result → Therapy, una decisión; y U(Disease, Therapy) = 10, 2, 8 y 6 (absent y no, present y no, absent y yes, present y yes). Los hallazgos Disease = absent y Result = positive tienen probabilidad cero:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+sin hallazgos                                   utilidad esperada 9,6
+Disease = absent y Result = positive
+  evaluación (VEEvaluation)                     10, sin aviso
+  utilidad esperada de Therapy                  10, 8, 10, 8, sin aviso
+  propagación, hallazgos antes de resolver      U = 10, sin aviso
+  propagación, hallazgos después de resolver    U = 8, sin aviso
+\end{Verbatim}
+
+En la red del \hyperref[err:389]{error~389} (Age → Dose, con Dose $= 7{,}5$ siempre; Cost $= -10 \cdot \mathrm{Dose}$), el hallazgo Dose $= 3$ es imposible. La evaluación da $-30$, tanto con la «Exact» (tras el arreglo de ese error) como con una combinación lineal $7{,}5 + 0 \cdot \mathrm{Age}$; la propagación, que tiene otro nodo de azar sin hallazgo, lo rechaza con \texttt{Evidence\allowbreak{}Is\allowbreak{}Impossible}.
+
+Se llega, leído en el código, de dos maneras. En modo inferencia, si no queda ningún nodo de azar sin hallazgo, la ventana enseña las utilidades sin aviso; y entonces «Show expected utility» de una decisión, que solo se ofrece con el caso ya propagado, da los números de la tabla. En modo edición, los hallazgos van a la evidencia previa a la resolución, y el análisis de sensibilidad toma su utilidad de referencia de \texttt{VEEvaluation} con ella (\texttt{Tornado\allowbreak{}Spider\allowbreak{}Dialog}, líneas 181-183; \texttt{Plot\allowbreak{}Dialog}, líneas 117-119).
+\paragraph{Cómo arreglarlo}
+Que la evaluación compruebe, antes de calcular, que sus hallazgos tienen probabilidad mayor que cero, y que la propagación lo compruebe siempre, no solo cuando falla una normalización. Las dos, con la cuenta que ya hace \texttt{VEPropagation.\allowbreak{}probability\allowbreak{}Of} (los hallazgos y sus antepasados, y cada decisión sin política eligiendo al azar, como en \texttt{findings\allowbreak{}Are\allowbreak{}Possible}), y con la misma excepción y el mismo mensaje. Tiene un coste: una eliminación más en cada evaluación, y el análisis de sensibilidad evalúa la red muchas veces con los mismos hallazgos. Hay que medirlo, o comprobarlo una sola vez por análisis.
+
+Prueba: en el diagrama de arriba, con Disease = absent y Result = positive, la evaluación, la utilidad esperada de Therapy y la propagación, con los hallazgos antes y después de resolver, se rechazan con \texttt{Evidence\allowbreak{}Is\allowbreak{}Impossible}; con Result = positive solo, dan lo mismo que ahora (en la propagación, U = 6). En la red del \hyperref[err:389]{error~389}, la evaluación con Dose $= 3$ se rechaza.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Decisiones: políticas, criterios, agentes y árbol de decisión}\label{sec:decisiones}
@@ -26030,6 +26068,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:425]{Error 425} & hallazgo nuevo, en la revisión del módulo \texttt{io} con sondas del 18 de noviembre \\
 \hyperref[err:426]{Error 426} & hallazgo nuevo, visto al redactar el \hyperref[err:405]{error~405} \\
 \hyperref[err:427]{Error 427} & hallazgo nuevo, en la revisión del módulo \texttt{io} con sondas del 18 de noviembre \\
+\hyperref[err:428]{Error 428} & hallazgo nuevo, visto al investigar el \hyperref[err:389]{error~389} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
