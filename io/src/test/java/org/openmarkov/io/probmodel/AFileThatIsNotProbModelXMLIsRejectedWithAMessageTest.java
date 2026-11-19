@@ -8,7 +8,6 @@ package org.openmarkov.io.probmodel;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.io.format.annotation.FormatManager;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.io.probmodel.exception.PGMXParserException;
@@ -41,10 +40,10 @@ public class AFileThatIsNotProbModelXMLIsRejectedWithAMessageTest {
                             .endsWith("netAB.xml is not a ProbModelXML network: its root element is BIF."));
     }
 
-    @Test public void aFileWithoutVersionHasAVersionThatIsNotSupported() throws Exception {
+    @Test public void aFileWithoutVersionIsRejectedForHavingNoVersion() throws Exception {
         Path file = Files.createTempFile("noVersion", ".xml");
         Files.writeString(file, "<ProbModelXML/>");
 
-        assertThrows(ProbNetParserException.WrongVersion.class, () -> open(file.toUri().toURL()));
+        assertThrows(PGMXParserException.FileWithoutFormatVersion.class, () -> open(file.toUri().toURL()));
     }
 }

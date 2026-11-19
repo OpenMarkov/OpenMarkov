@@ -1618,11 +1618,19 @@ public class PGMXReader_0_2 {
     public final Potential autoGetPotential(String sXmlPotentialType, Element xmlPotential, ProbNet probNet,
                                             PotentialRole potentialRole, List<Variable> variables)
             throws PGMXParserException {
+        if (sXmlPotentialType == null) {
+            throw new PGMXParserException.PotentialWithoutType(nodeOf(variables), xmlPotential);
+        }
         PotentialParser parser = this.parserOf(sXmlPotentialType);
         if (parser == null) {
-            throw new PGMXParserException.PotentialTypeNotSupported(sXmlPotentialType, xmlPotential);
+            throw new PGMXParserException.PotentialTypeNotSupported(sXmlPotentialType, nodeOf(variables), xmlPotential);
         }
         return parser.parse(xmlPotential, probNet, potentialRole, variables);
+    }
+
+    /** @return the name of the first variable of a relation, which is its node, or "?" if it has none */
+    private static String nodeOf(List<Variable> variables) {
+        return variables.isEmpty() ? "?" : variables.getFirst().getName();
     }
     
     /**
@@ -1678,6 +1686,14 @@ public class PGMXReader_0_2 {
         if (nestedPotential == null) {
             throw new PGMXParserException.RelationParameterMissing(variables.getFirst().getName(), tag.toString(),
                                                                    xmlPotential);
+        }
+        // The variables of a nested relation are the parents, so the node is named here
+        String type = getStringXMLPotentialType(nestedPotential);
+        if (type == null) {
+            throw new PGMXParserException.PotentialWithoutType(nodeOf(variables), nestedPotential);
+        }
+        if (!canReadPotentialType(type)) {
+            throw new PGMXParserException.PotentialTypeNotSupported(type, nodeOf(variables), nestedPotential);
         }
         return getPotential(nestedPotential, probNet, PotentialRole.CONDITIONAL_PROBABILITY);
     }

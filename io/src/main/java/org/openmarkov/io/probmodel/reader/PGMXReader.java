@@ -36,6 +36,9 @@ public class PGMXReader implements ProbNetReader {
             throw new PGMXParserException.NotAProbModelXMLFile(networkSource.getFile(), root);
         }
         String formatVersion = root.getAttributeValue(XMLAttributes.FORMAT_VERSION.toString());
+        if (formatVersion == null) {
+            throw new PGMXParserException.FileWithoutFormatVersion(networkSource.getFile(), root);
+        }
         PGMXReader_0_2 reader = ReaderFactory.getReader(formatVersion);
         NetworkAndEvidence networkAndEvidence = reader.read(networkSource);
         return new ProbNetInfo(networkAndEvidence.probNet, networkAndEvidence.evidence, this, switch (reader) {

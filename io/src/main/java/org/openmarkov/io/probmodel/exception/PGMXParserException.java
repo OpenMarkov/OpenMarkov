@@ -70,6 +70,15 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String fileName;
         public final String rootName;
     }
+
+    public static final class FileWithoutFormatVersion extends PGMXParserException {
+        public FileWithoutFormatVersion(String fileName, Element root) {
+            super(root);
+            this.fileName = fileName;
+        }
+
+        public final String fileName;
+    }
     
     public static final class UnknownDistribution extends PGMXParserException {
         public UnknownDistribution(String variableName, String distributionName, @Nullable String parametrizationName,
@@ -353,12 +362,23 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
     }
     
     public static final class PotentialTypeNotSupported extends PGMXParserException {
-        public PotentialTypeNotSupported(String potentialType, Element element) {
+        public PotentialTypeNotSupported(String potentialType, String nodeName, Element element) {
             super(element);
             this.potentialType = potentialType;
+            this.nodeName = nodeName;
         }
         
         public final String potentialType;
+        public final String nodeName;
+    }
+
+    public static final class PotentialWithoutType extends PGMXParserException {
+        public PotentialWithoutType(String nodeName, Element element) {
+            super(element);
+            this.nodeName = nodeName;
+        }
+
+        public final String nodeName;
     }
     
     public static final class DeltaPotentialWithoutState extends PGMXParserException {
