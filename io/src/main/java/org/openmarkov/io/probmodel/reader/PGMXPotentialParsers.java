@@ -83,7 +83,8 @@ public class PGMXPotentialParsers {
     // -------------------------------------------------------------------------
 
     public static TablePotential getTablePotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
-                                                    List<Variable> variables) {
+                                                    List<Variable> variables)
+            throws PGMXParserException.WrongNumberOfValues {
         Element xmlRootTable = xmlPotential.getChild(XMLTags.VALUES.toString());
         Element xmlRootUncertainValues = xmlPotential.getChild(XMLTags.UNCERTAIN_VALUES.toString());
         Element xmlRootUncertainParameters = xmlPotential.getChild(XMLTags.UNCERTAIN_PARAMETERS.toString());
@@ -91,6 +92,8 @@ public class PGMXPotentialParsers {
         TablePotential tablePotential;
         if (xmlRootTable != null) {
             double[] table = PGMXReader_0_2.parseDoubles(xmlRootTable.getTextNormalize());
+            PGMXReader_0_2.checkNumberOfValues(table.length, AbstractIndexedPotential.computeTableSize(variables),
+                                               PGMXReader_0_2.relationOf(variables), xmlRootTable);
             tablePotential = hasUncertainty
                     ? new UncertainTablePotential(variables, xmlRole, table)
                     : new TablePotential(variables, xmlRole, table);
@@ -108,10 +111,14 @@ public class PGMXPotentialParsers {
     }
 
     public static ExactDistrPotential getExactDistrPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
-                                                              List<Variable> variables) {
+                                                              List<Variable> variables)
+            throws PGMXParserException.WrongNumberOfValues {
         Element xmlRootTable = xmlPotential.getChild(XMLTags.VALUES.toString());
         double[] table = PGMXReader_0_2.parseDoubles(xmlRootTable.getTextNormalize());
-        ExactDistrPotential exactDistrPotential = new ExactDistrPotential(variables, xmlRole, table);
+        ExactDistrPotential exactDistrPotential = new ExactDistrPotential(variables, xmlRole);
+        PGMXReader_0_2.checkNumberOfValues(table.length, exactDistrPotential.getTablePotential().getValues().length,
+                                           PGMXReader_0_2.relationOf(variables), xmlRootTable);
+        exactDistrPotential.getTablePotential().setValues(table);
         Element xmlRootUncertainParameters = xmlPotential.getChild(XMLTags.UNCERTAIN_PARAMETERS.toString());
         Element xmlRootUncertainValues = xmlPotential.getChild(XMLTags.UNCERTAIN_VALUES.toString());
         if (xmlRootUncertainValues != null) {
@@ -162,7 +169,8 @@ public class PGMXPotentialParsers {
 
     public static Potential getWeibullPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
                                                  List<Variable> variables)
-            throws PGMXParserException.DataMissing, PGMXParserException.UnknownVariable {
+            throws PGMXParserException.DataMissing, PGMXParserException.UnknownVariable,
+                   PGMXParserException.WrongNumberOfValues {
         WeibullHazardPotential potential = new WeibullHazardPotential(variables, xmlRole);
         Element xmlTimeVariable = xmlPotential.getChild(XMLTags.TIME_VARIABLE.toString());
         if (xmlTimeVariable != null) {
@@ -177,7 +185,8 @@ public class PGMXPotentialParsers {
     }
 
     public static Potential getExponentialHazardPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
-                                                           List<Variable> variables) {
+                                                           List<Variable> variables)
+            throws PGMXParserException.WrongNumberOfValues {
         ExponentialHazardPotential potential = new ExponentialHazardPotential(variables, xmlRole);
         Element xmlLog = xmlPotential.getChild(XMLTags.LOG.toString());
         potential.setLog(xmlLog == null || Boolean.parseBoolean(xmlLog.getValue()));
@@ -186,32 +195,46 @@ public class PGMXPotentialParsers {
     }
 
     public static Potential getExponentialPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
-                                                     List<Variable> variables) {
+                                                     List<Variable> variables)
+            throws PGMXParserException.WrongNumberOfValues {
         ExponentialPotential potential = new ExponentialPotential(variables, xmlRole);
         getRegressionPotential(xmlPotential, potential, variables);
         return potential;
     }
 
     public static Potential getLinearRegressionPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
-                                                          List<Variable> variables) {
+                                                          List<Variable> variables)
+            throws PGMXParserException.WrongNumberOfValues {
         LinearCombinationPotential potential = new LinearCombinationPotential(variables, xmlRole);
         getRegressionPotential(xmlPotential, potential, variables);
         return potential;
     }
 
-    static void getRegressionPotential(Element xmlPotential, GLMPotential potential, List<Variable> variables) {
-        Element xmlCoefficients = xmlPotential.getChild(XMLTags.COEFFICIENTS.toString());
-        potential.setCoefficients(PGMXReader_0_2.parseDoubles(xmlCoefficients.getText()));
+    static void getRegressionPotential(Element xmlPotential, GLMPotential potential, List<Variable> variables)
+            throws PGMXParserException.WrongNumberOfValues {
+        String relation = PGMXReader_0_2.relationOf(variables);
         Element xmlCovariates = xmlPotential.getChild(XMLTags.COVARIATES.toString());
         if (xmlCovariates != null) {
             potential.setCovariates(PGMXReader_0_2.getCovariates(xmlCovariates, variables));
         }
+        // One coefficient per covariate
+        Element xmlCoefficients = xmlPotential.getChild(XMLTags.COEFFICIENTS.toString());
+        double[] coefficients = PGMXReader_0_2.parseDoubles(xmlCoefficients.getText());
+        PGMXReader_0_2.checkNumberOfValues(coefficients.length, potential.getCovariates().length, relation,
+                                           xmlCoefficients);
+        potential.setCoefficients(coefficients);
+        // The lower triangle of a square matrix with a row per coefficient
+        int triangle = coefficients.length * (coefficients.length + 1) / 2;
         Element xmlCovarianceMatrix = xmlPotential.getChild(XMLTags.COVARIANCE_MATRIX.toString());
         Element xmlCholeskyDecomposition = xmlPotential.getChild(XMLTags.CHOLESKY_DECOMPOSITION.toString());
         if (xmlCovarianceMatrix != null) {
-            potential.setCovarianceMatrix(PGMXReader_0_2.parseDoubles(xmlCovarianceMatrix.getText()));
+            double[] matrix = PGMXReader_0_2.parseDoubles(xmlCovarianceMatrix.getText());
+            PGMXReader_0_2.checkNumberOfValues(matrix.length, triangle, relation, xmlCovarianceMatrix);
+            potential.setCovarianceMatrix(matrix);
         } else if (xmlCholeskyDecomposition != null) {
-            potential.setCholeskyDecomposition(PGMXReader_0_2.parseDoubles(xmlCholeskyDecomposition.getText()));
+            double[] matrix = PGMXReader_0_2.parseDoubles(xmlCholeskyDecomposition.getText());
+            PGMXReader_0_2.checkNumberOfValues(matrix.length, triangle, relation, xmlCholeskyDecomposition);
+            potential.setCholeskyDecomposition(matrix);
         }
     }
 

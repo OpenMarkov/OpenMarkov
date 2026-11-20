@@ -127,7 +127,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     }
     
     protected static Potential getUnivariateDistrPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
-                                                           List<Variable> variables) {
+                                                           List<Variable> variables)
+            throws PGMXParserException.WrongNumberOfValues {
         String univariateName = xmlPotential.getAttributeValue(XMLAttributes.DISTRIBUTION.toString());
         String parametrization = xmlPotential.getAttributeValue(XMLAttributes.PARAMETRIZATION.toString());
         Element xmlRootTable = xmlPotential.getChild(XMLTags.PARAMETERS.toString());
@@ -163,6 +164,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         }
         // After the table read from <Functions>, so that the numbers land on the table the
         // potential keeps and not on the one just replaced.
+        checkNumberOfValues(table.length, potential.getDistributionTable().getValues().length,
+                            relationOf(variables), xmlRootTable);
         potential.setParameters(table);
         
         return potential;
@@ -211,7 +214,7 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     
     
     @Override
-    protected void loadVariableAdvancedInformation(Element variableElement, ProbNet probNet, VariableType variableType, NodeType nodeType, String variableName) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
+    protected void loadVariableAdvancedInformation(Element variableElement, ProbNet probNet, VariableType variableType, NodeType nodeType, String variableName) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion, PGMXParserException.WrongNumberOfValues {
         super.loadVariableAdvancedInformation(variableElement, probNet, variableType, nodeType, variableName);
         if (nodeType.equals(NodeType.EVENT)) {
             Node node = probNet.getNode(variableName);
@@ -291,12 +294,15 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
      *
      */
     private final Potential getTransitionTablePotential
-    (Element xmlPotential, ProbNet probNet, PotentialRole xmlRole, List<Variable> variables) throws PGMXParserException.UncertaintyInAnEventTable {
+    (Element xmlPotential, ProbNet probNet, PotentialRole xmlRole, List<Variable> variables)
+            throws PGMXParserException.UncertaintyInAnEventTable, PGMXParserException.WrongNumberOfValues {
         rejectUncertainty(xmlPotential, variables);
         Element xmlRootTable = this.getXMLRootTable(xmlPotential);
         double[] table = PGMXReader_0_2.parseDoubles(xmlRootTable.getTextNormalize());
         TransitionTablePotential potential;
         potential = new TransitionTablePotential(variables, xmlRole);
+        checkNumberOfValues(table.length, potential.getTablePotential().getValues().length,
+                            relationOf(variables), xmlRootTable);
         potential.getTablePotential().setValues(table);
         //14/08/2022 impossibleConfiguration removed
         //            addImpossibleConfigurations(xmlPotential, probNet, potential);
@@ -339,6 +345,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         double[] table = parseDoubles(xmlRootTable.getTextNormalize());
         DistributionTablePotential potential;
         potential = new DistributionTablePotential(variables, xmlRole, distributionName, distributionParametrization);
+        checkNumberOfValues(table.length, potential.getTableWithEvents().getValues().length,
+                            relationOf(variables), xmlRootTable);
         potential.getTableWithEvents().setValues(table);
         // 20/05/2024 Begin PSA
         UncertainValue[] uncertainValues;

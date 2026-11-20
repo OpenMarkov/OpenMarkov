@@ -691,7 +691,7 @@ public class PGMXReader_0_2 {
      * @param root    {@code Element}
      * @param probNet {@code ProbNet}
      */
-    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole, PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType, PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
+    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.WrongNumberOfValues, PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole, PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType, PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
         Element xmlVariablesRoot = getXMLVariables(root);
         if (xmlVariablesRoot == null) {
             return;
@@ -708,7 +708,8 @@ public class PGMXReader_0_2 {
             throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange,
                    PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole,
                    PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType,
-                   PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
+                   PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion,
+                   PGMXParserException.WrongNumberOfValues {
         for (Element variableElement : xmlVariables) {
             loadVariable(variableElement, probNet);
         }
@@ -718,7 +719,8 @@ public class PGMXReader_0_2 {
             throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange,
                    PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole,
                    PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType,
-                   PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
+                   PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion,
+                   PGMXParserException.WrongNumberOfValues {
         VariableType variableType = getXMLVariableType(variableElement);
         NodeType nodeType = getXMLNodeType(variableElement);
         String variableName = getVariableName(variableElement);
@@ -782,7 +784,7 @@ public class PGMXReader_0_2 {
             String variableName)
             throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent,
                    PGMXParserException.PrecisionOutOfRange, PGMXParserException.DataMissing,
-                   PGMXParserException.UnknownCriterion {
+                   PGMXParserException.UnknownCriterion, PGMXParserException.WrongNumberOfValues {
         
         String stringTimeSlice = variableElement.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
         String nameWithTimeSlice = variableName;
@@ -817,6 +819,10 @@ public class PGMXReader_0_2 {
                     variable = getXMLContinuousVariable(variableElement, variableName, precision == null ? 0.0 : precision);
                 } else { // DISCRETIZED variable. Read sub-intervals
                     Element thresholdsElement = variableElement.getChild(XMLTags.THRESHOLDS.toString());
+                    if (thresholdsElement != null && variableType == VariableType.DISCRETIZED) {
+                        checkNumberOfValues(getXMLChildren(thresholdsElement).size(), states.length + 1,
+                                            "the variable " + nameWithTimeSlice, thresholdsElement);
+                    }
                     variable = getXMLDiscretizedVariable(thresholdsElement, states, variableName);
                 }
             }
@@ -924,6 +930,14 @@ public class PGMXReader_0_2 {
             throw new PGMXParserException.UnknownVariable(place, nodeNameOf(element), element);
         }
         return variable;
+    }
+
+    /** @throws PGMXParserException.WrongNumberOfValues if {@code element}, in {@code place}, does not have {@code expected} numbers */
+    static void checkNumberOfValues(int found, int expected, String place, Element element)
+            throws PGMXParserException.WrongNumberOfValues {
+        if (found != expected) {
+            throw new PGMXParserException.WrongNumberOfValues(place, element.getName(), expected, found, element);
+        }
     }
 
     /** @return how a message names the relation whose variables, its node first, are {@code variables} */

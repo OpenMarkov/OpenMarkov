@@ -499,6 +499,22 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String variableName;
     }
 
+    public static final class WrongNumberOfValues extends PGMXParserException {
+        public WrongNumberOfValues(String place, String elementName, int expected, int found, Element element) {
+            super(element);
+            this.place = place;
+            this.elementName = elementName;
+            this.expected = expected;
+            this.found = found;
+        }
+
+        /** Where the numbers are, as in "the relation of X" or "the variable X" */
+        public final String place;
+        public final String elementName;
+        public final int expected;
+        public final int found;
+    }
+
     public static final class NodeWithoutVariableType extends PGMXParserException {
         public NodeWithoutVariableType(String nodeName, Element element) {
             super(element);

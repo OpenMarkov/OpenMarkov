@@ -247,6 +247,7 @@
     "WrongNumberOfStates",
     "WrongNumberOfThresholds",
     "WrongNumberOfValues",
+    "WrongNumberOfValues",
     "WrongRoleException",
     "WrongVersion",
     "XMLInvalid",

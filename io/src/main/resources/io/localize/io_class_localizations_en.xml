@@ -43,6 +43,7 @@
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownAgent" value="Variable {variableName} has the agent {agentName}, which is not in the list of agents of the network."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownCriterion" value="The file cannot be read: {elementName} names the criterion {criterionName}, which is not in the list of decision criteria of the network."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$UnknownVariable" value="The file cannot be read: {place} names the variable {variableName}, which is not in the network."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$WrongNumberOfValues" value="The file cannot be read: {place} needs {expected} numbers in {elementName}, and it has {found}."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$VariableHasNoStates" value="Variable {variableName} has no states, while a list of states must be provided."/>
     <Localization
             class="org.openmarkov.io.probmodel.exception.PGMXParserException$CannotAssignPotentialToStaticVariable"
