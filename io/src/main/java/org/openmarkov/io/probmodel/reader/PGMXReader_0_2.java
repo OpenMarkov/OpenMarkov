@@ -14,7 +14,6 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.located.LocatedJDOMFactory;
-import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.expression.VariableExpression;
@@ -686,7 +685,7 @@ public class PGMXReader_0_2 {
      * @param root    {@code Element}
      * @param probNet {@code ProbNet}
      */
-    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole, PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
+    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole, PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType, PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
         Element xmlVariablesRoot = getXMLVariables(root);
         if (xmlVariablesRoot == null) {
             return;
@@ -702,6 +701,7 @@ public class PGMXReader_0_2 {
     protected void loadVariables(List<Element> xmlVariables, ProbNet probNet)
             throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange,
                    PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole,
+                   PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType,
                    PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
         for (Element variableElement : xmlVariables) {
             loadVariable(variableElement, probNet);
@@ -711,6 +711,7 @@ public class PGMXReader_0_2 {
     protected void loadVariable(Element variableElement, ProbNet probNet)
             throws PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange,
                    PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole,
+                   PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType,
                    PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
         VariableType variableType = getXMLVariableType(variableElement);
         NodeType nodeType = getXMLNodeType(variableElement);
@@ -1025,16 +1026,19 @@ public class PGMXReader_0_2 {
         return properties;
     }
     
-    /**
-     * @param variableElement . {@code Element}
-     *
-     * @return variable type. {@code VariableType}
-     */
-    protected @Nullable VariableType getXMLVariableType(Element variableElement) {
-        String role = getStringXMLPotentialType(variableElement);
-        return Arrays.stream(VariableType.values()).filter(variableType -> role.contentEquals( variableType.toXMLTag()))
-                .findFirst()
-                .orElse(null);
+    /** @return the variable type written in the type of {@code variableElement}, which must match it exactly */
+    protected VariableType getXMLVariableType(Element variableElement)
+            throws PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType {
+        String type = getStringXMLPotentialType(variableElement);
+        if (type == null) {
+            throw new PGMXParserException.NodeWithoutVariableType(nodeNameOf(variableElement), variableElement);
+        }
+        for (VariableType variableType : VariableType.values()) {
+            if (type.equals(variableType.toXMLTag())) {
+                return variableType;
+            }
+        }
+        throw new PGMXParserException.UnknownVariableType(type, nodeNameOf(variableElement), variableElement);
     }
     
     /** @return the node type written in the role of {@code variableElement}, which must match it exactly */

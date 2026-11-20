@@ -6,8 +6,10 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.potential.PotentialRole;
 
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("serial")
@@ -463,6 +465,30 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
     /** A variable without the role that gives the type of its node. */
     public static final class NodeWithoutRole extends PGMXParserException {
         public NodeWithoutRole(String nodeName, Element element) {
+            super(element);
+            this.nodeName = nodeName;
+        }
+
+        public final String nodeName;
+    }
+
+    public static final class UnknownVariableType extends PGMXParserException {
+        public UnknownVariableType(String type, String nodeName, Element element) {
+            super(element);
+            this.type = type;
+            this.nodeName = nodeName;
+            List<String> tags = Arrays.stream(VariableType.values()).map(VariableType::toXMLTag).toList();
+            this.validTypes = String.join(", ", tags.subList(0, tags.size() - 1)) + " or " + tags.getLast();
+        }
+
+        public final String type;
+        public final String nodeName;
+        /** The types a variable can have, as they are written in the file */
+        public final String validTypes;
+    }
+
+    public static final class NodeWithoutVariableType extends PGMXParserException {
+        public NodeWithoutVariableType(String nodeName, Element element) {
             super(element);
             this.nodeName = nodeName;
         }
