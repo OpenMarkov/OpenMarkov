@@ -268,6 +268,9 @@ Los \hyperref[err:377]{errores~377} a \hyperref[err:425]{425} salen de una revis
 \paragraph{Errores añadidos el 19 de noviembre}
 El \hyperref[err:428]{error~428} se vio al investigar el \hyperref[err:389]{389}. Se ha comprobado con el código de \texttt{4474203}, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo.
 
+\paragraph{Errores añadidos el 21 de noviembre}
+El \hyperref[err:429]{error~429} se vio al corregir el \hyperref[err:397]{397}. Se ha comprobado con el código de \texttt{25f7d14}, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo.
+
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
 
@@ -321,9 +324,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{427 errores}; 283 de ellos son defectos nuevos: 101 encontrados al
-comprobar o corregir los demás, 116 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 377 pequeños, 49 medios y 1 grandes.
-De los 427, 390 están ya corregidos y 2 están cerrados sin arreglo.
+La lista tiene \textbf{428 errores}; 284 de ellos son defectos nuevos: 102 encontrados al
+comprobar o corregir los demás, 116 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 378 pequeños, 49 medios y 1 grandes.
+De los 428, 390 están ya corregidos y 2 están cerrados sin arreglo.
 El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -341,7 +344,7 @@ El apéndice recoge además 201 notas con lo que se comprobó y no entra en la l
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 16 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 30 \\
 \ref{sec:des}. Simulación de sucesos discretos & 23 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 53 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 54 \\
 \ref{sec:casos}. Bases de casos & 32 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 39 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 51 \\
@@ -619,6 +622,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:405]{405} & Un .pgmx temporal sin la lista de descuentos, o con un número de simulaciones que no es entero, no se abre & \texttt{io} & S \hfill No\\
 \hyperref[err:406]{406} & Un número mal escrito o un dato que falta impide abrir el .pgmx con «is corrupted», sin decir qué ni dónde & \texttt{io}, \texttt{gui} & L \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:426]{426} & \textcolor{corregidoverde}{\textbf{Corregido}} · El esquema del formato da por opcionales «Slices» y «Transition», que el lector exige & \texttt{core}, \texttt{io} & S \hfill No\\
+\hyperref[err:429]{429} & Un modelo canónico con parámetros de más o de menos da un aviso que no dice el nodo ni que el fallo está en el fichero & \texttt{io}, \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -15717,6 +15721,43 @@ MID-Chancellor.pgmx sin cambios        se abre                                  
 \paragraph{Cómo arreglarlo}
 Hecho como dice la fila \emph{Estado}. La otra salida era leer el que falte con un valor por omisión (ningún ciclo, o la transición al principio). No se tomó porque el lector los rechaza a propósito desde el arreglo del \hyperref[err:353]{error~353}. En la ventana no cambia nada: el fichero se rechaza antes de mirar el esquema.
 
+\setcounter{subsection}{428}
+\subsection[Un modelo canónico con parámetros de más o de menos da un aviso que no dice el nodo ni el fichero]{Un \texttt{.\allowbreak{}pgmx} en el que una tabla de un modelo canónico trae parámetros de más o de menos no se abre, y el aviso, «Argument is invalid», no dice de qué nodo es la tabla ni que el fallo está en el fichero}\label{err:429}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io, core
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.core.model.network.potential.canonical
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXPotentialParsers.java:136-163} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/canonical/ICIPotential.java:308-318, 405-415} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/canonical/TuningPotential.java:104-130}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{25f7d14} (21-11-2026): el lector, con cinco copias de \texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}test-\allowbreak{}ici-\allowbreak{}reading.\allowbreak{}pgmx}; y, con la primera, \texttt{Nets\allowbreak{}IO.\allowbreak{}open\allowbreak{}Network\allowbreak{}File}, lo que llama la ventana al abrir, y, sobre lo que lanza, \texttt{OMException\allowbreak{}Handler.\allowbreak{}type\allowbreak{}Of} y el título y el mensaje que enseña \texttt{Exception\allowbreak{}Dialog}. La ventana no se pintó
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:397]{error~397}, \hyperref[err:399]{error~399}
+\end{ficha}
+\paragraph{Qué pasa}
+En un modelo canónico (OR o MAX ruidoso, MIN, el modelo de ajuste «Tuning»), cada padre tiene su tabla de parámetros, con tantos números como estados del hijo por estados del padre, y el escape (\emph{leak}) la suya, con tantos como estados del hijo; el modelo «Tuning» acepta además una forma corta, de 4 números. Si una de esas tablas trae números de más o de menos, porque alguien la editó a mano o la escribió otro programa, la red no se abre. El aviso de error, con el título «Argument is invalid», dice cuántos números trae y cuántos hacen falta, pero no de qué nodo es la tabla ni que el fallo está en el fichero, y enseña la lista de números entre corchetes.
+
+Por qué pasa: \texttt{PGMXPotential\allowbreak{}Parsers.\allowbreak{}get\allowbreak{}ICIPotential} (líneas 136-163) pasa los números tal como vienen a \texttt{ICIPotential.\allowbreak{}set\allowbreak{}Noisy\allowbreak{}Parameters} o \texttt{set\allowbreak{}Leaky\allowbreak{}Parameters}, que los rechazan con una \texttt{Unrecoverable\allowbreak{}Exception} que envuelve una \texttt{Invalid\allowbreak{}Argument\allowbreak{}Exception}; el lector no comprueba la cuenta antes. Desde el arreglo del \hyperref[err:397]{error~397}, el resto de las listas de números se rechaza con \texttt{PGMXParser\allowbreak{}Exception.\allowbreak{}Wrong\allowbreak{}Number\allowbreak{}Of\allowbreak{}Values}, que nombra el nodo; los modelos canónicos quedaron fuera porque la cuenta depende del modelo.
+
+Medido con copias de \texttt{test-\allowbreak{}ici-\allowbreak{}reading.\allowbreak{}pgmx}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+OR / MAX, tabla de H con A, 3 números de 4
+    UnrecoverableException: Argument is invalid: Argument parameters ([1.0, 0.0, 0.0]) is invalid because The length of the array must be the multiplication of the parent's and child's state number 4 and is 3.
+    la ventana: OMExceptionHandler.typeOf da EXPECTED, y ExceptionDialog enseña
+      título   Argument is invalid
+      mensaje  Argument parameters ([1.0, 0.0, 0.0]) is invalid because The length of the array must be the multiplication of the parent's and child's state number 4 and is 3.
+OR / MAX, la misma tabla con 5 números      lo mismo, «… and is 5.»
+OR / MAX, el escape de H, 1 número de 2
+    … The length of the array must be the conditioned variable's state number 2 and is 1.
+Tuning, tabla de I con E, 8 números de 9
+    … Parameters' size must be either 4 or 9.
+Tuning, la misma tabla con 4 números        se abre (la forma corta)
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Que el lector compruebe la cuenta antes de pasar los números y se niegue con la \texttt{Wrong\allowbreak{}Number\allowbreak{}Of\allowbreak{}Values} del \hyperref[err:397]{error~397} («The file cannot be read: the relation of H needs 4 numbers in Values, and it has 3.»). Como la cuenta depende del modelo, el lector no debería repetir la regla de cada uno: que el potencial diga cuántos números acepta, con un método de \texttt{ICIPotential} que \texttt{Tuning\allowbreak{}Potential} sobrescriba para admitir también 4.
+
+Prueba: las cuatro primeras copias de \emph{Medido} no se abren, con \texttt{Wrong\allowbreak{}Number\allowbreak{}Of\allowbreak{}Values} y el nodo; la de «Tuning» con 4 números y el fichero sin cambios se siguen abriendo.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
 
@@ -26069,6 +26110,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:426]{Error 426} & hallazgo nuevo, visto al redactar el \hyperref[err:405]{error~405} \\
 \hyperref[err:427]{Error 427} & hallazgo nuevo, en la revisión del módulo \texttt{io} con sondas del 18 de noviembre \\
 \hyperref[err:428]{Error 428} & hallazgo nuevo, visto al investigar el \hyperref[err:389]{error~389} \\
+\hyperref[err:429]{Error 429} & hallazgo nuevo, visto al corregir el \hyperref[err:397]{error~397} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
