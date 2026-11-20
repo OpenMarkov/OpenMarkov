@@ -135,7 +135,8 @@ public class PGMXPotentialParsers {
 
     public static Potential getICIPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
                                              List<Variable> variables)
-            throws PGMXParserException.DataMissing, PGMXParserException.UnknownVariable {
+            throws PGMXParserException.DataMissing, PGMXParserException.UnknownVariable,
+                   PGMXParserException.WrongNumberOfValues {
         Element xmlModel = xmlPotential.getChild(XMLTags.MODEL.toString());
         ICIPotential iciPotential = null;
         if (xmlModel.getText().equals(PotentialUtils.getPotentialName(MaxPotential.class))
@@ -149,14 +150,18 @@ public class PGMXPotentialParsers {
         }
         for (Element subpotential : xmlPotential.getChild(XMLTags.SUBPOTENTIALS.toString()).getChildren()) {
             List<Element> subpotentialVariables = subpotential.getChild(XMLTags.VARIABLES.toString()).getChildren();
-            double[] values = PGMXReader_0_2.parseDoubles(subpotential.getChild(XMLTags.VALUES.toString()).getTextNormalize());
+            Element xmlValues = subpotential.getChild(XMLTags.VALUES.toString());
+            double[] values = PGMXReader_0_2.parseDoubles(xmlValues.getTextNormalize());
+            String relation = PGMXReader_0_2.relationOf(variables);
             if (subpotentialVariables.size() > 1) {
-                Variable variable = PGMXReader_0_2.getVariable(subpotentialVariables.get(1), probNet,
-                                                               PGMXReader_0_2.relationOf(variables));
+                Variable variable = PGMXReader_0_2.getVariable(subpotentialVariables.get(1), probNet, relation);
+                PGMXReader_0_2.checkNumberOfValues(values.length, iciPotential.noisyParametersSizes(variable),
+                                                   relation, xmlValues);
                 iciPotential.setNoisyParameters(variable, values);
             } else {
-                PGMXReader_0_2.getVariable(subpotentialVariables.getFirst(), probNet,
-                                           PGMXReader_0_2.relationOf(variables));
+                PGMXReader_0_2.getVariable(subpotentialVariables.getFirst(), probNet, relation);
+                PGMXReader_0_2.checkNumberOfValues(values.length, iciPotential.leakyParametersSize(), relation,
+                                                   xmlValues);
                 iciPotential.setLeakyParameters(values);
             }
         }

@@ -90,6 +90,11 @@ public class TuningPotential extends ICIPotential {
         throw new NotSupportedOperationException();
     }
     
+    /** @return the four numbers the table of a parent is built from, or the size of the whole table */
+    @Override public int[] noisyParametersSizes(Variable parent) {
+        return new int[]{4, super.noisyParametersSizes(parent)[0]};
+    }
+
     /**
      * Sets the parameters of a parent, either the whole table -the child's states by the parent's-
      * or the four numbers it is built from, in this order:

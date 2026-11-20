@@ -83,6 +83,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -932,12 +933,19 @@ public class PGMXReader_0_2 {
         return variable;
     }
 
+    /** @throws PGMXParserException.WrongNumberOfValues if {@code element}, in {@code place}, does not have one of the {@code accepted} numbers of numbers */
+    static void checkNumberOfValues(int found, int[] accepted, String place, Element element)
+            throws PGMXParserException.WrongNumberOfValues {
+        if (Arrays.stream(accepted).noneMatch(size -> size == found)) {
+            String expected = Arrays.stream(accepted).mapToObj(String::valueOf).collect(Collectors.joining(" or "));
+            throw new PGMXParserException.WrongNumberOfValues(place, element.getName(), expected, found, element);
+        }
+    }
+
     /** @throws PGMXParserException.WrongNumberOfValues if {@code element}, in {@code place}, does not have {@code expected} numbers */
     static void checkNumberOfValues(int found, int expected, String place, Element element)
             throws PGMXParserException.WrongNumberOfValues {
-        if (found != expected) {
-            throw new PGMXParserException.WrongNumberOfValues(place, element.getName(), expected, found, element);
-        }
+        checkNumberOfValues(found, new int[]{expected}, place, element);
     }
 
     /** @return how a message names the relation whose variables, its node first, are {@code variables} */

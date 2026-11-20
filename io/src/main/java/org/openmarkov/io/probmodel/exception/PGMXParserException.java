@@ -500,7 +500,7 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
     }
 
     public static final class WrongNumberOfValues extends PGMXParserException {
-        public WrongNumberOfValues(String place, String elementName, int expected, int found, Element element) {
+        public WrongNumberOfValues(String place, String elementName, String expected, int found, Element element) {
             super(element);
             this.place = place;
             this.elementName = elementName;
@@ -511,7 +511,8 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         /** Where the numbers are, as in "the relation of X" or "the variable X" */
         public final String place;
         public final String elementName;
-        public final int expected;
+        /** How many numbers are needed, as in "4" or "4 or 9" */
+        public final String expected;
         public final int found;
     }
 

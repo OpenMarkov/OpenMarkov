@@ -299,6 +299,16 @@ public abstract class ICIPotential extends Potential implements Projectable {
         return noisyParameters[parametersRowOf(variable)];
     }
     
+    /** @return how many numbers the noisy parameters of {@code parent} can have */
+    public int[] noisyParametersSizes(Variable parent) {
+        return new int[]{variables.getFirst().getNumStates() * parent.getNumStates()};
+    }
+
+    /** @return how many numbers the leaky parameters have */
+    public int leakyParametersSize() {
+        return variables.getFirst().getNumStates();
+    }
+
     /**
      * Sets the noisy parameters, i.e. <i>P(z<sub>i</sub>|x<sub>i</sub>)</i>
      *
