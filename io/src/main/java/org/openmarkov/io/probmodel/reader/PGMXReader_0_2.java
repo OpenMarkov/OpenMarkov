@@ -578,7 +578,8 @@ public class PGMXReader_0_2 {
      */
     protected List<EvidenceCase> getEvidence(Element root, ProbNet probNet)
             throws PGMXParserException.EvidenceIncompatibleInFile, PGMXParserException.DataMissing,
-                   PGMXParserException.UnknownVariable {
+                   PGMXParserException.UnknownVariable, PGMXParserException.InvalidState,
+                   PGMXParserException.DataNotValid {
         Element xMLEvidence = root.getChild(XMLTags.EVIDENCE.toString());
         List<EvidenceCase> evidence = new ArrayList<>();
         if (xMLEvidence != null) {
@@ -595,10 +596,14 @@ public class PGMXReader_0_2 {
                         }
                         Finding finding;
                         if (variable.getVariableType() == VariableType.FINITE_STATES) {
-                            String stateName = xmlFinding.getAttributeValue("state");
+                            String stateName = requiredAttribute(xmlFinding, "state");
+                            if (!variable.containsState(stateName)) {
+                                throw new PGMXParserException.InvalidState(variableName, stateName, xmlFinding);
+                            }
                             finding = new Finding(variable, variable.getStateIndex(stateName));
                         } else {
-                            double numericalValue = Double.parseDouble(xmlFinding.getAttributeValue("numericValue"));
+                            double numericalValue = doubleIn(xmlFinding, "numericValue",
+                                                             requiredAttribute(xmlFinding, "numericValue"));
                             finding = new Finding(variable, numericalValue);
                         }
                         evidenceCase.addFinding(finding);
