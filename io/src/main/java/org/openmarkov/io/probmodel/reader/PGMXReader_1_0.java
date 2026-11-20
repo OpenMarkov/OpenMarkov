@@ -496,8 +496,9 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
      * @throws PGMXParserException.TreeSplitOnAWrongVariable if it is not one of {@code allowed}
      */
     private Variable getTopVariable(Element xmlTopVariable, ProbNet probNet, List<Variable> variables,
-                                    List<Variable> allowed) throws PGMXParserException.TreeSplitOnAWrongVariable {
-        Variable topVariable = getVariable(xmlTopVariable, probNet);
+                                    List<Variable> allowed)
+            throws PGMXParserException.TreeSplitOnAWrongVariable, PGMXParserException.DataMissing {
+        Variable topVariable = findVariable(xmlTopVariable, probNet);
         if (topVariable == null || !allowed.contains(topVariable)) {
             throw new PGMXParserException.TreeSplitOnAWrongVariable(
                     variables.getFirst().getName(), xmlTopVariable.getAttributeValue(XMLAttributes.NAME.toString()),

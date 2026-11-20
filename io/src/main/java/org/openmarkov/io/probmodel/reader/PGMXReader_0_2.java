@@ -14,6 +14,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.located.LocatedJDOMFactory;
+import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.expression.VariableExpression;
@@ -575,7 +576,8 @@ public class PGMXReader_0_2 {
      * @return List of evidence case
      */
     protected List<EvidenceCase> getEvidence(Element root, ProbNet probNet)
-            throws PGMXParserException.EvidenceIncompatibleInFile {
+            throws PGMXParserException.EvidenceIncompatibleInFile, PGMXParserException.DataMissing,
+                   PGMXParserException.UnknownVariable {
         Element xMLEvidence = root.getChild(XMLTags.EVIDENCE.toString());
         List<EvidenceCase> evidence = new ArrayList<>();
         if (xMLEvidence != null) {
@@ -585,7 +587,11 @@ public class PGMXReader_0_2 {
                 List<Element> xmlFindings = getXMLChildren(xmlEvidenceCase);
                 for (Element xmlFinding : xmlFindings) {
                     try {
-                        Variable variable = probNet.getVariable(xmlFinding.getAttributeValue("variable"));
+                        String variableName = requiredAttribute(xmlFinding, "variable");
+                        Variable variable = probNet.getVariable(variableName);
+                        if (variable == null) {
+                            throw new PGMXParserException.UnknownVariable("a finding", variableName, xmlFinding);
+                        }
                         Finding finding;
                         if (variable.getVariableType() == VariableType.FINITE_STATES) {
                             String stateName = xmlFinding.getAttributeValue("state");
@@ -896,13 +902,33 @@ public class PGMXReader_0_2 {
         }
     }
     
-    protected static Variable getVariable(Element element, ProbNet probNet) {
-        String variableName = element.getAttributeValue(XMLAttributes.NAME.toString());
+    /** @return the variable of {@code probNet} that {@code element} names, or null if the network has none */
+    protected static @Nullable Variable findVariable(Element element, ProbNet probNet)
+            throws PGMXParserException.DataMissing {
+        String variableName = requiredAttribute(element, XMLAttributes.NAME.toString());
         // strip the name from the time slice for backwards compatibility
         String timeSlice = element.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
         variableName = variableName.replace(" [" + timeSlice + "]", "");
         return (timeSlice == null) ? probNet.getVariable(variableName)
                 : probNet.getVariable(variableName, parseInteger(timeSlice));
+    }
+
+    /**
+     * @param place where the file names the variable, for the message, as in "a link"
+     * @return the variable of {@code probNet} that {@code element} names
+     */
+    protected static Variable getVariable(Element element, ProbNet probNet, String place)
+            throws PGMXParserException.DataMissing, PGMXParserException.UnknownVariable {
+        Variable variable = findVariable(element, probNet);
+        if (variable == null) {
+            throw new PGMXParserException.UnknownVariable(place, nodeNameOf(element), element);
+        }
+        return variable;
+    }
+
+    /** @return how a message names the relation whose variables, its node first, are {@code variables} */
+    static String relationOf(List<Variable> variables) {
+        return variables.isEmpty() ? "a relation" : "the relation of " + variables.getFirst().getName();
     }
     
     protected String getElementName(Element element) {
@@ -1218,8 +1244,8 @@ public class PGMXReader_0_2 {
                 List<Element> variablesElement = xmlLink.getChildren(XMLTags.VARIABLE.toString());
                 // for the time being the name contains the time slice
                 try {
-                    Variable variable1 = getVariable(variablesElement.get(0), probNet);
-                    Variable variable2 = getVariable(variablesElement.get(1), probNet);
+                    Variable variable1 = getVariable(variablesElement.get(0), probNet, "a link");
+                    Variable variable2 = getVariable(variablesElement.get(1), probNet, "a link");
                     Node node1 = probNet.getNode(variable1);
                     Node node2 = probNet.getNode(variable2);
                     boolean directed = xmlLink.getAttribute(XMLAttributes.DIRECTED.toString()).getBooleanValue();
@@ -1328,7 +1354,8 @@ public class PGMXReader_0_2 {
         return root.getChild(XMLTags.POTENTIALS.toString());
     }
     
-    protected List<Variable> getReferencedVariables(Element xmlPotential, ProbNet probNet) {
+    protected List<Variable> getReferencedVariables(Element xmlPotential, ProbNet probNet)
+            throws PGMXParserException.DataMissing, PGMXParserException.UnknownVariable {
         // get variables
         Element xmlRootVariables = getXMLPotentialVariables(xmlPotential);
         List<Variable> variables = new ArrayList<>();
@@ -1337,7 +1364,7 @@ public class PGMXReader_0_2 {
             List<Element> xmlVariables = getXMLChildren(xmlRootVariables);
             int numVariables = xmlVariables.size();
             for (Element xmlVariable : xmlVariables) {
-                Variable variable = getVariable(xmlVariable, probNet);
+                Variable variable = getVariable(xmlVariable, probNet, relationOf(variables));
                 if (!variables.contains(variable) || probNet.hasConstraintOfClass(OnlySelfLoopsWithEventAndChanceNodes.class)) {
                     variables.add(variable);
                 }
@@ -1602,7 +1629,7 @@ public class PGMXReader_0_2 {
         Element xmlUtilityVariable = xmlPotential.getChild(XMLTags.UTILITY_VARIABLE.toString());
         boolean utilityVariableElement = false;
         if (xmlUtilityVariable != null) {
-            Variable utilityVariable = getVariable(xmlUtilityVariable, probNet);
+            Variable utilityVariable = getVariable(xmlUtilityVariable, probNet, "a relation");
             variables.addFirst(utilityVariable);
             utilityVariableElement = true;
         }
@@ -1716,7 +1743,7 @@ public class PGMXReader_0_2 {
         // }
         Element xmlTopVariable = xmlPotential.getChild(XMLTags.TOP_VARIABLE.toString());
         if (xmlTopVariable != null) {
-            topVariable = getVariable(xmlTopVariable, probNet);
+            topVariable = getVariable(xmlTopVariable, probNet, relationOf(variables));
         }
         // Recursive reading of tree structure
         List<TreeADDBranch> branches = getTreeADDBranches(xmlPotential, probNet, topVariable, xmlRole, variables);

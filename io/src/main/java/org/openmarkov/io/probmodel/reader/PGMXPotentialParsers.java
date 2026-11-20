@@ -19,7 +19,6 @@ import org.openmarkov.core.model.network.potential.canonical.MinPotential;
 import org.openmarkov.core.model.network.potential.canonical.TuningPotential;
 import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.io.probmodel.exception.PGMXParserException;
-import org.openmarkov.io.probmodel.strings.XMLAttributes;
 import org.openmarkov.io.probmodel.strings.XMLTags;
 
 import java.util.Arrays;
@@ -40,18 +39,6 @@ import java.util.List;
 public class PGMXPotentialParsers {
 
     private PGMXPotentialParsers() {}
-
-    // -------------------------------------------------------------------------
-    // Internal helpers (mirrors of PGMXReader_0_2 static helpers)
-    // -------------------------------------------------------------------------
-
-    private static Variable getVariable(Element element, ProbNet probNet) {
-        String variableName = element.getAttributeValue(XMLAttributes.NAME.toString());
-        String timeSlice = element.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
-        variableName = variableName.replace(" [" + timeSlice + "]", "");
-        return (timeSlice == null) ? probNet.getVariable(variableName)
-                : probNet.getVariable(variableName, PGMXReader_0_2.parseInteger(timeSlice));
-    }
 
     // -------------------------------------------------------------------------
     // Simple structural potentials
@@ -140,7 +127,8 @@ public class PGMXPotentialParsers {
     // -------------------------------------------------------------------------
 
     public static Potential getICIPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
-                                             List<Variable> variables) {
+                                             List<Variable> variables)
+            throws PGMXParserException.DataMissing, PGMXParserException.UnknownVariable {
         Element xmlModel = xmlPotential.getChild(XMLTags.MODEL.toString());
         ICIPotential iciPotential = null;
         if (xmlModel.getText().equals(PotentialUtils.getPotentialName(MaxPotential.class))
@@ -156,10 +144,12 @@ public class PGMXPotentialParsers {
             List<Element> subpotentialVariables = subpotential.getChild(XMLTags.VARIABLES.toString()).getChildren();
             double[] values = PGMXReader_0_2.parseDoubles(subpotential.getChild(XMLTags.VALUES.toString()).getTextNormalize());
             if (subpotentialVariables.size() > 1) {
-                Variable variable = getVariable(subpotentialVariables.get(1), probNet);
+                Variable variable = PGMXReader_0_2.getVariable(subpotentialVariables.get(1), probNet,
+                                                               PGMXReader_0_2.relationOf(variables));
                 iciPotential.setNoisyParameters(variable, values);
             } else {
-                getVariable(subpotentialVariables.getFirst(), probNet);
+                PGMXReader_0_2.getVariable(subpotentialVariables.getFirst(), probNet,
+                                           PGMXReader_0_2.relationOf(variables));
                 iciPotential.setLeakyParameters(values);
             }
         }
@@ -171,13 +161,13 @@ public class PGMXPotentialParsers {
     // -------------------------------------------------------------------------
 
     public static Potential getWeibullPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
-                                                 List<Variable> variables) {
+                                                 List<Variable> variables)
+            throws PGMXParserException.DataMissing, PGMXParserException.UnknownVariable {
         WeibullHazardPotential potential = new WeibullHazardPotential(variables, xmlRole);
         Element xmlTimeVariable = xmlPotential.getChild(XMLTags.TIME_VARIABLE.toString());
         if (xmlTimeVariable != null) {
-            String variableName = xmlTimeVariable.getAttributeValue(XMLAttributes.NAME.toString());
-            String timeSlice = xmlTimeVariable.getAttributeValue(XMLAttributes.TIME_SLICE.toString());
-            Variable timeVariable = probNet.getVariable(variableName, PGMXReader_0_2.parseInteger(timeSlice));
+            Variable timeVariable = PGMXReader_0_2.getVariable(xmlTimeVariable, probNet,
+                                                               PGMXReader_0_2.relationOf(variables));
             potential.setTimeVariable(timeVariable);
         }
         Element xmlLog = xmlPotential.getChild(XMLTags.LOG.toString());

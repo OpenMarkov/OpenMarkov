@@ -487,6 +487,18 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String validTypes;
     }
 
+    public static final class UnknownVariable extends PGMXParserException {
+        public UnknownVariable(String place, String variableName, Element element) {
+            super(element);
+            this.place = place;
+            this.variableName = variableName;
+        }
+
+        /** Where the file names the variable, as in "a link" or "the relation of X" */
+        public final String place;
+        public final String variableName;
+    }
+
     public static final class NodeWithoutVariableType extends PGMXParserException {
         public NodeWithoutVariableType(String nodeName, Element element) {
             super(element);

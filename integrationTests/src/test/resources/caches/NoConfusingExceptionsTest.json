@@ -223,6 +223,7 @@
     "UnknownNetworkType",
     "UnknownNodeRole",
     "UnknownPotentialRole",
+    "UnknownVariable",
     "UnknownVariableType",
     "UnlocalizedJavaException",
     "UnmetConstraints",
