@@ -118,6 +118,16 @@ import java.util.Random;
         newVariables.add(variable);
         ExactDistrPotential newPotential = new ExactDistrPotential(newVariables, role);
         ValuesOfTheSameStates.copy(tablePotential, newPotential.tablePotential, Map.of());
+        // Each new cell also takes a copy of the uncertain value of the cell whose number it repeats
+        UncertainValue[] uncertainValues = tablePotential.getUncertainValues();
+        if (uncertainValues != null) {
+            UncertainValue[] repeated = new UncertainValue[newPotential.tablePotential.getValues().length];
+            for (int i = 0; i < repeated.length; i++) {
+                UncertainValue original = uncertainValues[i % uncertainValues.length];
+                repeated[i] = (original == null) ? null : original.copy();
+            }
+            newPotential.tablePotential.setUncertainValues(repeated);
+        }
         newPotential.copyAttributesFrom(this);
         return newPotential;
     }
