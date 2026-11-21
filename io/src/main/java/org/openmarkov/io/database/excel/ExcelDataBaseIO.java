@@ -251,8 +251,11 @@ import java.util.Locale;
                 // Create a cell and put a value in it.
                 Cell cell = row.createCell(j);
                 String data = database.getVariables().get(j).getStates()[cases[i][j]].getName();
-                if (data.equals("?"))
+                // As text, so that a case with nothing known is not a blank row, which the reader skips
+                if (data.equals("?") || data.isEmpty()) {
+                    cell.setCellValue(new XSSFRichTextString("?"));
                     continue;
+                }
                 Double number = numberToWrite(data);
                 if (number == null) {
                     cell.setCellValue(new XSSFRichTextString(data));
