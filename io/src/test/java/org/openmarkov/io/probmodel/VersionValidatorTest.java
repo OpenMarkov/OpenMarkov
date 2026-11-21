@@ -1,7 +1,6 @@
 package org.openmarkov.io.probmodel;
 
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
@@ -15,21 +14,30 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.Objects;
 
-@Disabled("This test is disabled until someone fixes the absolute path")
 public class VersionValidatorTest {
     
-    private static String ABSOLUTE_PATH = new File(Objects.requireNonNull(VersionValidatorTest.class.getResource("/version.xsd"))
-                                                          .getFile()).getParentFile().getAbsolutePath();
+    private static final String ABSOLUTE_PATH = folderOfTheResources();
+
+    private static String folderOfTheResources() {
+        try {
+            return Path.of(Objects.requireNonNull(VersionValidatorTest.class.getResource("/version.xsd")).toURI())
+                       .getParent().toString();
+        } catch (URISyntaxException e) {
+            throw new IllegalStateException(e);
+        }
+    }
     
     private static void Version(String name) throws javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXException, java.io.IOException {
         DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = parser.parse(new File(ABSOLUTE_PATH + "\\" + name));
+        Document document = parser.parse(new File(ABSOLUTE_PATH, name));
         
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         
-        Source schemaFile = new StreamSource(new File(ABSOLUTE_PATH + "\\version.xsd"));
+        Source schemaFile = new StreamSource(new File(ABSOLUTE_PATH, "version.xsd"));
         Schema schema = factory.newSchema(schemaFile);
         
         Validator validator = schema.newValidator();
