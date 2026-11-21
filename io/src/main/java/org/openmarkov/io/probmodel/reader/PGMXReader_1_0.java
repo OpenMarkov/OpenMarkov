@@ -128,7 +128,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     
     protected static Potential getUnivariateDistrPotential(Element xmlPotential, ProbNet probNet, PotentialRole xmlRole,
                                                            List<Variable> variables)
-            throws PGMXParserException.WrongNumberOfValues {
+            throws PGMXParserException.WrongNumberOfValues, PGMXParserException.DataMissing,
+                   PGMXParserException.UnknownDistribution {
         String univariateName = xmlPotential.getAttributeValue(XMLAttributes.DISTRIBUTION.toString());
         String parametrization = xmlPotential.getAttributeValue(XMLAttributes.PARAMETRIZATION.toString());
         Element xmlRootTable = xmlPotential.getChild(XMLTags.PARAMETERS.toString());
@@ -143,18 +144,23 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
             }
             return PGMXPotentialParsers.getExactDistrPotential(xmlPotential,probNet,xmlRole,variables);
         }
-        UnivariateDistrPotential potential;
-        if (parametrization != null) {
-            potential = new UnivariateDistrPotential(variables, univariateName, parametrization, xmlRole);
-        } else {
-            var probDensFunctionClass = ProbDensFunctionManager.getUniqueInstance()
-                                                               .getProbDensFunctionClass(univariateName);
-            if(probDensFunctionClass == null) {
-                potential = new UnivariateDistrPotential(variables,xmlRole);
-            }else{
-                potential = new UnivariateDistrPotential(variables, probDensFunctionClass, xmlRole);
-            }
+        if (univariateName == null) {
+            throw new PGMXParserException.DataMissing(relationOf(variables), XMLAttributes.DISTRIBUTION.toString(),
+                                                      xmlPotential);
         }
+        ProbDensFunctionManager distributions = ProbDensFunctionManager.getUniqueInstance();
+        boolean known = parametrization == null
+                ? distributions.getProbDensFunctionClass(univariateName) != null
+                : distributions.getParametrizations(univariateName) != null
+                  && distributions.getProbDensFunctionClass(univariateName, parametrization) != null;
+        if (!known) {
+            throw new PGMXParserException.UnknownDistribution(variables.getFirst().getName(), univariateName,
+                                                              parametrization, xmlPotential);
+        }
+        UnivariateDistrPotential potential = parametrization != null
+                ? new UnivariateDistrPotential(variables, univariateName, parametrization, xmlRole)
+                : new UnivariateDistrPotential(variables, distributions.getProbDensFunctionClass(univariateName),
+                                               xmlRole);
         
         List<Variable> vDistributionTable = new ArrayList<>(potential.getFiniteStatesVariables());
         vDistributionTable.addFirst(potential.getPseudoVariableDistribution());
