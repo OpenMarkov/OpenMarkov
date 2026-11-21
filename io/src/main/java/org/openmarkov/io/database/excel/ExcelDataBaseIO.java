@@ -227,48 +227,48 @@ import java.util.Locale;
         checkItFits(database, SpreadsheetVersion.EXCEL2007, ".xlsx");
         int numCell = 0;
         
-        // create a workbook
-        SXSSFWorkbook wb = new SXSSFWorkbook();
-        // create a sheet
-        SXSSFSheet sheet = wb.createSheet("new sheet");
-        // Create a row to put the names of the attributes.
-        Row row = sheet.createRow(0);
+        // Closing the workbook deletes the temporary file it keeps its rows in
+        try (SXSSFWorkbook wb = new SXSSFWorkbook()) {
+            // create a sheet
+            SXSSFSheet sheet = wb.createSheet("new sheet");
+            // Create a row to put the names of the attributes.
+            Row row = sheet.createRow(0);
         
-        /* Attributes */
-        for (Variable variable : database.getVariables()) {
-            String variableName = variable.getName();
-            // Create a cell and put a value in it.
-            Cell cell = row.createCell(numCell);
-            cell.setCellValue(new XSSFRichTextString(variableName));
-            numCell++;
-        }
-        
-        /* Cases */
-        int[][] cases = database.getCases();
-        for (int i = 0; i < cases.length; i++) {
-            row = sheet.createRow(i + 1);
-            for (int j = 0; j < cases[i].length; j++) {
+            /* Attributes */
+            for (Variable variable : database.getVariables()) {
+                String variableName = variable.getName();
                 // Create a cell and put a value in it.
-                Cell cell = row.createCell(j);
-                String data = database.getVariables().get(j).getStates()[cases[i][j]].getName();
-                // As text, so that a case with nothing known is not a blank row, which the reader skips
-                if (data.equals("?") || data.isEmpty()) {
-                    cell.setCellValue(new XSSFRichTextString("?"));
-                    continue;
-                }
-                Double number = numberToWrite(data);
-                if (number == null) {
-                    cell.setCellValue(new XSSFRichTextString(data));
-                } else {
-                    cell.setCellValue(number);
+                Cell cell = row.createCell(numCell);
+                cell.setCellValue(new XSSFRichTextString(variableName));
+                numCell++;
+            }
+        
+            /* Cases */
+            int[][] cases = database.getCases();
+            for (int i = 0; i < cases.length; i++) {
+                row = sheet.createRow(i + 1);
+                for (int j = 0; j < cases[i].length; j++) {
+                    // Create a cell and put a value in it.
+                    Cell cell = row.createCell(j);
+                    String data = database.getVariables().get(j).getStates()[cases[i][j]].getName();
+                    // As text, so that a case with nothing known is not a blank row, which the reader skips
+                    if (data.equals("?") || data.isEmpty()) {
+                        cell.setCellValue(new XSSFRichTextString("?"));
+                        continue;
+                    }
+                    Double number = numberToWrite(data);
+                    if (number == null) {
+                        cell.setCellValue(new XSSFRichTextString(data));
+                    } else {
+                        cell.setCellValue(number);
+                    }
                 }
             }
-        }
         
-        // Write the output to a file
-        FileOutputStream fileOut = new FileOutputStream(file);
-        wb.write(fileOut);
-        fileOut.close();
+            try (FileOutputStream fileOut = new FileOutputStream(file)) {
+                wb.write(fileOut);
+            }
+        }
     }
     
 }
