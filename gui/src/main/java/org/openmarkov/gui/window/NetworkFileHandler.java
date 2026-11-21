@@ -184,7 +184,8 @@ public class NetworkFileHandler {
         netReadFrom.getPNESupport().setWithUndo(true);
         netReadFrom.setName((switch (source) {
             case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getName();
-            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> new File(sourceURL.url().getFile()).getName();
+            // The reader names it after the address that has the file, which may not be the one written
+            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> netReadFrom.getName();
             case NetworkEditorPanel.NetworkSource.NoSource noSource -> "Untitled";
         }));
         String networkFile = switch (source) {

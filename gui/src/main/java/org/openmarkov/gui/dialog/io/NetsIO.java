@@ -166,12 +166,12 @@ public class NetsIO {
      * @return an ProbNetInfo object with the information of the network.
      */
     public static ProbNetInfo openNetworkURL(URL url) throws IOException, ProbNetParserException, NoReaderForFileException, CorruptNetworkFile {
-        String networkName = url.getPath();
-        networkName = networkName.substring(networkName.lastIndexOf('/') + 1);
+        // The reader, and the name of the network, are those of the address that has the file
+        URL finalUrl = Redirections.finalAddressOf(url);
         FormatManager formatManager = FormatManager.getInstance();
-        ProbNetReader probNetReader = formatManager.getProbNetReader(url);
+        ProbNetReader probNetReader = formatManager.getProbNetReader(finalUrl);
         try {
-            return probNetReader.read(url);
+            return probNetReader.read(finalUrl);
         } catch (UnrecoverableException | UnreachableException e) {
             throw e;
         } catch (RuntimeException e) {
