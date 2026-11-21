@@ -1810,6 +1810,9 @@ public class PGMXReader_0_2 {
     }
     
     protected static double[] parseDoubles(String string) {
+        if (string.isBlank()) {
+            return new double[0];
+        }
         String[] sValues = string.split(" ");
         double[] table = new double[sValues.length];
         int i = 0;
