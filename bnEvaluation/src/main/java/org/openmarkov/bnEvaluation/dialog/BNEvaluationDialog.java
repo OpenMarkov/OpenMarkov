@@ -7,6 +7,7 @@
 
 package org.openmarkov.bnEvaluation.dialog;
 
+import java.io.File;
 import org.openmarkov.bnEvaluation.view.ErrorText;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.bnEvaluation.Coherence;
@@ -19,7 +20,6 @@ import org.openmarkov.bnEvaluation.measures.MeasuresSet;
 import org.openmarkov.bnEvaluation.view.BackgroundEvaluation;
 import org.openmarkov.core.developmentStaticAnalysis.ToCheck;
 import org.openmarkov.core.exception.ProbNetParserException;
-import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
@@ -384,18 +384,51 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         BackgroundEvaluation.run(this.owner, "Evaluation",
                                  progress -> evaluator.runEvaluator(),
                                  measures -> {
+                                     File file;
                                      try {
-                                         var file = new ResultsDialog(this.owner, measures).exportButtonActionPerformed();
-                                         if (file == null) {
-                                             return;
-                                         }
-                                         Desktop.getDesktop().open(file);
-                                         this.setVisible(false);
+                                         file = new ResultsDialog(this.owner, measures).exportButtonActionPerformed();
                                      } catch (IOException e) {
-                                         throw new UnrecoverableException(e);
+                                         // As the export button of the results: this window stays, to choose another file
+                                         JOptionPane.showMessageDialog(this,
+                                                 "The results could not be exported: " + ErrorText.of(e),
+                                                 "Export error", JOptionPane.ERROR_MESSAGE);
+                                         return;
                                      }
+                                     if (file == null) {
+                                         return;
+                                     }
+                                     String notice = noticeIfItCannotBeOpened(file, BNEvaluationDialog::openWithTheDesktop);
+                                     if (notice != null) {
+                                         JOptionPane.showMessageDialog(this, notice, "Results saved",
+                                                                       JOptionPane.INFORMATION_MESSAGE);
+                                     }
+                                     this.setVisible(false);
                                  });
         return false;
+    }
+
+    /** Something that opens a file for the user to see it. */
+    @FunctionalInterface interface FileOpener {
+        void open(File file) throws IOException;
+    }
+
+    /** Opens the file with the program the system has for it. */
+    private static void openWithTheDesktop(File file) throws IOException {
+        if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
+            throw new UnsupportedOperationException("the system cannot open files");
+        }
+        Desktop.getDesktop().open(file);
+    }
+
+    /** @return null if {@code opener} opens the file; if it cannot, the notice that says where the results are */
+    static @Nullable String noticeIfItCannotBeOpened(File file, FileOpener opener) {
+        try {
+            opener.open(file);
+            return null;
+        } catch (IOException | UnsupportedOperationException e) {
+            return "The results were saved in " + file.getAbsolutePath() + ", but the file could not be opened: "
+                   + ErrorText.of(e);
+        }
     }
 
     /** @return the notice, in HTML, that lists those variables by name, each on its line */
