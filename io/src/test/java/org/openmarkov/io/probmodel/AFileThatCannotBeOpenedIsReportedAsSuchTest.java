@@ -74,6 +74,7 @@ class AFileThatCannotBeOpenedIsReportedAsSuchTest {
                 assertThrows(ProbNetParserException.BadlyStructuredFile.class, () -> open(url));
         String message = exception.getExceptionMessage();
         assertAll(() -> assertTrue(message.contains("An error occurred at line 3, column "), message),
-                  () -> assertFalse(message.contains(">>>"), message));
+                  () -> assertFalse(message.contains(">>>"), message),
+                  () -> assertFalse(message.endsWith(".."), message));
     }
 }

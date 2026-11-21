@@ -285,7 +285,7 @@
     <Localization class="org.openmarkov.core.exception.NotEvaluableNetworkException$VariableIsNotTemporal"
                   value="Variable {variable} is not temporal."/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$BadlyStructuredFile"
-                  value="File {url} is not well-formed.\nAn error occurred at line {saxParseException.getLineNumber}, column {saxParseException.getColumnNumber}: {saxParseException.getMessage}."/>
+                  value="File {url} is not well-formed.\nAn error occurred at line {saxParseException.getLineNumber}, column {saxParseException.getColumnNumber}: {saxParseException.getMessage}"/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$CannotOpenFile"
                   value="Cannot open file {filename}.\n{ioException.getMessage}."/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$CannotParseFile"
