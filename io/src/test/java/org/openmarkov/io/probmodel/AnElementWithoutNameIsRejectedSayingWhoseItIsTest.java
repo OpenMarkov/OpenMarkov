@@ -86,7 +86,11 @@ class AnElementWithoutNameIsRejectedSayingWhoseItIsTest {
                              "a default state of the network"),
                 Arguments.of("an agent", AGENTS, "<Agent name=\"Agent 1\"/>", "<Agent/>", "an agent"),
                 Arguments.of("a property of an agent", AGENTS, "<Agent name=\"Agent 1\"/>",
-                             "<Agent name=\"Agent 1\"><Property value=\"1\"/></Agent>", "a property of an agent"));
+                             "<Agent name=\"Agent 1\"><Properties><Property value=\"1\"/></Properties></Agent>",
+                             "a property of an agent"),
+                Arguments.of("a property of an agent in format 1.0", AGENTS, "<Agent name=\"Agent 1\"/>",
+                             "<Agent name=\"Agent 1\"><AdditionalProperties><Property value=\"1\"/>"
+                             + "</AdditionalProperties></Agent>", "a property of an agent"));
     }
 
     @ParameterizedTest(name = "{0}")

@@ -367,7 +367,12 @@ public class PGMXReader_0_2 {
      */
     protected Properties getAdditionalProperties(Element agentElement) throws PGMXParserException.DataMissing {
         Properties properties = null;
-        List<Element> propertiesListElement = getXMLChildren(agentElement);
+        // The writers put them in a block, as they do with those of a variable
+        Element block = agentElement.getChild(XMLTags.ADDITIONAL_PROPERTIES.toString());
+        if (block == null) {
+            block = agentElement.getChild(XMLTags.PROPERTIES.toString());
+        }
+        List<Element> propertiesListElement = block == null ? null : getXMLChildren(block);
         if (propertiesListElement != null && !propertiesListElement.isEmpty()) {
             properties = new Properties();
             for (Element propertyElement : propertiesListElement) {
