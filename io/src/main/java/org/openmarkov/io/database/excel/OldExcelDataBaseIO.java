@@ -129,7 +129,7 @@ import java.util.List;
                 i++;
             }
             probNet.setAdditionalProperties(ioNet);
-            return CaseDatabaseReader.withDistinctVariableNames(file, new CaseDatabase(probNet.getVariables(), cases));
+            return CaseDatabaseReader.accepted(file, new CaseDatabase(probNet.getVariables(), cases));
         }
     }
     

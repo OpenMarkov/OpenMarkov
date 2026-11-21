@@ -8,6 +8,7 @@
 package org.openmarkov.io.database.weka;
 
 import org.jetbrains.annotations.NotNull;
+import org.openmarkov.core.exception.DatabaseWithoutCasesException;
 import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.io.database.ByteOrderMark;
@@ -55,10 +56,11 @@ public class ArffDataBaseIO implements CaseDatabaseReader, CaseDatabaseWriter {
     @Override
     public @NotNull CaseDatabase load(File file)
             throws IOException, ParsingSourceException.CouldNotParseSourceException,
-            ParsingSourceException.RepeatedVariableNames, ParsingSourceException.StartsWithAByteOrderMark {
+            ParsingSourceException.RepeatedVariableNames, ParsingSourceException.StartsWithAByteOrderMark,
+            DatabaseWithoutCasesException {
         ByteOrderMark.refuse(file);
         try {
-            return CaseDatabaseReader.withDistinctVariableNames(file, ArffReader.read(file.toPath()));
+            return CaseDatabaseReader.accepted(file, ArffReader.read(file.toPath()));
         } catch (ParseException e) {
             throw new ParsingSourceException.CouldNotParseSourceException(e);
         }

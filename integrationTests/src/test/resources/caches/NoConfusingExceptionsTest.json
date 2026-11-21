@@ -38,6 +38,7 @@
     "DataCouldNotBeConverted",
     "DataMissing",
     "DataNotValid",
+    "DatabaseWithoutCasesException",
     "DeltaPotentialWithoutState",
     "DensityCannotBeCalculated",
     "DensityIsInfinite",

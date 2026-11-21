@@ -208,6 +208,7 @@
     <Localization class="org.openmarkov.core.exception.DoEditException$NodeIsNull"
                   value="No node is selected, try selecting a node from the {probNet}"/>
     <Localization class="org.openmarkov.core.exception.EmptyDatabaseException" value="Dataset from {source} is empty."/>
+    <Localization class="org.openmarkov.core.exception.DatabaseWithoutCasesException" value="Dataset from {source} has no cases: it only has the names of its variables."/>
     <Localization class="org.openmarkov.core.exception.ParsingSourceException$RepeatedVariableNames"
                   value="Dataset from {source} has more than one column named {variableName}. A case could not say which of them it means, so the dataset cannot be read. Give each column a different name."/>
     <Localization class="org.openmarkov.core.exception.ParsingSourceException$WrongNumberOfValues"

@@ -159,7 +159,7 @@ import java.util.Locale;
             }
             probNet.setAdditionalProperties(ioNet);
             
-            return CaseDatabaseReader.withDistinctVariableNames(file, new CaseDatabase(probNet.getVariables(), cases));
+            return CaseDatabaseReader.accepted(file, new CaseDatabase(probNet.getVariables(), cases));
         }
     }
     

@@ -10,6 +10,7 @@ package org.openmarkov.core.io.database;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.ImplementationRequirements;
 import org.openmarkov.core.developmentStaticAnalysis.requirements.RequiredConstructor;
+import org.openmarkov.core.exception.DatabaseWithoutCasesException;
 import org.openmarkov.core.exception.EmptyDatabaseException;
 import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.model.database.CaseDatabase;
@@ -25,11 +26,14 @@ public interface CaseDatabaseReader {
     @NotNull CaseDatabase load(File file) throws IOException, ParsingSourceException, EmptyDatabaseException;
 
     /**
-     * Returns the database read from the file, or refuses it when two of its columns carry the same
-     * variable name: a case could not say which of the two it means.
+     * Returns the database read from the file, or refuses it when it has no cases, or when two of its columns carry
+     * the same variable name: a case could not say which of the two it means.
      */
-    static @NotNull CaseDatabase withDistinctVariableNames(File file, @NotNull CaseDatabase database)
-            throws ParsingSourceException.RepeatedVariableNames {
+    static @NotNull CaseDatabase accepted(File file, @NotNull CaseDatabase database)
+            throws ParsingSourceException.RepeatedVariableNames, DatabaseWithoutCasesException {
+        if (database.getCases().length == 0) {
+            throw new DatabaseWithoutCasesException(file.getName());
+        }
         Set<String> namesSoFar = new HashSet<>();
         for (Variable variable : database.getVariables()) {
             if (!namesSoFar.add(variable.getName())) {

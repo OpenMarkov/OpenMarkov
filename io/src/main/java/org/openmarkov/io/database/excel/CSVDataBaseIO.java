@@ -182,7 +182,7 @@ import java.util.Scanner;
                 cases[i][j] = row[j];
             }
         }
-        return CaseDatabaseReader.withDistinctVariableNames(file, new CaseDatabase(probNet.getVariables(), cases));
+        return CaseDatabaseReader.accepted(file, new CaseDatabase(probNet.getVariables(), cases));
     }
     
     @Override public void save(File file, CaseDatabase database) throws IOException {
