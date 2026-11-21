@@ -1,5 +1,6 @@
 package org.openmarkov.bnEvaluation.component;
 
+import org.openmarkov.bnEvaluation.view.ErrorText;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.bnEvaluation.view.BackgroundEvaluation;
@@ -113,7 +114,7 @@ public class DBOpenerPanel extends JPanel {
                 load(file);
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ErrorText.of(e), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     

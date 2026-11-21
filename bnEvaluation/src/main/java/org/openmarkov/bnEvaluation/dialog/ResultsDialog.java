@@ -7,6 +7,7 @@
 
 package org.openmarkov.bnEvaluation.dialog;
 
+import org.openmarkov.bnEvaluation.view.ErrorText;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -108,7 +109,7 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
             } catch (IOException ex) {
                 // An I/O failure while exporting is expectable (e.g. the file is open or read-only);
                 // report it and keep the dialog open instead of aborting the application.
-                JOptionPane.showMessageDialog(this, "The results could not be exported: " + ex.getMessage(), "Export error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "The results could not be exported: " + ErrorText.of(ex), "Export error", JOptionPane.ERROR_MESSAGE);
             }
         });
         addButtonToButtonsPanel(exportButton);

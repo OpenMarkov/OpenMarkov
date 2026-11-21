@@ -7,6 +7,7 @@
 
 package org.openmarkov.bnEvaluation.dialog;
 
+import org.openmarkov.bnEvaluation.view.ErrorText;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.bnEvaluation.Coherence;
 import org.openmarkov.bnEvaluation.NetEvaluator;
@@ -175,7 +176,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
                 // A bad file, an unsupported format or a non-evaluable network are expectable user
                 // errors; report them and keep the dialog open instead of aborting the application.
                 JOptionPane.showMessageDialog(this,
-                                              "The network could not be loaded: " + ex.getMessage(),
+                                              "The network could not be loaded: " + ErrorText.of(ex),
                                               "Network error", JOptionPane.ERROR_MESSAGE);
             }
         });

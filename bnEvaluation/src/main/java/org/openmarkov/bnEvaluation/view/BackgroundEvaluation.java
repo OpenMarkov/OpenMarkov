@@ -126,7 +126,7 @@ public final class BackgroundEvaluation {
                     // cancelled between iterations; nothing to show
                 } catch (ExecutionException e) {
                     Throwable cause = (e.getCause() != null) ? e.getCause() : e;
-                    JOptionPane.showMessageDialog(owner, cause.getMessage(),
+                    JOptionPane.showMessageDialog(owner, ErrorText.of(cause),
                             "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
