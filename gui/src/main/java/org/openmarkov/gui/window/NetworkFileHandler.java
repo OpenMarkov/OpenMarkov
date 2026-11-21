@@ -25,7 +25,7 @@ import org.openmarkov.core.io.ProbNetReader;
 import org.openmarkov.core.io.ProbNetWriter;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
-import org.openmarkov.core.io.exception.NoWriterForExtensionException;
+import org.openmarkov.core.io.exception.NoReaderForExtension;
 import org.openmarkov.core.io.format.annotation.FormatManager;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
@@ -494,7 +494,7 @@ public class NetworkFileHandler {
             try {
                 caseDbReader = caseDbManager
                         .getReader(FilenameUtils.getExtension(evidenceOMFileChooser.getSelectedFile().getName()));
-            } catch (NoWriterForExtensionException e) {
+            } catch (NoReaderForExtension e) {
                 throw new UnrecoverableException(e);
             }
             ProbNet currentNet = currentNetworkEditorPanel.getProbNet();

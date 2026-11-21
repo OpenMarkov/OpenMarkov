@@ -12,7 +12,7 @@ import org.openmarkov.bnEvaluation.DataPreprocessor;
 import org.openmarkov.bnEvaluation.component.DBOpenerPanel;
 import org.openmarkov.bnEvaluation.component.PreprocessingOptionsPanel;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
-import org.openmarkov.core.io.exception.NoReaderForExtension;
+import org.openmarkov.core.io.exception.NoWriterForExtensionException;
 import org.openmarkov.gui.dialog.common.BottomPanelButtonDialog;
 import org.openmarkov.gui.dialog.common.DialogBase;
 import org.openmarkov.gui.dialog.io.DBWriterOMFileChooser;
@@ -66,7 +66,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
         savePreprocessSetButton.addActionListener(e -> {
             try {
                 savePreprocessSetButtonActionPerformed();
-            } catch (IOException | NoReaderForExtension ex) {
+            } catch (IOException | NoWriterForExtensionException ex) {
                 // A write failure or an unsupported extension are expectable user errors; report them
                 // and keep the dialog open instead of aborting the application.
                 JOptionPane.showMessageDialog(this,
@@ -97,7 +97,7 @@ public final class DataPreprocessingDialog extends BottomPanelButtonDialog {
      * Saves the preprocessed dataset next to the source database file. Listener of the "Save dataset"
      * button.
      */
-    private void savePreprocessSetButtonActionPerformed() throws IOException, NoReaderForExtension {
+    private void savePreprocessSetButtonActionPerformed() throws IOException, NoWriterForExtensionException {
         if (!validateBeforeSave()) return;
         CaseDatabaseManager caseDbManager = new CaseDatabaseManager();
         String extension = FilenameUtils.getExtension(this.dbOpenerPanel.getDatabaseFile().getName());

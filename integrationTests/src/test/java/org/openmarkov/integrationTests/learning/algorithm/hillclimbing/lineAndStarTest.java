@@ -14,7 +14,7 @@ import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.ParsingSourceException;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
-import org.openmarkov.core.io.exception.NoWriterForExtensionException;
+import org.openmarkov.core.io.exception.NoReaderForExtension;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.testTags.TestSpeed;
@@ -40,11 +40,11 @@ public class lineAndStarTest {
     
     @Test
     @Tag(TestSpeed.SLOW)
-    public void testLineAndStarXLSX() throws NoWriterForExtensionException, ParsingSourceException, IOException, EmptyDatabaseException, EmptyModelNetException, UnobservedVariablesException, NodesWithoutProbabilityException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, DoEditException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ConstraintViolatedException {
+    public void testLineAndStarXLSX() throws NoReaderForExtension, ParsingSourceException, IOException, EmptyDatabaseException, EmptyModelNetException, UnobservedVariablesException, NodesWithoutProbabilityException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, DoEditException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ConstraintViolatedException {
         test();
     }
     
-    private static void test() throws NoWriterForExtensionException, IOException, ParsingSourceException, EmptyDatabaseException, EmptyModelNetException, UnobservedVariablesException, NodesWithoutProbabilityException, DoEditException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ConstraintViolatedException {
+    private static void test() throws NoReaderForExtension, IOException, ParsingSourceException, EmptyDatabaseException, EmptyModelNetException, UnobservedVariablesException, NodesWithoutProbabilityException, DoEditException, IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, CannotNormalizePotentialException, ConstraintViolatedException {
         var xlsxReader = new CaseDatabaseManager().getReader("xlsx");
         String xlsxDatabase = IntegrationTest.class.getResource("/networks/learning/lineAndStar.xlsx").getPath();
         CaseDatabase cases = xlsxReader.load(new File(xlsxDatabase));

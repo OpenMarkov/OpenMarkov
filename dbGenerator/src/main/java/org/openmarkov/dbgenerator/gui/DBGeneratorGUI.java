@@ -13,7 +13,7 @@ import org.openmarkov.core.exception.ProbNetParserException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
-import org.openmarkov.core.io.exception.NoReaderForExtension;
+import org.openmarkov.core.io.exception.NoWriterForExtensionException;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.database.CaseDatabase;
@@ -249,7 +249,7 @@ public class DBGeneratorGUI extends JDialog {
                 }
                 try {
                     databaseWriter = caseDbManager.getWriter(FilenameUtils.getExtension(filename));
-                } catch (NoReaderForExtension e) {
+                } catch (NoWriterForExtensionException e) {
                     throw new UnrecoverableException(e);
                 }
                 generateButton.setEnabled(net != null);

@@ -10,14 +10,15 @@ import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.CaseDatabaseWriter;
-import org.openmarkov.core.io.exception.NoReaderForExtension;
 import org.openmarkov.core.io.exception.NoWriterForExtensionException;
+import org.openmarkov.core.io.exception.NoReaderForExtension;
 import org.openmarkov.plugin.PluginSearch;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 /**
@@ -57,11 +58,11 @@ public class CaseDatabaseManager {
         this.writerPlugins = new LinkedHashMap<>();
         CaseDatabaseManager.findAllReaderPlugins().forEach(readerPlugin -> {
             CaseDatabaseFormat lAnnotation = readerPlugin.getAnnotation(CaseDatabaseFormat.class);
-            readerPlugins.put(lAnnotation.extension(), readerPlugin);
+            readerPlugins.put(lAnnotation.extension().toLowerCase(Locale.ROOT), readerPlugin);
         });
         CaseDatabaseManager.findAllWriterPlugins().forEach(writerPlugin -> {
             CaseDatabaseFormat lAnnotation = writerPlugin.getAnnotation(CaseDatabaseFormat.class);
-            writerPlugins.put(lAnnotation.extension(), writerPlugin);
+            writerPlugins.put(lAnnotation.extension().toLowerCase(Locale.ROOT), writerPlugin);
         });
     }
     
@@ -84,11 +85,11 @@ public class CaseDatabaseManager {
      *
      * @return a CaseDatabaseWriter object
      */
-    public CaseDatabaseWriter getWriter(String extension) throws NoReaderForExtension {
+    public CaseDatabaseWriter getWriter(String extension) throws NoWriterForExtensionException {
         try {
-            Class<? extends CaseDatabaseWriter> writerClass = this.writerPlugins.get(extension);
+            Class<? extends CaseDatabaseWriter> writerClass = this.writerPlugins.get(extension.toLowerCase(Locale.ROOT));
             if (writerClass == null) {
-                throw new NoReaderForExtension(extension);
+                throw new NoWriterForExtensionException(extension);
             }
             return writerClass.getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
@@ -102,11 +103,11 @@ public class CaseDatabaseManager {
      *
      * @return a CaseDatabaseReader object
      */
-    public CaseDatabaseReader getReader(String extension) throws NoWriterForExtensionException {
+    public CaseDatabaseReader getReader(String extension) throws NoReaderForExtension {
         try {
-            Class<? extends CaseDatabaseReader> readerClass = readerPlugins.get(extension);
+            Class<? extends CaseDatabaseReader> readerClass = readerPlugins.get(extension.toLowerCase(Locale.ROOT));
             if (readerClass == null) {
-                throw new NoWriterForExtensionException(extension);
+                throw new NoReaderForExtension(extension);
             }
             return readerClass.getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |

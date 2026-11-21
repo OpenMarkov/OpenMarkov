@@ -27,7 +27,7 @@ import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.io.database.plugin.CaseDatabaseManager;
-import org.openmarkov.core.io.exception.NoWriterForExtensionException;
+import org.openmarkov.core.io.exception.NoReaderForExtension;
 import org.openmarkov.core.io.format.annotation.NoReaderForFileException;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.database.CaseDatabase;
@@ -650,7 +650,7 @@ public class LearningDialog extends JDialog {
             try {
                 caseFileTextPane.setText(databaseName);
                 loadCaseFile(databasePath);
-            } catch (IOException | EmptyDatabaseException | ParsingSourceException | NoWriterForExtensionException |
+            } catch (IOException | EmptyDatabaseException | ParsingSourceException | NoReaderForExtension |
                      RuntimeException e) {
                 //Ignored on purpose.
                 //If you were to throw this exception, then the Learning tool wouldn't be able to load at all if
@@ -692,7 +692,7 @@ public class LearningDialog extends JDialog {
         generalTabPanel.caseFileTextPane.setText(databaseName);
         try {
             loadCaseFile(databaseFileChooser.getSelectedFile());
-        } catch (ParsingSourceException | NoWriterForExtensionException | IOException | EmptyDatabaseException e) {
+        } catch (ParsingSourceException | NoReaderForExtension | IOException | EmptyDatabaseException e) {
             throw new UnrecoverableException(e);
         } finally {
             updateVariableListCombobox();
@@ -734,7 +734,7 @@ public class LearningDialog extends JDialog {
 
     //GEN-LAST:event_loadCaseFileButtonActionPerformed
 
-    private void loadCaseFile(File file) throws ParsingSourceException, IOException, NoWriterForExtensionException, EmptyDatabaseException {
+    private void loadCaseFile(File file) throws ParsingSourceException, IOException, NoReaderForExtension, EmptyDatabaseException {
         if (file == null) {
             learnButton.setEnabled(false);
             return;
@@ -760,7 +760,7 @@ public class LearningDialog extends JDialog {
             if (modelNet == null) {
                 allVariablesRadioButton.setSelected(true);
             }
-        } catch (NoWriterForExtensionException | IOException | ParsingSourceException | EmptyDatabaseException |
+        } catch (NoReaderForExtension | IOException | ParsingSourceException | EmptyDatabaseException |
                  RuntimeException e) {
             resetCaseDatabaseFile();
             throw e;
