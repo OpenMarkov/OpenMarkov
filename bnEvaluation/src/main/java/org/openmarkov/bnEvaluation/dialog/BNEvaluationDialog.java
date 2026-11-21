@@ -51,6 +51,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -351,15 +352,7 @@ public final class BNEvaluationDialog extends OkCancelDialog {
         this.measuresPanel.changeVariables(
                 result.level() == Coherence.ZERO ? Collections.emptyList() : result.matchedVariableNames());
         if (!result.variablesNotInDatabase().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                                          "<html>The following variable(s) are not included in the dataset:<ul>"
-                                                  + result.variablesNotInDatabase()
-                                                          .stream()
-                                                          .map(Variable::getName)
-                                                          .sorted()
-                                                          .map(name -> "<li>" + name + "</li>")
-                                                          .collect(Collectors.joining()) +
-                                                  "</ul></html>",
+            JOptionPane.showMessageDialog(this, noticeOfTheVariablesNotIn(result.variablesNotInDatabase()),
                                           "Information", JOptionPane.INFORMATION_MESSAGE);
         }
         if (result.netDatabase() != null) {
@@ -403,5 +396,17 @@ public final class BNEvaluationDialog extends OkCancelDialog {
                                      }
                                  });
         return false;
+    }
+
+    /** @return the notice, in HTML, that lists those variables by name, each on its line */
+    static String noticeOfTheVariablesNotIn(Collection<Variable> variables) {
+        return "<html>The following variable(s) are not included in the dataset:<ul>"
+               + variables.stream()
+                          .map(Variable::getName)
+                          .sorted()
+                          .map(name -> "<li>" + name.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                                       + "</li>")
+                          .collect(Collectors.joining())
+               + "</ul></html>";
     }
 }
