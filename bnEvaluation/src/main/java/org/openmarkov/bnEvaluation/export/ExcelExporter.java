@@ -76,7 +76,10 @@ public final class ExcelExporter {
         
         // Title.
         Row predictedRow = sheet.createRow(0);
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 1, 1 + statesNames.length - 1));
+        // A region of a single cell cannot be merged
+        if (numStates > 1) {
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 1, numStates));
+        }
         Cell titleCell = predictedRow.createCell(1);
         titleCell.setCellValue("Prediction");
         titleCell.setCellStyle(format.centricHeaderFormat.get());
@@ -251,9 +254,10 @@ public final class ExcelExporter {
         
         CaseDatabase caseDatabase = indProb.getCaseDatabase();
         double[][] prob = indProb.getProbabilities();
-        String[] mostProbableStates = indProb.getMostProbableStates();
+        // Only the «state » put before each name is taken away, and from a copy: the measures keep theirs
+        String[] mostProbableStates = indProb.getMostProbableStates().clone();
         for (int i = 0; i < mostProbableStates.length; i++) {
-            mostProbableStates[i] = mostProbableStates[i].replaceAll("state ", "");
+            mostProbableStates[i] = mostProbableStates[i].replaceFirst("state ", "");
         }
         
         List<Variable> variables = caseDatabase.getVariables();
