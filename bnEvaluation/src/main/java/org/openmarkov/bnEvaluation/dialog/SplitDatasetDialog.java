@@ -7,6 +7,7 @@
 
 package org.openmarkov.bnEvaluation.dialog;
 
+import java.util.Locale;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.bnEvaluation.SplitSet;
@@ -278,8 +279,6 @@ public final class SplitDatasetDialog extends OkCancelDialog {
         SplitSetManager splitSetManager = new SplitSetManager(this.dbOpenerPanel.getDatabase());
         int numTest = testNumberSpinner.getCurrentValue();
         int numTrain = trainNumberSpinner.getCurrentValue();
-        double testFraction = 100. * (numTest) / numCases;
-        double trainingFraction = 100. - testFraction;
         SplitSetManager.GenerationOrder generationOrder = randomCasesButton.isSelected() ? SplitSetManager.GenerationOrder.Random
                 : firstCasesButton.isSelected() ? SplitSetManager.GenerationOrder.TestsFirst
                 : SplitSetManager.GenerationOrder.TestsLast;
@@ -287,14 +286,7 @@ public final class SplitDatasetDialog extends OkCancelDialog {
         sets = splitSetManager.generateTestSet(numTest, generationOrder);
         
         
-        String casesDescription = switch (generationOrder) {
-            case TestsFirst ->
-                    "<li>The first " + numTest + " (" + testFraction + "%) cases for testing.</li><li>" + numTrain + " (" + trainingFraction + "%) cases for training.</li>";
-            case TestsLast ->
-                    "<li>The last " + numTest + " (" + testFraction + "%) cases for testing.</li><li>" + numTrain + " (" + trainingFraction + "%) cases for training.</li>";
-            case Random ->
-                    "<li>" + numTest + " (" + testFraction + "%) randomly selected cases for testing.</li><li>" + numTrain + " (" + trainingFraction + "%) remanining cases for training.</li>";
-        };
+        String casesDescription = casesDescription(generationOrder, numTest, numTrain, numCases);
         sets.setTitle("<html>The " + numCases + " cases in the original dataset have been split as follows:<ul>" + casesDescription + "</ul></html>");
         CaseDatabaseManager caseDbManager = new CaseDatabaseManager();
         
@@ -324,4 +316,20 @@ public final class SplitDatasetDialog extends OkCancelDialog {
         return super.doOkClickBeforeHide();
     }
     
+
+    /** @return the items, in HTML, that say how many cases go to testing and to training, with their percentages */
+    static String casesDescription(SplitSetManager.GenerationOrder generationOrder, int numTest, int numTrain,
+                                   int numCases) {
+        double testFraction = 100. * numTest / numCases;
+        String test = numTest + String.format(Locale.ROOT, " (%.2f%%)", testFraction);
+        String train = numTrain + String.format(Locale.ROOT, " (%.2f%%)", 100. - testFraction);
+        return switch (generationOrder) {
+            case TestsFirst -> "<li>The first " + test + " cases for testing.</li><li>" + train
+                               + " cases for training.</li>";
+            case TestsLast -> "<li>The last " + test + " cases for testing.</li><li>" + train
+                              + " cases for training.</li>";
+            case Random -> "<li>" + test + " randomly selected cases for testing.</li><li>" + train
+                           + " remaining cases for training.</li>";
+        };
+    }
 }
