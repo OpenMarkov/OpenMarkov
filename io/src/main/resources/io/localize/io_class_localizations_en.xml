@@ -6,7 +6,7 @@
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DataCouldNotBeConverted" value="Data could not be converted due to {reason}."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$DeltaPotentialWithoutState" value="Delta potential of role {role} must specify a state. This can be done using the XML element State, StateIndex or NumericValue."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$EvidenceIsIncompatibleWithOther" value="{sourceException}"/>
-    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$FoundUnknownState" value="Variable {variable} does not have state {stateName}."/>
+    <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$FoundUnknownState" value="Variable {variable.getName} does not have state {stateName}."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$InvalidState" value="State {stateName} is invalid for variable {variableName}."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$NoNetworkTypeFound" value="No network type found."/>
     <Localization class="org.openmarkov.io.probmodel.exception.PGMXParserException$PotentialTypeNotSupported" value="The relation of {nodeName} has the type {potentialType}, which is not supported."/>
