@@ -271,6 +271,9 @@ El \hyperref[err:428]{error~428} se vio al investigar el \hyperref[err:389]{389}
 \paragraph{Errores añadidos el 21 de noviembre}
 El \hyperref[err:429]{error~429} se vio al corregir el \hyperref[err:397]{397}. Se ha comprobado con el código de \texttt{25f7d14}, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo.
 
+\paragraph{Errores de la versión en C++ y Qt añadidos el 21 de noviembre}
+Los \hyperref[err:430]{errores~430} a \hyperref[err:438]{438} se encontraron al llevar a la versión en C++ y Qt los arreglos del 15 al 19 de noviembre, mirando lo que trajo cada commit: el \hyperref[err:430]{430}, de \texttt{fbbbbcb}, el arreglo del \hyperref[err:386]{386}; el \hyperref[err:431]{431}, de \texttt{3297061}; el \hyperref[err:432]{432}, de \texttt{1f0263b}, el del \hyperref[err:363]{363}; el \hyperref[err:433]{433}, de \texttt{d5a9797}, el del \hyperref[err:383]{383}; el \hyperref[err:434]{434}, de \texttt{d34588c}, el del \hyperref[err:410]{410}; y los \hyperref[err:435]{435} a \hyperref[err:438]{438}, de \texttt{46b8e85}, de Jorge Rico (incidencia 695). Se comprobaron con el código de \texttt{b2cf772}, ejecutándolos sin ventana, y el 21 de noviembre se han vuelto a mirar con el de \texttt{65ecb87}: la fila \emph{Comprobado} de cada ficha dice cómo, qué parte se ha leído en el código sin ejecutarla y qué se ha vuelto a ejecutar. La misma tanda volvió a dar el \hyperref[err:415]{error~415}, los números de Excel mayores que 2\,147\,483\,647, que ya estaba. El \hyperref[err:439]{error~439} salió al llevar a esa versión los arreglos del 19 al 21 de noviembre, midiendo los casos del borde del \hyperref[err:397]{397}, y el \hyperref[err:440]{440}, al llevar el arreglo del \hyperref[err:403]{403}; los dos se han comprobado con el código de \texttt{65ecb87}.
+
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
 
@@ -324,9 +327,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{428 errores}; 284 de ellos son defectos nuevos: 102 encontrados al
-comprobar o corregir los demás, 116 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 378 pequeños, 49 medios y 1 grandes.
-De los 428, 393 están ya corregidos y 2 están cerrados sin arreglo.
+La lista tiene \textbf{439 errores}; 295 de ellos son defectos nuevos: 102 encontrados al
+comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 389 pequeños, 49 medios y 1 grandes.
+De los 439, 393 están ya corregidos y 2 están cerrados sin arreglo.
 El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -337,19 +340,19 @@ El apéndice recoge además 201 notas con lo que se comprobó y no entra en la l
 \ref{sec:potenciales}. Operaciones con potenciales & 3 \\
 \ref{sec:canonicos}. Modelos canónicos y modelo de ajuste & 3 \\
 \ref{sec:relaciones}. Relaciones definidas por fórmulas, regresiones, árboles y sucesos & 25 \\
-\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 34 \\
+\ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 35 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 29 \\
 \ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 24 \\
-\ref{sec:temporal}. Modelos temporales y evolución temporal & 16 \\
+\ref{sec:temporal}. Modelos temporales y evolución temporal & 17 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 30 \\
 \ref{sec:des}. Simulación de sucesos discretos & 23 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 54 \\
-\ref{sec:casos}. Bases de casos & 32 \\
-\ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 39 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 56 \\
+\ref{sec:casos}. Bases de casos & 33 \\
+\ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 42 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 51 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 26 \\
-\ref{sec:textos}. Textos y títulos que se ven mal & 21 \\
+\ref{sec:textos}. Textos y títulos que se ven mal & 24 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
 \ref{sec:amua}. Exportación a Amua & 11 \\
 \bottomrule
@@ -437,6 +440,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:312]{312} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una utilidad pegada donde ningún criterio se llama como el suyo sigue juzgada por una copia que la red no tiene & \texttt{gui}, \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:362]{362} & \textcolor{corregidoverde}{\textbf{Corregido}} · Pegar un nodo y renombrar un estado del pegado renombra también el del original & \texttt{core}, \texttt{gui} & S \hfill No\\
 \hyperref[err:363]{363} & \textcolor{corregidoverde}{\textbf{Corregido}} · Añadir un padre a una tabla con incertidumbre pierde la incertidumbre y el comentario & \texttt{core} & S \hfill No\\
+\hyperref[err:432]{432} & Añadir un padre a una «Table of utilities» con incertidumbre pierde la incertidumbre & \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:restricciones}.\ Restricciones de red}}\\
 \hyperref[err:37]{37} & \textcolor{corregidoverde}{\textbf{Corregido}} · Abrir un fichero no comprueba las restricciones de la red & \texttt{io} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:38]{38} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un estado puede quedarse con el nombre vacío o repetido & \texttt{core} & S \hfill \textcolor{decisionrojo}{Sí}\\
@@ -513,6 +517,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:350]{350} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Expand Network» en un modelo que nunca se ha guardado cae con un puntero nulo & \texttt{gui} & S \hfill No\\
 \hyperref[err:368]{368} & Desde 9739e8f, la red expandida de un modelo traído de una dirección lleva dos veces la extensión & \texttt{gui} & S \hfill No\\
 \hyperref[err:383]{383} & \textcolor{corregidoverde}{\textbf{Corregido}} · Los «Cycle length shift» no siguen la duración del ciclo al cambiarla ni al abrir la red: la utilidad cambia & \texttt{core}, \texttt{io} & S \hfill No\\
+\hyperref[err:433]{433} & Un «Cycle length shift» en una hoja de un árbol no sigue la duración del ciclo & \texttt{core}, \texttt{io}, \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:coste}.\ Coste-efectividad y análisis de sensibilidad}}\\
 \hyperref[err:74]{74} & \textcolor{corregidoverde}{\textbf{Corregido}} · El jar publicado mezcla dos JFreeChart y muchas gráficas no se abren & \texttt{full} & S \hfill No\\
 \hyperref[err:75]{75} & \textcolor{corregidoverde}{\textbf{Corregido}} · La araña de coste-efectividad reescribe la red abierta con las medias & \texttt{core} & M \hfill No\\
@@ -623,6 +628,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:406]{406} & Un número mal escrito o un dato que falta impide abrir el .pgmx con «is corrupted», sin decir qué ni dónde & \texttt{io}, \texttt{gui} & L \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:426]{426} & \textcolor{corregidoverde}{\textbf{Corregido}} · El esquema del formato da por opcionales «Slices» y «Transition», que el lector exige & \texttt{core}, \texttt{io} & S \hfill No\\
 \hyperref[err:429]{429} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un modelo canónico con parámetros de más o de menos da un aviso que no dice el nodo ni que el fallo está en el fichero & \texttt{io}, \texttt{core} & S \hfill No\\
+\hyperref[err:439]{439} & Una tabla con la lista de números vacía hace caer el lector, con un error que no dice nada del fichero & \texttt{io} & S \hfill No\\
+\hyperref[err:440]{440} & Desde 36d431d, una red con un agente con propiedades que OpenMarkov guarda no se vuelve a abrir & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -656,6 +663,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:419]{419} & «Load evidence» con una columna que la red no tiene falla, y los valores con otras mayúsculas se pierden & \texttt{gui} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:420]{420} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en Windows-1252 con «’», «€» o «–» se lee con caracteres de control invisibles & \texttt{io} & S \hfill No\\
 \hyperref[err:421]{421} & Abrir una base de 100\,000 filas con una columna de identificadores tarda de 17 a 52 segundos & \texttt{io} & S \hfill No\\
+\hyperref[err:434]{434} & Desde d34588c, un caso sin nada sabido que OpenMarkov guarda en Excel se pierde al abrirlo & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:aprendizaje}.\ Aprendizaje y evaluación de redes}}\\
 \hyperref[err:125]{125} & \textcolor{corregidoverde}{\textbf{Corregido}} · La exactitud del Bayes ingenuo selectivo usa el caso evaluado al entrenar & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:126]{126} & \textcolor{corregidoverde}{\textbf{Corregido}} · El Bayes ingenuo selectivo elige características sin el alfa del diálogo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
@@ -696,6 +704,9 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:342]{342} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Reset values» de la ventana de aprender olvida la red de referencia y deja elegida la opción que la usaba & \texttt{learning.\allowbreak{}gui} & S \hfill No\\
 \hyperref[err:345]{345} & \textcolor{corregidoverde}{\textbf{Corregido}} · EM sin red modelo deja la red aprendida sin tablas, y la inferencia falla & \texttt{learning.\allowbreak{}algorithm} & S \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:427]{427} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Data preprocessing» guarda una base sin variables si se desmarcan todas & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
+\hyperref[err:435]{435} & Desde 46b8e85, el libro de la evaluación no se escribe si la variable de clase tiene un solo estado & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
+\hyperref[err:436]{436} & Desde 46b8e85, el libro de la evaluación se equivoca con un estado cuyo nombre lleva «state » & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
+\hyperref[err:438]{438} & Desde 46b8e85, un fallo al guardar o al abrir el libro de la evaluación sale como «Internal error» & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:editor}.\ Interfaz: editor de red y paneles de las relaciones}}\\
 \hyperref[err:150]{150} & \textcolor{corregidoverde}{\textbf{Corregido}} · Volver a elegir la clase de relación que ya tiene un nodo borra sus números & \texttt{gui} & S \hfill No\\
 \hyperref[err:151]{151} & \textcolor{corregidoverde}{\textbf{Corregido}} · En una regresión, lo escrito como Cholesky se pierde al guardar la red & \texttt{gui} & S \hfill No\\
@@ -797,6 +808,9 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:372]{372} & \textcolor{corregidoverde}{\textbf{Corregido}} · Las negativas de muchas restricciones nombran cada nodo por su descripción entera & \texttt{core} & S \hfill No\\
 \hyperref[err:373]{373} & Desde 4a2cc85, lo que dicen de sí mismas una validación cruzada y la evaluación de una red sale en un solo renglón & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \hyperref[err:374]{374} & La frase nueva de «Split dataset» escribe sus porcentajes con todas las cifras de un double y dice «remanining» & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
+\hyperref[err:430]{430} & Un estado que no existe, en una rama de un árbol o en un «Delta», se rechaza describiendo la variable entera & \texttt{io} & S \hfill No\\
+\hyperref[err:431]{431} & El aviso de un fichero de red mal formado acaba en dos puntos & \texttt{core} & S \hfill No\\
+\hyperref[err:437]{437} & Desde 46b8e85, el aviso de las variables que faltan lee sus nombres como HTML & \texttt{bn\allowbreak{}Evaluation} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:rendimiento}.\ Rendimiento}}\\
 \hyperref[err:189]{189} & \textcolor{corregidoverde}{\textbf{Corregido}} · Entrar en modo inferencia con una red grande congela la ventana & \texttt{gui} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:190]{190} & \textcolor{corregidoverde}{\textbf{Corregido}} · Cada resultado de una operación sobre tablas reserva una tabla que tira & \texttt{core} & S \hfill No\\
@@ -4793,6 +4807,56 @@ core/src/main/java/org/openmarkov/core/model/network/potential/TablePotential.ja
 Que \texttt{Uncertain\allowbreak{}Table\allowbreak{}Potential} tenga su propio \texttt{add\allowbreak{}Variable}: que devuelva una tabla con incertidumbre en la que cada estado del padre nuevo repite la distribución de la casilla de la que copia el número, como ya repite el número, y con el mismo comentario.
 
 Prueba: añadir un padre de dos estados a una tabla con incertidumbre y comentario; la tabla nueva tiene incertidumbre, cada casilla con la distribución de la casilla de la que viene, y el mismo comentario; deshacer devuelve la tabla de antes.
+
+\setcounter{subsection}{431}
+\subsection[Añadir un padre a una «Table of utilities» con incertidumbre pierde la incertidumbre]{Al añadir un padre a un nodo cuya relación es una «Table of utilities» o una «Table of values» con incertidumbre, la relación nueva repite los números pero pierde la incertidumbre, sin aviso: es el error 363 en la otra clase de relación que la lleva}\label{err:432}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}org.openmarkov.core.model.network.potential
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/potential/ExactDistrPotential.java:112-123} \newline \path{core/src/main/java/org/openmarkov/core/model/network/potential/UncertainTablePotential.java:124-138}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{b2cf772} (19-11-2026): \texttt{Add\allowbreak{}Link\allowbreak{}Edit}, la edición que hace la ventana al dibujar un enlace, sobre un diagrama de influencia con una utilidad U cuya relación es una «Table of utilities» (\texttt{Exact\allowbreak{}Distr\allowbreak{}Potential}) de valor 5, con Normal(5,~1) y un comentario, y un nodo de azar P; \texttt{Remove\allowbreak{}Link\allowbreak{}Edit} sobre la misma relación ya con P y dos casillas inciertas; y, como control, una tabla de probabilidad con incertidumbre que gana el mismo padre. Vuelto a mirar el 21-11-2026 con el código de \texttt{65ecb87}: \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential} no ha cambiado desde \texttt{b2cf772}, y en \texttt{Uncertain\allowbreak{}Table\allowbreak{}Potential} solo cambió la proyección (\texttt{4474203}), que baja una línea lo citado
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:99]{error~99}, \hyperref[err:363]{error~363}
+\end{ficha}
+\paragraph{Qué pasa}
+El arreglo del \hyperref[err:363]{error~363} (\texttt{1f0263b}, 15-11-2026) hizo que una tabla de probabilidad con incertidumbre la conserve al ganar un padre: \texttt{Uncertain\allowbreak{}Table\allowbreak{}Potential.\allowbreak{}add\allowbreak{}Variable} da a cada casilla nueva una copia de la distribución de la casilla de la que repite el número (líneas 124-138). Pero hay otra clase de relación que lleva incertidumbre en sus números: \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential}, que la ventana llama «Table of utilities» en un nodo de utilidad y «Table of values» en uno de azar, y que guarda sus números en una \texttt{Uncertain\allowbreak{}Table\allowbreak{}Potential}. Su \texttt{add\allowbreak{}Variable}, desde el arreglo del \hyperref[err:99]{error~99}, copia los números a la relación nueva con \texttt{Values\allowbreak{}Of\allowbreak{}The\allowbreak{}Same\allowbreak{}States.\allowbreak{}copy} y el comentario con \texttt{copy\allowbreak{}Attributes\allowbreak{}From}, pero no la incertidumbre (líneas 112-123). Dibujar un enlace hacia el nodo la deja sin ella, sin aviso; quitar el padre, en cambio, la conserva. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+U con una «Table of utilities» de valor 5, Normal(5, 1) y un comentario
+    gana P     valores [5, 5]; incertidumbre: ninguna; el comentario, igual
+U con P, valores [5, 7], Normal(5, 1) y Normal(7, 2)
+    pierde P   valores [5]; incertidumbre: Normal(5, 1); el comentario, igual
+control: tabla de probabilidad de X con Beta(3, 7) y Beta(7, 3)
+    gana P     las 4 casillas con incertidumbre
+\end{Verbatim}
+
+Leído en el código, sin ejecutarlo: el análisis de sensibilidad probabilístico deja de sortear esos números, y si era la única incertidumbre de la red, el menú apaga la entrada de ese análisis (\texttt{Main\allowbreak{}Panel\allowbreak{}Menu\allowbreak{}Assistant}, líneas 271-292).
+\paragraph{El código}
+core/src/main/java/org/openmarkov/core/model/network/potential/ExactDistrPotential.java:112-123
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \AttributeTok{@Override} \KeywordTok{public}\NormalTok{ Potential }\FunctionTok{addVariable}\OperatorTok{(}\NormalTok{Variable variable}\OperatorTok{)} \OperatorTok{\{}
+        \ControlFlowTok{if} \OperatorTok{(}\NormalTok{variables}\OperatorTok{.}\FunctionTok{contains}\OperatorTok{(}\NormalTok{variable}\OperatorTok{)} \OperatorTok{||}\NormalTok{ variable}\OperatorTok{.}\FunctionTok{getVariableType}\OperatorTok{()} \OperatorTok{==}\NormalTok{ VariableType}\OperatorTok{.}\FunctionTok{NUMERIC}
+                \OperatorTok{||}\NormalTok{ variable}\OperatorTok{.}\FunctionTok{getVariableType}\OperatorTok{()} \OperatorTok{==}\NormalTok{ VariableType}\OperatorTok{.}\FunctionTok{EVENT}\OperatorTok{)} \OperatorTok{\{}
+            \ControlFlowTok{return} \KeywordTok{super}\OperatorTok{.}\FunctionTok{addVariable}\OperatorTok{(}\NormalTok{variable}\OperatorTok{);}
+        \OperatorTok{\}}
+        \BuiltInTok{List}\OperatorTok{\textless{}}\NormalTok{Variable}\OperatorTok{\textgreater{}}\NormalTok{ newVariables }\OperatorTok{=} \KeywordTok{new} \BuiltInTok{ArrayList}\OperatorTok{\textless{}\textgreater{}(}\NormalTok{variables}\OperatorTok{);}
+\NormalTok{        newVariables}\OperatorTok{.}\FunctionTok{add}\OperatorTok{(}\NormalTok{variable}\OperatorTok{);}
+\NormalTok{        ExactDistrPotential newPotential }\OperatorTok{=} \KeywordTok{new} \FunctionTok{ExactDistrPotential}\OperatorTok{(}\NormalTok{newVariables}\OperatorTok{,}\NormalTok{ role}\OperatorTok{);}
+\NormalTok{        ValuesOfTheSameStates}\OperatorTok{.}\FunctionTok{copy}\OperatorTok{(}\NormalTok{tablePotential}\OperatorTok{,}\NormalTok{ newPotential}\OperatorTok{.}\FunctionTok{tablePotential}\OperatorTok{,} \BuiltInTok{Map}\OperatorTok{.}\FunctionTok{of}\OperatorTok{());}
+\NormalTok{        newPotential}\OperatorTok{.}\FunctionTok{copyAttributesFrom}\OperatorTok{(}\KeywordTok{this}\OperatorTok{);}
+        \ControlFlowTok{return}\NormalTok{ newPotential}\OperatorTok{;}
+    \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Repetir en \texttt{Exact\allowbreak{}Distr\allowbreak{}Potential.\allowbreak{}add\allowbreak{}Variable} la incertidumbre de cada casilla, como hace \texttt{Uncertain\allowbreak{}Table\allowbreak{}Potential.\allowbreak{}add\allowbreak{}Variable}: cada casilla nueva, con una copia de la distribución de la casilla de la que repite el número.
+
+Prueba: la utilidad U, con una «Table of utilities» de valor 5 con Normal(5,~1), gana el padre P y queda con dos casillas, cada una con su propia copia de Normal(5,~1), y con su comentario.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Restricciones de red}\label{sec:restricciones}
@@ -8903,6 +8967,64 @@ io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXPotentialParsers.java:83
 Que la relación no guarde una duración propia, sino que use siempre la de su red. La forma más directa es tocar los dos sitios que hoy la separan: que el lector lea \texttt{\textless{}Time\allowbreak{}Unit\textgreater{}} antes que las relaciones (por ejemplo, en \texttt{initialize\allowbreak{}Prob\allowbreak{}Net}, que sirve a los dos formatos), y que \texttt{Cycle\allowbreak{}Length\allowbreak{}Edit} dé la duración nueva a cada «Cycle length shift» de la red, y la vieja al deshacer. La otra es que la relación pida la duración al calcular, en vez de guardarla; pide más cambios, porque al calcular no tiene la red a mano. En los dos casos hay que mirar las copias de la relación (constructor de copia, líneas 48-52), que comparten el objeto.
 
 Prueba: en \texttt{MID-\allowbreak{}Chancellor.\allowbreak{}pgmx}, cambiar el ciclo a medio año en las propiedades da 67\,268,45, y guardarla y abrirla en 0.2 y en 1.0 da lo mismo; en el diagrama pequeño, «Age [1]» vale 60,5 después de abrir el fichero.
+
+\setcounter{subsection}{432}
+\subsection[Un «Cycle length shift» en una hoja de un árbol no sigue la duración del ciclo]{Un «Cycle length shift» en una hoja de un árbol no sigue la duración del ciclo: el arreglo del error 383 no llega a las hojas, que siguen sumando un año por ciclo al cambiar la duración y al abrir la red}\label{err:433}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core, io, gui
+\fichakey{Paquete}org.openmarkov.core.model.network; org.openmarkov.io.probmodel.reader; org.openmarkov.gui.dialog.treeadd; org.openmarkov.gui.dialog.node; org.openmarkov.gui.action
+\fichakey{Ficheros}\path{core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:526-541, 1192-1200} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXPotentialParsers.java:78} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/treeadd/TreeADDEditorPanel.java:1193-1238} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/node/PotentialEditPanel.java:708-716} \newline \path{gui/src/main/java/org/openmarkov/gui/action/PasteEdit.java:183-185}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{b2cf772} (19-11-2026): un diagrama de influencia de Markov con «Age [0]» en 60 y «Age [1]» con un árbol sobre «Sex» cuyas dos hojas son «Cycle length shift» de «Age [0]»; la duración cambiada a medio año con \texttt{Cycle\allowbreak{}Length\allowbreak{}Edit}, como \texttt{Network\allowbreak{}Temporal\allowbreak{}Options\allowbreak{}Panel}; la red guardada con \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2} y \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0} y abierta con \texttt{PGMXReader}; y la misma red con las hojas creadas ya con medio año. Como control, la red con el «Cycle length shift» como relación del nodo. Lo del editor de las hojas y lo de pegar, leyendo el código. Vuelto a mirar el 21-11-2026 con el código de \texttt{65ecb87}: \texttt{Prob\allowbreak{}Net} y los tres ficheros de \texttt{gui} no han cambiado desde \texttt{b2cf772}, y en \texttt{PGMXPotential\allowbreak{}Parsers} la lectura del «Cycle length shift» es la misma, en otra línea
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:383]{error~383}
+\end{ficha}
+\paragraph{Qué pasa}
+El arreglo del \hyperref[err:383]{error~383} (\texttt{d5a9797}, 18-11-2026) hace que \texttt{Prob\allowbreak{}Net.\allowbreak{}set\allowbreak{}Cycle\allowbreak{}Length} dé la duración nueva a cada «Cycle length shift» de la red, y con eso cubre el cambio en «Temporal options», su deshacer y la lectura del fichero, que fija la duración después de leer las relaciones. Pero los busca con \texttt{get\allowbreak{}Potentials} (líneas 526-541), que recorre la relación de cada nodo y no lo que hay dentro de ella: no ve el «Cycle length shift» de una hoja de un árbol. Esa hoja se queda con la duración con que se creó; y al abrir el fichero, con la que tiene la red mientras se leen las relaciones (\texttt{PGMXPotential\allowbreak{}Parsers}, línea 78), que es la de omisión: un año. En un modelo de Markov con ciclos de medio año, la hoja suma un año por ciclo, sin aviso. Medido, igual en 0.2 y en 1.0:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+«Age [1]»: árbol sobre «Sex» con dos hojas «Cycle length shift»; «Age [0]» = 60
+    hojas de un año, ciclo cambiado a medio año   hojas 1.0 y 1.0   Age [1] = 61
+      guardada y abierta                          hojas 1.0 y 1.0   Age [1] = 61
+    hojas creadas ya con medio año                hojas 0.5 y 0.5   Age [1] = 60.5
+      guardada y abierta                          hojas 1.0 y 1.0   Age [1] = 61
+control: «Cycle length shift» como relación del nodo
+    ciclo cambiado a medio año, y guardada y abierta                Age [1] = 60.5
+\end{Verbatim}
+
+Hay, leídos en el código y sin ejecutarlos, otros dos caminos. El editor de las hojas, \texttt{Tree\allowbreak{}ADDEditor\allowbreak{}Panel.\allowbreak{}edit\allowbreak{}Potential} (líneas 1193-1238), abre la relación de la hoja sobre una red de usar y tirar, \texttt{new\ Prob\allowbreak{}Net(\allowbreak{})} (línea 1198), y \texttt{Potential\allowbreak{}Edit\allowbreak{}Panel.\allowbreak{}instanciate\allowbreak{}Potential} (líneas 708-716) da al «Cycle length shift» la duración de esa red, un año, sea cual sea la de la red de verdad. Y \texttt{Paste\allowbreak{}Edit} da la duración de la red a un «Cycle length shift» pegado solo si es la relación del nodo (líneas 183-185). En el repositorio, cuatro redes llevan un «Cycle length shift» en una hoja ---las del modelo CHAP, como \texttt{MID-\allowbreak{}CHAP-\allowbreak{}Ryan-\allowbreak{}Griffin.\allowbreak{}pgmx}---, todas con ciclos de un año: no les pasa nada mientras no se cambie la duración.
+\paragraph{El código}
+core/src/main/java/org/openmarkov/core/model/network/ProbNet.java:1193-1200
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{public} \DataTypeTok{void} \FunctionTok{setCycleLength}\OperatorTok{(}\NormalTok{CycleLength cycleLength}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{        metadata}\OperatorTok{.}\FunctionTok{setCycleLength}\OperatorTok{(}\NormalTok{cycleLength}\OperatorTok{);}
+        \ControlFlowTok{if} \OperatorTok{(}\NormalTok{cycleLength }\OperatorTok{!=} \KeywordTok{null}\OperatorTok{)} \OperatorTok{\{}
+            \ControlFlowTok{for} \OperatorTok{(}\NormalTok{Potential potential }\OperatorTok{:} \FunctionTok{getPotentials}\OperatorTok{(}\NormalTok{CycleLengthShift}\OperatorTok{.}\FunctionTok{class}\OperatorTok{::}\NormalTok{isInstance}\OperatorTok{))} \OperatorTok{\{}
+                \OperatorTok{((}\NormalTok{CycleLengthShift}\OperatorTok{)}\NormalTok{ potential}\OperatorTok{).}\FunctionTok{setCycleLength}\OperatorTok{(}\NormalTok{cycleLength}\OperatorTok{);}
+            \OperatorTok{\}}
+        \OperatorTok{\}}
+    \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+gui/src/main/java/org/openmarkov/gui/dialog/treeadd/TreeADDEditorPanel.java:1196-1199
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{        Potential potential }\OperatorTok{=}\NormalTok{ branch}\OperatorTok{.}\FunctionTok{getPotential}\OperatorTok{();}
+\NormalTok{        ProbNet probNet }\OperatorTok{=}\NormalTok{ node}\OperatorTok{.}\FunctionTok{getProbNet}\OperatorTok{();}
+\NormalTok{        ProbNet dummyProbNet }\OperatorTok{=} \KeywordTok{new} \FunctionTok{ProbNet}\OperatorTok{();}
+        \ControlFlowTok{for} \OperatorTok{(}\NormalTok{Variable variable }\OperatorTok{:}\NormalTok{ potential}\OperatorTok{.}\FunctionTok{getVariables}\OperatorTok{())} \OperatorTok{\{}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Que \texttt{Prob\allowbreak{}Net.\allowbreak{}set\allowbreak{}Cycle\allowbreak{}Length} recorra también las hojas de los árboles, bajando por las ramas de cada \texttt{Tree\allowbreak{}ADDPotential}, y que \texttt{Paste\allowbreak{}Edit} haga lo mismo con la relación del nodo pegado. Y que el editor de las hojas cree la relación con la duración de la red de verdad: que la red de usar y tirar tome la de \texttt{node.\allowbreak{}get\allowbreak{}Prob\allowbreak{}Net(\allowbreak{})}.
+
+Prueba: «Age [1]», con un árbol sobre «Sex» cuyas hojas son «Cycle length shift», vale 60,5 con «Age [0]» en 60 tras cambiar el ciclo a medio año, y lo mismo guardada y abierta en 0.2 y en 1.0.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Coste-efectividad y análisis de sensibilidad}\label{sec:coste}
@@ -15758,6 +15880,59 @@ Que el lector compruebe la cuenta antes de pasar los números y se niegue con la
 
 Prueba: las cuatro primeras copias de \emph{Medido} no se abren, con \texttt{Wrong\allowbreak{}Number\allowbreak{}Of\allowbreak{}Values} y el nodo; la de «Tuning» con 4 números y el fichero sin cambios se siguen abriendo.
 
+\setcounter{subsection}{438}
+\subsection[Una tabla con la lista de números vacía hace caer el lector, con un error que no dice nada del fichero]{Un \texttt{.\allowbreak{}pgmx} en el que el \texttt{\textless{}Values\textgreater{}} de una tabla está vacío, o solo tiene blancos, no se abre, y lo que el lector lanza es un \texttt{Number\allowbreak{}Format\allowbreak{}Exception}, «empty String», que no dice de qué nodo es la tabla ni que el fallo está en el fichero}\label{err:439}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1806-1814} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXPotentialParsers.java:93-96}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{65ecb87} (21-11-2026): el lector, \texttt{Format\allowbreak{}Manager.\allowbreak{}get\allowbreak{}Prob\allowbreak{}Net\allowbreak{}Reader(\allowbreak{}url).\allowbreak{}read(\allowbreak{}url)}, con dos copias de \texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}BN-\allowbreak{}conditional-\allowbreak{}gaussian.\allowbreak{}pgmx} en las que el \texttt{\textless{}Values\textgreater{}0.5\ 0.5\textless{}/\allowbreak{}Values\textgreater{}} de Age se cambia por uno vacío y por uno con dos blancos. Qué ventana sale no se ha mirado; que las demás listas de números pasan por la misma función está leído en el código
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:397]{error~397}, \hyperref[err:399]{error~399}, \hyperref[err:429]{error~429}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde el arreglo del \hyperref[err:397]{error~397} (\texttt{25f7d14}), una lista con números de más o de menos se rechaza con \texttt{PGMXParser\allowbreak{}Exception.\allowbreak{}Wrong\allowbreak{}Number\allowbreak{}Of\allowbreak{}Values}, que nombra el nodo y las dos cuentas. La lista vacía es la única que no llega a esa comprobación: \texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}parse\allowbreak{}Doubles} (líneas 1806-1814) parte el texto por los espacios, y del texto vacío sale un único trozo vacío, que \texttt{Double.\allowbreak{}parse\allowbreak{}Double} no admite. La excepción es de las que el programa no espera. Sin el elemento \texttt{\textless{}Values\textgreater{}} el fichero se abre, que es el \hyperref[err:399]{error~399}. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+BN-conditional-gaussian.pgmx, la tabla de Age
+    <Values></Values>        java.lang.NumberFormatException: empty String
+    <Values>  </Values>      java.lang.NumberFormatException: empty String
+    <Values>0.5 0.5 0.1</Values>   (control) WrongNumberOfValues: The file cannot be read: the relation of Age needs 2 numbers in Values, and it has 3.
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Que \texttt{parse\allowbreak{}Doubles} devuelva una lista sin números cuando el texto está vacío o en blanco. La comprobación de la cuenta hace el resto: «The file cannot be read: the relation of Age needs 2 numbers in Values, and it has 0.».
+
+Prueba: las dos copias de \emph{Medido} no se abren, con \texttt{Wrong\allowbreak{}Number\allowbreak{}Of\allowbreak{}Values}, el nodo y «it has 0».
+
+\setcounter{subsection}{439}
+\subsection[Desde 36d431d, una red con un agente con propiedades que OpenMarkov guarda no se vuelve a abrir]{Desde \texttt{36d431d}, una red con un agente que tiene propiedades, guardada por OpenMarkov, no se vuelve a abrir: el lector toma por una propiedad sin nombre el bloque en el que el escritor las mete, y la rechaza}\label{err:440}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.io.probmodel.writer
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:368-381} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/writer/PGMXWriter_0_2.java:330-337}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{65ecb87} (21-11-2026): \texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}test-\allowbreak{}decpomdp-\allowbreak{}manual.\allowbreak{}pgmx} abierta con el lector, su primer agente con la propiedad «colour» = «red» puesta con \texttt{String\allowbreak{}With\allowbreak{}Properties.\allowbreak{}put}, guardada con \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2} y con \texttt{PGMXWriter\_\allowbreak{}1\_\allowbreak{}0} y abierta otra vez. No se ha mirado si la ventana deja dar propiedades a un agente; ninguna red del repositorio tiene un agente con ellas. Qué pasaba antes de \texttt{36d431d} no se ha medido
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:403]{error~403}
+\end{ficha}
+\paragraph{Qué pasa}
+Los dos escritores guardan las propiedades de un agente dentro de un bloque, \texttt{\textless{}Properties\textgreater{}} el de la versión 0.2 y \texttt{\textless{}Additional\allowbreak{}Properties\textgreater{}} el de la 1.0 (\texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Agent}, líneas 330-337). El lector, en cambio, toma por propiedades los hijos directos de \texttt{\textless{}Agent\textgreater{}} (\texttt{get\allowbreak{}Additional\allowbreak{}Properties}, líneas 368-381), así que lo que lee es el bloque, que no tiene \texttt{name}. Desde el arreglo del \hyperref[err:403]{error~403} (\texttt{36d431d}, 21-11-2026) una propiedad de un agente sin nombre se rechaza, y con ello el fichero que el propio programa acaba de guardar. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+test-decpomdp-manual.pgmx, «Agent 1» con la propiedad colour = red
+  guardada en 0.2   <Agent name="Agent 1"> <Properties> <Property name="colour" value="red" /> </Properties> </Agent>
+    al abrirla      DataMissing: The file cannot be read: a property of an agent has no name.
+  guardada en 1.0   <Agent name="Agent 1"> <AdditionalProperties> <Property name="colour" value="red" /> </AdditionalProperties> </Agent>
+    al abrirla      DataMissing: The file cannot be read: a property of an agent has no name.
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Que el lector lea las propiedades de un agente de donde los escritores las ponen, como lee las de una variable: del bloque \texttt{\textless{}Additional\allowbreak{}Properties\textgreater{}} o, si no está, de \texttt{\textless{}Properties\textgreater{}}, y que exija el nombre a las propiedades de dentro.
+
+Prueba: la red de \emph{Medido}, guardada en las dos versiones, se abre con «colour» = «red» en su primer agente; y un agente con una propiedad sin nombre dentro del bloque se sigue rechazando.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
 
@@ -17673,6 +17848,61 @@ io/src/main/java/org/openmarkov/io/database/excel/ExcelDataBaseIO.java:165-173
 Buscar con un mapa del nombre al número de estado, en los tres lectores: en CSV, un mapa del orden nuevo, o una búsqueda binaria en la lista ya ordenada; en Excel, un mapa por columna en \texttt{find\allowbreak{}Variable\allowbreak{}State\allowbreak{}Index\allowbreak{}Or\allowbreak{}Create}, en los dos lectores; en ARFF, un mapa de los valores que declara cada columna, para la cabecera y para los casos.
 
 Prueba: un CSV, un ARFF y un \texttt{.\allowbreak{}xlsx} de 100\,000 filas con una columna de identificadores se leen en un segundo o menos, con los mismos estados, en el mismo orden, y los mismos casos que ahora.
+
+\setcounter{subsection}{433}
+\subsection[Desde d34588c, un caso sin nada sabido que OpenMarkov guarda en Excel se pierde al abrirlo]{Desde \texttt{d34588c}, un caso en el que no se sabe nada ---todas sus variables en «?» o en el estado vacío--- se guarda en Excel como una fila en blanco, y al abrir el fichero esa fila se salta: el caso se pierde sin aviso, y la variable puede perder el estado «?»}\label{err:434}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.database.excel
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/database/excel/ExcelDataBaseIO.java:100-102, 117-124, 210-219, 242-257} \newline \path{io/src/main/java/org/openmarkov/io/database/excel/OldExcelDataBaseIO.java:73, 169-182}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{b2cf772} (19-11-2026): \texttt{Excel\allowbreak{}Data\allowbreak{}Base\allowbreak{}IO} y \texttt{Old\allowbreak{}Excel\allowbreak{}Data\allowbreak{}Base\allowbreak{}IO}, el escritor y el lector de \texttt{.\allowbreak{}xlsx} y de \texttt{.\allowbreak{}xls} que usan «Split dataset» y «Data preprocessing», guardando y volviendo a abrir dos bases; y las mismas con esas dos clases tal como estaban antes de \texttt{d34588c}, en \texttt{9a3cb1d}. Vuelto a mirar el 21-11-2026 con el código de \texttt{65ecb87}: los ficheros citados no han cambiado desde \texttt{b2cf772}
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:409]{error~409}, \hyperref[err:410]{error~410}, \hyperref[err:416]{error~416}
+\end{ficha}
+\paragraph{Qué pasa}
+Los dos escritores de Excel dejan en blanco la casilla de un «?» (\texttt{Excel\allowbreak{}Data\allowbreak{}Base\allowbreak{}IO.\allowbreak{}save}, líneas 249-250) y escriben un texto vacío para el estado vacío. Desde el arreglo del \hyperref[err:410]{error~410} (\texttt{d34588c}, 18-11-2026), los dos lectores saltan la fila que no tiene ningún valor en las columnas de las variables (\texttt{has\allowbreak{}AValue}, líneas 210-219), y ni una casilla en blanco ni una con un texto vacío lo tienen. Así que un caso en el que todas las variables valen «?» o el estado vacío se guarda como una fila en blanco y, al abrir el fichero, ya no está. Si era el único caso con «?» en una variable, la variable pierde además ese estado. Antes de \texttt{d34588c}, la fila se leía como un caso de «?». Medido, igual en \texttt{.\allowbreak{}xlsx} y en \texttt{.\allowbreak{}xls}:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+dos variables, V1 [c, ?, ""] y V2 [d, ?]
+    guardada           5 casos: [c d] [? ?] [c ?] ["" ?] [c d]
+    abierta            3 casos: [c d] [c ?] [c d]; V1 [c], V2 [d, ?]
+    antes de d34588c   5 casos: [c d] [? ?] [c ?] [? ?] [c d]; V1 [c, ?], V2 [d, ?]
+una variable, A [a, ?, b]
+    guardada           4 casos: [a] [?] [b] [?]
+    abierta            2 casos: [a] [b]; A [a, b]
+    antes de d34588c   4 casos: [a] [?] [b] [?]; A [a, ?, b]
+\end{Verbatim}
+
+Pasa al guardar en Excel con «Split dataset» y con «Data preprocessing». Y va en contra de lo que dice la fila \emph{Estado} del \hyperref[err:416]{error~416}, que un estado vacío sigue volviendo como «?»: si el caso no tiene nada más, ya no vuelve.
+\paragraph{El código}
+io/src/main/java/org/openmarkov/io/database/excel/ExcelDataBaseIO.java:247-251
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{                Cell cell }\OperatorTok{=}\NormalTok{ row}\OperatorTok{.}\FunctionTok{createCell}\OperatorTok{(}\NormalTok{j}\OperatorTok{);}
+                \BuiltInTok{String}\NormalTok{ data }\OperatorTok{=}\NormalTok{ database}\OperatorTok{.}\FunctionTok{getVariables}\OperatorTok{().}\FunctionTok{get}\OperatorTok{(}\NormalTok{j}\OperatorTok{).}\FunctionTok{getStates}\OperatorTok{()[}\NormalTok{cases}\OperatorTok{[}\NormalTok{i}\OperatorTok{][}\NormalTok{j}\OperatorTok{]].}\FunctionTok{getName}\OperatorTok{();}
+                \ControlFlowTok{if} \OperatorTok{(}\NormalTok{data}\OperatorTok{.}\FunctionTok{equals}\OperatorTok{(}\StringTok{"?"}\OperatorTok{))}
+                    \ControlFlowTok{continue}\OperatorTok{;}
+                \BuiltInTok{Double}\NormalTok{ number }\OperatorTok{=} \FunctionTok{numberToWrite}\OperatorTok{(}\NormalTok{data}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+io/src/main/java/org/openmarkov/io/database/excel/ExcelDataBaseIO.java:100-102
+
+\begin{Shaded}
+\begin{Highlighting}[]
+            \ControlFlowTok{for} \OperatorTok{(}\DataTypeTok{int}\NormalTok{ i }\OperatorTok{=} \DecValTok{1}\OperatorTok{;}\NormalTok{ i }\OperatorTok{\textless{}=}\NormalTok{ sheet}\OperatorTok{.}\FunctionTok{getLastRowNum}\OperatorTok{();}\NormalTok{ i}\OperatorTok{++)} \OperatorTok{\{}
+\NormalTok{                row }\OperatorTok{=}\NormalTok{ sheet}\OperatorTok{.}\FunctionTok{getRow}\OperatorTok{(}\NormalTok{i}\OperatorTok{);}
+                \ControlFlowTok{if} \OperatorTok{(}\NormalTok{row }\OperatorTok{!=} \KeywordTok{null} \OperatorTok{\&\&} \FunctionTok{hasAValue}\OperatorTok{(}\NormalTok{row}\OperatorTok{,}\NormalTok{ numVariables}\OperatorTok{))} \OperatorTok{\{}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Que los escritores no dejen en blanco la fila de un caso así. Lo más sencillo es escribir el «?» como texto, que el lector ya lee como un valor desconocido (líneas 117-124), y escribir también así el estado vacío, que es como vuelve hoy. Que el lector no salte esas filas no sirve: no se distinguen de las filas en blanco de verdad, que el arreglo del \hyperref[err:410]{error~410} hace bien en saltar.
+
+Prueba: la base de dos variables [c d] [? ?] [c ?] [\texttt{""} ?] [c d], guardada en \texttt{.\allowbreak{}xlsx} y en \texttt{.\allowbreak{}xls} y abierta, tiene sus 5 casos, el segundo y el cuarto en [? ?].
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Aprendizaje y evaluación de redes}\label{sec:aprendizaje}
@@ -20099,6 +20329,165 @@ Excel  se guarda    3328 bytes; se reabre con 0 variables
 \end{Verbatim}
 \paragraph{Cómo arreglarlo}
 Hecho como dice la fila \emph{Estado}. La otra salida era desactivar «Save dataset» mientras no haya ninguna casilla marcada. No se tomó porque \texttt{validate} ya reúne las demás razones para no guardar, y su aviso dice por qué.
+
+\setcounter{subsection}{434}
+\subsection[Desde 46b8e85, el libro de la evaluación no se escribe si la variable de clase tiene un solo estado]{Desde \texttt{46b8e85}, el libro de Excel de la evaluación de una red no se escribe si la variable de clase tiene un solo estado: Apache POI no deja juntar una sola casilla, y sale la ventana de los errores imprevistos}\label{err:435}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.export; org.openmarkov.bnEvaluation.dialog
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/export/ExcelExporter.java:68-82} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/BNEvaluationDialog.java:390-402} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/ResultsDialog.java:105-112, 259-261}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{b2cf772} (19-11-2026): una red bayesiana con A, de un solo estado, padre de B, y 20 casos sacados de ella con \texttt{DBGenerator}; el panel de las medidas, \texttt{Measures\allowbreak{}Panel}, con «Predictive capacity» y A de variable de clase, como lo deja la ventana; \texttt{Net\allowbreak{}Evaluator}, que evalúa, y \texttt{Excel\allowbreak{}Exporter.\allowbreak{}export}, que hace el libro; como control, lo mismo con B de clase. Qué ventana sale, con la regla de \texttt{OMException\allowbreak{}Handler.\allowbreak{}type\allowbreak{}Of}, sin pintarla. Vuelto a mirar el 21-11-2026 con el código de \texttt{65ecb87}: los ficheros citados no han cambiado desde \texttt{b2cf772}
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:436]{error~436}, \hyperref[err:438]{error~438}
+\end{ficha}
+\paragraph{Qué pasa}
+El commit \texttt{46b8e85} (17-11-2026, Jorge Rico, tareas 5 a 10 de la incidencia 695) rehízo el libro de Excel con los resultados de la evaluación. Su hoja «Confusion matrix» pone «Prediction» encima de las columnas de los estados juntando sus casillas de la primera fila, de la columna B a la de su último estado (\texttt{Excel\allowbreak{}Exporter.\allowbreak{}write\allowbreak{}Confusion\allowbreak{}Matrix}, línea 79). Con un solo estado, la región es una sola casilla, B1, y Apache POI la rechaza con un \texttt{Illegal\allowbreak{}Argument\allowbreak{}Exception}. La evaluación funciona; lo que falla es hacer el libro. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+A, de un solo estado, padre de B; 20 casos
+    clase A   tabla de aciertos [[20]]
+              libro: IllegalArgumentException:
+              Merged region B1 must contain 2 or more cells
+    clase B   libro escrito (control)
+\end{Verbatim}
+
+Desde el mismo commit, «OK» en «Bayesian network evaluation» evalúa y guarda el libro sin más (\texttt{BNEvaluation\allowbreak{}Dialog}, líneas 390-402). Esa excepción no es un \texttt{IOException}, nadie la recoge, y sale la ventana de los errores imprevistos. El fichero no llega a crearse, porque \texttt{Results\allowbreak{}Dialog} hace el libro antes de abrir el fichero para escribirlo (línea 259). Pasa lo mismo, leído en el código, con el botón «Export to Excel file» de los resultados de «Cross validation», que usa el mismo exportador y solo recoge \texttt{IOException} (líneas 105-112).
+\paragraph{El código}
+bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/export/ExcelExporter.java:77-82
+
+\begin{Shaded}
+\begin{Highlighting}[]
+        \CommentTok{// Title.}
+\NormalTok{        Row predictedRow }\OperatorTok{=}\NormalTok{ sheet}\OperatorTok{.}\FunctionTok{createRow}\OperatorTok{(}\DecValTok{0}\OperatorTok{);}
+\NormalTok{        sheet}\OperatorTok{.}\FunctionTok{addMergedRegion}\OperatorTok{(}\KeywordTok{new} \FunctionTok{CellRangeAddress}\OperatorTok{(}\DecValTok{0}\OperatorTok{,} \DecValTok{0}\OperatorTok{,} \DecValTok{1}\OperatorTok{,} \DecValTok{1} \OperatorTok{+}\NormalTok{ statesNames}\OperatorTok{.}\FunctionTok{length} \OperatorTok{{-}} \DecValTok{1}\OperatorTok{));}
+\NormalTok{        Cell titleCell }\OperatorTok{=}\NormalTok{ predictedRow}\OperatorTok{.}\FunctionTok{createCell}\OperatorTok{(}\DecValTok{1}\OperatorTok{);}
+\NormalTok{        titleCell}\OperatorTok{.}\FunctionTok{setCellValue}\OperatorTok{(}\StringTok{"Prediction"}\OperatorTok{);}
+\NormalTok{        titleCell}\OperatorTok{.}\FunctionTok{setCellStyle}\OperatorTok{(}\NormalTok{format}\OperatorTok{.}\FunctionTok{centricHeaderFormat}\OperatorTok{.}\FunctionTok{get}\OperatorTok{());}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+No juntar las casillas cuando hay un solo estado: con uno, «Prediction» va sola en B1.
+
+Prueba: evaluar la red de A y B con A de clase guarda un libro con «Prediction» en B1 y la tabla de aciertos de una casilla.
+
+\setcounter{subsection}{435}
+\subsection[Desde 46b8e85, el libro de la evaluación se equivoca con un estado cuyo nombre lleva «state »]{Desde \texttt{46b8e85}, en la hoja «Probabilities» del libro de la evaluación, un estado de la variable de clase cuyo nombre lleva «state » ---«state yes»--- sale recortado como estado más probable, y la columna «Correct» da por fallos todos sus aciertos}\label{err:436}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.export; org.openmarkov.bnEvaluation.component; org.openmarkov.bnEvaluation.measures
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/export/ExcelExporter.java:254-257, 269-273, 299-307} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/component/MeasuresPanel.java:298-302} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/measures/MeasureMatrix.java:90-94}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{b2cf772} (19-11-2026): \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}bn/\allowbreak{}BN-\allowbreak{}asia.\allowbreak{}pgmx} con el estado «yes» de «X-ray» rebautizado «state yes» y, aparte, «with state yes»; 200 casos sacados de cada una con \texttt{DBGenerator}; \texttt{Measures\allowbreak{}Panel} con «Predictive capacity», «X-ray» de clase y «Show individual probabilities»; \texttt{Net\allowbreak{}Evaluator} y \texttt{Excel\allowbreak{}Exporter.\allowbreak{}export}; y leídas las hojas «Probabilities» y «Confusion matrix» del libro. Como control, la red sin rebautizar. Vuelto a mirar el 21-11-2026 con el código de \texttt{65ecb87}: los ficheros citados no han cambiado desde \texttt{b2cf772}
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:435]{error~435}
+\end{ficha}
+\paragraph{Qué pasa}
+Los nombres de los estados de la variable de clase llegan al exportador escritos con \texttt{State.\allowbreak{}to\allowbreak{}String}, que pone «state » delante: así los toma \texttt{Measures\allowbreak{}Panel.\allowbreak{}measures\allowbreak{}Set} (líneas 298-302), y con ellos guarda \texttt{Measure\allowbreak{}Matrix} el estado más probable de cada caso (líneas 90-94). \texttt{46b8e85} (incidencia 695) los limpia al escribir la hoja «Probabilities», pero de dos maneras: a la cabecera de cada probabilidad le quita el primer «state » (\texttt{replace\allowbreak{}First}, línea 271), y el nombre queda bien; a la columna del estado más probable, «MPS», le quita todos (\texttt{replace\allowbreak{}All}, líneas 255-257), también el que forma parte del nombre. El estado verdadero, en cambio, se toma de la variable, sin nada delante (línea 304), y «Correct» compara los dos tal cual (línea 307). Medido, con 200 casos de asia:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+X-ray con "no" y "yes" (control)
+    cabecera   P(X-ray=no) | P(X-ray=yes)
+    fila 29    X-ray = yes   MPS = yes   Correct = correct
+    casos con X-ray = yes: 13 correct y 9 incorrect; la tabla de aciertos cuenta 13
+"yes" rebautizado "state yes"
+    cabecera   P(X-ray=no) | P(X-ray=state yes)
+    fila 29    X-ray = state yes   MPS = yes   Correct = incorrect
+    casos con X-ray = state yes: 0 correct y 22 incorrect; la tabla de aciertos cuenta 13
+"yes" rebautizado "with state yes"
+    fila 29    X-ray = with state yes   MPS = with yes   Correct = incorrect
+    casos con X-ray = with state yes: 0 correct y 22 incorrect
+\end{Verbatim}
+
+La hoja «Confusion matrix» cuenta bien los aciertos; la de las probabilidades dice lo contrario.
+\paragraph{El código}
+bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/export/ExcelExporter.java:254-257, 304-307
+
+\begin{Shaded}
+\begin{Highlighting}[]
+        \BuiltInTok{String}\OperatorTok{[]}\NormalTok{ mostProbableStates }\OperatorTok{=}\NormalTok{ indProb}\OperatorTok{.}\FunctionTok{getMostProbableStates}\OperatorTok{();}
+        \ControlFlowTok{for} \OperatorTok{(}\DataTypeTok{int}\NormalTok{ i }\OperatorTok{=} \DecValTok{0}\OperatorTok{;}\NormalTok{ i }\OperatorTok{\textless{}}\NormalTok{ mostProbableStates}\OperatorTok{.}\FunctionTok{length}\OperatorTok{;}\NormalTok{ i}\OperatorTok{++)} \OperatorTok{\{}
+\NormalTok{            mostProbableStates}\OperatorTok{[}\NormalTok{i}\OperatorTok{]} \OperatorTok{=}\NormalTok{ mostProbableStates}\OperatorTok{[}\NormalTok{i}\OperatorTok{].}\FunctionTok{replaceAll}\OperatorTok{(}\StringTok{"state "}\OperatorTok{,} \StringTok{""}\OperatorTok{);}
+        \OperatorTok{\}}
+            \BuiltInTok{String}\NormalTok{ actualState }\OperatorTok{=}\NormalTok{ variables}\OperatorTok{.}\FunctionTok{get}\OperatorTok{(}\NormalTok{targetVariableIndex}\OperatorTok{).}\FunctionTok{getStateName}\OperatorTok{(}\NormalTok{cases}\OperatorTok{[}\NormalTok{i}\OperatorTok{][}\NormalTok{targetVariableIndex}\OperatorTok{]);}
+\NormalTok{            Cell correctCell }\OperatorTok{=}\NormalTok{ row}\OperatorTok{.}\FunctionTok{createCell}\OperatorTok{(}\NormalTok{numVariables }\OperatorTok{+}\NormalTok{ statesNames}\OperatorTok{.}\FunctionTok{length} \OperatorTok{+} \DecValTok{1}\OperatorTok{);}
+\NormalTok{            correctCell}\OperatorTok{.}\FunctionTok{setCellStyle}\OperatorTok{(}\NormalTok{format}\OperatorTok{.}\FunctionTok{cellMatrixFormat}\OperatorTok{.}\FunctionTok{get}\OperatorTok{());}
+\NormalTok{            correctCell}\OperatorTok{.}\FunctionTok{setCellValue}\OperatorTok{(}\NormalTok{actualState}\OperatorTok{.}\FunctionTok{equals}\OperatorTok{(}\NormalTok{mostProbableState}\OperatorTok{)} \OperatorTok{?} \StringTok{"correct"} \OperatorTok{:} \StringTok{"incorrect"}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Tomar los nombres con \texttt{get\allowbreak{}Name} en \texttt{Measures\allowbreak{}Panel.\allowbreak{}measures\allowbreak{}Set}, y no con \texttt{to\allowbreak{}String}, y quitar del exportador los \texttt{replace\allowbreak{}First} y el \texttt{replace\allowbreak{}All}: si no se pone «state » delante, no hay nada que quitar. Si se prefiere dejar los nombres como están, quitar solo el primer «state » también en la columna «MPS».
+
+Prueba: con el estado «yes» de «X-ray» rebautizado «state yes», la columna «MPS» dice «state yes» y «Correct» cuenta los mismos aciertos que la hoja «Confusion matrix».
+
+\setcounter{subsection}{437}
+\subsection[Desde 46b8e85, un fallo al guardar o al abrir el libro de la evaluación sale como «Internal error»]{Desde \texttt{46b8e85}, si el libro de la evaluación de una red no se puede guardar, o no hay programa con que abrirlo, sale un aviso «Internal error» con la traza de Java, y no el aviso «Export error» que el diálogo de los resultados tiene para eso; y el recuadro nuevo «Show individual probabilities for» no hace nada}\label{err:438}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.dialog; org.openmarkov.bnEvaluation.component; org.openmarkov.gui.dialog
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/BNEvaluationDialog.java:390-402} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/ResultsDialog.java:105-112, 241-264} \newline \path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/component/MeasuresPanel.java:181-204, 217-221, 305-308} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/OMExceptionHandler.java:61-75} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/ExceptionDialog.java:87-134}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{b2cf772} (19-11-2026): el \texttt{File\allowbreak{}Not\allowbreak{}Found\allowbreak{}Exception} que da \texttt{File\allowbreak{}Output\allowbreak{}Stream} con un fichero en una carpeta que no existe, y un \texttt{IOException} como el que lanza \texttt{Desktop.\allowbreak{}open}, envueltos en \texttt{Unrecoverable\allowbreak{}Exception} como los envuelve \texttt{BNEvaluation\allowbreak{}Dialog}, y pasados por \texttt{OMException\allowbreak{}Handler.\allowbreak{}type\allowbreak{}Of} y por el título y el texto que saca \texttt{Exception\allowbreak{}Dialog}, sin pintar la ventana. Y el panel de las medidas, \texttt{Measures\allowbreak{}Panel}, construido sin ventana con las variables A, B y C: «Predictive capacity», A de clase, «Show individual probabilities», B de clase y «Predictive capacity» desmarcada, mirando cada vez las casillas del recuadro. Que nadie lee lo marcado, leyendo el código. Vuelto a mirar el 21-11-2026 con el código de \texttt{65ecb87}: los ficheros citados no han cambiado desde \texttt{b2cf772}
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:366]{error~366}, \hyperref[err:418]{error~418}, \hyperref[err:435]{error~435}
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{46b8e85} (17-11-2026, Jorge Rico, tarea 4 de la incidencia 695), «OK» en «Bayesian network evaluation» evalúa, guarda el libro con \texttt{Results\allowbreak{}Dialog.\allowbreak{}export\allowbreak{}Button\allowbreak{}Action\allowbreak{}Performed}, que pregunta dónde, y lo abre con \texttt{Desktop.\allowbreak{}open} (\texttt{BNEvaluation\allowbreak{}Dialog}, líneas 390-402). Un \texttt{IOException} de cualquiera de los dos se envuelve en \texttt{Unrecoverable\allowbreak{}Exception} (línea 401). El gestor global, \texttt{OMException\allowbreak{}Handler}, lo toma por un error previsto, y \texttt{Exception\allowbreak{}Dialog}, que no tiene texto para un \texttt{IOException}, enseña «Internal error», «An internal error has happened:», la excepción y la traza de Java. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+el fichero no se puede escribir (FileNotFoundException de FileOutputStream)
+    «Internal error»: An internal error has happened:
+    java.io.FileNotFoundException: /nonexistent-folder/EvaluationNet.xlsx (No existe el fichero o el directorio)
+        at java.base/java.io.FileOutputStream.open0(Native Method)
+        … y el resto de la traza
+Desktop.open no tiene con qué abrirlo (IOException)
+    «Internal error»: An internal error has happened:
+    java.io.IOException: …
+        … y la traza
+\end{Verbatim}
+
+Un comentario del propio \texttt{Results\allowbreak{}Dialog} dice que un fallo al exportar es de esperar ---«e.g. the file is open or read-only»---, y su botón lo avisa con «Export error» y «The results could not be exported: …» (líneas 105-112); pero la evaluación ya no pasa por ese botón. Si lo que falla es abrir el libro, el fichero ya está escrito y el aviso no lo dice. En los dos casos, la ventana de la evaluación se queda abierta.
+
+Además, \texttt{46b8e85} añade al panel de las medidas, que comparten «Bayesian network evaluation» y «Cross validation», un recuadro «Show individual probabilities for» con una casilla por variable; su commit lo marca como trabajo a medias ([WIP]). Lo marcado no lo lee nadie: \texttt{Measures\allowbreak{}Panel.\allowbreak{}measures\allowbreak{}Set} lo guarda en \texttt{variables\allowbreak{}For\allowbreak{}Probabilities} (línea 306), que no se usa. Y las casillas se portan mal. Al cambiar la variable de clase, la anterior se queda marcada: \texttt{recheck\allowbreak{}Checkboxes} marca la de la clase, pero no desmarca nada (líneas 192-204). Y al desmarcar «Predictive capacity», «Show individual probabilities» se apaga, pero las casillas siguen encendidas, porque \texttt{recheck\allowbreak{}Checkboxes} no mira «Predictive capacity». Medido, con las variables A, B y C:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+«Predictive capacity», clase A y «Show individual probabilities»
+    A [x] gris   B [ ]        C [ ]
+clase B
+    A [x]        B [x] gris   C [ ]
+«Predictive capacity» desmarcada; «Show individual probabilities», gris
+    A [x]        B [x] gris   C [ ]
+\end{Verbatim}
+\paragraph{El código}
+bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/BNEvaluationDialog.java:390-402
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{        BackgroundEvaluation}\OperatorTok{.}\FunctionTok{run}\OperatorTok{(}\KeywordTok{this}\OperatorTok{.}\FunctionTok{owner}\OperatorTok{,} \StringTok{"Evaluation"}\OperatorTok{,}
+\NormalTok{                                 progress }\OperatorTok{{-}\textgreater{}}\NormalTok{ evaluator}\OperatorTok{.}\FunctionTok{runEvaluator}\OperatorTok{(),}
+\NormalTok{                                 measures }\OperatorTok{{-}\textgreater{}} \OperatorTok{\{}
+                                     \ControlFlowTok{try} \OperatorTok{\{}
+                                         \DataTypeTok{var}\NormalTok{ file }\OperatorTok{=} \KeywordTok{new} \FunctionTok{ResultsDialog}\OperatorTok{(}\KeywordTok{this}\OperatorTok{.}\FunctionTok{owner}\OperatorTok{,}\NormalTok{ measures}\OperatorTok{).}\FunctionTok{exportButtonActionPerformed}\OperatorTok{();}
+                                         \ControlFlowTok{if} \OperatorTok{(}\NormalTok{file }\OperatorTok{==} \KeywordTok{null}\OperatorTok{)} \OperatorTok{\{}
+                                             \ControlFlowTok{return}\OperatorTok{;}
+                                         \OperatorTok{\}}
+                                         \BuiltInTok{Desktop}\OperatorTok{.}\FunctionTok{getDesktop}\OperatorTok{().}\FunctionTok{open}\OperatorTok{(}\NormalTok{file}\OperatorTok{);}
+                                         \KeywordTok{this}\OperatorTok{.}\FunctionTok{setVisible}\OperatorTok{(}\KeywordTok{false}\OperatorTok{);}
+                                     \OperatorTok{\}} \ControlFlowTok{catch} \OperatorTok{(}\BuiltInTok{IOException}\NormalTok{ e}\OperatorTok{)} \OperatorTok{\{}
+                                         \ControlFlowTok{throw} \KeywordTok{new} \FunctionTok{UnrecoverableException}\OperatorTok{(}\NormalTok{e}\OperatorTok{);}
+                                     \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Tratar el \texttt{IOException} como lo trata el botón de exportar: avisar con «Export error» y su texto, y dejar la ventana abierta para elegir otro fichero; si lo que falla es abrirlo, decir que el libro se ha guardado y dónde. De paso, preguntar antes \texttt{Desktop.\allowbreak{}is\allowbreak{}Desktop\allowbreak{}Supported(\allowbreak{})} y \texttt{is\allowbreak{}Supported(\allowbreak{}Desktop.\allowbreak{}Action.\allowbreak{}OPEN)}: si el sistema no sabe abrir ficheros, \texttt{get\allowbreak{}Desktop} u \texttt{open} lanzan \texttt{Unsupported\allowbreak{}Operation\allowbreak{}Exception}, que acabaría en la ventana de los errores imprevistos. El recuadro, acabarlo ---que la hoja «Probabilities» tenga en cuenta las variables marcadas--- o esconderlo hasta entonces; y, mientras esté, que \texttt{recheck\allowbreak{}Checkboxes} desmarque la clase anterior y apague las casillas sin «Predictive capacity».
+
+Prueba: con un fichero que no se puede escribir, «OK» avisa con «Export error» y la ventana de la evaluación sigue abierta; en el panel, al pasar la clase de A a B, A queda desmarcada, y al desmarcar «Predictive capacity» las casillas se apagan.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Interfaz: editor de red y paneles de las relaciones}\label{sec:editor}
@@ -24747,6 +25136,145 @@ Escribir los dos números con \texttt{String.\allowbreak{}format(\allowbreak{}"\
 
 Prueba: partir 7 casos con 3 al azar da «3 (42.86\char37{}) randomly selected cases for testing.» y «4 (57.14\char37{}) remaining cases for training.».
 
+\setcounter{subsection}{429}
+\subsection[Un estado que no existe, en una rama de un árbol o en un «Delta», se rechaza describiendo la variable entera]{Al abrir un \texttt{.\allowbreak{}pgmx} con una rama de un árbol o un «Delta» sobre un estado que la variable no tiene, el aviso describe la variable entera ---«Variable Finite states variable X with states [state no, state yes] does not have state maybe.»--- en vez de nombrarla}\label{err:430}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}recursos de \texttt{io}; org.openmarkov.io.probmodel.reader
+\fichakey{Ficheros}\path{io/src/main/resources/io/localize/io_class_localizations_en.xml:9} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:1544-1560} \newline \path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXPotentialParsers.java:285-296}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{b2cf772} (19-11-2026): \texttt{Nets\allowbreak{}IO.\allowbreak{}open\allowbreak{}Network\allowbreak{}File}, lo que llama «Open», con dos ficheros: una red de un nodo X, de estados «no» y «yes», guardada con \texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2} con un «Delta» en «yes» cambiado a mano a «maybe»; y una copia de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}mid/\allowbreak{}MID-\allowbreak{}CHAP-\allowbreak{}Ryan-\allowbreak{}Griffin.\allowbreak{}pgmx} en la que la primera rama del árbol de «Death [1]» nombra «maybe». El título y el texto del aviso, con \texttt{get\allowbreak{}Exception\allowbreak{}Title} y \texttt{get\allowbreak{}Exception\allowbreak{}Message}, los que enseña \texttt{Exception\allowbreak{}Dialog}. Vuelto a ejecutar el 21-11-2026 con el código de \texttt{65ecb87}, abriendo con el lector una copia de \texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}MID-\allowbreak{}mammography.\allowbreak{}pgmx} en la que la primera rama de un árbol nombra «nobody»: «Variable Finite states variable Death (OC) [1] with states [state no, state yes] does not have state nobody.»
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:372]{error~372}, \hyperref[err:386]{error~386}, \hyperref[err:402]{error~402}
+\end{ficha}
+\paragraph{Qué pasa}
+Al abrir una red, el lector rechaza con \texttt{PGMXParser\allowbreak{}Exception.\allowbreak{}Found\allowbreak{}Unknown\allowbreak{}State} un estado que la variable no tiene en dos sitios: en las ramas de un árbol (\texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Branch\allowbreak{}States}, línea 1554) y, desde el arreglo del \hyperref[err:386]{error~386} (\texttt{fbbbbcb}, 18-11-2026), en un «Delta» (\texttt{PGMXPotential\allowbreak{}Parsers.\allowbreak{}state\allowbreak{}Named}, línea 293). Rechazarlo está bien; lo que sale mal es el aviso. Su frase, en \texttt{io\_\allowbreak{}class\_\allowbreak{}localizations\_\allowbreak{}en.\allowbreak{}xml}, es «\texttt{Variable\ \{variable\}\ does\ not\ have\ state\ \{state\allowbreak{}Name\}.}», y \texttt{\{variable\}} es la variable misma, que se escribe con \texttt{Variable.\allowbreak{}to\allowbreak{}String}: su descripción entera, con «state » delante de cada estado. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+«Delta» en "maybe" sobre X, de estados "no" y "yes"
+    «Found unknown state»: Variable Finite states variable X with states [state no, state yes] does not have state maybe.
+rama en "maybe" del árbol de Death [1], en una copia de MID-CHAP-Ryan-Griffin.pgmx
+    «Found unknown state»: Variable Finite states variable Death [1] with states [state no, state yes] does not have state maybe.
+\end{Verbatim}
+
+Es lo que contaba el \hyperref[err:372]{error~372} de las negativas de las restricciones, que \texttt{66133fa} (15-11-2026) arregló escribiendo \texttt{\{node.\allowbreak{}get\allowbreak{}Name\}}, \texttt{\{variable.\allowbreak{}get\allowbreak{}Name\}} y los demás en cada frase de \texttt{core\_\allowbreak{}class\_\allowbreak{}localizations\_\allowbreak{}en.\allowbreak{}xml}. Esta frase está en el módulo \texttt{io} y se quedó fuera.
+\paragraph{El código}
+io/src/main/resources/io/localize/io\_class\_localizations\_en.xml:9
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{    \textless{}}\KeywordTok{Localization}\OtherTok{ class=}\StringTok{"org.openmarkov.io.probmodel.exception.PGMXParserException$FoundUnknownState"}\OtherTok{ value=}\StringTok{"Variable \{variable\} does not have state \{stateName\}."}\NormalTok{/\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+
+io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader\_0\_2.java:1550-1555
+
+\begin{Shaded}
+\begin{Highlighting}[]
+            \ControlFlowTok{for} \OperatorTok{(}\BuiltInTok{Element}\NormalTok{ xmlState }\OperatorTok{:}\NormalTok{ xmlStates}\OperatorTok{)} \OperatorTok{\{}
+                \BuiltInTok{String}\NormalTok{ stateName }\OperatorTok{=} \FunctionTok{getElementName}\OperatorTok{(}\NormalTok{xmlState}\OperatorTok{);}
+                \DataTypeTok{int}\NormalTok{ stateIndex }\OperatorTok{=}\NormalTok{ topVariable}\OperatorTok{.}\FunctionTok{getStateIndex}\OperatorTok{(}\NormalTok{stateName}\OperatorTok{);}
+                \ControlFlowTok{if} \OperatorTok{(}\NormalTok{stateIndex }\OperatorTok{==} \OperatorTok{{-}}\DecValTok{1}\OperatorTok{)} \OperatorTok{\{}
+                    \ControlFlowTok{throw} \KeywordTok{new}\NormalTok{ PGMXParserException}\OperatorTok{.}\FunctionTok{FoundUnknownState}\OperatorTok{(}\NormalTok{topVariable}\OperatorTok{,}\NormalTok{ stateName}\OperatorTok{,}\NormalTok{ xmlState}\OperatorTok{);}
+                \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Nombrar la variable por su nombre, como las frases de las restricciones desde \texttt{66133fa}: «\texttt{Variable\ \{variable.\allowbreak{}get\allowbreak{}Name\}\ does\ not\ have\ state\ \{state\allowbreak{}Name\}.}».
+
+Prueba: un «Delta» en «maybe» sobre X, de estados «no» y «yes», se rechaza con «Variable X does not have state maybe.», y una rama en «maybe» del árbol de «Death [1]», con «Variable Death [1] does not have state maybe.».
+
+\setcounter{subsection}{430}
+\subsection[El aviso de un fichero de red mal formado acaba en dos puntos]{El aviso de un fichero de red que no es XML bien formado ---cortado o, desde \texttt{3297061}, que nombra una DTD o una entidad de fuera--- pone un punto detrás del mensaje del analizador de XML, que ya acaba en punto: «…within the same entity..»}\label{err:431}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}core
+\fichakey{Paquete}recursos de \texttt{core}; org.openmarkov.core.exception; org.openmarkov.core.io.format.annotation
+\fichakey{Ficheros}\path{core/src/main/resources/core/localize/core_class_localizations_en.xml:286-287} \newline \path{core/src/main/java/org/openmarkov/core/exception/ProbNetParserException.java:184-194} \newline \path{io/src/main/java/org/openmarkov/core/io/format/annotation/FormatManager.java:137-153}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{b2cf772} (19-11-2026): \texttt{Nets\allowbreak{}IO.\allowbreak{}open\allowbreak{}Network\allowbreak{}File}, lo que llama el menú de las redes recientes, con tres copias de \texttt{0\_\allowbreak{}miscellaneous/\allowbreak{}networks/\allowbreak{}bn/\allowbreak{}BN-\allowbreak{}asia.\allowbreak{}pgmx}: cortada a la mitad, con un \texttt{DOCTYPE} que nombra una DTD de fuera y con una entidad que nombra un fichero local. El título y el texto del aviso, con \texttt{get\allowbreak{}Exception\allowbreak{}Title} y \texttt{get\allowbreak{}Exception\allowbreak{}Message}, los que enseña \texttt{Exception\allowbreak{}Dialog}. Vuelto a ejecutar el 21-11-2026 con el código de \texttt{65ecb87}, abriendo con el lector un \texttt{.\allowbreak{}pgmx} cortado tras abrir \texttt{\textless{}ProbNet\textgreater{}}: «…An error occurred at line 2, column 35: XML document structures must start and end within the same entity..»
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:391]{error~391}, \hyperref[err:392]{error~392}
+\end{ficha}
+\paragraph{Qué pasa}
+Cuando el fichero de una red no es XML bien formado, \texttt{Format\allowbreak{}Manager.\allowbreak{}get\allowbreak{}Prob\allowbreak{}Net\allowbreak{}Reader} lo rechaza al buscar su versión, con \texttt{Prob\allowbreak{}Net\allowbreak{}Parser\allowbreak{}Exception.\allowbreak{}Badly\allowbreak{}Structured\allowbreak{}File} (líneas 148-149); y desde \texttt{3297061} (18-11-2026), también cuando nombra una DTD o una entidad de fuera, que el analizador ya no lee. La frase de esa excepción (líneas 286-287) acaba en «\texttt{:\ \{sax\allowbreak{}Parse\allowbreak{}Exception.\allowbreak{}get\allowbreak{}Message\}.}»: pone un punto detrás del mensaje del analizador de XML, que ya acaba en punto. El aviso sale así al abrir la red desde el menú de las redes recientes y, desde el arreglo del \hyperref[err:391]{error~391} (\texttt{af33246}), también desde «Open». Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+BN-asia.pgmx cortada a la mitad
+    «Badly structured file»: File file:/…/cortada.pgmx is not well-formed.
+    An error occurred at line 94, column 18: XML document structures must start and end within the same entity..
+con <!DOCTYPE ProbModelXML SYSTEM "…/x.dtd">
+    … An error occurred at line 2, column 170: External DTD: Failed to read external DTD 'x.dtd', because 'file' access is not allowed due to restriction set by the accessExternalDTD property..
+con una entidad que nombra local.txt
+    … An error occurred at line 14, column 25: External Entity: Failed to read external document 'local.txt', because 'file' access is not allowed due to restriction set by the accessExternalDTD property..
+\end{Verbatim}
+
+Las medidas del \hyperref[err:391]{error~391} ya lo enseñan («Final de archivo prematuro..»), sin decirlo.
+\paragraph{El código}
+core/src/main/resources/core/localize/core\_class\_localizations\_en.xml:286-287
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{    \textless{}}\KeywordTok{Localization}\OtherTok{ class=}\StringTok{"org.openmarkov.core.exception.ProbNetParserException$BadlyStructuredFile"}
+\OtherTok{                  value=}\StringTok{"File \{url\} is not well{-}formed.\textbackslash{}nAn error occurred at line \{saxParseException.getLineNumber\}, column \{saxParseException.getColumnNumber\}: \{saxParseException.getMessage\}."}\NormalTok{/\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Quitar el punto final de la frase, que acabe en «\texttt{:\ \{sax\allowbreak{}Parse\allowbreak{}Exception.\allowbreak{}get\allowbreak{}Message\}}». El arreglo del \hyperref[err:392]{error~392} (\texttt{ff99515}) sacó de esta frase el fichero que no se puede abrir, que tiene ya la suya, y no tocó el punto.
+
+Prueba: abrir \texttt{BN-\allowbreak{}asia.\allowbreak{}pgmx} cortada a la mitad da «… XML document structures must start and end within the same entity.», con un solo punto.
+
+\setcounter{subsection}{436}
+\subsection[Desde 46b8e85, el aviso de las variables que faltan lee sus nombres como HTML]{Desde \texttt{46b8e85}, el aviso de las variables de la red que la base de casos no tiene es HTML y mete cada nombre tal cual: «\texttt{A\textless{}B}» sale como «A», y «\texttt{x\textless{}b\textgreater{}y\textless{}/\allowbreak{}b\textgreater{}}», como «xy» con la «y» en negrita}\label{err:437}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}bnEvaluation
+\fichakey{Paquete}org.openmarkov.bnEvaluation.dialog
+\fichakey{Ficheros}\path{bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/BNEvaluationDialog.java:352-363}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{b2cf772} (19-11-2026): el mismo texto que construye \texttt{BNEvaluation\allowbreak{}Dialog}, con cinco nombres, puesto en un \texttt{JLabel}, que es como lo pinta \texttt{JOption\allowbreak{}Pane}, y leído el documento HTML que Swing hace con él. Que el aviso sale al abrir una base de casos a la que le faltan variables de la red está leído en el código. Vuelto a mirar el 21-11-2026 con el código de \texttt{65ecb87}: los ficheros citados no han cambiado desde \texttt{b2cf772}
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:373]{error~373}
+\end{ficha}
+\paragraph{Qué pasa}
+Al abrir la base de casos en «Bayesian network evaluation», si a la base le faltan variables de la red, un aviso «Information» las nombra. Desde \texttt{46b8e85} (17-11-2026, Jorge Rico, tarea 2 de la incidencia 695), para poner cada una en su renglón, el aviso es HTML ---una lista \texttt{\textless{}ul\textgreater{}}--- y cada nombre va dentro de un \texttt{\textless{}li\textgreater{}} tal cual, sin escapar (líneas 352-363). Swing lee el texto como HTML porque empieza por \texttt{\textless{}html\textgreater{}}: un nombre con «\textless{}» se lee como una marca, y uno con una entidad, como el carácter. Los nombres de las variables pueden llevar «\textless{}» y «\&»: solo se rechazan los caracteres que un fichero de red no puede guardar. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+nombre         se ve
+A<B            A
+x<b>y</b>      xy, con la «y» en negrita
+a&lt;b         a<b
+R&D            R&D
+Normal         Normal
+\end{Verbatim}
+\paragraph{El código}
+bnEvaluation/src/main/java/org/openmarkov/bnEvaluation/dialog/BNEvaluationDialog.java:352-363
+
+\begin{Shaded}
+\begin{Highlighting}[]
+        \ControlFlowTok{if} \OperatorTok{(!}\NormalTok{result}\OperatorTok{.}\FunctionTok{variablesNotInDatabase}\OperatorTok{().}\FunctionTok{isEmpty}\OperatorTok{())} \OperatorTok{\{}
+            \BuiltInTok{JOptionPane}\OperatorTok{.}\FunctionTok{showMessageDialog}\OperatorTok{(}\KeywordTok{this}\OperatorTok{,}
+                                          \StringTok{"\textless{}html\textgreater{}The following variable(s) are not included in the dataset:\textless{}ul\textgreater{}"}
+                                                  \OperatorTok{+}\NormalTok{ result}\OperatorTok{.}\FunctionTok{variablesNotInDatabase}\OperatorTok{()}
+                                                          \OperatorTok{.}\FunctionTok{stream}\OperatorTok{()}
+                                                          \OperatorTok{.}\FunctionTok{map}\OperatorTok{(}\NormalTok{Variable}\OperatorTok{::}\NormalTok{getName}\OperatorTok{)}
+                                                          \OperatorTok{.}\FunctionTok{sorted}\OperatorTok{()}
+                                                          \OperatorTok{.}\FunctionTok{map}\OperatorTok{(}\NormalTok{name }\OperatorTok{{-}\textgreater{}} \StringTok{"\textless{}li\textgreater{}"} \OperatorTok{+}\NormalTok{ name }\OperatorTok{+} \StringTok{"\textless{}/li\textgreater{}"}\OperatorTok{)}
+                                                          \OperatorTok{.}\FunctionTok{collect}\OperatorTok{(}\NormalTok{Collectors}\OperatorTok{.}\FunctionTok{joining}\OperatorTok{())} \OperatorTok{+}
+                                                  \StringTok{"\textless{}/ul\textgreater{}\textless{}/html\textgreater{}"}\OperatorTok{,}
+                                          \StringTok{"Information"}\OperatorTok{,} \BuiltInTok{JOptionPane}\OperatorTok{.}\FunctionTok{INFORMATION\_MESSAGE}\OperatorTok{);}
+        \OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Cómo arreglarlo}
+Escapar cada nombre antes de meterlo en la lista: «\&» por «\texttt{\&amp;}», «\textless{}» por «\texttt{\&lt;}» y «\textgreater{}» por «\texttt{\&gt;}». El módulo no tiene a mano ninguna función que lo haga, pero bastan tres \texttt{replace}.
+
+Prueba: el aviso de una red con la variable «\texttt{A\textless{}B}», que la base no tiene, enseña «\texttt{A\textless{}B}».
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Rendimiento}\label{sec:rendimiento}
 
@@ -26111,6 +26639,17 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:427]{Error 427} & hallazgo nuevo, en la revisión del módulo \texttt{io} con sondas del 18 de noviembre \\
 \hyperref[err:428]{Error 428} & hallazgo nuevo, visto al investigar el \hyperref[err:389]{error~389} \\
 \hyperref[err:429]{Error 429} & hallazgo nuevo, visto al corregir el \hyperref[err:397]{error~397} \\
+\hyperref[err:430]{Error 430} & registro de fallos de la versión en C++/Qt, nº 416, al llevar a ella los arreglos del 15 al 19 de noviembre \\
+\hyperref[err:431]{Error 431} & registro de fallos de la versión en C++/Qt, nº 417, al llevar a ella los arreglos del 15 al 19 de noviembre \\
+\hyperref[err:432]{Error 432} & registro de fallos de la versión en C++/Qt, nº 418, al llevar a ella los arreglos del 15 al 19 de noviembre \\
+\hyperref[err:433]{Error 433} & registro de fallos de la versión en C++/Qt, nº 419, al llevar a ella los arreglos del 15 al 19 de noviembre \\
+\hyperref[err:434]{Error 434} & registro de fallos de la versión en C++/Qt, nº 420, al llevar a ella los arreglos del 15 al 19 de noviembre \\
+\hyperref[err:435]{Error 435} & registro de fallos de la versión en C++/Qt, nº 422, al llevar a ella los arreglos del 15 al 19 de noviembre \\
+\hyperref[err:436]{Error 436} & registro de fallos de la versión en C++/Qt, nº 423, al llevar a ella los arreglos del 15 al 19 de noviembre \\
+\hyperref[err:437]{Error 437} & registro de fallos de la versión en C++/Qt, nº 424, al llevar a ella los arreglos del 15 al 19 de noviembre \\
+\hyperref[err:438]{Error 438} & registro de fallos de la versión en C++/Qt, nº 425, al llevar a ella los arreglos del 15 al 19 de noviembre \\
+\hyperref[err:439]{Error 439} & registro de fallos de la versión en C++/Qt, nº 426, al llevar a ella los arreglos del 19 al 21 de noviembre \\
+\hyperref[err:440]{Error 440} & registro de fallos de la versión en C++/Qt, nº 427, al llevar a ella el arreglo del \hyperref[err:403]{error~403} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
