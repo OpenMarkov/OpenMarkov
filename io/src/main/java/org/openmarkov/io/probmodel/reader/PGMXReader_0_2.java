@@ -94,7 +94,7 @@ import java.util.stream.Stream;
 public class PGMXReader_0_2 {
     
     /** What the messages of the reader call the text of an element. */
-    private static final String TEXT = "value";
+    protected static final String TEXT = "value";
     
     public final Map<Class<? extends Potential>, PotentialParser> potentialParsers;
     
@@ -491,8 +491,9 @@ public class PGMXReader_0_2 {
                    .getTemporalOptions()
                    .setTransition(enumIn(TemporalOptions.TransitionTime.class, transition, TEXT, transition.getText()));
             
+            // Without discount rates, each criterion keeps its default discount
             Element discountsTag = temporalOptions.getChild(XMLTags.DISCOUNT_RATES.toString());
-            List<Element> discounts = getXMLChildren(discountsTag);
+            List<Element> discounts = discountsTag == null ? List.of() : getXMLChildren(discountsTag);
             for (Element element : discounts) {
                 String criterionName = requiredAttribute(element, XMLTags.CRITERION.toString());
                 Criterion criterion = criterionOfTheNetwork(probNet, criterionName, element.getName(), element);
@@ -560,7 +561,7 @@ public class PGMXReader_0_2 {
     /**
      * @return the integer that {@code written}, the {@code dataName} of {@code element}, writes
      */
-    private static int integerIn(Element element, String dataName, String written)
+    protected static int integerIn(Element element, String dataName, String written)
             throws PGMXParserException.DataNotValid {
         try {
             return parseInteger(written);

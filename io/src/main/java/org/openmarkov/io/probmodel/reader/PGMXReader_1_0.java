@@ -261,7 +261,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
      * @param inferenceOptions XML subtree with the inference options
      * @param probNet          probNet being created reading the pgmx file
      */
-    protected void getMonteCarloOptions(Element inferenceOptions, ProbNet probNet) {
+    protected void getMonteCarloOptions(Element inferenceOptions, ProbNet probNet)
+            throws PGMXParserException.DataNotValid {
         if(inferenceOptions==null){
             return;
         }
@@ -270,7 +271,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         
         String childName = monteCarloOptions.getChildTextTrim(XMLTags.NUMBER_OF_SIMULATIONS.toString());
         if (!((childName == null) || (childName.isEmpty())))
-            probNet.getInferenceOptions().getMonteCarloOptions().setNumSimulations(Integer.parseInt(childName));
+            probNet.getInferenceOptions().getMonteCarloOptions().setNumSimulations(integerIn(
+                    monteCarloOptions.getChild(XMLTags.NUMBER_OF_SIMULATIONS.toString()), TEXT, childName));
         
         //28/08/2023 When using getValue, when there are extra spaces, /n, or /t (possibly introduced by hand) parseInt throws an exception
         //FIXME 28/08/2023 replace getValue for getChildTextTrim
@@ -278,7 +280,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
 //        probNet.getInferenceOptions().getMonteCarloOptions().setNumSeries(Integer.parseInt( numSeries.getValue() ));
         childName = monteCarloOptions.getChildTextTrim(XMLTags.NUMBER_OF_SERIES.toString());
         if (!((childName == null) || (childName.isEmpty())))
-            probNet.getInferenceOptions().getMonteCarloOptions().setNumSeries(Integer.parseInt(childName));
+            probNet.getInferenceOptions().getMonteCarloOptions().setNumSeries(integerIn(
+                    monteCarloOptions.getChild(XMLTags.NUMBER_OF_SERIES.toString()), TEXT, childName));
         
         childName = monteCarloOptions.getChildTextTrim(XMLTags.INPUT_DATA_FILE.toString());
         if (!((childName == null) || (childName.isEmpty())))
