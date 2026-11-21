@@ -7,6 +7,8 @@
 
 package org.openmarkov.core.model.network.potential;
 
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotSupportedOperationException;
@@ -51,6 +53,25 @@ public class CycleLengthShift extends Potential {
         
     }
     
+    /** @return the cycle length shifts in {@code potential}: itself, or those in the leaves of its trees */
+    public static List<CycleLengthShift> allIn(Potential potential) {
+        List<CycleLengthShift> shifts = new ArrayList<>();
+        collect(potential, shifts);
+        return shifts;
+    }
+
+    private static void collect(Potential potential, List<CycleLengthShift> shifts) {
+        switch (potential) {
+            case CycleLengthShift shift -> shifts.add(shift);
+            case TreeADDPotential tree -> {
+                for (TreeADDBranch branch : tree.getBranches()) {
+                    collect(branch.getPotential(), shifts);
+                }
+            }
+            case null, default -> { }
+        }
+    }
+
     public CycleLength getCycleLength() {
         return cycleLength;
     }

@@ -180,8 +180,10 @@ public class PasteEdit extends MultiStepEdit {
                                         .setChildVariable(this.probNet.getVariable(PasteEdit.this.newVariables.get(child.getName())));
                             }
                         }
-                        if (potential instanceof CycleLengthShift shift && this.probNet.getCycleLength() != null) {
-                            shift.setCycleLength(this.probNet.getCycleLength());
+                        if (this.probNet.getCycleLength() != null) {
+                            for (CycleLengthShift shift : CycleLengthShift.allIn(potential)) {
+                                shift.setCycleLength(this.probNet.getCycleLength());
+                            }
                         }
                         newPotentials.add(potential);
                     }

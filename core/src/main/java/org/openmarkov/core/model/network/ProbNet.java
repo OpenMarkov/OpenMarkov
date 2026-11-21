@@ -1193,8 +1193,10 @@ public class ProbNet implements PotentialNetwork, Cloneable, ClassLocalizable {
     public void setCycleLength(CycleLength cycleLength) {
         metadata.setCycleLength(cycleLength);
         if (cycleLength != null) {
-            for (Potential potential : getPotentials(CycleLengthShift.class::isInstance)) {
-                ((CycleLengthShift) potential).setCycleLength(cycleLength);
+            for (Potential potential : getPotentials()) {
+                for (CycleLengthShift shift : CycleLengthShift.allIn(potential)) {
+                    shift.setCycleLength(cycleLength);
+                }
             }
         }
     }

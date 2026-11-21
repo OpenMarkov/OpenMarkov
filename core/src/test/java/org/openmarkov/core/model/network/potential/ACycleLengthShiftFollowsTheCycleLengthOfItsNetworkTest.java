@@ -6,6 +6,10 @@
  */
 package org.openmarkov.core.model.network.potential;
 
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDPotential;
+import org.openmarkov.core.model.network.potential.treeadd.TreeADDBranch;
+import org.openmarkov.core.model.network.State;
+import java.util.ArrayList;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.action.core.CycleLengthEdit;
@@ -46,6 +50,44 @@ class ACycleLengthShiftFollowsTheCycleLengthOfItsNetworkTest {
 
         network.getPNESupport().redo();
         assertEquals(60.5, age1(network));
+    }
+
+    /** Error 433: the shifts in the leaves of a tree follow the cycle length too. */
+    @Test void theShiftsInTheLeavesOfATreeFollowItToo() {
+        ProbNet network = networkWithTheShiftsInATree(new CycleLength(CycleLength.Unit.YEAR, 1));
+        assertEquals(List.of(1.0, 1.0), yearsOfTheShifts(network));
+
+        network.setCycleLength(new CycleLength(CycleLength.Unit.YEAR, 0.5));
+
+        assertEquals(List.of(0.5, 0.5), yearsOfTheShifts(network));
+    }
+
+    /** The same network with «Age [1]» as a tree on «Sex» whose two leaves are cycle length shifts. */
+    static ProbNet networkWithTheShiftsInATree(CycleLength cycleLength) {
+        ProbNet network = network(cycleLength);
+        Variable age0 = network.getVariable("Age [0]");
+        Variable age1 = network.getVariable("Age [1]");
+        Variable sex = new Variable("Sex", "man", "woman");
+        network.addNode(sex, NodeType.CHANCE)
+               .setPotential(new UniformPotential(List.of(sex), PotentialRole.CONDITIONAL_PROBABILITY));
+        network.addLink(sex, age1, true);
+        List<Variable> variables = List.of(age1, age0, sex);
+        List<TreeADDBranch> branches = new ArrayList<>();
+        for (State state : sex.getStates()) {
+            branches.add(new TreeADDBranch(List.of(state), sex,
+                                           new CycleLengthShift(List.of(age1, age0), network.getCycleLength()),
+                                           variables));
+        }
+        network.getNode(age1).setPotential(
+                new TreeADDPotential(variables, sex, PotentialRole.CONDITIONAL_PROBABILITY, branches));
+        return network;
+    }
+
+    /** The cycle lengths, in years, of the cycle length shifts in the relation of «Age [1]». */
+    static List<Double> yearsOfTheShifts(ProbNet network) {
+        return CycleLengthShift.allIn(network.getNode("Age [1]").getPotential()).stream()
+                               .map(shift -> shift.getCycleLength().getValue())
+                               .toList();
     }
 
     /** A Markov influence diagram whose «Age [1]» is a cycle length shift of «Age [0]», which is 60. */

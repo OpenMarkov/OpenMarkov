@@ -1204,6 +1204,8 @@ public class TreeADDEditorPanel extends JScrollPane implements ActionListener {
             dummyProbNet.addPotential(potential, probNet);
         }
         dummyProbNet.addPotential(potential);
+        // So that a cycle length shift chosen for the leaf takes the cycle length of the network
+        dummyProbNet.setCycleLength(probNet.getCycleLength());
         Variable conditionedVariable = parentTreeADD.getConditionedVariable();
         Node dummy = dummyProbNet.getNode(conditionedVariable);
         for (Variable variable : potential.getVariables()) {
