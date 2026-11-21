@@ -187,11 +187,7 @@ class InferenceHandler {
             return;
         }
         
-        String fileName = expandedFileName(probNet.getName(), switch (networkPanelMID.source()) {
-            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getAbsolutePath();
-            case NetworkEditorPanel.NetworkSource.NoSource noSource -> null;
-            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> null;
-        });
+        String fileName = expandedFileName(probNet.getName(), nameSourceOf(networkPanelMID.source()));
 
         TemporalNetOperations.ExpandedNetwork expanded =
                 TemporalNetOperations.expandNetwork(probNet, preResolutionEvidence, fileName);
@@ -210,6 +206,15 @@ class InferenceHandler {
                     .getEvidenceManager()
                     .setEvidence(expanded.evidence(), new ArrayList<>());
         fileHandler.getNetworkEditorPanels().add(networkPanel);
+    }
+
+    /** @return the path the name of an expanded network is taken from: that of the file or of the address, or null */
+    static String nameSourceOf(NetworkEditorPanel.NetworkSource source) {
+        return switch (source) {
+            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getAbsolutePath();
+            case NetworkEditorPanel.NetworkSource.NoSource noSource -> null;
+            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> sourceURL.url().getPath();
+        };
     }
 
     /**

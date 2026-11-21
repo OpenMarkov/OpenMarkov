@@ -6,6 +6,8 @@
  */
 package org.openmarkov.gui.window;
 
+import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
+import java.net.URI;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.localize.StringDatabase;
@@ -46,5 +48,15 @@ class AModelNeverSavedCanBeExpandedTest {
 
         assertEquals("MID-x" + SUFFIX + ".pgmx", fileName);
         assertEquals(new File(folder, fileName).getPath(), InferenceHandler.expandedFile(modelFile, fileName));
+    }
+
+    /** Error 368: the name of a model brought from an address does not keep its extension. */
+    @Test void aModelBroughtFromAnAddressGivesItsNameWithoutTheExtension() throws Exception {
+        NetworkEditorPanel.NetworkSource source = new NetworkEditorPanel.NetworkSource.SourceURL(
+                URI.create("https://www.cisiad.uned.es/redes/MID-x.pgmx?version=2").toURL());
+
+        String fileName = InferenceHandler.expandedFileName("MID-x.pgmx", InferenceHandler.nameSourceOf(source));
+
+        assertEquals("MID-x" + SUFFIX + ".pgmx", fileName);
     }
 }
