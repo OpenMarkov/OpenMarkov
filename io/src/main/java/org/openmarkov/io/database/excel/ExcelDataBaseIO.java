@@ -37,6 +37,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -82,6 +84,7 @@ import java.util.Locale;
             }
             int numVariables = sheet.getRow(0).getPhysicalNumberOfCells();
             List<State>[] variableStates = (ArrayList<State>[]) new ArrayList[numVariables];
+            List<Map<String, Integer>> stateIndexes = new ArrayList<>();
             
             // the first row contains the names of the variables
             Row row = sheet.getRow(0);
@@ -89,6 +92,7 @@ import java.util.Locale;
             for (int i = 0; i < numVariables; i++) {
                 variableNames.add(row.getCell(i).getRichStringCellValue().getString());
                 variableStates[i] = new ArrayList<State>();
+                stateIndexes.add(new HashMap<>());
             }
             
             // Gets a int[][] variable that represents the excel file.
@@ -129,7 +133,7 @@ import java.util.Locale;
                         } else {
                             stateName = stateNameOf(cell.getNumericCellValue());
                         }
-                        aCase[j] = findVariableStateIndexOrCreate(variableStates[j], stateName);
+                        aCase[j] = findVariableStateIndexOrCreate(variableStates[j], stateIndexes.get(j), stateName);
                     }
                     rowCases.add(aCase);
                 }
@@ -163,11 +167,12 @@ import java.util.Locale;
         }
     }
     
-    private int findVariableStateIndexOrCreate(List<State> variableStates, String stateName) {
-        for (int index = 0; index < variableStates.size(); index++) {
-            if (variableStates.get(index).getName().equals(stateName)) {
-                return index;
-            }
+    /** @return the index of the state {@code stateName}, which is added to the states and to their index if new */
+    static int findVariableStateIndexOrCreate(List<State> variableStates, Map<String, Integer> indexOf,
+                                              String stateName) {
+        Integer index = indexOf.putIfAbsent(stateName, variableStates.size());
+        if (index != null) {
+            return index;
         }
         variableStates.add(new State(stateName));
         return variableStates.size() - 1;

@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Reader and writer for the legacy Excel {@code .xls} (HSSF) format.
@@ -53,6 +55,7 @@ import java.util.List;
             }
             int numVariables = sheet.getRow(0).getPhysicalNumberOfCells();
             List<State>[] variableStates = (ArrayList<State>[]) new ArrayList[numVariables];
+            List<Map<String, Integer>> stateIndexes = new ArrayList<>();
             
             // the first row contains the names of the variables
             HSSFRow row = sheet.getRow(0);
@@ -60,6 +63,7 @@ import java.util.List;
             for (int i = 0; i < numVariables; i++) {
                 variableNames.add(row.getCell(i).getRichStringCellValue().getString());
                 variableStates[i] = new ArrayList<State>();
+                stateIndexes.add(new HashMap<>());
             }
             
             // Gets a int[][] variable that represents the excel file.
@@ -100,7 +104,7 @@ import java.util.List;
                         } else {
                             stateName = ExcelDataBaseIO.stateNameOf(cell.getNumericCellValue());
                         }
-                        aCase[j] = findVariableStateIndexOrCreate(variableStates[j], stateName);
+                        aCase[j] = ExcelDataBaseIO.findVariableStateIndexOrCreate(variableStates[j], stateIndexes.get(j), stateName);
                     }
                     rowCases.add(aCase);
                 }
@@ -133,15 +137,7 @@ import java.util.List;
         }
     }
     
-    private int findVariableStateIndexOrCreate(List<State> variableStates, String stateName) {
-        for (int index = 0; index < variableStates.size(); index++) {
-            if (variableStates.get(index).getName().equals(stateName)) {
-                return index;
-            }
-        }
-        variableStates.add(new State(stateName));
-        return variableStates.size() - 1;
-    }
+
     
     @Override
     public void save(File file, CaseDatabase database) throws IOException {

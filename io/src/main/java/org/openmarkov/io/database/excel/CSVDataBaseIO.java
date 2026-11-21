@@ -157,9 +157,13 @@ import java.util.Scanner;
             List<String> stateNames = variablesStatesNames.get(i);
             List<String> sortedNames = new ArrayList<>(stateNames);
             Collections.sort(sortedNames);
+            Map<String, Integer> sortedIndex = new HashMap<>();
+            for (int newIdx = 0; newIdx < sortedNames.size(); newIdx++) {
+                sortedIndex.put(sortedNames.get(newIdx), newIdx);
+            }
             int[] remap = new int[stateNames.size()];
             for (int oldIdx = 0; oldIdx < stateNames.size(); oldIdx++) {
-                remap[oldIdx] = sortedNames.indexOf(stateNames.get(oldIdx));
+                remap[oldIdx] = sortedIndex.get(stateNames.get(oldIdx));
             }
             remappings.add(remap);
             stateNames.clear();

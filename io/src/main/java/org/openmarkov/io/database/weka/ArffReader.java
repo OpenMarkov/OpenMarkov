@@ -53,6 +53,10 @@ final class ArffReader {
     private final List<Integer> declared = new ArrayList<>();
     /** For each numeric column, the state of each number its cases have; null for a nominal column */
     private final List<Map<Double, Integer>> statesOfTheNumbers = new ArrayList<>();
+    /** For each nominal column, the state of each value its header declares; null for a numeric column */
+    private final List<Map<String, Integer>> statesOfTheValues = new ArrayList<>();
+    /** For each column, the state of the unknown value, or null until a case has it */
+    private final List<Integer> statesOfMissing = new ArrayList<>();
     private final List<int[]> cases = new ArrayList<>();
 
     private ArffReader() {
@@ -123,6 +127,8 @@ final class ArffReader {
             states.add(new ArrayList<>());
             declared.add(0);
             statesOfTheNumbers.add(new HashMap<>());
+            statesOfTheValues.add(null);
+            statesOfMissing.add(null);
             return;
         }
         if (!type.startsWith("{") || !type.endsWith("}")) {
@@ -131,12 +137,13 @@ final class ArffReader {
                                      + "can be read", lineNumber);
         }
         List<String> values = new ArrayList<>();
+        Map<String, Integer> stateOf = new HashMap<>();
         String list = type.substring(1, type.length() - 1);
         // No values: every case of the column is unknown
         for (String field : list.isBlank() ? List.<String>of() : fields(list, lineNumber)) {
             String value = unquote(field);
             // Two commas in a row leave a value out; '' is the empty value, which Weka and the writer write
-            if (field.isEmpty() || values.contains(value)) {
+            if (field.isEmpty() || stateOf.putIfAbsent(value, values.size()) != null) {
                 throw new ParseException("Line " + lineNumber + ": the attribute «" + name + "» has an empty or a "
                                          + "repeated value", lineNumber);
             }
@@ -146,6 +153,8 @@ final class ArffReader {
         states.add(values);
         declared.add(values.size());
         statesOfTheNumbers.add(null);
+        statesOfTheValues.add(stateOf);
+        statesOfMissing.add(null);
     }
 
     /** Where the name of an attribute ends: at its closing quote, or else at the first blank or brace. */
@@ -175,10 +184,13 @@ final class ArffReader {
             String field = fields.get(column);
             List<String> values = states.get(column);
             if (field.equals(MISSING)) {
-                if (!values.contains(MISSING)) {
-                    values.add(MISSING);
+                if (statesOfMissing.get(column) == null) {
+                    if (!values.contains(MISSING)) {
+                        values.add(MISSING);
+                    }
+                    statesOfMissing.set(column, values.indexOf(MISSING));
                 }
-                example[column] = values.indexOf(MISSING);
+                example[column] = statesOfMissing.get(column);
                 continue;
             }
             String value = unquote(field);
@@ -188,7 +200,7 @@ final class ArffReader {
             }
             // A quoted ? is a value of that name, which the header must declare
             List<String> declaredValues = values.subList(0, declared.get(column));
-            example[column] = declaredValues.indexOf(value);
+            example[column] = statesOfTheValues.get(column).getOrDefault(value, -1);
             if (example[column] == -1) {
                 throw new ParseException("Line " + lineNumber + ": the value «" + value + "» is not one of those of the "
                                          + "attribute «" + names.get(column) + "»: " + declaredValues, lineNumber);
