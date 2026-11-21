@@ -269,7 +269,7 @@ Los \hyperref[err:377]{errores~377} a \hyperref[err:425]{425} salen de una revis
 El \hyperref[err:428]{error~428} se vio al investigar el \hyperref[err:389]{389}. Se ha comprobado con el código de \texttt{4474203}, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo.
 
 \paragraph{Errores añadidos el 21 de noviembre}
-El \hyperref[err:429]{error~429} se vio al corregir el \hyperref[err:397]{397}. Se ha comprobado con el código de \texttt{25f7d14}, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo.
+El \hyperref[err:429]{error~429} se vio al corregir el \hyperref[err:397]{397}. Se ha comprobado con el código de \texttt{25f7d14}, ejecutándolo sin ventana, y la fila \emph{Comprobado} de su ficha dice cómo. Los \hyperref[err:441]{errores~441} y \hyperref[err:442]{442} se vieron al corregir el \hyperref[err:440]{440} y el \hyperref[err:405]{405}; se han comprobado con el código de \texttt{1c972a2}, ejecutándolos sin ventana.
 
 \paragraph{Errores de la versión en C++ y Qt añadidos el 21 de noviembre}
 Los \hyperref[err:430]{errores~430} a \hyperref[err:438]{438} se encontraron al llevar a la versión en C++ y Qt los arreglos del 15 al 19 de noviembre, mirando lo que trajo cada commit: el \hyperref[err:430]{430}, de \texttt{fbbbbcb}, el arreglo del \hyperref[err:386]{386}; el \hyperref[err:431]{431}, de \texttt{3297061}; el \hyperref[err:432]{432}, de \texttt{1f0263b}, el del \hyperref[err:363]{363}; el \hyperref[err:433]{433}, de \texttt{d5a9797}, el del \hyperref[err:383]{383}; el \hyperref[err:434]{434}, de \texttt{d34588c}, el del \hyperref[err:410]{410}; y los \hyperref[err:435]{435} a \hyperref[err:438]{438}, de \texttt{46b8e85}, de Jorge Rico (incidencia 695). Se comprobaron con el código de \texttt{b2cf772}, ejecutándolos sin ventana, y el 21 de noviembre se han vuelto a mirar con el de \texttt{65ecb87}: la fila \emph{Comprobado} de cada ficha dice cómo, qué parte se ha leído en el código sin ejecutarla y qué se ha vuelto a ejecutar. La misma tanda volvió a dar el \hyperref[err:415]{error~415}, los números de Excel mayores que 2\,147\,483\,647, que ya estaba. El \hyperref[err:439]{error~439} salió al llevar a esa versión los arreglos del 19 al 21 de noviembre, midiendo los casos del borde del \hyperref[err:397]{397}, y el \hyperref[err:440]{440}, al llevar el arreglo del \hyperref[err:403]{403}; los dos se han comprobado con el código de \texttt{65ecb87}.
@@ -327,9 +327,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{439 errores}; 295 de ellos son defectos nuevos: 102 encontrados al
-comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 389 pequeños, 49 medios y 1 grandes.
-De los 439, 416 están ya corregidos y 2 están cerrados sin arreglo.
+La lista tiene \textbf{441 errores}; 297 de ellos son defectos nuevos: 104 encontrados al
+comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 391 pequeños, 49 medios y 1 grandes.
+De los 441, 416 están ya corregidos y 2 están cerrados sin arreglo.
 El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -347,7 +347,7 @@ El apéndice recoge además 201 notas con lo que se comprobó y no entra en la l
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 17 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 30 \\
 \ref{sec:des}. Simulación de sucesos discretos & 23 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 56 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 58 \\
 \ref{sec:casos}. Bases de casos & 33 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 42 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 51 \\
@@ -630,6 +630,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:429]{429} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un modelo canónico con parámetros de más o de menos da un aviso que no dice el nodo ni que el fallo está en el fichero & \texttt{io}, \texttt{core} & S \hfill No\\
 \hyperref[err:439]{439} & \textcolor{corregidoverde}{\textbf{Corregido}} · Una tabla con la lista de números vacía hace caer el lector, con un error que no dice nada del fichero & \texttt{io} & S \hfill No\\
 \hyperref[err:440]{440} & \textcolor{corregidoverde}{\textbf{Corregido}} · Desde 36d431d, una red con un agente con propiedades que OpenMarkov guarda no se vuelve a abrir & \texttt{io} & S \hfill No\\
+\hyperref[err:441]{441} & Renombrar un agente de una red abierta de un fichero falla con NullPointerException & \texttt{io}, \texttt{core} & S \hfill No\\
+\hyperref[err:442]{442} & Un número negativo de simulaciones o de series se acepta, y la simulación falla con NegativeArraySizeException & \texttt{io}, \texttt{gui} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -15933,6 +15935,88 @@ Que el lector lea las propiedades de un agente de donde los escritores las ponen
 
 Prueba: la red de \emph{Medido}, guardada en las dos versiones, se abre con «colour» = «red» en su primer agente; y un agente con una propiedad sin nombre dentro del bloque se sigue rechazando.
 
+\setcounter{subsection}{440}
+\subsection[Renombrar un agente de una red abierta de un fichero falla con NullPointerException]{En una red abierta de un fichero, renombrar un agente en «Network properties» falla con una \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} y el nombre no cambia: el lector deja sin lista de propiedades a los agentes que no traen ninguna}\label{err:441}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io, core
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.core.model.network
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_0_2.java:324-385} \newline \path{core/src/main/java/org/openmarkov/core/model/network/ProbNetAgentManager.java:112-117} \newline \path{core/src/main/java/org/openmarkov/core/model/network/StringWithProperties.java:42-51}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{1c972a2} (21-11-2026): \texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}test-\allowbreak{}decpomdp-\allowbreak{}manual.\allowbreak{}pgmx} abierta con el lector y, sobre ella, la edición que lanza la tabla de agentes, \texttt{Network\allowbreak{}Agent\allowbreak{}Edit}, con RENAME y con UP. Lo que enseña la ventana se ha leído en el código, sin pintarla
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:61]{error~61}, \hyperref[err:440]{error~440}
+\end{ficha}
+\paragraph{Qué pasa}
+Se abre una red con agentes, se va a File → «Network properties\ldots», pestaña de agentes, y se cambia el nombre de uno. La edición falla con una \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} y el agente se queda con el nombre de antes. Subir o bajar un agente sí funciona, y renombrar uno recién creado en la misma sesión, también.
+
+Le pasa a cualquier red con agentes que se haya guardado y vuelto a abrir. La ventana no deja poner propiedades a un agente, así que el escritor guarda \texttt{\textless{}Agent name="\ldots" /\textgreater{}} sin bloque de propiedades (\texttt{PGMXWriter\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Agent} solo lo escribe si hay alguna).
+
+Por qué pasa: \texttt{PGMXReader\_\allowbreak{}0\_\allowbreak{}2.\allowbreak{}get\allowbreak{}Additional\allowbreak{}Properties} (líneas 368-385) devuelve \texttt{null} cuando el agente no trae propiedades, y \texttt{get\allowbreak{}Agents} (línea 333) se lo pasa a \texttt{String\allowbreak{}With\allowbreak{}Properties.\allowbreak{}put(\allowbreak{}Properties)}, que cambia por él la lista vacía con la que nace el agente. \texttt{Prob\allowbreak{}Net\allowbreak{}Agent\allowbreak{}Manager.\allowbreak{}renamed} (línea 117) copia las propiedades del agente viejo con \texttt{get\allowbreak{}Additional\allowbreak{}Properties(\allowbreak{}).\allowbreak{}clone(\allowbreak{})}, sin mirar si las hay. La excepción sale de \texttt{Network\allowbreak{}Agents\allowbreak{}Table\allowbreak{}Panel.\allowbreak{}table\allowbreak{}Changed}, que no la recoge: llega a \texttt{OMException\allowbreak{}Handler} como error inesperado.
+
+Con un agente así fallan también \texttt{String\allowbreak{}With\allowbreak{}Properties.\allowbreak{}put(\allowbreak{}String,\allowbreak{} String)} y \texttt{remove}, que hoy solo llaman las pruebas.
+
+Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+test-decpomdp-manual.pgmx, recién abierta: 2 agentes, <Agent name="Agent 1"/> y <Agent name="Agent 2"/>
+  getAgents().get(0).getAdditionalProperties()   null
+  NetworkAgentEdit UP     (Agent 2, Agent 1)     se hace
+  NetworkAgentEdit RENAME (Agent 1 → Boss)
+    java.lang.NullPointerException: Cannot invoke "org.openmarkov.core.model.network.Properties.clone()" because the return value of "org.openmarkov.core.model.network.StringWithProperties.getAdditionalProperties()" is null
+      at ProbNetAgentManager.renamed(ProbNetAgentManager.java:117)
+      at ProbNetAgentManager.modifyAgent(ProbNetAgentManager.java:91)
+      at NetworkAgentEdit.doEdit(NetworkAgentEdit.java:59)
+  getAgents().get(1).put("speciality", "x")
+    java.lang.NullPointerException: Cannot invoke "org.openmarkov.core.model.network.Properties.put(String, String)" because "this.properties" is null
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Que un agente tenga siempre su lista de propiedades, vacía si no trae ninguna: que \texttt{get\allowbreak{}Additional\allowbreak{}Properties} devuelva una lista vacía en vez de \texttt{null}, o que \texttt{get\allowbreak{}Agents} no llame a \texttt{put(\allowbreak{}Properties)} cuando no hay nada que poner. Con eso \texttt{renamed} no necesita cambios; proteger solo \texttt{renamed} dejaría el fallo de \texttt{put(\allowbreak{}String,\allowbreak{} String)}.
+
+Prueba: abrir \texttt{test-\allowbreak{}decpomdp-\allowbreak{}manual.\allowbreak{}pgmx}, renombrar «Agent 1» con \texttt{Network\allowbreak{}Agent\allowbreak{}Edit} y comprobar que la lista tiene el nombre nuevo y que las decisiones del agente lo siguen; y que a un agente recién leído se le puede poner una propiedad.
+
+\setcounter{subsection}{441}
+\subsection[Un número negativo de simulaciones o de series se acepta, y la simulación falla con NegativeArraySizeException]{Una red de sucesos con un número negativo de simulaciones o de series se abre sin aviso, y el diálogo de opciones también lo acepta; al simular, falla con una \texttt{Negative\allowbreak{}Array\allowbreak{}Size\allowbreak{}Exception}}\label{err:442}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io, gui
+\fichakey{Paquete}org.openmarkov.io.probmodel.reader; org.openmarkov.gui.dialog.inference.common; org.openmarkov.gui.desnets
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/probmodel/reader/PGMXReader_1_0.java:272-284} \newline \path{gui/src/main/java/org/openmarkov/gui/dialog/inference/common/MonteCarloOptionsPanel.java:160-167} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/SimulationSummaryResults.java:58-59, 70} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:345-351}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{1c972a2} (21-11-2026): cinco copias de \texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}DES-\allowbreak{}illness.\allowbreak{}pgmx} abiertas con el lector y simuladas con \texttt{DESInference}, lo que lanza «Simulation». Sin pantalla, la simulación que acaba bien se detiene al ir a abrir la ventana de resultados. El diálogo de opciones y lo que enseña la ventana ante el fallo se han leído en el código, sin ejecutarlos
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:405]{error~405}
+\end{ficha}
+\paragraph{Qué pasa}
+En una red de sucesos, las opciones de la simulación guardan cuántas simulaciones se hacen por serie y cuántas series. Si uno de los dos números es negativo, porque el fichero se editó a mano o porque se escribió así en el diálogo de opciones, nadie lo rechaza. Al lanzar la simulación no sale ningún resultado: falla con una \texttt{Negative\allowbreak{}Array\allowbreak{}Size\allowbreak{}Exception}, que no dice qué opción está mal.
+
+Por qué pasa: desde el arreglo del \hyperref[err:405]{error~405}, \texttt{PGMXReader\_\allowbreak{}1\_\allowbreak{}0} (líneas 272-284) rechaza lo que no es un número entero, pero no mira el signo. \texttt{Monte\allowbreak{}Carlo\allowbreak{}Options\allowbreak{}Panel.\allowbreak{}get\allowbreak{}Monte\allowbreak{}Carlo\allowbreak{}Options} (líneas 160-167) pasa lo escrito por \texttt{Integer.\allowbreak{}parse\allowbreak{}Int} sin más. \texttt{Simulation\allowbreak{}Summary\allowbreak{}Results} crea con esos números las tablas de resultados (líneas 58-59 y 70). La simulación corre en un hilo aparte (\texttt{Inference\allowbreak{}Handler}, líneas 345-351), que solo recoge las excepciones de OpenMarkov: esta llega a \texttt{OMException\allowbreak{}Handler} como error inesperado.
+
+Con un cero en cualquiera de los dos números la simulación acaba sin fallar, sin haber simulado nada; qué enseña entonces la ventana de resultados no se ha visto.
+
+Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+DES-illness.pgmx con <NumberOfSimulations> y <NumberOfSeries> cambiados
+  3 y 2 (el fichero)   se abre; la simulación acaba
+  -5 y 2               se abre, con -5 simulaciones; al simular
+      java.lang.NegativeArraySizeException: -5
+        at SimulationResults.<init>(SimulationResults.java:34)
+        at CriteriaValues.<init>(CriteriaValues.java:39)
+        at SimulationSummaryResults.addEmptySeries(SimulationSummaryResults.java:70)
+        at DESInference.<init>(DESInference.java:171)
+  3 y -2               se abre, con -2 series; al simular
+      java.lang.NegativeArraySizeException: -2
+        at SimulationSummaryResults.<init>(SimulationSummaryResults.java:58)
+        at DESInference.initialize(DESInference.java:550)
+  0 y 2                se abre; la simulación acaba
+  3 y 0                se abre; la simulación acaba
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Que el lector rechace un número de simulaciones o de series menor que 1 con el mismo aviso que el \hyperref[err:405]{error~405} da a lo que no es un número, y que el diálogo de opciones no acepte un valor así. Si el cero debe valer o no es parte de la misma decisión: hoy no falla, pero tampoco simula.
+
+Prueba: las copias con -5 simulaciones y con -2 series no se abren, y el aviso nombra el dato; el fichero sin cambios se sigue abriendo.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
 
@@ -26650,6 +26734,8 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:438]{Error 438} & registro de fallos de la versión en C++/Qt, nº 425, al llevar a ella los arreglos del 15 al 19 de noviembre \\
 \hyperref[err:439]{Error 439} & registro de fallos de la versión en C++/Qt, nº 426, al llevar a ella los arreglos del 19 al 21 de noviembre \\
 \hyperref[err:440]{Error 440} & registro de fallos de la versión en C++/Qt, nº 427, al llevar a ella el arreglo del \hyperref[err:403]{error~403} \\
+\hyperref[err:441]{Error 441} & hallazgo nuevo, visto al corregir el \hyperref[err:440]{error~440} \\
+\hyperref[err:442]{Error 442} & hallazgo nuevo, visto al corregir el \hyperref[err:405]{error~405} \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
