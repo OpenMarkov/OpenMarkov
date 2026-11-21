@@ -90,21 +90,33 @@ public class LastOpenFiles {
      */
     public static OptionalInt getIndexForSource(NetworkEditorPanel.NetworkSource source) {
         return IntStream.range(0, UserPreferences.LAST_OPEN_NETWORKS_FILES.get().size())
-                        .filter(index -> {
-                            return switch (Tuples.record(source, UserPreferences.LAST_OPEN_NETWORKS_FILES.get()
-                                                                                                         .get(index))) {
-                                case Tuple2Record(
-                                        NetworkEditorPanel.NetworkSource.SourceFile s1,
-                                        NetworkEditorPanel.NetworkSource.SourceFile s2
-                                ) -> s1.file().equals(s2.file());
-                                case Tuple2Record(
-                                        NetworkEditorPanel.NetworkSource.SourceURL s1,
-                                        NetworkEditorPanel.NetworkSource.SourceURL s2
-                                ) -> s1.url().equals(s2.url());
-                                default -> false;
-                            };
-                        })
+                        .filter(index -> same(source, UserPreferences.LAST_OPEN_NETWORKS_FILES.get().get(index)))
                         .findFirst();
+    }
+
+    /** @return whether both are the same file, or the same address written the same way */
+    static boolean same(NetworkEditorPanel.NetworkSource one, NetworkEditorPanel.NetworkSource other) {
+        return switch (Tuples.record(one, other)) {
+            case Tuple2Record(
+                    NetworkEditorPanel.NetworkSource.SourceFile s1,
+                    NetworkEditorPanel.NetworkSource.SourceFile s2
+            ) -> s1.file().equals(s2.file());
+            // As text: URL.equals asks the network for the address of each server
+            case Tuple2Record(
+                    NetworkEditorPanel.NetworkSource.SourceURL s1,
+                    NetworkEditorPanel.NetworkSource.SourceURL s2
+            ) -> s1.url().toString().equals(s2.url().toString());
+            default -> false;
+        };
+    }
+
+    /** @return what the list of recent networks shows for {@code source}: the whole path or the whole address */
+    public static String textOf(NetworkEditorPanel.NetworkSource source) {
+        return switch (source) {
+            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile -> sourceFile.file().getAbsolutePath();
+            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> sourceURL.url().toString();
+            case NetworkEditorPanel.NetworkSource.NoSource noSource -> "None";
+        };
     }
     
     /**
