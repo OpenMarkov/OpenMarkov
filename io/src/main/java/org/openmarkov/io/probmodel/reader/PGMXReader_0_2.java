@@ -236,7 +236,7 @@ public class PGMXReader_0_2 {
      */
     protected void getNetworkAdvancedInformation(Element xMLProbNet, ProbNet probNet, String netName,
                                                  Map<String, ProbNet> classes)
-            throws PGMXParserException.DataNotValid {
+            throws PGMXParserException.DataNotValid, PGMXParserException.DataMissing {
         getTemporaUnit(xMLProbNet, probNet);
         getAdditionalProperties(xMLProbNet, probNet);
     }
@@ -276,7 +276,8 @@ public class PGMXReader_0_2 {
     }
     
     protected ProbNet initializeProbNet(Element xMLProbNet, String netName)
-            throws PGMXParserException.NoNetworkTypeFound, PGMXParserException.UnknownNetworkType, PGMXParserException.ConstraintNotFound {
+            throws PGMXParserException.NoNetworkTypeFound, PGMXParserException.UnknownNetworkType,
+                   PGMXParserException.ConstraintNotFound, PGMXParserException.DataMissing {
         // =
         // xMLProbNet.getAttribute(XMLAttributes.TYPE.toString());
         NetworkType networkType = getNetworkType(xMLProbNet);
@@ -291,13 +292,13 @@ public class PGMXReader_0_2 {
         return probNet;
     }
     
-    protected void getAdditionalProperties(Element root, ProbNet probNet) {
+    protected void getAdditionalProperties(Element root, ProbNet probNet) throws PGMXParserException.DataMissing {
         Element xmlAdditionalProperties = root.getChild(XMLTags.ADDITIONAL_PROPERTIES.toString());
         if (xmlAdditionalProperties != null) {
             List<Element> propertiesListElement = getXMLChildren(xmlAdditionalProperties);
             if (propertiesListElement != null && !propertiesListElement.isEmpty()) {
                 for (Element propertyElement : propertiesListElement) {
-                    String propertyName = getElementName(propertyElement);
+                    String propertyName = requiredName(propertyElement, "a property of the network");
                     String propertyValue = propertyElement.getAttributeValue(XMLAttributes.VALUE.toString());
                     probNet.putAdditionalProperty(propertyName, propertyValue);
                 }
@@ -308,7 +309,7 @@ public class PGMXReader_0_2 {
             List<Element> propertiesListElement = getXMLChildren(xmlProperties);
             if (propertiesListElement != null && !propertiesListElement.isEmpty()) {
                 for (Element propertyElement : propertiesListElement) {
-                    String propertyName = getElementName(propertyElement);
+                    String propertyName = requiredName(propertyElement, "a property of the network");
                     String propertyValue = propertyElement.getAttributeValue(XMLAttributes.VALUE.toString());
                     probNet.putAdditionalProperty(propertyName, propertyValue);
                 }
@@ -320,13 +321,13 @@ public class PGMXReader_0_2 {
      * @param root    . {@code Element}
      * @param probNet . {@code ProbNet}
      */
-    protected void getAgents(Element root, ProbNet probNet) {
+    protected void getAgents(Element root, ProbNet probNet) throws PGMXParserException.DataMissing {
         Element xmlAgentsRoot = root.getChild(XMLTags.AGENTS.toString());
         if (xmlAgentsRoot != null) {
             List<Element> xmlAgents = getXMLChildren(xmlAgentsRoot);
             ArrayList<StringWithProperties> agents = new ArrayList<>();
             for (Element agentElement : xmlAgents) {
-                String agentName = getElementName(agentElement);
+                String agentName = requiredName(agentElement, "an agent");
                 StringWithProperties agent = new StringWithProperties(agentName);
                 Properties agentProperties = getAdditionalProperties(agentElement);
                 agent.put(agentProperties);
@@ -340,12 +341,12 @@ public class PGMXReader_0_2 {
      * @param root    . {@code Element}
      * @param probNet . {@code ProbNet}
      */
-    protected void getDecisionCriterion(Element root, ProbNet probNet) {
+    protected void getDecisionCriterion(Element root, ProbNet probNet) throws PGMXParserException.DataMissing {
         Element xmlCriteronRoot = root.getChild(XMLTags.DECISION_CRITERIA.toString());
         List<Criterion> criteria = new ArrayList<>();
         if (xmlCriteronRoot != null) {
             for (Element criterionElement : getXMLChildren(xmlCriteronRoot)) {
-                String criterionName = getElementName(criterionElement);
+                String criterionName = requiredName(criterionElement, "a decision criterion");
                 String criterionUnit = criterionElement.getAttributeValue(XMLAttributes.UNIT.toString());
                 criteria.add(new Criterion(criterionName, criterionUnit));
             }
@@ -364,13 +365,13 @@ public class PGMXReader_0_2 {
      *
      * @return {@code Properties}
      */
-    protected Properties getAdditionalProperties(Element agentElement) {
+    protected Properties getAdditionalProperties(Element agentElement) throws PGMXParserException.DataMissing {
         Properties properties = null;
         List<Element> propertiesListElement = getXMLChildren(agentElement);
         if (propertiesListElement != null && !propertiesListElement.isEmpty()) {
             properties = new Properties();
             for (Element propertyElement : propertiesListElement) {
-                String propertyName = getElementName(propertyElement);
+                String propertyName = requiredName(propertyElement, "a property of an agent");
                 String propertyValue = propertyElement.getAttributeValue(XMLAttributes.VALUE.toString());
                 properties.put(propertyName, propertyValue);
             }
@@ -814,6 +815,12 @@ public class PGMXReader_0_2 {
                 Element statesElement = getXMLRootStates(variableElement);
                 if (statesElement != null) { // jlgozalo. 25/10/2009
                     states = getXMLStates(statesElement); // previously without null control
+                    for (State state : states) {
+                        if (state.getName() == null) {
+                            throw new PGMXParserException.DataMissing("a state of " + nameWithTimeSlice, "name",
+                                                                      statesElement);
+                        }
+                    }
                 } else {
                     throw new PGMXParserException.VariableHasNoStates(nameWithTimeSlice, variableElement);
                 }
@@ -958,6 +965,15 @@ public class PGMXReader_0_2 {
         return variables.isEmpty() ? "a relation" : "the relation of " + variables.getFirst().getName();
     }
     
+    /** @return the name of {@code element}, which the message calls {@code description} if it has none */
+    protected String requiredName(Element element, String description) throws PGMXParserException.DataMissing {
+        String name = getElementName(element);
+        if (name == null) {
+            throw new PGMXParserException.DataMissing(description, "name", element);
+        }
+        return name;
+    }
+
     protected String getElementName(Element element) {
         return element.getAttributeValue(XMLAttributes.NAME.toString());
     }
@@ -1044,7 +1060,8 @@ public class PGMXReader_0_2 {
      *
      * @return A {@code HashMap} with {@code key = String} and {@code value = Object}
      */
-    protected LinkedHashMap<String, String> getProperties(Element variableElement) {
+    protected LinkedHashMap<String, String> getProperties(Element variableElement)
+            throws PGMXParserException.DataMissing {
         LinkedHashMap<String, String> properties = new LinkedHashMap<>();
         Element others = variableElement.getChild(XMLTags.ADDITIONAL_PROPERTIES.toString());
         if (others == null) {
@@ -1054,7 +1071,7 @@ public class PGMXReader_0_2 {
         if (others != null) {
             List<Element> xmlProperties = getXMLChildren(others);
             for (Element xmlProperty : xmlProperties) { // additionalProperties
-                String key = getElementName(xmlProperty);
+                String key = requiredName(xmlProperty, "a property of " + nodeNameOf(variableElement));
                 String value = xmlProperty.getAttributeValue(XMLAttributes.VALUE.toString());
                 // try to discover the property type (double, boolean...)
                 try { // try parse double
@@ -1913,7 +1930,7 @@ public class PGMXReader_0_2 {
         }
     }
     
-    protected void setDefaultStates(Element root, ProbNet probNet) {
+    protected void setDefaultStates(Element root, ProbNet probNet) throws PGMXParserException.DataMissing {
         Element defaultStatesElement = root.getChild(XMLTags.DEFAULT_STATES.toString());
         if (defaultStatesElement == null) return;
         
@@ -1922,7 +1939,7 @@ public class PGMXReader_0_2 {
         int i = 0;
         
         for (Element state : XMLStates) {
-            defaultStates[i] = new State(state.getAttributeValue(XMLAttributes.NAME.toString()));
+            defaultStates[i] = new State(requiredName(state, "a default state of the network"));
             i++;
         }
         
