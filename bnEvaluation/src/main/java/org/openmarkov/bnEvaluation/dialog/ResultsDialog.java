@@ -148,12 +148,10 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         informationPanel.setPreferredSize(new Dimension(600, 100));
         informationPanel.setBorder(BorderFactory.createTitledBorder("Information"));
         // informationPanel components
-        JTextPane textMetaInformation = new JTextPane();
-        textMetaInformation.setContentType("text/html");
-        textMetaInformation.setText(switch (resultKind) {
-            case Measures -> measures.getMeasureInformation();
-            case SplitSet -> splitSet.getTitle();
-        });
+        JTextPane textMetaInformation = switch (resultKind) {
+            case Measures -> informationPane("text/plain", measures.getMeasureInformation());
+            case SplitSet -> informationPane("text/html", splitSet.getTitle());
+        };
         JScrollPane jScrollPaneMetaInf = new JScrollPane(textMetaInformation);
         jScrollPaneMetaInf.setAutoscrolls(true);
         jScrollPaneMetaInf.setPreferredSize(new Dimension(550, 50));
@@ -338,4 +336,12 @@ public final class ResultsDialog extends BottomPanelButtonDialog {
         return null;
     }
     
+
+    /** @return the box with the information of some results: HTML for a split, a line for each sentence of the measures */
+    static JTextPane informationPane(String contentType, String text) {
+        JTextPane pane = new JTextPane();
+        pane.setContentType(contentType);
+        pane.setText(text);
+        return pane;
+    }
 }
