@@ -10,6 +10,8 @@ package org.openmarkov.gui.dialog.inference.common;
 import org.openmarkov.core.action.core.MonteCarloOptionsEdit;
 import org.openmarkov.core.action.core.MulticriteriaEdit;
 import org.openmarkov.core.exception.InvalidArgumentException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.inference.MonteCarloOptions;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.inference.TemporalOptions;
 import org.openmarkov.core.model.network.Criterion;
@@ -1008,6 +1010,14 @@ public class InferenceOptionsDialog extends OkCancelDialog {
         if (table != null && table.getCellEditor() != null) {
             table.getCellEditor().stopCellEditing();
         }
+        MonteCarloOptions monteCarloOptions = null;
+        if (isMonteCarloSimulation) {
+            try {
+                monteCarloOptions = monteCarloOptionsPanel.getMonteCarloOptions();
+            } catch (InvalidArgumentException notValid) {
+                throw new UnrecoverableException(notValid);
+            }
+        }
         probNet.getPNESupport().openNewSubEditHistory();
         if (isMulticriteria) {
             boolean decisionCriteriaIsTheSame = ReflectionEquality.areEquals(probNet.getDecisionCriteria(), decisionCriteria);
@@ -1040,7 +1050,7 @@ public class InferenceOptionsDialog extends OkCancelDialog {
         }
         
         if (isMonteCarloSimulation) {
-            probNet.getInferenceOptions().setMonteCarloOptions(monteCarloOptionsPanel.getMonteCarloOptions());
+            probNet.getInferenceOptions().setMonteCarloOptions(monteCarloOptions);
         }
         
         probNet.getPNESupport().closeSubEditHistory();

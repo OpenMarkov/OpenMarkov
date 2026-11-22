@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Temporal options without discount rates are read with the default discounts, and a number of simulations or of
- * series that is not an integer is rejected with a message that names it (error 405).
+ * series that is not an integer, 1 or more, is rejected with a message that names it (errors 405 and 442).
  *
  * @author Manuel Arias
  */
@@ -73,8 +73,9 @@ class MissingDiscountsAndWrongSimulationNumbersTest {
     }
 
     @ParameterizedTest(name = "{0} {1}")
-    @CsvSource({"NumberOfSimulations, abc", "NumberOfSeries, 2.5"})
-    void aNumberThatIsNotAnInteger(String element, String written) throws Exception {
+    @CsvSource({"NumberOfSimulations, abc", "NumberOfSeries, 2.5", "NumberOfSimulations, -5", "NumberOfSeries, -2",
+                "NumberOfSimulations, 0", "NumberOfSeries, 0"})
+    void aNumberThatIsNotAnIntegerFromOne(String element, String written) throws Exception {
         URL url = copyWith("(<" + element + ">)[^<]*", "$1" + written);
 
         OpenMarkovException exception = assertThrows(PGMXParserException.DataNotValid.class, () -> open(url));

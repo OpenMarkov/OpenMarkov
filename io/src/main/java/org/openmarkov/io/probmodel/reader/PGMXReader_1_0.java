@@ -256,6 +256,17 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     }
     
     /**
+     * @return the integer, 1 or more, that {@code written}, the text of {@code element}, writes
+     */
+    private static int integerFromOneIn(Element element, String written) throws PGMXParserException.DataNotValid {
+        int number = integerIn(element, TEXT, written);
+        if (number < 1) {
+            throw new PGMXParserException.DataNotValid(element.getName(), TEXT, written.strip(), element);
+        }
+        return number;
+    }
+    
+    /**
      * Reads the Monte Carlo options for evaluating DESnets
      *
      * @param inferenceOptions XML subtree with the inference options
@@ -271,8 +282,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         
         String childName = monteCarloOptions.getChildTextTrim(XMLTags.NUMBER_OF_SIMULATIONS.toString());
         if (!((childName == null) || (childName.isEmpty())))
-            probNet.getInferenceOptions().getMonteCarloOptions().setNumSimulations(integerIn(
-                    monteCarloOptions.getChild(XMLTags.NUMBER_OF_SIMULATIONS.toString()), TEXT, childName));
+            probNet.getInferenceOptions().getMonteCarloOptions().setNumSimulations(integerFromOneIn(
+                    monteCarloOptions.getChild(XMLTags.NUMBER_OF_SIMULATIONS.toString()), childName));
         
         //28/08/2023 When using getValue, when there are extra spaces, /n, or /t (possibly introduced by hand) parseInt throws an exception
         //FIXME 28/08/2023 replace getValue for getChildTextTrim
@@ -280,8 +291,8 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
 //        probNet.getInferenceOptions().getMonteCarloOptions().setNumSeries(Integer.parseInt( numSeries.getValue() ));
         childName = monteCarloOptions.getChildTextTrim(XMLTags.NUMBER_OF_SERIES.toString());
         if (!((childName == null) || (childName.isEmpty())))
-            probNet.getInferenceOptions().getMonteCarloOptions().setNumSeries(integerIn(
-                    monteCarloOptions.getChild(XMLTags.NUMBER_OF_SERIES.toString()), TEXT, childName));
+            probNet.getInferenceOptions().getMonteCarloOptions().setNumSeries(integerFromOneIn(
+                    monteCarloOptions.getChild(XMLTags.NUMBER_OF_SERIES.toString()), childName));
         
         childName = monteCarloOptions.getChildTextTrim(XMLTags.INPUT_DATA_FILE.toString());
         if (!((childName == null) || (childName.isEmpty())))

@@ -7,6 +7,7 @@
 
 package org.openmarkov.gui.dialog.inference.common;
 
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.inference.MonteCarloOptions;
 import org.openmarkov.core.model.network.ProbNet;
 
@@ -156,10 +157,13 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 	/**
 	 * This method delivers the monteCarloOptions set in this panel
 	 * @return  the monteCarloOptions set in this panel
+	 * @throws InvalidArgumentException if the number of individuals or of series is not an integer, 1 or more
 	 */
 	public MonteCarloOptions getMonteCarloOptions() {
-		this.monteCarloOptions.setNumSeries(Integer.parseInt(numSeriesTextField.getText()));
-		this.monteCarloOptions.setNumSimulations(Integer.parseInt(numSimulationsTextField.getText()));
+		int numSeries = integerFromOneIn(numSeriesTextField, getJLabelNumSeries());
+		int numSimulations = integerFromOneIn(numSimulationsTextField, getJLabelNumSimulations());
+		this.monteCarloOptions.setNumSeries(numSeries);
+		this.monteCarloOptions.setNumSimulations(numSimulations);
 		this.monteCarloOptions.setTextualLog(textualLogCheckBox.isSelected());
 		//26/08/2023 - set inputFile options
 		this.monteCarloOptions.setInputFilePath(inputFile);
@@ -167,6 +171,19 @@ public class MonteCarloOptionsPanel extends JPanel implements ActionListener {
 	}
 
 
+
+	private static int integerFromOneIn(JTextField field, JLabel label) {
+		String written = field.getText().strip();
+		try {
+			int number = Integer.parseInt(written);
+			if (number >= 1) {
+				return number;
+			}
+		} catch (NumberFormatException notAnInteger) {
+			// rejected below
+		}
+		throw new InvalidArgumentException(written, label.getText(), "it must be a whole number, 1 or more");
+	}
 
 	/**
 	 * This method returns the label for number of simulations
