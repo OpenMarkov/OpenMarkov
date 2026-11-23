@@ -134,6 +134,8 @@ public class ADamagedEventTreeIsRejectedWithAMessageTest {
         String text = withTreeOfDeath(saved(new TreeWithEventsPotential(variablesOfDeath, PotentialRole.CONDITIONAL_PROBABILITY)),
                                       "<Values>1.0</Values>", "<Values>abc</Values>");
 
-        assertThrows(NumberFormatException.class, () -> deathIn(text));
+        var rejected = assertThrows(PGMXParserException.PartCannotBeRead.class, () -> deathIn(text));
+
+        assertEquals("a number is not written as expected. For input string: \"abc\"", rejected.reason);
     }
 }

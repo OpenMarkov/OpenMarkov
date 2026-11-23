@@ -12,6 +12,8 @@ import org.jdom2.DataConversionException;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.openmarkov.core.exception.InvalidArgumentException;
+import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.located.LocatedJDOMFactory;
@@ -150,13 +152,29 @@ public class PGMXReader_0_2 {
             throw new ProbNetParserException.PGMXInvalid(e.getMessage());
         }
         Element root = getRootElement(networkSource);
-        ProbNet probNet = this.getProbNet(root, networkSource.getFile());
-        this.getInferenceOptions(root, probNet);
-        List<EvidenceCase> evidence = this.getEvidence(root, probNet);
-        this.getPolicies(root, probNet);
-        this.setVariableType(root, probNet);
-        this.setDefaultStates(root, probNet);
-        return new PGMXReader.NetworkAndEvidence(probNet, evidence);
+        try {
+            ProbNet probNet = this.getProbNet(root, networkSource.getFile());
+            this.getInferenceOptions(root, probNet);
+            List<EvidenceCase> evidence = this.getEvidence(root, probNet);
+            this.getPolicies(root, probNet);
+            this.setVariableType(root, probNet);
+            this.setDefaultStates(root, probNet);
+            return new PGMXReader.NetworkAndEvidence(probNet, evidence);
+        } catch (RuntimeException failure) {
+            throw cannotBeRead(null, null, failure);
+        }
+    }
+    
+    /**
+     * @return the refusal of the file for a failure in the reading of {@code part}, which belongs to {@code whose}
+     *
+     * @throws RuntimeException {@code failure} itself, if it tells of a defect of the program and not of the file
+     */
+    private static PGMXParserException.PartCannotBeRead cannotBeRead(Element part, String whose, RuntimeException failure) {
+        if (failure instanceof UnrecoverableException || failure instanceof UnreachableException) {
+            throw failure;
+        }
+        return new PGMXParserException.PartCannotBeRead(part, whose, failure);
     }
     
     /**
@@ -704,7 +722,7 @@ public class PGMXReader_0_2 {
      * @param root    {@code Element}
      * @param probNet {@code ProbNet}
      */
-    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.WrongNumberOfValues, PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole, PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType, PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion {
+    protected void getVariables(Element root, ProbNet probNet) throws PGMXParserException.WrongNumberOfValues, PGMXParserException.VariableHasNoStates, PGMXParserException.UnknownAgent, PGMXParserException.PrecisionOutOfRange, PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole, PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType, PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion, PGMXParserException.PartCannotBeRead {
         Element xmlVariablesRoot = getXMLVariables(root);
         if (xmlVariablesRoot == null) {
             return;
@@ -722,9 +740,13 @@ public class PGMXReader_0_2 {
                    PGMXParserException.NodeWithoutRole, PGMXParserException.UnknownNodeRole,
                    PGMXParserException.NodeWithoutVariableType, PGMXParserException.UnknownVariableType,
                    PGMXParserException.DataMissing, PGMXParserException.UnknownCriterion,
-                   PGMXParserException.WrongNumberOfValues {
+                   PGMXParserException.WrongNumberOfValues, PGMXParserException.PartCannotBeRead {
         for (Element variableElement : xmlVariables) {
-            loadVariable(variableElement, probNet);
+            try {
+                loadVariable(variableElement, probNet);
+            } catch (RuntimeException failure) {
+                throw cannotBeRead(variableElement, getVariableName(variableElement), failure);
+            }
         }
     }
     
@@ -1300,6 +1322,8 @@ public class PGMXReader_0_2 {
                     }
                 } catch (DataConversionException e) {
                     throw new PGMXParserException.DataCouldNotBeConverted(e.getMessage(), xmlLink);
+                } catch (RuntimeException failure) {
+                    throw cannotBeRead(xmlLink, null, failure);
                 }
             }
         }
@@ -1616,6 +1640,8 @@ public class PGMXReader_0_2 {
             return getPotential(xmlPotential, probNet, role);
         } catch (InvalidArgumentException invalid) {
             throw notFinite(invalid, xmlPotential);
+        } catch (RuntimeException failure) {
+            throw cannotBeRead(xmlPotential, nodeOfTheRelation(xmlPotential), failure);
         }
     }
     

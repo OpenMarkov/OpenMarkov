@@ -237,6 +237,43 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String dataName;
     }
     
+    /** A part of the file whose reading failed for a cause that no other exception tells. */
+    public static final class PartCannotBeRead extends PGMXParserException {
+        /**
+         * @param part  the element whose reading failed, or null if it is not known
+         * @param whose what {@code part} belongs to, such as the name of its node, or null
+         */
+        public PartCannotBeRead(@Nullable Element part, @Nullable String whose, RuntimeException cause) {
+            super(part);
+            this.place = placeOf(part, whose);
+            this.reason = reasonOf(cause);
+            this.initCause(cause);
+        }
+        
+        /** Where the reading failed, ready to follow "The file cannot be read"; empty if it is not known. */
+        public final String place;
+        public final String reason;
+        
+        private static String placeOf(@Nullable Element part, @Nullable String whose) {
+            if (part == null) {
+                return "";
+            }
+            String place = part instanceof LocatedElement located ? ", line " + located.getLine() : "";
+            place += ", element " + part.getName();
+            return whose == null ? place : place + " of " + whose;
+        }
+        
+        private static String reasonOf(RuntimeException cause) {
+            return switch (cause) {
+                case NumberFormatException badNumber -> "a number is not written as expected. " + badNumber.getMessage();
+                case NullPointerException missing -> "a piece of data is missing";
+                case IndexOutOfBoundsException missing -> "an item of a list is missing";
+                default -> cause.getClass().getSimpleName()
+                           + (cause.getMessage() == null ? "" : ". " + cause.getMessage());
+            };
+        }
+    }
+    
     /** An element of the file with a value that is not one of those it can have. */
     public static final class DataNotValid extends PGMXParserException {
         public DataNotValid(String elementName, String dataName, String written, Element element) {

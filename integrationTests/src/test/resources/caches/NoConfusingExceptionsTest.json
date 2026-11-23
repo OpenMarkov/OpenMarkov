@@ -168,6 +168,7 @@
     "PGMXParserException",
     "ParametersAreNotADistribution",
     "ParsingSourceException",
+    "PartCannotBeRead",
     "PartitionsAndProbabilitiesHaveDifferentSizes",
     "PotentialCannotBeConvertedToATable",
     "PotentialCannotBeConvertedToATableDueToVariable",
