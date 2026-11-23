@@ -40,7 +40,7 @@ class AStateSavedInExcelIsReadBackAsItWasTest {
                                                        "2.5", "-3");
 
     /** The states that the reader gives back as they are when they are written as numbers. */
-    private static final List<String> NUMBERS = List.of("1", "2.5", "-3");
+    private static final List<String> NUMBERS = List.of("12345678901", "1", "2.5", "-3");
 
     @ParameterizedTest @ValueSource(strings = {"xlsx", "xls"})
     void everyStateIsReadBackAndTheNumbersStayNumbers(String extension, @TempDir Path folder) throws Exception {

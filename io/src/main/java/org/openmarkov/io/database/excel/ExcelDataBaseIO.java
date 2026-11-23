@@ -10,7 +10,9 @@ package org.openmarkov.io.database.excel;
 
 import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -39,6 +41,7 @@ import org.openmarkov.core.model.network.VariableType;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -187,7 +190,7 @@ import java.util.Locale;
         return switch (typeOfTheValueOf(cell)) {
             case STRING -> cell.getRichStringCellValue().length() == 0 ? null : cell.getRichStringCellValue().getString();
             case BOOLEAN -> Boolean.toString(cell.getBooleanCellValue());
-            case NUMERIC -> stateNameOf(cell.getNumericCellValue());
+            case NUMERIC -> shown(cell);
             default -> null;
         };
     }
@@ -220,9 +223,30 @@ import java.util.Locale;
         }
     }
     
-    /** @return the name of the state that a numeric cell with {@code value} is read as */
+    /** Writes numbers and dates as Excel shows them, with a point for the decimals. */
+    private static final DataFormatter AS_EXCEL_SHOWS = new DataFormatter(Locale.ROOT);
+    
+    /** @return the number or the date of {@code cell} as the sheet shows it, with the format of the cell; null if it shows nothing */
+    private static String shown(Cell cell) {
+        CellStyle style = cell.getCellStyle();
+        if (style.getDataFormat() == 0) {
+            return stateNameOf(cell.getNumericCellValue());
+        }
+        String shown = AS_EXCEL_SHOWS.formatRawCellContents(cell.getNumericCellValue(), style.getDataFormat(),
+                                                            style.getDataFormatString()).strip();
+        return shown.isEmpty() ? null : shown;
+    }
+    
+    /**
+     * @return the name of the state that a numeric cell with {@code value} and without a format of its own is read
+     * as: a whole number with all its digits, where Excel would shorten the long ones to powers of ten, and any other
+     * as Excel shows it
+     */
     static String stateNameOf(double value) {
-        return value == Math.round(value) ? Integer.toString((int) value) : Double.toString(value);
+        if (Double.isFinite(value) && value == Math.rint(value)) {
+            return new BigDecimal(value).toBigInteger().toString();
+        }
+        return AS_EXCEL_SHOWS.formatRawCellContents(value, 0, "General");
     }
     
     /** @return the number to write for the state {@code stateName}, or {@code null} if it would not be read back as it is */
