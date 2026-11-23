@@ -185,6 +185,8 @@
                   value="The link from {parent.getName} to {child.getName} is part of a cycle with no event node. Every cycle of more than one node must contain an event node."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$ThereIsACycle"
                   value="The link {parent.getName} → {child.getName} closes a cycle."/>
+    <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$NodeHasMoreThanOneRelation"
+                  value="{node.getName} has {numRelations} probability or utility relations instead of one. Only the first is shown. To keep only that one, open it with «Edit probability» or «Edit utility» and press OK."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$VariableHasNoPotentials"
                   value="Variable {variable.getName} has no potentials."/>
     <Localization class="org.openmarkov.core.exception.ConstraintViolatedException$VariableNameIsAlreadyPresent"
@@ -386,6 +388,7 @@
     <Localization class="org.openmarkov.core.model.network.constraint.AllChanceVariablesHaveChancePotentials"
                   value="Chance variable without potential"/>
     <Localization class="org.openmarkov.core.model.network.constraint.DistinctLinks" value="No equal links allowed."/>
+    <Localization class="org.openmarkov.core.model.network.constraint.OneRelationPerNode" value="Only one relation per node allowed."/>
     <Localization class="org.openmarkov.core.model.network.constraint.DistinctVariableNames"
                   value="Variables have distinct names"/>
     <Localization class="org.openmarkov.core.model.network.constraint.MaxNumParents"

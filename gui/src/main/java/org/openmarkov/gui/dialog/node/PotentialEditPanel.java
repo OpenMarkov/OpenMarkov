@@ -137,6 +137,9 @@ public class PotentialEditPanel extends JPanel {
     
     private final @Nullable Potential originalPotential;
     
+    /** The relations of the node other than the one shown, which a network read from a file may bring. */
+    private final List<Potential> relationsNotShown;
+    
     private ArrayList<Runnable> onPotentialTypeChanges;
     
     
@@ -148,6 +151,8 @@ public class PotentialEditPanel extends JPanel {
         this.node = node;
         this.onPotentialTypeChanges = new ArrayList<>();
         Potential lastPotential = this.node.getPotential();
+        List<Potential> relations = this.node.getPotentials();
+        this.relationsNotShown = relations.size() > 1 ? relations.subList(1, relations.size()) : List.of();
         if (!readOnly && lastPotential != null) {
             this.originalPotential = this.node.getPotential().deepCopy(this.node.getProbNet());
         } else {
@@ -587,7 +592,7 @@ public class PotentialEditPanel extends JPanel {
         boolean potentialHasChanged = potentialHasChanged();
         PNEdit setPotentialEdit = this.generateSetPotentialEdit(this.originalPotential, this.node.getPotential());
         this.node.getProbNet().getPNESupport().closeSubEditHistory(CloseEditStackOptions.FORGET);
-        if (potentialHasChanged) {
+        if (potentialHasChanged || !this.relationsNotShown.isEmpty()) {
             setPotentialEdit.executeEdit();
         }
         return true;
@@ -605,6 +610,7 @@ public class PotentialEditPanel extends JPanel {
             return;
         }
         this.removePotentialOnClose(this.originalPotential);
+        this.relationsNotShown.forEach(this.node::addPotential);
         this.getPotentialPanel().close();
         this.node.getProbNet()
                  .getPNESupport()

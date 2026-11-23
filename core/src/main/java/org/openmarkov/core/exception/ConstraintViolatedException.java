@@ -22,6 +22,7 @@ import org.openmarkov.core.model.network.constraint.NoMixedParents;
 import org.openmarkov.core.model.network.constraint.NoMultipleLinks;
 import org.openmarkov.core.model.network.constraint.NoSelfLoop;
 import org.openmarkov.core.model.network.constraint.NoUtilityParent;
+import org.openmarkov.core.model.network.constraint.OneRelationPerNode;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.core.model.network.constraint.OnlyContinuousVariables;
@@ -231,6 +232,18 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
         }
         
         public final Node node;
+    }
+    
+    public static class NodeHasMoreThanOneRelation extends ConstraintViolatedException {
+        
+        public NodeHasMoreThanOneRelation(OneRelationPerNode constraint, Node node, int numRelations) {
+            super(constraint);
+            this.node = node;
+            this.numRelations = numRelations;
+        }
+        
+        public final Node node;
+        public final int numRelations;
     }
     
     public static class NodeHasMoreParentsThanAllowed extends ConstraintViolatedException {

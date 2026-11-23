@@ -8,6 +8,7 @@
 package org.openmarkov.core.model.network.type;
 
 import org.openmarkov.core.model.network.constraint.ConstraintBehavior;
+import org.openmarkov.core.model.network.constraint.OneRelationPerNode;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.core.model.network.constraint.OnlyDirectedLinks;
 import org.openmarkov.core.model.network.constraint.OnlyUndirectedLinks;
@@ -23,6 +24,7 @@ public final class MarkovNetworkType extends NetworkType {
 		overrideConstraintBehavior(OnlyChanceNodes.class, ConstraintBehavior.YES);
 		overrideConstraintBehavior(OnlyDirectedLinks.class, ConstraintBehavior.NO);
 		overrideConstraintBehavior(OnlyUndirectedLinks.class, ConstraintBehavior.YES);
+		overrideConstraintBehavior(OneRelationPerNode.class, ConstraintBehavior.NO);
 	}
 
 	// Methods

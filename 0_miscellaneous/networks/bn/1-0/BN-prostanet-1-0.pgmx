@@ -952,27 +952,11 @@
       </Potential>
       <Potential type="ProbTable">
         <Variables>
-          <Variable name="Cáncer de próstata" />
-          <Variable name="Cancer_o_c" />
-          <Variable name="Cancer_f_r" />
-        </Variables>
-        <Values>0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</Values>
-      </Potential>
-      <Potential type="ProbTable">
-        <Variables>
           <Variable name="Prostatitis crónica" />
           <Variable name="ETS" />
           <Variable name="Itus_uno" />
         </Variables>
         <Values>0.8 0.2 0.6 0.4 0.6 0.4 0.4 0.6</Values>
-      </Potential>
-      <Potential type="ProbTable">
-        <Variables>
-          <Variable name="Prostatitis crónica" />
-          <Variable name="ETS" />
-          <Variable name="Itus_uno" />
-        </Variables>
-        <Values>0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</Values>
       </Potential>
       <Potential type="ProbTable">
         <Variables>
@@ -1109,13 +1093,6 @@
           <Variable name="Obesidad" />
         </Variables>
         <Values>0.8 0.2 0.4 0.6</Values>
-      </Potential>
-      <Potential type="ProbTable">
-        <Variables>
-          <Variable name="Factores hormonales" />
-          <Variable name="Obesidad" />
-        </Variables>
-        <Values>0.5 0.5 0.5 0.5</Values>
       </Potential>
       <Potential type="ProbTable">
         <Variables>

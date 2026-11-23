@@ -127,6 +127,7 @@
     "NodeCannotBeSampled",
     "NodeCannotHaveMoreParents",
     "NodeHasMoreParentsThanAllowed",
+    "NodeHasMoreThanOneRelation",
     "NodeHasRepeatedLinks",
     "NodeIsNull",
     "NodeMustBeChance",

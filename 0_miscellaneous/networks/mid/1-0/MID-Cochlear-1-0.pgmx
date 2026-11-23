@@ -4086,39 +4086,6 @@
         </Branches>
       </Potential>
       <Potential type="Tree/ADD">
-        <Variables>
-          <Variable name="Processor 2 age" timeSlice="1" />
-          <Variable name="External device 2 failure" timeSlice="0" />
-          <Variable name="Processor 2 age" timeSlice="0" />
-        </Variables>
-        <TopVariable name="External device 2 failure" timeSlice="0" />
-        <Branches>
-          <Branch>
-            <States>
-              <State name="yes" />
-            </States>
-            <Potential type="Delta">
-              <Variables>
-                <Variable name="Processor 2 age" timeSlice="1" />
-              </Variables>
-              <State>0</State>
-            </Potential>
-          </Branch>
-          <Branch>
-            <States>
-              <State name="no" />
-            </States>
-            <Potential type="ProbTable">
-              <Variables>
-                <Variable name="Processor 2 age" timeSlice="1" />
-                <Variable name="Processor 2 age" timeSlice="0" />
-              </Variables>
-              <Values>0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
-            </Potential>
-          </Branch>
-        </Branches>
-      </Potential>
-      <Potential type="Tree/ADD">
         <Comment><![CDATA[<html>
   <head>
     
@@ -4282,39 +4249,6 @@
           <Variable name="Internal device 2 age" timeSlice="0" />
         </Variables>
         <State>0</State>
-      </Potential>
-      <Potential type="Tree/ADD">
-        <Variables>
-          <Variable name="Internal device 2 age" timeSlice="1" />
-          <Variable name="Internal device 2 failure" timeSlice="0" />
-          <Variable name="Internal device 2 age" timeSlice="0" />
-        </Variables>
-        <TopVariable name="Internal device 2 failure" timeSlice="0" />
-        <Branches>
-          <Branch>
-            <States>
-              <State name="yes" />
-            </States>
-            <Potential type="Delta">
-              <Variables>
-                <Variable name="Internal device 2 age" timeSlice="1" />
-              </Variables>
-              <State>0</State>
-            </Potential>
-          </Branch>
-          <Branch>
-            <States>
-              <State name="no" />
-            </States>
-            <Potential type="ProbTable">
-              <Variables>
-                <Variable name="Internal device 2 age" timeSlice="1" />
-                <Variable name="Internal device 2 age" timeSlice="0" />
-              </Variables>
-              <Values>0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0</Values>
-            </Potential>
-          </Branch>
-        </Branches>
       </Potential>
       <Potential type="Tree/ADD">
         <Variables>
