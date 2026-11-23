@@ -110,7 +110,7 @@ public class AmuaDTValidatorTest {
 
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> validator.determineAmuaDTType(ceaRoot));
 
-        assertEquals("Amua supports only one decision node.", exception.getMessage());
+        assertEquals("In a cost-effectiveness analysis, Amua supports only one decision node.", exception.getMessage());
     }
 
     @Test

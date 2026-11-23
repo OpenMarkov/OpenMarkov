@@ -16,7 +16,11 @@ import java.util.List;
 
 public class AmuaDTValidator {
 
+    private static final String ONLY_ONE_DECISION =
+            "In a cost-effectiveness analysis, Amua supports only one decision node.";
+
     private final List<Criterion> criteria;
+    /** How many decisions with options the tree has, and the first one found from the root down */
     private int decisionNodeCount = 0;
     private DecisionTreeNode decisionNode;
 
@@ -43,8 +47,12 @@ public class AmuaDTValidator {
             try {
                 decisionNodeCount = 0;
                 decisionNode = null;
-                hasValidStructure(treeNode, 1, true);
+                hasValidStructure(treeNode, true);
                 checkDecisionIsTheRoot(treeNode);
+                // Amua would solve a decision below another with the one willingness to pay that the file carries
+                if (decisionNodeCount > 1) {
+                    throw new IllegalStateException(ONLY_ONE_DECISION);
+                }
                 return AmuaModel.COST_EFFECTIVENESS_DT;
             } catch (IllegalStateException e) {
                 if (isCriticalError(e)) { // critical error
@@ -61,7 +69,8 @@ public class AmuaDTValidator {
             try {
                 decisionNodeCount = 0;
                 decisionNode = null;
-                hasValidStructure(treeNode, 1, false);
+                // Amua solves the decisions below the first one by their best option, as OpenMarkov does
+                hasValidStructure(treeNode, false);
                 checkDecisionIsTheRoot(treeNode);
                 return AmuaModel.UNICRITERIA_DT;
             } catch (IllegalStateException e) {
@@ -83,29 +92,27 @@ public class AmuaDTValidator {
      * Performs DFS traversal to validate the tree structure.
      *
      * @param node current node.
-     * @param maxDecisionNodes maximum allowed decision nodes.
      * @param isCE whether CE structure is expected.
      * @throws IllegalStateException if the subtree is invalid.
      */
-    private void hasValidStructure(DecisionTreeNode node, int maxDecisionNodes, boolean isCE){
-        isValidNode(node, maxDecisionNodes, isCE);
+    private void hasValidStructure(DecisionTreeNode node, boolean isCE){
+        isValidNode(node, isCE);
         for (DecisionTreeVisualNode child : node.getChildren()) {
             if (child instanceof DecisionTreeBranch branch) {
-                hasValidStructure(branch.getChild(), maxDecisionNodes, isCE);
+                hasValidStructure(branch.getChild(), isCE);
             }
         }
     }
 
 
     /**
-     * Checks if a single node is valid in Amua.
+     * Checks if a single node is valid in Amua, and counts it if it is a decision with options.
      *
      * @param node current node.
-     * @param maxDecisionNodes maximum allowed decision nodes.
      * @param isCE whether CE structure is expected.
      * @throws IllegalStateException if the node is invalid.
      */
-    private void isValidNode(DecisionTreeNode node, int maxDecisionNodes, boolean isCE) {
+    private void isValidNode(DecisionTreeNode node, boolean isCE) {
         // validate the kind of evaluation the node belongs to
         if (isCE && node.getEvaluationType() != EvaluationType.CE) {
             throw new IllegalStateException("Invalid node type for Cost-Effectiveness tree.");
@@ -134,10 +141,9 @@ public class AmuaDTValidator {
         // A decision without branches ends the tree in Amua, as a terminal node
         if (type == NodeType.DECISION && !node.getChildBranches().isEmpty()) {
             decisionNodeCount++;
-            if (decisionNodeCount > maxDecisionNodes) {
-                throw new IllegalStateException("Amua supports only one decision node.");
+            if (decisionNode == null) {
+                decisionNode = node;
             }
-            decisionNode = node;
         }
     }
 
@@ -145,7 +151,7 @@ public class AmuaDTValidator {
     /**
      * Checks that the tree begins with its decision, whose options Amua takes as the strategies to compare.
      *
-     * @throws IllegalStateException if the tree has no decision or the decision is below the root.
+     * @throws IllegalStateException if the tree has no decision or its first decision is below the root.
      */
     private void checkDecisionIsTheRoot(DecisionTreeNode root) {
         if (decisionNode == null) {
@@ -181,7 +187,7 @@ public class AmuaDTValidator {
      */
     private boolean isCriticalError(IllegalStateException e) {
         String msg = e.getMessage();
-        return msg != null && (msg.contains("Unsupported node type") || msg.contains("Amua supports only one decision node."));
+        return msg != null && (msg.contains("Unsupported node type") || msg.equals(ONLY_ONE_DECISION));
     }
 
 }
