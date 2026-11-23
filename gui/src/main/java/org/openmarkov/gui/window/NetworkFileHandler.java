@@ -36,6 +36,7 @@ import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.NetworkCurrency;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.io.probmodel.reader.TablesAFileLeavesOut;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.core.model.network.potential.ColumnsThatDoNotAddUpToOne;
@@ -245,6 +246,15 @@ public class NetworkFileHandler {
             if (!schemaProblems.isEmpty()) {
                 this.showColumns(netReadFrom, schemaProblems, "FileDoesNotFollowTheSchema");
             }
+        }
+        List<String> tablesLeftOut = switch (source) {
+            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile ->
+                    TablesAFileLeavesOut.in(sourceFile.file().toURI().toURL());
+            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> TablesAFileLeavesOut.in(sourceURL.url());
+            case NetworkEditorPanel.NetworkSource.NoSource noSource -> List.<String>of();
+        };
+        if (!tablesLeftOut.isEmpty()) {
+            this.showColumns(netReadFrom, tablesLeftOut, "TablesLeftOutOfTheFile");
         }
         List<String> wrongColumns = ColumnsThatDoNotAddUpToOne.in(netReadFrom);
         if (!wrongColumns.isEmpty()) {

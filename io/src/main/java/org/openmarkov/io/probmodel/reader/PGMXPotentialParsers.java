@@ -114,11 +114,14 @@ public class PGMXPotentialParsers {
                                                               List<Variable> variables)
             throws PGMXParserException.WrongNumberOfValues {
         Element xmlRootTable = xmlPotential.getChild(XMLTags.VALUES.toString());
-        double[] table = PGMXReader_0_2.parseDoubles(xmlRootTable.getTextNormalize());
         ExactDistrPotential exactDistrPotential = new ExactDistrPotential(variables, xmlRole);
-        PGMXReader_0_2.checkNumberOfValues(table.length, exactDistrPotential.getTablePotential().getValues().length,
-                                           PGMXReader_0_2.relationOf(variables), xmlRootTable);
-        exactDistrPotential.getTablePotential().setValues(table);
+        // A table without numbers is left with its zeros; TablesAFileLeavesOut tells of it
+        if (xmlRootTable != null) {
+            double[] table = PGMXReader_0_2.parseDoubles(xmlRootTable.getTextNormalize());
+            PGMXReader_0_2.checkNumberOfValues(table.length, exactDistrPotential.getTablePotential().getValues().length,
+                                               PGMXReader_0_2.relationOf(variables), xmlRootTable);
+            exactDistrPotential.getTablePotential().setValues(table);
+        }
         Element xmlRootUncertainParameters = xmlPotential.getChild(XMLTags.UNCERTAIN_PARAMETERS.toString());
         Element xmlRootUncertainValues = xmlPotential.getChild(XMLTags.UNCERTAIN_VALUES.toString());
         if (xmlRootUncertainValues != null) {
