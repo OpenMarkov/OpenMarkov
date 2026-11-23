@@ -161,6 +161,10 @@
         <Title value="Tables that the file leaves out"/>
         <Text value="The file of the network &quot;~&quot; leaves out these tables, and they have been filled in as said. Check them before using the network."/>
     </TablesLeftOutOfTheFile>
+    <RelevancesThatAreNotNumbers>
+        <Title value="Relevances that are not numbers"/>
+        <Text value="The file of the network &quot;~&quot; gives these nodes a relevance that is not a number. They have been opened with the relevance by default."/>
+    </RelevancesThatAreNotNumbers>
     <ColumnsDoNotAddUpToOne>
         <Title value="Probabilities that do not add up to one"/>
         <Text value="These probability columns of the network &quot;~&quot; do not add up to one. Sampling and exact inference will give different results."/>

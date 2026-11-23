@@ -65,6 +65,8 @@
                   value="This operation requires more memory than available in your system."/>
     <Localization class="org.openmarkov.gui.exception.OtherPropertyAlreadyExistsException"
                   value="There is already a property named {propertyName}."/>
+    <Localization class="org.openmarkov.gui.exception.OtherPropertyNameIsUsedByTheProgramException"
+                  value="A property cannot be named {propertyName}: the program keeps its own data under that name in the files."/>
     <Localization class="org.openmarkov.gui.exception.PreResolutionNodeInInferenceException"
                   value="Node {node} has a Pre-Resolution Finding that cannot be modified in Inference Mode."/>
     <Localization class="org.openmarkov.gui.exception.RemovingAllStatesIsNotAllowedException"

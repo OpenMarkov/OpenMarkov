@@ -886,9 +886,11 @@ public class PGMXReader_0_2 {
         if (properties.get(XMLTags.TITLE.toString()) != null) {
             properties.remove(XMLTags.TITLE.toString());
         }
+        // A relevance that is not a number is left out; RelevancesThatAreNotNumbers tells of it
         if (properties.get(XMLTags.RELEVANCE.toString()) != null) {
             String relevance = properties.get(XMLTags.RELEVANCE.toString());
-            if (Double.parseDouble(relevance) == Node.DEFAULT_RELEVANCE) {
+            if (!RelevancesThatAreNotNumbers.isANumber(relevance)
+                    || Double.parseDouble(relevance) == Node.DEFAULT_RELEVANCE) {
                 properties.remove(XMLTags.RELEVANCE.toString());
             }
         }
@@ -903,7 +905,6 @@ public class PGMXReader_0_2 {
             node.setPurpose(properties.get(XMLTags.PURPOSE.toString()));
             properties.remove(XMLTags.PURPOSE.toString());
         }
-        // TODO revisar el posible error al convertir un string a número
         if (properties.get(XMLTags.RELEVANCE.toString()) != null) {
             node.setRelevance(Double.parseDouble(properties.get(XMLTags.RELEVANCE.toString())));
             properties.remove(XMLTags.RELEVANCE.toString());
@@ -1079,24 +1080,7 @@ public class PGMXReader_0_2 {
             for (Element xmlProperty : xmlProperties) { // additionalProperties
                 String key = requiredName(xmlProperty, "a property of " + nodeNameOf(variableElement));
                 String value = xmlProperty.getAttributeValue(XMLAttributes.VALUE.toString());
-                // try to discover the property type (double, boolean...)
-                try { // try parse double
-                    Double.parseDouble(value);
-                    properties.put(key, value);
-                } catch (NumberFormatException nd) {
-                    try { // try parse int
-                        Integer.parseInt(value);
-                        properties.put(key, value);
-                    } catch (NumberFormatException ni) { // try parse boolean
-                        boolean bTrue = Boolean.parseBoolean(value);
-                        boolean bFalse = "false".equalsIgnoreCase(value);
-                        if (bTrue || bFalse) {
-                            properties.put(key, Boolean.toString(bTrue));
-                        } else { // Nor double nor integer nor boolean -> String
-                            properties.put(key, value);
-                        }
-                    }
-                }
+                properties.put(key, value);
             }
         }
         return properties;

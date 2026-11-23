@@ -36,6 +36,7 @@ import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.NetworkCurrency;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.io.probmodel.reader.RelevancesThatAreNotNumbers;
 import org.openmarkov.io.probmodel.reader.TablesAFileLeavesOut;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
@@ -255,6 +256,15 @@ public class NetworkFileHandler {
         };
         if (!tablesLeftOut.isEmpty()) {
             this.showColumns(netReadFrom, tablesLeftOut, "TablesLeftOutOfTheFile");
+        }
+        List<String> wrongRelevances = switch (source) {
+            case NetworkEditorPanel.NetworkSource.SourceFile sourceFile ->
+                    RelevancesThatAreNotNumbers.in(sourceFile.file().toURI().toURL());
+            case NetworkEditorPanel.NetworkSource.SourceURL sourceURL -> RelevancesThatAreNotNumbers.in(sourceURL.url());
+            case NetworkEditorPanel.NetworkSource.NoSource noSource -> List.<String>of();
+        };
+        if (!wrongRelevances.isEmpty()) {
+            this.showColumns(netReadFrom, wrongRelevances, "RelevancesThatAreNotNumbers");
         }
         List<String> wrongColumns = ColumnsThatDoNotAddUpToOne.in(netReadFrom);
         if (!wrongColumns.isEmpty()) {

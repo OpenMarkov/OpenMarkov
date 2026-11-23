@@ -11,6 +11,8 @@ import org.openmarkov.core.action.base.PNEdit;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.gui.exception.OtherPropertyAlreadyExistsException;
+import org.openmarkov.gui.exception.OtherPropertyNameIsUsedByTheProgramException;
+import org.openmarkov.io.probmodel.strings.NodePropertiesOfTheProgram;
 import org.openmarkov.java.collectionsUtils.arrayUtils.ArrayUtils;
 import org.openmarkov.java.collectionsUtils.arrayUtils.MapUtils;
 
@@ -80,9 +82,11 @@ public class OtherPropertyEdit extends PNEdit {
         this.otherPropertyAction = otherPropertyAction;
     }
     
-    @Override protected void doEdit() throws OtherPropertyAlreadyExistsException {
+    @Override protected void doEdit()
+            throws OtherPropertyAlreadyExistsException, OtherPropertyNameIsUsedByTheProgramException {
         switch (this.otherPropertyAction) {
             case "ADD" -> {
+                this.checkTheProgramDoesNotUseTheName(this.newProperty[0]);
                 this.newProperties = new LinkedHashMap<>(this.oldProperties);
                 this.newProperties.put(this.newProperty[0], this.newProperty[1]);
             }
@@ -94,6 +98,9 @@ public class OtherPropertyEdit extends PNEdit {
             case "RENAME" -> {
                 var newPropertiesArray = MapUtils.mapToArray(this.oldProperties);
                 String key = this.newProperty[0];
+                if (!key.equals(newPropertiesArray[this.propertyIndex].getKey())) {
+                    this.checkTheProgramDoesNotUseTheName(key);
+                }
                 var indexOfRepeatedKey = IntStream.range(0, newPropertiesArray.length)
                                                   .filter(i -> Objects.equals(newPropertiesArray[i].getKey(), key))
                                                   .findFirst();
@@ -115,6 +122,13 @@ public class OtherPropertyEdit extends PNEdit {
             }
         }
         this.setProperties(this.newProperties);
+    }
+    
+    /** A property of a node cannot have a name under which the files keep data of the program. */
+    private void checkTheProgramDoesNotUseTheName(String name) throws OtherPropertyNameIsUsedByTheProgramException {
+        if (this.node != null && NodePropertiesOfTheProgram.NAMES.contains(name)) {
+            throw new OtherPropertyNameIsUsedByTheProgramException(name, this);
+        }
     }
     
     @Override public void redo() {

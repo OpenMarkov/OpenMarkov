@@ -163,6 +163,7 @@
     "OnlyUndirectedLinksCannotHaveParents",
     "OpenMarkovException",
     "OtherPropertyAlreadyExistsException",
+    "OtherPropertyNameIsUsedByTheProgramException",
     "PGMXInvalid",
     "PGMXParserException",
     "ParametersAreNotADistribution",
