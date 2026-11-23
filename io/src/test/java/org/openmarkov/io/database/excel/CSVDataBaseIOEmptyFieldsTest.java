@@ -53,7 +53,7 @@ public class CSVDataBaseIOEmptyFieldsTest {
         assertEquals("B", variables.get(1).getName());
         assertEquals("C", variables.get(2).getName());
 
-        assertEquals("", stateAt(db, 0, 0), "column A of the first row is the empty field");
+        assertEquals("?", stateAt(db, 0, 0), "column A of the first row is the empty field, an unknown value");
         assertEquals("male", stateAt(db, 0, 1), "column B must be 'male', not shifted into A");
         assertEquals("30", stateAt(db, 0, 2), "column C must be '30'");
     }
@@ -64,6 +64,17 @@ public class CSVDataBaseIOEmptyFieldsTest {
 
         assertEquals("x", stateAt(db, 0, 0));
         assertEquals("male", stateAt(db, 0, 1));
-        assertEquals("", stateAt(db, 0, 2), "column C of the first row is the empty field");
+        assertEquals("?", stateAt(db, 0, 2), "column C of the first row is the empty field, an unknown value");
+    }
+
+    @Test public void anEmptyFieldIsTheSameUnknownValueAsAQuestionMark() throws Exception {
+        CaseDatabase db = loadCsv("A,B\nyes,\nno,?\nyes,  \nno,x\nyes,NA\n");
+
+        List<String> statesOfB = java.util.Arrays.stream(db.getVariables().get(1).getStates())
+                                                 .map(org.openmarkov.core.model.network.State::getName).sorted().toList();
+        assertEquals(List.of("?", "NA", "x"), statesOfB);
+        assertEquals("?", stateAt(db, 0, 1));
+        assertEquals("?", stateAt(db, 1, 1));
+        assertEquals("?", stateAt(db, 2, 1));
     }
 }

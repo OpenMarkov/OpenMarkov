@@ -273,6 +273,10 @@ import java.util.Scanner;
                 default:
                     break;
             }
+            // An empty field is an unknown value, as a blank cell of an Excel sheet
+            if (stateVariable.isBlank()) {
+                stateVariable = "?";
+            }
             Map<String, Integer> variableStates = variablesStates.get(numVariable);
             Integer stateNumber = variableStates.get(stateVariable);
             if (stateNumber == null) {
