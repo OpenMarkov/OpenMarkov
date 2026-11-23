@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.jdom2.Element;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.UnreachableException;
 import org.openmarkov.core.expression.VariableExpression;
@@ -81,7 +82,11 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
      * {@code PGMXReader_0_2#getPotential(Element, ProbNet)}).
      */
     @Override protected Potential getPotential(Element xmlPotential, ProbNet probNet) throws PGMXParserException {
-        return this.getPotential(xmlPotential, probNet, PotentialRole.CONDITIONAL_PROBABILITY);
+        try {
+            return this.getPotential(xmlPotential, probNet, PotentialRole.CONDITIONAL_PROBABILITY);
+        } catch (InvalidArgumentException invalid) {
+            throw notFinite(invalid, xmlPotential);
+        }
     }
     
     /**
@@ -597,7 +602,7 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         FunctionPotential initTimeFunction = (FunctionPotential) PGMXPotentialParsers.getFunctionPotential(xmlPotential, probNet, xmlRole, variables);
         String lifeTableIntervalsStr = xmlPotential.getChildText(XMLTags.SLICES.toString());
         String[] timesString = lifeTableIntervalsStr.split("\\s+");
-        double[] lifeTableIntervals = Arrays.stream(timesString).mapToDouble(Double::parseDouble).toArray();
+        double[] lifeTableIntervals = Arrays.stream(timesString).mapToDouble(PGMXReader_0_2::finiteNumber).toArray();
         Element xmlValues = xmlPotential.getChild(XMLTags.VALUES.toString());
         String[] valuesString = xmlValues.getText().split("\\s+");
         boolean useRates = Boolean.parseBoolean(xmlPotential.getChildText(XMLTags.RATES.toString()));

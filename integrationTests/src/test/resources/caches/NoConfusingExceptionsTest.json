@@ -146,6 +146,7 @@
     "NotSupportedOperationException",
     "NothingToCopy",
     "NumOfPotentialsMismatchesNumOfUtilities",
+    "NumberNotFinite",
     "NumericVariableNeedsAFinding",
     "OnlyAtemporalVariablesAllowed",
     "OnlyChanceNodesAllowed",

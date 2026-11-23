@@ -283,6 +283,19 @@ public abstract sealed class PGMXParserException extends ProbNetParserException 
         public final String variableName;
     }
     
+    /** A number of the relation of a node that is NaN or an infinite. */
+    public static final class NumberNotFinite extends PGMXParserException {
+        public NumberNotFinite(String nodeName, String value, Element element) {
+            super(element);
+            this.nodeName = nodeName;
+            this.value = value;
+        }
+        
+        public final String nodeName;
+        /** The value as the file writes it. */
+        public final String value;
+    }
+    
     /** The precision of a variable that is not a finite number not below 0, the only ones its values can be rounded to. */
     public static final class PrecisionOutOfRange extends PGMXParserException {
         public PrecisionOutOfRange(String variableName, String value, Element element) {

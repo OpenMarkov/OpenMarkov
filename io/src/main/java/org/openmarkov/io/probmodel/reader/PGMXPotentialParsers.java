@@ -266,7 +266,7 @@ public class PGMXPotentialParsers {
         Element xmlState = xmlPotential.getChild(XMLTags.STATE.toString());
         Element xmlStateIndex = xmlPotential.getChild(XMLTags.STATE_INDEX.toString());
         if (xmlNumericValue != null) {
-            double value = Double.parseDouble(xmlNumericValue.getText());
+            double value = PGMXReader_0_2.finiteNumber(xmlNumericValue.getText());
             return new DeltaPotential(variables, role, value);
         } else if (xmlState != null) {
             return new DeltaPotential(variables, role, stateNamed(variables.getFirst(), xmlState));
@@ -303,7 +303,7 @@ public class PGMXPotentialParsers {
         Element xmlTheta = xmlPotential.getChild(XMLTags.THETA.toString());
         if ((xmlNumberOfCases != null) && (xmlTheta != null)) {
             int N = PGMXReader_0_2.parseInteger(xmlNumberOfCases.getText());
-            double theta = Double.parseDouble(xmlTheta.getText());
+            double theta = PGMXReader_0_2.finiteNumber(xmlTheta.getText());
             return new BinomialPotential(variables, role, N, theta);
         }
         throw new PGMXParserException.BinomialPotentialMissingCasesAndProbabilities(role, xmlPotential);

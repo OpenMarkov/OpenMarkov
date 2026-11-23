@@ -11,6 +11,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.jdom2.DataConversionException;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.openmarkov.core.exception.InvalidArgumentException;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.located.LocatedJDOMFactory;
@@ -1603,7 +1604,7 @@ public class PGMXReader_0_2 {
             String[] arguments = xmlUncertainValue.getTextNormalize().split(" ");
             double[] parameters = new double[arguments.length];
             for (int i = 0; i < parameters.length; ++i) {
-                parameters[i] = Double.parseDouble(arguments[i]);
+                parameters[i] = finiteNumber(arguments[i]);
             }
             ProbDensFunction function = ProbDensFunctionManager.getUniqueInstance()
                                                                .newInstance(functionName, parameters);
@@ -1622,7 +1623,45 @@ public class PGMXReader_0_2 {
      */
     protected Potential getPotential(Element xmlPotential, ProbNet probNet)
             throws PGMXParserException {
-        return getPotential(xmlPotential, probNet, getPotentialRole(xmlPotential));
+        try {
+            return getPotential(xmlPotential, probNet, getPotentialRole(xmlPotential));
+        } catch (InvalidArgumentException invalid) {
+            throw notFinite(invalid, xmlPotential);
+        }
+    }
+    
+    private static final String NOT_FINITE = "it is not a finite number";
+    
+    /**
+     * @return the number that {@code written} writes
+     *
+     * @throws InvalidArgumentException if it is NaN or an infinite; {@link #notFinite} tells it from any other
+     */
+    static double finiteNumber(String written) {
+        double number = Double.parseDouble(written);
+        if (!Double.isFinite(number)) {
+            throw new InvalidArgumentException((Object) written.strip(), NOT_FINITE);
+        }
+        return number;
+    }
+    
+    /**
+     * @return the refusal of the file for the number that {@link #finiteNumber} did not take in {@code xmlPotential}
+     *
+     * @throws InvalidArgumentException {@code invalid} itself, if it does not come from {@link #finiteNumber}
+     */
+    static PGMXParserException.NumberNotFinite notFinite(InvalidArgumentException invalid, Element xmlPotential) {
+        if (!NOT_FINITE.equals(invalid.reason)) {
+            throw invalid;
+        }
+        return new PGMXParserException.NumberNotFinite(nodeOfTheRelation(xmlPotential), String.valueOf(invalid.value),
+                                                       xmlPotential);
+    }
+    
+    /** @return the name of the node of {@code xmlPotential}: its utility variable if it has one, else its first variable */
+    static String nodeOfTheRelation(Element xmlPotential) {
+        Element utilityVariable = xmlPotential.getChild(XMLTags.UTILITY_VARIABLE.toString());
+        return utilityVariable == null ? firstVariableOf(xmlPotential) : nodeNameOf(utilityVariable);
     }
     
     /**
@@ -1816,7 +1855,7 @@ public class PGMXReader_0_2 {
         double[] table = new double[sValues.length];
         int i = 0;
         for (String sValue : sValues) {
-            table[i++] = Double.parseDouble(sValue);
+            table[i++] = finiteNumber(sValue);
         }
         return table;
     }
