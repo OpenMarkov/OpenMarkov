@@ -172,6 +172,14 @@
         <Title value="Relevances that are not numbers"/>
         <Text value="The file of the network &quot;~&quot; gives these nodes a relevance that is not a number. They have been opened with the relevance by default."/>
     </RelevancesThatAreNotNumbers>
+    <EvidenceLeftOut>
+        <Title value="Evidence left out"/>
+        <Text value="The evidence of the file has been loaded for the network &quot;~&quot;, except for what follows, which gives no finding."/>
+    </EvidenceLeftOut>
+    <NoEvidenceLoaded>
+        <Title value="No evidence loaded"/>
+        <Text value="The file gives no finding for the network &quot;~&quot;, so no evidence has been loaded. This is why:"/>
+    </NoEvidenceLoaded>
     <ColumnsDoNotAddUpToOne>
         <Title value="Probabilities that do not add up to one"/>
         <Text value="These probability columns of the network &quot;~&quot; do not add up to one. Sampling and exact inference will give different results."/>

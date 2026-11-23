@@ -525,21 +525,13 @@ public class NetworkFileHandler {
                 // The file starts with a byte order mark, and the user did not want it removed
                 return;
             }
-            List<Variable> variables = caseDatabase.getVariables();
-            int[][] cases = caseDatabase.getCases();
-            for (int i = 0; i < cases.length; ++i) {
-                EvidenceCase newEvidenceCase = new EvidenceCase();
-                for (int j = 0; j < cases[i].length; ++j) {
-                    if (!variables.get(j).getStateName(cases[i][j]).isEmpty()
-                            && !variables.get(j).getStateName(cases[i][j]).equals("?")) {
-                        Variable variable = currentNet.getVariable(variables.get(j).getName());
-                        int stateIndex = variable.getStateIndex(variables.get(j)
-                                                                         .getStateName(cases[i][j]));
-                        if (stateIndex == -1) continue;
-                        newEvidenceCase.addFinding(new Finding(variable, stateIndex));
-                    }
-                }
+            EvidenceOfADatabase evidence = EvidenceOfADatabase.of(currentNet, caseDatabase);
+            for (EvidenceCase newEvidenceCase : evidence.cases()) {
                 currentNetworkEditorPanel.getEditorPanel().getEvidenceManager().addNewEvidenceCase(newEvidenceCase);
+            }
+            if (!evidence.leftOut().isEmpty()) {
+                this.showColumns(currentNet, evidence.leftOut(),
+                                 evidence.cases().isEmpty() ? "NoEvidenceLoaded" : "EvidenceLeftOut");
             }
             UserPreferences.LATEST_LOADED_EVIDENCE_FORMAT.set(((FileFilterByExtension<?>) evidenceOMFileChooser.getFileFilter()).getExtensions()
                                                                                                                                 .getFirst());
