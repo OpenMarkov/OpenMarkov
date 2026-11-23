@@ -14,6 +14,7 @@ import org.openmarkov.core.io.database.ByteOrderMark;
 import org.openmarkov.core.io.database.CaseDatabaseReader;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.database.CaseDatabase;
+import org.openmarkov.io.database.excel.ErrorCellsOfASheet;
 
 import javax.swing.JOptionPane;
 import java.awt.Component;
@@ -34,12 +35,41 @@ public final class CaseDatabaseLoading {
     }
 
     /**
-     * @return the database of the file, or null if it starts with a byte order mark and the user does not want it
-     * removed
+     * @return the database of the file, or null if the user does not want it opened: because it has cells with an
+     * error and they do not want them read as unknown values, or because it starts with a byte order mark and they
+     * do not want it removed
      */
     public static @Nullable CaseDatabase load(Component parent, CaseDatabaseReader reader, File file)
             throws IOException, ParsingSourceException, EmptyDatabaseException {
+        if (!userAgreesToReadTheErrorCellsAsUnknown(parent, file)) {
+            return null;
+        }
         return load(reader, file, markedFile -> userAgreesToRemoveTheMark(parent, markedFile));
+    }
+
+    /**
+     * Tells the user where the first cell with an error of an Excel file is, and how many there are, and asks
+     * whether to read them as unknown values.
+     *
+     * @return whether the file is to be read: it has no such cells, or the user agrees
+     */
+    public static boolean userAgreesToReadTheErrorCellsAsUnknown(Component parent, File file) {
+        ErrorCellsOfASheet errors = ErrorCellsOfASheet.in(file);
+        if (errors.count() == 0) {
+            return true;
+        }
+        StringDatabase stringDatabase = StringDatabase.getUniqueInstance();
+        String[] options = { stringDatabase.getString("ErrorCells.ReadAsUnknown"),
+                             stringDatabase.getString("ErrorCells.DoNotOpen") };
+        return JOptionPane.showOptionDialog(parent, textAbout(errors, file), stringDatabase.getString("ErrorCells.Title"),
+                                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,
+                                            options[0]) == JOptionPane.YES_OPTION;
+    }
+
+    /** @return what the user is told about the cells with an error of {@code file} */
+    static String textAbout(ErrorCellsOfASheet errors, File file) {
+        String key = errors.count() == 1 ? "ErrorCells.TextOne" : "ErrorCells.TextSeveral";
+        return StringDatabase.getUniqueInstance().getString(key).formatted(file.getName(), errors.first(), errors.count());
     }
 
     /** @param removeTheMark whether the user agrees to save the file without its byte order mark */

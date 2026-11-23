@@ -97,6 +97,13 @@
         <Title value="Byte order mark"/>
         <Text value="«%s» starts with a byte order mark: three invisible bytes that some programs,&#10;such as older versions of Windows Notepad, write at the start of a file, and that this format does not allow.&#10;Do you want to save the file without them, overwriting it, and open it?"/>
     </ByteOrderMark>
+    <ErrorCells>
+        <Title value="Cells with an error"/>
+        <TextOne value="The cell %2$s of «%1$s» has an error, such as #N/A.&#10;It can be read as an unknown value («?»)."/>
+        <TextSeveral value="«%1$s» has %3$d cells with an error, such as #N/A. The first one is %2$s.&#10;They can be read as unknown values («?»)."/>
+        <ReadAsUnknown value="Read as unknown"/>
+        <DoNotOpen value="Do not open the file"/>
+    </ErrorCells>
     <RepeatedLifeTableTime>
         <Title value="Repeated time"/>
         <Text value="Another row of the life table already starts at this time"/>

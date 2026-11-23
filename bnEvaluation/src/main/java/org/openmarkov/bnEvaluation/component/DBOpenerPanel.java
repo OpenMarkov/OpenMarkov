@@ -87,6 +87,9 @@ public class DBOpenerPanel extends JPanel {
     }
 
     private void load(File file) {
+        if (!CaseDatabaseLoading.userAgreesToReadTheErrorCellsAsUnknown(this, file)) {
+            return;
+        }
         Window window = SwingUtilities.getWindowAncestor(this);
         // Load off the event-dispatch thread so the window stays responsive; a read error becomes a
         // message instead of crashing the application. A file that starts with a byte order mark comes

@@ -6,6 +6,7 @@ import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.exception.EmptyDatabaseException;
 import org.openmarkov.core.exception.ParsingSourceException;
@@ -32,112 +33,9 @@ import java.util.HashMap;
 @CaseDatabaseFormat(extension = "xls", name = "OldExcel") public class OldExcelDataBaseIO
         extends ExcelDataBaseIO {
     
-    @Override
-    public @NotNull CaseDatabase load(File file)
-            throws IOException, EmptyDatabaseException, ParsingSourceException.RepeatedVariableNames {
-        /* Each field stores an ArrayList with the StateNames of the
-         * corresponding variable */
-        
-        //create a POIFSFileSystem object to read the data
-        POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
-        
-        try (
-                // create a workbook out of the input stream
-                HSSFWorkbook wb = new HSSFWorkbook(fs);
-        ) {
-            // get a reference to the worksheet
-            HSSFSheet sheet = wb.getSheetAt(0);
-            
-            // number of rows and columns
-            int rows = sheet.getPhysicalNumberOfRows();
-            if (rows == 0) {
-                throw new EmptyDatabaseException(file.getName());
-            }
-            int numVariables = sheet.getRow(0).getPhysicalNumberOfCells();
-            List<State>[] variableStates = (ArrayList<State>[]) new ArrayList[numVariables];
-            List<Map<String, Integer>> stateIndexes = new ArrayList<>();
-            
-            // the first row contains the names of the variables
-            HSSFRow row = sheet.getRow(0);
-            List<String> variableNames = new ArrayList<String>();
-            for (int i = 0; i < numVariables; i++) {
-                variableNames.add(row.getCell(i).getRichStringCellValue().getString());
-                variableStates[i] = new ArrayList<State>();
-                stateIndexes.add(new HashMap<>());
-            }
-            
-            // Gets a int[][] variable that represents the excel file.
-            // The first coordinate is the variable index and the second
-            // is the row index of the excel datasheet. (IT'S THE OTHER WAY)
-            // A cell contains the StateName index corresponding to
-            // the String in the excel file cell
-            List<int[]> rowCases = new ArrayList<>();
-            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-                row = sheet.getRow(i);
-                if (row != null && ExcelDataBaseIO.hasAValue(row, numVariables)) {
-                    int[] aCase = new int[numVariables];
-                    for (int j = 0; j < numVariables; j++) {
-                        HSSFCell cell = row.getCell(j);
-                        /*
-                         * we can have a string or an integer. If we have an absent
-                         * value, cell is null
-                         */
-                        /* EXTERNAL LIBRARY NOTE:
-                         * Apache POI is expected to recover getCellType() on version 4.0.
-                         * When it happens, switch the the three if lines for the commented ones.
-                         */
-                        // if ((cell == null) || (cell.getCellType() == cell.CELL_TYPE_BLANK))
-                        String stateName;
-                        if ((cell == null) || (cell.getCellType() == CellType.BLANK))
-                            stateName = "?";
-                            
-                            // else if (cell.getCellType() == HSSFCell.CELL_TYPE_STRING) {
-                        else if (cell.getCellType() == CellType.STRING) {
-                            if (cell.getRichStringCellValue().length() == 0)
-                                stateName = "?";
-                            else
-                                stateName = cell.getRichStringCellValue().getString();
-                            
-                            // } else if (cell.getCellType() == HSSFCell.CELL_TYPE_BOOLEAN) {
-                        } else if (cell.getCellType() == CellType.BOOLEAN) {
-                            stateName = Boolean.toString(cell.getBooleanCellValue());
-                        } else {
-                            stateName = ExcelDataBaseIO.stateNameOf(cell.getNumericCellValue());
-                        }
-                        aCase[j] = ExcelDataBaseIO.findVariableStateIndexOrCreate(variableStates[j], stateIndexes.get(j), stateName);
-                    }
-                    rowCases.add(aCase);
-                }
-            }
-            int[][] cases = rowCases.toArray(new int[0][]);
-            
-            /* Creation of the probNet. The probNet only contains variables but
-             * no links. */
-            ProbNet probNet = new ProbNet(BayesianNetworkType.getUniqueInstance());
-            LinkedHashMap<String, String> ioNet = new LinkedHashMap<String, String>();
-            ioNet.put("Name", file.getName());
-            int i = 0;
-            for (String variableName : variableNames) {
-                LinkedHashMap<String, String> infoNode = new LinkedHashMap<String, String>();
-                infoNode.put("Title", variableName);
-                infoNode.put("NodeType", NodeType.CHANCE.name());
-                infoNode.put("TypeOfVariable", VariableType.FINITE_STATES.name());
-                infoNode.put("CoordinateX", "0");
-                infoNode.put("CoordinateY", "0");
-                infoNode.put("UseDefaultStates", "false");
-                State[] aux = new State[1];
-                Variable variable = new Variable(variableName, variableStates[i].toArray(aux));
-                Node node = probNet.addNode(variable, NodeType.CHANCE);
-                node.setAdditionalProperties(infoNode);
-                infoNode.put("Name", variableName);
-                i++;
-            }
-            probNet.setAdditionalProperties(ioNet);
-            return CaseDatabaseReader.accepted(file, new CaseDatabase(probNet.getVariables(), cases));
-        }
+    @Override protected Workbook openWorkbook(FileInputStream stream) throws IOException {
+        return new HSSFWorkbook(stream);
     }
-    
-
     
     @Override
     public void save(File file, CaseDatabase database) throws IOException {

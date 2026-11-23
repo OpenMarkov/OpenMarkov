@@ -215,6 +215,10 @@
                   value="Dataset from {source} has more than one column named {variableName}. A case could not say which of them it means, so the dataset cannot be read. Give each column a different name."/>
     <Localization class="org.openmarkov.core.exception.ParsingSourceException$WrongNumberOfValues"
                   value="Line {line} of {source} has {values} values, but the first line names {columns} columns. Each line must have one value for each column, separated as the names of the first line."/>
+    <Localization class="org.openmarkov.core.exception.ParsingSourceException$NotASheet"
+                  value="{source} is not an Excel file of the type that its extension says. Check the file, or give it the extension of its type."/>
+    <Localization class="org.openmarkov.core.exception.ParsingSourceException$ColumnWithoutName"
+                  value="The cell {cell} of {source} is empty, and its column has values. The first row of the sheet must name every column, from the cell A1 on."/>
     <Localization class="org.openmarkov.core.exception.ParsingSourceException$TwoSeparators"
                   value="The first line of {source} separates the names of its columns with commas and with semicolons, so the values cannot be told apart. Use only one of them, or write between double quotes the names that have the other."/>
     <Localization class="org.openmarkov.core.exception.ParsingSourceException$StartsWithAByteOrderMark"

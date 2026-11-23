@@ -12,6 +12,14 @@ import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.EmptyFileException;
+import org.apache.poi.ooxml.POIXMLException;
+import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
+import org.apache.poi.poifs.filesystem.NotOLE2FileException;
+import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.*;
@@ -56,115 +64,132 @@ import java.util.Locale;
         implements CaseDatabaseReader, CaseDatabaseWriter {
     
     /**
-     * Opens a database from a '.xlsx' file and creates a ProbNet
-     * building the variables and states dinamically while reading, and
-     * returning the cases on the database.
-     *
-     * @return {@code int[][]} matrix with the cases in the database.
-     *
-     * @throws IOException if the file does not exist or the file format is not
-     *                     correct.
+     * Reads the first sheet of the file: its first row names the variables, from the cell A1 on, and each of the
+     * other rows is a case. A formula counts as the value it gives; a blank cell and one with an error, such as
+     * #N/A, are unknown values. {@link ErrorCellsOfASheet} tells of the cells with an error.
      */
-    @Override @SuppressWarnings({"unchecked", "static-access"})
-    public @NotNull CaseDatabase load(File file)
-            throws IOException, EmptyDatabaseException, ParsingSourceException.RepeatedVariableNames {
-        //create a FileInputStream object to read the data
-        FileInputStream fs = new FileInputStream(file);
-        try (
-                // create a workbook out of the input stream
-                XSSFWorkbook wb = new XSSFWorkbook(fs);
-        ) {
-            // get a reference to the worksheet
-            XSSFSheet sheet = wb.getSheetAt(0);
-            
-            // number of rows and columns
-            int rows = sheet.getPhysicalNumberOfRows();
-            if (rows == 0) {
-                throw new EmptyDatabaseException(file.getName());
+    @Override public @NotNull CaseDatabase load(File file)
+            throws IOException, EmptyDatabaseException, ParsingSourceException.RepeatedVariableNames,
+                   ParsingSourceException.NotASheet, ParsingSourceException.ColumnWithoutName {
+        try (Workbook workbook = open(file)) {
+            return read(file, workbook.getSheetAt(0));
+        }
+    }
+    
+    /**
+     * @return the workbook of the file
+     *
+     * @throws ParsingSourceException.NotASheet if the file is not a workbook of the format of this reader
+     */
+    Workbook open(File file) throws IOException, ParsingSourceException.NotASheet, EmptyDatabaseException {
+        try (FileInputStream stream = new FileInputStream(file)) {
+            return openWorkbook(stream);
+        } catch (EmptyFileException empty) {
+            throw new EmptyDatabaseException(file.getName());
+        } catch (NotOfficeXmlFileException | OfficeXmlFileException | NotOLE2FileException | POIXMLException other) {
+            throw new ParsingSourceException.NotASheet(file.getName());
+        }
+    }
+    
+    /** @return the workbook that {@code stream} holds, in the format of this reader */
+    protected Workbook openWorkbook(FileInputStream stream) throws IOException {
+        return new XSSFWorkbook(stream);
+    }
+    
+    private static CaseDatabase read(File file, Sheet sheet)
+            throws EmptyDatabaseException, ParsingSourceException.RepeatedVariableNames,
+                   ParsingSourceException.ColumnWithoutName {
+        int numVariables = numberOfColumnsWithAValue(sheet);
+        if (numVariables == 0) {
+            throw new EmptyDatabaseException(file.getName());
+        }
+        // The first row names the variables
+        Row titles = sheet.getRow(0);
+        List<String> variableNames = new ArrayList<>();
+        List<List<State>> variableStates = new ArrayList<>();
+        List<Map<String, Integer>> stateIndexes = new ArrayList<>();
+        for (int column = 0; column < numVariables; column++) {
+            String name = valueOf(titles == null ? null : titles.getCell(column));
+            if (name == null) {
+                throw new ParsingSourceException.ColumnWithoutName(file.getName(),
+                                                                   new CellReference(0, column).formatAsString());
             }
-            int numVariables = sheet.getRow(0).getPhysicalNumberOfCells();
-            List<State>[] variableStates = (ArrayList<State>[]) new ArrayList[numVariables];
-            List<Map<String, Integer>> stateIndexes = new ArrayList<>();
-            
-            // the first row contains the names of the variables
-            Row row = sheet.getRow(0);
-            List<String> variableNames = new ArrayList<>();
-            for (int i = 0; i < numVariables; i++) {
-                variableNames.add(row.getCell(i).getRichStringCellValue().getString());
-                variableStates[i] = new ArrayList<State>();
-                stateIndexes.add(new HashMap<>());
+            variableNames.add(name);
+            variableStates.add(new ArrayList<>());
+            stateIndexes.add(new HashMap<>());
+        }
+        List<int[]> rowCases = new ArrayList<>();
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row != null && hasAValue(row, numVariables)) {
+                int[] aCase = new int[numVariables];
+                for (int j = 0; j < numVariables; j++) {
+                    String value = valueOf(row.getCell(j));
+                    aCase[j] = findVariableStateIndexOrCreate(variableStates.get(j), stateIndexes.get(j),
+                                                              value == null ? "?" : value);
+                }
+                rowCases.add(aCase);
             }
-            
-            // Gets a int[][] variable that represents the excel file.
-            // The first coordinate is the variable index and the second
-            // is the row index of the excel datasheet. (IT'S THE OTHER WAY)
-            // A cell contains the StateName index corresponding to
-            // the String in the excel file cell
-            List<int[]> rowCases = new ArrayList<>();
-            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-                row = sheet.getRow(i);
-                if (row != null && hasAValue(row, numVariables)) {
-                    int[] aCase = new int[numVariables];
-                    for (int j = 0; j < numVariables; j++) {
-                        
-                        Cell cell = row.getCell(j);
-                        /*
-                         * we can have a string or an integer. If we have an absent
-                         * value, cell is null
-                         */
-                        /* EXTERNAL LIBRARY NOTE:
-                         * Apache POI is expected to recover getCellType() on version 4.0.
-                         * When it happens, switch the the three if lines for the commented ones.
-                         *  TODO Manolo> When migrating to Java 17, I have made changes that should be tested.
-                         */
-                        String stateName;
-                        if ((cell == null) || (cell.getCellType() == CellType.BLANK)) {
-                            stateName = "?";
-                        } else if (cell.getCellType() == CellType.STRING) {
-                            if (cell.getRichStringCellValue().length() == 0) {
-                                stateName = "?";
-                            } else {
-                                stateName = cell.getRichStringCellValue().getString();
-                            }
-                            
-                        } else if (cell.getCellType() == CellType.BOOLEAN) {
-                            
-                            stateName = Boolean.toString(cell.getBooleanCellValue());
-                        } else {
-                            stateName = stateNameOf(cell.getNumericCellValue());
-                        }
-                        aCase[j] = findVariableStateIndexOrCreate(variableStates[j], stateIndexes.get(j), stateName);
-                    }
-                    rowCases.add(aCase);
+        }
+        int[][] cases = rowCases.toArray(new int[0][]);
+        
+        // The network only has the variables, without links
+        ProbNet probNet = new ProbNet(BayesianNetworkType.getUniqueInstance());
+        LinkedHashMap<String, String> ioNet = new LinkedHashMap<>();
+        ioNet.put("Name", file.getName());
+        for (int i = 0; i < numVariables; i++) {
+            String variableName = variableNames.get(i);
+            LinkedHashMap<String, String> infoNode = new LinkedHashMap<>();
+            infoNode.put("Title", variableName);
+            infoNode.put("NodeType", NodeType.CHANCE.name());
+            infoNode.put("TypeOfVariable", VariableType.FINITE_STATES.name());
+            infoNode.put("CoordinateX", "0");
+            infoNode.put("CoordinateY", "0");
+            infoNode.put("UseDefaultStates", "false");
+            Variable variable = new Variable(variableName, variableStates.get(i).toArray(new State[1]));
+            Node node = probNet.addNode(variable, NodeType.CHANCE);
+            node.setAdditionalProperties(infoNode);
+            infoNode.put("Name", variableName);
+        }
+        probNet.setAdditionalProperties(ioNet);
+        
+        return CaseDatabaseReader.accepted(file, new CaseDatabase(probNet.getVariables(), cases));
+    }
+    
+    /** @return the number of columns of {@code sheet} up to the last one that has a value in some row */
+    private static int numberOfColumnsWithAValue(Sheet sheet) {
+        int columns = 0;
+        for (Row row : sheet) {
+            for (int column = row.getLastCellNum() - 1; column >= columns; column--) {
+                if (valueOf(row.getCell(column)) != null || hasAnError(row.getCell(column))) {
+                    columns = column + 1;
+                    break;
                 }
             }
-            int[][] cases = rowCases.toArray(new int[0][]);
-            
-            /* Creation of the probNet. The probNet only contains variables but
-             * no links. */
-            ProbNet probNet = new ProbNet(BayesianNetworkType.getUniqueInstance());
-            LinkedHashMap<String, String> ioNet = new LinkedHashMap<String, String>();
-            ioNet.put("Name", file.getName());
-            int i = 0;
-            for (String variableName : variableNames) {
-                LinkedHashMap<String, String> infoNode = new LinkedHashMap<String, String>();
-                infoNode.put("Title", variableName);
-                infoNode.put("NodeType", NodeType.CHANCE.name());
-                infoNode.put("TypeOfVariable", VariableType.FINITE_STATES.name());
-                infoNode.put("CoordinateX", "0");
-                infoNode.put("CoordinateY", "0");
-                infoNode.put("UseDefaultStates", "false");
-                State[] aux = new State[1];
-                Variable variable = new Variable(variableName, variableStates[i].toArray(aux));
-                Node node = probNet.addNode(variable, NodeType.CHANCE);
-                node.setAdditionalProperties(infoNode);
-                infoNode.put("Name", variableName);
-                i++;
-            }
-            probNet.setAdditionalProperties(ioNet);
-            
-            return CaseDatabaseReader.accepted(file, new CaseDatabase(probNet.getVariables(), cases));
         }
+        return columns;
+    }
+    
+    /** @return whether {@code cell} has an error, such as #N/A, written or given by its formula */
+    static boolean hasAnError(Cell cell) {
+        return cell != null && typeOfTheValueOf(cell) == CellType.ERROR;
+    }
+    
+    private static CellType typeOfTheValueOf(Cell cell) {
+        return cell.getCellType() == CellType.FORMULA ? cell.getCachedFormulaResultType() : cell.getCellType();
+    }
+    
+    /** @return what {@code cell} says, a formula counting as the value it gives; null if it is blank or has an error */
+    private static String valueOf(Cell cell) {
+        if (cell == null) {
+            return null;
+        }
+        return switch (typeOfTheValueOf(cell)) {
+            case STRING -> cell.getRichStringCellValue().length() == 0 ? null : cell.getRichStringCellValue().getString();
+            case BOOLEAN -> Boolean.toString(cell.getBooleanCellValue());
+            case NUMERIC -> stateNameOf(cell.getNumericCellValue());
+            default -> null;
+        };
     }
     
     /** @return the index of the state {@code stateName}, which is added to the states and to their index if new */

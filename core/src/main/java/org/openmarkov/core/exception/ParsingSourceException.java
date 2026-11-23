@@ -43,6 +43,26 @@ public abstract sealed class ParsingSourceException extends UserInputException {
         }
     }
 
+    /** A file with the extension of a spreadsheet that is not one of that format. */
+    public static final class NotASheet extends ParsingSourceException {
+        public final String source;
+
+        public NotASheet(String source) {
+            this.source = source;
+        }
+    }
+
+    /** A column of a spreadsheet that has values and no name in the first row. */
+    public static final class ColumnWithoutName extends ParsingSourceException {
+        public final String source;
+        public final String cell;
+
+        public ColumnWithoutName(String source, String cell) {
+            this.source = source;
+            this.cell = cell;
+        }
+    }
+
     /** The first line of a file of separated values uses both the comma and the semicolon to separate its names. */
     public static final class TwoSeparators extends ParsingSourceException {
         public final String source;
