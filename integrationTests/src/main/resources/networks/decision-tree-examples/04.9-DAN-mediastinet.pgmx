@@ -997,7 +997,7 @@
       <Unicriterion>
         <Unit>€</Unit>
         <Scales>
-          <Scale Criterion="Cost" Value="1.0" />
+          <Scale Criterion="Cost" Value="-1.0" />
           <Scale Criterion="Effectiveness" Value="25000.0" />
         </Scales>
       </Unicriterion>

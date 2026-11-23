@@ -17,6 +17,7 @@ import org.openmarkov.core.inference.TemporalOptions;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.CycleLength;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.UtilityOperations;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.gui.component.ValuesTableCellRenderer;
@@ -103,6 +104,8 @@ public class InferenceOptionsDialog extends OkCancelDialog {
      * Cost Effectiveness radio button
      */
     private JRadioButton costEffectiveness;
+    /** Says that the cost is added, when no scale of the single-criterion analysis is negative */
+    private final JLabel costIsAddedWarning = new JLabel();
     /**
      * Temporal copy of the decisionCriteria
      */
@@ -365,6 +368,10 @@ public class InferenceOptionsDialog extends OkCancelDialog {
             
             tableScrollPane = getTablePanel();
             multicriteriaPanel.add(tableScrollPane);
+            costIsAddedWarning.setName("costIsAddedWarning");
+            costIsAddedWarning.setText(stringDatabase.getString("MulticriteriaDialog.CostIsAdded"));
+            costIsAddedWarning.setAlignmentX(Component.CENTER_ALIGNMENT);
+            showCostIsAddedWarning();
             
             multicriteriaPanel.setVisible(true);
             
@@ -869,8 +876,16 @@ public class InferenceOptionsDialog extends OkCancelDialog {
             tableScrollPane.setVisible(true);
             multicriteriaPanel.repaint();
         }
+        showCostIsAddedWarning();
         this.pack();
         this.repaint();
+    }
+
+    /** Puts the warning under the table, visible only when the single-criterion analysis would add the cost. */
+    private void showCostIsAddedWarning() {
+        multicriteriaPanel.remove(costIsAddedWarning);
+        costIsAddedWarning.setVisible(unicriterion.isSelected() && UtilityOperations.costIsAdded(decisionCriteria));
+        multicriteriaPanel.add(costIsAddedWarning);
     }
     
     /**

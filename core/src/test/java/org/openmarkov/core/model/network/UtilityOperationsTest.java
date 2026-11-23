@@ -197,4 +197,31 @@ public class UtilityOperationsTest {
         Assertions.assertEquals(122331, compositeSimpsonsThreeEighthsRule, delta);
         double a = compositeSimpsonsOneThirdRule + compositeSimpsonsThreeEighthsRule;
     }
+
+    private static Criterion criterion(String name, CECriterion role, double scale) {
+        Criterion criterion = new Criterion(name);
+        criterion.setCECriterion(role);
+        criterion.setUnicriterizationScale(scale);
+        return criterion;
+    }
+
+    @Test
+    void theCostIsAddedWhenNoScaleIsNegative() {
+        Criterion effectiveness = criterion("Effectiveness", CECriterion.Effectiveness, 30000);
+
+        assertTrue(UtilityOperations.costIsAdded(List.of(criterion("Cost", CECriterion.Cost, 1), effectiveness)));
+        assertFalse(UtilityOperations.costIsAdded(List.of(criterion("Cost", CECriterion.Cost, -1), effectiveness)));
+    }
+
+    @Test
+    void aBenefitWithTheRoleOfACostDoesNotCountWhenTheCostIsSubtracted() {
+        assertFalse(UtilityOperations.costIsAdded(List.of(criterion("Cost", CECriterion.Cost, -1),
+                                                          criterion("Benefit", CECriterion.Cost, 1))));
+    }
+
+    @Test
+    void criteriaWithoutACostAddNothingWrong() {
+        assertFalse(UtilityOperations.costIsAdded(List.of(criterion("Life", CECriterion.Effectiveness, 1),
+                                                          criterion("Quality", CECriterion.Effectiveness, 1))));
+    }
 }

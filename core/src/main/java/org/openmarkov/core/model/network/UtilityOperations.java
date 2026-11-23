@@ -34,6 +34,12 @@ public class UtilityOperations {
 		return false;
 	}
 
+	/** Whether a criterion whose role is the cost would add to the others, because no scale is negative. */
+	public static boolean costIsAdded(List<Criterion> criteria) {
+		return criteria.stream().anyMatch(criterion -> criterion.getCECriterion() == Criterion.CECriterion.Cost)
+				&& criteria.stream().noneMatch(criterion -> criterion.getUnicriterizationScale() < 0);
+	}
+
 	/**
 	 * Transform a multicriteria net into an unicriterion net. All the utility
 	 * potentials are adjusted according to the scales defined in their

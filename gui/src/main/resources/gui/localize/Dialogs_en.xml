@@ -476,6 +476,7 @@
             <Title value="Unit"/>
             <Select value="Select unit"/>
         </Unit>
+        <CostIsAdded value="No scale is negative, so the cost is added to the other criteria. Give it a negative scale to subtract it."/>
     </MulticriteriaDialog>
     <InferenceOptionsDialog>
         <Title value="Inference options"/>

@@ -80,7 +80,7 @@ class TheParametersOfADistributionAreShownAndEditedAsTheyAreComputedTest {
 
         assertEquals(List.of("2", "1.3"), expressions(probNet));
         assertArrayEquals(new double[]{ 2.0, 1.3 }, effectiveness(probNet).getValues());
-        assertEquals(53000.0, utilityBefore);
+        assertEquals(25000.0, utilityBefore);
         assertEquals(60000.0, new VEEvaluation(probNet).getUtility().getValues()[0]);
     }
 

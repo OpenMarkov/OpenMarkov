@@ -198,6 +198,7 @@ public class StandardCriteriaDialog extends OkCancelDialog {
             Criterion costCriterion = new Criterion(stringDatabase.getString("defaultCriteria.cost.Text"),
                                                     stringDatabase.getString("defaultCriteria.euros.Text"));
             costCriterion.setCECriterion(CECriterion.Cost);
+            costCriterion.setUnicriterizationScale(-1);
             
             Criterion effectivenessCriterion = new Criterion(
                     stringDatabase.getString("defaultCriteria.effectiveness.Text"),
@@ -211,6 +212,7 @@ public class StandardCriteriaDialog extends OkCancelDialog {
             Criterion costCriterion = new Criterion(stringDatabase.getString("defaultCriteria.cost.Text"),
                                                     stringDatabase.getString("defaultCriteria.pounds.Text"));
             costCriterion.setCECriterion(CECriterion.Cost);
+            costCriterion.setUnicriterizationScale(-1);
             
             Criterion effectivenessCriterion = new Criterion(
                     stringDatabase.getString("defaultCriteria.effectiveness.Text"),
@@ -224,6 +226,7 @@ public class StandardCriteriaDialog extends OkCancelDialog {
             Criterion costCriterion = new Criterion(stringDatabase.getString("defaultCriteria.cost.Text"),
                                                     stringDatabase.getString("defaultCriteria.dollars.Text"));
             costCriterion.setCECriterion(CECriterion.Cost);
+            costCriterion.setUnicriterizationScale(-1);
             
             Criterion effectivenessCriterion = new Criterion(
                     stringDatabase.getString("defaultCriteria.effectiveness.Text"),
