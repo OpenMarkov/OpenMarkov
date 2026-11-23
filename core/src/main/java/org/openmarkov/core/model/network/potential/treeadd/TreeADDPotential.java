@@ -247,8 +247,7 @@ public class TreeADDPotential extends Potential implements DESSimulablePotential
         // Fixing issue #216
         // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/216/treeadd-as-possible-type-of-potential-for
         // [...] and the node cannot be a super value node
-        if (role == PotentialRole.UNSPECIFIED && !node.isSuperValueNode() && !variables.isEmpty()) {
-            // in variables there is not utility variable
+        if (role == PotentialRole.UNSPECIFIED && !node.isSuperValueNode() && variables.size() >= 2) {
             return true;
         }
         if ((role == PotentialRole.CONDITIONAL_PROBABILITY || node.hasPolicy()) && variables.size() >= 2) {

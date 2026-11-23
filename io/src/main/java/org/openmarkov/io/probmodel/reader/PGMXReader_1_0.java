@@ -52,9 +52,8 @@ import org.openmarkov.io.probmodel.strings.XMLTags;
  * <p>Divergencias respecto a {@code PGMXReader_0_2} (ver
  * {@code docs/rediseno-io/pgmx-readers-diff.md}):</p>
  * <ul>
- *   <li>{@link #getPotential(Element, ProbNet)}: el formato 1.0 no requiere
- *       derivar el rol del atributo XML y asume {@code CONDITIONAL_PROBABILITY}
- *       por construcción (los potenciales de utilidad usan otra ruta).</li>
+ *   <li>{@link #getPotentialRole(Element)}: el formato 1.0 no escribe el rol;
+ *       lo dan el nodo de la relación y el elemento en que está.</li>
  *   <li>{@link #getPotential(Element, ProbNet, PotentialRole)}: se elimina la
  *       rama de compatibilidad {@code <UtilityVariable>} y el caso especial
  *       {@code Table + utilityVariable → ExactDistrPotential}. El formato 1.0
@@ -76,17 +75,9 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         super();
     }
     
-    /**
-     * En 1.0 el rol se fija a {@link PotentialRole#CONDITIONAL_PROBABILITY} en
-     * lugar de derivarlo del atributo XML {@code role} (diferencia respecto a
-     * {@code PGMXReader_0_2#getPotential(Element, ProbNet)}).
-     */
-    @Override protected Potential getPotential(Element xmlPotential, ProbNet probNet) throws PGMXParserException {
-        try {
-            return this.getPotential(xmlPotential, probNet, PotentialRole.CONDITIONAL_PROBABILITY);
-        } catch (InvalidArgumentException invalid) {
-            throw notFinite(invalid, xmlPotential);
-        }
+    /** Format 1.0 does not write the role of a relation: the node and the element where it is tell it. */
+    @Override protected PotentialRole getPotentialRole(Element xmlPotential) {
+        return PotentialRole.CONDITIONAL_PROBABILITY;
     }
     
     /**

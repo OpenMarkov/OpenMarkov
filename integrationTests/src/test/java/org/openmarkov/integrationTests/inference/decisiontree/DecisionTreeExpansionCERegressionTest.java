@@ -18,7 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.openmarkov.core.exception.NonProjectablePotentialException.NumericVariableNeedsAFinding;
+import org.openmarkov.core.exception.NonProjectablePotentialException.UtilityIsNotDefined;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.model.decisiontree.DecisionModelEvaluation;
 import org.openmarkov.core.model.decisiontree.DecisionTreeBranch;
@@ -314,15 +314,15 @@ class DecisionTreeExpansionCERegressionTest {
 	void anExampleNetworkWithAUniformUtilityIsRefusedByBothAlgorithms() throws Exception {
 		ProbNet net = load(EXAMPLES + "03.4-ID-decide-two-tests.pgmx");
 
-		NumericVariableNeedsAFinding byTheOldOne = catchThrowableOfType(NumericVariableNeedsAFinding.class,
+		UtilityIsNotDefined byTheOldOne = catchThrowableOfType(UtilityIsNotDefined.class,
 				() -> reference(net, 6));
-		NumericVariableNeedsAFinding byTheNewOne = catchThrowableOfType(NumericVariableNeedsAFinding.class,
+		UtilityIsNotDefined byTheNewOne = catchThrowableOfType(UtilityIsNotDefined.class,
 				() -> actual(net, 6));
 
 		assertThat(byTheOldOne).as("aviso del algoritmo antiguo").isNotNull();
 		assertThat(byTheNewOne).as("aviso del algoritmo nuevo").isNotNull();
-		assertThat(byTheOldOne.variable.getName()).isEqualTo("Cost of test Z");
-		assertThat(byTheNewOne.variable.getName()).isEqualTo("Cost of test Z");
+		assertThat(byTheOldOne.utilityVariable.getName()).isEqualTo("Cost of test Z");
+		assertThat(byTheNewOne.utilityVariable.getName()).isEqualTo("Cost of test Z");
 	}
 
 	/**

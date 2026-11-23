@@ -1623,11 +1623,34 @@ public class PGMXReader_0_2 {
      */
     protected Potential getPotential(Element xmlPotential, ProbNet probNet)
             throws PGMXParserException {
+        return getPotentialWithRole(xmlPotential, probNet, roleForItsNode(getPotentialRole(xmlPotential), xmlPotential, probNet));
+    }
+    
+    private Potential getPotentialWithRole(Element xmlPotential, ProbNet probNet, PotentialRole role)
+            throws PGMXParserException {
         try {
-            return getPotential(xmlPotential, probNet, getPotentialRole(xmlPotential));
+            return getPotential(xmlPotential, probNet, role);
         } catch (InvalidArgumentException invalid) {
             throw notFinite(invalid, xmlPotential);
         }
+    }
+    
+    /** @return the role of utility if {@code written} is that of a probability and the node of the relation is a utility; else {@code written} */
+    private PotentialRole roleForItsNode(PotentialRole written, Element xmlPotential, ProbNet probNet)
+            throws PGMXParserException {
+        if (written != PotentialRole.CONDITIONAL_PROBABILITY) {
+            return written;
+        }
+        Element xmlNode = xmlPotential.getChild(XMLTags.UTILITY_VARIABLE.toString());
+        if (xmlNode == null) {
+            Element xmlVariables = xmlPotential.getChild(XMLTags.VARIABLES.toString());
+            xmlNode = xmlVariables == null ? null : xmlVariables.getChild(XMLTags.VARIABLE.toString());
+        }
+        if (xmlNode == null) {
+            return written;
+        }
+        Node node = probNet.getNode(getVariable(xmlNode, probNet, "a relation"));
+        return node != null && node.getNodeType() == NodeType.UTILITY ? PotentialRole.UNSPECIFIED : written;
     }
     
     private static final String NOT_FINITE = "it is not a finite number";
@@ -1907,7 +1930,10 @@ public class PGMXReader_0_2 {
         if (policiesRoot != null) {
             List<Element> xmlPotentialPolicies = getXMLChildren(policiesRoot);
             for (Element xmlPotential : xmlPotentialPolicies) {
-                Potential potential = getPotential(xmlPotential, probNet);
+                // A relation of this element is a policy, even if the file gives it the role of a probability
+                PotentialRole role = getPotentialRole(xmlPotential);
+                Potential potential = getPotentialWithRole(xmlPotential, probNet,
+                        role == PotentialRole.CONDITIONAL_PROBABILITY ? PotentialRole.POLICY : role);
                 probNet.addPotential(potential);
             }
         }

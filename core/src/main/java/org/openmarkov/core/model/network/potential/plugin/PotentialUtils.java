@@ -151,7 +151,7 @@ public class PotentialUtils {
         return switch (nodeType) {
             case DECISION, SV_PRODUCT, SV_SUM -> null;
             case CHANCE -> new TablePotential(variableAndParents, PotentialRole.CONDITIONAL_PROBABILITY);
-            case UTILITY -> new ExactDistrPotential(variableAndParents, PotentialRole.CONDITIONAL_PROBABILITY);
+            case UTILITY -> new ExactDistrPotential(variableAndParents, PotentialRole.UNSPECIFIED);
             case EVENT -> new DeltaPotential(variableAndParents, PotentialRole.CONDITIONAL_PROBABILITY, 0.02);
         };
     }
