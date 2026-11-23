@@ -69,6 +69,16 @@ class TablesThatAFileLeavesOutAreFoundOnOpeningTest {
         assertArrayEquals(new double[] {0, 0, 0, 0}, utility.getTablePotential().getValues(), 1e-12);
     }
 
+    @Test void aTableOfUtilitiesWithoutNumbersInFormat1OpensWithZeros() throws Exception {
+        URL file = without("ID-decide-test-1-0.pgmx", "<Values>10.0 4.0 9.0 8.0</Values>");
+
+        assertEquals(List.of("Health state: its table has no numbers. It is opened with zeros."),
+                     TablesAFileLeavesOut.in(file));
+        ProbNet read = new PGMXReader().read(file).probNet();
+        ExactDistrPotential utility = (ExactDistrPotential) read.getNode("Health state").getPotential();
+        assertArrayEquals(new double[] {0, 0, 0, 0}, utility.getTablePotential().getValues(), 1e-12);
+    }
+
     @Test void aCanonicalModelWithoutTheTableOfAParentOpensWithTheTableByDefault() throws Exception {
         URL file = without("BN-noisy-or-four-parents.pgmx",
                            "<Potential type=\"Table\">\\s*<Variables>\\s*<Variable name=\"Fever\" />\\s*"

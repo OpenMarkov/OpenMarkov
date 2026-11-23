@@ -2,7 +2,10 @@ package org.openmarkov.integrationTests.io;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.model.network.potential.Potential;
 import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
 import org.openmarkov.core.testTags.TestSpeed;
@@ -33,6 +36,11 @@ class UnivariateDistrParametersSurviveARoundTripTest {
     @Test void theParametersAreTheOnesTheFileCarried() throws Exception {
         ProbNet original = new PGMXReader().read(
                 getClass().getClassLoader().getResource(NETWORK)).probNet();
+        for (Node utility : original.getNodes(NodeType.UTILITY)) {
+            if (utility.getPotential() instanceof ExactDistrPotential) {
+                ExactDistributions.inPlaceOfTheTableOf(utility);
+            }
+        }
         List<double[]> valuesBefore = univariateValues(original);
         assertFalse(valuesBefore.isEmpty(), "the network must carry UnivariateDistr potentials");
 

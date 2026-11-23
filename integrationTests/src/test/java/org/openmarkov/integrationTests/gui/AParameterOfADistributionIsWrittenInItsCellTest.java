@@ -13,6 +13,7 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.potential.AugmentedProbTable;
 import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
 import org.openmarkov.core.testTags.TestSpeed;
+import org.openmarkov.integrationTests.io.ExactDistributions;
 import org.openmarkov.gui.dialog.common.UnivariateDistrPotentialPanel;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
 
@@ -31,7 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The panel of the effectiveness of ID-CEA-minimal in format 1.0, which is 0.8 without the therapy. The user
+ * The panel of the effectiveness of ID-CEA-minimal, given as an "Exact" distribution, which is 0.8 without the
+ * therapy. The user
  * starts editing that cell, writes 2 and presses Enter.
  *
  * @author Manuel Arias
@@ -62,7 +64,9 @@ class AParameterOfADistributionIsWrittenInItsCellTest {
                           .filter(network -> network.getPath().endsWith("/ID-CEA-minimal-1-0.pgmx"))
                           .findFirst()
                           .orElseThrow();
-        return new PGMXReader().read(url).probNet().getNode("Effectiveness");
+        Node node = new PGMXReader().read(url).probNet().getNode("Effectiveness");
+        ExactDistributions.inPlaceOfTheTableOf(node);
+        return node;
     }
 
     /** The panel as the dialog of the relation leaves it. */

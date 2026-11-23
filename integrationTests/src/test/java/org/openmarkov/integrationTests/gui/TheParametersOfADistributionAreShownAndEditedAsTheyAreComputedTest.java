@@ -15,6 +15,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.potential.AugmentedProbTable;
 import org.openmarkov.core.model.network.potential.UnivariateDistrPotential;
 import org.openmarkov.core.testTags.TestSpeed;
+import org.openmarkov.integrationTests.io.ExactDistributions;
 import org.openmarkov.gui.action.AugmentedPotentialValueEdit;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEEvaluation;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
@@ -31,8 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * The effectiveness of ID-CEA-minimal in format 1.0 is 0.8 without the therapy and 1.3 with it, and the file gives
- * only those numbers. The panel of the relation shows the expressions of the parameters and edits them.
+ * The effectiveness of ID-CEA-minimal is 0.8 without the therapy and 1.3 with it, given here as an "Exact"
+ * distribution with only those numbers. The panel of the relation shows the expressions of the parameters and edits them.
  *
  * @author Manuel Arias
  */
@@ -51,6 +52,7 @@ class TheParametersOfADistributionAreShownAndEditedAsTheyAreComputedTest {
                           .findFirst()
                           .orElseThrow();
         probNet = new PGMXReader().read(url).probNet();
+        ExactDistributions.inPlaceOfTheTableOf(probNet.getNode("Effectiveness"));
     }
 
     private static AugmentedProbTable effectiveness(ProbNet network) {

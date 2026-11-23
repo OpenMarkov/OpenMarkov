@@ -137,6 +137,9 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
                    PGMXParserException.UnknownDistribution {
         String univariateName = xmlPotential.getAttributeValue(XMLAttributes.DISTRIBUTION.toString());
         String parametrization = xmlPotential.getAttributeValue(XMLAttributes.PARAMETRIZATION.toString());
+        if (isATableOfValues(xmlPotential)) {
+            return PGMXPotentialParsers.getExactDistrPotential(xmlPotential, probNet, xmlRole, variables);
+        }
         Element xmlRootTable = xmlPotential.getChild(XMLTags.PARAMETERS.toString());
         if (xmlRootTable == null) {
             xmlRootTable = xmlPotential.getChild(XMLTags.VALUES.toString());
@@ -180,6 +183,13 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
         potential.setParameters(table);
         
         return potential;
+    }
+    
+    /** @return whether {@code xmlPotential} is a table of values, which this format writes as an "Exact" distribution with numbers and no functions */
+    static boolean isATableOfValues(Element xmlPotential) {
+        return "Exact".equals(xmlPotential.getAttributeValue(XMLAttributes.DISTRIBUTION.toString()))
+                && xmlPotential.getChild(XMLTags.PARAMETERS.toString()) == null
+                && xmlPotential.getChild(XMLTags.FUNCTIONS.toString()) == null;
     }
     
     // TODO Remove?

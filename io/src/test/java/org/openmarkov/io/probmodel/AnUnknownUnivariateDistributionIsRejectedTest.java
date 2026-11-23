@@ -57,7 +57,6 @@ class AnUnknownUnivariateDistributionIsRejectedTest {
 
     @ParameterizedTest(name = "{0}")
     @CsvSource(delimiter = '|', value = {
-            "distribution=\"Exact\"                                  | 0.0 14000.0         | ExactFunction",
             "distribution=\"Normal\"                                 | 0.0 1.0 14000.0 2.0 | NormalFunction",
             "distribution=\"Normal\" parametrization=\"mu, sigma\"   | 0.0 1.0 14000.0 2.0 | NormalFunction"})
     void aKnownDistributionIsRead(String attributes, String values, String function) throws Exception {

@@ -65,6 +65,7 @@ public final class TablesAFileLeavesOut {
     /** @return whether the reader takes {@code xmlPotential} for a table of utilities */
     static boolean isAUtilityTable(Element xmlPotential, String type) {
         return PotentialUtils.getNames(ExactDistrPotential.class).contains(type)
+                || PGMXReader_1_0.isATableOfValues(xmlPotential)
                 || PotentialUtils.getNames(TablePotential.class).contains(type)
                 && xmlPotential.getChild(XMLTags.UTILITY_VARIABLE.toString()) != null;
     }
