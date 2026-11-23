@@ -7,6 +7,7 @@
 
 package org.openmarkov.sensitivityanalysis.model;
 
+import org.openmarkov.inference.algorithm.variableElimination.tasks.VEPropagation;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -167,6 +168,7 @@ public class SensitivityAnalysisController {
 	 * shows the results in a dialog
 	 */
     public void runAnalysis(EvidenceCase evidence) throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, NotSupportedOperationException, ConstraintViolatedException {
+		VEPropagation.refuseImpossibleFindings(probNet, evidence);
 		JDialog sensitivityAnalysisResultsDialog = null;
 		AnalysisType sensitivityAnalysisType = sensitivityAnalysisModel.getAnalysisType();
         if (sensitivityAnalysisType == AnalysisType.TORNADO_SPIDER) {

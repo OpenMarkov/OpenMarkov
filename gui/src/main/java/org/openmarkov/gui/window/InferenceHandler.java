@@ -41,6 +41,7 @@ import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluation.DANDecompositionIntoSymmetricDANsEvaluation;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.evaluation.DANEvaluation;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VEOptimalIntervention;
+import org.openmarkov.inference.algorithm.variableElimination.tasks.VEPropagation;
 import org.openmarkov.java.swing.ComponentUtilities;
 
 import javax.swing.JOptionPane;
@@ -278,6 +279,12 @@ class InferenceHandler {
             optimalStrategyDialog.setVisible(true);
         } else {
             VEOptimalIntervention veOptimalStrategy = null;
+            try {
+                VEPropagation.refuseImpossibleFindings(probNet, networkPanel.getEditorPanel().getEvidenceManager()
+                                                                            .getPreResolutionEvidence());
+            } catch (ConstraintViolatedException e) {
+                throw new UnrecoverableException(e);
+            }
             try {
                 veOptimalStrategy = new VEOptimalIntervention(probNet,
                                                               networkPanel.getEditorPanel()

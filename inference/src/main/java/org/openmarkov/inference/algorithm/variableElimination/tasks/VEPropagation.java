@@ -222,6 +222,17 @@ public class VEPropagation extends VariableElimination implements Propagation {
         return propagation.isEvidencePossible();
     }
 
+    /**
+     * For whoever shows a result to the user: an evaluation takes impossible findings as it takes any others.
+     *
+     * @throws IncompatibleEvidenceException.EvidenceIsImpossible if {@link #findingsArePossible} says they are not
+     */
+    public static void refuseImpossibleFindings(ProbNet network, EvidenceCase findings) throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
+        if (!findingsArePossible(network, findings)) {
+            throw new IncompatibleEvidenceException.EvidenceIsImpossible();
+        }
+    }
+
     private void resolve() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, CannotNormalizePotentialException {
         LogManager.getLogger(getClass()).trace("Resolving VEPropagation");
         posteriorValues = new HashMap<>();
@@ -269,7 +280,9 @@ public class VEPropagation extends VariableElimination implements Propagation {
             probPotential.setPotentialRole(PotentialRole.CONDITIONAL_PROBABILITY);
             posteriorValues.put(probNet.getVariable(variable.getName()), probPotential);
         }
-        
+        if (!evidenceIsPossible(evidence)) {
+            throw new IncompatibleEvidenceException.EvidenceIsImpossible();
+        }
     }
     
     // Methods

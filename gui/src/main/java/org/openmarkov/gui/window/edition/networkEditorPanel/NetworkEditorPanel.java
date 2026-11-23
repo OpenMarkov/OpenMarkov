@@ -8,6 +8,7 @@
 package org.openmarkov.gui.window.edition.networkEditorPanel;
 
 
+import org.openmarkov.inference.algorithm.variableElimination.tasks.VEPropagation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.action.base.PNEdit;
@@ -608,6 +609,8 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void showExpectedUtilityOfNode() throws IncompatibleEvidenceException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, ThereIsNoPotentialInNodeException {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
         Node node = visualNode.getNode();
+        VEPropagation.refuseImpossibleFindings(this.visualNetwork.getProbNet(),
+                                               this.evidenceManager.getPreResolutionEvidence());
         VEExpectedUtilityDecision veExpectedUtilityDecision
                 = new VEExpectedUtilityDecision(this.visualNetwork.getProbNet(), node.getVariable());
         veExpectedUtilityDecision.setPreResolutionEvidence(this.evidenceManager.getPreResolutionEvidence());
@@ -627,6 +630,8 @@ public final class NetworkEditorPanel extends EditorPanel implements PNEditListe
     public void showOptimalPolicyOfNode() throws IncompatibleEvidenceException, NonProjectablePotentialException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException, ThereIsNoPotentialInNodeException {
         VisualNode visualNode = this.visualNetwork.getLastSelectedNode();
         ProbNet dummyProbNet = new ProbNet();
+        VEPropagation.refuseImpossibleFindings(this.visualNetwork.getProbNet(),
+                                               this.evidenceManager.getPreResolutionEvidence());
         OptimalPolicies veOptimalPolicy = new VEEvaluation(this.visualNetwork.getProbNet());
         veOptimalPolicy.setPreResolutionEvidence(this.evidenceManager.getPreResolutionEvidence());
         Potential optimalPolicy = veOptimalPolicy.getOptimalPolicy(visualNode.getNode().getVariable());
