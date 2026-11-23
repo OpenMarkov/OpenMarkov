@@ -43,6 +43,15 @@ public abstract sealed class ParsingSourceException extends UserInputException {
         }
     }
 
+    /** The first line of a file of separated values uses both the comma and the semicolon to separate its names. */
+    public static final class TwoSeparators extends ParsingSourceException {
+        public final String source;
+
+        public TwoSeparators(String source) {
+            this.source = source;
+        }
+    }
+
     /**
      * A file of text starts with the byte order mark of UTF-8, three bytes that some programs put before the text. The
      * formats of case databases do not allow it, and Weka refuses it too (error 250 of the pending list).

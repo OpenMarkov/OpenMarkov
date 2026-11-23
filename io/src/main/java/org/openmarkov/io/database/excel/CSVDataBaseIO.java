@@ -26,7 +26,6 @@ import org.openmarkov.core.model.network.type.BayesianNetworkType;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -109,7 +108,8 @@ import java.util.Scanner;
      */
     @Override public @NotNull CaseDatabase load(File file)
             throws EmptyDatabaseException, IOException, ParsingSourceException.RepeatedVariableNames,
-            ParsingSourceException.StartsWithAByteOrderMark, ParsingSourceException.WrongNumberOfValues {
+            ParsingSourceException.StartsWithAByteOrderMark, ParsingSourceException.WrongNumberOfValues,
+            ParsingSourceException.TwoSeparators {
         ByteOrderMark.refuse(file);
         // TODO Solve: This method assumes that 1) ALL the states of every variable are always included in the dataset, 2) All the variables are discrete.
         // First row contains all the attributes names and the attributes number
@@ -119,7 +119,15 @@ import java.util.Scanner;
             scanner.close();
             throw new EmptyDatabaseException(file.getName());
         }
-        List<String> variablesNames = getVariableNames(scanner.nextLine());
+        String firstLine = scanner.nextLine();
+        char separator;
+        try {
+            separator = separatorOf(firstLine, file.getName());
+        } catch (ParsingSourceException.TwoSeparators twoSeparators) {
+            scanner.close();
+            throw twoSeparators;
+        }
+        List<String> variablesNames = fields(firstLine, separator);
         int numColumns = variablesNames.size();
         List<List<String>> variablesStatesNames = new ArrayList<>(numColumns);
         for (int i = 0; i < numColumns; i++) {
@@ -140,12 +148,12 @@ import java.util.Scanner;
                 if (line.isBlank()) {
                     continue;
                 }
-                int numValues = line.split("[,;]", -1).length;
-                if (numValues != numColumns) {
-                    throw new ParsingSourceException.WrongNumberOfValues(file.getName(), lineNumber, numValues,
+                List<String> values = fields(line, separator);
+                if (values.size() != numColumns) {
+                    throw new ParsingSourceException.WrongNumberOfValues(file.getName(), lineNumber, values.size(),
                                                                          numColumns);
                 }
-                data.add(getDataLine(line, variablesStates, variablesStatesNames));
+                data.add(getDataLine(values, separator == ';', variablesStates, variablesStatesNames));
                 numRows++;
             }
         } finally {
@@ -199,16 +207,16 @@ import java.util.Scanner;
             List<Variable> variables = database.getVariables();
             int numVariablesMinus1 = variables.size() - 1;
             for (int i = 0; i < numVariablesMinus1; i++) {
-                writer.write(variables.get(i).getName() + ",");
+                writer.write(written(variables.get(i).getName()) + ",");
             }
-            writer.write(variables.get(numVariablesMinus1).getName() + "\r\n");
+            writer.write(written(variables.get(numVariablesMinus1).getName()) + "\r\n");
             for (int row = 0; row < database.getCases().length; row++) {
                 for (int column = 0; column < numVariablesMinus1; column++) {
                     Variable variable = variables.get(column);
-                    writer.write(variable.getStateName(database.getCases()[row][column]) + ",");
+                    writer.write(written(variable.getStateName(database.getCases()[row][column])) + ",");
                 }
                 Variable variable = variables.get(numVariablesMinus1);
-                writer.write(variable.getStateName(database.getCases()[row][numVariablesMinus1]) + "\r\n");
+                writer.write(written(variable.getStateName(database.getCases()[row][numVariablesMinus1])) + "\r\n");
             }
         }
     }
@@ -230,39 +238,81 @@ import java.util.Scanner;
         save(file, new CaseDatabase(probNet.getVariables(), newCases));
     }
     
+    /** @return {@code value} as it goes in a file: between double quotes, with its own doubled, if it has a separator or a quote */
+    private static String written(String value) {
+        boolean needsQuotes = value.contains(",") || value.contains(";") || value.contains("\"")
+                || value.contains("\n") || value.contains("\r");
+        return needsQuotes ? "\"" + value.replace("\"", "\"\"") + "\"" : value;
+    }
+    
     /**
-     * Reads the first line of a 'csv' file where is stored the variable list.
+     * @return the character that separates the names of {@code firstLine}: the semicolon if it has one outside
+     * quotes, and the comma otherwise
      *
-     * @param firstLine {@code String}
-     *
-     * @return Variables list. {@code ArrayList} of {@code String}
+     * @throws ParsingSourceException.TwoSeparators if it has both outside quotes
      */
-    private static ArrayList<String> getVariableNames(String firstLine) {
-        // split with limit -1 keeps empty fields, so the column count matches the data rows.
-        // A Scanner with a "[,;]" delimiter silently drops leading and trailing empty tokens.
-        return new ArrayList<>(Arrays.asList(firstLine.split("[,;]", -1)));
+    private static char separatorOf(String firstLine, String source) throws ParsingSourceException.TwoSeparators {
+        boolean comma = fields(firstLine, ',').size() > 1;
+        boolean semicolon = fields(firstLine, ';').size() > 1;
+        if (comma && semicolon) {
+            throw new ParsingSourceException.TwoSeparators(source);
+        }
+        return semicolon ? ';' : ',';
+    }
+    
+    /**
+     * @return the values of {@code line}, in order, empty ones included. A value that starts with a double quote
+     * goes up to its closing quote: it may have separators, and each quote of its own is written twice.
+     */
+    static List<String> fields(String line, char separator) {
+        List<String> fields = new ArrayList<>();
+        int position = 0;
+        while (true) {
+            StringBuilder field = new StringBuilder();
+            if (position < line.length() && line.charAt(position) == '"') {
+                position++;
+                while (position < line.length()) {
+                    char character = line.charAt(position++);
+                    if (character != '"') {
+                        field.append(character);
+                    } else if (position < line.length() && line.charAt(position) == '"') {
+                        field.append('"');
+                        position++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            while (position < line.length() && line.charAt(position) != separator) {
+                field.append(line.charAt(position++));
+            }
+            fields.add(field.toString());
+            if (position >= line.length()) {
+                return fields;
+            }
+            position++;
+        }
     }
     
     /**
      * Reads a data line of a 'csv' file.
      *
-     * @param line                 Data to be parsed. {@code String}
+     * @param fields               the values of the line
+     * @param commaIsDecimal       whether a number written with a comma, as 70,5, is read as 70.5
      * @param variablesStates      Current states of variables that can be updated
      * @param variablesStatesNames per-variable ordered list of state names, updated as new states are found
-     *                             if appears new ones. {@code ArrayList} of {@code HashSet} of
-     *                             {@code String}.
      *
      * @return A data line, each cell contains the state number readed.
-     * {@code Integer[]}.
      */
-    private static int[] getDataLine(String line, List<Map<String, Integer>> variablesStates,
+    private static int[] getDataLine(List<String> fields, boolean commaIsDecimal,
+                                     List<Map<String, Integer>> variablesStates,
                                      List<List<String>> variablesStatesNames) {
         int[] statesLines = new int[variablesStates.size()];
-        // split with limit -1 keeps empty fields, so a leading/trailing empty value does not
-        // shift the whole row by a column (as a Scanner with a "[,;]" delimiter would).
-        String[] fields = line.split("[,;]", -1);
-        for (int numVariable = 0; numVariable < fields.length; numVariable++) {
-            String stateVariable = fields[numVariable];
+        for (int numVariable = 0; numVariable < fields.size(); numVariable++) {
+            String stateVariable = fields.get(numVariable);
+            if (commaIsDecimal && stateVariable.strip().matches("[+-]?\\d+,\\d+")) {
+                stateVariable = stateVariable.strip().replace(',', '.');
+            }
             switch (translateToLowerUpperCase) {
                 case 1:
                     stateVariable = stateVariable.toLowerCase();

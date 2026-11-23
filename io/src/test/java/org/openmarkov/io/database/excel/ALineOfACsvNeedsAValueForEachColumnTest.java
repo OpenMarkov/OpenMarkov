@@ -61,7 +61,7 @@ class ALineOfACsvNeedsAValueForEachColumnTest {
         assertEquals(2, refusal.values);
         assertEquals(3, refusal.columns);
         assertEquals("Line 3 of cases.csv has 2 values, but the first line names 3 columns. Each line must have one "
-                     + "value for each column, separated by commas.", refusal.toString());
+                     + "value for each column, separated as the names of the first line.", refusal.toString());
     }
 
     @Test void aLineWithMoreValuesIsRefusedNamingIt() throws IOException {

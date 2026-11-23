@@ -217,6 +217,7 @@
     "TriedToSplitIntervalOutsideBoundsException",
     "TryingToWriteANullProbNet",
     "TryingToWriteAProbNetWithoutName",
+    "TwoSeparators",
     "UncertainParameterException",
     "UncertaintyInAnEventTable",
     "UnexpectedInferenceException",

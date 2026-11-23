@@ -38,7 +38,7 @@ class ErrorTextTest {
                 () -> new CaseDatabaseManager().getReader("csv").load(file.toFile()));
 
         assertEquals("Line 2 of width.csv has 1 values, but the first line names 2 columns. "
-                     + "Each line must have one value for each column, separated by commas.", ErrorText.of(refused));
+                     + "Each line must have one value for each column, separated as the names of the first line.", ErrorText.of(refused));
     }
 
     @Test void anEmptyDatabaseSaysSo() {
