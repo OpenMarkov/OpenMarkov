@@ -293,12 +293,17 @@ public class PGMXWriter_1_0 extends PGMXWriter_0_2 {
      * @param xmlElement         the XML element to attach the functions to
      * @param AugmentedProbTable the augmented probability table containing function values
      */
+    /** @return {@code formula} with a backslash before each of its quotes and backslashes, as it goes between quotes */
+    private static String escaped(String formula) {
+        return formula.replace("\\", "\\\\").replace("\"", "\\\"");
+    }
+    
     @Override protected void getAugmentedProbTablePotential(Element xmlElement, AugmentedProbTable AugmentedProbTable) {
         Element parametersElement = new Element(XMLTags.FUNCTIONS.toString());
         
         VariableExpression[] functionValues = AugmentedProbTable.getFunctionValues();
         for (VariableExpression function : functionValues) {
-            parametersElement.addContent("\"" + function.asStringExpression() + "\" ");
+            parametersElement.addContent("\"" + escaped(function.asStringExpression()) + "\" ");
         }
         // Write table values to the XML file
         xmlElement.addContent(parametersElement);

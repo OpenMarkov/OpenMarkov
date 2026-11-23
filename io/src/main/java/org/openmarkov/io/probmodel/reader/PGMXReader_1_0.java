@@ -207,10 +207,11 @@ public class PGMXReader_1_0 extends PGMXReader_0_2 {
     protected static AugmentedProbTable getAugmentedProbTable(Element xmlPotential, PotentialRole xmlRole,
                                                               List<Variable> vDistributionTable, List<Variable> variables) {
         String functionsValue = xmlPotential.getChild(XMLTags.FUNCTIONS.toString()).getValue();
-        List<String> uncertainParametersList = Pattern.compile("\"(.*?)\"")
+        // Each formula goes between quotes, with a backslash before the quotes and the backslashes it has
+        List<String> uncertainParametersList = Pattern.compile("\"((?:[^\"\\\\]|\\\\.)*)\"")
                                                       .matcher(functionsValue)
                                                       .results()
-                                                      .map(m -> m.group(1))
+                                                      .map(m -> m.group(1).replaceAll("\\\\([\"\\\\])", "$1"))
                                                       .toList();
         VariableExpression[] functionValues = new VariableExpression[uncertainParametersList.size()];
         int i = 0;
