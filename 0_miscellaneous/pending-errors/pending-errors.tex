@@ -277,6 +277,9 @@ Los \hyperref[err:430]{errores~430} a \hyperref[err:438]{438} se encontraron al 
 \paragraph{Errores añadidos el 24 de noviembre}
 Los \hyperref[err:443]{errores~443} a \hyperref[err:446]{446} salen de revisar los tres commits que Jorge Rico subió el 24 de noviembre (\texttt{06cec5fa}, \texttt{b6b50968} y \texttt{07bbdb98}), que pasaron la integración continua porque esta no ejecuta las pruebas que necesitan pantalla. Se han comprobado con el código de \texttt{07bbdb98}, y la fila \emph{Comprobado} de cada ficha dice cómo.
 
+\paragraph{Errores de la versión en C++ y Qt añadidos el 24 de noviembre}
+Los \hyperref[err:447]{errores~447} y \hyperref[err:448]{448} se encontraron al buscar a propósito errores de memoria en la versión en C++ y Qt, cuyo lector de Elvira, traducido de este, tenía los mismos bucles. Se han comprobado con el código de \texttt{c1633e1a}, ejecutándolos sin ventana, y la fila \emph{Comprobado} de cada ficha dice cómo.
+
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
 
@@ -330,9 +333,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{445 errores}; 301 de ellos son defectos nuevos: 104 encontrados al
-comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas y 4 al revisar los commits del 24 de noviembre. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 395 pequeños, 49 medios y 1 grandes.
-De los 445, 435 están ya corregidos y 2 están cerrados sin arreglo.
+La lista tiene \textbf{447 errores}; 303 de ellos son defectos nuevos: 104 encontrados al
+comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas, 4 al revisar los commits del 24 de noviembre y 2 al buscar errores de memoria en la versión en C++/Qt. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 397 pequeños, 49 medios y 1 grandes.
+De los 447, 435 están ya corregidos y 2 están cerrados sin arreglo.
 El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -350,7 +353,7 @@ El apéndice recoge además 201 notas con lo que se comprobó y no entra en la l
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 17 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 31 \\
 \ref{sec:des}. Simulación de sucesos discretos & 24 \\
-\ref{sec:ficheros}. Abrir y guardar redes & 59 \\
+\ref{sec:ficheros}. Abrir y guardar redes & 61 \\
 \ref{sec:casos}. Bases de casos & 33 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 42 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 51 \\
@@ -638,6 +641,8 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:441]{441} & \textcolor{corregidoverde}{\textbf{Corregido}} · Renombrar un agente de una red abierta de un fichero falla con NullPointerException & \texttt{io}, \texttt{core} & S \hfill No\\
 \hyperref[err:442]{442} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un número negativo de simulaciones o de series se acepta, y la simulación falla con NegativeArraySizeException & \texttt{io}, \texttt{gui} & S \hfill No\\
 \hyperref[err:444]{444} & Desde 06cec5fa, «Open» no abre una red escrita sin la extensión & \texttt{gui} & S \hfill No\\
+\hyperref[err:447]{447} & Un fichero de Elvira cortado a mitad de una lista llena la memoria hasta OutOfMemoryError & \texttt{io} & S \hfill No\\
+\hyperref[err:448]{448} & Unos veinte mil signos sueltos seguidos en un fichero de Elvira acaban en StackOverflowError & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:casos}.\ Bases de casos}}\\
 \hyperref[err:118]{118} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un «?» en una base de Weka descuadra las filas e inventa casos sin avisar & \texttt{io} & M \hfill No\\
 \hyperref[err:119]{119} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un fichero de Weka en UTF-8 con tildes o «ñ» pierde estados y lee ceros & \texttt{io} & M \hfill No\\
@@ -16131,6 +16136,63 @@ Que \texttt{get\allowbreak{}Selected\allowbreak{}Files} complete cada nombre con
 
 Prueba: lo de \emph{Medido}, con la selección de varias: «BN-asia» escrito con el filtro de ProbModelXML da \texttt{BN-\allowbreak{}asia.\allowbreak{}pgmx}, y dos nombres escritos entre comillas y sin extensión dan los dos con ella.
 
+\setcounter{subsection}{446}
+\subsection[Un fichero de Elvira cortado a mitad de una lista llena la memoria hasta OutOfMemoryError]{Un fichero de Elvira que se acaba a mitad de una lista ---los estados, las variables de una relación, las relaciones de un modelo canónico--- no se abre: el lector añade un nombre nulo a la lista en cada vuelta, sin fin, hasta \texttt{Out\allowbreak{}Of\allowbreak{}Memory\allowbreak{}Error}; a mitad de una tabla cae con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception}, y a mitad de sus corchetes se queda colgado}\label{err:447}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.elvira
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/elvira/ElviraScanner.java:169-174, 203-209, 228-230, 243-261, 288-291}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{c1633e1a} (24-11-2026) y \texttt{-Xmx512m}: \texttt{Elvira\allowbreak{}Parser.\allowbreak{}read(\allowbreak{}url)} con copias de \texttt{core/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}nets/\allowbreak{}asia.\allowbreak{}elv} y de \texttt{io/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}puerta-\allowbreak{}or.\allowbreak{}elv} cortadas a mitad de cada lista. Qué ventana sale no se ha mirado
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:448]{error~448}, \hyperref[nota:118]{nota~118}
+\end{ficha}
+\paragraph{Qué pasa}
+\texttt{Elvira\allowbreak{}Scanner.\allowbreak{}get\allowbreak{}Next\allowbreak{}Token} lee cada lista hasta el signo que la cierra, y sus bucles no miran si el fichero se ha acabado antes: los de los estados por omisión (líneas 169-174) y los de los estados de un nodo (203-209), que paran en «)»; el de las variables de una relación (228-230), que para en «\{»; y el de las relaciones de un modelo canónico, en \texttt{get\allowbreak{}Canonical\allowbreak{}Token} (288-291). Al final del fichero, \texttt{Stream\allowbreak{}Tokenizer} devuelve \texttt{TT\_\allowbreak{}EOF} una y otra vez con \texttt{sval} nulo, y cada vuelta añade ese nulo a la lista hasta que la máquina virtual se queda sin memoria. Con la memoria por omisión, la cuarta parte de la del ordenador, el programa se queda colgado mucho rato antes de llegar ahí.
+
+Los otros dos bucles de una lista tampoco miran el final: el de los números de una tabla (243-261) cae con \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} al pasarle el nulo a \texttt{Double.\allowbreak{}parse\allowbreak{}Double}, y el de lo que va entre corchetes dentro de ella (249-251) no añade nada, pero no acaba nunca. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+asia.elv entero                                  read: 8 nodes
+  cortado tras «default node states = (yes , »  OutOfMemoryError: Java heap space (16 s)
+  cortado tras «states = (yes »                  OutOfMemoryError: Java heap space (18 s)
+  cortado tras «relation T A »                   OutOfMemoryError: Java heap space (17 s)
+  cortado tras «values= table (0.98 »            NullPointerException: Cannot invoke "String.length()" because "in" is null
+  cortado tras «values= table ([ 0.98 »          sin respuesta en 60 s
+puerta-or.elv cortado tras «Or(CA,CB,»          OutOfMemoryError: Java heap space (35 s)
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Que esos seis bucles paren también en \texttt{TT\_\allowbreak{}EOF} y lancen una \texttt{ProbNet\allowbreak{}Parser\allowbreak{}Exception} que diga qué lista no se cierra y en qué línea empieza. La versión en C++/Qt dice «the file ends before the «)» that closes the list that starts here (line 15 of …)».
+
+Prueba: las copias cortadas de \emph{Medido} no se abren, con esa excepción y la línea; los ficheros enteros se siguen abriendo.
+
+\setcounter{subsection}{447}
+\subsection[Unos veinte mil signos sueltos seguidos en un fichero de Elvira acaban en StackOverflowError]{Un fichero de Elvira con unos veinte mil signos sueltos seguidos ---un «;» o una coma de más--- no se abre: el analizador se llama a sí mismo por cada tres signos y acaba en \texttt{Stack\allowbreak{}Overflow\allowbreak{}Error}}\label{err:448}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.elvira
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/elvira/ElviraScanner.java:98-112}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{c1633e1a} (24-11-2026): \texttt{Elvira\allowbreak{}Parser.\allowbreak{}read(\allowbreak{}url)} con copias de \texttt{core/\allowbreak{}src/\allowbreak{}test/\allowbreak{}resources/\allowbreak{}nets/\allowbreak{}asia.\allowbreak{}elv} con 1, 2, 3, 4, 5, 6, 999, 1\,000, 1\,001, 20\,000 y 30\,000 «;\ » delante
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\fichakey{Relacionados}\hyperref[err:447]{error~447}
+\end{ficha}
+\paragraph{Qué pasa}
+Cuando lo que viene no es ni una palabra reservada ni un nombre, \texttt{get\allowbreak{}Next\allowbreak{}Token} se llama a sí mismo para seguir con lo de después (línea 111, \texttt{return get\allowbreak{}Next\allowbreak{}Token();}). Cada llamada se lleva tres signos ---uno al buscar una palabra reservada y dos al buscar un nombre--- y ocupa sitio en la pila, así que una tira lo bastante larga la desborda: con veinte mil «;\ » al principio del fichero, que son cuarenta kilobytes, el lector acaba en \texttt{Stack\allowbreak{}Overflow\allowbreak{}Error}. Con pocos signos no pasa nada malo: se saltan de tres en tres, de modo que con tres, seis o 999 la red se lee, y con uno, dos o mil se lleva con ellos la primera palabra del fichero y se rechaza con \texttt{Probabilistic\allowbreak{}Network\allowbreak{}Type\allowbreak{}Missing}. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+asia.elv con «; » delante
+  1, 2, 4, 5, 1000 y 1001 veces    ProbNetParserException$ProbabilisticNetworkTypeMissing
+  3, 6 y 999 veces                 read: 8 nodes
+  20000 y 30000 veces              java.lang.StackOverflowError
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Que \texttt{get\allowbreak{}Next\allowbreak{}Token} dé otra vuelta en un \texttt{while} en vez de llamarse a sí mismo: hace lo mismo sin gastar pila.
+
+Prueba: con treinta mil «;\ » delante, la red se lee como con tres; con treinta mil y uno, se rechaza como con uno.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Bases de casos}\label{sec:casos}
 
@@ -26881,6 +26943,8 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:444]{Error 444} & hallazgo nuevo, al revisar el commit \texttt{06cec5fa} de Jorge Rico \\
 \hyperref[err:445]{Error 445} & hallazgo nuevo, al revisar el commit \texttt{b6b50968} de Jorge Rico \\
 \hyperref[err:446]{Error 446} & hallazgo nuevo, al revisar el commit \texttt{06cec5fa} de Jorge Rico \\
+\hyperref[err:447]{Error 447} & registro de fallos de la versión en C++/Qt, nº 428, al buscar errores de memoria en ella \\
+\hyperref[err:448]{Error 448} & registro de fallos de la versión en C++/Qt, nº 429, al buscar errores de memoria en ella \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
