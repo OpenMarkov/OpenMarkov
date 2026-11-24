@@ -92,10 +92,19 @@ public class OMFileChooser extends JFileChooser {
         return selectedFile;
     }
     
+    /**
+     * The chosen files, each with the extension of the filter if it was typed without it, as {@link #getSelectedFile()}
+     * (error 444). Swing leaves without folder a name typed in quotes that is not in the folder as written, so it gets
+     * the folder shown.
+     */
     @Override public File[] getSelectedFiles() {
         File[] selectedFiles = super.getSelectedFiles();
         if (selectedFiles == null) return null;
-        return Arrays.stream(selectedFiles).map(OMFileChooser::correctQuotes).toArray(File[]::new);
+        return Arrays.stream(selectedFiles)
+                     .map(OMFileChooser::correctQuotes)
+                     .map(file -> file.isAbsolute() ? file : new File(getCurrentDirectory(), file.getPath()))
+                     .map(file -> OMFileChooser.applyFilter(file, getFileFilter()))
+                     .toArray(File[]::new);
     }
     
     /**
