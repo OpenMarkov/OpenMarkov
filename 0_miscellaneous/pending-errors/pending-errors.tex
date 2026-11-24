@@ -12494,7 +12494,7 @@ Prueba: una probabilidad de 1,5 se rechaza en la tabla y en el fichero; una tasa
 \setcounter{subsection}{442}
 \subsection[Desde 06cec5fa, «Show optimal strategy» o el «Cost-effectiveness plot» de una red de sucesos fallan con un aviso que no se entiende]{Desde \texttt{06cec5fa}, la eliminación de variables acepta las redes de sucesos: en una red de sucesos con decisiones, «Show optimal strategy» y el «Cost-effectiveness plot» del análisis de sensibilidad, que avisaban de que el algoritmo no evalúa ese tipo de red, fallan con «Potential P(Onset | Therapy, Sex) cannot be converted to a table»}\label{err:443}
 \begin{ficha}
-\fichakey{Estado}Presente
+\fichakey{Estado}Presente. Se deja hasta que Jorge Rico termine el análisis probabilístico de las redes de sucesos, que es lo que empezó en el bloque desactivado de \texttt{DESInference} (Manuel Arias, 24-11-2026)
 \fichakey{Módulo}inference, gui
 \fichakey{Paquete}org.openmarkov.inference.algorithm.variableElimination.tasks; org.openmarkov.gui.window; org.openmarkov.gui.desnets
 \fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/variableElimination/tasks/VariableElimination.java:142-150} \newline \path{gui/src/main/java/org/openmarkov/gui/window/MainPanelMenuAssistant.java:793-795} \newline \path{gui/src/main/java/org/openmarkov/gui/window/InferenceHandler.java:280-295} \newline \path{gui/src/main/java/org/openmarkov/gui/desnets/DESInference.java:463-483}
