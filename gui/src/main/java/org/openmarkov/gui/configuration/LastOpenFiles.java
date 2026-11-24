@@ -14,6 +14,7 @@ import io.github.jorgericovivas.rust_essentials.tuples.Tuple2Record;
 import io.github.jorgericovivas.rust_essentials.tuples.Tuples;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 
+import java.util.List;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
@@ -45,17 +46,14 @@ public class LastOpenFiles {
     public static void setLastSource(NetworkEditorPanel.NetworkSource source) {
         UserPreferences.LAST_OPEN_NETWORKS_SOURCES.use(latestOpenFiles -> {
             var index = getIndexForSource(source);
-            if (index.isEmpty()) {
-                latestOpenFiles.addFirst(source);
-                while (latestOpenFiles.size() > UserPreferences.LAST_OPEN_NETWORKS_SOURCES_MAX.get()) {
-                    latestOpenFiles.removeLast();
-                }
-            } else {
+            if (index.isPresent()) {
                 latestOpenFiles.remove(index.getAsInt());
-                latestOpenFiles.addFirst(source);
             }
+            latestOpenFiles.addFirst(source);
+            // Also when it was already in the list, which may be longer than the number chosen (error 446)
+            removeTheOldest(latestOpenFiles);
         });
-        
+
         if (UserPreferences.UPDATE_RECENTS_ON_OPEN_NETWORK.get() && source instanceof NetworkEditorPanel.NetworkSource.SourceFile sourceFile) {
             switch (OperatingSystem.CURRENT_OS) {
                 case WINDOWS -> {
@@ -69,6 +67,20 @@ public class LastOpenFiles {
         }
     }
     
+    /** Leaves in the list of recent networks only as many as the number chosen in the settings (error 446). */
+    public static void keepOnlyTheMostRecent() {
+        UserPreferences.LAST_OPEN_NETWORKS_SOURCES.use(latestOpenFiles -> {
+            removeTheOldest(latestOpenFiles);
+        });
+    }
+
+    private static void removeTheOldest(List<NetworkEditorPanel.NetworkSource> latestOpenFiles) {
+        while (!latestOpenFiles.isEmpty()
+                && latestOpenFiles.size() > UserPreferences.LAST_OPEN_NETWORKS_SOURCES_MAX.get()) {
+            latestOpenFiles.removeLast();
+        }
+    }
+
     private interface Shell32 extends ShellAPI {
         Shell32 INSTANCE = Native.load("shell32", Shell32.class);
         

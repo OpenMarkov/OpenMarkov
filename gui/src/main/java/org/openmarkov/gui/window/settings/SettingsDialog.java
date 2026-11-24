@@ -16,6 +16,7 @@ import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.component.NumericSpinner;
 import org.openmarkov.gui.configuration.GUIColor;
 import org.openmarkov.gui.configuration.GUIColors;
+import org.openmarkov.gui.configuration.LastOpenFiles;
 import org.openmarkov.gui.configuration.OperatingSystem;
 import org.openmarkov.gui.configuration.StartupAction;
 import org.openmarkov.gui.configuration.Theme;
@@ -522,9 +523,7 @@ public final class SettingsDialog extends JDialog {
             var uiScaleLabel = new JLabel("Recent networks size  ");
             var helpToolTip = GUIUtils.generateTooltipElement("The amount of networks on the `File -> Open recent` option.");
             
-            networkFilesSpinner.addChangeListener(e -> {
-                UserPreferences.LAST_OPEN_NETWORKS_SOURCES_MAX.set(networkFilesSpinner.getCurrentValue());
-            });
+            networkFilesSpinner.addChangeListener(e -> changeTheNumberOfRecentNetworks(networkFilesSpinner.getCurrentValue()));
             gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
                    .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, uiScaleLabel, helpToolTip))
                    .weighty(0)
@@ -853,6 +852,13 @@ public final class SettingsDialog extends JDialog {
         return preferenceChooser.getSelectedOption();
     }
     
+    /** Keeps {@code number} recent networks, and shortens their list and their menu at once (error 446). */
+    static void changeTheNumberOfRecentNetworks(int number) {
+        UserPreferences.LAST_OPEN_NETWORKS_SOURCES_MAX.set(number);
+        LastOpenFiles.keepOnlyTheMostRecent();
+        MainGUI.INSTANCE.mainPanel.getMainMenu().rechargeFileMenu();
+    }
+
     private static void reloadPreference(UserPreference<?> preference) {
         SwitchUtils.switchInstance(
                 preference,
