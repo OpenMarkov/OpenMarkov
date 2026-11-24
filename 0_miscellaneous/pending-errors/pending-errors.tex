@@ -24567,13 +24567,13 @@ Prueba: abrir \texttt{asia.\allowbreak{}pgmx} desde dos servidores con el mismo 
 \fichakey{Estado}Presente
 \fichakey{Módulo}gui
 \fichakey{Paquete}org.openmarkov.gui.window.settings; org.openmarkov.gui.configuration; org.openmarkov.gui.menutoolbar.menu
-\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/settings/SettingsDialog.java:513-534, 866-868} \newline \path{gui/src/main/java/org/openmarkov/gui/configuration/LastOpenFiles.java:44-57} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/MainMenu.java:679-692}
+\fichakey{Ficheros}\path{gui/src/main/java/org/openmarkov/gui/window/settings/SettingsDialog.java:513-534, 804, 856-871} \newline \path{gui/src/main/java/org/openmarkov/gui/window/NetworkFileHandler.java:239, 399} \newline \path{gui/src/main/java/org/openmarkov/gui/configuration/LastOpenFiles.java:44-57} \newline \path{gui/src/main/java/org/openmarkov/gui/menutoolbar/menu/MainMenu.java:679-692}
 \fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{07bbdb98} (24-11-2026) y una carpeta de usuario aparte, para no tocar preferencias de nadie: nueve redes en la preferencia de las recientes, el número puesto a 3 como lo pone el selector de Settings (\texttt{LAST\_\allowbreak{}OPEN\_\allowbreak{}NETWORKS\_\allowbreak{}SOURCES\_\allowbreak{}MAX.\allowbreak{}set}) y después \texttt{Last\allowbreak{}Open\allowbreak{}Files.\allowbreak{}set\allowbreak{}Last\allowbreak{}Source}, que es lo que hace abrir una red. Que el menú enseñe la lista entera y no se rehaga al cambiar el número se ha leído en el código
 \fichakey{Esfuerzo}Pequeño (horas)
 \fichakey{Decisión de equipo}No
 \end{ficha}
 \paragraph{Qué pasa}
-\texttt{06cec5fa} (24-11-2026) añade a Settings un número, «Recent networks size», con cuántas redes recuerda «Open recent network\ldots»; antes eran 9 fijas, y ahora son 10 si no se cambia. Al cambiarlo solo se guarda el número (línea 526). La lista se recorta en \texttt{Last\allowbreak{}Open\allowbreak{}Files.\allowbreak{}set\allowbreak{}Last\allowbreak{}Source} (líneas 44-57), y solo cuando se abre una red que no estaba en ella; volver a abrir una de la lista la sube al principio sin recortar. El menú se rehace cuando cambia la lista (líneas 866-868), no el número, y enseña la lista entera (\texttt{Main\allowbreak{}Menu.\allowbreak{}get\allowbreak{}Last\allowbreak{}Open\allowbreak{}Files}, líneas 679-692). Bajar el número a 3, o a 0 para no tener recientes, no cambia nada hasta abrir otra red.
+\texttt{06cec5fa} (24-11-2026) añade a Settings un número, «Recent networks size», con cuántas redes recuerda «Open recent network\ldots»; antes eran 9 fijas, y ahora son 10 si no se cambia. Al cambiarlo solo se guarda el número (línea 526). La lista se recorta en \texttt{Last\allowbreak{}Open\allowbreak{}Files.\allowbreak{}set\allowbreak{}Last\allowbreak{}Source} (líneas 44-57), y solo cuando se abre una red que no estaba en ella; volver a abrir una de la lista la sube al principio sin recortar. El menú se rehace al abrir una red (\texttt{Network\allowbreak{}File\allowbreak{}Handler}, líneas 239 y 399) y al volver en Settings a los valores de fábrica (línea 804), y enseña la lista entera (\texttt{Main\allowbreak{}Menu.\allowbreak{}get\allowbreak{}Last\allowbreak{}Open\allowbreak{}Files}, líneas 679-692). En \texttt{Settings\allowbreak{}Dialog} hay un método que lo rehace cuando cambia la lista, \texttt{reload\allowbreak{}Preference} (líneas 856-871), pero nadie lo llama. Bajar el número a 3, o a 0 para no tener recientes, no cambia nada hasta abrir otra red.
 
 Medido:
 
@@ -24584,7 +24584,7 @@ abierta otra vez net5.pgmx, que está en la lista    número 3, en la lista 9
 abierta new.pgmx, que no está                       número 3, en la lista 3
 \end{Verbatim}
 \paragraph{Cómo arreglarlo}
-Recortar la lista en cuanto cambia el número; al guardar la lista recortada, el menú se rehace solo (líneas 866-868). Y recortar en \texttt{set\allowbreak{}Last\allowbreak{}Source} también al volver a abrir una red de la lista.
+Recortar la lista en cuanto cambia el número, y rehacer el menú, como al abrir una red. Y recortar en \texttt{set\allowbreak{}Last\allowbreak{}Source} también al volver a abrir una red de la lista.
 
 Prueba: lo de \emph{Medido}: con nueve recientes, poner el número a 3 deja tres en la lista, y el menú enseña tres.
 
