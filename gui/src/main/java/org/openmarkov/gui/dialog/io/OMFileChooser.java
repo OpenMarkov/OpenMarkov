@@ -64,6 +64,7 @@ public class OMFileChooser extends JFileChooser {
         return OMFileChooser.applyFilter(OMFileChooser.correctQuotes(selectedFile), getFileFilter());
     }
     
+    
     public @Nullable File getRawSelectedFile() {
         return super.getSelectedFile();
     }

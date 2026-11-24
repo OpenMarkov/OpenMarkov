@@ -59,8 +59,12 @@ public final class UserPreferences {
             .of("directories/latest_saved_dataset_directory", () -> new File("."), null, new TypeToken<>() {
             });
     
-    public static final UserPreference<ArrayList<NetworkEditorPanel.NetworkSource>> LAST_OPEN_NETWORKS_FILES = UserPreference
+    public static final UserPreference<ArrayList<NetworkEditorPanel.NetworkSource>> LAST_OPEN_NETWORKS_SOURCES = UserPreference
             .of("directories/last_open_networks_files", () -> new ArrayList<>(), null, new TypeToken<>() {
+            });
+    
+    public static final UserPreference<Integer> LAST_OPEN_NETWORKS_SOURCES_MAX = UserPreference
+            .of("directories/last_open_networks_files_max", () -> 10, null, new TypeToken<>() {
             });
     
     

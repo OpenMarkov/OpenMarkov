@@ -5,7 +5,7 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package org.openmarkov.sensitivityanalysis.dialog;
+package org.openmarkov.gui.sensitivityAnalysis.dialog;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -19,10 +19,10 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.renderer.category.IntervalBarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.category.DefaultIntervalCategoryDataset;

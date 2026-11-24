@@ -1,13 +1,17 @@
 package org.openmarkov.gui.desnets;
 
 import org.openmarkov.core.exception.ConstraintViolatedException;
-import org.openmarkov.core.model.network.constraint.EveryCycleHasAnEvent;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.OpenMarkovException;
 import org.openmarkov.core.exception.ThereIsNoPotentialInNodeException;
 import org.openmarkov.core.exception.UnreachableException;
+import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.MonteCarloOptions;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.EqualCriterion;
+import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
@@ -15,6 +19,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.State;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.VariableType;
+import org.openmarkov.core.model.network.constraint.EveryCycleHasAnEvent;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
 import org.openmarkov.core.model.network.potential.DESSimulablePotential;
 import org.openmarkov.core.model.network.potential.DistributionTablePotential;
@@ -25,12 +30,16 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.core.model.network.potential.TransitionTablePotential;
 import org.openmarkov.core.model.network.potential.plugin.PotentialUtils;
 import org.openmarkov.core.model.network.type.DESNetworkType;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.CEProbabilisticDialog;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisController;
+import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.inference.DES.DESRandomProvider;
 import org.openmarkov.inference.DES.DESRecord;
 import org.openmarkov.inference.DES.exception.ChanceNodeCannotBeDiscretized;
 import org.openmarkov.inference.DES.exception.OnlyDESNetsAllowedException;
 import org.openmarkov.inference.DES.exception.RelationCannotBeSimulated;
 import org.openmarkov.inference.DES.exception.RelationDoesNotTakeEventsIntoAccount;
+import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisModel;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -447,8 +456,31 @@ public class DESInference {
      */
     private void showResultsWindow(double simulationTime, JPanel psaPanel) {
         boolean[] usingDiscount = new boolean[criteria.size()];
-        for (int criterionNum = 0; criterionNum < criteria.size(); criterionNum++)
+        for (int criterionNum = 0; criterionNum < criteria.size(); criterionNum++) {
             usingDiscount[criterionNum] = criteria.get(criterionNum).getDiscount() > 0;
+        }
+        
+        var seController = new SensitivityAnalysisController(MainGUI.INSTANCE);
+        
+        if (1 == 0) {
+            try {
+                SensitivityAnalysisModel sensitivityAnalysisModel = new SensitivityAnalysisModel();
+                var decisionVariables = probNet.getNodes()
+                                               .stream()
+                                               .filter(node -> node.getNodeType() == NodeType.DECISION)
+                                               .map(Node::getVariable)
+                                               .toList();
+                sensitivityAnalysisModel.setDecisionVariable(decisionVariables.getFirst());
+                
+                
+                new CEProbabilisticDialog(MainGUI.INSTANCE, probNet, new EvidenceCase(), sensitivityAnalysisModel);
+            } catch (IncompatibleEvidenceException | NonProjectablePotentialException |
+                     NotEvaluableNetworkException.NotApplicableNetwork | ConstraintViolatedException e) {
+                throw new UnrecoverableException(e);
+            }
+            return;
+        }
+        
         DESResultsWindow.presentResults(
                 simulationTime,
                 simulationSummaryResults,

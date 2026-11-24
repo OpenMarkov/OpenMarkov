@@ -5,7 +5,7 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package org.openmarkov.sensitivityanalysis.dialog;
+package org.openmarkov.gui.sensitivityAnalysis.dialog;
 
 import org.jdesktop.swingx.VerticalLayout;
 import org.jetbrains.annotations.NotNull;
@@ -20,13 +20,14 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.chart.ui.RectangleEdge;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
@@ -39,15 +40,32 @@ import org.openmarkov.gui.commonComponents.JComboBoxFunctionRender;
 import org.openmarkov.gui.component.NumericSpinner;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VECESensAnSpider;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisModel;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;

@@ -1,7 +1,11 @@
 # OpenMarkov
 An open-source software tool for probabilistic graphical models (PGMs) developed by the Research Centre for Intelligent Decision-Support Systems of the UNED in Madrid, Spain.
 
-## Authors
+## Main authors
+
+Many contributors have collaborated into the conception of OpenMarkov, the following list contains
+the main authors of OpenMarkov, but plenty of others have also contributed on it:
+
 - Manuel Arias
 - Francisco Javier Díez
 - Manuel Luque

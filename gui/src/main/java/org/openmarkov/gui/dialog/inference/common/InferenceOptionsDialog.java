@@ -7,13 +7,13 @@
 
 package org.openmarkov.gui.dialog.inference.common;
 
-import org.openmarkov.core.action.core.MonteCarloOptionsEdit;
 import org.openmarkov.core.action.core.MulticriteriaEdit;
 import org.openmarkov.core.exception.InvalidArgumentException;
 import org.openmarkov.core.exception.UnrecoverableException;
 import org.openmarkov.core.inference.MonteCarloOptions;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.inference.TemporalOptions;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.CycleLength;
 import org.openmarkov.core.model.network.ProbNet;
@@ -22,10 +22,18 @@ import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.gui.component.ValuesTableCellRenderer;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.java.reflectionUtils.ReflectionEquality;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -33,7 +41,13 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.JTextComponent;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -261,9 +275,6 @@ public class InferenceOptionsDialog extends OkCancelDialog {
         
         this.add(mainPanel);
         this.setIconImage(null);
-        this.setResizable(false);
-        
-        this.pack();
         
         if (onlyShowThisType != null) {
             if (onlyShowThisType == MulticriteriaOptions.Type.UNICRITERION) {
@@ -302,7 +313,13 @@ public class InferenceOptionsDialog extends OkCancelDialog {
                 multicriteriaOptions.setCeOptionsShowed(true);
             }
         }
-
+        
+        this.pack();
+        this.setResizable(false);
+        if (probNet.getNetworkType() instanceof DESNetworkType) {
+            this.setMinimumSize(new Dimension(600, 490));
+        }
+        
         // Center dialog
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();

@@ -16,9 +16,9 @@ import org.openmarkov.core.model.network.modelUncertainty.DeterministicAxisVaria
 import org.openmarkov.core.model.network.modelUncertainty.SystematicSampling;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
 import org.openmarkov.core.testTags.TestSpeed;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.TornadoSpiderDialog;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VESensAnTornadoSpider;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
-import org.openmarkov.sensitivityanalysis.dialog.TornadoSpiderDialog;
 
 import java.net.URL;
 import java.util.Arrays;

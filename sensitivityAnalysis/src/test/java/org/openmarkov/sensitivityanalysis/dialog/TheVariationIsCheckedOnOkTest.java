@@ -17,6 +17,7 @@ import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
 import org.openmarkov.core.model.network.modelUncertainty.DeterministicAxisVariationType;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.gui.configuration.UserPreference;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.AxisVariationPanel;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.sensitivityanalysis.model.AnalysisType;
@@ -132,21 +133,21 @@ class TheVariationIsCheckedOnOkTest {
         return strings.getString("SensitivityAnalysis.Axis.Invalid") + ": "
                 + strings.getString("SensitivityAnalysis.Axis.Invalid." + type);
     }
-
-    private static void writeTheInterval(SensitivityAnalysisDialog dialog, int axis, String lower, String upper) {
+    
+    private static void writeTheInterval(org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog dialog, int axis, String lower, String upper) {
         JComboBox<?> types = (JComboBox<?>) axis(dialog, axis).getComponent(1);
         types.setSelectedItem(strings.getString(DeterministicAxisVariationType.UDIN.toString()));
         // Written as by the keyboard, but without Enter
         parameterControl(dialog, axis, JTextField.class, 0).setText(lower);
         parameterControl(dialog, axis, JTextField.class, 1).setText(upper);
     }
-
-    private static JPanel axis(SensitivityAnalysisDialog dialog, int axis) {
+    
+    private static JPanel axis(org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog dialog, int axis) {
         return (JPanel) first(dialog, AxisVariationPanel.class).getComponent(axis);
     }
 
     /** The control number {@code index} of class {@code type} among the parameters of {@code axis}. */
-    private static <T extends Component> T parameterControl(SensitivityAnalysisDialog dialog, int axis, Class<T> type,
+    private static <T extends Component> T parameterControl(org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog dialog, int axis, Class<T> type,
                                                             int index) {
         JPanel parameters = (JPanel) axis(dialog, axis).getComponent(2);
         List<T> controls = new ArrayList<>();
@@ -164,13 +165,13 @@ class TheVariationIsCheckedOnOkTest {
      *
      * @return the title and the text of each message shown
      */
-    private static List<String> messagesOnOk(Consumer<SensitivityAnalysisDialog> write,
+    private static List<String> messagesOnOk(Consumer<org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog> write,
                                              Consumer<SensitivityAnalysisController> afterOk) throws Exception {
-        AtomicReference<SensitivityAnalysisDialog> dialog = new AtomicReference<>();
+        AtomicReference<org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog> dialog = new AtomicReference<>();
         AtomicReference<SensitivityAnalysisController> controller = new AtomicReference<>();
         SwingUtilities.invokeAndWait(() -> {
             controller.set(new SensitivityAnalysisController(MainGUI.INSTANCE));
-            dialog.set(new SensitivityAnalysisDialog(MainGUI.INSTANCE, controller.get()));
+            dialog.set(new org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog(MainGUI.INSTANCE, controller.get()));
             write.accept(dialog.get());
         });
         AtomicBoolean pressed = new AtomicBoolean();
@@ -203,7 +204,7 @@ class TheVariationIsCheckedOnOkTest {
     private static void closeTheWindowsOpened(Set<Window> closed, List<String> messages) {
         for (Window window : Window.getWindows()) {
             if (window.isShowing() && window instanceof JDialog opened
-                    && !(window instanceof SensitivityAnalysisDialog) && closed.add(window)) {
+                    && !(window instanceof org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog) && closed.add(window)) {
                 JOptionPane message = first(opened, JOptionPane.class);
                 if (message != null) {
                     messages.add(opened.getTitle() + ": " + message.getMessage());

@@ -11,9 +11,9 @@ import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
-import org.openmarkov.core.inference.InferenceProgress;
 import org.openmarkov.core.inference.BasicOperations;
 import org.openmarkov.core.inference.InferenceAlgorithm;
+import org.openmarkov.core.inference.InferenceProgress;
 import org.openmarkov.core.inference.heuristic.EliminationHeuristic;
 import org.openmarkov.core.inference.heuristic.HeuristicFactory;
 import org.openmarkov.core.inference.tasks.TaskUtilities;
@@ -23,6 +23,7 @@ import org.openmarkov.core.model.network.constraint.NoMixedParents;
 import org.openmarkov.core.model.network.constraint.OnlyAtemporalVariables;
 import org.openmarkov.core.model.network.constraint.PNConstraint;
 import org.openmarkov.core.model.network.type.BayesianNetworkType;
+import org.openmarkov.core.model.network.type.DESNetworkType;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
@@ -144,6 +145,7 @@ public abstract class VariableElimination extends InferenceAlgorithm {
 		possibleNetworkTypes.add(InfluenceDiagramType.getUniqueInstance());
 		possibleNetworkTypes.add(MIDType.getUniqueInstance());
 		possibleNetworkTypes.add(DecisionAnalysisNetworkType.getUniqueInstance());
+        possibleNetworkTypes.add(DESNetworkType.getUniqueInstance());
 		return possibleNetworkTypes;
 	}
 

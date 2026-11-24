@@ -33,12 +33,8 @@ import org.openmarkov.core.logging.OpenMarkovLogger;
 import org.openmarkov.core.model.database.CaseDatabase;
 import org.openmarkov.core.model.network.Criterion;
 import org.openmarkov.core.model.network.EvidenceCase;
-import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.NetworkCurrency;
 import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.io.probmodel.reader.RelevancesThatAreNotNumbers;
-import org.openmarkov.io.probmodel.reader.TablesAFileLeavesOut;
-import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.constraint.OnlyChanceNodes;
 import org.openmarkov.core.model.network.potential.ColumnsThatDoNotAddUpToOne;
 import org.openmarkov.core.model.network.potential.DistributionsOfAColumn;
@@ -61,6 +57,8 @@ import org.openmarkov.gui.exception.CorruptNetworkFile;
 import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
+import org.openmarkov.io.probmodel.reader.RelevancesThatAreNotNumbers;
+import org.openmarkov.io.probmodel.reader.TablesAFileLeavesOut;
 import org.openmarkov.io.probmodel.writer.PGMXWriter_1_0;
 import org.openmarkov.java.swing.ComponentUtilities;
 
@@ -79,6 +77,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -146,8 +146,14 @@ public class NetworkFileHandler {
     
     // ── Open ──────────────────────────────────────────────────────
     
-    void openNetwork() throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
-        this.openNetwork((String) null);
+    void requestAndOpenNetwork() {
+        for (var file : this.requestNetworkFilesToOpen()) {
+            try {
+                openNetworkSource(new NetworkEditorPanel.NetworkSource.SourceFile(new File(file)));
+            } catch (ProbNetParserException | IOException | NoReaderForFileException | CorruptNetworkFile ex) {
+                Thread.currentThread().getUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), ex);
+            }
+        }
     }
     
     void openNetwork(ProbNet probNet) {
@@ -155,13 +161,7 @@ public class NetworkFileHandler {
         networkPanels.add(newNetworkEditorPanel);
     }
     
-    void openNetwork(@Nullable String fileName) throws ProbNetParserException, IOException, NoReaderForFileException, CorruptNetworkFile {
-        if (fileName == null || fileName.isBlank()) {
-            fileName = this.requestNetworkFileToOpen();
-            if (fileName == null) {
-                return;
-            }
-        }
+    void openNetwork(@Nullable String fileName) throws NoReaderForFileException, ProbNetParserException, IOException, CorruptNetworkFile {
         openNetworkSource(new NetworkEditorPanel.NetworkSource.SourceFile(new File(fileName)));
     }
     
@@ -555,14 +555,15 @@ public class NetworkFileHandler {
     
     // ── File chooser dialogs ──────────────────────────────────────
     
-    private String requestNetworkFileToOpen() {
+    private List<String> requestNetworkFilesToOpen() {
         NetworkOMFileChooser fileChooser = new NetworkOMFileChooser();
         fileChooser.setDialogTitle(stringDatabase.getString("OpenNetwork.Title"));
         String fileName = null;
+        fileChooser.setMultiSelectionEnabled(true);
         if (fileChooser.showOpenDialog(ComponentUtilities.getOwner(mainPanel)) == JFileChooser.APPROVE_OPTION) {
-            fileName = fileChooser.getSelectedFile().getAbsolutePath();
+            return Arrays.stream(fileChooser.getSelectedFiles()).map(File::getAbsolutePath).toList();
         }
-        return fileName;
+        return Collections.emptyList();
     }
     
     private URL requestURLFileToOpen() {

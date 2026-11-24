@@ -5,9 +5,15 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package org.openmarkov.sensitivityanalysis.dialog;
+package org.openmarkov.gui.sensitivityAnalysis.dialog;
 
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.NotSupportedOperationException;
+import org.openmarkov.core.exception.UnrecoverableException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.NodeType;
@@ -15,19 +21,29 @@ import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.dialog.ExceptionDialog;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.sensitivityanalysis.exceptions.ScopeException;
 import org.openmarkov.sensitivityanalysis.exceptions.UncertainParameterException;
 import org.openmarkov.sensitivityanalysis.model.AnalysisType;
 import org.openmarkov.sensitivityanalysis.model.ParameterType;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisConfiguration;
-import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisController;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -442,8 +458,8 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
             //filteredTypes.add(stringDatabase.getValuesInAString(AnalysisType.ACCEPTABILITY.toString()));
             //filteredTypes.add(stringDatabase.getValuesInAString(AnalysisType.EVPI.toString()));
         } else {
-            filteredTypes.add(stringDatabase.getString(AnalysisType.SPIDER_CE.toString()));
             filteredTypes.add(stringDatabase.getString(AnalysisType.CEPLANE.toString()));
+            filteredTypes.add(stringDatabase.getString(AnalysisType.SPIDER_CE.toString()));
             //filteredTypes.add(stringDatabase.getValuesInAString(AnalysisType.EVPI.toString()));
         }
         
@@ -598,7 +614,6 @@ public class SensitivityAnalysisDialog extends OkCancelDialog implements Observe
             controller.getSensitivityAnalysisModel()
                       .setMultithreading(chkUseMultiThreading.isSelected());
             controller.getSensitivityAnalysisModel().setSeed(seedOf(seedTextField.getText()));
-            
         }
         EvidenceCase evidence = new EvidenceCase(controller.getPreResolutionEvidence());
         if (this.controller.getSensitivityAnalysisModel().getDecisionVariable() != null

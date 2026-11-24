@@ -1,12 +1,12 @@
-package org.openmarkov.sensitivityanalysis;
+package org.openmarkov.gui.sensitivityAnalysis;
 
 import org.jetbrains.annotations.NotNull;
 import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisFrameGenerator;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
-import org.openmarkov.sensitivityanalysis.dialog.SensitivityAnalysisFrameGenerator;
 
 import javax.swing.JMenuItem;
 

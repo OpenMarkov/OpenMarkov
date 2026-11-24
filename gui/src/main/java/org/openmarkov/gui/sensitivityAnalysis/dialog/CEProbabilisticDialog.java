@@ -5,7 +5,7 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package org.openmarkov.sensitivityanalysis.dialog;
+package org.openmarkov.gui.sensitivityAnalysis.dialog;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -200,6 +200,7 @@ public class CEProbabilisticDialog extends JDialog {
         setResizable(true);
         repaint();
         pack();
+        relativeRadioButton.doClick();
         this.setVisible(true);
     }
     

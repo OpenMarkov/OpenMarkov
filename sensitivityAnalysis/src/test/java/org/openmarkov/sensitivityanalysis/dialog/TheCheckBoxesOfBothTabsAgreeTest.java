@@ -17,6 +17,7 @@ import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.gui.configuration.UserPreference;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.CEProbabilisticDialog;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisModel;

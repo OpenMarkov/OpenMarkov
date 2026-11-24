@@ -348,7 +348,10 @@ class InferenceHandler {
 
 
             ProgressMonitor simulationProgressMonitor = new ProgressMonitor(SwingUtilities.getWindowAncestor(mainPanel), "Running simulation", null, 0, 0);
-
+            
+            simulationProgressMonitor.setMillisToDecideToPopup(100);
+            simulationProgressMonitor.setMillisToPopup(100);
+            
             new Thread(() -> {
                 try {
                     new DESInference(probNet, simulationProgressMonitor);

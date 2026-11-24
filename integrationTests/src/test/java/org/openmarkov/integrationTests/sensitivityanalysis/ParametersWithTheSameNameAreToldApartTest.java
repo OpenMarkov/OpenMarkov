@@ -20,10 +20,10 @@ import org.openmarkov.core.model.network.modelUncertainty.UncertainValue;
 import org.openmarkov.core.model.network.potential.ExactDistrPotential;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.gui.configuration.UserPreference;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisController;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.TornadoSpiderDialog;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
-import org.openmarkov.sensitivityanalysis.dialog.TornadoSpiderDialog;
-import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisController;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisModel;
 
 import javax.swing.SwingUtilities;

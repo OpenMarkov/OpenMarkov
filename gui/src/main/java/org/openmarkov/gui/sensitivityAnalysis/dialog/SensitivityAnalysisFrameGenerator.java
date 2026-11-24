@@ -5,7 +5,7 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package org.openmarkov.sensitivityanalysis.dialog;
+package org.openmarkov.gui.sensitivityAnalysis.dialog;
 
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.inference.MulticriteriaOptions;
@@ -13,7 +13,6 @@ import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.java.swing.ComponentUtilities;
-import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisController;
 
 import javax.swing.JFrame;
 
@@ -42,7 +41,8 @@ public class SensitivityAnalysisFrameGenerator {
                             || controller.getProbNet()
                                          .getDecisionCriteria() != null
                             && controller.getProbNet().getDecisionCriteria().size() == 1);
-            return new SensitivityAnalysisDialog(owner, controller);
+            SensitivityAnalysisDialog sensitivityAnalysisDialog = new SensitivityAnalysisDialog(owner, controller);
+            return sensitivityAnalysisDialog;
         }
         return null;
     }

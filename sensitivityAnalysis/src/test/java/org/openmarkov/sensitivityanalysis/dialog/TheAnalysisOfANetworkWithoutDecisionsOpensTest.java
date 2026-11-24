@@ -115,8 +115,9 @@ class TheAnalysisOfANetworkWithoutDecisionsOpensTest {
                    opened.messages.toString());
         assertFalse(opened.okEnabled.get(), "OK is enabled");
     }
-
-    private record Opened(AtomicReference<SensitivityAnalysisDialog> dialog,
+    
+    private record Opened(
+            AtomicReference<org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog> dialog,
                           AtomicReference<SensitivityAnalysisController> controller,
                           AtomicReference<Throwable> failure, AtomicBoolean okEnabled, List<String> messages) {
     }
@@ -135,7 +136,7 @@ class TheAnalysisOfANetworkWithoutDecisionsOpensTest {
                 SensitivityAnalysisController controller = new SensitivityAnalysisController(MainGUI.INSTANCE);
                 controller.getConfiguration().setIsUnicriterion(unicriterion);
                 opened.controller.set(controller);
-                opened.dialog.set(new SensitivityAnalysisDialog(MainGUI.INSTANCE, controller));
+                opened.dialog.set(new org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog(MainGUI.INSTANCE, controller));
                 opened.okEnabled.set(opened.dialog.get().getOKButton().isEnabled());
             } catch (Throwable e) {
                 opened.failure.set(e);
@@ -148,7 +149,7 @@ class TheAnalysisOfANetworkWithoutDecisionsOpensTest {
             Thread.sleep(20);
             for (Window window : Window.getWindows()) {
                 if (window.isShowing() && window instanceof JDialog message
-                        && !(window instanceof SensitivityAnalysisDialog) && closed.add(window)) {
+                        && !(window instanceof org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog) && closed.add(window)) {
                     JOptionPane pane = first(message, JOptionPane.class);
                     opened.messages.add(message.getTitle() + ": " + (pane == null ? "" : pane.getMessage()));
                     SwingUtilities.invokeLater(message::dispose);

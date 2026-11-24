@@ -5,23 +5,26 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package org.openmarkov.sensitivityanalysis.dialog;
+package org.openmarkov.gui.sensitivityAnalysis.dialog;
 
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.ProbNetOperations;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.dialog.inference.common.PossibleScenario;
 import org.openmarkov.sensitivityanalysis.model.ScopeType;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisConfiguration;
-import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisController;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;

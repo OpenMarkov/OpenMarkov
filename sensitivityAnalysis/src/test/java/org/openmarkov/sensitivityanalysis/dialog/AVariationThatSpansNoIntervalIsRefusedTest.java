@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
 import org.openmarkov.core.model.network.modelUncertainty.DeterministicAxisVariationType;
 import org.openmarkov.core.testTags.TestSpeed;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.AxisVariationPanel;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.openmarkov.core.model.network.modelUncertainty.DeterministicAxisVariationType.POPP;

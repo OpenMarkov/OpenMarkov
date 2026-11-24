@@ -20,11 +20,11 @@ import org.openmarkov.core.model.network.modelUncertainty.SystematicSampling;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.costEffectiveness.CEDecisionResults;
 import org.openmarkov.gui.configuration.UserPreference;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.CEProbabilisticDialog;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.TornadoSpiderDialog;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.integrationTests.IntegrationTest;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
-import org.openmarkov.sensitivityanalysis.dialog.CEProbabilisticDialog;
-import org.openmarkov.sensitivityanalysis.dialog.TornadoSpiderDialog;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisModel;
 
 import javax.swing.JComboBox;

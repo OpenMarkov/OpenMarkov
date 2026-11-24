@@ -18,8 +18,8 @@ import org.openmarkov.core.model.network.modelUncertainty.DeterministicAxisVaria
 import org.openmarkov.core.model.network.modelUncertainty.SystematicSampling;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
 import org.openmarkov.core.testTags.TestSpeed;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.MapDialog;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
-import org.openmarkov.sensitivityanalysis.dialog.MapDialog;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisModel;
 
 import javax.swing.JFrame;

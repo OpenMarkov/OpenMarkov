@@ -23,8 +23,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 /**
  * The dialog in which a sensitivity analysis is asked for is titled «Sensitivity analysis».
  *
@@ -65,7 +63,7 @@ class TheSensitivityAnalysisDialogHasATitleTest {
         SwingUtilities.invokeAndWait(() -> {
             SensitivityAnalysisController controller = new SensitivityAnalysisController(MainGUI.INSTANCE);
             controller.getConfiguration().setIsUnicriterion(true);
-            SensitivityAnalysisDialog dialog = new SensitivityAnalysisDialog(MainGUI.INSTANCE, controller);
+            org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog dialog = new org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog(MainGUI.INSTANCE, controller);
             try {
                 assertEquals("Sensitivity analysis", dialog.getTitle());
             } finally {

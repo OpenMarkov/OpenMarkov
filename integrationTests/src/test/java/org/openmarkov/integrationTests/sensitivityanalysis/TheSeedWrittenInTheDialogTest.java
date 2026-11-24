@@ -9,7 +9,7 @@ package org.openmarkov.integrationTests.sensitivityanalysis;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openmarkov.core.testTags.TestSpeed;
-import org.openmarkov.sensitivityanalysis.dialog.SensitivityAnalysisDialog;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;

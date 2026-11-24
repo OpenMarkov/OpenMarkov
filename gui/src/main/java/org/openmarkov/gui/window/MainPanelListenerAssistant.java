@@ -37,7 +37,7 @@ import org.openmarkov.gui.exception.NotEnoughMemoryException;
 import org.openmarkov.gui.graphic.VisualLink;
 import org.openmarkov.gui.graphic.VisualNode;
 import org.openmarkov.gui.menutoolbar.common.ActionCommands;
-import org.openmarkov.gui.toolplugin.ToolPlugin;
+import org.openmarkov.gui.sensitivityAnalysis.SensitivityAnalysisPlugin;
 import org.openmarkov.gui.util.GUIUtils;
 import org.openmarkov.gui.util.PropertyNames;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
@@ -105,7 +105,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
         switch (actionCommandConstant) {
             // ── File ──────────────────────────────────────────
             case ActionCommands.NEW_NETWORK -> fileHandler.createNewNetwork();
-            case ActionCommands.OPEN_NETWORK -> GUIUtils.executeUIAction(() -> fileHandler.openNetwork());
+            case ActionCommands.OPEN_NETWORK -> GUIUtils.executeUIAction(() -> fileHandler.requestAndOpenNetwork());
             case ActionCommands.OPEN_NETWORK_URL -> GUIUtils.executeUIAction(() -> fileHandler.openNetworkURL());
             case ActionCommands.SAVE_NETWORK ->
                     GUIUtils.executeUIAction(() -> fileHandler.saveNetwork(getCurrentNetworkEditorPanel()));
@@ -318,8 +318,7 @@ public class MainPanelListenerAssistant extends WindowAdapter
             case ActionCommands.HELP_ABOUT -> editAndViewHandler.showAbout();
             case ActionCommands.SENSITIVITY_ANALYSIS -> {
                 GUIUtils.executeUIAction(() -> {
-                    ToolPlugin toolPlugin = (ToolPlugin) Class.forName("org.openmarkov.sensitivityanalysis.SensitivityAnalysisPlugin").getDeclaredConstructor().newInstance();
-                    toolPlugin.toMenuItem().doClick();
+                    new SensitivityAnalysisPlugin().toMenuItem().doClick();
                 });
             }
             

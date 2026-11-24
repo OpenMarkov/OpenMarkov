@@ -17,12 +17,12 @@ import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.gui.configuration.UserPreference;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisController;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.SensitivityAnalysisDialog;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.io.probmodel.reader.PGMXReader;
-import org.openmarkov.sensitivityanalysis.dialog.SensitivityAnalysisDialog;
-import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisController;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;

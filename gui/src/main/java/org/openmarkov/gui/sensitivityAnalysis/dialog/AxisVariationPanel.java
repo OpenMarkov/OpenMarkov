@@ -5,20 +5,21 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package org.openmarkov.sensitivityanalysis.dialog;
+package org.openmarkov.gui.sensitivityAnalysis.dialog;
 
 import org.jetbrains.annotations.Nullable;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
 import org.openmarkov.core.model.network.modelUncertainty.DeterministicAxisVariationType;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisConfiguration;
-import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisController;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Arrays;
+import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.Component;
+import java.awt.FlowLayout;
 
 /**
  * Panel with all controls needed to select axis variation of one or two uncertain parameters

@@ -5,7 +5,7 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package org.openmarkov.sensitivityanalysis.dialog;
+package org.openmarkov.gui.sensitivityAnalysis.dialog;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -20,13 +20,14 @@ import org.jfree.chart.renderer.PaintScale;
 import org.jfree.chart.renderer.xy.XYBlockRenderer;
 import org.jfree.chart.title.PaintScaleLegend;
 import org.jfree.chart.title.TextTitle;
-import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.chart.ui.RectangleInsets;
+import org.jfree.data.xy.DefaultXYZDataset;
 import org.openmarkov.core.exception.ConstraintViolatedException;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.ProbNet;
@@ -38,13 +39,13 @@ import org.openmarkov.core.model.network.potential.TablePotential;
 import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.dialog.inference.common.ScopeType;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
-import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VESensAnMap;
 import org.openmarkov.sensitivityanalysis.model.AnalysisType;
 import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisModel;
 
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -52,9 +53,6 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.text.DecimalFormat;
 import java.util.List;
-
-import javax.swing.JDialog;
-import javax.swing.JPanel;
 
 /**
  * Dialog that shows Map sensitivity analysis

@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.openmarkov.core.testTags.TestSpeed;
-import org.openmarkov.sensitivityanalysis.dialog.PlotDialog;
-import org.openmarkov.sensitivityanalysis.dialog.TornadoSpiderDialog;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.PlotDialog;
+import org.openmarkov.gui.sensitivityAnalysis.dialog.TornadoSpiderDialog;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

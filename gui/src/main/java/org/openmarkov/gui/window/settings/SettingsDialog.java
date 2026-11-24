@@ -510,6 +510,29 @@ public final class SettingsDialog extends JDialog {
                    .add(optionsPanel);
         }
         
+        //UI Scale
+        {
+            var networkFilesSpinner = new NumericSpinner<>(Integer.class);
+            networkFilesSpinner.setMinimum(0);
+            networkFilesSpinner.setMaximum(100);
+            networkFilesSpinner.setCurrentValueNoListener(UserPreferences.LAST_OPEN_NETWORKS_SOURCES_MAX.get());
+            ((JSpinner.DefaultEditor) networkFilesSpinner.getEditor()).getTextField().setColumns(4);
+            networkFilesSpinner.setStepSize(1);
+            
+            var uiScaleLabel = new JLabel("Recent networks size  ");
+            var helpToolTip = GUIUtils.generateTooltipElement("The amount of networks on the `File -> Open recent` option.");
+            
+            networkFilesSpinner.addChangeListener(e -> {
+                UserPreferences.LAST_OPEN_NETWORKS_SOURCES_MAX.set(networkFilesSpinner.getCurrentValue());
+            });
+            gridbag.anchor(SimplifiedGridBagConstraint.Anchor.WEST)
+                   .add(ComponentUtilities.joinComponents(FlowLayout.CENTER, uiScaleLabel, helpToolTip))
+                   .weighty(0)
+                   .weightx(0)
+                   .anchor(SimplifiedGridBagConstraint.Anchor.EAST)
+                   .add(networkFilesSpinner);
+        }
+        
         //Developer tools
         {
             var developerToolsCheckBox = new JCheckBox();
@@ -840,7 +863,7 @@ public final class SettingsDialog extends JDialog {
                              UnsupportedLookAndFeelException e) {
                     }
                 }),
-                SwitchUtils.Case.of(UserPreferences.LAST_OPEN_NETWORKS_FILES, (lastOpenNetworksPreference) -> {
+                SwitchUtils.Case.of(UserPreferences.LAST_OPEN_NETWORKS_SOURCES, (lastOpenNetworksPreference) -> {
                     MainGUI.INSTANCE.mainPanel.getMainMenu().rechargeFileMenu();
                 })
         );

@@ -5,24 +5,26 @@
  * WITHOUT WARRANTIES OF ANY KIND.
  */
 
-package org.openmarkov.sensitivityanalysis.model;
+package org.openmarkov.gui.sensitivityAnalysis.dialog;
 
-import org.openmarkov.inference.algorithm.variableElimination.tasks.VEPropagation;
-import org.openmarkov.core.exception.*;
+import org.openmarkov.core.exception.ConstraintViolatedException;
+import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
+import org.openmarkov.core.exception.NotEvaluableNetworkException;
+import org.openmarkov.core.exception.NotSupportedOperationException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.modelUncertainty.SystematicSampling;
 import org.openmarkov.core.model.network.modelUncertainty.UncertainParameter;
 import org.openmarkov.gui.window.MainGUI;
-import org.openmarkov.sensitivityanalysis.dialog.CEProbabilisticDialog;
-import org.openmarkov.sensitivityanalysis.dialog.CESpiderDialog;
-import org.openmarkov.sensitivityanalysis.dialog.MapDialog;
-import org.openmarkov.sensitivityanalysis.dialog.PlotDialog;
-import org.openmarkov.sensitivityanalysis.dialog.TornadoSpiderDialog;
+import org.openmarkov.inference.algorithm.variableElimination.tasks.VEPropagation;
+import org.openmarkov.sensitivityanalysis.model.AnalysisType;
+import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisConfiguration;
+import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisModel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JDialog;
+import java.awt.Window;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;

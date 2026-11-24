@@ -33,6 +33,7 @@ open module org.openmarkov.gui {
     requires com.sun.jna.platform;
     requires java.net.http;
     requires commons.math3;
+    requires org.openmarkov.sensitivityanalysis;
     
     exports org.openmarkov.gui.action;
     exports org.openmarkov.gui.layout.bayesian;
