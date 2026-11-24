@@ -4,7 +4,7 @@
  * this code is distributed on an "AS IS" basis,
  * WITHOUT WARRANTIES OF ANY KIND.
  */
-package org.openmarkov.sensitivityanalysis.dialog;
+package org.openmarkov.gui.sensitivityAnalysis.dialog;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,11 +17,9 @@ import org.openmarkov.core.model.network.modelUncertainty.AxisVariation;
 import org.openmarkov.core.model.network.modelUncertainty.DeterministicAxisVariationType;
 import org.openmarkov.core.testTags.TestSpeed;
 import org.openmarkov.gui.configuration.UserPreference;
-import org.openmarkov.gui.sensitivityAnalysis.dialog.AxisVariationPanel;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.edition.networkEditorPanel.NetworkEditorPanel;
 import org.openmarkov.sensitivityanalysis.model.AnalysisType;
-import org.openmarkov.sensitivityanalysis.model.SensitivityAnalysisController;
 
 import javax.swing.JComboBox;
 import javax.swing.JDialog;

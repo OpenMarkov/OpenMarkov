@@ -7,6 +7,7 @@ open module org.openmarkov.gui {
     requires org.openmarkov.core;
     requires org.openmarkov.io;
     requires org.openmarkov.inference;
+    requires org.openmarkov.sensitivityanalysis;
     requires org.apache.logging.log4j;
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
@@ -33,7 +34,6 @@ open module org.openmarkov.gui {
     requires com.sun.jna.platform;
     requires java.net.http;
     requires commons.math3;
-    requires org.openmarkov.sensitivityanalysis;
     
     exports org.openmarkov.gui.action;
     exports org.openmarkov.gui.layout.bayesian;
