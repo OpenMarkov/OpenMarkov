@@ -68,7 +68,9 @@ open module org.openmarkov.gui {
     exports org.openmarkov.gui.productTour.tour;
     exports org.openmarkov.gui.productTour.tour.action;
     exports org.openmarkov.gui.license;
-
+    exports org.openmarkov.gui.sensitivityAnalysis;
+    exports org.openmarkov.gui.sensitivityAnalysis.dialog;
+    
     uses org.openmarkov.core.localize.spi.LocalizeResourcesProvider;
     provides org.openmarkov.core.localize.spi.LocalizeResourcesProvider with GUIResourceBundleProvider;
     
