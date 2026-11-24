@@ -78,8 +78,9 @@ class TheGeneratorNamesTheFileOfItsNetworkTest {
         File fromFile = folder.resolve("fromFile.pgmx").toFile();
         new PGMXWriter_1_0().write(fromFile.getPath(), network, List.of());
         File broken = Files.writeString(folder.resolve("broken.pgmx"), "This is not a network").toFile();
-        AnsweringChooser chooser = new AnsweringChooser();
         SwingUtilities.invokeAndWait(() -> {
+            // On the Swing thread, as every Swing component: built outside, it failed once inside Swing (error 449)
+            AnsweringChooser chooser = new AnsweringChooser();
             DBGeneratorGUI window = new DBGeneratorGUI(MainGUI.INSTANCE);
             try {
                 set(window, "netFileChooser", chooser);
