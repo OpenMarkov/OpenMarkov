@@ -278,7 +278,7 @@ Los \hyperref[err:430]{errores~430} a \hyperref[err:438]{438} se encontraron al 
 Los \hyperref[err:443]{errores~443} a \hyperref[err:446]{446} salen de revisar los tres commits que Jorge Rico subió el 24 de noviembre (\texttt{06cec5fa}, \texttt{b6b50968} y \texttt{07bbdb98}), que pasaron la integración continua porque esta no ejecuta las pruebas que necesitan pantalla. Se han comprobado con el código de \texttt{07bbdb98}, y la fila \emph{Comprobado} de cada ficha dice cómo. El \hyperref[err:449]{error~449} salió al pasar con pantalla la suite para el arreglo del \hyperref[err:446]{446}; la fila \emph{Comprobado} de su ficha dice cómo.
 
 \paragraph{Errores de la versión en C++ y Qt añadidos el 24 de noviembre}
-Los \hyperref[err:447]{errores~447} y \hyperref[err:448]{448} se encontraron al buscar a propósito errores de memoria en la versión en C++ y Qt, cuyo lector de Elvira, traducido de este, tenía los mismos bucles. Se han comprobado con el código de \texttt{c1633e1a}, ejecutándolos sin ventana, y la fila \emph{Comprobado} de cada ficha dice cómo.
+Los \hyperref[err:447]{errores~447} y \hyperref[err:448]{448} se encontraron al buscar a propósito errores de memoria en la versión en C++ y Qt, cuyo lector de Elvira, traducido de este, tenía los mismos bucles. Se han comprobado con el código de \texttt{c1633e1a}, ejecutándolos sin ventana, y la fila \emph{Comprobado} de cada ficha dice cómo. Los \hyperref[err:450]{errores~450} y \hyperref[err:451]{451} salieron de la misma búsqueda: el 450, leyendo su lector de hojas de Excel, y el 451, resolviendo con ella las redes de sus pruebas. Se han comprobado igual, con el mismo código.
 
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
@@ -333,9 +333,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{448 errores}; 304 de ellos son defectos nuevos: 105 encontrados al
-comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas, 4 al revisar los commits del 24 de noviembre y 2 al buscar errores de memoria en la versión en C++/Qt. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 398 pequeños, 49 medios y 1 grandes.
-De los 448, 438 están ya corregidos y 2 están cerrados sin arreglo.
+La lista tiene \textbf{450 errores}; 306 de ellos son defectos nuevos: 105 encontrados al
+comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas, 4 al revisar los commits del 24 de noviembre y 4 al buscar errores de memoria en la versión en C++/Qt. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 400 pequeños, 49 medios y 1 grandes.
+De los 450, 438 están ya corregidos y 2 están cerrados sin arreglo.
 El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -349,12 +349,12 @@ El apéndice recoge además 201 notas con lo que se comprobó y no entra en la l
 \ref{sec:ediciones}. Ediciones de la red: deshacer, cancelar y pegar & 35 \\
 \ref{sec:restricciones}. Restricciones de red & 3 \\
 \ref{sec:inferencia}. Evidencia, inferencia y variables numéricas & 29 \\
-\ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 24 \\
+\ref{sec:decisiones}. Decisiones: políticas, criterios, agentes y árbol de decisión & 25 \\
 \ref{sec:temporal}. Modelos temporales y evolución temporal & 17 \\
 \ref{sec:coste}. Coste-efectividad y análisis de sensibilidad & 31 \\
 \ref{sec:des}. Simulación de sucesos discretos & 24 \\
 \ref{sec:ficheros}. Abrir y guardar redes & 61 \\
-\ref{sec:casos}. Bases de casos & 34 \\
+\ref{sec:casos}. Bases de casos & 35 \\
 \ref{sec:aprendizaje}. Aprendizaje y evaluación de redes & 42 \\
 \ref{sec:editor}. Interfaz: editor de red y paneles de las relaciones & 51 \\
 \ref{sec:menus}. Interfaz: menús, diálogos y herramientas & 27 \\
@@ -506,6 +506,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:224]{224} & \textcolor{corregidoverde}{\textbf{Corregido}} · En una DAN, un hallazgo previo sobre una variable que restringe a otras impide evaluarla & \texttt{inference} & S \hfill No\\
 \hyperref[err:290]{290} & \textcolor{corregidoverde}{\textbf{Corregido}} · En una DAN, un hallazgo cuya probabilidad depende de una decisión cambia la utilidad o la estrategia & \texttt{inference} & M \hfill \textcolor{decisionrojo}{Sí}\\
 \hyperref[err:322]{322} & \textcolor{corregidoverde}{\textbf{Corregido}} · «Show CEP» en el nodo de una rama imposible sale como error no previsto & \texttt{gui} & S \hfill No\\
+\hyperref[err:451]{451} & Evaluar el árbol de decisión de un modelo que incumple más de una restricción acaba en NullPointerException & \texttt{inference}, \texttt{core} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:temporal}.\ Modelos temporales y evolución temporal}}\\
 \hyperref[err:67]{67} & \textcolor{corregidoverde}{\textbf{Corregido}} · Con evidencia, las curvas de la evolución temporal no suman uno & \texttt{inference} & M \hfill No\\
 \hyperref[err:68]{68} & \textcolor{corregidoverde}{\textbf{Corregido}} · La evolución temporal de una variable que empieza en el ciclo 1 falla & \texttt{inference} & S \hfill No\\
@@ -678,6 +679,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:421]{421} & \textcolor{corregidoverde}{\textbf{Corregido}} · Abrir una base de 100\,000 filas con una columna de identificadores tarda de 17 a 52 segundos & \texttt{io} & S \hfill No\\
 \hyperref[err:434]{434} & \textcolor{corregidoverde}{\textbf{Corregido}} · Desde d34588c, un caso sin nada sabido que OpenMarkov guarda en Excel se pierde al abrirlo & \texttt{io} & S \hfill No\\
 \hyperref[err:449]{449} & \textcolor{corregidoverde}{\textbf{Corregido}} · Cuatro pruebas del generador de bases de casos crean el selector de ficheros fuera del hilo de Swing y fallan de vez en cuando & \texttt{dbGenerator} & S \hfill No\\
+\hyperref[err:450]{450} & Una casilla de Excel más allá de XFD se lee, y lo que pasa depende de un número de 16 bits & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:aprendizaje}.\ Aprendizaje y evaluación de redes}}\\
 \hyperref[err:125]{125} & \textcolor{corregidoverde}{\textbf{Corregido}} · La exactitud del Bayes ingenuo selectivo usa el caso evaluado al entrenar & \texttt{learning.\allowbreak{}metric} & S \hfill No\\
 \hyperref[err:126]{126} & \textcolor{corregidoverde}{\textbf{Corregido}} · El Bayes ingenuo selectivo elige características sin el alfa del diálogo & \texttt{learning.\allowbreak{}algorithm} & S \hfill No\\
@@ -8004,6 +8006,36 @@ java.lang.NullPointerException: Cannot read the array length because "costs" is 
 A diferencia del \hyperref[err:321]{error~321}, a este se llegaba desde la ventana. En el árbol que ella construye (profundidad~5), \texttt{04.6-ID-CEA-two-tests.\allowbreak{}pgmx}, una de las redes de ejemplo de Francisco Javier Díez, tiene 9 nodos con esa partición de 165. Y redes del repositorio, eligiendo el análisis de coste-efectividad en las opciones de inferencia, también: \texttt{ID-decide-test.\allowbreak{}pgmx}, 9 de 45; \texttt{ID-CEA-test-2therapies.\allowbreak{}pgmx}, 12 de 63; \texttt{ID-CEA-test-2therapies-new-test.\allowbreak{}pgmx}, 9 de 165.
 \paragraph{Cómo arreglarlo}
 Que \texttt{open\allowbreak{}Associated\allowbreak{}CEP} mire si la partición es la de probabilidad cero (\texttt{CEP.\allowbreak{}isZero}) y, si lo es, enseñe un mensaje (\texttt{ShowCEP.\allowbreak{}ImpossibleScenario}, en \texttt{Messages\_\allowbreak{}en.\allowbreak{}xml}) con el título de la ventana de la partición, en vez de abrirla. Prueba: con \texttt{ID-decide-test} en coste-efectividad, «Show CEP» en un nodo imposible saca ese mensaje, y en otro, la ventana de la partición.
+
+\setcounter{subsection}{450}
+\subsection[Evaluar el árbol de decisión de un modelo que incumple más de una restricción acaba en NullPointerException]{Evaluar con \texttt{Decision\allowbreak{}Tree\allowbreak{}Expansion} un modelo que incumple más de una restricción ---un diagrama de influencia con un ciclo, por ejemplo--- acaba en \texttt{Null\allowbreak{}Pointer\allowbreak{}Exception} en vez de decir cuáles incumple: el \texttt{constraint} de una \texttt{Multiple\allowbreak{}Constraints\allowbreak{}Violated} es nulo}\label{err:451}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}inference, core
+\fichakey{Paquete}org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.core; org.openmarkov.core.exception
+\fichakey{Ficheros}\path{inference/src/main/java/org/openmarkov/inference/algorithm/decompositionIntoSymmetricDANs/core/DANConditionalSymmetricInference.java:46-49} \newline \path{core/src/main/java/org/openmarkov/core/exception/ConstraintViolatedException.java:72-73}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{c1633e1a} (24-11-2026): \texttt{tools/\allowbreak{}parity/\allowbreak{}DecisionTrees.\allowbreak{}java} de la versión en C++/Qt a profundidad~3, \texttt{new Decision\allowbreak{}Tree\allowbreak{}Expansion(\allowbreak{}Evaluation\allowbreak{}Type.\allowbreak{}UNICRITERION).\allowbreak{}evaluate} y \texttt{ProbNet.\allowbreak{}check\allowbreak{}Constraints}, con \texttt{ID-\allowbreak{}cycle.\allowbreak{}pgmx}, un diagrama de influencia con los enlaces A → B y B → A que está en las pruebas de esa versión. Qué ventana sale no se ha mirado
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\end{ficha}
+\paragraph{Qué pasa}
+Desde \texttt{098cf850} (9-8-2026), el constructor de \texttt{DAN\allowbreak{}Conditional\allowbreak{}Symmetric\allowbreak{}Inference} (líneas 46-49) convierte la \texttt{Constraint\allowbreak{}Violated\allowbreak{}Exception} que recibe en \texttt{Not\allowbreak{}Evaluable\allowbreak{}Network\allowbreak{}Exception.\allowbreak{}Unsatisfied\allowbreak{}Constraints} con \texttt{List.\allowbreak{}of(\allowbreak{}e.\allowbreak{}constraint)}. Cuando la red incumple más de una restricción, lo que llega es una \texttt{Multiple\allowbreak{}Constraints\allowbreak{}Violated}, que se construye con \texttt{super(null)} (líneas 72-73): su \texttt{constraint} es nulo, y \texttt{List.\allowbreak{}of} no admite nulos. En \texttt{ID-\allowbreak{}cycle.\allowbreak{}pgmx}, A → B y B → A cierran cada uno el ciclo, que son dos incumplimientos de \texttt{NoCycle}. El árbol se construye ---la red se abre con el aviso de las restricciones y se queda en edición, y «Show decision tree» se sigue ofreciendo---, pero evaluar cualquiera de sus hojas falla así. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+ID-cycle.pgmx
+  ProbNet.checkConstraints()      ConstraintViolatedException$MultipleConstraintsViolated  constraint=null
+  DecisionTrees.java, depth 3     el árbol, 30 líneas; y al evaluar: refused NullPointerException
+  evaluate(...)                   java.lang.NullPointerException
+      at java.util.Objects.requireNonNull(Objects.java:220)
+      at java.util.List.of(List.java:935)
+      at DANConditionalSymmetricInference.<init>(DANConditionalSymmetricInference.java:49)
+      at DecisionTreeExpansion.variableElimination(DecisionTreeExpansion.java:457)
+      at DecisionTreeExpansion.evaluateAsLeaf(DecisionTreeExpansion.java:172)
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Que ese \texttt{catch} pase a \texttt{Unsatisfied\allowbreak{}Constraints} las restricciones que la excepción lleva ---todas, si es una \texttt{Multiple\allowbreak{}Constraints\allowbreak{}Violated}--- en lugar de \texttt{List.\allowbreak{}of(\allowbreak{}e.\allowbreak{}constraint)}. La versión en C++/Qt dice «2 constraints were broken» y las nombra.
+
+Prueba: evaluar \texttt{ID-\allowbreak{}cycle.\allowbreak{}pgmx} da \texttt{Unsatisfied\allowbreak{}Constraints} con las dos restricciones; un modelo que incumple una sola sigue diciéndola.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Modelos temporales y evolución temporal}\label{sec:temporal}
@@ -18200,6 +18232,32 @@ Crear cada selector dentro del \texttt{invoke\allowbreak{}And\allowbreak{}Wait} 
 
 Prueba: las cuatro siguen pasando con pantalla. El choque no se puede provocar a voluntad, así que no hay una prueba que falle sin el arreglo.
 
+\setcounter{subsection}{449}
+\subsection[Una casilla de Excel más allá de XFD se lee, y lo que pasa depende de un número de 16 bits]{Una casilla de una hoja de Excel más allá de XFD, la última columna que una hoja puede tener, se lee: según lo que quede de su columna en el \texttt{short} de \texttt{get\allowbreak{}Last\allowbreak{}Cell\allowbreak{}Num}, el fichero se rechaza porque una columna no tiene nombre, o se lee sin la casilla y sin avisar}\label{err:450}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}io
+\fichakey{Paquete}org.openmarkov.io.database.excel
+\fichakey{Ficheros}\path{io/src/main/java/org/openmarkov/io/database/excel/ExcelDataBaseIO.java:163-174}
+\fichakey{Comprobado}Ejecutándolo, sin ventana, con el código de \texttt{c1633e1a} (24-11-2026): \texttt{Excel\allowbreak{}Data\allowbreak{}Base\allowbreak{}IO.\allowbreak{}load} con cuatro libros de una hoja de dos columnas, X e Y, con dos casos y una casilla más, que están en las pruebas de la versión en C++/Qt (\texttt{modules/\allowbreak{}io/\allowbreak{}tests/\allowbreak{}data/\allowbreak{}apart/\allowbreak{}a-*.\allowbreak{}xlsx}). Que lo de en medio sea el \texttt{short} está leído en la firma de \texttt{Row.\allowbreak{}get\allowbreak{}Last\allowbreak{}Cell\allowbreak{}Num}, no seguido en el código de POI
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\end{ficha}
+\paragraph{Qué pasa}
+Una hoja de Excel 2007 tiene 16\,384 columnas, de A a XFD, y ninguna hoja de cálculo escribe una casilla más allá. POI la lee igual, y \texttt{Row.\allowbreak{}get\allowbreak{}Last\allowbreak{}Cell\allowbreak{}Num} devuelve la columna siguiente a la última en un \texttt{short}, de 16 bits, así que lo que ve \texttt{number\allowbreak{}Of\allowbreak{}Columns\allowbreak{}With\allowbreak{}A\allowbreak{}Value} (líneas 163-174) depende de lo que quede de ella ahí. Con XFE2, la columna 16\,385, cuenta una columna de más y el fichero se rechaza con \texttt{Column\allowbreak{}Without\allowbreak{}Name}; con ZZZZZ1 o ZZZZZZZ2, el número da la vuelta, la casilla queda fuera y el fichero se lee \textbf{sin ella y sin decir nada}, aunque lleve un valor. Es un fichero roto, y uno de verdad no pierde nada, pero el resultado no se puede prever. Medido:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+una hoja con X e Y, los casos «a b» y «c d», y una casilla más
+  en XFD2       ParsingSourceException$ColumnWithoutName
+  en XFE2       ParsingSourceException$ColumnWithoutName
+  en ZZZZZZZ2   read: 2 variables, 2 cases
+  en ZZZZZ1     read: 2 variables, 2 cases
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Que \texttt{Excel\allowbreak{}Data\allowbreak{}Base\allowbreak{}IO} rechace el fichero si una casilla pasa de \texttt{Spreadsheet\allowbreak{}Version.\allowbreak{}EXCEL2007.\allowbreak{}get\allowbreak{}Last\allowbreak{}Column\allowbreak{}Index()}, nombrándola. La versión en C++/Qt dice «…: the cell XFE2 is past XFD, the last column a sheet can have».
+
+Prueba: los libros con XFE2, ZZZZZZZ2 y ZZZZZ1 se rechazan nombrando la casilla; el de XFD2 sigue como ahora.
+
 % ══════════════════════════════════════════════════════════════════════
 \section{Aprendizaje y evaluación de redes}\label{sec:aprendizaje}
 
@@ -26982,6 +27040,8 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:447]{Error 447} & registro de fallos de la versión en C++/Qt, nº 428, al buscar errores de memoria en ella \\
 \hyperref[err:448]{Error 448} & registro de fallos de la versión en C++/Qt, nº 429, al buscar errores de memoria en ella \\
 \hyperref[err:449]{Error 449} & hallazgo nuevo, visto al comprobar el arreglo del \hyperref[err:446]{error~446} \\
+\hyperref[err:450]{Error 450} & registro de fallos de la versión en C++/Qt, nº 430, al buscar errores de memoria en ella \\
+\hyperref[err:451]{Error 451} & registro de fallos de la versión en C++/Qt, nº 431, al buscar errores de memoria en ella \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
