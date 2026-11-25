@@ -38,6 +38,13 @@ public class GlobalInputTracker {
     static final Set<Integer> HELD_KEY_CODES = Collections.synchronizedSet(new HashSet<>());
     static final Set<Integer> HELD_MOUSE_BUTTONS = Collections.synchronizedSet(new HashSet<>());
     static final Map<Integer, Integer> MOUSE_CLICK_COUNTS = Collections.synchronizedMap(new HashMap<>());
+    /**
+     * The mouse buttons that the loss of the focus let go while they were down, with their clicks. Closing a menu
+     * moves the focus through nobody for an instant, in the middle of the click that closes it, while the button is
+     * still down: its release must still count as one, or the commands that act when a button is let go, such as
+     * «Select element», do not happen (error 369 of the pending list).
+     */
+    static final Map<Integer, Integer> LET_GO_BY_THE_FOCUS = Collections.synchronizedMap(new HashMap<>());
     static MouseWheel currentMouseWheelState = MouseWheel.NONE;
     
     // Timer to reset wheel state to NONE
@@ -84,15 +91,12 @@ public class GlobalInputTracker {
                 switch (mouseEvent.getID()) {
                     case MouseEvent.MOUSE_PRESSED -> {
                         if (button != MouseEvent.NOBUTTON) {
-                            GlobalInputTracker.HELD_MOUSE_BUTTONS.add(button);
-                            GlobalInputTracker.MOUSE_CLICK_COUNTS.put(button, mouseEvent.getClickCount());
-                            GlobalInputTracker.updateState("Global listener - Mouse Pressed: " + GlobalInputTracker.getButtonName(button), mouseEvent);
+                            GlobalInputTracker.pressed(button, mouseEvent.getClickCount(), mouseEvent);
                         }
                     }
                     case MouseEvent.MOUSE_RELEASED -> {
                         if (button != MouseEvent.NOBUTTON) {
-                            GlobalInputTracker.HELD_MOUSE_BUTTONS.remove(button);
-                            GlobalInputTracker.updateState("Global listener - Mouse Released: " + GlobalInputTracker.getButtonName(button), mouseEvent);
+                            GlobalInputTracker.released(button, mouseEvent);
                         }
                     }
                     case MouseEvent.MOUSE_MOVED -> {
@@ -114,15 +118,45 @@ public class GlobalInputTracker {
         // 3. Focus loss cleanup
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("focusOwner", evt -> {
             if (evt.getNewValue() == null) {
-                GlobalInputTracker.HELD_KEY_CODES.clear();
-                GlobalInputTracker.HELD_MOUSE_BUTTONS.clear();
-                GlobalInputTracker.currentMouseWheelState = MouseWheel.NONE;
-                if (GlobalInputTracker.wheelReleaseTimer != null) GlobalInputTracker.wheelReleaseTimer.stop();
-                GlobalInputTracker.updateState("Global listener - Focus Lost (Cleared)", null);
+                GlobalInputTracker.focusLost();
             }
         });
     }
-    
+
+    static void pressed(int button, int clicks, InputEvent event) {
+        GlobalInputTracker.LET_GO_BY_THE_FOCUS.remove(button);
+        GlobalInputTracker.HELD_MOUSE_BUTTONS.add(button);
+        GlobalInputTracker.MOUSE_CLICK_COUNTS.put(button, clicks);
+        GlobalInputTracker.updateState("Global listener - Mouse Pressed: " + GlobalInputTracker.getButtonName(button), event);
+    }
+
+    static void released(int button, InputEvent event) {
+        Integer clicks = GlobalInputTracker.LET_GO_BY_THE_FOCUS.remove(button);
+        if (clicks != null && !GlobalInputTracker.HELD_MOUSE_BUTTONS.contains(button)) {
+            // Held again for an instant, so that letting it go is seen as such
+            GlobalInputTracker.HELD_MOUSE_BUTTONS.add(button);
+            GlobalInputTracker.MOUSE_CLICK_COUNTS.put(button, clicks);
+            GlobalInputTracker.updateState("Global listener - Mouse held until its release: " + GlobalInputTracker.getButtonName(button), event);
+        }
+        GlobalInputTracker.HELD_MOUSE_BUTTONS.remove(button);
+        GlobalInputTracker.updateState("Global listener - Mouse Released: " + GlobalInputTracker.getButtonName(button), event);
+    }
+
+    /**
+     * Lets go of every key and button, so that none stays held if its release goes to another window, and keeps the
+     * buttons in {@link #LET_GO_BY_THE_FOCUS}.
+     */
+    static void focusLost() {
+        for (int button : GlobalInputTracker.getHeldMouseButtons()) {
+            GlobalInputTracker.LET_GO_BY_THE_FOCUS.put(button, GlobalInputTracker.MOUSE_CLICK_COUNTS.getOrDefault(button, 1));
+        }
+        GlobalInputTracker.HELD_KEY_CODES.clear();
+        GlobalInputTracker.HELD_MOUSE_BUTTONS.clear();
+        GlobalInputTracker.currentMouseWheelState = MouseWheel.NONE;
+        if (GlobalInputTracker.wheelReleaseTimer != null) GlobalInputTracker.wheelReleaseTimer.stop();
+        GlobalInputTracker.updateState("Global listener - Focus Lost (Cleared)", null);
+    }
+
     private static void resetWheelState() {
         GlobalInputTracker.currentMouseWheelState = MouseWheel.NONE;
         GlobalInputTracker.updateState("Global listener - Wheel Auto-Reset (NONE)", null);
