@@ -87,6 +87,7 @@
     "LinkAlreadyExists",
     "LinkCannotBePaintedException",
     "LinkInversionRequiresChanceVariablesWithPotential",
+    "ListNotClosed",
     "LocalizedJavaException",
     "MismatchedToken",
     "MismatchedValueException",

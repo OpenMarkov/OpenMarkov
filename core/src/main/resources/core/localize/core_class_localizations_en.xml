@@ -302,6 +302,8 @@
                   value="Unexpected error when validating {url}\n{originException.getMessage}."/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$CannotReadConstraint"
                   value="Could not read a constraint."/>
+    <Localization class="org.openmarkov.core.exception.ProbNetParserException$ListNotClosed"
+                  value="The file ends before the «{closing}» that closes the list that starts at line {startLine}."/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$MismatchedToken"
                   value="Expected token {expected}, but found {found}"/>
     <Localization class="org.openmarkov.core.exception.ProbNetParserException$MissingPotential"

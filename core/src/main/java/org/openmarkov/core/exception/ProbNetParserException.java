@@ -126,6 +126,20 @@ public abstract class ProbNetParserException extends UserInputException {
         public final String token;
     }
     
+    /**
+     * A file ends before the sign that closes a list, as a file cut short does. The reader of Elvira used to go on
+     * reading nothing until the memory ran out, or for ever (error 447 of the pending list).
+     */
+    public static final class ListNotClosed extends ProbNetParserException {
+        public ListNotClosed(String closing, int startLine) {
+            this.closing = closing;
+            this.startLine = startLine;
+        }
+
+        public final String closing;
+        public final int startLine;
+    }
+
     public static final class MismatchedToken extends ProbNetParserException {
         public MismatchedToken(int expected, int found) {
             this.expected = expected + "";

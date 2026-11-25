@@ -165,12 +165,14 @@ public class ElviraScanner {
                 checkToken(streamTokenizer, ReservedWord.STATES);
                 readTokenType(streamTokenizer, TT_ASSIGNMENT);
                 readTokenType(streamTokenizer, TT_LEFTP);
+                int startLine = streamTokenizer.lineno();
                 List<String> defaultStates = new ArrayList<String>();
                 do {
                     defaultStates.add(readIdentifier(streamTokenizer, false));
                     if (streamTokenizer.ttype == TT_COMMA) {
                         streamTokenizer.nextToken();
                     }
+                    refuseTheEndInsideAList(")", startLine);
                 } while (streamTokenizer.ttype != TT_RIGHTP);
                 readNextToken = true;
                 readTokenType(streamTokenizer, TT_SEMICOLON);
@@ -199,6 +201,7 @@ public class ElviraScanner {
             case STATES -> {
                 readTokenType(streamTokenizer, TT_ASSIGNMENT);
                 readTokenType(streamTokenizer, TT_LEFTP);
+                int startLine = streamTokenizer.lineno();
                 List<String> states = new ArrayList<String>();
                 do {
                     String stateName = readIdentifier(streamTokenizer, false);
@@ -206,6 +209,7 @@ public class ElviraScanner {
                     if (streamTokenizer.ttype == TT_COMMA) {
                         streamTokenizer.nextToken();
                     }
+                    refuseTheEndInsideAList(")", startLine);
                 } while (streamTokenizer.ttype != TT_RIGHTP);
                 String[] stateList = new String[states.size()];
                 for (int i = 0; i < stateList.length; i++) {
@@ -223,9 +227,11 @@ public class ElviraScanner {
             }
             case RELATION -> {
                 ArrayList<String> variablesNames = new ArrayList<String>();
+                int startLine = streamTokenizer.lineno();
                 streamTokenizer.nextToken();
                 readNextToken = false;
                 while (streamTokenizer.ttype != TT_LEFTCB) {
+                    refuseTheEndInsideAList("{", startLine);
                     variablesNames.add(readIdentifier(streamTokenizer, false));
                 }
                 readNextToken = true; // Skips LEFTB: {
@@ -237,17 +243,21 @@ public class ElviraScanner {
             }
             case TABLE, GENERALIZED_TABLE -> {
                 readTokenType(streamTokenizer, TT_LEFTP);
+                int startLine = streamTokenizer.lineno();
                 ArrayList<Double> arrayTable = new ArrayList<Double>();
                 streamTokenizer.nextToken();
                 int i = 0;
                 while (streamTokenizer.ttype != TT_RIGHTP) {
+                    refuseTheEndInsideAList(")", startLine);
                     String tokenString = streamTokenizer.sval;
                     if ((tokenString != null) && (tokenString.toUpperCase().startsWith("E")) && (i > 0)) {
                         String newDoubleValue = arrayTable.get(i - 1).toString() + tokenString;
                         arrayTable.set(i - 1, Double.parseDouble(newDoubleValue));
                     } else if (streamTokenizer.ttype == TT_LEFTSB) {
+                        int bracketLine = streamTokenizer.lineno();
                         while (streamTokenizer.ttype != TT_RIGHTSB) {
                             streamTokenizer.nextToken();
+                            refuseTheEndInsideAList("]", bracketLine);
                         }
                         streamTokenizer.nextToken();
                     } else {
@@ -282,10 +292,13 @@ public class ElviraScanner {
      *
      * @return ElviraToken
      */
-    private ElviraToken getCanonicalToken(ReservedWord reservedWord) throws IOException, ProbNetParserException.MismatchedToken {
+    private ElviraToken getCanonicalToken(ReservedWord reservedWord)
+            throws IOException, ProbNetParserException.MismatchedToken, ProbNetParserException.ListNotClosed {
         ArrayList<String> relationsNames = new ArrayList<String>();
         String relationName;
+        int startLine = streamTokenizer.lineno();
         while (streamTokenizer.ttype != TT_RIGHTP) {
+            refuseTheEndInsideAList(")", startLine);
             relationName = readIdentifier(streamTokenizer, true);
             relationsNames.add(relationName);
         }
@@ -344,6 +357,20 @@ public class ElviraScanner {
         }
     }
     
+    /**
+     * Refuses a file that ends inside a list: the loops that read a list stop only at the sign that closes it, and,
+     * at the end of the file, read nothing again and again, until the memory runs out or for ever (error 447 of the
+     * pending list).
+     *
+     * @param closing   the sign that closes the list
+     * @param startLine the line where the list starts
+     */
+    private void refuseTheEndInsideAList(String closing, int startLine) throws ProbNetParserException.ListNotClosed {
+        if (streamTokenizer.ttype == StreamTokenizer.TT_EOF) {
+            throw new ProbNetParserException.ListNotClosed(closing, startLine);
+        }
+    }
+
     /**
      * Reads a token.
      *
