@@ -64,7 +64,15 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
     @Override public String toString() {
         return this.localize();
     }
-    
+
+    /**
+     * @return the constraints that the network breaks: that of this exception, or, when there are several, each of
+     * them once. {@link #constraint} is null when there are several (error 451 of the pending list).
+     */
+    public List<PNConstraint> constraints() {
+        return constraint == null ? List.of() : List.of(constraint);
+    }
+
     public static class MultipleConstraintsViolated extends ConstraintViolatedException {
         
         private final TreeMap<PNConstraint, TreeSet<ConstraintViolatedException>> exceptionsMap;
@@ -80,6 +88,10 @@ public abstract class ConstraintViolatedException extends OpenMarkovException {
             }
         }
         
+        @Override public List<PNConstraint> constraints() {
+            return List.copyOf(exceptionsMap.keySet());
+        }
+
         @Override public @Nullable String getExceptionTitle() {
             if (thereIsOnlyOneKindOfConstraintViolated()) {
                 return getFirstExceptionFound().getExceptionTitle();

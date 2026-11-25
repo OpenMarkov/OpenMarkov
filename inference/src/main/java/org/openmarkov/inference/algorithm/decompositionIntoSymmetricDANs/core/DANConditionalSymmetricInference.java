@@ -46,7 +46,7 @@ public class DANConditionalSymmetricInference extends DANInference {
         } catch (ConstraintViolatedException e) {
             // The network does not meet what the algorithm requires: that is not a branch worth
             // zero, it is a network that cannot be evaluated.
-            throw new NotEvaluableNetworkException.UnsatisfiedConstraints(dan, List.of(e.constraint));
+            throw new NotEvaluableNetworkException.UnsatisfiedConstraints(dan, e.constraints());
         }
         if (callInference) {
             if (!isCEAnalysis) {
