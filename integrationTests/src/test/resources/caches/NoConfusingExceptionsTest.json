@@ -22,6 +22,7 @@
     "CannotRemovePotential",
     "CannotResolveVariable",
     "CannotSelfLink",
+    "CellPastTheLastColumn",
     "ChanceNodeCannotBeDiscretized",
     "ChangeDomainOfTreeADDIsNotAllowedException",
     "CharacterAFileCannotKeep",

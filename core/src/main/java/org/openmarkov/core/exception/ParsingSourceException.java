@@ -63,6 +63,22 @@ public abstract sealed class ParsingSourceException extends UserInputException {
         }
     }
 
+    /**
+     * A cell of a spreadsheet past the last column that a sheet can have, XFD in .xlsx. No spreadsheet program writes
+     * one, so the file is damaged (error 450 of the pending list).
+     */
+    public static final class CellPastTheLastColumn extends ParsingSourceException {
+        public final String source;
+        public final String cell;
+        public final String lastColumn;
+
+        public CellPastTheLastColumn(String source, String cell, String lastColumn) {
+            this.source = source;
+            this.cell = cell;
+            this.lastColumn = lastColumn;
+        }
+    }
+
     /** The first line of a file of separated values uses both the comma and the semicolon to separate its names. */
     public static final class TwoSeparators extends ParsingSourceException {
         public final String source;

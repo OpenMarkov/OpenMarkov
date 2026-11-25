@@ -73,7 +73,8 @@ import java.util.Locale;
      */
     @Override public @NotNull CaseDatabase load(File file)
             throws IOException, EmptyDatabaseException, ParsingSourceException.RepeatedVariableNames,
-                   ParsingSourceException.NotASheet, ParsingSourceException.ColumnWithoutName {
+                   ParsingSourceException.NotASheet, ParsingSourceException.ColumnWithoutName,
+                   ParsingSourceException.CellPastTheLastColumn {
         try (Workbook workbook = open(file)) {
             return read(file, workbook.getSheetAt(0));
         }
@@ -101,7 +102,8 @@ import java.util.Locale;
     
     private static CaseDatabase read(File file, Sheet sheet)
             throws EmptyDatabaseException, ParsingSourceException.RepeatedVariableNames,
-                   ParsingSourceException.ColumnWithoutName {
+                   ParsingSourceException.ColumnWithoutName, ParsingSourceException.CellPastTheLastColumn {
+        refuseCellsPastTheLastColumn(file, sheet);
         int numVariables = numberOfColumnsWithAValue(sheet);
         if (numVariables == 0) {
             throw new EmptyDatabaseException(file.getName());
@@ -159,6 +161,45 @@ import java.util.Locale;
         return CaseDatabaseReader.accepted(file, new CaseDatabase(probNet.getVariables(), cases));
     }
     
+    /**
+     * Refuses a cell past the last column that a sheet of its format can have, XFD in .xlsx and IV in .xls. No
+     * spreadsheet program writes one, but a damaged file can carry it, and POI keeps only 16 bits of its column: the
+     * cell was read as one column too many, left out, or, when its column wrapped around onto another, read in the
+     * place of that column's cell, all without a word (error 450 of the pending list). So the letters of the cell are
+     * looked at as the file writes them, not at the column that POI makes of them.
+     */
+    private static void refuseCellsPastTheLastColumn(File file, Sheet sheet)
+            throws ParsingSourceException.CellPastTheLastColumn {
+        String lastColumn = sheet.getWorkbook().getSpreadsheetVersion().getLastColumnName();
+        for (Row row : sheet) {
+            for (Cell cell : row) {
+                String reference = cell instanceof XSSFCell asWritten ? asWritten.getReference()
+                                                                      : cell.getAddress().formatAsString();
+                if (isPast(columnLettersOf(reference), lastColumn)) {
+                    throw new ParsingSourceException.CellPastTheLastColumn(file.getName(), reference, lastColumn);
+                }
+            }
+        }
+    }
+
+    /** @return the letters that start {@code reference}, in upper case: «XFE» for XFE2 */
+    private static String columnLettersOf(String reference) {
+        int end = 0;
+        while (end < reference.length() && Character.isLetter(reference.charAt(end))) {
+            end++;
+        }
+        return reference.substring(0, end).toUpperCase(Locale.ROOT);
+    }
+
+    /**
+     * @return whether the column {@code letters} comes after {@code lastColumn}, both in upper case; no letters at
+     * all, as POI writes a column it has made negative, counts as past it
+     */
+    static boolean isPast(String letters, String lastColumn) {
+        return letters.isEmpty() || letters.length() > lastColumn.length()
+               || letters.length() == lastColumn.length() && letters.compareTo(lastColumn) > 0;
+    }
+
     /** @return the number of columns of {@code sheet} up to the last one that has a value in some row */
     private static int numberOfColumnsWithAValue(Sheet sheet) {
         int columns = 0;
