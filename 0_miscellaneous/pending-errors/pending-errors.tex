@@ -281,7 +281,7 @@ Los \hyperref[err:443]{errores~443} a \hyperref[err:446]{446} salen de revisar l
 Los \hyperref[err:447]{errores~447} y \hyperref[err:448]{448} se encontraron al buscar a propósito errores de memoria en la versión en C++ y Qt, cuyo lector de Elvira, traducido de este, tenía los mismos bucles. Se han comprobado con el código de \texttt{c1633e1a}, ejecutándolos sin ventana, y la fila \emph{Comprobado} de cada ficha dice cómo. Los \hyperref[err:450]{errores~450} y \hyperref[err:451]{451} salieron de la misma búsqueda: el 450, leyendo su lector de hojas de Excel, y el 451, resolviendo con ella las redes de sus pruebas. Se han comprobado igual, con el mismo código.
 
 \paragraph{Errores añadidos el 25 de noviembre}
-El \hyperref[err:452]{error~452} salió en los avisos que dio Maven a Francisco Javier Díez al generar un instalador en Windows desde IntelliJ. Se ha comprobado con el código de \texttt{6dd86e7f}, y la fila \emph{Comprobado} de su ficha dice cómo. El \hyperref[err:453]{error~453} salió al comprobar el arreglo del 452, porque Maven avisa de él junto al otro; se ha comprobado con el código de \texttt{4ee88b1b}.
+El \hyperref[err:452]{error~452} salió en los avisos que dio Maven a Francisco Javier Díez al generar un instalador en Windows desde IntelliJ. Se ha comprobado con el código de \texttt{6dd86e7f}, y la fila \emph{Comprobado} de su ficha dice cómo. El \hyperref[err:453]{error~453} salió al comprobar el arreglo del 452, porque Maven avisa de él junto al otro; se ha comprobado con el código de \texttt{4ee88b1b}. El \hyperref[err:454]{error~454} sale del mismo correo: la página de la wiki que explica cómo construir los instaladores no ayudaba con lo que le pasó; se ha comprobado leyendo el código de \texttt{1b9836b3}, y la fila \emph{Comprobado} de su ficha dice cómo.
 
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
@@ -336,9 +336,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{452 errores}; 308 de ellos son defectos nuevos: 106 encontrados al
-comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas, 4 al revisar los commits del 24 de noviembre, 4 al buscar errores de memoria en la versión en C++/Qt y 1 en los avisos de Maven al generar un instalador en Windows. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 402 pequeños, 49 medios y 1 grandes.
-De los 452, 440 están ya corregidos y 2 están cerrados sin arreglo.
+La lista tiene \textbf{453 errores}; 309 de ellos son defectos nuevos: 106 encontrados al
+comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas, 4 al revisar los commits del 24 de noviembre, 4 al buscar errores de memoria en la versión en C++/Qt y 2 al generar un instalador en Windows. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 403 pequeños, 49 medios y 1 grandes.
+De los 453, 440 están ya corregidos y 2 están cerrados sin arreglo.
 El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -364,7 +364,7 @@ El apéndice recoge además 201 notas con lo que se comprobó y no entra en la l
 \ref{sec:textos}. Textos y títulos que se ven mal & 24 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
 \ref{sec:amua}. Exportación a Amua & 11 \\
-\ref{sec:construccion}. Construcción del programa & 2 \\
+\ref{sec:construccion}. Construcción del programa & 3 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -852,6 +852,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:construccion}.\ Construcción del programa}}\\
 \hyperref[err:452]{452} & \textcolor{corregidoverde}{\textbf{Corregido}} · El complemento de Spring Boot de \texttt{resttemplate} no tiene versión: Maven avisa y usa la última publicada, aunque sea de pruebas & \texttt{resttemplate} & S \hfill No\\
 \hyperref[err:453]{453} & \textcolor{corregidoverde}{\textbf{Corregido}} · \texttt{gui} declara dos veces la dependencia de \texttt{sensitivity\allowbreak{}Analysis}, y Maven avisa en cada construcción & \texttt{gui} & S \hfill No\\
+\hyperref[err:454]{454} & La wiki de construcción dice mal dónde salen los instaladores, no habla de IntelliJ ni de qué hacer tras instalar WiX, y achaca a Linux un mensaje de Windows & wiki & S \hfill No\\
 \bottomrule
 \end{longtable}
 }
@@ -26401,6 +26402,36 @@ Borrar la segunda declaración.
 
 Prueba: \texttt{mvn -pl gui validate} ya no da el aviso, y la suite entera sigue pasando. Como en el \hyperref[err:452]{error~452}, no hay una prueba automática que falle sin el arreglo.
 
+\setcounter{subsection}{453}
+\subsection[La wiki de construcción dice mal dónde salen los instaladores, no habla de IntelliJ ni de qué hacer tras instalar WiX, y achaca a Linux un mensaje de Windows]{La página de la wiki que explica cómo construir OpenMarkov y sus instaladores dice que estos salen en \path{full/target/installer/}, cuando desde \texttt{80555303} salen en \path{0_miscellaneous/installer/}; no habla de la configuración «Generate installer» de IntelliJ ni de que IntelliJ no encuentra WiX hasta que se vuelve a abrir; y su apartado de problemas dice que \texttt{Invalid or unsupported type: [msi]} sale al construir en Linux o macOS, cuando en Windows sale por faltar WiX}\label{err:454}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}documentación (wiki)
+\fichakey{Paquete}ninguno: es una página de la wiki
+\fichakey{Ficheros}\path{0_miscellaneous/wiki/Building_and_packaging_OpenMarkov.md:61, 90, 102-106, 134-135, 170-171}
+\fichakey{Comprobado}Leyendo el código de \texttt{1b9836b3} (25-11-2026): la carpeta \texttt{-{}-dest} que reciben las siete ejecuciones de \texttt{jpackage} en \path{full/pom.xml} y la configuración \path{.idea/runConfigurations/Generate_installer.xml}. El mensaje de Windows es el de las capturas que Francisco Javier Díez mandó el 25 de noviembre
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\end{ficha}
+\paragraph{Qué pasa}
+Francisco Javier Díez generó el 25 de noviembre un instalador en Windows desde IntelliJ, y la construcción se paró porque le faltaba WiX, el programa con el que \texttt{jpackage} hace los \texttt{.\allowbreak{}msi} y los \texttt{.\allowbreak{}exe}. La página de la wiki que explica cómo construir los instaladores no le habría ayudado del todo:
+\begin{itemize}
+\item Dice en cuatro sitios ---la explicación de la orden, la tabla de lo que produce cada sistema y los dos ejemplos de instalación en Linux--- que los instaladores salen en \path{full/target/installer/}. Desde el commit \texttt{80555303} (10 de agosto, incidencia 633) salen en \path{0_miscellaneous/installer/}, en una carpeta nueva para cada construcción cuyo nombre es la fecha y la hora.
+\item No habla de la configuración «Generate installer» que el repositorio trae para IntelliJ, que es la que él usó.
+\item Dice que WiX tiene que estar en el \texttt{PATH}, la lista de carpetas donde Windows busca los programas, pero no que IntelliJ conserva la que había al abrirse: tras instalar WiX hay que volver a abrirlo.
+\item Su apartado de problemas dice que \texttt{Invalid or unsupported type: [msi]} sale al construir en Linux o macOS. En Windows sale justo debajo del aviso de que falta WiX:
+\end{itemize}
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+[11:37:05.079] Can not find WiX tools. Was looking for WiX v3 light.exe and candle.exe or WiX v4/v5 wix.exe and none was found
+[11:37:05.079] Download WiX 3.0 or later from https://wixtoolset.org and add it to the PATH.
+Error: Invalid or unsupported type: [msi]
+\end{Verbatim}
+\paragraph{Cómo arreglarlo}
+Corregir la carpeta en los cuatro sitios y decir que git no la sube; añadir un párrafo sobre «Generate installer»; añadir que, tras instalar WiX, se compruebe con \texttt{where candle} o \texttt{where wix} en una consola nueva y se vuelva a abrir IntelliJ; y separar en el apartado de problemas los dos casos del mensaje.
+
+Prueba: construir los instaladores de Linux con la orden de la página y ver que salen donde dice. La parte de Windows no se puede probar en Linux.
+
 % ═════════════════════════════════════════════════════════════════════════════
 \appendix
 \renewcommand{\thesection}{\Alph{section}}
@@ -27106,6 +27137,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:451]{Error 451} & registro de fallos de la versión en C++/Qt, nº 431, al buscar errores de memoria en ella \\
 \hyperref[err:452]{Error 452} & hallazgo nuevo, en los avisos de Maven que vio Francisco Javier Díez al generar un instalador en Windows \\
 \hyperref[err:453]{Error 453} & hallazgo nuevo, visto al comprobar el arreglo del \hyperref[err:452]{error~452}; lo trajo el commit \texttt{06cec5fa}, de Jorge Rico \\
+\hyperref[err:454]{Error 454} & hallazgo nuevo, al repasar la wiki de construcción a raíz del correo de Francisco Javier Díez del 25 de noviembre \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
