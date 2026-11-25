@@ -281,7 +281,7 @@ Los \hyperref[err:443]{errores~443} a \hyperref[err:446]{446} salen de revisar l
 Los \hyperref[err:447]{errores~447} y \hyperref[err:448]{448} se encontraron al buscar a propósito errores de memoria en la versión en C++ y Qt, cuyo lector de Elvira, traducido de este, tenía los mismos bucles. Se han comprobado con el código de \texttt{c1633e1a}, ejecutándolos sin ventana, y la fila \emph{Comprobado} de cada ficha dice cómo. Los \hyperref[err:450]{errores~450} y \hyperref[err:451]{451} salieron de la misma búsqueda: el 450, leyendo su lector de hojas de Excel, y el 451, resolviendo con ella las redes de sus pruebas. Se han comprobado igual, con el mismo código.
 
 \paragraph{Errores añadidos el 25 de noviembre}
-El \hyperref[err:452]{error~452} salió en los avisos que dio Maven a Francisco Javier Díez al generar un instalador en Windows desde IntelliJ. Se ha comprobado con el código de \texttt{6dd86e7f}, y la fila \emph{Comprobado} de su ficha dice cómo.
+El \hyperref[err:452]{error~452} salió en los avisos que dio Maven a Francisco Javier Díez al generar un instalador en Windows desde IntelliJ. Se ha comprobado con el código de \texttt{6dd86e7f}, y la fila \emph{Comprobado} de su ficha dice cómo. El \hyperref[err:453]{error~453} salió al comprobar el arreglo del 452, porque Maven avisa de él junto al otro; se ha comprobado con el código de \texttt{4ee88b1b}.
 
 \paragraph{Errores asignados el 29 de septiembre}
 El 29 de septiembre se asignaron a Jorge Rico 36 errores. El 27 de octubre se retiró la asignación, y se corrigen como los demás.
@@ -336,9 +336,9 @@ midió), \emph{El código} (extractos del código actual, cuando ayudan) y \emph
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-La lista tiene \textbf{451 errores}; 307 de ellos son defectos nuevos: 105 encontrados al
-comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas, 4 al revisar los commits del 24 de noviembre, 4 al buscar errores de memoria en la versión en C++/Qt y 1 en los avisos de Maven al generar un instalador en Windows. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 401 pequeños, 49 medios y 1 grandes.
-De los 451, 439 están ya corregidos y 2 están cerrados sin arreglo.
+La lista tiene \textbf{452 errores}; 308 de ellos son defectos nuevos: 106 encontrados al
+comprobar o corregir los demás, 127 al portar OpenMarkov a C++/Qt, 5 al revisar la rama \texttt{DES-development}, 9 al revisar el código de la edición de redes, 3 al revisar el diseño de los potenciales y 49 en una revisión del módulo \texttt{io} con sondas, 4 al revisar los commits del 24 de noviembre, 4 al buscar errores de memoria en la versión en C++/Qt y 1 en los avisos de Maven al generar un instalador en Windows. \textbf{67} necesitan antes una decisión del equipo. Por esfuerzo estimado: 402 pequeños, 49 medios y 1 grandes.
+De los 452, 439 están ya corregidos y 2 están cerrados sin arreglo.
 El apéndice recoge además 201 notas con lo que se comprobó y no entra en la lista.
 
 \begin{center}
@@ -364,7 +364,7 @@ El apéndice recoge además 201 notas con lo que se comprobó y no entra en la l
 \ref{sec:textos}. Textos y títulos que se ven mal & 24 \\
 \ref{sec:rendimiento}. Rendimiento & 4 \\
 \ref{sec:amua}. Exportación a Amua & 11 \\
-\ref{sec:construccion}. Construcción del programa & 1 \\
+\ref{sec:construccion}. Construcción del programa & 2 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -851,6 +851,7 @@ esfuerzo (S, pequeño; M, medio; L, grande) y, en rojo, si hace falta una decisi
 \hyperref[err:425]{425} & \textcolor{corregidoverde}{\textbf{Corregido}} · Un árbol de coste-efectividad cortado antes de otra decisión llega a Amua con la opción óptima dominada & \texttt{io} & S \hfill No\\
 \multicolumn{4}{@{}l}{\rule{0pt}{2.6ex}\textbf{\ref{sec:construccion}.\ Construcción del programa}}\\
 \hyperref[err:452]{452} & \textcolor{corregidoverde}{\textbf{Corregido}} · El complemento de Spring Boot de \texttt{resttemplate} no tiene versión: Maven avisa y usa la última publicada, aunque sea de pruebas & \texttt{resttemplate} & S \hfill No\\
+\hyperref[err:453]{453} & \texttt{gui} declara dos veces la dependencia de \texttt{sensitivity\allowbreak{}Analysis}, y Maven avisa en cada construcción & \texttt{gui} & S \hfill No\\
 \bottomrule
 \end{longtable}
 }
@@ -26375,6 +26376,31 @@ Poner en el \texttt{pom.\allowbreak{}xml} de \texttt{resttemplate} una propiedad
 
 Prueba: \texttt{mvn -pl resttemplate validate} ya no da el aviso. No hay una prueba automática que falle sin el arreglo: el aviso sale en el registro de Maven, no en las pruebas.
 
+\setcounter{subsection}{452}
+\subsection[\texttt{gui} declara dos veces la dependencia de \texttt{sensitivity\allowbreak{}Analysis}, y Maven avisa en cada construcción]{El \texttt{pom.\allowbreak{}xml} de \texttt{gui} declara dos veces la dependencia de \texttt{sensitivity\allowbreak{}Analysis}, la segunda con un alcance \texttt{compile} que es el que Maven pone cuando no se dice ninguno: Maven avisa en cada construcción y advierte que versiones futuras podrían negarse a construir el proyecto}\label{err:453}
+\begin{ficha}
+\fichakey{Estado}Presente
+\fichakey{Módulo}gui
+\fichakey{Paquete}ninguno: es el fichero de construcción de Maven
+\fichakey{Ficheros}\path{gui/pom.xml:54-64}
+\fichakey{Comprobado}Ejecutándolo con el código de \texttt{4ee88b1b} (25-11-2026): \texttt{mvn -pl gui validate} da el aviso. Que las dos declaraciones llegaron en el commit \texttt{06cec5fa} se ha visto con \texttt{git log -L} sobre esas líneas
+\fichakey{Esfuerzo}Pequeño (horas)
+\fichakey{Decisión de equipo}No
+\end{ficha}
+\paragraph{Qué pasa}
+Las dos declaraciones dicen lo mismo, así que la construcción no cambia: Maven se queda con una. Pero avisa cada vez que construye el proyecto:
+
+\begin{Verbatim}[breaklines,breakanywhere,fontsize=\small]
+[WARNING] Some problems were encountered while building the effective model for org.openmarkov:gui:jar:0.3.0-SNAPSHOT
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: org.openmarkov:sensitivityAnalysis:jar -> duplicate declaration of version 0.3.0-SNAPSHOT @ line 59, column 21
+\end{Verbatim}
+
+Las dos llegaron en el commit \texttt{06cec5fa}, de Jorge Rico (24 de noviembre), que pasó a \texttt{gui} las ventanas del análisis de sensibilidad.
+\paragraph{Cómo arreglarlo}
+Borrar la segunda declaración.
+
+Prueba: \texttt{mvn -pl gui validate} ya no da el aviso, y la suite entera sigue pasando. Como en el \hyperref[err:452]{error~452}, no hay una prueba automática que falle sin el arreglo.
+
 % ═════════════════════════════════════════════════════════════════════════════
 \appendix
 \renewcommand{\thesection}{\Alph{section}}
@@ -27079,6 +27105,7 @@ mismos criterios. Los añadidos el 9 de octubre se vieron al portar OpenMarkov a
 \hyperref[err:450]{Error 450} & registro de fallos de la versión en C++/Qt, nº 430, al buscar errores de memoria en ella \\
 \hyperref[err:451]{Error 451} & registro de fallos de la versión en C++/Qt, nº 431, al buscar errores de memoria en ella \\
 \hyperref[err:452]{Error 452} & hallazgo nuevo, en los avisos de Maven que vio Francisco Javier Díez al generar un instalador en Windows \\
+\hyperref[err:453]{Error 453} & hallazgo nuevo, visto al comprobar el arreglo del \hyperref[err:452]{error~452}; lo trajo el commit \texttt{06cec5fa}, de Jorge Rico \\
 \hyperref[nota:1]{Nota 1} & registro de fallos, nº 31; plan de cambios, RP11 \\
 \hyperref[nota:2]{Nota 2} & registro de fallos, nº 127 \\
 \hyperref[nota:3]{Nota 3} & registro de fallos, nº 24 \\
