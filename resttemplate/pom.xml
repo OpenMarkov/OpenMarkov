@@ -13,6 +13,9 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- One version for the Spring Boot libraries and for its Maven plugin. Without a version
+             of its own the plugin was whatever Spring had published last, test releases included. -->
+        <spring-boot.version>4.0.1</spring-boot.version>
     </properties>
 
     <dependencies>
@@ -24,7 +27,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>4.0.1</version>
+            <version>${spring-boot.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
@@ -40,7 +43,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <version>4.0.1</version>
+            <version>${spring-boot.version}</version>
         </dependency>
     </dependencies>
     <build>
@@ -48,6 +51,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
