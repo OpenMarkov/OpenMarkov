@@ -58,8 +58,11 @@ The same command on every operating system:
 mvn -pl full -am -P Installer clean package -DskipTests --batch-mode
 ```
 
-The results appear in **`full/target/installer/`**. Which files appear there depends on the system
-you ran it on; see the next section. The build never fails for asking for a format the system
+The results appear in **`0_miscellaneous/installer/`**, in a new folder for every build, named after
+the date and time the build started in universal time (UTC) — for example
+`0_miscellaneous/installer/2026-11-25_14-15-47/` for a build started at 15:15:47 in Madrid in
+winter. Git ignores that folder, so the installers cannot be uploaded by mistake. Which files appear
+there depends on the system you ran it on; see the next section. The build never fails for asking for a format the system
 cannot produce — those steps are skipped, and the log says so:
 
 ```
@@ -81,13 +84,17 @@ Running `mvn clean install -am -P Installer -DskipTests` from the root works too
 safe about using current code; it is just slower, because it builds every module of the project
 rather than only the ones `full` needs, and it also copies all of them into `~/.m2`.
 
+**From IntelliJ**, the run configuration **Generate installer**, which comes with the repository,
+runs that second command with the `Installer` profile. Pick it in the run configurations menu, at
+the top right of the window, and press *Run*.
+
 Note that the continuous integration build **never builds installers** — it only publishes the jar.
 Installers exist only when somebody builds them by hand, and nothing checks automatically that they
 still work.
 
 ## 2.2 What each operating system produces
 
-| Built on | Files you get in `full/target/installer/`                                       |
+| Built on | Files you get in the build's folder in `0_miscellaneous/installer/`              |
 |----------|--------------------------------------------------------------------------------|
 | Windows  | `OpenMarkov-0.3.msi`, `OpenMarkov-0.3.exe`, and the portable folder `OpenMarkov/` |
 | Linux    | `openmarkov_0.3_amd64.deb`, `openmarkov-0.3-1.x86_64.rpm`, and the portable folder `OpenMarkov/` |
@@ -104,6 +111,14 @@ drives the WiX Toolset, a separate open-source program that has to be installed 
 the `PATH` environment variable. Download it from [wixtoolset.org](https://wixtoolset.org/).
 Version 3.14 is the one that has been used with `jpackage` the longest; recent JDKs also accept
 newer versions. If the build fails complaining that it cannot find WiX, this is the reason.
+
+After installing WiX:
+
+1. Open a **new** console and check that Windows finds it: `where candle` for WiX 3, `where wix`
+   for WiX 4 and later. If it finds nothing, add WiX's `bin` folder to the `PATH` (for WiX 3.14,
+   `C:\Program Files (x86)\WiX Toolset v3.14\bin`) and try again in another new console.
+2. **Close IntelliJ and open it again.** It keeps the `PATH` it had when it started, so until it is
+   reopened its builds do not find WiX, even when a console does.
 
 The `.msi` is the one most users want; the `.exe` is the same thing in the other Windows installer
 format. Both let the user choose the install directory, add a start-menu entry and a shortcut, and
@@ -128,11 +143,12 @@ openSUSE and theirs. Both install OpenMarkov under `/opt/openmarkov`, add a menu
 Debian does not allow capitals in package names, while the application itself keeps the name
 `OpenMarkov`.
 
-Install and remove them the usual way:
+Install and remove them the usual way, from the folder of your build:
 
 ```
-sudo apt install ./full/target/installer/openmarkov_0.3_amd64.deb    # Debian, Ubuntu
-sudo dnf install ./full/target/installer/openmarkov-0.3-1.x86_64.rpm # Fedora, Red Hat
+cd 0_miscellaneous/installer/2026-11-25_14-15-47   # the folder of your build
+sudo apt install ./openmarkov_0.3_amd64.deb         # Debian, Ubuntu
+sudo dnf install ./openmarkov-0.3-1.x86_64.rpm      # Fedora, Red Hat
 ```
 
 ## 2.5 macOS
@@ -165,10 +181,13 @@ Change it there and every format picks it up.
 # 3. Troubleshooting
 
 **The build fails and mentions WiX, `candle.exe` or `light.exe`.** The WiX Toolset is missing or is
-not on the `PATH`. See section 2.3.
+not on the `PATH`. If you have just installed it from a running IntelliJ, close IntelliJ and open it
+again. See section 2.3.
 
-**`Invalid or unsupported type: [msi]`.** You are building on Linux or macOS with the skipping
-disabled. The `.msi` and `.exe` formats are Windows-only.
+**`Invalid or unsupported type: [msi]`.** On Windows, it comes right after
+`Can not find WiX tools`: WiX is missing, or IntelliJ does not see it yet. See section 2.3. On Linux
+or macOS it means you are building with the skipping disabled: the `.msi` and `.exe` formats are
+Windows-only.
 
 **`The specified icon "…openmarkov.ico" is not a PNG file`.** Despite the wording, this is not a
 warning: outside Windows `jpackage` stops with it and leaves the application image incomplete. It
