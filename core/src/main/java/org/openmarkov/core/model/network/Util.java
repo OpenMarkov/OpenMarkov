@@ -181,7 +181,9 @@ public class Util {
      * @author maryebra
      */
     public static double roundWithPrecision(double value, String precision) {
-        
+        if (value == Double.NEGATIVE_INFINITY || value == Double.POSITIVE_INFINITY) {
+            return value;
+        }
         String rounded;
         //double scale;
         int numDecimals;

@@ -7,6 +7,7 @@
 
 package org.openmarkov.gui.dialog.node;
 
+import org.openmarkov.core.model.network.Node;
 import org.openmarkov.gui.dialog.common.OkCancelDialog;
 
 import javax.swing.JRadioButton;
@@ -21,14 +22,15 @@ import java.util.List;
 @SuppressWarnings("serial") public class StandardDomainsDialog extends OkCancelDialog {
     
     private StandardDomainPanel standardDomainsPanel;
-
-	public StandardDomainsDialog(Window owner) {
+	private final Node node;
+	
+	public StandardDomainsDialog(Window owner, Node node) {
 		super(owner);
+		this.node = node;
 		initialize();
 		setLocationRelativeTo(owner);
 		setResizable(true);
 		pack();
-
 	}
 
 	private void initialize() {
@@ -45,20 +47,17 @@ import java.util.List;
 	}
 
 	private void configureComponentsPanel() {
-
 		getComponentsPanel().setLayout(new BorderLayout(5, 5));
 		getComponentsPanel().add(getJPanelStandardDomains(), BorderLayout.CENTER);
-
 	}
     
     public StandardDomainPanel getJPanelStandardDomains() {
 		if (standardDomainsPanel == null) {
-			standardDomainsPanel = new StandardDomainPanel();
+			standardDomainsPanel = new StandardDomainPanel(node);
 			//statesCheckBoxPanel.setLayout( new FlowLayout());
 			standardDomainsPanel.setName("jPanelStandardDomains");
 		}
 		return standardDomainsPanel;
-
 	}
     
     public List<String> getChosenStates() {
@@ -66,9 +65,7 @@ import java.util.List;
     }
 	
     public ChosenOption requestValues() {
-
 		setVisible(true);
-        
         return getSelectedOption();
 	}
 
@@ -87,6 +84,6 @@ import java.util.List;
 	 * before hide the dialog.
 	 */
 	@Override protected void doCancelClickBeforeHide() {
-
 	}
+	
 }

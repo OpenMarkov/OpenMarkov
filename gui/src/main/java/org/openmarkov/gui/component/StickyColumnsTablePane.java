@@ -319,6 +319,24 @@ public class StickyColumnsTablePane extends JScrollPane {
         consumer.accept(this.stickyTable);
     }
     
+    public void onStickyModel(Consumer<? super OMTableModel> consumer) {
+        consumer.accept(this.stickyTableModel);
+    }
+    
+    public void onScrollableModel(Consumer<? super OMTableModel> consumer) {
+        consumer.accept(this.scrollableTableModel);
+    }
+    
+    public void onMainModel(Consumer<? super OMTableModel> consumer) {
+        consumer.accept(this.model);
+    }
+    
+    public void onModels(Consumer<? super OMTableModel> consumer) {
+        consumer.accept(this.stickyTableModel);
+        consumer.accept(this.scrollableTableModel);
+        consumer.accept(this.model);
+    }
+    
     public int getSelectedRow() {
         if (this.stickyTable.getSelectedRow() != -1) {
             return this.stickyTable.getSelectedRow();

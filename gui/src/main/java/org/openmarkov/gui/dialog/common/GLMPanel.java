@@ -10,6 +10,7 @@ import org.openmarkov.core.exception.DoEditException;
 import org.openmarkov.core.expression.VariableExpression;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.GLMPotential;
+import org.openmarkov.gui.component.OMTableModel;
 import org.openmarkov.gui.configuration.GUIColors;
 
 import javax.swing.JTable;
@@ -38,7 +39,10 @@ import java.util.List;
         super(new String[]{"Covariate", "Coefficient"}, new Object[0][2], true, true, true, false);
         getValuesTable().onTables(omjTable -> omjTable.setDefaultRenderer(String.class, new CoefficientTableCellRenderer()));
         listeners = new ArrayList<>();
-        valuesTable.addMouseListener(new CovariatesTableMouseListener());
+        valuesTable.onStickyTable(table -> {
+            table.addMouseListener(new CovariatesTableMouseListener());
+            table.getModel().addEditabilityChecker((_, _) -> OMTableModel.Editability.NON_EDITABLE);
+        });
         initialize();
     }
     

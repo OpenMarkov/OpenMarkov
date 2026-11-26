@@ -8,6 +8,10 @@ package org.openmarkov.gui.dialog.node;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
+import org.openmarkov.core.model.network.Node;
+import org.openmarkov.core.model.network.NodeType;
+import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.gui.configuration.UserPreference;
 
 import javax.swing.SwingUtilities;
@@ -32,7 +36,7 @@ class StandardDomainsWaitForAChoiceTest {
         UserPreference.IGNORE_STORAGE = true;
         try {
             SwingUtilities.invokeAndWait(() -> {
-                StandardDomainsDialog dialog = new StandardDomainsDialog(null);
+                StandardDomainsDialog dialog = new StandardDomainsDialog(null, new Node(new ProbNet(), new Variable("A"), NodeType.CHANCE));
                 try {
                     assertEquals("Standard domains", dialog.getTitle());
                     assertFalse(dialog.getOKButton().isEnabled());

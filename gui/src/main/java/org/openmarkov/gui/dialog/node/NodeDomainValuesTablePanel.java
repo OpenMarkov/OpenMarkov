@@ -310,18 +310,18 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
                     || properties.getVariable().getVariableType() == VariableType.NUMERIC) {
                 getDiscretizedStatesPanel().setDataFromPartitionedInterval(node.getVariable().getPartitionedInterval(),
                                                                            node.getVariable().getStates());
-                Object[][] tableData = getDiscretizedStatesPanel().getData();
-                for (int i = 0; i < tableData.length; i++) {
-                    for (int j = 3; j < tableData[0].length; j++) {
-                        if (j == 3 || j == 5) {
-                            String value = (String) tableData[i][j];
-                            // Infinity values
-                            if (value != "\u221E" && value != "-" + "\u221E") {
-                                getDiscretizedStatesPanel().getValuesTable().setValueAt(value, i, j, null);
-                            }
-                        }
-                    }
-                }
+//                Object[][] tableData = getDiscretizedStatesPanel().getData();
+//                for (int i = 0; i < tableData.length; i++) {
+//                    for (int j = 3; j < tableData[0].length; j++) {
+//                        if (j == 3 || j == 5) {
+//                            String value = (String) tableData[i][j];
+//                            // Infinity values
+//                            if (value != "\u221E" && value != "-" + "\u221E") {
+//                                getDiscretizedStatesPanel().getValuesTable().setValueAt(value, i, j, null);
+//                            }
+//                        }
+//                    }
+//                }
             }
             switch (properties.getVariable().getVariableType()) {
                 case FINITE_STATES: {
@@ -392,8 +392,8 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
                     getDiscretizedStatesPanel().setVisibleRemoveValue(false);
                     getDiscretizedStatesPanel().setVisibleUpValue(false);
                     getDiscretizedStatesPanel().setVisibleDownValue(false);
-                    getDiscretizedStatesPanel().getStandardDomainButton().setVisible(false);
-                    getDiscretizedStatesPanel().getStandardDomainButton().setEnabled(false);
+                    getDiscretizedStatesPanel().getStandardDomainButton().setVisible(true);
+                    getDiscretizedStatesPanel().getStandardDomainButton().setEnabled(true);
                     getJTextFieldUnit().setEnabled(true);
                     getJTextFieldUnit().setVisible(true);
                     getJLabelUnit().setEnabled(true);
@@ -539,8 +539,8 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
         if (index == comboBox.getItemCount() || !samePrecision(Double.parseDouble(comboBox.getItemAt(index)), precision)) {
             // BigDecimal takes neither NaN nor an infinity: the reader refuses them, but a network built otherwise may have one
             comboBox.insertItemAt(Double.isFinite(precision)
-                                  ? BigDecimal.valueOf(precision).stripTrailingZeros().toPlainString()
-                                  : Double.toString(precision), index);
+                                          ? BigDecimal.valueOf(precision).stripTrailingZeros().toPlainString()
+                                          : Double.toString(precision), index);
         }
         comboBox.setSelectedIndex(index);
     }
@@ -882,7 +882,8 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
             jLabelNodeVariableType.setHorizontalTextPosition(SwingConstants.LEFT);
             jLabelNodeVariableType.setText("a Label");
             jLabelNodeVariableType.setText(stringDatabase.getString("NodeDomainValuesTablePanel." + "jLabelNodeVariableType.Text"));
-            jLabelNodeVariableType.setDisplayedMnemonic(stringDatabase.getString("NodeDomainValuesTablePanel.jLabelNodeVariableType.Mnemonic").charAt(0));
+            jLabelNodeVariableType.setDisplayedMnemonic(stringDatabase.getString("NodeDomainValuesTablePanel.jLabelNodeVariableType.Mnemonic")
+                                                                      .charAt(0));
             // jLabelNodeVariableType.setLabelFor( getJPanelNodeType() );
         }
         return jLabelNodeVariableType;
@@ -958,7 +959,7 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
                 } catch (ThereIsNoPotentialInNodeException e) {
                     throw new UnrecoverableException(e);
                 }
-
+                
             }
         } else if (comboBox.getName().equals("jComboBoxStatesValues")) {
             // warning mpalacios relative function to options position.
@@ -1126,7 +1127,7 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
     }
     
     private void actionPerformedStandardDomain(ActionEvent arg0) throws DoEditException, ThereIsNoPotentialInNodeException {
-        StandardDomainsDialog standardDomainDialog = new StandardDomainsDialog(ComponentUtilities.getOwner(this));
+        StandardDomainsDialog standardDomainDialog = new StandardDomainsDialog(ComponentUtilities.getOwner(this), node);
         // @ 2014/11/18. Issue 145.
         // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
         // Propagation of the domain in related variables in temporal models
@@ -1136,29 +1137,57 @@ public class NodeDomainValuesTablePanel extends JPanel implements ItemListener, 
             return;
         }
         var chosenStates = standardDomainDialog.getJPanelStandardDomains().getChosenStates();
-        
-        State[] newStates = chosenStates.stream().map(State::new).toArray(State[]::new);
-        
-        NodeReplaceStatesEdit nodeReplaceStatesEdit = new NodeReplaceStatesEdit(node, newStates);
-        
-        ProbNet nodeProbNet = node.getProbNet();
-        nodeReplaceStatesEdit.executeEdit();
-        // @ 2014/11/18. Issue 145.
-        // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
-        // Propagation of the domain in related variables in temporal models
-        if (nodeRelatedNodes != null) {
-            if (!nodeRelatedNodes.isEmpty()) {
-                for (Node relatedNode : nodeRelatedNodes) {
-                    nodeReplaceStatesEdit = new NodeReplaceStatesEdit(relatedNode, newStates);
-                    ProbNet probNet = relatedNode.getProbNet();
-                    nodeReplaceStatesEdit.executeEdit();
+        switch (this.node.getVariable().getVariableType()) {
+            case FINITE_STATES, DISCRETIZED, EVENT -> {
+                State[] newStates = chosenStates.stream().map(State::new).toArray(State[]::new);
+                
+                NodeReplaceStatesEdit nodeReplaceStatesEdit = new NodeReplaceStatesEdit(node, newStates);
+                
+                ProbNet nodeProbNet = node.getProbNet();
+                nodeReplaceStatesEdit.executeEdit();
+                // @ 2014/11/18. Issue 145.
+                // https://bitbucket.org/cisiad/org.openmarkov.issues/issue/145/domains-in-mpads-related-variables
+                // Propagation of the domain in related variables in temporal models
+                if (nodeRelatedNodes != null) {
+                    if (!nodeRelatedNodes.isEmpty()) {
+                        for (Node relatedNode : nodeRelatedNodes) {
+                            nodeReplaceStatesEdit = new NodeReplaceStatesEdit(relatedNode, newStates);
+                            ProbNet probNet = relatedNode.getProbNet();
+                            nodeReplaceStatesEdit.executeEdit();
+                        }
+                    }
                 }
+                // @@@
+            }
+            case NUMERIC -> {
+                var partitionString = chosenStates.getFirst();
+                new PartitionedIntervalEdit(node, partitionedIntervalOf(partitionString)).executeEdit();
             }
         }
-        // @@@
         this.removeAll();
         initialize();
         setFieldsFromProperties(node);
-        
+    }
+    
+    private static PartitionedInterval partitionedIntervalOf(String partitionString) {
+        var start = partitionString.substring(0, 1);
+        var end = partitionString.substring(partitionString.length() - 1);
+        var partitionValues = Arrays.stream(partitionString.substring(1, partitionString.length() - 1).split(","))
+                                    .map(String::trim).mapToDouble(val -> {
+                                                                       if (val.equals("+∞") || val.equals("∞")) {
+                                                                           return Double.POSITIVE_INFINITY;
+                                                                       }
+                                                                       if (val.equals("-∞")) {
+                                                                           return Double.NEGATIVE_INFINITY;
+                                                                       }
+                                                                       return Double.parseDouble(val);
+                                                                   }
+                
+                ).toArray();
+        var belongs = new boolean[2 + partitionValues.length - 1];
+        Arrays.fill(belongs, end.equals("]"));
+        belongs[0] = !start.equals("[");
+        PartitionedInterval newPartitionedInterval = new PartitionedInterval(partitionValues, belongs);
+        return newPartitionedInterval;
     }
 }

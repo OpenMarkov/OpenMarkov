@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -26,6 +28,7 @@ public class OMTableModel extends DefaultTableModel {
         this.firstColumnIsHeader = firstColumnIsHeader;
         this.cellEditability = new HashMap<>();
         this.editabilityChecker = new ArrayList<>();
+        this.mapValues = new ArrayList<>();
     }
     
     public @NotNull Tuple2Record<OMTableModel, OMTableModel> split(int columnSplit) {
@@ -113,8 +116,15 @@ public class OMTableModel extends DefaultTableModel {
         Vector<Vector> data = new Vector<>(baseModel.getDataVector());
         this.setDataVector(data, columnHeaders);
         this.firstColumnIsHeader = baseModel.firstColumnIsHeader;
-        this.cellEditability = CloneUtils.safeClone(baseModel.cellEditability);
-        this.editabilityChecker = new ArrayList<>(baseModel.editabilityChecker);
+        
+        this.cellEditability.clear();
+        this.cellEditability.putAll(CloneUtils.safeClone(baseModel.cellEditability));
+        
+        this.editabilityChecker.clear();
+        this.editabilityChecker.addAll(baseModel.editabilityChecker);
+        
+        this.mapValues.clear();
+        this.mapValues.addAll(baseModel.mapValues);
     }
     
     
@@ -150,7 +160,7 @@ public class OMTableModel extends DefaultTableModel {
         return super.isCellEditable(row, column);
     }
     
-    private List<BiFunction<Integer, Integer, Editability>> editabilityChecker;
+    private final List<BiFunction<Integer, Integer, Editability>> editabilityChecker;
     
     public void addEditabilityChecker(BiFunction<Integer, Integer, Editability> editabilityChecker) {
         this.editabilityChecker.add(editabilityChecker);
@@ -169,4 +179,37 @@ public class OMTableModel extends DefaultTableModel {
         EDITABLE, NON_EDITABLE, UNSPECIFIED
     }
     
+    private final List<MapValue> mapValues;
+    
+    @Override public void setValueAt(Object value, int row, int column) {
+        var valInfo = new MapValue.NewValueInfo(value, row, column);
+        for (var mapValue : this.mapValues) {
+            if (mapValue.when.test(valInfo)) {
+                value = mapValue.map.apply(valInfo);
+            }
+        }
+        super.setValueAt(value, row, column);
+    }
+    
+    public void valuesAreMappedWith(MapValue mapValue) {
+        this.mapValues.add(mapValue);
+    }
+    
+    public static class MapValue {
+        public record NewValueInfo(Object value, int row, int column) {
+        }
+        
+        private @NotNull Predicate<NewValueInfo> when;
+        private final @NotNull Function<NewValueInfo, Object> map;
+        
+        public MapValue(@NotNull Function<NewValueInfo, Object> map) {
+            this.map = map;
+            this.when = _ -> true;
+        }
+        
+        public MapValue when(@NotNull Predicate<NewValueInfo> when) {
+            this.when = when;
+            return this;
+        }
+    }
 }
